@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend;
@@ -24,12 +23,10 @@ class AttributeValidation
      * @var Configurable
      */
     private $configurableProductType;
-
     /**
      * @var array
      */
     private $unskippableAttributes;
-
     /**
      * @param Configurable $configurableProductType
      * @param array|null $unskippableAttributes
@@ -41,28 +38,24 @@ class AttributeValidation
         $this->configurableProductType = $configurableProductType;
         $this->unskippableAttributes = $unskippableAttributes;
     }
-
     /**
-     * Around plugin to skip attribute validation used for create configurable product.
+     * Verify is attribute used for configurable product creation and should not be validated.
      *
      * @param AbstractBackend $subject
-     * @param Closure $proceed
+     * @param \Closure $proceed
      * @param DataObject $entity
      * @return bool
      */
-    public function aroundValidate(
-        AbstractBackend $subject,
-        Closure $proceed,
-        DataObject $entity
-    ) {
+    public function aroundValidate(AbstractBackend $subject, Closure $proceed, DataObject $entity)
+    {
         $attribute = $subject->getAttribute();
-        if ($this->isAttributeShouldNotBeValidated($entity, $attribute)) {
+        if ($this->isAttributeShouldNotBeValidated($entity, $attribute)
+            && !in_array($attribute->getAttributeCode(), $this->unskippableAttributes)
+        ) {
             return true;
         }
-
         return $proceed($entity);
     }
-
     /**
      * Verify if attribute is a part of configurable product and should not be validated.
      *
@@ -72,10 +65,7 @@ class AttributeValidation
      */
     private function isAttributeShouldNotBeValidated(DataObject $entity, AbstractAttribute $attribute): bool
     {
-        if (!($entity instanceof ProductInterface
-            && $entity->getTypeId() == Configurable::TYPE_CODE)
-            && in_array($attribute->getAttributeCode(), $this->unskippableAttributes)
-        ) {
+        if (!($entity instanceof ProductInterface && $entity->getTypeId() === Configurable::TYPE_CODE)) {
             return false;
         }
         $attributeId = $attribute->getAttributeId();
