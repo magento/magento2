@@ -19,11 +19,10 @@ class BannerTest extends \PHPUnit\Framework\TestCase
      * @covers       \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
      * @covers       \Magento\Paypal\Block\PayLater\Banner::getConfig()
      */
-    public function testGetJsLayout($layoutConfig, $expectedConfig)
+    public function testGetJsLayout($blockConfig, $expectedConfig)
     {
         /** @var LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
-        $blockConfig['jsLayout']['components']['payLater']['config']['attributes'] = $layoutConfig;
         $block = $layout->createBlock(
             \Magento\Paypal\Block\PayLater\Banner::class,
             '',
@@ -43,8 +42,26 @@ class BannerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                ['data-pp-placement' => 'test-page'],
-                ['attributes' => ['data-pp-placement' => 'test-page', 'data-pp-style-logo-position' => 'right']]
+                [
+                    'placement' => 'test-page',
+                    'position' => 'header',
+                    'jsLayout' => [
+                        'components' => [
+                            'payLater' => [
+                                'config' => [
+                                    'attributes' => [
+                                        'data-pp-style-logo-position' => 'right'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    'attributes' => [
+                        'data-pp-style-logo-position' => 'right'
+                    ]
+                ]
             ],
         ];
     }

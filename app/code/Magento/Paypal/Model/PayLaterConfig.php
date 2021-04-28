@@ -78,6 +78,6 @@ class PayLaterConfig
                 ]
             ],
         ];
-        return $configMock[$section][$key];
+        return $configMock[$section][$key] ?? [];
     }
 }

@@ -10,7 +10,7 @@ namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Paypal\Model\PayLaterConfig;
-use Magento\Paypal\Model\SdkUrlBuilder;
+use Magento\Paypal\Model\SdkUrl;
 
 /**
  * PayPal PayLater component block
@@ -23,24 +23,25 @@ class Banner extends Template
     private $payLaterConfig;
     private $position;
     private $placement;
-    private SdkUrlBuilder $sdkUrl;
+    private $sdkUrl;
 
     /**
      * @param Template\Context $context
      * @param PayLaterConfig $payLaterConfig
+     * @param SdkUrl $sdkUrl
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PayLaterConfig $payLaterConfig,
-        /*SdkUrlBuilder $sdkUrl,*/
+        SdkUrl $sdkUrl,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->placement = $data['placement'] ??  '';
         $this->position = $data['position'] ??  '';
         $this->payLaterConfig = $payLaterConfig;
-        /*$this->sdkUrl = $sdkUrl;*/
+        $this->sdkUrl = $sdkUrl;
     }
 
     /**
@@ -63,7 +64,7 @@ class Banner extends Template
     {
         $this->jsLayout['components']['payLater']['config']['sdkUrl'] = $this->getPayPalSdkUrl();
         $attributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
-        $attributes = array_replace($attributes, $this->getStyleAttributesConfig());
+        $attributes = array_replace($this->getStyleAttributesConfig(), $attributes);
         $this->jsLayout['components']['payLater']['config']['attributes'] = $attributes;
         return parent::getJsLayout();
     }
@@ -75,8 +76,7 @@ class Banner extends Template
      */
     private function getPayPalSdkUrl()
     {
-        $sandBox = "https://www.paypal.com/sdk/js?client-id=sb&components=messages,buttons";
-        return $sandBox;
+        return $this->sdkUrl->getUrl();
     }
 
     /**
