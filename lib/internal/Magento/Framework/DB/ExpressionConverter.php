@@ -102,6 +102,8 @@ class ExpressionConverter
         if (strlen($entityName) > self::MYSQL_IDENTIFIER_LEN) {
             $shortName = ExpressionConverter::shortName($entityName);
             if (strlen($shortName) > self::MYSQL_IDENTIFIER_LEN) {
+                // md5() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 $hash = md5($entityName);
                 if (strlen($prefix . $hash) > self::MYSQL_IDENTIFIER_LEN) {
                     $entityName = self::trimHash($hash, $prefix, self::MYSQL_IDENTIFIER_LEN);

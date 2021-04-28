@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
-    'Magento_Checkout/js/model/billing-address-postcode-validator'
+    'Magento_Checkout/js/model/billing-address-postcode-validator',
+    'Magento_Checkout/js/model/address-converter'
 ],
 function (
     ko,
@@ -35,11 +36,14 @@ function (
     setBillingAddressAction,
     globalMessageList,
     $t,
-    billingAddressPostcodeValidator
+    billingAddressPostcodeValidator,
+    addressConverter
 ) {
     'use strict';
 
     var lastSelectedBillingAddress = null,
+        addressUpadated = false,
+        addressEdited = false,
         countryData = customerData.get('directory-data'),
         addressOptions = addressList().filter(function (address) {
             return address.getType() === 'customer-address';
@@ -140,6 +144,8 @@ function (
         updateAddress: function () {
             var addressData, newBillingAddress;
 
+            addressUpadated = true;
+
             if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
                 checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
@@ -165,6 +171,7 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
+            setBillingAddressAction(globalMessageList);
             this.updateAddresses();
         },
 
@@ -172,6 +179,8 @@ function (
          * Edit address action
          */
         editAddress: function () {
+            addressUpadated = false;
+            addressEdited = true;
             lastSelectedBillingAddress = quote.billingAddress();
             quote.billingAddress(null);
             this.isAddressDetailsVisible(false);
@@ -181,6 +190,7 @@ function (
          * Cancel address edit action
          */
         cancelAddressEdit: function () {
+            addressUpadated = true;
             this.restoreBillingAddress();
 
             if (quote.billingAddress()) {
@@ -202,11 +212,25 @@ function (
         }),
 
         /**
+         * Check if Billing Address Changes should be canceled
+         */
+        needCancelBillingAddressChanges: function () {
+            if (addressEdited && !addressUpadated) {
+                this.cancelAddressEdit();
+            }
+        },
+
+        /**
          * Restore billing address
          */
         restoreBillingAddress: function () {
+            var lastBillingAddress;
+
             if (lastSelectedBillingAddress != null) {
                 selectBillingAddress(lastSelectedBillingAddress);
+                lastBillingAddress = addressConverter.quoteAddressToFormAddressData(lastSelectedBillingAddress);
+
+                checkoutData.setNewCustomerBillingAddress(lastBillingAddress);
             }
         },
 

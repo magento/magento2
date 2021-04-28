@@ -175,7 +175,7 @@
         <waitForPageLoad stepKey="waitForImagesLoad3"/>
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(TestImageNew.fileName)}}" stepKey="seeImageIsDeleted"/>
         <!--Open Storefront on Default store view and assert image existence-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad0"/>
         <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage"/>
         <assertStringContainsString stepKey="assertProductImageAbsence">

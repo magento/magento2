@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Framework\DataObject;
 
 /**
  * Skip validate attributes used for create configurable product
@@ -19,7 +24,6 @@ class AttributeValidation
     private $configurableProductType;
 
     /**
-     * AttributeValidation constructor.
      * @param Configurable $configurableProductType
      */
     public function __construct(
@@ -29,27 +33,42 @@ class AttributeValidation
     }
 
     /**
-     * @param \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject
+     * Verify is attribute used for configurable product creation and should not be validated.
+     *
+     * @param AbstractBackend $subject
      * @param \Closure $proceed
-     * @param \Magento\Framework\DataObject $entity
+     * @param DataObject $entity
      * @return bool
      */
     public function aroundValidate(
-        \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend $subject,
+        AbstractBackend $subject,
         \Closure $proceed,
-        \Magento\Framework\DataObject $entity
+        DataObject $entity
     ) {
         $attribute = $subject->getAttribute();
-        if ($entity instanceof ProductInterface
-            && $entity->getTypeId() == Configurable::TYPE_CODE
-            && in_array(
-                $attribute->getAttributeId(),
-                $this->configurableProductType->getUsedProductAttributeIds($entity),
-                true
-            )
-        ) {
+        if ($this->isAttributeShouldNotBeValidated($entity, $attribute)) {
             return true;
         }
         return $proceed($entity);
+    }
+
+    /**
+     * Verify if attribute is a part of configurable product and should not be validated.
+     *
+     * @param DataObject $entity
+     * @param AbstractAttribute $attribute
+     * @return bool
+     */
+    private function isAttributeShouldNotBeValidated(DataObject $entity, AbstractAttribute $attribute): bool
+    {
+        if (!($entity instanceof ProductInterface && $entity->getTypeId() === Configurable::TYPE_CODE)) {
+            return false;
+        }
+        $attributeId = $attribute->getAttributeId();
+        $options = $entity->getConfigurableProductOptions() ?: [];
+        $configurableAttributeIds = array_column($options, 'attribute_id');
+
+        return in_array($attributeId, $configurableAttributeIds)
+            || in_array($attributeId, $this->configurableProductType->getUsedProductAttributeIds($entity), true);
     }
 }
