@@ -101,7 +101,7 @@ class Main extends \Magento\Backend\Block\Template
         $this->addChild(
             'delete_group_button',
             \Magento\Backend\Block\Widget\Button::class,
-            ['label' => __('Delete Selected Group'), 'onclick' => "editSet.trigger('submit');", 'class' => 'delete']
+            ['label' => __('Delete Selected Group'), 'onclick' => "editSet.submit();", 'class' => 'delete']
         );
 
         $this->addChild(

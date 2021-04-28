@@ -24,7 +24,7 @@ class Website extends \Magento\Backend\Block\Template
         $this->addChild(
             'confirm_deletion_button',
             \Magento\Backend\Block\Widget\Button::class,
-            ['label' => __('Delete Web Site'), 'onclick' => "deleteForm.trigger('submit')", 'class' => 'cancel']
+            ['label' => __('Delete Web Site'), 'onclick' => "deleteForm.submit()", 'class' => 'cancel']
         );
         $onClick = "setLocation('" . $this->getUrl('adminhtml/*/editWebsite', ['website_id' => $itemId]) . "')";
         $this->addChild(

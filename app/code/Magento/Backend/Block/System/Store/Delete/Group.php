@@ -24,7 +24,7 @@ class Group extends \Magento\Backend\Block\Template
         $this->addChild(
             'confirm_deletion_button',
             \Magento\Backend\Block\Widget\Button::class,
-            ['label' => __('Delete Store'), 'onclick' => "deleteForm.trigger('submit')", 'class' => 'cancel']
+            ['label' => __('Delete Store'), 'onclick' => "deleteForm.submit()", 'class' => 'cancel']
         );
         $onClick = "setLocation('" . $this->getUrl('adminhtml/*/editGroup', ['group_id' => $itemId]) . "')";
         $this->addChild(
