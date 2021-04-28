@@ -92,17 +92,16 @@ class TreeTest extends TestCase
     /**
      * Test execute for get directories tree
      *
-     * @param array $fileNames
-     * @dataProvider dirsCollectionDataProvider
      * @return void
      */
-    public function testGetTreeJson($fileNames): void
+    public function testGetTreeJson(): void
     {
         $collection = [];
         $this->cmsWysiwygImagesMock->method('getStorageRoot')
             ->willReturn('/storage/root/dir/');
         $this->cmsWysiwygImagesMock->method('getCurrentPath')
             ->willReturn('/storage/root/dir/pub/media/');
+        $fileNames = ['fileName'];
         foreach ($fileNames as $filename) {
             /** @var DataObject|MockObject $objectMock */
             $objectMock = $this->getMockBuilder(DataObject::class)
@@ -123,21 +122,5 @@ class TreeTest extends TestCase
             ->method('getDirectoryReadByPath')
             ->willReturn($this->directoryMock);
         $this->model->getTreeJson();
-    }
-
-    /**
-     * Data provider for testGetTreeJson()
-     *
-     * @return array
-     */
-    public function dirsCollectionDataProvider(): array
-    {
-        return [
-            [
-                'filenames' => [
-                    '/dress',
-                ]
-            ]
-        ];
     }
 }
