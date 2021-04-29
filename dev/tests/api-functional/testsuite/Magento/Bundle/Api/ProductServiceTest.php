@@ -225,8 +225,6 @@ class ProductServiceTest extends WebapiAbstract
     public function testUpdateBundleAddAndDeleteOption()
     {
         $bundleProduct = $this->createDynamicBundleProduct();
-        $linkedProductPrice = 20;
-
         $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
 
         $oldOptionId = $bundleProductOptions[0]['option_id'];
@@ -239,7 +237,7 @@ class ProductServiceTest extends WebapiAbstract
                 [
                     'sku' => 'simple2',
                     'qty' => 2,
-                    "price" => $linkedProductPrice,
+                    "price" => 20,
                     "price_type" => 1,
                     "is_default" => false,
                 ],
@@ -250,6 +248,7 @@ class ProductServiceTest extends WebapiAbstract
 
         $updatedProduct = $this->getProduct(self::BUNDLE_PRODUCT_ID);
         $bundleOptions = $this->getBundleProductOptions($updatedProduct);
+        $simpleProduct = $this->getProduct('simple2');
         $this->assertEquals('new option', $bundleOptions[0]['title']);
         $this->assertTrue($bundleOptions[0]['required']);
         $this->assertEquals('select', $bundleOptions[0]['type']);
@@ -257,7 +256,43 @@ class ProductServiceTest extends WebapiAbstract
         $this->assertFalse(isset($bundleOptions[1]));
         $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
         $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
-        $this->assertEquals($linkedProductPrice, $bundleOptions[0]['product_links'][0]['price']);
+        $this->assertEquals($simpleProduct['price'], $bundleOptions[0]['product_links'][0]['price']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
+     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
+     */
+    public function testUpdateFixedPriceBundleProductOptionSelectionPrice()
+    {
+        $optionPrice = 20;
+        $bundleProduct = $this->createFixedPriceBundleProduct();
+        $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
+
+        $oldOptionId = $bundleProductOptions[0]['option_id'];
+        //replace current option with a new option
+        $bundleProductOptions[0] = [
+            'title' => 'new option',
+            'required' => true,
+            'type' => 'select',
+            'product_links' => [
+                [
+                    'sku' => 'simple2',
+                    'qty' => 2,
+                    "price" => $optionPrice,
+                    "price_type" => 1,
+                    "is_default" => false,
+                ],
+            ],
+        ];
+        $this->setBundleProductOptions($bundleProduct, $bundleProductOptions);
+        $this->saveProduct($bundleProduct);
+
+        $updatedProduct = $this->getProduct(self::BUNDLE_PRODUCT_ID);
+        $bundleOptions = $this->getBundleProductOptions($updatedProduct);
+        $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
+        $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
+        $this->assertEquals($optionPrice, $bundleOptions[0]['product_links'][0]['price']);
     }
 
     /**
