@@ -20,7 +20,10 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Image;
 use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
+use Magento\MediaStorage\Api\MediaConfigResolverInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\Media\ConfigInterface;
+use Magento\MediaStorage\Service\GetRequestedResource;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -125,6 +128,16 @@ class ImageResizeTest extends TestCase
     private $storeManager;
 
     /**
+     * @var MediaConfigResolverInterface|MockObject
+     */
+    private $mediaConfigResolver;
+
+    /**
+     * @var GetRequestedResource|MockObject
+     */
+    private $getRequestedResourceMock;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -150,7 +163,7 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAbsolutePath','isFile','getRelativePath'])
+            ->setMethods(['getAbsolutePath', 'isFile', 'getRelativePath'])
             ->getMock();
 
         $this->filesystemMock->expects($this->any())
@@ -217,6 +230,9 @@ class ImageResizeTest extends TestCase
             ->method('getStores')
             ->willReturn([$store]);
 
+        $this->mediaConfigResolver = $this->getMockForAbstractClass(MediaConfigResolverInterface::class);
+        $this->getRequestedResourceMock = $this->createMock(GetRequestedResource::class);
+
         $this->service = new ImageResize(
             $this->appStateMock,
             $this->imageConfigMock,
@@ -229,7 +245,9 @@ class ImageResizeTest extends TestCase
             $this->themeCollectionMock,
             $this->filesystemMock,
             $this->databaseMock,
-            $this->storeManager
+            $this->storeManager,
+            $this->mediaConfigResolver,
+            $this->getRequestedResourceMock
         );
     }
 
@@ -259,7 +277,7 @@ class ImageResizeTest extends TestCase
             ->method('getUsedProductImages')
             ->willReturnCallback(
                 function () {
-                    $data = [[ 'filepath' => $this->testfilename ]];
+                    $data = [['filepath' => $this->testfilename]];
                     foreach ($data as $e) {
                         yield $e;
                     }
@@ -307,7 +325,7 @@ class ImageResizeTest extends TestCase
             ->method('getUsedProductImages')
             ->willReturnCallback(
                 function () {
-                    $data = [[ 'filepath' => $this->testfilename ]];
+                    $data = [['filepath' => $this->testfilename]];
                     foreach ($data as $e) {
                         yield $e;
                     }
@@ -329,6 +347,14 @@ class ImageResizeTest extends TestCase
 
     public function testResizeFromImageNameMediaStorageDatabase()
     {
+        $resource = 'resource';
+        $path = '/' . $this->testfilename;
+
+        $this->getRequestedResourceMock->expects($this->once())->method('execute')->willReturn($resource);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configMock->expects($this->once())->method('getMediaPath')->with($this->testfilename)->willReturn($path);
+        $this->mediaConfigResolver->expects($this->once())->method('execute')->with($resource)->willReturn($configMock);
+
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
             ->willReturn(true);
@@ -352,7 +378,7 @@ class ImageResizeTest extends TestCase
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
             ->willReturn(
-                [ new DataObject(['id' => '0']) ]
+                [new DataObject(['id' => '0'])]
             );
         $this->themeCustomizationConfigMock->expects($this->any())
             ->method('getStoresByThemes')
@@ -372,6 +398,14 @@ class ImageResizeTest extends TestCase
 
     public function testSkipResizingAlreadyResizedImageOnDisk()
     {
+        $resource = 'resource';
+        $path = '/' . $this->testfilename;
+
+        $this->getRequestedResourceMock->expects($this->once())->method('execute')->willReturn($resource);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configMock->expects($this->once())->method('getMediaPath')->with($this->testfilename)->willReturn($path);
+        $this->mediaConfigResolver->expects($this->once())->method('execute')->with($resource)->willReturn($configMock);
+
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
             ->willReturn(false);
@@ -383,7 +417,7 @@ class ImageResizeTest extends TestCase
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
             ->willReturn(
-                [ new DataObject(['id' => '0']) ]
+                [new DataObject(['id' => '0'])]
             );
         $this->themeCustomizationConfigMock->expects($this->any())
             ->method('getStoresByThemes')
@@ -399,6 +433,14 @@ class ImageResizeTest extends TestCase
 
     public function testSkipResizingAlreadyResizedImageInDatabase()
     {
+        $resource = 'resource';
+        $path = '/' . $this->testfilename;
+
+        $this->getRequestedResourceMock->expects($this->once())->method('execute')->willReturn($resource);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configMock->expects($this->once())->method('getMediaPath')->with($this->testfilename)->willReturn($path);
+        $this->mediaConfigResolver->expects($this->once())->method('execute')->with($resource)->willReturn($configMock);
+
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
             ->willReturn(true);
@@ -417,7 +459,7 @@ class ImageResizeTest extends TestCase
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
             ->willReturn(
-                [ new DataObject(['id' => '0']) ]
+                [new DataObject(['id' => '0'])]
             );
         $this->themeCustomizationConfigMock->expects($this->any())
             ->method('getStoresByThemes')

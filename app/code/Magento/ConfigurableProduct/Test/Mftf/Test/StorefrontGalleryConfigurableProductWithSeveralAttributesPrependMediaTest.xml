@@ -169,6 +169,7 @@
 
         <!--CASE 0: Selected options = none; Expected media : C1, C2, C3-->
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase0"/>
+        <wait time="3" stepKey="waitForImageGeneration0"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase0"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case0">
 			<actualResult type="variable">getListOfThumbnailsCase0[0]</actualResult>
@@ -193,6 +194,7 @@
         <!--CASE 1: Selected options = F2; Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case1"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase1"/>
+        <wait time="3" stepKey="waitForImageGeneration1"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase1"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case1">
 			<actualResult type="variable">getListOfThumbnailsCase1[0]</actualResult>
@@ -229,6 +231,7 @@
         <!--CASE 2: Selected options = F1; Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case2"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase2"/>
+        <wait time="3" stepKey="waitForImageGeneration2"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase2"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case2">
 			<actualResult type="variable">getListOfThumbnailsCase2[0]</actualResult>
@@ -265,6 +268,7 @@
         <!--CASE 3: Selected options = B2,F1; Expected media : C1, C2, C3-->
         <selectOption userInput="$dropdownAttributeSecondOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB2Case3"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase3"/>
+        <wait time="3" stepKey="waitForImageGeneration3"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase3"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case3">
 			<actualResult type="variable">getListOfThumbnailsCase3[0]</actualResult>
@@ -289,6 +293,7 @@
         <!--CASE 4: Selected options = B2,F2, Expected media : G1, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case4"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase4"/>
+        <wait time="3" stepKey="waitForImageGeneration4"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase4"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case4">
 			<actualResult type="variable">getListOfThumbnailsCase4[0]</actualResult>
@@ -317,6 +322,7 @@
         <!--CASE 5: Selected options = B2, Expected media : C1, C2, C3-->
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF2Case5"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase5"/>
+        <wait time="3" stepKey="waitForImageGeneration5"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase5"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case5">
 			<actualResult type="variable">getListOfThumbnailsCase5[0]</actualResult>
@@ -341,6 +347,7 @@
         <!--CASE 6: Selected options = B1, Expected media : D1, D2, D3, C1, C2, C3-->
         <selectOption userInput="$dropdownAttributeFirstOption.option[store_labels][0][label]$" selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="chooseOptionB1Case6"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase6"/>
+        <wait time="3" stepKey="waitForImageGeneration6"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase6"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case6">
 			<actualResult type="variable">getListOfThumbnailsCase6[0]</actualResult>
@@ -377,6 +384,7 @@
         <!--CASE 7: Selected options = B1,F2, Expected media : E1, E2, E3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeSecondOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF2Case7"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase7"/>
+        <wait time="3" stepKey="waitForImageGeneration7"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase7"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case7">
 			<actualResult type="variable">getListOfThumbnailsCase7[0]</actualResult>
@@ -413,6 +421,7 @@
         <!--CASE 8: Selected options = B1,F1, Expected media : D1, D2, D3, C1, C2, C3-->
         <click selector="{{StorefrontProductInfoMainSection.swatchOptionByLabel($swatchAttributeFirstOption.option[store_labels][0][label]$)}}" stepKey="chooseOptionF1Case8"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase8"/>
+        <wait time="3" stepKey="waitForImageGeneration8"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase8"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case8">
 			<actualResult type="variable">getListOfThumbnailsCase8[0]</actualResult>
@@ -450,6 +459,7 @@
         <selectOption userInput="Choose an Option..." selector="{{StorefrontProductInfoMainSection.attributeSelectByAttributeID($createDropdownAttribute.default_frontend_label$)}}" stepKey="unselectB1Case9"/>
         <conditionalClick selector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" dependentSelector="{{StorefrontProductInfoMainSection.swatchAttributeSelectedOption}}" visible="true" stepKey="unchooseF1Case9"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsAppearCase9"/>
+        <wait time="3" stepKey="waitForImageGeneration9"/>
         <grabMultiple userInput="src" selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="getListOfThumbnailsCase9"/>
         <assertRegExp stepKey="checkPositionInThumbnailForImage1Case9">
 			<actualResult type="variable">getListOfThumbnailsCase9[0]</actualResult>
