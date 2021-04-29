@@ -50,6 +50,9 @@ class PathTest extends TestCase
      */
     protected $mediaDirectory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
@@ -71,8 +74,6 @@ class PathTest extends TestCase
             $this->_assetRepo,
             $this->_storeManager
         );
-
-        $this->_model = new Path($this->filesystem, $this->_assetRepo, $this->_storeManager);
     }
 
     public function testGetPreviewImageUrl()
