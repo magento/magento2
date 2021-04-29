@@ -24,6 +24,7 @@
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
+        <plugin name="product_special_price" type="Magento\Catalog\Plugin\SetProductSpecialPrice" />
     </type>
     <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
         <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
