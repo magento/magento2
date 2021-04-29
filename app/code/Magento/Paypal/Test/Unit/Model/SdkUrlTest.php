@@ -20,10 +20,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for smart button config
  */
-class SmartButtonConfigTest extends TestCase
+class SdkUrlTest extends TestCase
 {
     /**
-     * @var SmartButtonConfig
+     * @var \Magento\Paypal\Model\SdkUrl
      */
     private $model;
 
@@ -59,63 +59,61 @@ class SmartButtonConfigTest extends TestCase
             ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($this->configMock);
 
-        $sdkUrl = $this->createMock(\Magento\Paypal\Model\SdkUrl::class);
-        $sdkUrl->method('getUrl')->willReturn('http://mock.url');
+        /** @var Store|MockObject $storeMock */
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getBaseCurrencyCode')
+            ->willReturn('USD');
 
-        $this->model = new SmartButtonConfig(
+        /** @var StoreManagerInterface|MockObject $storeManagerMock */
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock->method('getStore')
+            ->willReturn($storeMock);
+
+        $this->model = new \Magento\Paypal\Model\SdkUrl(
             $this->localeResolverMock,
             $configFactoryMock,
             $scopeConfigMock,
-            $sdkUrl,
-            $this->getDefaultStyles(),
+            $storeManagerMock,
+            $this->getDisallowedFundingMap(),
+            $this->getUnsupportedPaymentMethods()
         );
     }
 
     /**
      * Tests config.
      *
-     * @param string $page
      * @param string $locale
-     * @param bool $isCustomize
-     * @param string $layout
-     * @param string $shape
-     * @param string $label
-     * @param string $color
-     * @param string $installmentPeriod
-     * @param string $installmentPeriodLocale
+     * @param string $intent
+     * @param string|null $disallowedFunding
+     * @param bool $isPaypalGuestCheckoutEnabled
      * @param array $expected
      * @dataProvider getConfigDataProvider
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testGetConfig(
-        string $page,
         string $locale,
-        bool $isCustomize,
-        string $layout,
-        string $shape,
-        string $label,
-        string $color,
-        string $installmentPeriod,
-        string $installmentPeriodLocale,
+        string $intent,
+        ?string $disallowedFunding,
+        bool $isPaypalGuestCheckoutEnabled,
         array $expected = []
     ) {
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $this->configMock->method('getValue')->willReturnMap(
             [
-                ["{$page}_page_button_customize", null, $isCustomize],
-                ["{$page}_page_button_layout", null, $layout],
-                ["{$page}_page_button_color", null, $color],
-                ["{$page}_page_button_shape", null, $shape],
-                ["{$page}_page_button_label", null, $label],
+                ['merchant_id', null, 'merchant'],
+                ['sandbox_client_id', null, 'sb'],
+                ['sandbox_flag', null, true],
+                ['disable_funding_options', null, $disallowedFunding],
+                ['paymentAction', null, $intent],
+                ['in_context', null, true],
                 [
-                    $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
+                    'solution_type',
                     null,
-                    $installmentPeriod
-                ]
+                    $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
+                ],
             ]
         );
 
-        self::assertEquals($expected, $this->model->getConfig($page));
+        self::assertEquals($expected['sdkUrl'], $this->model->getUrl());
     }
 
     /**
@@ -125,16 +123,41 @@ class SmartButtonConfigTest extends TestCase
      */
     public function getConfigDataProvider()
     {
-        return include __DIR__ . '/_files/expected_style_config.php';
+        return include __DIR__ . '/_files/expected_url_config.php';
     }
 
     /**
-     * Get default styles
+     * Get disallowed funding map
+     * See app/code/Magento/Paypal/etc/frontend/di.xml
      *
      * @return array
      */
-    private function getDefaultStyles()
+    private function getDisallowedFundingMap()
     {
-        return include __DIR__ . '/_files/default_styles.php';
+        return [
+            "CREDIT" => 'credit',
+            "CARD" => 'card',
+            "ELV" => 'sepa'
+        ];
+    }
+
+    /**
+     * Get unsupported payment methods
+     * See app/code/Magento/Paypal/etc/frontend/di.xml
+     *
+     * @return array
+     */
+    private function getUnsupportedPaymentMethods()
+    {
+        return [
+            'venmo'=> 'venmo',
+            'bancontact' => 'bancontact',
+            'eps' => 'eps',
+            'giropay' => 'giropay',
+            'ideal' => 'ideal',
+            'mybank' => 'mybank',
+            'p24' => 'p24',
+            'sofort' => 'sofort'
+        ];
     }
 }
