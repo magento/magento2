@@ -64,7 +64,7 @@ class DataFixtureDirectivesParser
                 }
             }
         }
-        if (strpos($name, '\\') !== false && !class_exists($name)) {
+        if (strpos($name, '\\') !== false && !class_exists($name) && !is_callable($name)) {
             // usage of a single directory separator symbol streamlines search across the source code
             throw new LocalizedException(__('Directory separator "\\" is prohibited in fixture declaration.'));
         }
