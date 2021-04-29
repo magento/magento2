@@ -25,6 +25,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\MergeCarts\CartQuantityValidatorInterface;
 
 /**
  * Merge Carts Resolver
@@ -64,6 +65,11 @@ class MergeCarts implements ResolverInterface
     private $stockRegistry;
 
     /**
+     * @var CartQuantityValidatorInterface
+     */
+    private $cartQuantityValidator;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
      * @param CustomerCartResolver|null $customerCartResolver
@@ -77,7 +83,8 @@ class MergeCarts implements ResolverInterface
         CustomerCartResolver $customerCartResolver = null,
         QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null,
         CartItemRepositoryInterface $cartItemRepository = null,
-        StockRegistryInterface $stockRegistry = null
+        StockRegistryInterface $stockRegistry = null,
+        CartQuantityValidatorInterface $cartQuantityValidator = null
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartRepository = $cartRepository;
@@ -89,6 +96,8 @@ class MergeCarts implements ResolverInterface
             ?: ObjectManager::getInstance()->get(CartItemRepositoryInterface::class);
         $this->stockRegistry = $stockRegistry
             ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
+        $this->cartQuantityValidator = $cartQuantityValidator
+            ?: ObjectManager::getInstance()->get(CartQuantityValidatorInterface::class);
     }
 
     /**
@@ -150,7 +159,7 @@ class MergeCarts implements ResolverInterface
             $currentUserId,
             $storeId
         );
-        if ($this->validateFinalCartQuantities($customerCart, $guestCart)) {
+        if ($this->cartQuantityValidator->validateFinalCartQuantities($customerCart, $guestCart)) {
             $guestCart = $this->getCartForUser->execute(
                 $guestMaskedCartId,
                 null,
@@ -164,40 +173,5 @@ class MergeCarts implements ResolverInterface
         return [
             'model' => $customerCart,
         ];
-    }
-
-    /**
-     * Validate combined cart quantities to make sure they are within available stock
-     *
-     * @param CartInterface $customerCart
-     * @param CartInterface $guestCart
-     * @return bool
-     */
-    private function validateFinalCartQuantities(CartInterface $customerCart, CartInterface $guestCart)
-    {
-        $modified = false;
-        /** @var CartItemInterface $guestCartItem */
-        foreach ($guestCart->getAllVisibleItems() as $guestCartItem) {
-            foreach ($customerCart->getAllItems() as $customerCartItem) {
-                if ($customerCartItem->compare($guestCartItem)) {
-                    $product = $customerCartItem->getProduct();
-                    $stockCurrentQty = $this->stockRegistry->getStockStatus(
-                        $product->getId(),
-                        $product->getStore()->getWebsiteId()
-                    )->getQty();
-                    if ($stockCurrentQty < $guestCartItem->getQty() + $customerCartItem->getQty()) {
-                        try {
-                            $this->cartItemRepository->deleteById($guestCart->getId(), $guestCartItem->getItemId());
-                            $modified = true;
-                        } catch (NoSuchEntityException $e) {
-                            continue;
-                        } catch (CouldNotSaveException $e) {
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
-        return $modified;
     }
 }
