@@ -1319,16 +1319,16 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
-        <arguments>
-            <argument name="itemResolvers" xsi:type="array"/>
-        </arguments>
-    </type>
     <type name="Magento\MediaStorage\Api\MediaConfigResolverInterface">
         <arguments>
             <argument name="resolvers" xsi:type="array">
                 <item name="catalog" xsi:type="object">Magento\Catalog\Model\Media\Config</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array"/>
         </arguments>
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
