@@ -40,7 +40,7 @@ require([
             uploadButton.click(function () {
                 $('#messages').html('');
                 $(this).attr('disabled', 'disabled');
-                data.trigger('submit');
+                data.submit();
             });
         },
 

@@ -54,7 +54,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         $storeId = $this->_sessionQuote->getStoreId();
 
         $this->buttonList->update('save', 'label', __('Submit Order'));
-        $this->buttonList->update('save', 'onclick', "order.trigger('submit')");
+        $this->buttonList->update('save', 'onclick', 'order.submit()');
         $this->buttonList->update('save', 'class', 'primary');
         // Temporary solution, unset button widget. Will have to wait till jQuery migration is complete
         $this->buttonList->update('save', 'data_attribute', []);

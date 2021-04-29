@@ -165,6 +165,7 @@ define([
 
                 /**
                  * form component for upload image
+                 * @type {jQuery}
                  */
                 form: null,
 

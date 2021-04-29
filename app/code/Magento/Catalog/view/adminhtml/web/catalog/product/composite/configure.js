@@ -266,7 +266,7 @@ define([
         onConfirmBtn: function () {
             if (jQuery(this.blockForm).valid()) {
                 if (this.listTypes[this.current.listType].urlConfirm) {
-                    this.trigger('submit');
+                    this.submit();
                 } else {
                     this._processFieldsData('item_confirm');
                     this._closeWindow();

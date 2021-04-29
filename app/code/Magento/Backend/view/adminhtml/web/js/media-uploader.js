@@ -85,7 +85,7 @@ define([
                     });
 
                     $(this).fileupload('process', data).done(function () {
-                        data.trigger('submit');
+                        data.submit();
                     });
                 },
 

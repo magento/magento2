@@ -251,7 +251,7 @@ require([
                         });
 
                         $(this).fileupload('process', data).done(function () {
-                            data.trigger('submit');
+                            data.submit();
                         });
                     },
                     done: function (e, data) {

@@ -196,7 +196,7 @@ define([
             this.element.validation({
                 submitHandler: $.proxy(function (form) {
                     if ($(form).find('input:checkbox:checked').length) {
-                        form.trigger('submit');
+                        form.submit();
                     } else {
                         alert({
                             content: this.options.checkBoxValidationMessage

@@ -64,7 +64,7 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
                 'text' => $this->getLayout()->createBlock(
                     \Magento\Backend\Block\Widget\Button::class
                 )->setData(
-                    ['label' => __('Add Group'), 'onclick' => "this.form.trigger('submit');", 'class' => 'add']
+                    ['label' => __('Add Group'), 'onclick' => "this.form.submit();", 'class' => 'add']
                 )->toHtml()
             ]
         );

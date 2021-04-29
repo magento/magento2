@@ -12,7 +12,7 @@ define([
 
     /**
      * @param {String} url
-     * @returns {Object}
+     * @returns {jQuery}
      */
     function getForm(url) {
         return $('<form>', {
