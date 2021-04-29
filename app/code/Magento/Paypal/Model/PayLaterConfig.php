@@ -71,8 +71,24 @@ class PayLaterConfig
      */
     public function isEnabled(string $placement): bool
     {
-        $isPayLaterEnabled = (boolean)$this->config->getPayLaterConfigValue('enabled');
-        return $isPayLaterEnabled && $this->getSectionConfig($placement, 'display');
+        $enabled = false;
+        if ($this->isPPCreditEnabled()) {
+            $isPayLaterEnabled = (boolean)$this->config->getPayLaterConfigValue('enabled');
+            $enabled = $isPayLaterEnabled && $this->getSectionConfig($placement, 'display');
+        }
+        return $enabled;
+    }
+
+    /**
+     * Check that PayPal Credit enabled with any PayPal express method
+     *
+     * @return
+     */
+    private function isPPCreditEnabled()
+    {
+        return $this->config->isMethodAvailable(Config::METHOD_WPP_BML)
+            || $this->config->isMethodAvailable(Config::METHOD_WPS_BML)
+            || $this->config->isMethodAvailable(Config::METHOD_WPP_PE_BML);
     }
 
     /**
