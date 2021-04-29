@@ -835,7 +835,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUrl($routePath = null, $routeParams = null)
     {
-        $routeParams['_scope'] = $this->_scopeResolver->getScope() ? $this->_scopeResolver->getScope() : $this->_getData('scope');
+        $routeParams['_scope'] = $this->_scopeResolver->getScope();
 
         if (filter_var($routePath, FILTER_VALIDATE_URL)) {
             return $routePath;
