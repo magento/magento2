@@ -71,6 +71,6 @@ class ImportExportTest extends TestCase
     {
         $html = $this->block->toHtml();
         $this->assertStringContainsString('<form id="export_form"', $html);
-        $this->assertStringContainsString("export_form.submit();", $html);
+        $this->assertStringContainsString('export_form.submit();', $html);
     }
 }

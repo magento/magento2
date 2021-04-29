@@ -36,7 +36,7 @@ class Formattribute extends \Magento\Backend\Block\Widget\Form\Generic
                 'text' => $this->getLayout()->createBlock(
                     \Magento\Backend\Block\Widget\Button::class
                 )->setData(
-                    ['label' => __('Add Attribute'), 'onclick' => "this.form.submit();", 'class' => 'add']
+                    ['label' => __('Add Attribute'), 'onclick' => 'this.form.submit();', 'class' => 'add']
                 )->toHtml()
             ]
         );

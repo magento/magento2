@@ -29,7 +29,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression(
             '/\<button.*\>[\s\S]*Button Label[\s\S]*<\/button>'
                 . '.*?\<script.*?\>.*?this\.form\.submit\(\).*?\<\/script\>/is',
-            $widget->getButtonHtml('Button Label', "this.form.submit()")
+            $widget->getButtonHtml('Button Label', 'this.form.submit()')
         );
     }
 
@@ -52,13 +52,13 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
         $this->assertMatchesRegularExpression(
             '/<button.*\>[\s\S]*Button Label[\s\S]*<\/button>'
                 . '.*?\<script.*?\>.*?this\.form\.submit\(\).*?\<\/script\>/ius',
-            $widget->getButtonHtml('Button Label', "this.form.submit()")
+            $widget->getButtonHtml('Button Label', 'this.form.submit()')
         );
 
         $this->assertMatchesRegularExpression(
             '/<button.*\>[\s\S]*Button Label2[\s\S]*<\/button>'
                 . '.*?\<script.*?\>.*?this\.form\.submit\(\).*?\<\/script\>/ius',
-            $widget->getButtonHtml('Button Label2', "this.form.submit()")
+            $widget->getButtonHtml('Button Label2', 'this.form.submit()')
         );
     }
 
