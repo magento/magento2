@@ -1767,6 +1767,11 @@
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
     <virtualType name="CsrfRequestValidator" type="Magento\Framework\App\Request\CsrfValidator" />
     <virtualType name="RequestValidator" type="Magento\Framework\App\Request\CompositeValidator">
         <arguments>
