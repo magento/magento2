@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Fixture\Type;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Fixture\DataFixtureInterface;
 use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
@@ -60,9 +61,9 @@ class DataFixture implements DataFixtureTypeInterface
     /**
      * Get fixture class instance
      *
-     * @return \Magento\TestFramework\Fixture\DataFixtureInterface
+     * @return DataFixtureInterface
      */
-    private function getInstance(): \Magento\TestFramework\Fixture\DataFixtureInterface
+    private function getInstance(): DataFixtureInterface
     {
         return $this->objectManager->create($this->className);
     }

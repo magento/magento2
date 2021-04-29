@@ -106,8 +106,10 @@ abstract class AbstractDataFixture
             $fixture = $dataFixtureFactory->create($directives);
             $key = $directives['identifier'] ?? $key;
             $result = $fixture->apply($directives['data'] ?? []);
-            $resultObj = $result !== null ? $objectManager->create(DataObject::class, ['data' => $result]) : null;
-            DataFixtureStorageManager::getStorage()->persist("$key", $resultObj);
+            DataFixtureStorageManager::getStorage()->persist(
+                "$key",
+                $result !== null ? $objectManager->create(DataObject::class, ['data' => $result]) : null
+            );
             $this->_appliedFixtures[$key] = $fixture;
         }
         $resolver = Resolver::getInstance();
