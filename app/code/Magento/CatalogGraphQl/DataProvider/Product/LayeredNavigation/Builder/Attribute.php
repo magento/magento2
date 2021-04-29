@@ -86,12 +86,12 @@ class Attribute implements LayerBuilderInterface
                 $attribute['attribute_code'] ?? $bucketName
             );
 
-            foreach ($bucket->getValues() as $value) {
-                $metrics = $value->getMetrics();
+            $options = $this->getSortedOptions($bucket,$attribute['options'] ?: []);
+            foreach ($options as $option) {
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
-                    $attribute['options'][$metrics['value']] ?? $metrics['value'],
-                    $metrics['value'],
-                    $metrics['count']
+                    $option['label'],
+                    $option['value'],
+                    $option['count']
                 );
             }
         }
@@ -160,5 +160,37 @@ class Attribute implements LayerBuilderInterface
             $storeId,
             $attributes
         );
+    }
+
+    /**
+     * Get sorted options
+     *
+     * @param BucketInterface $bucket
+     * @param array $optionLabels
+     * @return array
+     */
+    private function getSortedOptions(BucketInterface $bucket, array $optionLabels): array
+    {
+        /**
+         * Option labels array has been sorted
+         */
+        $options = $optionLabels;
+        foreach ($bucket->getValues() as $value) {
+            $metrics = $value->getMetrics();
+            $optionValue = $metrics['value'];
+            $optionLabel = $optionLabels[$optionValue] ?? $optionValue;
+            $options[$optionValue] = $metrics + ['label' => $optionLabel];
+        }
+
+        /**
+         * Delete options without bucket values
+         */
+        foreach ($options as $optionId => $option) {
+            if (!is_array($options[$optionId])) {
+               unset($options[$optionId]);
+            }
+        }
+
+        return array_values($options);
     }
 }
