@@ -21,7 +21,7 @@ class Position
     {
         return [
             'header' => __('Header (center)'),
-            'sidebar' => __('Near PayPal Credit checkout button')
+            'near_pp_button' => __('Near PayPal Credit checkout button')
         ];
     }
 }

@@ -21,14 +21,20 @@ class Banner extends Template
      * @var PayLaterConfig
      */
     private $payLaterConfig;
-    private $position;
-    private $placement;
-    private $sdkUrl;
+
+    /**
+     * @var string
+     */
+    private $placement = '';
+
+    /**
+     * @var string
+     */
+    private $position = '';
 
     /**
      * @param Template\Context $context
      * @param PayLaterConfig $payLaterConfig
-     * @param SdkUrl $sdkUrl
      * @param array $data
      */
     public function __construct(
@@ -38,10 +44,10 @@ class Banner extends Template
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->placement = $data['placement'] ??  '';
-        $this->position = $data['position'] ??  '';
         $this->payLaterConfig = $payLaterConfig;
         $this->sdkUrl = $sdkUrl;
+        $this->placement = $data['placement'] ??  '';
+        $this->position = $data['position'] ??  '';
     }
 
     /**
@@ -49,7 +55,7 @@ class Banner extends Template
      *
      * @return string
      */
-    protected function _toHtml()
+    protected function _toHtml(): string
     {
         if (!$this->isEnabled()) {
             return '';
@@ -62,10 +68,30 @@ class Banner extends Template
      */
     public function getJsLayout()
     {
-        $this->jsLayout['components']['payLater']['config']['sdkUrl'] = $this->getPayPalSdkUrl();
+        $jsLayout = [
+            'components' => [
+                'payLater' => [
+                    'component' =>
+                        $this->jsLayout['components']['payLater']['component'] ?? 'Magento_Paypal/js/view/paylater',
+                    'config' => [
+                        'sdkUrl' => $this->getPayPalSdkUrl(),
+                    ]
+                ]
+            ]
+        ];
+
+        //Merge config
+        $config = $this->jsLayout['components']['payLater']['config'] ?? [];
+        $config = array_replace($jsLayout['components']['payLater']['config'], $config);
+
+        //Merge attributes
         $attributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
-        $attributes = array_replace($this->getStyleAttributesConfig(), $attributes);
-        $this->jsLayout['components']['payLater']['config']['attributes'] = $attributes;
+        $config['attributes'] = array_replace($this->getStyleAttributesConfig(), $attributes);
+        $config['attributes']['data-pp-placement'] = $this->placement;
+        $jsLayout['components']['payLater']['config'] = $config;
+
+        $this->jsLayout = $jsLayout;
+
         return parent::getJsLayout();
     }
 
@@ -74,7 +100,7 @@ class Banner extends Template
      *
      * @return string
      */
-    private function getPayPalSdkUrl()
+    private function getPayPalSdkUrl(): string
     {
         return $this->sdkUrl->getUrl();
     }
@@ -82,14 +108,11 @@ class Banner extends Template
     /**
      * Retrieve style configuration
      *
-     * @return string[]
+     * @return array
      */
-    private function getStyleAttributesConfig()
+    private function getStyleAttributesConfig(): array
     {
-        return array_replace(
-            ['data-pp-style-logo-position' => 'center'],
-            $this->payLaterConfig->getStyleConfig($this->placement)
-        );
+        return $this->payLaterConfig->getStyleConfig($this->placement);
     }
 
     /**
@@ -97,7 +120,7 @@ class Banner extends Template
      *
      * @return bool
      */
-    private function isEnabled()
+    private function isEnabled(): bool
     {
         $enabled = $this->payLaterConfig->isEnabled($this->placement);
         return $enabled && $this->payLaterConfig->getPositionConfig($this->placement) == $this->position;
