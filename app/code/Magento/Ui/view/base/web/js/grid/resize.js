@@ -445,7 +445,7 @@ define([
             cfg.depResizeElem.model.width = $(cfg.depResizeElem.elems[0]).outerWidth();
             body.addClass(this.inResizeClass);
             body.bind('mousemove', this.mousemoveHandler);
-            $(window).bind('mouseup', this.mouseupHandler);
+            $(window).on('mouseup', this.mouseupHandler);
         },
 
         /**
@@ -529,7 +529,7 @@ define([
 
             body.removeClass(this.inResizeClass);
             body.unbind('mousemove', this.mousemoveHandler);
-            $(window).unbind('mouseup', this.mouseupHandler);
+            $(window).off('mouseup', this.mouseupHandler);
         },
 
         /**
