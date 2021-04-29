@@ -99,7 +99,8 @@
                     <field id="enable_payflow_advanced"/>
                 </requires>
             </field>
-            <field id="enable_express_checkout_bml" sortOrder="42" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" showInDefault="1" showInWebsite="1">
+            <field id="enable_paypal_paylater_experience" sortOrder="42" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_paypal_paylater_experience"/>
+            <field id="enable_express_checkout_bml" sortOrder="44" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" showInDefault="1" showInWebsite="1">
                 <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                             You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
                             <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
@@ -109,12 +110,16 @@
                 <requires>
                     <field id="enable_payflow_advanced"/>
                 </requires>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">0</field>
+                </depends>
             </field>
             <field id="express_checkout_bml_sort_order" sortOrder="50" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order" showInDefault="1" showInWebsite="1">
                 <config_path>payment/payflow_express_bml/sort_order</config_path>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
                 <depends>
                     <field id="enable_express_checkout_bml">1</field>
+                    <field id="enable_paypal_paylater_experience">0</field>
                 </depends>
             </field>
             <group id="advanced_advertise_bml" showInDefault="1" showInWebsite="1" sortOrder="60" translate="label comment">
@@ -127,6 +132,10 @@
                                             The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                                             or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">0</field>
+                </depends>
+                <fieldset_css>paypal-advertise-bml</fieldset_css>
                 <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
                 <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
                 <group id="advanced_settings_bml_homepage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20" translate="label">
@@ -213,6 +222,9 @@
             </group>
             <group id="advanced_advertise_paylater" translate="label" showInDefault="1" showInWebsite="1" sortOrder="70">
                 <label>Advertise PayPal PayLater</label>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">1</field>
+                </depends>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
                 <group id="advanced_settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Catalog Product Page</label>

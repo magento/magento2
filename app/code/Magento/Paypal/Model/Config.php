@@ -178,6 +178,7 @@ class Config extends AbstractConfig
      * PayPal PayLater
      */
     const PAYLATER = 'paypal_paylater';
+    const PAYFLOW_PAYLATER = 'payflow_paylater';
 
     /**
      * Instructions for generating proper BN code

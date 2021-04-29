@@ -73,8 +73,9 @@ class PayLaterConfig
     {
         $enabled = false;
         if ($this->isPPCreditEnabled()) {
+            $payLaterActive = (boolean)$this->config->getPayLaterConfigValue('experience_active');
             $isPayLaterEnabled = (boolean)$this->config->getPayLaterConfigValue('enabled');
-            $enabled = $isPayLaterEnabled && $this->getSectionConfig($placement, 'display');
+            $enabled = $payLaterActive && $isPayLaterEnabled && $this->getSectionConfig($placement, 'display');
         }
         return $enabled;
     }

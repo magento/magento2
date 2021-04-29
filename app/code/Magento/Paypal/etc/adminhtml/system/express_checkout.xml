@@ -160,7 +160,20 @@
                     <field id="enable_in_context_checkout">1</field>
                 </depends>
             </field>
-            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="0" showInWebsite="0">
+            <field id="enable_paypal_paylater_experience" translate="label comment" type="select" sortOrder="23" showInDefault="1" showInWebsite="1">
+                <label>Enable PayPal PayLater Experience</label>
+                <comment>
+                    <![CDATA[Recommended. <strong>Advertise PayPal Credit</strong> is deprecated.
+                    See PayPal PayLater details and list of supported regions
+                    <a href="https://developer.paypal.com/docs/business/pay-later/us/#eligibility" target="_blank">
+                    here</a>.]]>
+                </comment>
+                <config_path>payment/paypal_paylater/experience_active</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\PayLater</frontend_model>
+                <attribute type="shared">1</attribute>
+            </field>
+            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="24" showInDefault="0" showInWebsite="0">
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
@@ -172,6 +185,9 @@
                 <requires>
                     <field id="enable_express_checkout"/>
                 </requires>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">0</field>
+                </depends>
             </field>
             <field id="express_checkout_bml_sort_order" translate="label" type="text" sortOrder="25" showInDefault="0" showInWebsite="0" showInStore="0">
                 <label>Sort Order PayPal Credit</label>
@@ -181,6 +197,7 @@
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlApiSortOrder</frontend_model>
                 <depends>
                     <field id="enable_express_checkout_bml">1</field>
+                    <field id="enable_paypal_paylater_experience">0</field>
                 </depends>
             </field>
             <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">
@@ -193,6 +210,10 @@
                         The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                         or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
+                <fieldset_css>paypal-advertise-bml</fieldset_css>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">0</field>
+                </depends>
                 <field id="bml_publisher_id" translate="label comment tooltip" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Publisher ID</label>
                     <comment><![CDATA[Required to display a banner]]></comment>
@@ -322,6 +343,9 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
                 </field>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">1</field>
+                </depends>
                 <group id="settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Catalog Product Page</label>
                     <depends>
