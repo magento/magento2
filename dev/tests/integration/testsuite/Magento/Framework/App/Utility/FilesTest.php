@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\App\Utility;
 
-use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class FilesTest extends \PHPUnit\Framework\TestCase
@@ -169,6 +168,14 @@ class FilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testAllowUnderscoreInExtendedFiles()
     {
-        $this->model->getStaticPreProcessingFiles('*.less');
+        $this->assertNotEmpty(
+            array_filter(
+                $this->model->getStaticPreProcessingFiles('*.less'),
+                function ($resource) {
+                    return $resource[3] === 'Module_Third_Party'
+                        && $resource[4] === 'css/source/_module.less';
+                }
+            )
+        );
     }
 }
