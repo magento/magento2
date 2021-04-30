@@ -47,6 +47,11 @@ class Queue
     private $inProgress = [];
 
     /**
+     * @var Package[]
+     */
+    private $failed = [];
+
+    /**
      * @var int
      */
     private $maxProcesses;
@@ -193,8 +198,13 @@ class Queue
 
         $this->awaitForAllProcesses();
 
-        if (!empty($packages)) {
-            throw new TimeoutException('Not all packages are deployed.');
+        $failedPackages = array_merge($this->failed, $packages);
+        if (!empty($failedPackages)) {
+            throw new \RuntimeException(
+                'The following packages have failed to deploy '
+                .PHP_EOL
+                .implode(PHP_EOL, array_keys($failedPackages))
+            );
         }
 
         return $returnStatus;
@@ -280,9 +290,7 @@ class Queue
                 $isDeployed = $this->isDeployed($package);
 
                 if ($isDeployed === false) {
-                    throw new \RuntimeException(
-                        "Deploy of the package " . $package->getPath() . " has failed."
-                    );
+                    $this->failed[$package->getPath()]= $this->packages[$package->getPath()];
                 } elseif ($isDeployed) {
                     unset($this->inProgress[$name]);
                 }
@@ -363,9 +371,7 @@ class Queue
         } else {
             $isDeployed = $this->deployPackageService->deploy($package, $this->options);
             if ($isDeployed === false) {
-                throw new \RuntimeException(
-                    "Deploy of the package " . $package->getPath() . " has failed."
-                );
+                $this->failed[$package->getPath()]= $this->packages[$package->getPath()];
             }
             return $isDeployed;
         }

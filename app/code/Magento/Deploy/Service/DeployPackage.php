@@ -99,10 +99,6 @@ class DeployPackage
             function () use ($package, $options, $skipLogging) {
                 // emulate application locale needed for correct file path resolving
                 $this->localeResolver->setLocale($package->getLocale());
-                /**
-                 * \Magento\Framework\App\State::emulateAreaCode was returning the result of this
-                 * anonymous function, and the result wasn't provided
-                 */
                 return $this->deployEmulated($package, $options, $skipLogging);
             }
         );
@@ -154,7 +150,7 @@ class DeployPackage
         foreach ($package->getPostProcessors() as $processor) {
             $processor->process($package, $options);
         }
-        // $this->errorsCount was counted but never checked in the end. Return was always true.
+
         return !(bool)$this->errorsCount;
     }
 
