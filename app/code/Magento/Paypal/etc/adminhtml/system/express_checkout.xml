@@ -179,6 +179,9 @@
                 <frontend_class>validate-number</frontend_class>
                 <attribute type="shared">1</attribute>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlApiSortOrder</frontend_model>
+                <depends>
+                    <field id="enable_express_checkout_bml">1</field>
+                </depends>
             </field>
             <field id="enable_paypal_paylater_experience" translate="label comment" type="select" sortOrder="27" showInDefault="1" showInWebsite="1">
                 <label>Enable PayPal PayLater Experience</label>
