@@ -277,7 +277,13 @@ class Queue
     {
         while ($this->inProgress && $this->checkTimeout()) {
             foreach ($this->inProgress as $name => $package) {
-                if ($this->isDeployed($package)) {
+                $isDeployed = $this->isDeployed($package);
+
+                if ($isDeployed === false) {
+                    throw new \RuntimeException(
+                        "Deploy of the package " . $package->getPath() . " has failed."
+                    );
+                } elseif ($isDeployed) {
                     unset($this->inProgress[$name]);
                 }
             }
@@ -351,12 +357,17 @@ class Queue
 
             // process child process
             $this->inProgress = [];
-            $this->deployPackageService->deploy($package, $this->options, true);
+            $isDeployed = $this->deployPackageService->deploy($package, $this->options, true);
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
-            exit(0);
+            exit((int)!$isDeployed);
         } else {
-            $this->deployPackageService->deploy($package, $this->options);
-            return true;
+            $isDeployed = $this->deployPackageService->deploy($package, $this->options);
+            if ($isDeployed === false) {
+                throw new \RuntimeException(
+                    "Deploy of the package " . $package->getPath() . " has failed."
+                );
+            }
+            return $isDeployed;
         }
     }
 
@@ -364,9 +375,9 @@ class Queue
      * Checks if package is deployed.
      *
      * @param Package $package
-     * @return bool
+     * @return null|bool
      */
-    private function isDeployed(Package $package)
+    private function isDeployed(Package $package): ?bool
     {
         if ($this->isCanBeParalleled()) {
             if ($package->getState() === null) {
@@ -375,7 +386,7 @@ class Queue
                 // When $pid comes back as null the child process for this package has not yet started; prevents both
                 // hanging until timeout expires (which was behaviour in 2.2.x) and the type error from strict_types
                 if ($pid === null) {
-                    return false;
+                    return null;
                 }
 
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -406,10 +417,10 @@ class Queue
                         "Error encountered checking child process status (PID: $pid): $strerror (errno: $errno)"
                     );
                 }
-                return false;
+                return null;
             }
         }
-        return $package->getState();
+        return (bool)$package->getState();
     }
 
     /**
