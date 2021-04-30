@@ -35,6 +35,11 @@ abstract class AbstractDataFixture
     protected $fixtures = [];
 
     /**
+     * @var array
+     */
+    private $appliedFixturesResults = [];
+
+    /**
      * Retrieve fixtures from annotation
      *
      * @param TestCase $test
@@ -99,18 +104,20 @@ abstract class AbstractDataFixture
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
         $dataFixtureFactory = $objectManager->get(Factory::class);
         /* Execute fixture scripts */
-        foreach ($fixtures as $key => $directives) {
+        foreach ($fixtures as $directives) {
             if (is_callable([get_class($test), $directives['name']])) {
                 $directives['name'] = [get_class($test), $directives['name']];
             }
             $fixture = $dataFixtureFactory->create($directives);
-            $key = $directives['identifier'] ?? $key;
             $result = $fixture->apply($directives['data'] ?? []);
-            DataFixtureStorageManager::getStorage()->persist(
-                "$key",
-                $result !== null ? $objectManager->create(DataObject::class, ['data' => $result]) : null
-            );
-            $this->_appliedFixtures[$key] = $fixture;
+            if ($result !== null && isset($directives['identifier'])) {
+                DataFixtureStorageManager::getStorage()->persist(
+                    $directives['identifier'],
+                    $objectManager->create(DataObject::class, ['data' => $result])
+                );
+            }
+            $this->_appliedFixtures[] = $fixture;
+            $this->appliedFixturesResults[] = $result;
         }
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType(null);
@@ -128,15 +135,15 @@ abstract class AbstractDataFixture
         $resolver->setCurrentFixtureType($this->getAnnotation());
         $appliedFixtures = array_reverse($this->_appliedFixtures, true);
         foreach ($appliedFixtures as $key => $fixture) {
-            $result = DataFixtureStorageManager::getStorage()->get("$key");
+            $result = $this->appliedFixturesResults[$key];
             try {
-                $fixture->revert($result ? $result->getData() : []);
+                $fixture->revert($result ?? []);
             } catch (NoSuchEntityException $exception) {
                 //ignore
             }
         }
         $this->_appliedFixtures = [];
-        DataFixtureStorageManager::getStorage()->flush();
+        $this->appliedFixturesResults = [];
         $resolver->setCurrentFixtureType(null);
 
         if (null !== $test) {
