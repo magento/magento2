@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\ResourceModel\Provider;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 
 /**
  * Retrieves ID's of not synced by `updated_at` column entities.
@@ -26,12 +27,21 @@ class UpdatedAtListProvider implements NotSyncedDataProviderInterface
     private $connection;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @var LastUpdateTimeCache
      */
-    public function __construct(ResourceConnection $resourceConnection)
-    {
+    private $lastUpdateTimeCache;
+
+    /**
+     * @param ResourceConnection $resourceConnection
+     * @param LastUpdateTimeCache $lastUpdateTimeCache
+     */
+    public function __construct(
+        ResourceConnection $resourceConnection,
+        LastUpdateTimeCache $lastUpdateTimeCache
+    ) {
         $this->connection = $resourceConnection->getConnection('sales');
         $this->resourceConnection = $resourceConnection;
+        $this->lastUpdateTimeCache = $lastUpdateTimeCache;
     }
 
     /**
@@ -54,6 +64,11 @@ class UpdatedAtListProvider implements NotSyncedDataProviderInterface
                 ),
                 []
             );
+
+        $lastUpdatedAt = $this->lastUpdateTimeCache->get($gridTableName);
+        if ($lastUpdatedAt) {
+            $select->where($mainTableName . '.updated_at > ?', $lastUpdatedAt);
+        }
 
         return $this->connection->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
     }
