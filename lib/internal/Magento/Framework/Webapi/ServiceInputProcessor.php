@@ -11,6 +11,7 @@ namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
@@ -299,6 +300,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $object->{$setterName}($setterValue);
             }
         }
+
+        if ($object instanceof SearchCriteriaInterface
+            && $object->getPageSize() === null
+        ) {
+            $object->setPageSize(20);
+        }
+
         return $object;
     }
 
