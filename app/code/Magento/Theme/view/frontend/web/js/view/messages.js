@@ -32,16 +32,15 @@ define([
             this._super().observe('messages');
 
 
-            this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
+            this.cookieMessages = _.unique($.mage.cookies.get('mage-messages'), 'text');
 
             _self.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
-            });
+            }) || [];
 
             // Force to clean obsolete messages
             if (!_.isEmpty(_self.messages().messages)) {
                 customerData.set('messages', {});
-                _self.messages().messages = {};
             }
 
             $.mage.cookies.set('mage-messages', '', {
