@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\ResourceModel\Layout;
+
+use Magento\Widget\Model\ResourceModel\Layout\Update as WidgetLayoutUpdate;
 
 /**
  * Class Plugin
@@ -11,15 +15,15 @@ namespace Magento\Widget\Model\ResourceModel\Layout;
 class Plugin
 {
     /**
-     * @var \Magento\Widget\Model\ResourceModel\Layout\Update
+     * @var WidgetLayoutUpdate
      */
     private $update;
 
     /**
-     * @param \Magento\Widget\Model\ResourceModel\Layout\Update $update
+     * @param WidgetLayoutUpdate
      */
     public function __construct(
-        \Magento\Widget\Model\ResourceModel\Layout\Update $update
+        WidgetLayoutUpdate $update
     ) {
         $this->update = $update;
     }

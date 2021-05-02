@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Model\Layout;
 
 use Magento\Framework\App\ObjectManager;
@@ -180,6 +182,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $cacheLifetime;
 
     /**
+     * @var \Magento\Framework\View\DesignInterface
+     */
+    private $design;
+
+    /**
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
@@ -214,6 +221,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         SerializerInterface $serializer = null,
         ?int $cacheLifetime = null
     ) {
+        $this->design = $design;
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
         $this->fileSource = $fileSource;
@@ -773,7 +781,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected function _loadFileLayoutUpdatesXml()
     {
         $layoutStr = '';
-        $theme = $this->_getPhysicalTheme($this->theme);
+        $theme = $this->_getPhysicalTheme($this->getTheme());
         $updateFiles = $this->fileSource->getFiles($theme, '*.xml');
         $updateFiles = array_merge($updateFiles, $this->pageLayoutFileSource->getFiles($theme, '*.xml'));
         $useErrors = libxml_use_internal_errors(true);
@@ -957,6 +965,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function getTheme()
     {
+        if ($this->theme === null) {
+            $this->theme = $this->design->getDesignTheme();
+        }
+
         return $this->theme;
     }
 

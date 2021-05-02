@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Model\View;
 
@@ -114,7 +115,6 @@ class Design implements \Magento\Framework\View\DesignInterface
     public function setArea($area)
     {
         $this->_area = $area;
-        $this->_theme = null;
         return $this;
     }
 
@@ -232,7 +232,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
@@ -272,7 +272,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDesignParams()
     {
