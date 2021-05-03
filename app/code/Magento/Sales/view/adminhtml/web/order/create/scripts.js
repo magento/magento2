@@ -1107,7 +1107,7 @@ define([
         },
 
         accountFieldChange: function () {
-            this.saveData(this.serializeData('order-form_account'));
+            this.saveData(this.serializeData('order-form_account').toObject());
         },
 
         commentFieldsBind: function (container) {
@@ -1119,7 +1119,7 @@ define([
         },
 
         commentFieldChange: function () {
-            this.saveData(this.serializeData('order-comment'));
+            this.saveData(this.serializeData('order-comment').toObject());
         },
 
         giftmessageFieldsBind: function (container) {
