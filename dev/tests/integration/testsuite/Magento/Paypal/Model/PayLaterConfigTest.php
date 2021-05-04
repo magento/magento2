@@ -122,6 +122,7 @@ class PayLaterConfigTest extends TestCase
     public function testIsEnabled($systemConfig, $expected)
     {
         $systemConfig = array_replace([
+                'payment/paypal_paylater/experience_active' => 1,
                 'payment/paypal_paylater/enabled' => 1,
                 'payment/paypal_paylater/test1page_display' => 1
         ], $systemConfig);
@@ -214,6 +215,13 @@ class PayLaterConfigTest extends TestCase
                 [
                     sprintf($paymentPath, Config::METHOD_EXPRESS) => 1,
                     'payment/paypal_paylater/test1page_display' => 0
+                ],
+                false
+            ],
+            'PayLater experience not active' => [
+                [
+                    sprintf($paymentPath, Config::METHOD_EXPRESS) => 1,
+                    'payment/paypal_paylater/experience_active' => 0
                 ],
                 false
             ],
