@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -35,8 +37,8 @@ class VisibilityStatusProcessor implements CollectionProcessorInterface
         array $attributeNames,
         ContextInterface $context = null
     ): Collection {
-        $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $collection->addAttributeToFilter('status', ['eq' => Status::STATUS_ENABLED]);
+        $collection->addAttributeToFilter('visibility', ['neq' => [Visibility::VISIBILITY_NOT_VISIBLE]]);
 
         return $collection;
     }
