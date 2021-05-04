@@ -39,8 +39,9 @@ staleLabel: "stale issue"
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
   This issue has been automatically marked as stale because it has not had
-  recent activity. It will be closed after 14 days if no further activity occurs. Thank you
-  for your contributions.
+  recent activity. It will be closed after 14 days if no further activity occurs.
+  Is this issue still relevant? If so, what is blocking it? Is there anything you can do to help move it forward?
+  Thank you for your contributions!
 # Comment to post when removing the stale label.
 # unmarkComment: >
 #   Your comment here.

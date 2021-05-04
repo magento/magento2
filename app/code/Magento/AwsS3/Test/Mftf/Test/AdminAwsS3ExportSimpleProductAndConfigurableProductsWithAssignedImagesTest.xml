@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ExportSimpleProductAndConfigurableProductsWithAssignedImagesTest" extends="AdminExportSimpleProductAndConfigurableProductsWithAssignedImagesTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Export Products"/>
+            <title value="S3 - Export Simple product and Configurable products with assigned images"/>
+            <description value="Verifies that a user can export a Configurable product with child simple products with
+            images. Verifies that the exported file and the downloadable copy of the exported file contain the expected
+            product (a filter is applied when exporting such that ONLY the configurable product row should be in the
+            export) and the attached image. Note that MFTF cannot simply download a file and have access to it due to
+            the test not having access to the server that is running the test browser. Therefore, this test verifies
+            that the Download button can be successfully clicked, grabs the request URL from the Download button,
+            executes the request on the magento machine via a curl request, and verifies the contents of the downloaded
+            file. Uses S3 for the file system."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38558"/>
+            <group value="importExport"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+
+        <before>
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="createCategory"/>
+        </before>
+
+        <after>
+            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">import_export/export</argument>
+            </helper>
+
+            <!-- Disable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logout"/>
+        </after>
+
+        <!-- Validate Export File on S3: Configurable Product -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createConfigProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildSimpleProductOption">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">sku=$$createConfigFirstChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option1</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildSimpleProductOption">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">sku=$$createConfigSecondChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option2</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProductImage">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$createConfigProductImage.entry[content][name]$,"$createConfigProductImage.entry[label]$"</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainFirstSimpleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createConfigFirstChildProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainSecondSimpleProduct">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+            <argument name="text">$$createConfigSecondChildProduct.name$$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">import_export/export/{$grabNameFile}</argument>
+        </helper>
+    </test>
+</tests>
