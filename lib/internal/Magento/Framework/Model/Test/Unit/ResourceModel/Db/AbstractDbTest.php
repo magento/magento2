@@ -616,4 +616,26 @@ class AbstractDbTest extends TestCase
 
         $model->save($object);
     }
+
+    public function testThrowableProcessingOnSave()
+    {
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+
+        /** @var AbstractDb|MockObject $model */
+        $model = $this->getMockBuilder(AbstractDb::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getConnection'])
+            ->getMockForAbstractClass();
+        $model->expects($this->any())->method('getConnection')->willReturn($connection);
+
+        /** @var AbstractModel|MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $object->expects($this->once())->method('beforeSave')->willThrowException(new \Error());
+
+        $model->save($object);
+    }
+
 }
