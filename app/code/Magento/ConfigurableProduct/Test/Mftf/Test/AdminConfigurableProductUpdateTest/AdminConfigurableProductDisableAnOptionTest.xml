@@ -75,7 +75,7 @@
         </after>
 
         <!--check storefront for both options-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront1"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnStorefront1"/>
         <waitForPageLoad stepKey="wait1"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="seeOption1Storefront"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
@@ -91,7 +91,7 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
 
         <!--check storefront for one option-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront2"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="amOnStorefront2"/>
         <waitForPageLoad stepKey="wait4"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option1" stepKey="dontSeeOption1InStorefront"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Again"/>

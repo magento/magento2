@@ -12,13 +12,15 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConfigurableTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
     /**
      * Object under test
@@ -644,5 +646,31 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->load(1);
         return $this->model->getUsedProducts($product);
+    }
+
+    /**
+     * Unable to save product required option to product which is a part of configurable product
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
+     * @return void
+     */
+    public function testAddCustomOptionToConfigurableChildProduct(): void
+    {
+        $this->expectErrorMessage(
+            'Required custom options cannot be added to a simple product that is a part of a composite product.'
+        );
+
+        $sku = 'Simple option 1';
+        $product = $this->productRepository->get($sku);
+        $optionRepository = Bootstrap::getObjectManager()->get(ProductCustomOptionInterfaceFactory::class);
+        $createdOption = $optionRepository->create(
+            ['data' => ['title' => 'drop_down option', 'type' => 'drop_down', 'sort_order' => 4, 'is_require' => 1]]
+        );
+        $createdOption->setProductSku($product->getSku());
+        $product->setOptions([$createdOption]);
+        $this->productRepository->save($product);
+
+        $product = $this->productRepository->get($sku);
+        $this->assertEmpty($product->getOptions());
     }
 }
