@@ -1959,4 +1959,9 @@
             <argument name="maxPageSize" xsi:type="number">300</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+        <arguments>
+            <argument name="defaultPageSize" xsi:type="number">20</argument>
+        </arguments>
+    </type>
 </config>

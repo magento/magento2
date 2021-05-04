@@ -93,6 +93,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $serviceInputValidator;
 
     /**
+     * @var int
+     */
+    private $defaultPageSize;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -104,6 +109,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param ConfigInterface|null $config
      * @param array $customAttributePreprocessors
      * @param ServiceInputValidatorInterface|null $serviceInputValidator
+     * @param int|null $defaultPageSize
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -114,7 +120,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         ServiceTypeToEntityTypeMap $serviceTypeToEntityTypeMap = null,
         ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
-        ServiceInputValidatorInterface $serviceInputValidator = null
+        ServiceInputValidatorInterface $serviceInputValidator = null,
+        int $defaultPageSize = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -128,6 +135,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->customAttributePreprocessors = $customAttributePreprocessors;
         $this->serviceInputValidator = $serviceInputValidator
             ?: ObjectManager::getInstance()->get(ServiceInputValidatorInterface::class);
+        $this->defaultPageSize = $defaultPageSize ?: 20;
     }
 
     /**
@@ -304,7 +312,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if ($object instanceof SearchCriteriaInterface
             && $object->getPageSize() === null
         ) {
-            $object->setPageSize(20);
+            $object->setPageSize($this->defaultPageSize);
         }
 
         return $object;
