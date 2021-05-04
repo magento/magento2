@@ -35,6 +35,7 @@ class BannerTest extends TestCase
 
         $jsConfig = json_decode($block->getJsLayout(), true);
         $this->assertArrayHasKey('config', $jsConfig['components']['payLater']);
+        $this->assertArrayHasKey('component', $jsConfig['components']['payLater']);
 
         $optionsConfig = $jsConfig['components']['payLater']['config'];
         $this->assertEquals($expectedConfig, array_intersect_key($optionsConfig, $expectedConfig));
@@ -120,17 +121,66 @@ class BannerTest extends TestCase
 
     /**
      * @magentoAppArea frontend
+     * @dataProvider sdkUrlDataProvider
      * @covers \Magento\Paypal\Block\PayLater\Banner::getJsLayout()
      * @covers \Magento\Paypal\Block\PayLater\Banner::getPayPalSdkUrl()
      */
-    public function testSdkUrl()
+    public function testSdkUrl($blockConfig, $expectedUrl)
     {
         $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
-        $block = $layout->createBlock(Banner::class, '', []);
+        $block = $layout->createBlock(Banner::class, '', ['data' => $blockConfig]);
 
         $jsConfig = json_decode($block->getJsLayout(), true);
         $this->assertArrayHasKey('config', $jsConfig['components']['payLater']);
         $this->assertArrayHasKey('sdkUrl', $jsConfig['components']['payLater']['config']);
+        $this->assertStringContainsString($expectedUrl, $jsConfig['components']['payLater']['config']['sdkUrl']);
+    }
+
+    public function sdkUrlDataProvider()
+    {
+        return [
+            [
+                'blockConfig' => [
+                    'jsLayout' => [
+                        'components' => [
+                            'payLater' => [
+                                'config' => [
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedUrl' => 'paypal.com/sdk'
+            ],
+            [
+                'blockConfig' => [
+                    'jsLayout' => [
+                        'components' => [
+                            'payLater' => [
+                                'config' => [
+                                    'attributes' => ['test1' => 'value1']
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedUrl' => 'paypal.com/sdk'
+            ],
+            [
+                'blockConfig' => [
+                    'jsLayout' => [
+                        'components' => [
+                            'payLater' => [
+                                'config' => [
+                                    'sdkUrl' => 'http://mock.url'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedUrl' => 'mock.url'
+            ]
+        ];
     }
 
     /**
