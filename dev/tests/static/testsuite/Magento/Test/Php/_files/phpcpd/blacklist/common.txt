@@ -20,6 +20,7 @@ app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/Tab/Related.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/Tab/Upsell.php
 app/code/Magento/Catalog/Block/Adminhtml/Product/Attribute/Edit/Tab/Advanced.php
 app/code/Magento/Catalog/Block/Adminhtml/Category/Helper/Sortby/Available.php
+app/code/Magento/Catalog/Model/Layer/Filter/Dynamic/Auto.php
 app/code/Magento/Sales/Model/Order/Pdf/
 app/code/Magento/Sales/Model/Order/CreditmemoRepository.php
 app/code/Magento/Sales/Model/Order/Email/Container/
