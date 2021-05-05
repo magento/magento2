@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaList;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -88,6 +90,11 @@ class GraphQl implements FrontControllerInterface
      * @var ContextFactoryInterface
      */
     private $contextFactory;
+    
+    /** 
+     * @var AreaList $areaList
+     */
+    private $appState;
 
     /**
      * @param Response $response
@@ -114,7 +121,8 @@ class GraphQl implements FrontControllerInterface
         QueryFields $queryFields,
         JsonFactory $jsonFactory = null,
         HttpResponse $httpResponse = null,
-        ContextFactoryInterface $contextFactory = null
+        ContextFactoryInterface $contextFactory = null,
+        AreaList $areaList
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -127,6 +135,7 @@ class GraphQl implements FrontControllerInterface
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
+        $this->areaList = $areaList;
     }
 
     /**
@@ -138,6 +147,8 @@ class GraphQl implements FrontControllerInterface
      */
     public function dispatch(RequestInterface $request) : ResponseInterface
     {
+        $this->areaList->getArea(Area::AREA_GRAPHQL)->load(Area::PART_TRANSLATE);
+
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
         try {
