@@ -62,7 +62,7 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History implem
         $this->fileFactory->create(
             $fileName,
             null,
-            DirectoryList::VAR_DIR,
+            DirectoryList::VAR_IMPORT_EXPORT,
             'application/octet-stream',
             $reportHelper->getReportSize($fileName)
         );

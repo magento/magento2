@@ -122,4 +122,14 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
             $this->resourceConnection->getConnection()->dropTable($tableName);
         }
     }
+
+    /**
+     * Cleanup leftover temporary tables
+     */
+    public function __destruct()
+    {
+        foreach ($this->temporaryTables as $tableName) {
+            $this->resourceConnection->getConnection()->dropTable($tableName);
+        }
+    }
 }

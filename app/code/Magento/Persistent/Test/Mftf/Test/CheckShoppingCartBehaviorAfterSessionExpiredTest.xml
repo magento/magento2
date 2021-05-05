@@ -55,8 +55,8 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <!--Reset cookies and refresh the page-->
         <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad"/>
         <!--Check product exists in cart-->
         <see userInput="$$createProduct.name$$" stepKey="ProductExistsInCart"/>
     </test>

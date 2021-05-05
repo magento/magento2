@@ -341,7 +341,7 @@ class AfterAddressSaveObserverTest extends TestCase
         $customer->expects($this->once())
             ->method('getDisableAutoGroupChange')
             ->willReturn(false);
-        $customer->expects($this->once())
+        $customer->expects($this->exactly(2))
             ->method('getGroupId')
             ->willReturn(null);
         $customer->expects($this->once())

@@ -57,16 +57,13 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <!--Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Go to bundle product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createCategory.name$$)}}" stepKey="navigateToBundleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
 
         <!--Place order bundle product with 10 options-->
-        <actionGroup ref="StorefrontAddCategoryBundleProductToCartActionGroup" stepKey="addBundleProductToCart">
+        <actionGroup ref="StorefrontAddCategoryBundleProductWithSingleChoiceToCartActionGroup" stepKey="addBundleProductToCart">
             <argument name="product" value="$$createBundleProduct$$"/>
             <argument name="quantity" value="10"/>
         </actionGroup>

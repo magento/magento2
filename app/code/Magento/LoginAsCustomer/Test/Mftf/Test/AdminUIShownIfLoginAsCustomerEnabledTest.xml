@@ -29,9 +29,7 @@
             </createData>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCachesAfterSet">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
@@ -44,9 +42,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfter">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAfter"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCachesDefault">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
@@ -69,10 +65,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderId"/>
-        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Verify Login as Customer Login action works correctly from Order page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromOrderPageActionGroup"

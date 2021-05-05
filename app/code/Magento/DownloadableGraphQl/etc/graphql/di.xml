@@ -39,10 +39,38 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableOrderItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\InvoiceItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableInvoiceItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableCreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\WishlistGraphQl\Model\Resolver\Type\WishlistItemType">
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
                 <item name="downloadable" xsi:type="string">DownloadableWishlistItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\UrlRewriteGraphQl\Model\RoutableInterfaceTypeResolver">
+        <arguments>
+            <argument name="productTypeNameResolvers" xsi:type="array">
+                <item name="downloadable_product_type_resolver" xsi:type="object">Magento\DownloadableGraphQl\Model\DownloadableProductTypeResolver</item>
             </argument>
         </arguments>
     </type>
