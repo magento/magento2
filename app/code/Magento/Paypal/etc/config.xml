@@ -196,6 +196,11 @@
                 <productpage_logoposition>left</productpage_logoposition>
                 <productpage_textcolor>black</productpage_textcolor>
                 <productpage_textsize>12</productpage_textsize>
+                <homepage_display>0</homepage_display>
+                <homepage_position>header</homepage_position>
+                <homepage_stylelayout>flex</homepage_stylelayout>
+                <homepage_ratio>1x1</homepage_ratio>
+                <homepage_color>blue</homepage_color>
             </paypal_paylater>
         </payment>
     </default>
