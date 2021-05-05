@@ -86,10 +86,7 @@ class Banner extends Template
      */
     private function getStyleAttributesConfig()
     {
-        return array_replace(
-            ['data-pp-style-logo-position' => 'left'],
-            $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_STYLES)
-        );
+        return $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_STYLES);
     }
 
     /**
@@ -101,7 +98,7 @@ class Banner extends Template
     {
         $enabled = $this->payLaterConfig->isEnabled($this->placement);
         return $enabled &&
-            $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_POSITION) ==
+            $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_POSITION) ===
                 $this->position;
     }
 }

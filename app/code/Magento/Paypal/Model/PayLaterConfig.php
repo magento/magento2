@@ -59,9 +59,9 @@ class PayLaterConfig
      *
      * @param string $section
      * @param string $key
-     * @return array|mixed
+     * @return array|string|int
      */
-    public function getSectionConfig($section, $key)
+    public function getSectionConfig(string $section, string $key)
     {
         $configMock = [
             'product' => [
