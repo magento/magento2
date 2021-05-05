@@ -68,29 +68,26 @@ class Banner extends Template
      */
     public function getJsLayout()
     {
-        $jsLayout = [
+        $jsComponent = $this->jsLayout['components']['payLater']['component'] ?? 'Magento_Paypal/js/view/paylater';
+
+        //Extend block component config with defaults
+        $componentConfig = $this->jsLayout['components']['payLater']['config'] ?? [];
+        $defaultConfig = ['sdkUrl' => $this->getPayPalSdkUrl()];
+        $config = array_replace($defaultConfig, $componentConfig);
+
+        //Extend block component attributes with defaults
+        $componentAttributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
+        $config['attributes'] = array_replace($this->getStyleAttributesConfig(), $componentAttributes);
+        $config['attributes']['data-pp-placement'] = $this->placement;
+
+        $this->jsLayout = [
             'components' => [
                 'payLater' => [
-                    'component' =>
-                        $this->jsLayout['components']['payLater']['component'] ?? 'Magento_Paypal/js/view/paylater',
-                    'config' => [
-                        'sdkUrl' => $this->getPayPalSdkUrl(),
-                    ]
+                    'component' => $jsComponent,
+                    'config' => $config
                 ]
             ]
         ];
-
-        //Merge config
-        $config = $this->jsLayout['components']['payLater']['config'] ?? [];
-        $config = array_replace($jsLayout['components']['payLater']['config'], $config);
-
-        //Merge attributes
-        $attributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
-        $config['attributes'] = array_replace($this->getStyleAttributesConfig(), $attributes);
-        $config['attributes']['data-pp-placement'] = $this->placement;
-        $jsLayout['components']['payLater']['config'] = $config;
-
-        $this->jsLayout = $jsLayout;
 
         return parent::getJsLayout();
     }
