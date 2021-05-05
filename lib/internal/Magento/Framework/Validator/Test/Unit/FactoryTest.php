@@ -88,7 +88,6 @@ class FactoryTest extends TestCase
             Reader::class,
             ['getConfigurationFiles']
         );
-        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $objectManager = new ObjectManager($this);
 
