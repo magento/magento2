@@ -87,8 +87,8 @@ class Banner extends Template
     private function getStyleAttributesConfig()
     {
         return array_replace(
-            ['data-pp-style-logo-position' => 'center'],
-            $this->payLaterConfig->getStyleConfig($this->placement)
+            ['data-pp-style-logo-position' => 'left'],
+            $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_STYLES)
         );
     }
 
@@ -100,6 +100,8 @@ class Banner extends Template
     private function isEnabled()
     {
         $enabled = $this->payLaterConfig->isEnabled($this->placement);
-        return $enabled && $this->payLaterConfig->getPositionConfig($this->placement) == $this->position;
+        return $enabled &&
+            $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_POSITION) ==
+                $this->position;
     }
 }

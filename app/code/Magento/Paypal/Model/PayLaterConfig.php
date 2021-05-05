@@ -18,7 +18,15 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class PayLaterConfig
 {
-    const PLACEMENT_PRODUCT = 'product';
+    /**
+     * Configuration key for Styles settings
+     */
+    const CONFIG_KEY_STYLES = 'styles';
+
+    /**
+     * Configuration key for Position setting
+     */
+    const CONFIG_KEY_POSITION = 'position';
 
     /**
      * @var ScopeConfigInterface
@@ -35,27 +43,6 @@ class PayLaterConfig
     }
 
     /**
-     * Get configured styles for specified page
-     *
-     * @return array
-     */
-    public function getStyleConfig(string $placement): array
-    {
-        return $this->getSectionConfig($placement, 'style') ?? [];
-    }
-
-    /**
-     * Get configured Banner position on specified page
-     *
-     * @param string $placement
-     * @return mixed|string
-     */
-    public function getPositionConfig(string $placement)
-    {
-        return $this->getSectionConfig($placement, 'position') ?? '';
-    }
-
-    /**
      * Check if Banner enabled for specified page
      *
      * @param string $placement
@@ -67,10 +54,17 @@ class PayLaterConfig
         return $isPayLaterEnabled && $this->getSectionConfig($placement, 'display');
     }
 
-    private function getSectionConfig($section, $key)
+    /**
+     * Get config for a specific section and key
+     *
+     * @param string $section
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getSectionConfig($section, $key)
     {
         $configMock = [
-            self::PLACEMENT_PRODUCT => [
+            'product' => [
                 'display' => 1,
                 'position' => 'header', // 'sidebar'
                 'style' => [

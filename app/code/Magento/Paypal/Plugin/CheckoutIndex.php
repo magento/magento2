@@ -9,6 +9,7 @@ namespace Magento\Paypal\Plugin;
 
 use Magento\Checkout\Controller\Index\Index;
 use Magento\Paypal\Model\Config;
+use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\SdkUrl;
 
 /**
@@ -25,7 +26,7 @@ class CheckoutIndex
     /**
      * @var Config
      */
-    private $config;
+    private $configFactory;
 
     /**
      * @param SdkUrl $sdkUrl
@@ -33,11 +34,10 @@ class CheckoutIndex
      */
     public function __construct(
         SdkUrl $sdkUrl,
-        Config $config
+        ConfigFactory $config
     ) {
         $this->sdkUrl = $sdkUrl;
-        $this->config = $config;
-        $this->config->setMethod(Config::METHOD_EXPRESS);
+        $this->configFactory = $config;
     }
 
     /**
@@ -50,7 +50,8 @@ class CheckoutIndex
     public function beforeExecute(Index $subject)
     {
         // Check If PP SmartButtons enabled
-        if ((bool)(int) $this->config->getValue('in_context')) {
+        $config = $this->configFactory->create()->setMethod(Config::METHOD_EXPRESS);
+        if ((bool)(int) $config->getValue('in_context')) {
             $this->sdkUrl->setQueryParam('commit', 'true');
         }
 
