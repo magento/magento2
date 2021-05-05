@@ -82,16 +82,6 @@ class UpdateBmltoPayLater implements DataPatchInterface
     {
         $this->moduleDataSetup->getConnection()->startSetup();
 
-        $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-            $this->moduleDataSetup->getTable('core_config_data'),
-            [
-                'scope' => 'default',
-                'scope_id' => 0,
-                'path' => 'payment/paypal_paylater/experience_active',
-                'value' => '1'
-            ]
-        );
-
         $select = $this->moduleDataSetup->getConnection()->select()
             ->from(
                 $this->moduleDataSetup->getTable('core_config_data'),
@@ -100,17 +90,12 @@ class UpdateBmltoPayLater implements DataPatchInterface
             ->where('path LIKE ?', self::BMLPATH . '%');
         $bmlSettings = $this->moduleDataSetup->getConnection()->fetchPairs($select);
 
-        $enabled = false;
         foreach ($bmlSettings as $bmlPath => $bmlValue) {
             $setting = str_replace(self::BMLPATH, '', $bmlPath);
             $settingParts = explode('_', $setting);
             $page = $settingParts[0];
             $setting = $settingParts[1];
             $payLaterPath = self::PAYLATERPATH . $page;
-
-            if ($setting === 'display' && $bmlValue === '1') {
-                $enabled = true;
-            }
 
             foreach ($this->bmlToPayLaterSettings as $bmlToPayLaterSetting) {
                 if (in_array($page, $bmlToPayLaterSetting['pages'])
@@ -154,17 +139,6 @@ class UpdateBmltoPayLater implements DataPatchInterface
                     }
                 }
             }
-        }
-        if ($enabled) {
-            $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-                $this->moduleDataSetup->getTable('core_config_data'),
-                [
-                    'scope' => 'default',
-                    'scope_id' => 0,
-                    'path' => 'payment/paypal_paylater/enabled',
-                    'value' => '1'
-                ]
-            );
         }
         return $this->moduleDataSetup->getConnection()->endSetup();
     }
