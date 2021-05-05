@@ -109,7 +109,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param ConfigInterface|null $config
      * @param array $customAttributePreprocessors
      * @param ServiceInputValidatorInterface|null $serviceInputValidator
-     * @param int|null $defaultPageSize
+     * @param int $defaultPageSize
      */
     public function __construct(
         TypeProcessor $typeProcessor,
@@ -121,7 +121,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         ConfigInterface $config = null,
         array $customAttributePreprocessors = [],
         ServiceInputValidatorInterface $serviceInputValidator = null,
-        int $defaultPageSize = null
+        int $defaultPageSize = 20
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
