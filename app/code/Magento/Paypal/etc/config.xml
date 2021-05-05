@@ -188,7 +188,7 @@
                 <verify_peer>1</verify_peer>
             </hosted_pro>
             <paypal_paylater>
-                <experience_active>1</experience_active>
+                <experience_active>0</experience_active>
                 <enabled>0</enabled>
                 <productpage_display>0</productpage_display>
                 <productpage_position>header</productpage_position>

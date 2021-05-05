@@ -97,6 +97,12 @@ class UpdateBmltoPayLater implements DataPatchInterface
             $setting = $settingParts[1];
             $payLaterPath = self::PAYLATERPATH . $page;
 
+            if (array_key_exists(self::BMLPATH . $page . '_display', $bmlSettings)
+                && $bmlSettings[self::BMLPATH . $page . '_display'] === '0'
+            ) {
+                continue;
+            }
+
             foreach ($this->bmlToPayLaterSettings as $bmlToPayLaterSetting) {
                 if (in_array($page, $bmlToPayLaterSetting['pages'])
                     && array_key_exists($setting, $bmlToPayLaterSetting['data'])
