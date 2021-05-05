@@ -8,6 +8,8 @@ namespace Magento\Framework\Controller\Result;
 
 /**
  * Factory class for @see \Magento\Framework\Controller\Result\Json
+ *
+ * @api
  */
 class JsonFactory
 {

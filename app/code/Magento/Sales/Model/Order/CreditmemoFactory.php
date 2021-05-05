@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 /**
  * Factory class for @see \Magento\Sales\Model\Order\Creditmemo
  *
+ * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoFactory
