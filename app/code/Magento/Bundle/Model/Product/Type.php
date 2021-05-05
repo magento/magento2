@@ -1231,8 +1231,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getQty($selection, $qtys, $selectionOptionId)
     {
         if ($selection->getSelectionCanChangeQty() && isset($qtys[$selectionOptionId])) {
-            $selectionQty = $qtys[$selectionOptionId][$selection->getSelectionId()];
-            $qty = (float)$selectionQty > 0 ? $selectionQty : 1;
+            if (is_array($qtys[$selectionOptionId]) && isset($qtys[$selectionOptionId][$selection->getSelectionId()])) {
+                $selectionQty = $qtys[$selectionOptionId][$selection->getSelectionId()];
+                $qty = (float)$selectionQty > 0 ? $selectionQty : 1;
+            } else {
+                $qty = (float)$qtys[$selectionOptionId] > 0 ? $qtys[$selectionOptionId] : 1;
+            }
         } else {
             $qty = (float)$selection->getSelectionQty() ? $selection->getSelectionQty() : 1;
         }
