@@ -167,7 +167,7 @@ class Queue
      * Process jobs
      *
      * @return int
-     * @throws TimeoutException
+     * @throws \RuntimeException
      */
     public function process()
     {
@@ -291,6 +291,7 @@ class Queue
 
                 if ($isDeployed === false) {
                     $this->failed[$package->getPath()]= $this->packages[$package->getPath()];
+                    unset($this->inProgress[$name]);
                 } elseif ($isDeployed) {
                     unset($this->inProgress[$name]);
                 }
