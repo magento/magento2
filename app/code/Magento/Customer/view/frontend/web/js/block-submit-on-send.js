@@ -20,7 +20,6 @@ define([
             }
             this.isValid = true;
         });
-        dataForm.trigger('submit');
         dataForm.bind('invalid-form.validate', function () {
             $(this).find(':submit').prop('disabled', false);
             this.isValid = false;
