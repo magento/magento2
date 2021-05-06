@@ -553,6 +553,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
+        $order->setEntityId($quote->getOrigOrderId());
         $this->submitQuoteValidator->validateOrder($order);
 
         $this->eventManager->dispatch(
