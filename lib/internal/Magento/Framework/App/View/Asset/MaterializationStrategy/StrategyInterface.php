@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\View\Asset\MaterializationStrategy;
 
@@ -12,6 +13,7 @@ use Magento\Framework\View\Asset;
 /**
  * Interface \Magento\Framework\App\View\Asset\MaterializationStrategy\StrategyInterface
  *
+ * @api
  */
 interface StrategyInterface
 {
