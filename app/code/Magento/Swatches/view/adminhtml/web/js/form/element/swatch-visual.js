@@ -165,7 +165,6 @@ define([
 
                 /**
                  * form component for upload image
-                 * @type {jQuery}
                  */
                 form: null,
 
@@ -242,7 +241,7 @@ define([
 
                 swatchComponents.iframe.off('load');
                 swatchComponents.iframe.load(iframeHandler);
-                swatchComponents.form.trigger('submit');
+                swatchComponents.form.submit();
                 $(this).val('');
             });
 

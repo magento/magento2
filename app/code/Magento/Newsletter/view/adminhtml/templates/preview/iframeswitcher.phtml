@@ -39,7 +39,7 @@ var previewIframe = $('preview_iframe');
 function preview() {
     previewForm.writeAttribute('target', previewIframe.readAttribute('id'));
     blockPreview();
-    previewForm.trigger('submit');
+    previewForm.submit();
 }
 
 function blockPreview() {

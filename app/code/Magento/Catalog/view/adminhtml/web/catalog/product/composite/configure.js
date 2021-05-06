@@ -365,7 +365,7 @@ define([
             if (Object.isFunction(this.beforeSubmitCallback[this.current.listType])) {
                 this.beforeSubmitCallback[this.current.listType]();
             }
-            this.blockForm.trigger('submit');
+            this.blockForm.submit();
 
             // Show loader
             jQuery(this.blockForm).trigger('processStart');
