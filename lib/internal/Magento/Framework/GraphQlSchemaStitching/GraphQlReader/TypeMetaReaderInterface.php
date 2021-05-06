@@ -9,6 +9,8 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 
 /**
  * Reads and returns metadata as array for a specific type if it finds an adequate implementation for that type
+ *
+ * @api
  */
 interface TypeMetaReaderInterface
 {
@@ -18,5 +20,5 @@ interface TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\Type $typeMeta
      * @return array|null
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta)  : array;
+    public function read(\GraphQL\Type\Definition\Type $typeMeta): array;
 }

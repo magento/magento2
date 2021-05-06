@@ -11,6 +11,8 @@ use Magento\Framework\GraphQl\Schema;
 
 /**
  * GraphQL schema generator interface.
+ *
+ * @api
  */
 interface SchemaGeneratorInterface
 {
@@ -19,5 +21,5 @@ interface SchemaGeneratorInterface
      *
      * @return Schema
      */
-    public function generate() : Schema;
+    public function generate(): Schema;
 }
