@@ -256,8 +256,8 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                         };
                         $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
                             $('#' + generalTabField + ', #' + advancedTabField)
-                                .bind('focus blur change keyup click', filler)
-                                .bind('keyup change blur', disabler)
+                                .on('focus blur change keyup click', filler)
+                                .on('keyup change blur', disabler)
                                 .trigger('change');
                         });
 
