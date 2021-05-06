@@ -89,11 +89,7 @@ define([
                 }
                 $(ppCheckoutInput).val(returnUrl);
 
-                if ($form instanceof jQuery) {
-                    $form.trigger('submit');
-                } else {
-                    $form.submit();
-                }
+                $form.trigger('submit');
             } else {
                 $.mage.redirect(returnUrl);
             }
