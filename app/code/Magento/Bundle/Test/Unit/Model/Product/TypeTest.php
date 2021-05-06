@@ -342,7 +342,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -496,7 +497,7 @@ class TypeTest extends TestCase
         $selection->expects($this->once())
             ->method('getSelectionCanChangeQty')
             ->willReturn(true);
-        $selection->expects($this->once())
+        $selection->expects($this->exactly(2))
             ->method('getSelectionId');
         $selection->expects($this->once())
             ->method('addCustomOption')
@@ -531,9 +532,9 @@ class TypeTest extends TestCase
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
-        $buyRequest->expects($this->once())
-            ->method('getBundleOptionQty')
-            ->willReturn([3 => 5]);
+        $buyRequest->expects($this->exactly(2))
+            ->method('getBundleOptionsData')
+            ->willReturn([3 => [3 => 5]]);
         $priceModel->expects($this->once())
             ->method('getSelectionFinalTotalPrice')
             ->willReturnSelf();
@@ -586,7 +587,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -736,7 +738,7 @@ class TypeTest extends TestCase
         $selection->expects($this->once())
             ->method('getSelectionCanChangeQty')
             ->willReturn(true);
-        $selection->expects($this->once())
+        $selection->expects($this->exactly(2))
             ->method('getSelectionId');
         $selection->expects($this->once())
             ->method('addCustomOption')
@@ -768,9 +770,9 @@ class TypeTest extends TestCase
         $option->expects($this->once())
             ->method('getTitle')
             ->willReturn('Title for option');
-        $buyRequest->expects($this->once())
-            ->method('getBundleOptionQty')
-            ->willReturn([3 => 5]);
+        $buyRequest->expects($this->exactly(2))
+            ->method('getBundleOptionsData')
+            ->willReturn([3 => [3 => 5]]);
         $priceModel->expects($this->once())
             ->method('getSelectionFinalTotalPrice')
             ->willReturnSelf();
@@ -811,7 +813,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -957,7 +960,7 @@ class TypeTest extends TestCase
         $selection->expects($this->once())
             ->method('getSelectionCanChangeQty')
             ->willReturn(true);
-        $selection->expects($this->once())
+        $selection->expects($this->exactly(2))
             ->method('getSelectionId');
         $selection->expects($this->once())
             ->method('addCustomOption')
@@ -992,9 +995,9 @@ class TypeTest extends TestCase
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
-        $buyRequest->expects($this->once())
-            ->method('getBundleOptionQty')
-            ->willReturn([3 => 5]);
+        $buyRequest->expects($this->exactly(2))
+            ->method('getBundleOptionsData')
+            ->willReturn([3 => [3 => 5]]);
         $priceModel->expects($this->once())
             ->method('getSelectionFinalTotalPrice')
             ->willReturnSelf();
@@ -1030,7 +1033,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -1105,9 +1109,9 @@ class TypeTest extends TestCase
 
         $bundleOptions = [];
         $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
-        $buyRequest->expects($this->once())
-            ->method('getBundleOptionQty')
-            ->willReturn([3 => 5]);
+        $buyRequest->expects($this->exactly(2))
+            ->method('getBundleOptionsData')
+            ->willReturn([3 => [3 => 5]]);
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
