@@ -46,6 +46,11 @@ class Config extends \Magento\Eav\Model\Config
     protected $_productTypesById;
 
     /**
+     * @var array
+     */
+    private $_productTypesByName;
+
+    /**
      * Array of attributes codes needed for product load
      *
      * @var array
@@ -174,16 +179,6 @@ class Config extends \Magento\Eav\Model\Config
             $scopeConfig,
             $attributesForPreload
         );
-    }
-
-    /**
-     * Initialize resource model
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_init(\Magento\Catalog\Model\ResourceModel\Config::class);
     }
 
     /**
