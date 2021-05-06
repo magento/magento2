@@ -21,19 +21,28 @@ class SearchCriteriaValidatorTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAllowsPageSizeWhenBelowLimit()
+    public function testAllowsPageSizeWhenAboveMinLimitAndBelowMaxLimit()
     {
         $searchCriteria = new SearchCriteria();
-        $validator = new SearchCriteriaValidator(3);
+        $validator = new SearchCriteriaValidator(1, 3);
         $validator->validateEntityValue($searchCriteria, 'pageSize', 2);
     }
 
-    public function testFailsPageSizeWhenAboveLimit()
+    public function testFailsPageSizeWhenBelowMinLimit()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage('Minimum SearchCriteria pageSize is 1');
+        $searchCriteria = new SearchCriteria();
+        $validator = new SearchCriteriaValidator(1, 3);
+        $validator->validateEntityValue($searchCriteria, 'pageSize', 0);
+    }
+
+    public function testFailsPageSizeWhenAboveMaxLimit()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectErrorMessage('Maximum SearchCriteria pageSize is 3');
         $searchCriteria = new SearchCriteria();
-        $validator = new SearchCriteriaValidator(3);
+        $validator = new SearchCriteriaValidator(1, 3);
         $validator->validateEntityValue($searchCriteria, 'pageSize', 4);
     }
 }

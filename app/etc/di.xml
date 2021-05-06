@@ -1943,6 +1943,7 @@
     </type>
     <type name="Magento\Framework\Webapi\Validator\SearchCriteriaValidator">
         <arguments>
+            <argument name="minimumPageSize" xsi:type="number">10</argument>
             <argument name="maximumPageSize" xsi:type="number">300</argument>
         </arguments>
     </type>
@@ -1956,6 +1957,7 @@
     </type>
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
         <arguments>
+            <argument name="minPageSize" xsi:type="number">10</argument>
             <argument name="maxPageSize" xsi:type="number">300</argument>
         </arguments>
     </type>

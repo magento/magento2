@@ -135,7 +135,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->customAttributePreprocessors = $customAttributePreprocessors;
         $this->serviceInputValidator = $serviceInputValidator
             ?: ObjectManager::getInstance()->get(ServiceInputValidatorInterface::class);
-        $this->defaultPageSize = $defaultPageSize ?: 20;
+        $this->defaultPageSize = $defaultPageSize;
     }
 
     /**
