@@ -120,6 +120,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
             'name'
         )->addAttributeToSelect(
+            'name '
+        )->addAttributeToSelect(
             'sku'
         )->addAttributeToSelect(
             'visibility'
