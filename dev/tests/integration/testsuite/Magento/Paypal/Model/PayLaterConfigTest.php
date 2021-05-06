@@ -27,7 +27,7 @@ class PayLaterConfigTest extends TestCase
 
         /** @var PayLaterConfig $config */
         $config = Bootstrap::getObjectManager()->get(PayLaterConfig::class);
-        $this->assertEquals($expectedConfig, $config->getStyleConfig('test1'));
+        $this->assertEquals($expectedConfig, $config->getSectionConfig('test1', PayLaterConfig::CONFIG_KEY_STYLE));
     }
 
     /**
@@ -85,7 +85,7 @@ class PayLaterConfigTest extends TestCase
 
         /** @var PayLaterConfig $config */
         $config = Bootstrap::getObjectManager()->get(PayLaterConfig::class);
-        $this->assertEquals($expectedConfig, $config->getPositionConfig('test1'));
+        $this->assertEquals($expectedConfig, $config->getSectionConfig('test1', PayLaterConfig::CONFIG_KEY_POSITION));
     }
 
     /**

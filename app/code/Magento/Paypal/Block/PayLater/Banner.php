@@ -23,6 +23,11 @@ class Banner extends Template
     private $payLaterConfig;
 
     /**
+     * @var SdkUrl
+     */
+    private $sdkUrl;
+
+    /**
      * @var string
      */
     private $placement = '';
@@ -110,7 +115,7 @@ class Banner extends Template
      */
     private function getStyleAttributesConfig(): array
     {
-        return $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_STYLES);
+        return $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_STYLE);
     }
 
     /**

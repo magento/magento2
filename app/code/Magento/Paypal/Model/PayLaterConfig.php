@@ -17,7 +17,7 @@ class PayLaterConfig
     /**
      * Configuration key for Styles settings
      */
-    const CONFIG_KEY_STYLES = 'styles';
+    const CONFIG_KEY_STYLE = 'style';
 
     /**
      * Configuration key for Position setting
