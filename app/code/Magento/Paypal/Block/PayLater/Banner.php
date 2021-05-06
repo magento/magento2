@@ -35,6 +35,7 @@ class Banner extends Template
     /**
      * @param Template\Context $context
      * @param PayLaterConfig $payLaterConfig
+     * @param SdkUrl $sdkUrl
      * @param array $data
      */
     public function __construct(
@@ -105,11 +106,11 @@ class Banner extends Template
     /**
      * Retrieve style configuration
      *
-     * @return array
+     * @return string[]
      */
     private function getStyleAttributesConfig(): array
     {
-        return $this->payLaterConfig->getStyleConfig($this->placement);
+        return $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_STYLES);
     }
 
     /**
@@ -120,6 +121,8 @@ class Banner extends Template
     private function isEnabled(): bool
     {
         $enabled = $this->payLaterConfig->isEnabled($this->placement);
-        return $enabled && $this->payLaterConfig->getPositionConfig($this->placement) == $this->position;
+        return $enabled &&
+            $this->payLaterConfig->getSectionConfig($this->placement, PayLaterConfig::CONFIG_KEY_POSITION) ===
+                $this->position;
     }
 }

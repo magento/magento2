@@ -15,6 +15,16 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class PayLaterConfig
 {
     /**
+     * Configuration key for Styles settings
+     */
+    const CONFIG_KEY_STYLES = 'styles';
+
+    /**
+     * Configuration key for Position setting
+     */
+    const CONFIG_KEY_POSITION = 'position';
+
+    /**
      * @var Config
      */
     private $config;
@@ -39,28 +49,6 @@ class PayLaterConfig
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->config = $config;
-    }
-
-    /**
-     * Get configured styles for specified page
-     *
-     * @param string $placement
-     * @return array
-     */
-    public function getStyleConfig(string $placement): array
-    {
-        return $this->getSectionConfig($placement, 'style') ?? [];
-    }
-
-    /**
-     * Get configured Banner position on specified page
-     *
-     * @param string $placement
-     * @return string
-     */
-    public function getPositionConfig(string $placement): string
-    {
-        return $this->getSectionConfig($placement, 'position') ?? '';
     }
 
     /**
@@ -96,9 +84,9 @@ class PayLaterConfig
      *
      * @param string $section
      * @param string $key
-     * @return mixed
+     * @return array|string|int
      */
-    private function getSectionConfig($section, $key)
+    public function getSectionConfig(string $section, string $key)
     {
         if (!array_key_exists($section, $this->configData)) {
             $this->configData[$section] = [
