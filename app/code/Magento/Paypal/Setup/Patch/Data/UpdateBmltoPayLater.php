@@ -28,14 +28,10 @@ class UpdateBmltoPayLater implements DataPatchInterface
     /**
      * @var array
      */
-    private $bmlToPayLaterSettings = [
+    private $bmlToPayLater = [
         [
             'pages' => ['productpage'],
             'data' => [
-                'display' => [
-                    'name' => 'display',
-                    'values' => ['0' => '0', '1' => '1']
-                ],
                 'position' => [
                     'name' =>'position',
                     'values' => ['0' => 'header', '1' => 'near_pp_button'],
@@ -103,50 +99,71 @@ class UpdateBmltoPayLater implements DataPatchInterface
                 continue;
             }
 
-            foreach ($this->bmlToPayLaterSettings as $bmlToPayLaterSetting) {
+            foreach ($this->bmlToPayLater as $bmlToPayLaterSetting) {
                 if (in_array($page, $bmlToPayLaterSetting['pages'])
                     && array_key_exists($setting, $bmlToPayLaterSetting['data'])
                 ) {
                     $pageSetting = $bmlToPayLaterSetting['data'][$setting];
-                    $dependsPath = isset($pageSetting['depends'])
-                        ? self::BMLPATH . $page . '_' . $pageSetting['depends']['name']
-                        : '';
 
-                    if (!array_key_exists('depends', $pageSetting)
-                        || (array_key_exists($dependsPath, $bmlSettings)
-                            && $bmlSettings[$dependsPath] === $pageSetting['depends']['value'])
-                    ) {
-                        $path = $payLaterPath . '_' . $pageSetting['name'];
-                        $value = $pageSetting['values'][$bmlValue];
-                        $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-                            $this->moduleDataSetup->getTable('core_config_data'),
-                            [
-                                'scope' => 'default',
-                                'scope_id' => 0,
-                                'path' => $path,
-                                'value' => $value
-                            ]
-                        );
-                        if (array_key_exists('requires', $pageSetting)
-                            && array_key_exists($value, $pageSetting['requires'])
-                        ) {
-                            $requiredPath = $payLaterPath . '_' . $pageSetting['requires'][$value]['name'];
-                            $requiredValue = $pageSetting['requires'][$value]['value'];
-                            $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-                                $this->moduleDataSetup->getTable('core_config_data'),
-                                [
-                                    'scope' => 'default',
-                                    'scope_id' => 0,
-                                    'path' => $requiredPath,
-                                    'value' => $requiredValue
-                                ]
-                            );
-                        }
-                    }
+                    $this->convertAndSaveConfigValues($bmlSettings, $pageSetting, $payLaterPath, $page, $bmlValue);
                 }
             }
         }
+
         return $this->moduleDataSetup->getConnection()->endSetup();
+    }
+
+    /**
+     * Convert BML settings to PayLater and save
+     *
+     * @param array $bmlSettings
+     * @param array $pageSetting
+     * @param string $payLaterPath
+     * @param string $page
+     * @param string $bmlValue
+     */
+    private function convertAndSaveConfigValues(
+        array $bmlSettings,
+        array $pageSetting,
+        string $payLaterPath,
+        string $page,
+        string $bmlValue
+    ) {
+        $dependsPath = isset($pageSetting['depends'])
+            ? self::BMLPATH . $page . '_' . $pageSetting['depends']['name']
+            : '';
+
+        if (!array_key_exists('depends', $pageSetting)
+            || (array_key_exists($dependsPath, $bmlSettings)
+                && $bmlSettings[$dependsPath] === $pageSetting['depends']['value'])
+        ) {
+            $path = $payLaterPath . '_' . $pageSetting['name'];
+            $value = $pageSetting['values'][$bmlValue];
+            $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+                $this->moduleDataSetup->getTable('core_config_data'),
+                [
+                    'scope' => 'default',
+                    'scope_id' => 0,
+                    'path' => $path,
+                    'value' => $value
+                ]
+            );
+            if (array_key_exists('requires', $pageSetting)
+                && array_key_exists($value, $pageSetting['requires'])
+            ) {
+                $requiredPath = $payLaterPath . '_' . $pageSetting['requires'][$value]['name'];
+                $requiredValue = $pageSetting['requires'][$value]['value'];
+                $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+                    $this->moduleDataSetup->getTable('core_config_data'),
+                    [
+                        'scope' => 'default',
+                        'scope_id' => 0,
+                        'path' => $requiredPath,
+                        'value' => $requiredValue
+                    ]
+                );
+            }
+        }
     }
 
     /**
