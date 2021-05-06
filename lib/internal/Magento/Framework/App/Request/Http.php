@@ -19,8 +19,8 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  *
- * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @api
  */
 class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {

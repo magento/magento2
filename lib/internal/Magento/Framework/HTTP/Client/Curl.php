@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Client;
 
 /**
@@ -10,6 +13,7 @@ namespace Magento\Framework\HTTP\Client;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 class Curl implements \Magento\Framework\HTTP\ClientInterface
 {

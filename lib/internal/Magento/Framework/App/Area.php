@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Framework\App;
 
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
@@ -12,6 +14,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
  * Application area model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @api
  */
 class Area implements \Magento\Framework\App\AreaInterface
 {
