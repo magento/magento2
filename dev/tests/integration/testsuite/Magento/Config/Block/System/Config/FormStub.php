@@ -52,15 +52,14 @@ class FormStub extends \Magento\Config\Block\System\Config\Form
      */
     protected function _initObjects()
     {
-        parent::_initObjects();
+        $result = parent::_initObjects();
         $this->_configData = $this->_configDataStub;
-        if ($this->_configRootStub) {
-            $this->_configRoot = $this->_configRootStub;
-        }
         $this->_fieldRenderer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
             \Magento\Config\Block\System\Config\Form\Field::class
         );
+
+        return $result;
     }
 }
