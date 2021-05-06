@@ -17,7 +17,7 @@ class LastUpdateTimeCache
     /**
      * Prefix for cache key.
      */
-    private const CACHE_PREFIX = 'LAST_GRID_UPDATE_TIME';
+    private const CACHE_PREFIX = 'LAST_GRID_UPDATE_TIME:';
 
     /**
      * @var CacheInterface

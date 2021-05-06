@@ -37,6 +37,11 @@ class GridTest extends TestCase
     private $connection;
 
     /**
+     * @var LastUpdateTimeCache|MockObject
+     */
+    private $lastUpdateTimeCache;
+
+    /**
      * @var string
      */
     private $mainTable = 'sales_order';
@@ -50,8 +55,9 @@ class GridTest extends TestCase
      * @var array
      */
     private $columns = [
-        'column_1_key' => 'column_1_value',
-        'column_2_key' => 'column_2_value'
+        'entity_id' => 'sales_order.entity_id',
+        'status' => 'sales_order.status',
+        'updated_at' => 'sales_order.updated_at',
     ];
 
     /**
@@ -62,7 +68,7 @@ class GridTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->notSyncedDataProvider = $this->createMock(NotSyncedDataProviderInterface::class);
         $this->connection = $this->createMock(ConnectionAdapterInterface::class);
-        $lastUpdateTimeCache = $this->createMock(LastUpdateTimeCache::class);
+        $this->lastUpdateTimeCache = $this->createMock(LastUpdateTimeCache::class);
 
         $this->grid = $objectManager->getObject(
             Grid::class,
@@ -73,7 +79,7 @@ class GridTest extends TestCase
                 'connection' => $this->connection,
                 '_tables' => ['sales_order' => $this->mainTable, 'sales_order_grid' => $this->gridTable],
                 'columns' => $this->columns,
-                'lastUpdateTimeCache' => $lastUpdateTimeCache,
+                'lastUpdateTimeCache' => $this->lastUpdateTimeCache,
             ]
         );
     }
@@ -84,10 +90,16 @@ class GridTest extends TestCase
     public function testRefreshBySchedule()
     {
         $notSyncedIds = ['1', '2', '3'];
-        $fetchResult = [
-            ['entity_id' => 1, 'updated_at' => date('Y-m-d H:i:s')],
-            ['entity_id' => 2, 'updated_at' => date('Y-m-d H:i:s')],
-        ];
+        $fetchResult = [];
+        for ($i = 1; $i <= 220; $i++) {
+            $fetchResult[] = [
+                'entity_id' => $i,
+                'status' => 1,
+                'updated_at' => '2021-01-01 01:02:03',
+            ];
+        }
+        $fetchResult[50]['updated_at'] = '2021-02-03 01:02:03';
+        $fetchResult[150]['updated_at'] = '2021-03-04 01:02:03';
 
         $this->notSyncedDataProvider->expects($this->atLeastOnce())
             ->method('getIds')
@@ -116,6 +128,10 @@ class GridTest extends TestCase
             ->method('insertOnDuplicate')
             ->with($this->gridTable, $fetchResult, array_keys($this->columns))
             ->willReturn(array_count_values($notSyncedIds));
+
+        $this->lastUpdateTimeCache->expects($this->once())
+            ->method('save')
+            ->with($this->gridTable, '2021-03-04 01:02:03');
 
         $this->grid->refreshBySchedule();
     }

@@ -140,7 +140,10 @@ class Grid extends AbstractGrid
                 array_keys($this->columns)
             );
 
-            $lastUpdatedAt = max(array_column($fetchResult, 'updated_at'));
+            $timestamps = array_column($fetchResult, 'updated_at');
+            if ($timestamps) {
+                $lastUpdatedAt = max(max($timestamps), $lastUpdatedAt);
+            }
         }
 
         if ($lastUpdatedAt) {
