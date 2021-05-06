@@ -126,9 +126,7 @@
                     <field id="enable_express_checkout_bml">1</field>
                 </depends>
             </field>
-
-
-
+            <field id="enable_paypal_paylater_experience" sortOrder="55" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_paypal_paylater_experience"/>
             <group id="payflow_link_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="60">
                 <label>Advertise PayPal Credit</label>
                 <comment>
@@ -139,6 +137,10 @@
                         The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                         or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
                 </comment>
+                <fieldset_css>paypal-advertise-bml</fieldset_css>
+                <depends>
+                    <field id="enable_paypal_paylater_experience">0</field>
+                </depends>
                 <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
                 <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
                 <group id="payflow_link_settings_bml_homepage"  translate="label" showInWebsite="1" sortOrder="20" showInDefault="1" showInStore="1">
@@ -226,6 +228,9 @@
             <group id="payflow_link_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
                 <label>Advertise PayPal Paylater</label>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
+                <depends>
+                    <field id="enable_paypal_paylater_experience">1</field>
+                </depends>
                 <group id="payflow_link_settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Catalog Product Page</label>
                     <depends>

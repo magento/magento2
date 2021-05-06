@@ -192,6 +192,7 @@ class BannerTest extends TestCase
         $paymentMethod = sprintf('payment/%s/active', Config::METHOD_EXPRESS);
         $systemConfig = [
                 $paymentMethod => 1,
+                'payment/paypal_paylater/experience_active' => 1,
                 'payment/paypal_paylater/enabled' => 1,
                 'payment/paypal_paylater/test3page_display' => 1,
                 'payment/paypal_paylater/test3page_position' => 'header'
@@ -225,6 +226,7 @@ class BannerTest extends TestCase
         $paymentMethod = sprintf('payment/%s/active', Config::METHOD_EXPRESS);
         $enableSystemConfig = [
             $paymentMethod => 1,
+            'payment/paypal_paylater/experience_active' => 1,
             'payment/paypal_paylater/enabled' => 1,
             'payment/paypal_paylater/test4page_display' => 1,
             'payment/paypal_paylater/test4page_position' => 'near_pp_button'
@@ -253,6 +255,10 @@ class BannerTest extends TestCase
     {
         $paymentPath = 'payment/%s/active';
         return [
+            [
+                'systemConfig' => ['payment/paypal_paylater/experience_active' => 0],
+                'blockConfig' => []
+            ],
             [
                 'systemConfig' => ['payment/paypal_paylater/enabled' => 0],
                 'blockConfig' => []
