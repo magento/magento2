@@ -45,6 +45,8 @@ class ScopeOverriddenValue
      */
     private $resourceConnection;
 
+    private $loadedEntityId;
+
     /**
      * @var FilterBuilder
      */
@@ -70,6 +72,7 @@ class ScopeOverriddenValue
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->resourceConnection = $resourceConnection;
+	$this->loadedEntityId = false;
     }
 
     /**
@@ -86,7 +89,7 @@ class ScopeOverriddenValue
         if ((int)$storeId === Store::DEFAULT_STORE_ID) {
             return false;
         }
-        if (!isset($this->attributesValues[$storeId])) {
+        if (!isset($this->attributesValues[$storeId]) || $this->loadedEntityId !== $entity->getId()) {
             $this->initAttributeValues($entityType, $entity, (int)$storeId);
         }
 
@@ -105,7 +108,7 @@ class ScopeOverriddenValue
      */
     public function getDefaultValues($entityType, $entity)
     {
-        if ($this->attributesValues === null) {
+        if ($this->attributesValues === null || $this->loadedEntityId !== $entity->getId()) {
             $this->initAttributeValues($entityType, $entity, (int)$entity->getStoreId());
         }
 
@@ -125,6 +128,12 @@ class ScopeOverriddenValue
      */
     private function initAttributeValues($entityType, $entity, $storeId)
     {
+	if ($this->loadedEntityId !== $entity->getId()) {
+	    $this->attributesValues = [];
+	    $this->loadedEntityId = $entity->getId();
+	}
+
+	$this->attributesValues[$storeId] = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $attributeTables = [];

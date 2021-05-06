@@ -21,6 +21,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Tests product model:
@@ -813,5 +814,33 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
         $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
         $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_different_store_values.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
+     */
+    public function testExistsStoreValueFlagForMultipleProducts() {
+
+        $descriptionProduct = $this->productRepository->get('store_description');
+        $nameProduct = $this->productRepository->get('store_name');
+
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $store = $storeManager->getStore('fixturestore');
+
+        $nameProduct->addAttributeUpdate('name','Overwritten Name',$store->getId());
+        $descriptionProduct->addAttributeUpdate('description', 'Overwritten Description', $store->getId());
+
+        $descriptionProduct = $this->productRepository->get('store_description',false, $store->getId(), true);
+        $nameProduct = $this->productRepository->get('store_name', false, $store->getId(), true);
+
+        $this->assertTrue($descriptionProduct->getExistsStoreValueFlag('description'));
+        $this->assertFalse($descriptionProduct->getExistsStoreValueFlag('name'));
+
+        $this->assertFalse($nameProduct->getExistsStoreValueFlag('description'));
+        $this->assertTrue($nameProduct->getExistsStoreValueFlag('name'));
     }
 }
