@@ -26,7 +26,12 @@ $review->setEntityId(
     [
         $secondStoreId
     ]
-)->save();
+);
+$reviewResourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Review\Model\ResourceModel\Review::class
+);
+
+$reviewResourceModel->save();
 
 /*
  * Added a sleep because in a few tests the sql query orders by created at. Without the sleep the reviews
@@ -48,7 +53,9 @@ $review->setEntityId(
     [
         $secondStoreId
     ]
-)->save();
+);
+
+$reviewResourceModel->save($review);
 
 /*
  * Added a sleep because in a few tests the sql query orders by created at. Without the sleep the reviews
