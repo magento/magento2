@@ -17,7 +17,7 @@ class LastUpdateTimeCache
     /**
      * Prefix for cache key.
      */
-    private const CACHE_PREFIX = 'LAST_GRID_UPDATE_TIME:';
+    private const CACHE_PREFIX = 'LAST_GRID_UPDATE_TIME';
 
     /**
      * @var CacheInterface
@@ -63,6 +63,17 @@ class LastUpdateTimeCache
     }
 
     /**
+     * Remove last grid update time.
+     *
+     * @param string $gridTableName
+     * @return void
+     */
+    public function remove(string $gridTableName): void
+    {
+        $this->cache->remove($this->getCacheKey($gridTableName));
+    }
+
+    /**
      * Generate cache key.
      *
      * @param string $gridTableName
@@ -70,6 +81,6 @@ class LastUpdateTimeCache
      */
     private function getCacheKey(string $gridTableName): string
     {
-        return self::CACHE_PREFIX . $gridTableName;
+        return self::CACHE_PREFIX . ':' . $gridTableName;
     }
 }
