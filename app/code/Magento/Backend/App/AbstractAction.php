@@ -5,9 +5,12 @@
  */
 namespace Magento\Backend\App;
 
+use Magento\Framework\Encryption\Helper\Security;
+
 /**
  * Generic backend controller
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -101,6 +104,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Checking if the user has access to requested component.
+     *
      * @return bool
      */
     protected function _isAllowed()
@@ -119,6 +124,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Get message manager.
+     *
      * @return \Magento\Framework\Message\ManagerInterface
      */
     protected function getMessageManager()
@@ -146,6 +153,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Prepare breadcrumbs.
+     *
      * @param string $label
      * @param string $title
      * @param string|null $link
@@ -158,6 +167,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Add content to specified block.
+     *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
@@ -167,6 +178,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Move block to left container.
+     *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
@@ -176,6 +189,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Add js to specified block.
+     *
      * @param \Magento\Framework\View\Element\AbstractBlock $block
      * @return $this
      */
@@ -200,6 +215,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
+     * Dispatch request.
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
@@ -286,8 +303,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Set session locale,
-     * process force locale set through url params
+     * Set session locale, process force locale set through url params.
      *
      * @return $this
      */
@@ -309,8 +325,8 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * Set redirect into response
      *
      * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
-     * @param   string $path
-     * @param   array $arguments
+     * @param string $path
+     * @param array $arguments
      * @return \Magento\Framework\App\ResponseInterface
      */
     protected function _redirect($path, $arguments = [])
@@ -333,7 +349,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected function _forward($action, $controller = null, $module = null, array $params = null)
     {
         $this->_getSession()->setIsUrlNotice($this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED));
-        return parent::_forward($action, $controller, $module, $params);
+        parent::_forward($action, $controller, $module, $params);
     }
 
     /**
@@ -360,7 +376,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         $secretKey = $this->getRequest()->getParam(\Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME, null);
-        if (!$secretKey || $secretKey != $this->_backendUrl->getSecretKey()) {
+        if (!$secretKey || !Security::compareStrings($secretKey, $this->_backendUrl->getSecretKey())) {
             return false;
         }
         return true;

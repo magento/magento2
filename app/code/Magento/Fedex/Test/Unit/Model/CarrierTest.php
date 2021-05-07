@@ -358,6 +358,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             [12.12, 'USD', 'USD', 'RATED_LIST_SHIPMENT', 12.12, 0],
             [38.9, 'USD', 'USD', 'PAYOR_LIST_SHIPMENT', 38.9],
             [38.9, 'USD', 'USD', 'PAYOR_LIST_SHIPMENT', 38.9, 0],
+            [10.0, 'SID', 'USD', 'PAYOR_LIST_SHIPMENT', 10.0, 0],
         ];
     }
 
