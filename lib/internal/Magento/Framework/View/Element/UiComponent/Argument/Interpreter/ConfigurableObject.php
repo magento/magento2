@@ -80,6 +80,7 @@ class ConfigurableObject implements InterpreterInterface
      */
     public function evaluate(array $data)
     {
+        $type = null;
         if (isset($data['value'])) {
             $className = $data['value'];
             $arguments = [];
@@ -112,10 +113,12 @@ class ConfigurableObject implements InterpreterInterface
             }
         }
 
-        $type = $this->objectManagerConfig->getInstanceType(
-            $this->objectManagerConfig->getPreference($className)
-        );
-        $classParents = $this->getParents($type);
+        if ($type === null) {
+            $type = $this->objectManagerConfig->getInstanceType(
+                $this->objectManagerConfig->getPreference($className)
+            );
+            $classParents = array_merge([$type], $this->getParents($type));
+        }
 
         $deniedIntersection = array_intersect($classParents, $this->deniedClassList);
 
