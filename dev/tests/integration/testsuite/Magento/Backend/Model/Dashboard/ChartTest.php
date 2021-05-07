@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
  * Verify chart data by different period.
  *
  * @magentoAppArea adminhtml
- * @magentoAppIsolation enabled
  */
 class ChartTest extends TestCase
 {
