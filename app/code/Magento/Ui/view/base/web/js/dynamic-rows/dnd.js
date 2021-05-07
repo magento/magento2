@@ -109,7 +109,7 @@ define([
          * @param {Object} data - element data
          */
         initListeners: function (elem, data) {
-            $(elem).on('mousedown touchstart', this.mousedownHandler.on(this, data, elem));
+            $(elem).on('mousedown touchstart', this.mousedownHandler.bind(this, data, elem));
         },
 
         /**
