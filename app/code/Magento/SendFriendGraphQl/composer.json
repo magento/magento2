@@ -2,17 +2,18 @@
     "name": "magento/module-send-friend-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-send-friend": "*",
-        "magento/module-graph-ql": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.0",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-send-friend": "100.4.*",
+        "magento/module-graph-ql": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -22,3 +23,4 @@
         }
     }
 }
+
