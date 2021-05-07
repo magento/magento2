@@ -12,7 +12,7 @@ define([
     return function (config) {
         var dataForm = $('#' + config.formId);
 
-        dataForm.submit(function () {
+        dataForm.on('submit', function () {
             $(this).find(':submit').attr('disabled', 'disabled');
 
             if (this.isValid === false) {
