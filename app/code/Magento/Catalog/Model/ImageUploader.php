@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\File\Uploader;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Name;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -211,7 +211,7 @@ class ImageUploader
         $baseTmpImagePath = $this->getFilePath($baseTmpPath, $imageName);
 
         try {
-            $this->coreFileStorageDatabase->copyFile(
+            $this->coreFileStorageDatabase->renameFile(
                 $baseTmpImagePath,
                 $baseImagePath
             );

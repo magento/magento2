@@ -22,5 +22,6 @@
         <element name="rowTemplateStrict" type="block" selector="//tbody/tr[td[*[text()[normalize-space()='{{text}}']]]]" parameterized="true" />
         <element name="rowTemplate" type="block" selector="//tbody/tr[td[*[contains(.,normalize-space('{{text}}'))]]]" parameterized="true" timeout="30" />
         <element name="firstNotEmptyRow" type="block" selector="table.data-grid tbody tr[data-role=row]:not(.data-grid-tr-no-data):nth-of-type(1)" timeout="30"/>
+        <element name="firstNotEmptyRow2" type="block" selector="table.data-grid tbody tr:not(.data-grid-tr-no-data):nth-of-type(1)" timeout="30"/>
     </section>
 </sections>

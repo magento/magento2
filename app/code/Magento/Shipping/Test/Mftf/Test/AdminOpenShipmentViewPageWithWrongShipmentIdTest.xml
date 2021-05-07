@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOpenShipmentViewPageWithWrongShipmentIdTest">
+        <annotations>
+            <stories value="Shipment Page With Wrong Shipment Id"/>
+            <title value="Open Shipment View Page with Wrong Shipment Id"/>
+            <description value="Open Shipment View Page with Wrong Shipment Id."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-39502"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminGoToShipmentViewActionGroup" stepKey="navigateOpenShipmentViewPage">
+            <argument name="identifier" value="test"/>
+        </actionGroup>
+
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeInCurrentUrl url="{{AdminShipmentsGridPage.url}}" stepKey="redirectToShipmentsGridPage"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput='This shipment no longer exists.'
+             stepKey="seeErrorMessage"/>
+    </test>
+</tests>
