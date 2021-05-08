@@ -20,7 +20,7 @@ define([
             }
             this.isValid = true;
         });
-        dataForm.bind('invalid-form.validate', function () {
+        dataForm.on('invalid-form.validate', function () {
             $(this).find(':submit').prop('disabled', false);
             this.isValid = false;
         });
