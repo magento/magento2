@@ -34,7 +34,7 @@ class UpdateBmltoPayLater implements DataPatchInterface
             'data' => [
                 'position' => [
                     'name' =>'position',
-                    'values' => ['0' => 'header', '1' => 'near_pp_button'],
+                    'values' => [['options' =>['0' => 'header', '1' => 'near_pp_button']]],
                     'requires' => [
                         'header' => ['name' => 'stylelayout', 'value' => 'flex'],
                         'near_pp_button' => ['name' => 'stylelayout', 'value' => 'text']
@@ -43,14 +43,59 @@ class UpdateBmltoPayLater implements DataPatchInterface
                 'size' => [
                     'name' => 'ratio',
                     'values' => [
-                        '190x100' => '8x1',
-                        '234x60' => '8x1',
-                        '300x50' => '8x1',
-                        '468x60' => '8x1',
-                        '728x90' => '20x1',
-                        '800x66' => '20x1'
-                    ],
-                    'depends' => ['name' => 'position', 'value' => '0']
+                        [
+                            'options' => [
+                                '190x100' => '8x1',
+                                '234x60' => '8x1',
+                                '300x50' => '8x1',
+                                '468x60' => '8x1',
+                                '728x90' => '20x1',
+                                '800x66' => '20x1'
+                            ],
+                            'depends' => ['name' => 'position', 'value' => '0']
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
+            'pages' => ['homepage'],
+            'data' => [
+                'position' => [
+                    'name' =>'position',
+                    'values' => [['options' => ['0' => 'header', '1' => 'sidebar']]],
+                    'requires' => [
+                        'header' => ['name' => 'stylelayout', 'value' => 'flex'],
+                        'sidebar' => ['name' => 'stylelayout', 'value' => 'flex']
+                    ]
+                ],
+                'size' => [
+                    'name' => 'ratio',
+                    'values' => [
+                        [
+                            'options' => [
+                                '190x100' => '8x1',
+                                '234x60' => '8x1',
+                                '300x50' => '8x1',
+                                '468x60' => '8x1',
+                                '728x90' => '20x1',
+                                '800x66' => '20x1'
+                            ],
+                            'depends' => ['name' => 'position', 'value' => '0']
+                        ],
+                        [
+                            'options' => [
+                                '120x90' => '1x1',
+                                '190x100' => '1x1',
+                                '234x60' => '1x1',
+                                '120x240' => '1x1',
+                                '120x600' => '1x4',
+                                '234x400' => '1x1',
+                                '250x250' => '1x1'
+                            ],
+                            'depends' => ['name' => 'position', 'value' => '1']
+                        ]
+                    ]
                 ]
             ]
         ]
@@ -129,39 +174,41 @@ class UpdateBmltoPayLater implements DataPatchInterface
         string $page,
         string $bmlValue
     ) {
-        $dependsPath = isset($pageSetting['depends'])
-            ? self::BMLPATH . $page . '_' . $pageSetting['depends']['name']
-            : '';
+        foreach ($pageSetting['values'] as $pageSettingValues) {
+            $dependsPath = isset($pageSettingValues['depends'])
+                ? self::BMLPATH . $page . '_' . $pageSettingValues['depends']['name']
+                : '';
 
-        if (!array_key_exists('depends', $pageSetting)
-            || (array_key_exists($dependsPath, $bmlSettings)
-                && $bmlSettings[$dependsPath] === $pageSetting['depends']['value'])
-        ) {
-            $path = $payLaterPath . '_' . $pageSetting['name'];
-            $value = $pageSetting['values'][$bmlValue];
-            $this->moduleDataSetup->getConnection()->insertOnDuplicate(
-                $this->moduleDataSetup->getTable('core_config_data'),
-                [
-                    'scope' => 'default',
-                    'scope_id' => 0,
-                    'path' => $path,
-                    'value' => $value
-                ]
-            );
-            if (array_key_exists('requires', $pageSetting)
-                && array_key_exists($value, $pageSetting['requires'])
+            if (!array_key_exists('depends', $pageSettingValues)
+                || (array_key_exists($dependsPath, $bmlSettings)
+                    && $bmlSettings[$dependsPath] === $pageSettingValues['depends']['value'])
             ) {
-                $requiredPath = $payLaterPath . '_' . $pageSetting['requires'][$value]['name'];
-                $requiredValue = $pageSetting['requires'][$value]['value'];
+                $path = $payLaterPath . '_' . $pageSetting['name'];
+                $value = $pageSettingValues['options'][$bmlValue];
                 $this->moduleDataSetup->getConnection()->insertOnDuplicate(
                     $this->moduleDataSetup->getTable('core_config_data'),
                     [
                         'scope' => 'default',
                         'scope_id' => 0,
-                        'path' => $requiredPath,
-                        'value' => $requiredValue
+                        'path' => $path,
+                        'value' => $value
                     ]
                 );
+                if (array_key_exists('requires', $pageSetting)
+                    && array_key_exists($value, $pageSetting['requires'])
+                ) {
+                    $requiredPath = $payLaterPath . '_' . $pageSetting['requires'][$value]['name'];
+                    $requiredValue = $pageSetting['requires'][$value]['value'];
+                    $this->moduleDataSetup->getConnection()->insertOnDuplicate(
+                        $this->moduleDataSetup->getTable('core_config_data'),
+                        [
+                            'scope' => 'default',
+                            'scope_id' => 0,
+                            'path' => $requiredPath,
+                            'value' => $requiredValue
+                        ]
+                    );
+                }
             }
         }
     }
