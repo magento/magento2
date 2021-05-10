@@ -41,14 +41,14 @@ class PayLaterConfig
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param Config $config
+     * @param ConfigFactory $configFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        Config $config
+        ConfigFactory $configFactory
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->config = $config;
+        $this->config = $configFactory->create();
     }
 
     /**
@@ -75,8 +75,13 @@ class PayLaterConfig
      */
     private function isPPCreditEnabled()
     {
-        return $this->config->isMethodAvailable(Config::METHOD_WPP_BML)
-            || $this->config->isMethodAvailable(Config::METHOD_WPS_BML)
+        $isEnabled = false;
+        if ($this->config->setMethod(Config::METHOD_EXPRESS)->getValue('in_context')) {
+            $disabledFunding = $this->config->getValue('disable_funding_options');
+            $isEnabled = $disabledFunding ? strpos($disabledFunding, 'CREDIT') === false : true;
+        }
+
+        return $isEnabled || $this->config->isMethodAvailable(Config::METHOD_WPP_BML)
             || $this->config->isMethodAvailable(Config::METHOD_WPP_PE_BML);
     }
 

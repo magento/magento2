@@ -25,12 +25,14 @@ define([
             sdkUrl: '',
             priceBoxSelector: '.price-box',
             qtyFieldSelector: '#product_addtocart_form [name="qty"]',
+            refreshSelector: '',
             displayAmount: true,
             attributes: {}
         },
         amount: ko.observable(),
         qty: 1,
         price: 0,
+        paypal: null,
 
         /**
          * Initialize
@@ -38,23 +40,28 @@ define([
          * @returns {*}
          */
         initialize: function () {
-            var priceBox, qty;
+            var priceBox;
 
             this._super();
-            this.loadPayPalSdk(this.sdkUrl);
+            this.loadPayPalSdk()
+                .then(this._setPayPalObject.bind(this));
 
             if (this.displayAmount) {
                 priceBox = $(this.priceBoxSelector);
+                priceBox.on('priceUpdated', this._onPriceChange.bind(this));
 
                 if (priceBox.priceBox('option') &&
-                    priceBox.priceBox('option').prices
+                    priceBox.priceBox('option').prices &&
+                    priceBox.priceBox('option').prices.finalPrice
                 ) {
                     this.price = priceBox.priceBox('option').prices.finalPrice.amount;
-                    priceBox.on('priceUpdated', this._onPriceChange.bind(this));
                 }
 
-                qty = $(this.qtyFieldSelector);
-                qty.on('change', this._onQtyChange.bind(this));
+                $(this.qtyFieldSelector).on('change', this._onQtyChange.bind(this));
+
+                if (this.refreshSelector) {
+                    $(this.refreshSelector).on('click', this._refreshMessages.bind(this));
+                }
 
                 this._updateAmount();
             }
@@ -113,11 +120,30 @@ define([
 
         /**
          * Load PP SDK with preconfigured options
-         *
-         * @param {String} sdkUrl
          */
-        loadPayPalSdk: function (sdkUrl) {
-            paypalSdk(sdkUrl);
+        loadPayPalSdk: function () {
+            return paypalSdk(this.sdkUrl);
+        },
+
+        /**
+         * Set reference to paypal Sdk object
+         *
+         * @param {Object} paypal
+         * @private
+         */
+        _setPayPalObject: function (paypal) {
+            this.paypal = paypal;
+        },
+
+        /**
+         * Render messages
+         *
+         * @private
+         */
+        _refreshMessages: function () {
+            if (this.paypal) {
+                this.paypal.Messages.render();
+            }
         }
     });
 });
