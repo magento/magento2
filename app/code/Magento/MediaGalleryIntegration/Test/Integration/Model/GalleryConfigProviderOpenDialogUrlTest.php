@@ -8,20 +8,23 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
+use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Cms\Model\Wysiwyg\Gallery\DefaultConfigProvider;
+use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Tinymce3\Model\Config\Gallery\Config;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Provide integration tests cover update open dialog url functionality for media editor.
  * @magentoAppArea adminhtml
  */
-class TinyMceOpenDialogUrlTest extends TestCase
+class GalleryConfigProviderOpenDialogUrlTest extends TestCase
 {
     private const FILES_BROWSER_WINDOW_URL = 'files_browser_window_url';
+    private const MEDIA_GALLERY_URL = 'media_gallery/index/index';
 
     /**
      * @var ObjectManagerInterface
@@ -29,9 +32,9 @@ class TinyMceOpenDialogUrlTest extends TestCase
     private $objectManger;
 
     /**
-     * @var Config
+     * @var DefaultConfigProvider
      */
-    private $tinyMce3Config;
+    private $galleryConfigProvider;
 
     /**
      * @var DataObject
@@ -49,11 +52,17 @@ class TinyMceOpenDialogUrlTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManger = Bootstrap::getObjectManager();
-        $this->tinyMce3Config = $this->objectManger->create(Config::class);
+        $this->galleryConfigProvider = $this->objectManger->create(DefaultConfigProvider::class);
         $this->configDataObject = $this->objectManger->create(DataObject::class);
 
         $url = $this->objectManger->create(UrlInterface::class);
-        $this->fileBrowserWindowUrl = $url->getUrl('media_gallery/index/index');
+
+        $this->fileBrowserWindowUrl = $url->getUrl(
+            self::MEDIA_GALLERY_URL,
+            [
+                'current_tree_path' => $this->objectManger->get(Images::class)->idEncode(Config::IMAGE_DIRECTORY),
+            ]
+        );
     }
 
     /**
@@ -62,7 +71,7 @@ class TinyMceOpenDialogUrlTest extends TestCase
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {
-        $config = $this->tinyMce3Config->getConfig($this->configDataObject);
+        $config = $this->galleryConfigProvider->getConfig($this->configDataObject);
         self::assertNotEquals($this->fileBrowserWindowUrl, $config->getData(self::FILES_BROWSER_WINDOW_URL));
     }
 
@@ -72,7 +81,7 @@ class TinyMceOpenDialogUrlTest extends TestCase
      */
     public function testWithEnhancedMediaGalleryEnabled(): void
     {
-        $config = $this->tinyMce3Config->getConfig($this->configDataObject);
+        $config = $this->galleryConfigProvider->getConfig($this->configDataObject);
         self::assertEquals($this->fileBrowserWindowUrl, $config->getData(self::FILES_BROWSER_WINDOW_URL));
     }
 }
