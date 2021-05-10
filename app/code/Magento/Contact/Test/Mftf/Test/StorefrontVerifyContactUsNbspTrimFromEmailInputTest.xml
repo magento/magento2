@@ -27,7 +27,7 @@
             <argument name="contactUsData" value="DefaultContactUsData" />
         </actionGroup>
 
-        <actionGroup ref="AssertEmailTrimmedInInputActionGroup" stepKey="assertEmailWasTrimmedInTheInput">
+        <actionGroup ref="StorefrontAssertEmailAddressTrimmedActionGroup" stepKey="assertEmailWasTrimmedInTheInput">
             <argument name="emailAddressWithSpaces" value="{{Simple_US_Customer_Nbsp_In_Email.email}}" />
             <argument name="inputSelector" value="{{StorefrontContactUsFormSection.emailField}}" />
         </actionGroup>

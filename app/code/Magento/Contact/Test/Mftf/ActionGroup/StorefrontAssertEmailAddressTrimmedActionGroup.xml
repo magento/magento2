@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertEmailTrimmedInInputActionGroup">
+    <actionGroup name="StorefrontAssertEmailAddressTrimmedActionGroup">
         <annotations>
-            <description>Validated that the provided email address is trimmed from spaces in the given input.</description>
+            <description>Validate that the provided email address is trimmed from spaces in the given input.</description>
         </annotations>
         <arguments>
             <argument name="inputSelector" type="string" defaultValue="input[name='email']"/>
