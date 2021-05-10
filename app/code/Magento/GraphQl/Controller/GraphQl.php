@@ -122,7 +122,7 @@ class GraphQl implements FrontControllerInterface
         JsonFactory $jsonFactory = null,
         HttpResponse $httpResponse = null,
         ContextFactoryInterface $contextFactory = null,
-        AreaList $areaList
+        AreaList $areaList = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -135,7 +135,7 @@ class GraphQl implements FrontControllerInterface
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
-        $this->areaList = $areaList;
+        $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);;
     }
 
     /**
