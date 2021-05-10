@@ -69,6 +69,64 @@ class CustomerWishlistsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_product.php
+     * @throws Exception
+     */
+    public function testWishlistCreationScenario(): void
+    {
+        $customerEmail = 'customer@wishlist.com';
+        $this->graphQlMutation(
+            $this->getCreateCustomerQuery($customerEmail),
+            [],
+            ''
+        );
+        $response = $this->graphQlQuery(
+            $this->getQuery(),
+            [],
+            '',
+            $this->getCustomerAuthHeaders($customerEmail, '123123^q')
+        );
+        $this->assertArrayHasKey('wishlists', $response['customer']);
+        $wishlists = $response['customer']['wishlists'];
+        $this->assertNotEmpty($wishlists);
+        $wishlist = $wishlists[0];
+        $this->assertEquals(0, $wishlist['items_count']);
+        $sku = 'simple-1';
+        $qty = 1;
+        $addProductToWishlistQuery =
+            <<<QUERY
+mutation{
+   addProductsToWishlist(
+     wishlistId:{$wishlist['id']}
+     wishlistItems:[
+      {
+        sku:"{$sku}"
+        quantity:{$qty}
+      }
+    ])
+  {
+     wishlist{
+     id
+     items_count
+     items{product{name sku} description qty}
+    }
+    user_errors{code message}
+  }
+}
+
+QUERY;
+        $addToWishlistResponse = $this->graphQlMutation(
+            $addProductToWishlistQuery,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($customerEmail, '123123^q')
+        );
+        $this->assertArrayHasKey('user_errors', $addToWishlistResponse['addProductsToWishlist']);
+        $this->assertCount(0, $addToWishlistResponse['addProductsToWishlist']['user_errors']);
+    }
+
+    /**
      * Testing fetching the wishlist when wishlist is disabled
      *
      * @magentoConfigFixture default_store wishlist/general/active 0
@@ -109,15 +167,36 @@ class CustomerWishlistsTest extends GraphQlAbstract
 query {
   customer {
     wishlists {
+      id
       items_count
       sharing_code
       updated_at
       items_v2 {
-        items {product {name sku}
+        items {
+        product {name sku}
         }
       }
     }
   }
+}
+QUERY;
+    }
+
+    private function getCreateCustomerQuery($customerEmail): string
+    {
+        return <<<QUERY
+mutation {
+  createCustomer(input: {
+    firstname: "test"
+    lastname: "test"
+    email: "$customerEmail"
+    password: "123123^q"
+  })
+   {
+  customer {
+    email
+  }
+}
 }
 QUERY;
     }
