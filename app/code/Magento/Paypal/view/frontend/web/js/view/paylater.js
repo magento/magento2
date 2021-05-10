@@ -7,14 +7,14 @@ define([
     'jquery',
     'ko',
     'uiElement',
-    'Magento_Paypal/js/in-context/paypal-sdk',
+    'Magento_Paypal/js/view/paylater-common',
     'priceBox',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
-    paypalSdk
+    paypalPayLater
 ) {
     'use strict';
 
@@ -41,7 +41,8 @@ define([
             var priceBox, qty;
 
             this._super();
-            this.loadPayPalSdk(this.sdkUrl);
+
+            paypalPayLater.init(this.sdkUrl, this.attributes);
 
             if (this.displayAmount) {
                 priceBox = $(this.priceBoxSelector);
@@ -107,17 +108,7 @@ define([
          * @returns {*|null}
          */
         getAttribute: function (attributeName) {
-            return typeof this.attributes[attributeName] !== 'undefined' ?
-                this.attributes[attributeName] : null;
+            return paypalPayLater.getAttribute(attributeName);
         },
-
-        /**
-         * Load PP SDK with preconfigured options
-         *
-         * @param {String} sdkUrl
-         */
-        loadPayPalSdk: function (sdkUrl) {
-            paypalSdk(sdkUrl);
-        }
     });
 });

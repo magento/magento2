@@ -9,8 +9,9 @@ define([
     'Magento_Paypal/js/action/set-payment-method',
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Checkout/js/model/quote',
-    'Magento_Customer/js/customer-data'
-], function ($, Component, setPaymentMethodAction, additionalValidators, quote, customerData) {
+    'Magento_Customer/js/customer-data',
+    'Magento_Paypal/js/view/paylater-common'
+], function ($, Component, setPaymentMethodAction, additionalValidators, quote, customerData, paypalPayLater) {
     'use strict';
 
     return Component.extend({
@@ -18,8 +19,21 @@ define([
             template: 'Magento_Paypal/payment/payflow-express-bml',
             billingAgreement: ''
         },
+        amount: 0,
 
         /** Init observable variables */
+        initialize: function () {
+            this._super();
+
+            if (window.checkoutConfig) {
+                const config = window.checkoutConfig.payment.paypalPayLater.config;
+                paypalPayLater.init(config.sdkUrl, config.attributes);
+            }
+
+            return this;
+        },
+
+            /** Init observable variables */
         initObservable: function () {
             this._super()
                 .observe('billingAgreement');
@@ -55,6 +69,21 @@ define([
         /** Returns billing agreement data */
         getBillingAgreementCode: function () {
             return window.checkoutConfig.payment.paypalExpress.billingAgreementCode[this.item.method];
+        },
+
+        /** Returns payment paylater enabled */
+        getPayLaterEnabled: function () {
+            return window.checkoutConfig.payment.paypalPayLater.enabled;
+        },
+
+        /**
+         * Get PayLater attribute value from configuration
+         *
+         * @param {String} attributeName
+         * @returns {*|null}
+         */
+        getAttribute: function (attributeName) {
+            return paypalPayLater.getAttribute(attributeName);
         },
 
         /** Returns payment information data */
