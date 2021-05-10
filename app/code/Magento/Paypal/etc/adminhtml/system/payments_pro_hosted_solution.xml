@@ -159,7 +159,22 @@
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>
                 </depends>
-                <group id="pphs_settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                <group id="pphs_settings_paylater_homepage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                    <label>Home Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_display"/>
+                    <field id="paylater_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_position"/>
+                    <field id="paylater_homepage_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_stylelayout"/>
+                    <field id="paylater_homepage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_logotype"/>
+                    <field id="paylater_homepage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_logoposition"/>
+                    <field id="paylater_homepage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_textcolor"/>
+                    <field id="paylater_homepage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_textsize"/>
+                    <field id="paylater_homepage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_ratio"/>
+                    <field id="paylater_homepage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_homepage/paylater_homepage_color"/>
+                </group>
+                <group id="pphs_settings_paylater_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
                     <label>Catalog Product Page</label>
                     <depends>
                         <field id="paylater_enabled">1</field>
