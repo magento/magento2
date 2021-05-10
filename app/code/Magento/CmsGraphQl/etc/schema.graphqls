@@ -20,7 +20,7 @@ type Query {
     ): CmsBlocks @resolver(class: "Magento\\CmsGraphQl\\Model\\Resolver\\Blocks") @doc(description: "The CMS block query returns information about CMS blocks") @cache(cacheIdentity: "Magento\\CmsGraphQl\\Model\\Resolver\\Block\\Identity")
 }
 
-type CmsPage @doc(description: "CMS page defines all CMS page information") {
+type CmsPage implements RoutableInterface @doc(description: "CMS page defines all CMS page information") {
     identifier: String @doc(description: "Identifier of the CMS page")
     url_key: String @doc(description: "URL key of CMS page")
     title: String @doc(description: "CMS page title")

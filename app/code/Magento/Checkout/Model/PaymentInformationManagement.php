@@ -6,7 +6,9 @@
 
 namespace Magento\Checkout\Model;
 
+use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 
@@ -59,12 +61,23 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $paymentRateLimiter;
 
     /**
+     * @var PaymentSavingRateLimiterInterface
+     */
+    private $saveRateLimiter;
+
+    /**
+     * @var bool
+     */
+    private $saveRateLimiterDisabled = false;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
+     * @param PaymentSavingRateLimiterInterface|null $saveRateLimiter
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -73,7 +86,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
-        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null
+        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null,
+        ?PaymentSavingRateLimiterInterface $saveRateLimiter = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
@@ -82,6 +96,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         $this->cartTotalsRepository = $cartTotalsRepository;
         $this->paymentRateLimiter = $paymentRateLimiter
             ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
+        $this->saveRateLimiter = $saveRateLimiter
+            ?? ObjectManager::getInstance()->get(PaymentSavingRateLimiterInterface::class);
     }
 
     /**
@@ -92,7 +108,14 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
-        $this->savePaymentInformation($cartId, $paymentMethod, $billingAddress);
+        $this->paymentRateLimiter->limit();
+        try {
+            //Have to do this hack because of plugins for savePaymentInformation()
+            $this->saveRateLimiterDisabled = true;
+            $this->savePaymentInformation($cartId, $paymentMethod, $billingAddress);
+        } finally {
+            $this->saveRateLimiterDisabled = false;
+        }
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -121,7 +144,14 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
-        $this->paymentRateLimiter->limit();
+        if (!$this->saveRateLimiterDisabled) {
+            try {
+                $this->saveRateLimiter->limit();
+            } catch (PaymentProcessingRateLimitExceededException $ex) {
+                //Limit reached
+                return false;
+            }
+        }
 
         if ($billingAddress) {
             /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */

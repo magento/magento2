@@ -13,8 +13,10 @@
         <element name="downloadableLinkLabel" type="text" selector="//label[contains(., '{{title}}')]" parameterized="true" timeout="30"/>
         <element name="downloadableLinkByTitle" type="input" selector="//*[@id='downloadable-links-list']/*[contains(.,'{{title}}')]//input" parameterized="true" timeout="30"/>
         <element name="downloadableLinkSampleByTitle" type="text" selector="//label[contains(., '{{title}}')]/a[contains(@class, 'sample link')]" parameterized="true"/>
-        <element name="downloadableSampleLabel" type="text" selector="//a[contains(.,normalize-space('{{title}}'))]" parameterized="true" timeout="30"/>
+        <element name="downloadableSampleLabel" type="text" selector="//dl[contains(@class,'samples')]//a[contains(.,normalize-space('{{title}}'))]" parameterized="true" timeout="30"/>
         <element name="downloadableLinkSelectAllCheckbox" type="checkbox" selector="#links_all" />
         <element name="downloadableLinkSelectAllLabel" type="text" selector="label[for='links_all']" />
+        <element name="downloadableLinksListSection" type="text" selector="#downloadable-links-list" timeout="30"/>
+        <element name="downloadableSamplesListSection" type="text" selector=".items.samples" timeout="30"/>
     </section>
 </sections>
