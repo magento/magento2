@@ -48,7 +48,7 @@ class PayLaterConfig
         ConfigFactory $configFactory
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->config = $configFactory->create();;
+        $this->config = $configFactory->create();
     }
 
     /**
