@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Export\Adapter\CsvFactory;
@@ -29,7 +30,6 @@ use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -682,18 +682,18 @@ class Import extends AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->isErrorLimitExceeded();
+        if ($errorAggregator->isErrorLimitExceeded()) {
+            return false;
+        }
 
         if ($this->getProcessedRowsCount() <= $errorAggregator->getInvalidRowsCount()) {
-            $result = false;
             $this->addLogComment(__('There are no valid rows to import.'));
+            return false;
         }
 
-        if ($result) {
-            $this->addLogComment(__('Import data validation is complete.'));
-        }
+        $this->addLogComment(__('Import data validation is complete.'));
 
-        return $result;
+        return true;
     }
 
     /**
