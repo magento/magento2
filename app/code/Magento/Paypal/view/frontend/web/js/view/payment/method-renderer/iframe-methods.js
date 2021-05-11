@@ -5,8 +5,9 @@
 define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Paypal/js/model/iframe',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function (Component, iframe, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Paypal/js/view/paylater-common'
+], function (Component, iframe, fullScreenLoader, paypalPayLater) {
     'use strict';
 
     return Component.extend({
@@ -16,6 +17,19 @@ define([
         },
         redirectAfterPlaceOrder: false,
         isInAction: iframe.isInAction,
+        amount: 0,
+
+        /** Init observable variables */
+        initialize: function () {
+            this._super();
+
+            if (window.checkoutConfig) {
+                const config = window.checkoutConfig.payment.paypalPayLater.config;
+                paypalPayLater.init(config.sdkUrl, config.attributes);
+            }
+
+            return this;
+        },
 
         /**
          * @return {exports}
@@ -87,6 +101,21 @@ define([
          */
         iframeLoaded: function () {
             fullScreenLoader.stopLoader();
+        },
+
+        /** Returns payment paylater enabled */
+        getPayLaterEnabled: function () {
+            return window.checkoutConfig.payment.paypalPayLater.enabled;
+        },
+
+        /**
+         * Get PayLater attribute value from configuration
+         *
+         * @param {String} attributeName
+         * @returns {*|null}
+         */
+        getAttribute: function (attributeName) {
+            return paypalPayLater.getAttribute(attributeName);
         }
     });
 });

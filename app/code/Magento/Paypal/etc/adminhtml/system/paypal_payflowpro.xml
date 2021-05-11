@@ -113,7 +113,7 @@
                     <field id="paylater_productpage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_productpage/paylater_productpage_color"/>
                 </group>
                 <group id="paypal_payflow_settings_paylater_paymentpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
-                    <label>Checkout Page</label>
+                    <label>Checkout Payment Page</label>
                     <depends>
                         <field id="paylater_enabled">1</field>
                     </depends>

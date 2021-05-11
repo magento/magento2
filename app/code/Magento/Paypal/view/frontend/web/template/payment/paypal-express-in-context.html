@@ -31,5 +31,10 @@
             <each args="$parent.getRegion('before-place-order')" render=""/>
         </div>
         <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"/>
+        <!-- ko if: getPayLaterEnabled() -->
+            <div style="padding-top: 10px">
+                <!-- ko template: 'Magento_Paypal/paylater' --><!-- /ko -->
+            </div>
+        <!-- /ko -->
     </div>
 </div>

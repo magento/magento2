@@ -53,5 +53,10 @@
             </iframe>
             <!-- /ko -->
         </div>
+        <!-- ko if: getPayLaterEnabled() -->
+            <div style="padding-top: 10px">
+                <!-- ko template: 'Magento_Paypal/paylater' --><!-- /ko -->
+            </div>
+        <!-- /ko -->
     </div>
 </div>

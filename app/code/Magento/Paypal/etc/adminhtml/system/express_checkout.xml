@@ -414,7 +414,7 @@
                     </field>
                 </group>
                 <group id="settings_paylater_paymentpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
-                    <label>Checkout Page</label>
+                    <label>Checkout Payment Page</label>
                     <depends>
                         <field id="paylater_enabled">1</field>
                     </depends>

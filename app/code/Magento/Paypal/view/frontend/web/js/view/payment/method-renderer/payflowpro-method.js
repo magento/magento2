@@ -9,8 +9,9 @@ define([
     'Magento_Checkout/js/model/payment/additional-validators',
     'Magento_Checkout/js/action/set-payment-information',
     'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Vault/js/view/payment/vault-enabler'
-], function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, VaultEnabler) {
+    'Magento_Vault/js/view/payment/vault-enabler',
+    'Magento_Paypal/js/view/paylater-common',
+], function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, VaultEnabler, paypalPayLater) {
     'use strict';
 
     return Component.extend({
@@ -19,6 +20,7 @@ define([
         },
         placeOrderHandler: null,
         validateHandler: null,
+        amount: 0,
 
         /**
          * @returns {exports.initialize}
@@ -27,6 +29,11 @@ define([
             this._super();
             this.vaultEnabler = new VaultEnabler();
             this.vaultEnabler.setPaymentCode(this.getVaultCode());
+
+            if (window.checkoutConfig) {
+                const config = window.checkoutConfig.payment.paypalPayLater.config;
+                paypalPayLater.init(config.sdkUrl, config.attributes);
+            }
 
             return this;
         },
@@ -135,6 +142,21 @@ define([
          */
         getVaultCode: function () {
             return 'payflowpro_cc_vault';
-        }
+        },
+
+        /** Returns payment paylater enabled */
+        getPayLaterEnabled: function () {
+            return window.checkoutConfig.payment.paypalPayLater.enabled;
+        },
+
+        /**
+         * Get PayLater attribute value from configuration
+         *
+         * @param {String} attributeName
+         * @returns {*|null}
+         */
+        getAttribute: function (attributeName) {
+            return paypalPayLater.getAttribute(attributeName);
+        },
     });
 });
