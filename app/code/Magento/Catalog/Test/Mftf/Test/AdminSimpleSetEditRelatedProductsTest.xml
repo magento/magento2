@@ -78,7 +78,7 @@
         <!--See related product in admin-->
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
-        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.name$$" stepKey="seeRelatedProduct"/>
 
         <!--See more related products in admin-->
         <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct2">
@@ -98,13 +98,14 @@
         </actionGroup>
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo2"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee2"/>
-        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.sku$$" stepKey="seeSixthRelatedProduct"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.name$$" stepKey="seeSixthRelatedProduct"/>
         <selectOption selector=".admin__collapsible-block-wrapper[data-index='related'] .admin__control-select" userInput="5" stepKey="selectFivePerPage"/>
-        <dontSee selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.sku$$" stepKey="dontSeeSixthRelatedProduct"/>
+        <waitForPageLoad stepKey="waitForLoadingAfterSelectFivePerPage"/>
+        <dontSee selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.name$$" stepKey="dontSeeSixthRelatedProduct"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{SimpleProduct3.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{SimpleProduct3.urlKey}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$simpleProduct1.sku$$)}}" stepKey="seeRelatedProductInStorefront"/>
+        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$simpleProduct1.name$$)}}" stepKey="seeRelatedProductInStorefront"/>
     </test>
 </tests>

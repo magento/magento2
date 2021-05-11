@@ -24,23 +24,23 @@
 
         <before>
             <!-- Locally Copy Import Files to Unique Media Import Directory -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportFiles" after="createCustomer">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportFiles" after="createCustomer">
                 <argument name="path">pub/media/import/{{ImportProduct_Configurable.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyImportFile" after="createDirectoryForImportFiles">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyImportFile" after="createDirectoryForImportFiles">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Configurable.fileName}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Configurable.name}}/{{ImportProduct_Configurable.fileName}}</argument>
             </helper>
             <remove keyForRemoval="createDirectoryForImportImages"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Configurable.baseImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Configurable.name}}/{{ImportProductSimple1_Configurable.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Configurable.smallImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Configurable.name}}/{{ImportProductSimple2_Configurable.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
                 <argument name="destination">pub/media/import/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
             </helper>
@@ -50,18 +50,18 @@
             <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
 
             <!-- Copy to Import Directory in AWS S3 -->
-            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage">
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
-            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProduct1BaseImageInS3" after="createDirectoryForImportFilesInS3">
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProduct1BaseImageInS3" after="createDirectoryForImportFilesInS3">
                 <argument name="source">media/import/{{ImportProduct_Configurable.name}}/{{ImportProductSimple1_Configurable.baseImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple1_Configurable.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProduct2BaseImageInS3" after="copyProduct1BaseImageInS3">
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProduct2BaseImageInS3" after="copyProduct1BaseImageInS3">
                 <argument name="source">media/import/{{ImportProduct_Configurable.name}}/{{ImportProductSimple2_Configurable.smallImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple2_Configurable.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProduct3BaseImageInS3" after="copyProduct2BaseImageInS3">
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProduct3BaseImageInS3" after="copyProduct2BaseImageInS3">
                 <argument name="source">media/import/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
             </helper>
@@ -70,16 +70,16 @@
         <after>
             <!-- Delete S3 Data -->
             <remove keyForRemoval="deleteProductImageDirectory"/>
-            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryS3" after="deleteCustomer">
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryS3" after="deleteCustomer">
                 <argument name="path">media/import/{{ImportProduct_Configurable.name}}</argument>
             </helper>
-            <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportImagesFilesDirectoryS3" after="deleteImportFilesDirectoryS3">
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportImagesFilesDirectoryS3" after="deleteImportFilesDirectoryS3">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
 
             <!-- Disable AWS S3 Remote Storage & Delete Local Data -->
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryLocal" after="disableRemoteStorage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryLocal" after="disableRemoteStorage">
                 <argument name="path">pub/media/import/{{ImportProduct_Configurable.name}}</argument>
             </helper>
         </after>
