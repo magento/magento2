@@ -73,6 +73,7 @@ QUERY;
         ];
         $attributeTypes = ['String', 'Int', 'Float','Boolean', 'Float'];
         $inputTypes = ['textarea', 'select', 'price', 'boolean', 'price'];
+
         $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityType, $inputTypes, $response);
     }
 
@@ -173,7 +174,7 @@ QUERY;
             'text',
             'gallery'
         ];
-        $this->assertAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $inputTypes, $response);
+        $this->assertComplexAttributeType($attributeTypes, $expectedAttributeCodes, $entityTypes, $inputTypes, $response);
     }
 
     /**
@@ -236,7 +237,7 @@ QUERY;
      * @param array $actualResponse
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function assertAttributeType(
+    private function assertComplexAttributeType(
         $attributeTypes,
         $expectedAttributeCodes,
         $entityTypes,
@@ -281,6 +282,36 @@ QUERY;
 
             }
 
+        }
+    }
+
+    /**
+     * @param array $attributeTypes
+     * @param array $expectedAttributeCodes
+     * @param array $entityTypes
+     * @param array $inputTypes
+     * @param array $actualResponse
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function assertAttributeType(
+        $attributeTypes,
+        $expectedAttributeCodes,
+        $entityTypes,
+        $inputTypes,
+        $actualResponse
+    ) {
+        $attributeMetaDataItems = array_map(null, $actualResponse['customAttributeMetadata']['items'], $attributeTypes);
+
+        foreach ($attributeMetaDataItems as $itemIndex => $itemArray) {
+                $this->assertResponseFields(
+                    $attributeMetaDataItems[$itemIndex][0],
+                    [
+                        "attribute_code" => $expectedAttributeCodes[$itemIndex],
+                        "attribute_type" => $attributeTypes[$itemIndex],
+                        "entity_type" => $entityTypes[$itemIndex],
+                        "input_type" => $inputTypes[$itemIndex]
+                    ]
+                );
         }
     }
 }
