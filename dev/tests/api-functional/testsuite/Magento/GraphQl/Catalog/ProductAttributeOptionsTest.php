@@ -121,11 +121,10 @@ QUERY;
       input_type
        storefront_properties {
          position
-         use_in_search
-         used_in_product_listing
+         use_in_product_listing
          use_in_layered_navigation
          use_in_search_results_layered_navigation
-         visible_on_catalog_storefront
+         visible_on_catalog_pages
       }
     }
   }
@@ -137,11 +136,10 @@ QUERY;
         $actualStorefrontPropery = $response['customAttributeMetadata']['items'][0]['storefront_properties'];
         $expectedStorefrontProperties = [
             'position' => 0,
-            'use_in_search' => false,
-            'used_in_product_listing' => true,
+            'use_in_product_listing' => true,
             'use_in_layered_navigation' => 'NO',
             'use_in_search_results_layered_navigation' => false,
-            'visible_on_catalog_storefront' => true
+            'visible_on_catalog_pages' => true
         ];
         $this->assertEquals($expectedStorefrontProperties, $actualStorefrontPropery);
     }

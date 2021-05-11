@@ -19,10 +19,9 @@ type Attribute @doc(description: "Attribute contains the attribute_type of the s
 }
 
 type StorefrontProperties {
-    used_in_product_listing: Boolean
-    use_in_search: Boolean
+    use_in_product_listing: Boolean
     position: Int
-    visible_on_catalog_storefront: Boolean
+    visible_on_catalog_pages: Boolean
     use_in_layered_navigation: UseInLayeredNavigationOptions
     use_in_search_results_layered_navigation: Boolean
 }

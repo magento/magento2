@@ -109,11 +109,10 @@ class CustomAttributeMetadata implements ResolverInterface
     private function getStorefrontProperties(AttributeInterface $attribute)
     {
         return [
-            'use_in_search' => $attribute->getIsSearchable(),
             'position'=> $attribute->getPosition(),
-            'visible_on_catalog_storefront'=> $attribute->getIsVisibleOnFront(),
+            'visible_on_catalog_pages'=> $attribute->getIsVisibleOnFront(),
             'use_in_search_results_layered_navigation' => $attribute->getIsFilterableInSearch(),
-            'used_in_product_listing'=> $attribute->getUsedInProductListing(),
+            'use_in_product_listing'=> $attribute->getUsedInProductListing(),
             'use_in_layered_navigation'=>
                 $this->getLayeredNavigationPropertiesEnum()[$attribute->getisFilterable()] ?? null
         ];
