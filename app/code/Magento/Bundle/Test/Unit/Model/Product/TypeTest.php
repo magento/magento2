@@ -232,7 +232,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -497,7 +506,7 @@ class TypeTest extends TestCase
         $selection->expects($this->once())
             ->method('getSelectionCanChangeQty')
             ->willReturn(true);
-        $selection->expects($this->exactly(2))
+        $selection->expects($this->once())
             ->method('getSelectionId');
         $selection->expects($this->once())
             ->method('addCustomOption')
@@ -532,9 +541,9 @@ class TypeTest extends TestCase
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
-        $buyRequest->expects($this->exactly(2))
-            ->method('getBundleOptionsData')
-            ->willReturn([3 => [3 => 5]]);
+        $buyRequest->expects($this->once())
+            ->method('getBundleOptionQty')
+            ->willReturn([3 => 5]);
         $priceModel->expects($this->once())
             ->method('getSelectionFinalTotalPrice')
             ->willReturnSelf();
@@ -738,7 +747,7 @@ class TypeTest extends TestCase
         $selection->expects($this->once())
             ->method('getSelectionCanChangeQty')
             ->willReturn(true);
-        $selection->expects($this->exactly(2))
+        $selection->expects($this->once())
             ->method('getSelectionId');
         $selection->expects($this->once())
             ->method('addCustomOption')
@@ -770,9 +779,9 @@ class TypeTest extends TestCase
         $option->expects($this->once())
             ->method('getTitle')
             ->willReturn('Title for option');
-        $buyRequest->expects($this->exactly(2))
-            ->method('getBundleOptionsData')
-            ->willReturn([3 => [3 => 5]]);
+        $buyRequest->expects($this->once())
+            ->method('getBundleOptionQty')
+            ->willReturn([3 => 5]);
         $priceModel->expects($this->once())
             ->method('getSelectionFinalTotalPrice')
             ->willReturnSelf();
@@ -960,7 +969,7 @@ class TypeTest extends TestCase
         $selection->expects($this->once())
             ->method('getSelectionCanChangeQty')
             ->willReturn(true);
-        $selection->expects($this->exactly(2))
+        $selection->expects($this->once())
             ->method('getSelectionId');
         $selection->expects($this->once())
             ->method('addCustomOption')
@@ -995,9 +1004,9 @@ class TypeTest extends TestCase
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
-        $buyRequest->expects($this->exactly(2))
-            ->method('getBundleOptionsData')
-            ->willReturn([3 => [3 => 5]]);
+        $buyRequest->expects($this->once())
+            ->method('getBundleOptionQty')
+            ->willReturn([3 => 5]);
         $priceModel->expects($this->once())
             ->method('getSelectionFinalTotalPrice')
             ->willReturnSelf();
@@ -1109,9 +1118,9 @@ class TypeTest extends TestCase
 
         $bundleOptions = [];
         $buyRequest->expects($this->once())->method('getBundleOption')->willReturn($bundleOptions);
-        $buyRequest->expects($this->exactly(2))
-            ->method('getBundleOptionsData')
-            ->willReturn([3 => [3 => 5]]);
+        $buyRequest->expects($this->once())
+            ->method('getBundleOptionQty')
+            ->willReturn([3 => 5]);
 
         $this->arrayUtility->expects($this->once())->method('flatten')->willReturn($bundleOptions);
 
@@ -1135,7 +1144,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1262,7 +1280,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1426,7 +1453,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1527,7 +1563,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
