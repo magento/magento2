@@ -15,6 +15,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\CollectionFactory;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Test coverage for customer wishlists
@@ -70,7 +71,7 @@ class CustomerWishlistsTest extends GraphQlAbstract
 
     /**
      * @magentoConfigFixture default_store wishlist/general/active 1
-     * @magentoApiDataFixture Magento/Wishlist/_files/wishlist_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      * @throws Exception
      */
     public function testWishlistCreationScenario(): void
@@ -94,8 +95,9 @@ class CustomerWishlistsTest extends GraphQlAbstract
         $this->assertEquals(0, $wishlist['items_count']);
         $sku = 'simple-1';
         $qty = 1;
-        $addProductToWishlistQuery =
-            <<<QUERY
+        try {
+            $addProductToWishlistQuery =
+                <<<QUERY
 mutation{
    addProductsToWishlist(
      wishlistId:{$wishlist['id']}
@@ -116,14 +118,29 @@ mutation{
 }
 
 QUERY;
-        $addToWishlistResponse = $this->graphQlMutation(
-            $addProductToWishlistQuery,
-            [],
-            '',
-            $this->getCustomerAuthHeaders($customerEmail, '123123^q')
-        );
-        $this->assertArrayHasKey('user_errors', $addToWishlistResponse['addProductsToWishlist']);
-        $this->assertCount(0, $addToWishlistResponse['addProductsToWishlist']['user_errors']);
+            $addToWishlistResponse = $this->graphQlMutation(
+                $addProductToWishlistQuery,
+                [],
+                '',
+                $this->getCustomerAuthHeaders($customerEmail, '123123^q')
+            );
+            $this->assertArrayHasKey('user_errors', $addToWishlistResponse['addProductsToWishlist']);
+            $this->assertCount(0, $addToWishlistResponse['addProductsToWishlist']['user_errors']);
+        } finally {
+            /** @var \Magento\Framework\Registry $registry */
+            $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+                ->get(\Magento\Framework\Registry::class);
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', true);
+
+            $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+            $customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
+            $customer = $customerRepository->get('customer@wishlist.com');
+            $customerRepository->delete($customer);
+
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
+        }
     }
 
     /**
