@@ -34,7 +34,7 @@ require([
         add: function (e, data) {
             var uploadButton = $('#css_uploader_button');
             /** Unbind click event on file change */
-            uploadButton.unbind('click');
+            uploadButton.off('click');
             uploadButton.removeAttr('disabled');
 
             uploadButton.click(function () {

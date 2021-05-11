@@ -11,6 +11,12 @@
             <policy id="script-src">
                 <values>
                     <value id="adobedtm" type="host">assets.adobedtm.com</value>
+                    <value id="adobe" type="host">*.adobe.com</value>
+                </values>
+            </policy>
+            <policy id="style-src">
+                <values>
+                    <value id="adobe" type="host">*.adobe.com</value>
                 </values>
             </policy>
             <policy id="img-src">
@@ -19,6 +25,7 @@
                     <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
                     <value id="dpmdemdex" type="host">dpm.demdex.net</value>
                     <value id="everesttech" type="host">cm.everesttech.net</value>
+                    <value id="adobe" type="host">*.adobe.com</value>
                 </values>
             </policy>
             <policy id="connect-src">
@@ -27,9 +34,15 @@
                     <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
                 </values>
             </policy>
+            <policy id="media-src">
+                <values>
+                    <value id="adobe" type="host">*.adobe.com</value>
+                </values>
+            </policy>
             <policy id="frame-src">
                 <values>
                     <value id="amcdemdex" type="host">fast.amc.demdex.net</value>
+                    <value id="adobe" type="host">*.adobe.com</value>
                 </values>
             </policy>
         </policies>
