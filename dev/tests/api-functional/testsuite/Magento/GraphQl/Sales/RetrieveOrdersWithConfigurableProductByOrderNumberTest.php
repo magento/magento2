@@ -11,7 +11,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\GraphQl\Sales\Fixtures\CustomerPlaceOrderWithConfigurable;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -53,49 +52,29 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
      * Test customer order details with configurable product with child items
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/Sales/_files/customer_order_with_configurable_product.php
      */
     public function testGetCustomerOrderConfigurableProduct()
     {
-        //Place order with configurable product
-        $qty = 1;
-        $parentSku = 'configurable';
-        $sku = 'simple_20';
-        /** @var CustomerPlaceOrderWithConfigurable $сonfigurableProductOrderFixture */
-        $сonfigurableProductOrderFixture = Bootstrap::getObjectManager()->create(CustomerPlaceOrderWithConfigurable::class);
-        $orderResponse = $сonfigurableProductOrderFixture->placeOrderWithConfigurableProduct(
-            ['email' => 'customer@example.com', 'password' => 'password'],
-            ['sku' => $sku, 'parent_sku' => $parentSku, 'quantity' => $qty]
-        );
-        $orderNumber = $orderResponse['placeOrder']['order']['order_number'];
-        //End place order with configurable product
+        $orderNumber = '100000001';
 
         $customerOrderResponse = $this->getCustomerOrderQueryConfigurableProduct($orderNumber);
         $customerOrderItems = $customerOrderResponse[0];
-        $this->assertEquals("Pending", $customerOrderItems['status']);
+        $this->assertEquals('Pending Payment', $customerOrderItems['status']);
         $configurableItemInTheOrder = $customerOrderItems['items'][0];
         $this->assertEquals(
-            'simple_20',
+            'simple_10',
             $configurableItemInTheOrder['product_sku']
         );
 
-        $priceOfConfigurableItemInOrder = $configurableItemInTheOrder['product_sale_price']['value'];
-        $this->assertEquals(20, $priceOfConfigurableItemInOrder);
-        $expectedConfigurableOptions =
-              [
-                  '__typename' => 'OrderItem',
-                    'product_sku' => 'simple_20',
-                    'product_name' => 'Configurable Product',
-                    'parent_sku' => 'configurable',
-                    'product_url_key' => 'configurable-product',
-                    'quantity_ordered'=> 1,
-                    'product_sale_price' => [
-                        'value' => 20,
-                        'currency' => 'USD'
-                    ],
-                    'discounts' => []
-
-            ];
+        $expectedConfigurableOptions = [
+            '__typename' => 'OrderItem',
+            'product_sku' => 'simple_10',
+            'product_name' => 'Configurable Product',
+            'parent_sku' => 'configurable',
+            'product_url_key' => 'configurable-product',
+            'quantity_ordered'=> 2
+        ];
         $this->assertEquals($expectedConfigurableOptions, $configurableItemInTheOrder);
     }
 
@@ -119,16 +98,14 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
            number
            order_date
            status
-           items{
-            __typename
-            product_sku
-            product_name
-            parent_sku
-            product_url_key
-            product_sale_price{value, currency}
-            quantity_ordered
-            discounts{amount{value} label}
-         }
+           items {
+             __typename
+             product_sku
+             product_name
+             parent_sku
+             product_url_key
+             quantity_ordered
+           }
            total {
              base_grand_total{value currency}
              grand_total{value currency}
