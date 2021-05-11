@@ -432,7 +432,6 @@ QUERY;
         attribute_code
         count
         label
-        position
         options
         {
           label
@@ -451,11 +450,6 @@ QUERY;
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
         $this->assertCount(2, $response['products']['aggregations']);
-        $aggregations = $response['products']['aggregations'];
-        foreach($aggregations as $aggregation)
-        {
-            $this->assertNotEmpty($aggregations['position']);
-        }
     }
 
     /**
