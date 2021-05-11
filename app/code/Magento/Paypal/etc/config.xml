@@ -196,13 +196,13 @@
                 <productpage_logoposition>left</productpage_logoposition>
                 <productpage_textcolor>black</productpage_textcolor>
                 <productpage_textsize>12</productpage_textsize>
-                <paymentpage_display>0</paymentpage_display>
-                <paymentpage_position>header</paymentpage_position>
-                <paymentpage_stylelayout>text</paymentpage_stylelayout>
-                <paymentpage_logotype>primary</paymentpage_logotype>
-                <paymentpage_logoposition>left</paymentpage_logoposition>
-                <paymentpage_textcolor>black</paymentpage_textcolor>
-                <paymentpage_textsize>12</paymentpage_textsize>
+                <checkout_payment_display>0</checkout_payment_display>
+                <checkout_payment_position>header</checkout_payment_position>
+                <checkout_payment_stylelayout>text</checkout_payment_stylelayout>
+                <checkout_payment_logotype>primary</checkout_payment_logotype>
+                <checkout_payment_logoposition>left</checkout_payment_logoposition>
+                <checkout_payment_textcolor>black</checkout_payment_textcolor>
+                <checkout_payment_textsize>12</checkout_payment_textsize>
             </paypal_paylater>
         </payment>
     </default>
