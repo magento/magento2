@@ -4,15 +4,22 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Sales\Model\Order\Payment;
-use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
-
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 /** @var CustomerRegistry $customerRegistry */
 $customerRegistry = $objectManager->create(CustomerRegistry::class);
 $customer = $customerRegistry->retrieve(1);
@@ -22,8 +29,8 @@ $configurableProduct = $productRepository->get('configurable');
 
 $addressData = include __DIR__ . '/address_data.php';
 
-/** @var \Magento\Sales\Model\Order\Address $billingAddress */
-$billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
+/** @var Address $billingAddress */
+$billingAddress = $objectManager->create(Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
@@ -39,11 +46,14 @@ $payment->setMethod('checkmo')
         ],
     ]);
 
-/** @var \Magento\Sales\Model\Order $order */
-$order = $objectManager->create(\Magento\Sales\Model\Order::class);
+/** @var Order $order */
+$order = $objectManager->create(Order::class);
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
+
 $order->setIncrementId('100000001')
-    ->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT)
-    ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT))
+    ->setState(Order::STATE_PENDING_PAYMENT)
+    ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PENDING_PAYMENT))
     ->setSubtotal(100)
     ->setGrandTotal(100)
     ->setBaseSubtotal(100)
@@ -55,13 +65,13 @@ $order->setIncrementId('100000001')
     ->setCustomerLastname($customer->getLastname())
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
-    ->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId())
+    ->setStoreId($objectManager->get(StoreManagerInterface::class)->getStore()->getId())
     ->setPayment($payment);
-$order->save();
+$orderRepository->save($order);
 
 $qtyOrdered = 2;
-/** @var \Magento\Sales\Model\Order\Item $orderItem */
-$orderConfigurableItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
+/** @var Item $orderItem */
+$orderConfigurableItem = $objectManager->create(Item::class);
 $orderConfigurableItem->setProductId($configurableProduct->getId())->setQtyOrdered($qtyOrdered);
 $orderConfigurableItem->setBasePrice($configurableProduct->getPrice());
 $orderConfigurableItem->setPrice($configurableProduct->getPrice());
@@ -72,8 +82,8 @@ $orderConfigurableItem->setSku($configurableProduct->getSku());
 $orderConfigurableItem->setName($configurableProduct->getName());
 $orderConfigurableItem->setOrder($order);
 
-/** @var \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemsRepository */
-$orderItemsRepository = $objectManager->create(\Magento\Sales\Api\OrderItemRepositoryInterface::class);
+/** @var OrderItemRepositoryInterface $orderItemsRepository */
+$orderItemsRepository = $objectManager->create(OrderItemRepositoryInterface::class);
 // Configurable item must be present in database to have its real ID to set parent id of simple product.
 $orderItemsRepository->save($orderConfigurableItem);
 
@@ -81,7 +91,7 @@ if ($configurableProduct->getExtensionAttributes()
     && (array)$configurableProduct->getExtensionAttributes()->getConfigurableProductLinks()
 ) {
     $simpleProductId = current($configurableProduct->getExtensionAttributes()->getConfigurableProductLinks());
-    /** @var \Magento\Catalog\Api\Data\ProductInterface $simpleProduct */
+    /** @var ProductInterface $simpleProduct */
     $simpleProduct = $productRepository->getById($simpleProductId);
     $orderItem = $objectManager->create(\Magento\Sales\Api\Data\OrderItemInterface::class);
     $orderItem->setBasePrice($simpleProduct->getPrice());

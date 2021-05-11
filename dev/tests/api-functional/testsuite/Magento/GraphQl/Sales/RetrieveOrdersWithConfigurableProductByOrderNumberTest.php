@@ -7,12 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -21,31 +17,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbstract
 {
-    /** @var OrderRepositoryInterface */
-    private $orderRepository;
-
-    /** @var SearchCriteriaBuilder */
-    private $searchCriteriaBuilder;
-
-    /** @var GetCustomerAuthenticationHeader */
+    /**
+     * @var GetCustomerAuthenticationHeader
+     */
     private $customerAuthenticationHeader;
 
-    /** @var ProductRepositoryInterface */
-    private $productRepository;
-
-    protected function setUp():void
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
         $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
-        $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
-        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->deleteOrder();
     }
 
     /**
@@ -54,10 +35,9 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_with_configurable_product.php
      */
-    public function testGetCustomerOrderConfigurableProduct()
+    public function testGetCustomerOrderConfigurableProduct(): void
     {
         $orderNumber = '100000001';
-
         $customerOrderResponse = $this->getCustomerOrderQueryConfigurableProduct($orderNumber);
         $customerOrderItems = $customerOrderResponse[0];
         $this->assertEquals('Pending Payment', $customerOrderItems['status']);
@@ -73,7 +53,7 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
             'product_name' => 'Configurable Product',
             'parent_sku' => 'configurable',
             'product_url_key' => 'configurable-product',
-            'quantity_ordered'=> 2
+            'quantity_ordered' => 2
         ];
         $this->assertEquals($expectedConfigurableOptions, $configurableItemInTheOrder);
     }
@@ -85,7 +65,7 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
      * @return mixed
      * @throws AuthenticationException
      */
-    private function getCustomerOrderQueryConfigurableProduct($orderNumber)
+    private function getCustomerOrderQueryConfigurableProduct($orderNumber): mixed
     {
         $query =
             <<<QUERY
@@ -141,24 +121,5 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         return $customerOrderItemsInResponse;
-    }
-
-    /**
-     * @return void
-     */
-    private function deleteOrder(): void
-    {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-
-        /** @var $order \Magento\Sales\Model\Order */
-        $orderCollection = Bootstrap::getObjectManager()->create(Collection::class);
-        foreach ($orderCollection as $order) {
-            $this->orderRepository->delete($order);
-        }
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
     }
 }
