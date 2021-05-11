@@ -131,6 +131,23 @@ $formData = $block->getFormData();
                 </div>
             </div>
 
+            <?php if ($addressHelper->isVatAttributeVisible()): ?>
+                <?php $_vatidValidationClass = $addressHelper->getAttributeValidationClass('vat_id'); ?>
+                <div class="field taxvat">
+                    <label class="label" for="vat_id">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
+                    </label>
+                    <div class="control">
+                        <input type="text"
+                               name="vat_id"
+                               value="<?= $escaper->escapeHtmlAttr($formData->getVatId()) ?>"
+                               title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
+                               class="input-text <?= $escaper->escapeHtmlAttr($_vatidValidationClass) ?>"
+                               id="vat_id">
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="field country required">
                 <label for="country" class="label">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span>
@@ -259,6 +276,9 @@ $formData = $block->getFormData();
                        autocomplete="off">
             </div>
         </div>
+        <div class="field choice" data-bind="scope: 'showPassword'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
     </fieldset>
 
     <fieldset class="fieldset additional_info">
@@ -335,9 +355,9 @@ script;
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": {$regionJson},
-                "defaultRegion": "{$regionId}",
-                "countriesWithOptionalZip": {$countriesWithOptionalZip}
+                "regionJson": <?= $regionJson ?>,
+                "defaultRegion": <?= $regionId ?>,
+                "countriesWithOptionalZip": <?= $countriesWithOptionalZip ?>
             }
         }
     }
@@ -354,6 +374,14 @@ script;
         "*": {
             "Magento_Customer/js/block-submit-on-send": {
                 "formId": "form-validate"
+            },
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "showPassword": {
+                        "component": "Magento_Customer/js/show-password",
+                        "passwordSelector": "#password,#password-confirmation"
+                    }
+                }
             }
         }
     }

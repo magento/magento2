@@ -187,7 +187,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
             ->where('rule_date = ?', $date->format('Y-m-d'))
             ->where('website_id = ?', $websiteId)
             ->where('customer_group_id = ?', $customerGroupId)
-            ->where('product_id IN(?)', $productIds);
+            ->where('product_id IN(?)', $productIds, \Zend_Db::INT_TYPE);
 
         return $connection->fetchPairs($select);
     }

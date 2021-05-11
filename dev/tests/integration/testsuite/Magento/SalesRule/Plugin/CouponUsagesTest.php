@@ -14,6 +14,9 @@ use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,9 +26,20 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CouponUsagesTest extends TestCase
 {
+    /**
+     * @var PublisherConsumerController
+     */
+    private $publisherConsumerController;
+
+    /**
+     * @var array
+     */
+    private $consumers = ['sales.rule.update.coupon.usage'];
+
     /**
      * @var ObjectManagerInterface
      */
@@ -58,15 +72,45 @@ class CouponUsagesTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->usage = $this->objectManager->get(Usage::class);
-        $this->couponUsage = $this->objectManager->get(DataObject::class);
+        $this->couponUsage = $this->objectManager->create(DataObject::class);
         $this->quoteManagement = $this->objectManager->get(QuoteManagement::class);
         $this->orderService = $this->objectManager->get(OrderService::class);
+
+        $this->publisherConsumerController = Bootstrap::getObjectManager()->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => $this->consumers,
+                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+                'maxMessages' => 100,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
+        try {
+            $this->publisherConsumerController->startConsumers();
+        } catch (EnvironmentPreconditionException $e) {
+            $this->markTestSkipped($e->getMessage());
+        } catch (PreconditionFailedException $e) {
+            $this->fail(
+                $e->getMessage()
+            );
+        }
+        parent::setUp();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->publisherConsumerController->stopConsumers();
+        parent::tearDown();
     }
 
     /**
      * Test increasing coupon usages after after order placing and decreasing after order cancellation.
      *
      * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
+     * @magentoDbIsolation disabled
      */
     public function testSubmitQuoteAndCancelOrder()
     {
@@ -75,14 +119,15 @@ class CouponUsagesTest extends TestCase
         $reservedOrderId = 'test01';
 
         /** @var Coupon $coupon */
-        $coupon = $this->objectManager->get(Coupon::class);
+        $coupon = $this->objectManager->create(Coupon::class);
         $coupon->loadByCode($couponCode);
         /** @var Quote $quote */
-        $quote = $this->objectManager->get(Quote::class);
+        $quote = $this->objectManager->create(Quote::class);
         $quote->load($reservedOrderId, 'reserved_order_id');
 
         // Make sure coupon usages value is incremented then order is placed.
         $order = $this->quoteManagement->submit($quote);
+        sleep(10); // timeout to processing Magento queue
         $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $coupon->getId());
         $coupon->loadByCode($couponCode);
 

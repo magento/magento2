@@ -16,6 +16,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Wishlist\Model\Wishlist;
 
 /**
  * Class checks create order load block controller.
@@ -199,6 +200,69 @@ class LoadBlockTest extends AbstractBackendController
         $this->assertCount(1, $cartItems->getItems());
         $this->assertEquals('taxable_product', $cartItems->getFirstItem()->getSku());
         $this->quoteIdsToRemove[] = $customerCart->getId();
+    }
+
+    /**
+     * Check that Wishlist item is deleted after it has been added to Order.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     */
+    public function testAddProductToOrderFromWishList(): void
+    {
+        /** @var Wishlist $wishlist */
+        $wishlist = $this->_objectManager->create(Wishlist::class);
+        $wishlistItems = $wishlist->loadByCustomerId(1)->getItemCollection();
+        $this->assertCount(1, $wishlistItems);
+
+        $post = $this->hydratePost([
+            'sidebar' => [
+                'add_wishlist_item' => [
+                    $wishlistItems->getFirstItem()->getId() => 1,
+                ],
+            ],
+        ]);
+        $params = $this->hydrateParams();
+        $this->dispatchWitParams($params, $post);
+
+        $wishlistItems->clear()->load();
+        $this->assertEmpty($wishlistItems);
+        $quoteItems = $this->session->getQuote()->getItemsCollection();
+        $this->assertCount(1, $quoteItems);
+    }
+
+    /**
+     * Check that customer notification is NOT disabled after comment is updated.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
+     */
+    public function testUpdateCustomerNote(): void
+    {
+        $customerNote = 'Example Comment';
+        $quoteId = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address')->getId();
+        $this->session->setQuoteId($quoteId);
+        $params = [
+            'json' => false,
+            'block' => 'totals',
+            'as_js_varname' => false,
+        ];
+        $post = $this->hydratePost([
+            'order' => [
+                'comment' => [
+                    CartInterface::KEY_CUSTOMER_NOTE => $customerNote
+                ],
+            ],
+        ]);
+        $this->dispatchWitParams($params, $post);
+
+        $quote = $this->session->getQuote();
+        $this->assertEquals($customerNote, $quote->getCustomerNote());
+        $this->assertTrue((bool)$quote->getCustomerNoteNotify());
+
+        preg_match('/id="notify_customer"(?<attributes>.*?)\/>/s', $this->getResponse()->getBody(), $matches);
+        $this->assertArrayHasKey('attributes', $matches);
+        $this->assertStringContainsString('checked="checked"', $matches['attributes']);
     }
 
     /**
