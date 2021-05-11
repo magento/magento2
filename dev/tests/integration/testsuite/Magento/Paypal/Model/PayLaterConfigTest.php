@@ -19,7 +19,7 @@ class PayLaterConfigTest extends TestCase
     /**
      * @dataProvider getStyleDataProvider
      * @magentoAppIsolation enabled
-     * @covers \Magento\Paypal\Model\PayLaterConfig::getStyleConfig()
+     * @covers \Magento\Paypal\Model\PayLaterConfig::getSectionConfig()
      */
     public function testGetStyleConfig($systemConfig, $expectedConfig)
     {
@@ -77,7 +77,7 @@ class PayLaterConfigTest extends TestCase
     /**
      * @dataProvider getPositionDataProvider
      * @magentoAppIsolation enabled
-     * @covers \Magento\Paypal\Model\PayLaterConfig::getPositionConfig()
+     * @covers \Magento\Paypal\Model\PayLaterConfig::getSectionConfig()
      */
     public function testGetPositionConfig($systemConfig, $expectedConfig)
     {

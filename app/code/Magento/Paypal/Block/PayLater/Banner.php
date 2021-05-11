@@ -14,6 +14,7 @@ use Magento\Paypal\Model\SdkUrl;
 
 /**
  * PayPal PayLater component block
+ * @api
  */
 class Banner extends Template
 {
