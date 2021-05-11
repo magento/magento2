@@ -491,7 +491,7 @@ class Gd2 extends AbstractAdapter
         }
 
         /**
-         * Fixes issue with transparent watermark and a non-truecolor image.
+         * Fixes issue with watermark with transparent background and an image that is not truecolor (e.g GIF).
          * blending mode is allowed for truecolor images only.
          * @see imagealphablending()
          */
