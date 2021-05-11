@@ -77,26 +77,26 @@ class CustomerWishlistsTest extends GraphQlAbstract
      */
     public function testWishlistCreationScenario(): void
     {
-        $customerEmail = 'customer@wishlist.com';
-        $this->graphQlMutation(
-            $this->getCreateCustomerQuery($customerEmail),
-            [],
-            ''
-        );
-        $response = $this->graphQlQuery(
-            $this->getQuery(),
-            [],
-            '',
-            $this->getCustomerAuthHeaders($customerEmail, '123123^q')
-        );
-        $this->assertArrayHasKey('wishlists', $response['customer']);
-        $wishlists = $response['customer']['wishlists'];
-        $this->assertNotEmpty($wishlists);
-        $wishlist = $wishlists[0];
-        $this->assertEquals(0, $wishlist['items_count']);
-        $sku = 'simple-1';
-        $qty = 1;
         try {
+            $customerEmail = 'customer@wishlist.com';
+            $this->graphQlMutation(
+                $this->getCreateCustomerQuery($customerEmail),
+                [],
+                ''
+            );
+            $response = $this->graphQlQuery(
+                $this->getQuery(),
+                [],
+                '',
+                $this->getCustomerAuthHeaders($customerEmail, '123123^q')
+            );
+            $this->assertArrayHasKey('wishlists', $response['customer']);
+            $wishlists = $response['customer']['wishlists'];
+            $this->assertNotEmpty($wishlists);
+            $wishlist = $wishlists[0];
+            $this->assertEquals(0, $wishlist['items_count']);
+            $sku = 'simple-1';
+            $qty = 1;
             $addProductToWishlistQuery =
                 <<<QUERY
 mutation{
