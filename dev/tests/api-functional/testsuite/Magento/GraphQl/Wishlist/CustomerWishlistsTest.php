@@ -16,6 +16,7 @@ use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\CollectionFactory;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Registry;
 
 /**
  * Test coverage for customer wishlists
@@ -127,13 +128,13 @@ QUERY;
             $this->assertArrayHasKey('user_errors', $addToWishlistResponse['addProductsToWishlist']);
             $this->assertCount(0, $addToWishlistResponse['addProductsToWishlist']['user_errors']);
         } finally {
-            /** @var \Magento\Framework\Registry $registry */
-            $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get(\Magento\Framework\Registry::class);
+            /** @var Registry $registry */
+            $registry = Bootstrap::getObjectManager()
+                ->get(Registry::class);
             $registry->unregister('isSecureArea');
             $registry->register('isSecureArea', true);
 
-            $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+            $objectManager = Bootstrap::getObjectManager();
             $customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
             $customer = $customerRepository->get('customer@wishlist.com');
             $customerRepository->delete($customer);
