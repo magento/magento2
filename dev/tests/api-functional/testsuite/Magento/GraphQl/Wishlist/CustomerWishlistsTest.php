@@ -136,7 +136,7 @@ QUERY;
 
             $objectManager = Bootstrap::getObjectManager();
             $customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
-            $customer = $customerRepository->get('customer@wishlist.com');
+            $customer = $customerRepository->get($customerEmail);
             $customerRepository->delete($customer);
 
             $registry->unregister('isSecureArea');
