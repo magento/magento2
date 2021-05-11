@@ -55,8 +55,11 @@ class CustomAttributeMetadata implements ResolverInterface
     ) {
         $attributes['items'] = null;
         $attributeInputs = $args['attributes'];
-        $this->validateInputFields($attributeInputs);
         foreach ($attributeInputs as $attributeInput) {
+            if (!isset($attributeInput['attribute_code']) || !isset($attributeInput['entity_type'])) {
+                $attributes['items'][] = $this->createInputException($attributeInput);
+                continue;
+            }
             try {
                 $attribute = $this->attribute->getAttribute(
                     $attributeInput['attribute_code'],
@@ -127,21 +130,6 @@ class CustomAttributeMetadata implements ResolverInterface
             1 => 'FILTERABLE_WITH_RESULTS',
             2 => 'FILTERABLE_NO_RESULT'
         ];
-    }
-
-    /**
-     * Validate input
-     *
-     * @param array $attributeInputs
-     */
-    private function validateInputFields(array $attributeInputs)
-    {
-        foreach ($attributeInputs as $attribute) {
-            if (!isset($attribute['attribute_code']) || !isset($attribute['entity_type'])) {
-                $attributes['items'][] = $this->createInputException($attribute);
-                continue;
-            }
-        }
     }
 
     /**
