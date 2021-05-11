@@ -62,10 +62,10 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
      * Get customer order query for configurable order items
      *
      * @param $orderNumber
-     * @return mixed
+     * @return array
      * @throws AuthenticationException
      */
-    private function getCustomerOrderQueryConfigurableProduct($orderNumber): mixed
+    private function getCustomerOrderQueryConfigurableProduct($orderNumber): array
     {
         $query =
             <<<QUERY
