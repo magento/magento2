@@ -125,6 +125,13 @@ QUERY;
       attribute_type
       entity_type
       input_type
+      storefront_properties {
+         use_in_search
+         used_in_product_listing
+         use_in_layered_navigation
+         use_in_search_results_layered_navigation
+         visible_on_catalog_storefront
+      }
     }
   }
  }
@@ -239,15 +246,41 @@ QUERY;
         $attributeMetaDataItems = array_map(null, $actualResponse['customAttributeMetadata']['items'], $attributeTypes);
 
         foreach ($attributeMetaDataItems as $itemIndex => $itemArray) {
-            $this->assertResponseFields(
-                $attributeMetaDataItems[$itemIndex][0],
-                [
-                    "attribute_code" => $expectedAttributeCodes[$itemIndex],
-                    "attribute_type" => $attributeTypes[$itemIndex],
-                    "entity_type" => $entityTypes[$itemIndex],
-                    "input_type" => $inputTypes[$itemIndex]
-                ]
-            );
+            if($itemArray[0]['entity_type'] === 'catalog_category' || $itemArray[0]['entity_type'] ==='catalog_product') {
+                $this->assertResponseFields(
+                    $attributeMetaDataItems[$itemIndex][0],
+                    [
+                        "attribute_code" => $expectedAttributeCodes[$itemIndex],
+                        "attribute_type" => $attributeTypes[$itemIndex],
+                        "entity_type" => $entityTypes[$itemIndex],
+                        "input_type" => $inputTypes[$itemIndex],
+                        "storefront_properties" => [
+                            'use_in_search' => false,
+                            'used_in_product_listing' => false,
+                            'use_in_layered_navigation' => 'NO',
+                            'use_in_search_results_layered_navigation' => false,
+                            'visible_on_catalog_storefront' => false,
+                        ]
+                    ]
+                );
+            }
+            else {
+                $this->assertNotEmpty($attributeMetaDataItems[$itemIndex][0]['storefront_properties']);
+                // 5 fields are present
+                $this->assertCount(5, $attributeMetaDataItems[$itemIndex][0]['storefront_properties']);
+                unset($attributeMetaDataItems[$itemIndex][0]['storefront_properties']);
+                $this->assertResponseFields(
+                    $attributeMetaDataItems[$itemIndex][0],
+                    [
+                        "attribute_code" => $expectedAttributeCodes[$itemIndex],
+                        "attribute_type" => $attributeTypes[$itemIndex],
+                        "entity_type" => $entityTypes[$itemIndex],
+                        "input_type" => $inputTypes[$itemIndex]
+                    ]
+                );
+
+            }
+
         }
     }
 }
