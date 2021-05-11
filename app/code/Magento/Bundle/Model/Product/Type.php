@@ -665,7 +665,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $skipSaleableCheck = $this->_catalogProduct->getSkipSaleableCheck();
             $_appendAllSelections = (bool)$product->getSkipCheckRequiredOption() || $skipSaleableCheck;
 
-            $options = $buyRequest->getBundleOption();
+            if ($buyRequest->getBundleOptionsData()) {
+                $options = $this->getPreparedOptions($buyRequest->getBundleOptionsData());
+            } else {
+                $options = $buyRequest->getBundleOption();
+            }
             if (is_array($options)) {
                 $options = $this->recursiveIntval($options);
                 $optionIds = array_keys($options);
@@ -1412,5 +1416,22 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return array_merge([], ...$selections);
+    }
+
+    /**
+     * Get prepared options with selection ids
+     *
+     * @param array $options
+     * @return array
+     */
+    private function getPreparedOptions(array $options): array
+    {
+        foreach ($options as $optionId => $option) {
+            foreach ($option as $selectionId => $optionQty) {
+                $options[$optionId][$selectionId] = $selectionId;
+            }
+        }
+
+        return $options;
     }
 }
