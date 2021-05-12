@@ -127,6 +127,8 @@ class Type implements OptionSourceInterface
 
         $typeModel = $this->_productTypePool->get($typeModelName);
         $typeModel->setConfig($types[$typeId]);
+        $typeModel->setTypeId($typeId);
+
         return $typeModel;
     }
 
