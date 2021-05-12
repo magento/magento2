@@ -83,10 +83,11 @@ class Attribute implements LayerBuilderInterface
             $result[$bucketName] = $this->layerFormatter->buildLayer(
                 $attribute['attribute_label'] ?? $bucketName,
                 \count($bucket->getValues()),
-                $attribute['attribute_code'] ?? $bucketName
+                $attribute['attribute_code'] ?? $bucketName,
+                $attribute['position']
             );
 
-            $options = $this->getSortedOptions($bucket,$attribute['options'] ?: []);
+            $options = $this->getSortedOptions($bucket, $attribute['options'] ?: []);
             foreach ($options as $option) {
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
                     $option['label'],
