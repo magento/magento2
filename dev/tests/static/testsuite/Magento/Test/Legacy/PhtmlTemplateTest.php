@@ -24,7 +24,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                self::assertNotRegExp(
+                self::assertDoesNotMatchRegularExpression(
                     '/this->(?!helper)\S*/iS',
                     file_get_contents($file),
                     'Access to members and methods of Block class through $this is ' .
@@ -51,7 +51,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                self::assertNotRegexp(
+                self::assertDoesNotMatchRegularExpression(
                     '/block->_[^_]+\S*\(/iS',
                     file_get_contents($file),
                     'Access to protected and private members of Block class is ' .
@@ -73,7 +73,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                self::assertNotRegexp(
+                self::assertDoesNotMatchRegularExpression(
                     '/type="text\/javascript"/',
                     file_get_contents($file),
                     'Please do not use "text/javascript" type attribute.'
@@ -97,7 +97,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
                 if (strpos($file, '/view/frontend/templates/') !== false
                     || strpos($file, '/view/base/templates/') !== false
                 ) {
-                    self::assertNotRegexp(
+                    self::assertDoesNotMatchRegularExpression(
                         '/(["\'])jquery\/ui\1/',
                         file_get_contents($file),
                         'Please do not use "jquery/ui" library in templates. Use needed jquery ui widget instead.'
@@ -124,7 +124,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
                     && (strpos($file, '/view/frontend/templates/') !== false
                     || strpos($file, '/view/base/templates/') !== false)
                 ) {
-                    self::assertNotRegExp(
+                    self::assertDoesNotMatchRegularExpression(
                         '/data-mage-init=(?:\'|")(?!\s*{\s*"[^"]+")/',
                         file_get_contents($file),
                         'Please do not initialize JS component in php. Do it in template.'
