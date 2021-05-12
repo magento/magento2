@@ -19,11 +19,11 @@ type Attribute @doc(description: "Attribute contains the attribute_type of the s
 }
 
 type StorefrontProperties {
-    use_in_product_listing: Boolean
-    position: Int
-    visible_on_catalog_pages: Boolean
-    use_in_layered_navigation: UseInLayeredNavigationOptions
-    use_in_search_results_layered_navigation: Boolean
+    use_in_product_listing: Boolean @doc(description: "Indicates whether the attribute is displayed in product listings")
+    position: Int @doc(description: "The relative position of the attribute in the layered navigation block")
+    visible_on_catalog_pages: Boolean @doc(description: "Indicates whether the attribute is displayed on product pages")
+    use_in_layered_navigation: UseInLayeredNavigationOptions @doc(description: "Indicates whether the attribute is filterable with results, without results, or not at all")
+    use_in_search_results_layered_navigation: Boolean @doc(description: "Indicates whether the attribute can be used in layered navigation on search results pages")
 }
 
 enum UseInLayeredNavigationOptions {
