@@ -144,7 +144,7 @@ define([
                 itemQty = elem.data('item-qty');
 
             if (this._isValidQty(itemQty, elem.val())) {
-                $('#update-cart-item-' + itemId).fadeIn(300);
+                $('#update-cart-item-' + itemId).addClass('show');
             } else if (elem.val() == 0) { //eslint-disable-line eqeqeq
                 this._hideItemButton(elem);
             } else {
@@ -184,7 +184,7 @@ define([
         _hideItemButton: function (elem) {
             var itemId = elem.data('cart-item');
 
-            $('#update-cart-item-' + itemId).fadeOut(300);
+            $('#update-cart-item-' + itemId).removeClass('show');
         },
 
         /**
