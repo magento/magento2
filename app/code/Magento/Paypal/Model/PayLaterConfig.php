@@ -25,6 +25,11 @@ class PayLaterConfig
     const CONFIG_KEY_POSITION = 'position';
 
     /**
+     * Checkout payment step placement
+     */
+    const CHECKOUT_PAYMENT_PLACEMENT = 'checkout_payment';
+
+    /**
      * @var Config
      */
     private $config;
@@ -95,30 +100,33 @@ class PayLaterConfig
     public function getSectionConfig(string $section, string $key)
     {
         if (!array_key_exists($section, $this->configData)) {
+            $sectionName = $section === self::CHECKOUT_PAYMENT_PLACEMENT
+                ? self::CHECKOUT_PAYMENT_PLACEMENT : "${section}page";
+
             $this->configData[$section] = [
-                'display' => (boolean)$this->config->getPayLaterConfigValue("${section}page_display"),
-                'position' => $this->config->getPayLaterConfigValue("${section}page_position"),
+                'display' => (boolean)$this->config->getPayLaterConfigValue("${sectionName}_display"),
+                'position' => $this->config->getPayLaterConfigValue("${sectionName}_position"),
                 'style' => [
                     'data-pp-style-layout' => $this->config->getPayLaterConfigValue(
-                        "${section}page_stylelayout"
+                        "${sectionName}_stylelayout"
                     ),
                     'data-pp-style-logo-type' => $this->config->getPayLaterConfigValue(
-                        "${section}page_logotype"
+                        "${sectionName}_logotype"
                     ),
                     'data-pp-style-logo-position' => $this->config->getPayLaterConfigValue(
-                        "${section}page_logoposition"
+                        "${sectionName}_logoposition"
                     ),
                     'data-pp-style-text-color' => $this->config->getPayLaterConfigValue(
-                        "${section}page_textcolor"
+                        "${sectionName}_textcolor"
                     ),
                     'data-pp-style-text-size' => $this->config->getPayLaterConfigValue(
-                        "${section}page_textsize"
+                        "${sectionName}_textsize"
                     ),
                     'data-pp-style-color' => $this->config->getPayLaterConfigValue(
-                        "${section}page_color"
+                        "${sectionName}_color"
                     ),
                     'data-pp-style-ratio' => $this->config->getPayLaterConfigValue(
-                        "${section}page_ratio"
+                        "${sectionName}_ratio"
                     )
                 ]
             ];

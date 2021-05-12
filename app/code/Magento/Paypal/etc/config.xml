@@ -202,6 +202,13 @@
                 <homepage_stylelayout>flex</homepage_stylelayout>
                 <homepage_ratio>1x1</homepage_ratio>
                 <homepage_color>blue</homepage_color>
+                <checkout_payment_display>0</checkout_payment_display>
+                <checkout_payment_position>header</checkout_payment_position>
+                <checkout_payment_stylelayout>text</checkout_payment_stylelayout>
+                <checkout_payment_logotype>primary</checkout_payment_logotype>
+                <checkout_payment_logoposition>left</checkout_payment_logoposition>
+                <checkout_payment_textcolor>black</checkout_payment_textcolor>
+                <checkout_payment_textsize>12</checkout_payment_textsize>
             </paypal_paylater>
         </payment>
     </default>

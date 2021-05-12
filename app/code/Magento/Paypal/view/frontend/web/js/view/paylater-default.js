@@ -26,6 +26,7 @@ define([
             amount: ko.observable(),
             style: '',
         },
+        paypal: null,
 
         /**
          * Initialize
@@ -36,7 +37,8 @@ define([
             this._super();
 
             if ( this.sdkUrl !== '') {
-                this.loadPayPalSdk(this.sdkUrl);
+                this.loadPayPalSdk(this.sdkUrl)
+                    .then(this._setPayPalObject.bind(this));
             }
 
             return this;
@@ -59,7 +61,17 @@ define([
          * @param {String} sdkUrl
          */
         loadPayPalSdk: function (sdkUrl) {
-            paypalSdk(sdkUrl);
-        }
+            return paypalSdk(sdkUrl);
+        },
+
+        /**
+         * Set reference to paypal Sdk object
+         *
+         * @param {Object} paypal
+         * @private
+         */
+        _setPayPalObject: function (paypal) {
+            this.paypal = paypal;
+        },
     });
 });

@@ -37,4 +37,16 @@ class Position
             'sidebar' => __('Sidebar')
         ];
     }
+
+    /**
+     * PayLater positions source getter for Checkout Page
+     *
+     * @return array
+     */
+    public function getPositionsCheckout(): array
+    {
+        return [
+            'near_pp_button' => __('Near PayPal Credit checkout button')
+        ];
+    }
 }
