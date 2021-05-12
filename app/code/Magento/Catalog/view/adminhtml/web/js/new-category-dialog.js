@@ -118,7 +118,7 @@ define([
                             },
                             dataType: 'json',
                             context: $('body')
-                        }).success(function (data) {
+                        }).done(function (data) {
                             var $suggest;
 
                             if (!data.error) {
@@ -135,7 +135,7 @@ define([
                             } else {
                                 $('#new_category_messages').html(data.messages);
                             }
-                        }).complete(
+                        }).always(
                             function () {
                                 thisButton.prop('disabled', false);
                             }
