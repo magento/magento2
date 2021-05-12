@@ -71,8 +71,8 @@ class Banner extends Template
         $jsLayout = [
             'components' => [
                 'payLater' => [
-                    'component' =>
-                        $this->jsLayout['components']['payLater']['component'] ?? 'Magento_Paypal/js/view/paylater',
+                    'component' => $this->jsLayout['components']['payLater']['component']
+                        ?? 'Magento_Paypal/js/view/paylater-default',
                     'config' => [
                         'sdkUrl' => $this->getPayPalSdkUrl(),
                     ]

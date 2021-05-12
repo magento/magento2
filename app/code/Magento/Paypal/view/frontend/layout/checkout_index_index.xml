@@ -28,7 +28,7 @@
                                                                 <item name="before-place-order" xsi:type="array">
                                                                     <item name="children" xsi:type="array">
                                                                         <item name="paylater-place-order" xsi:type="array">
-                                                                            <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater</item>
+                                                                            <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater-checkout</item>
                                                                             <item name="sortOrder" xsi:type="string">100</item>
                                                                             <item name="displayArea" xsi:type="string">before-place-order</item>
                                                                         </item>

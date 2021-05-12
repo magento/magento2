@@ -13,6 +13,11 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 class PayLaterCheckoutConfigProvider implements ConfigProviderInterface
 {
     /**
+     * Checkout payment page placement
+     */
+    private const PLACEMENT = 'payment';
+
+    /**
      * @var PayLaterConfig
      */
     private $payLaterConfig;
@@ -38,7 +43,7 @@ class PayLaterCheckoutConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $attributes = $this->payLaterConfig->getStyleConfig(PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT);
-        $attributes['data-pp-placement'] = PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT;
+        $attributes['data-pp-placement'] = self::PLACEMENT;
 
         $config['payment']['paypalPayLater']['enabled'] = $this->payLaterConfig->isEnabled(
             PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT
