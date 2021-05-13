@@ -61,4 +61,14 @@
         <data key="label">Global</data>
         <data key="value">0</data>
     </entity>
+    <entity name="CustomerAccountConfirmationEnabled">
+        <data key="path">customer/create_account/confirm</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CustomerAccountConfirmationDisabled">
+        <data key="path">customer/create_account/confirm</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

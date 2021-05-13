@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerSendConfirmationLinkTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer on Storefront with enabled Email Confirmation Setting"/>
+            <title value="Register a customer with enabled Email Confirmation Setting"/>
+            <description value="Customer should receive notification about account confirmation after registration and have possibility re-send confirmation link"/>
+            <severity value="MINOR"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{CustomerAccountConfirmationEnabled.path}} {{CustomerAccountConfirmationEnabled.value}}" stepKey="enableAccountConfirmation"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCreatedCustomer">
+                <argument name="email" value="{{Simple_US_Customer.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{CustomerAccountConfirmationDisabled.path}} {{CustomerAccountConfirmationDisabled.value}}" stepKey="disableAccountConfirmation"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="You must confirm your account. Please check your email for the confirmation link or click here for a new link."/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerClickAccountConfirmationSendingLinkActionGroup" stepKey="clickTheConfirmationLinkSending"/>
+        <actionGroup ref="StorefrontCustomerFillEmailFieldOnSendConfirmationLinkPageActionGroup" stepKey="fillEmailField">
+            <argument name="email" value="Simple_US_Customer.email"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSendConfirmationLinkButtonActionGroup" stepKey="clickSendConfirmationLinkBtn"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="assertSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Please check your email for confirmation key."/>
+        </actionGroup>
+    </test>
+</tests>
