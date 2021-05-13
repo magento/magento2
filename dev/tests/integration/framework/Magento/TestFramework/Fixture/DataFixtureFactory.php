@@ -10,7 +10,7 @@ namespace Magento\TestFramework\Fixture;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory for data fixture type
+ * Factory for data fixture
  */
 class DataFixtureFactory
 {
