@@ -209,6 +209,13 @@
                 <checkout_payment_logoposition>left</checkout_payment_logoposition>
                 <checkout_payment_textcolor>black</checkout_payment_textcolor>
                 <checkout_payment_textsize>12</checkout_payment_textsize>
+                <cartpage_display>0</cartpage_display>
+                <cartpage_position>header</cartpage_position>
+                <cartpage_stylelayout>text</cartpage_stylelayout>
+                <cartpage_logotype>primary</cartpage_logotype>
+                <cartpage_logoposition>left</cartpage_logoposition>
+                <cartpage_textcolor>black</cartpage_textcolor>
+                <cartpage_textsize>12</cartpage_textsize>
             </paypal_paylater>
         </payment>
     </default>

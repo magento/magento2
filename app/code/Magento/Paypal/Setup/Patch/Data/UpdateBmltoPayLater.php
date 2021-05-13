@@ -30,7 +30,7 @@ class UpdateBmltoPayLater implements DataPatchInterface
      */
     private $bmlToPayLater = [
         [
-            'pages' => ['productpage'],
+            'pages' => ['productpage', 'checkout'],
             'data' => [
                 'position' => [
                     'name' =>'position',
@@ -136,7 +136,8 @@ class UpdateBmltoPayLater implements DataPatchInterface
             $settingParts = explode('_', $setting);
             $page = $settingParts[0];
             $setting = $settingParts[1];
-            $payLaterPath = self::PAYLATERPATH . $page;
+            $payLaterPage = $page === 'checkout' ? 'cartpage' : $page;
+            $payLaterPath = self::PAYLATERPATH . $payLaterPage;
 
             if (array_key_exists(self::BMLPATH . $page . '_display', $bmlSettings)
                 && $bmlSettings[self::BMLPATH . $page . '_display'] === '0'
