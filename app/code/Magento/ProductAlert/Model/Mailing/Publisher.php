@@ -101,7 +101,7 @@ class Publisher
                 [
                     'data' => [
                         'bulk_uuid' => $bulkUuid,
-                        'topic_name' => 'product_alert.mailing',
+                        'topic_name' => 'product_alert',
                         'serialized_data' => $serializedData,
                         'status' => OperationInterface::STATUS_TYPE_OPEN,
                     ]
