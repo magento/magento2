@@ -16,6 +16,7 @@ define([
     quote
 ) {
     'use strict';
+
     var payLaterEnabled = window.checkoutConfig.payment.paypalPayLater.enabled,
         payLaterConfig = window.checkoutConfig.payment.paypalPayLater.config;
 
