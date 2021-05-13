@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Product;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Controller\Product\View;
 use Magento\Catalog\Helper\Product\View as ViewHelper;
 use Magento\Catalog\Model\Design;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
@@ -49,9 +50,14 @@ class ViewTest extends TestCase
     private $catalogDesignMock;
 
     /**
-     * @var ProductRepository|MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;
+
+    /**
+     * @var CategoryRepositoryInterface|MockObject
+     */
+    private $categoryRepositoryMock;
 
     /**
      * @var ProductInterface|MockObject
@@ -93,9 +99,8 @@ class ViewTest extends TestCase
         $this->catalogDesignMock = $this->getMockBuilder(Design::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->productInterfaceMock = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -112,6 +117,7 @@ class ViewTest extends TestCase
             null,
             $this->catalogDesignMock,
             $this->productRepositoryMock,
+            $this->categoryRepositoryMock,
             $this->storeManagerMock
         );
     }
