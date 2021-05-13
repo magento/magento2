@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\GraphQlSchemaStitching\Test\Unit;
+namespace Magento\Framework\GraphQl\GraphQlSchemaStitching;
 
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 use Magento\Framework\ObjectManagerInterface;
