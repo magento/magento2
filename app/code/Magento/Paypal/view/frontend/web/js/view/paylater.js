@@ -32,7 +32,7 @@ define([
             amountComponentConfig: {
                 name: '${ $.name }.amountProvider',
                 component: ''
-            },
+            }
         },
         paypal: null,
         amount: null,

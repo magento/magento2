@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\PayPal\Block\PayLater;
+namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Paypal\Model\PayLaterConfig;

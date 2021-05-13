@@ -21,7 +21,7 @@ define([
         defaults: {
             priceBoxSelector: '.price-box',
             qtyFieldSelector: '#product_addtocart_form [name="qty"]',
-            amount: null,
+            amount: null
         },
         qty: 1,
         price: 0,
@@ -84,12 +84,12 @@ define([
          * @private
          */
         _updateAmount: function () {
-            var amount = this.price * this.qty;
+            var amount = this.price * this.qty,
+                payLater = registry.get(this.parentName);
 
             if (amount !== 0) {
-                var payLater = registry.get(this.parentName);
                 payLater.amount(amount);
             }
-        },
+        }
     });
 });
