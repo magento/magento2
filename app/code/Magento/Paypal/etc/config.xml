@@ -197,6 +197,11 @@
                 <productpage_logoposition>left</productpage_logoposition>
                 <productpage_textcolor>black</productpage_textcolor>
                 <productpage_textsize>12</productpage_textsize>
+                <categorypage_display>0</categorypage_display>
+                <categorypage_position>header</categorypage_position>
+                <categorypage_stylelayout>flex</categorypage_stylelayout>
+                <categorypage_color>blue</categorypage_color>
+                <categorypage_ratio>20x1</categorypage_ratio>
                 <homepage_display>0</homepage_display>
                 <homepage_position>header</homepage_position>
                 <homepage_stylelayout>flex</homepage_stylelayout>

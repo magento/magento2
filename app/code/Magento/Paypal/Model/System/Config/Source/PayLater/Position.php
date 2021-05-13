@@ -49,4 +49,17 @@ class Position
             'near_pp_button' => __('Near PayPal Credit checkout button')
         ];
     }
+
+    /**
+     * PayLater positions source getter for Catalog Category Page
+     *
+     * @return array
+     */
+    public function getPositionsCategoryPage(): array
+    {
+        return [
+            'header' => __('Header (center)'),
+            'sidebar' => __('Sidebar'),
+        ];
+    }
 }

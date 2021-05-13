@@ -59,7 +59,7 @@ class UpdateBmltoPayLater implements DataPatchInterface
             ]
         ],
         [
-            'pages' => ['homepage'],
+            'pages' => ['homepage', 'categorypage'],
             'data' => [
                 'position' => [
                     'name' =>'position',

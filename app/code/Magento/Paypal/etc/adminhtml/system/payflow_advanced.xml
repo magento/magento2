@@ -267,6 +267,21 @@
                     <field id="paylater_checkout_payment_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_ratio"/>
                     <field id="paylater_checkout_payment_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_checkout_payment/paylater_checkout_payment_color"/>
                 </group>
+                <group id="advanced_settings_paylater_categorypage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
+                    <label>Catalog Category Page</label>
+                    <depends>
+                        <field id="paylater_enabled">1</field>
+                    </depends>
+                    <field id="paylater_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_display"/>
+                    <field id="paylater_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_position"/>
+                    <field id="paylater_categorypage_stylelayout" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_stylelayout"/>
+                    <field id="paylater_categorypage_logotype" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_logotype"/>
+                    <field id="paylater_categorypage_logoposition" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_logoposition"/>
+                    <field id="paylater_categorypage_textcolor" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_textcolor"/>
+                    <field id="paylater_categorypage_textsize" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_textsize"/>
+                    <field id="paylater_categorypage_ratio" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_ratio"/>
+                    <field id="paylater_categorypage_color" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/settings_paylater_categorypage/paylater_categorypage_color"/>
+                </group>
             </group>
         </group>
         <group id="settings_payments_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
