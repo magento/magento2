@@ -78,7 +78,7 @@ class CustomerWishlistsTest extends GraphQlAbstract
     public function testWishlistCreationScenario(): void
     {
         try {
-            $customerEmail = 'customer@wishlist.com';
+            $customerEmail = 'customer2@wishlist.com';
             $this->graphQlMutation(
                 $this->getCreateCustomerQuery($customerEmail),
                 [],
