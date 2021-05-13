@@ -337,6 +337,17 @@ class GraphQlReader implements ReaderInterface
         $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
         $spacePattern = '([\s\t\n\r]+)';
 
+        // TODO review this workaround
+        // Replace enums before types, there is a bug in which some enums are caught by the type regex
+        // If we process them first they will have their placeholder inserted appropriately without the :String suffix
+        // This means they will not be caught by the following preg_replace
+        //add placeholder in empty enums
+        $graphQlSchemaContent = preg_replace(
+            "/{$enumKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
+            "\$1\$2\$3\$4\$5{\n{$placeholderField}\n}",
+            $graphQlSchemaContent
+        );
+
         //add placeholder in empty types
         $graphQlSchemaContent = preg_replace(
             "/{$typesKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
@@ -344,12 +355,6 @@ class GraphQlReader implements ReaderInterface
             $graphQlSchemaContent
         );
 
-        //add placeholder in empty enums
-        $graphQlSchemaContent = preg_replace(
-            "/{$enumKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
-            "\$1\$2\$3\$4\$5{\n{$placeholderField}\n}",
-            $graphQlSchemaContent
-        );
         return $graphQlSchemaContent;
     }
 
