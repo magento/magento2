@@ -103,7 +103,7 @@ class ValidationRulesTest extends SetupTestCase
         );
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule8',
-            'incosistence_reference_type_definition',
+            'inconsistent_reference_type_definition',
             'db_schema.xml',
             'etc'
         );
