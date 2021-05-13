@@ -22,7 +22,14 @@
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
                             <item name="payLater" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater-product</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="displayAmount" xsi:type="boolean">true</item>
+                                    <item name="amountComponentConfig" xsi:type="array">
+                                        <item name="component" xsi:type="string">
+                                            Magento_Paypal/js/view/amountProviders/product
+                                        </item>
+                                    </item>
+                                </item>
                             </item>
                         </item>
                     </argument>
@@ -44,7 +51,14 @@
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
                             <item name="payLater" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater-product</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="displayAmount" xsi:type="boolean">true</item>
+                                    <item name="amountComponentConfig" xsi:type="array">
+                                        <item name="component" xsi:type="string">
+                                            Magento_Paypal/js/view/amountProviders/product
+                                        </item>
+                                    </item>
+                                </item>
                             </item>
                         </item>
                     </argument>
@@ -60,7 +74,14 @@
                     <argument name="jsLayout" xsi:type="array">
                         <item name="components" xsi:type="array">
                             <item name="payLater" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater-product</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="displayAmount" xsi:type="boolean">true</item>
+                                    <item name="amountComponentConfig" xsi:type="array">
+                                        <item name="component" xsi:type="string">
+                                            Magento_Paypal/js/view/amountProviders/product
+                                        </item>
+                                    </item>
+                                </item>
                             </item>
                         </item>
                     </argument>

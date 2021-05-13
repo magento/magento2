@@ -84,7 +84,6 @@
                 <item name="paypal_iframe_config_provider" xsi:type="object">Magento\Paypal\Model\IframeConfigProvider</item>
                 <item name="paypal_billing_agreement_config_provider" xsi:type="object">Magento\Paypal\Model\BillingAgreementConfigProvider</item>
                 <item name="paypal_iframe_cc_config_provider" xsi:type="object">PaypalIframeCcConfigProvider</item>
-                <item name="paypal_paylater_config_provider" xsi:type="object">Magento\Paypal\Model\PayLaterCheckoutConfigProvider</item>
             </argument>
         </arguments>
     </type>
@@ -188,6 +187,13 @@
                 <item name="sofort" xsi:type="string">sofort</item>
             </argument>
             <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="payLater" xsi:type="object">Magento\PayPal\Block\PayLater\LayoutProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>

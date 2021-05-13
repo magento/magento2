@@ -1,18 +1,18 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
 
 define([
     'jquery',
-    'ko',
-    'Magento_Paypal/js/view/paylater-default',
+    'uiElement',
+    'uiRegistry',
     'priceBox',
     'domReady!'
 ], function (
     $,
-    ko,
-    Component
+    Component,
+    registry
 ) {
     'use strict';
 
@@ -21,7 +21,7 @@ define([
         defaults: {
             priceBoxSelector: '.price-box',
             qtyFieldSelector: '#product_addtocart_form [name="qty"]',
-            refreshSelector: ''
+            amount: null,
         },
         qty: 1,
         price: 0,
@@ -47,10 +47,6 @@ define([
             }
 
             $(this.qtyFieldSelector).on('change', this._onQtyChange.bind(this));
-
-            if (this.refreshSelector) {
-                $(this.refreshSelector).on('click', this._refreshMessages.bind(this));
-            }
 
             this._updateAmount();
 
@@ -91,19 +87,9 @@ define([
             var amount = this.price * this.qty;
 
             if (amount !== 0) {
-                this.amount(amount);
+                var payLater = registry.get(this.parentName);
+                payLater.amount(amount);
             }
         },
-
-        /**
-         * Render messages
-         *
-         * @private
-         */
-        _refreshMessages: function () {
-            if (this.paypal) {
-                this.paypal.Messages.render();
-            }
-        }
     });
 });

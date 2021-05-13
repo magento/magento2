@@ -6,27 +6,22 @@
 define([
     'jquery',
     'ko',
-    'Magento_Paypal/js/view/paylater-default',
+    'uiElement',
+    'uiRegistry',
     'Magento_Checkout/js/model/quote',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
+    registry,
     quote
 ) {
     'use strict';
 
-    var payLaterEnabled = window.checkoutConfig.payment.paypalPayLater.enabled,
-        payLaterConfig = window.checkoutConfig.payment.paypalPayLater.config;
-
     return Component.extend({
         defaults: {
-            template: 'Magento_Paypal/paylater',
-            sdkUrl: payLaterEnabled ? payLaterConfig.sdkUrl : '',
-            attributes: payLaterConfig.attributes,
-            amount: ko.observable(),
-            style: 'margin-bottom: 10px;'
+            amount: null
         },
 
         /**
@@ -36,6 +31,7 @@ define([
          */
         initialize: function () {
             this._super();
+
             this.updateAmount();
 
             return this;
@@ -45,10 +41,10 @@ define([
          * Update amount
          */
         updateAmount: function () {
-            var amount = this.amount;
+            var payLater = registry.get(this.parentName);
 
             quote.totals.subscribe(function (newValue) {
-                amount(newValue['base_grand_total']);
+                payLater.amount(newValue['base_grand_total']);
             });
         }
     });

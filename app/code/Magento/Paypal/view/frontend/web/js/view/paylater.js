@@ -7,12 +7,14 @@ define([
     'jquery',
     'ko',
     'uiElement',
+    'uiLayout',
     'Magento_Paypal/js/in-context/paypal-sdk',
     'domReady!'
 ], function (
     $,
     ko,
     Component,
+    layout,
     paypalSdk
 ) {
     'use strict';
@@ -23,10 +25,15 @@ define([
             template: 'Magento_Paypal/paylater',
             sdkUrl: '',
             attributes: {},
-            amount: ko.observable(),
-            style: ''
+            refreshSelector: '',
+            displayAmount: false,
+            amountComponentConfig: {
+                name: '${ $.name }.amountProvider',
+                component: ''
+            },
         },
         paypal: null,
+        amount: null,
 
         /**
          * Initialize
@@ -34,11 +41,20 @@ define([
          * @returns {*}
          */
         initialize: function () {
-            this._super();
+            this._super()
+                .observe(['amount']);
+
+            if (this.displayAmount) {
+                layout([this.amountComponentConfig]);
+            }
 
             if (this.sdkUrl !== '') {
                 this.loadPayPalSdk(this.sdkUrl)
                     .then(this._setPayPalObject.bind(this));
+            }
+
+            if (this.refreshSelector) {
+                $(this.refreshSelector).on('click', this._refreshMessages.bind(this));
             }
 
             return this;
@@ -72,6 +88,17 @@ define([
          */
         _setPayPalObject: function (paypal) {
             this.paypal = paypal;
+        },
+
+        /**
+         * Render messages
+         *
+         * @private
+         */
+        _refreshMessages: function () {
+            if (this.paypal) {
+                this.paypal.Messages.render();
+            }
         }
     });
 });
