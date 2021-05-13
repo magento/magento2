@@ -90,7 +90,7 @@ class ValidationRulesTest extends SetupTestCase
     /**
      * @moduleName Magento_TestSetupDeclarationModule8
      */
-    public function testFailOnIncosistentReferenceTypeDefinition()
+    public function testFailOnInconsistentReferenceTypeDefinition()
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessageMatches(
