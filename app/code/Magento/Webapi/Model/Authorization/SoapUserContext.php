@@ -74,7 +74,7 @@ class SoapUserContext implements UserContextInterface
     /**
      * @inheritdoc
      */
-    public function getUserId()
+    public function getUserId() //phpcs:ignore CopyPaste
     {
         $this->processRequest();
         return $this->userId;
@@ -83,7 +83,7 @@ class SoapUserContext implements UserContextInterface
     /**
      * @inheritdoc
      */
-    public function getUserType()
+    public function getUserType() //phpcs:ignore CopyPaste
     {
         $this->processRequest();
         return $this->userType;
@@ -94,7 +94,7 @@ class SoapUserContext implements UserContextInterface
      *
      * @return void
      */
-    protected function processRequest()
+    protected function processRequest() //phpcs:ignore CopyPaste
     {
         if ($this->isRequestProcessed) {
             return;
