@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="pay-later-message" data-pp-message data-bind="attr: {
+<div data-pp-message data-bind="attr: {
+        'class': getAttribute('class'),
         'data-pp-amount': amount,
         'data-pp-placement': getAttribute('data-pp-placement'),
         'data-pp-style-layout': getAttribute('data-pp-style-layout'),

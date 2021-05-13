@@ -24,7 +24,9 @@ define([
         defaults: {
             template: 'Magento_Paypal/paylater',
             sdkUrl: '',
-            attributes: {},
+            attributes: {
+                class: 'pay-later-message'
+            },
             refreshSelector: '',
             displayAmount: false,
             amountComponentConfig: {

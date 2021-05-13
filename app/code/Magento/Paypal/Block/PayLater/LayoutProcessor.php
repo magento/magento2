@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\PayPal\Block\PayLater;
 
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
@@ -46,6 +48,10 @@ class LayoutProcessor implements LayoutProcessorInterface
     public function process($jsLayout)
     {
         if (!$this->payLaterConfig->isEnabled(PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT)) {
+            unset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
+                ['children']['payment']['children']['payments-list']['children']['before-place-order']['children']
+                ['paylater-place-order']);
+
             return $jsLayout;
         }
 
@@ -57,20 +63,26 @@ class LayoutProcessor implements LayoutProcessorInterface
             ['children']['payment']['children']['payments-list']['children']['before-place-order']['children']
             ['paylater-place-order'];
 
+            $componentConfig = $payLaterPlaceOrder['config'] ?? [];
+            $defaultConfig = [
+                'sdkUrl' => $this->sdkUrl->getUrl(),
+                'displayAmount' => true,
+                'amountComponentConfig' => [
+                    'component' => 'Magento_Paypal/js/view/amountProviders/checkout'
+                ]
+            ];
+            $config = array_replace($defaultConfig, $componentConfig);
+
             $attributes = $this->payLaterConfig->getSectionConfig(
                 PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT,
                 PayLaterConfig::CONFIG_KEY_STYLE
             );
             $attributes['data-pp-placement'] = self::PLACEMENT;
 
-            $payLaterPlaceOrder['config'] = [
-                'sdkUrl' => $this->sdkUrl->getUrl(),
-                'attributes' => $attributes,
-                'displayAmount' => true,
-                'amountComponentConfig' => [
-                    'component' => 'Magento_Paypal/js/view/amountProviders/checkout'
-                ]
-            ];
+            $componentAttributes = $payLaterPlaceOrder['config']['attributes'] ?? [];
+            $config['attributes'] = array_replace($attributes, $componentAttributes);
+
+            $payLaterPlaceOrder['config'] = $config;
         }
 
         return $jsLayout;
