@@ -96,6 +96,26 @@ class GraphQlReader implements ReaderInterface
         foreach ($schemaFiles as $partialSchemaContent) {
             $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
 
+            /**
+             * TODO fix this
+             * There is a bug in parseTypes where the union type is also containing the information for the type below
+             * in this case that meant that we were missing the type directly below CompanyStructureEntity
+             *
+             * This means that we cannot find CompanyStructureItem later in getTypesToUse
+             *
+             * Manually split them out in a proof of concept hack, while we review the regex
+             */
+            if (isset($partialSchemaTypes['CompanyStructureEntity'])) {
+                if (strpos($partialSchemaTypes['CompanyStructureEntity'], 'type CompanyStructureItem') !== false) {
+                    $lines = explode(PHP_EOL . PHP_EOL, $partialSchemaTypes['CompanyStructureEntity']);
+                    if (isset($lines[0], $lines[1]) && count($lines) === 2) {
+                        $partialSchemaTypes['CompanyStructureEntity'] = $lines[0];
+                        $partialSchemaTypes['CompanyStructureItem'] = $lines[1];
+                    }
+                    unset($lines);
+                }
+            }
+
             // Filter out duplicated ones and save them into a list to be retried
             $tmpTypes = $knownTypes;
             foreach ($partialSchemaTypes as $intendedKey => $partialSchemaType) {
