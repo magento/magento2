@@ -5,16 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Type;
+namespace Magento\TestFramework\Fixture;
 
-use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
-use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
 use PHPUnit\Framework\Exception;
 
 /**
  * File based data fixture
  */
-class LegacyDataFixture implements DataFixtureTypeInterface
+class LegacyDataFixture implements RevertibleDataFixtureInterface
 {
     /**
      * @var string

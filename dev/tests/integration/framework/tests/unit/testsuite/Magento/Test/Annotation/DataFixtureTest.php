@@ -13,12 +13,12 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Event\Param\Transaction;
 use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
+use Magento\TestFramework\Fixture\DataFixtureInterface;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
-use Magento\TestFramework\Fixture\Type\Factory;
-use Magento\TestFramework\Fixture\Type\LegacyDataFixture;
+use Magento\TestFramework\Fixture\DataFixtureFactory;
+use Magento\TestFramework\Fixture\LegacyDataFixture;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Annotation\TestsIsolation;
@@ -63,8 +63,8 @@ class DataFixtureTest extends TestCase
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
             DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(new Json()),
-            Factory::class => new Factory($objectManager),
-            LegacyDataFixture::class => $this->createMock(DataFixtureTypeInterface::class),
+            DataFixtureFactory::class => new DataFixtureFactory($objectManager),
+            LegacyDataFixture::class => $this->createMock(DataFixtureInterface::class),
         ];
         $objectManager->expects($this->atLeastOnce())
             ->method('get')

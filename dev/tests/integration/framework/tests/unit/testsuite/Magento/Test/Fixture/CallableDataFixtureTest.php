@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Fixture\Type;
+namespace Magento\Test\Fixture;
 
-use Magento\TestFramework\Fixture\Type\CallableDataFixture;
+use Magento\TestFramework\Fixture\CallableDataFixture;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;

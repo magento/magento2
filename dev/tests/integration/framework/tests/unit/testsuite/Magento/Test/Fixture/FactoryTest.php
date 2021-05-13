@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Fixture\Type;
+namespace Magento\Test\Fixture;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixtureInterface;
-use Magento\TestFramework\Fixture\Type\CallableDataFixture;
-use Magento\TestFramework\Fixture\Type\DataFixture;
-use Magento\TestFramework\Fixture\Type\Factory;
-use Magento\TestFramework\Fixture\Type\LegacyDataFixture;
+use Magento\TestFramework\Fixture\CallableDataFixture;
+use Magento\TestFramework\Fixture\DataFixtureFactory;
+use Magento\TestFramework\Fixture\LegacyDataFixture;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class FactoryTest extends TestCase
 {
     /**
-     * @var Factory
+     * @var DataFixtureFactory
      */
     private $model;
 
@@ -35,7 +35,7 @@ class FactoryTest extends TestCase
         $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->method('create')
             ->willReturnCallback([$this, 'createFixture']);
-        $this->model = new Factory($objectManager);
+        $this->model = new DataFixtureFactory($objectManager);
     }
 
     /**
@@ -43,11 +43,10 @@ class FactoryTest extends TestCase
      */
     public function testShouldCreateCallableDataFixture(): void
     {
-        $fakeClass = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['fakeMethod'])
-            ->getMock();
-        $directives = ['name' => [$fakeClass, 'fakeMethod']];
-        $this->assertInstanceOf(CallableDataFixture::class, $this->model->create($directives));
+        $this->assertInstanceOf(
+            CallableDataFixture::class,
+            $this->model->create(get_class($this) . '::' . 'tearDownAfterClass')
+        );
     }
 
     /**
@@ -55,8 +54,7 @@ class FactoryTest extends TestCase
      */
     public function testShouldCreateLegacyDataFixture(): void
     {
-        $directives = ['name' => 'path/to/fixture.php'];
-        $this->assertInstanceOf(LegacyDataFixture::class, $this->model->create($directives));
+        $this->assertInstanceOf(LegacyDataFixture::class, $this->model->create('path/to/fixture.php'));
     }
 
     /**
@@ -64,9 +62,10 @@ class FactoryTest extends TestCase
      */
     public function testShouldCreateDataFixture(): void
     {
-        $fixtureClass = $this->createMock(DataFixtureInterface::class);
-        $directives = ['name' => get_class($fixtureClass)];
-        $this->assertInstanceOf(DataFixture::class, $this->model->create($directives));
+        $this->assertInstanceOf(
+            RevertibleDataFixtureInterface::class,
+            $this->model->create(RevertibleDataFixtureInterface::class)
+        );
     }
 
     /**

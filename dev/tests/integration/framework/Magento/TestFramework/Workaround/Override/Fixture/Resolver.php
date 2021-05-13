@@ -13,7 +13,7 @@ use Magento\TestFramework\Annotation\AdminConfigFixture;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Annotation\DataFixtureBeforeTransaction;
-use Magento\TestFramework\Fixture\Type\Factory;
+use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\ConfigInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\AdminConfigFixture as AdminConfigFixtureApplier;
@@ -49,7 +49,7 @@ class Resolver implements ResolverInterface
     private $currentFixtureType = null;
 
     /**
-     * @var Factory
+     * @var DataFixtureFactory
      */
     private $dataFixtureFactory;
 
@@ -60,7 +60,7 @@ class Resolver implements ResolverInterface
     {
         $this->config = $config;
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->dataFixtureFactory = $this->objectManager->create(Factory::class);
+        $this->dataFixtureFactory = $this->objectManager->create(DataFixtureFactory::class);
     }
 
     /**

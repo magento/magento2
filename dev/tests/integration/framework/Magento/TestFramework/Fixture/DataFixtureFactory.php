@@ -5,15 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Type;
+namespace Magento\TestFramework\Fixture;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
 
 /**
  * Factory for data fixture type
  */
-class Factory
+class DataFixtureFactory
 {
     /**
      * @var ObjectManagerInterface
@@ -32,30 +31,25 @@ class Factory
     /**
      * Create new instance of data fixture
      *
-     * @param array $directives
-     * @return DataFixtureTypeInterface
+     * @param string $fixture
+     * @return DataFixtureInterface
      */
-    public function create(array $directives): DataFixtureTypeInterface
+    public function create(string $fixture): DataFixtureInterface
     {
-        if (is_callable($directives['name'])) {
+        if (is_callable($fixture)) {
             $result = $this->objectManager->create(
                 CallableDataFixture::class,
                 [
-                    'callback' => $directives['name']
+                    'callback' => $fixture
                 ]
             );
-        } elseif (class_exists($directives['name'])) {
-            $result = $this->objectManager->create(
-                DataFixture::class,
-                [
-                    'className' => $directives['name'],
-                ]
-            );
+        } elseif (class_exists($fixture)) {
+            $result = $this->objectManager->create($fixture);
         } else {
             $result = $this->objectManager->create(
                 LegacyDataFixture::class,
                 [
-                    'filePath' => $directives['name'],
+                    'filePath' => $fixture,
                 ]
             );
         }

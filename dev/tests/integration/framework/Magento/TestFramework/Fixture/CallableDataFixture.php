@@ -5,14 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture\Type;
-
-use Magento\TestFramework\Fixture\DataFixtureTypeInterface;
+namespace Magento\TestFramework\Fixture;
 
 /**
  * Callable data fixture type
  */
-class CallableDataFixture implements DataFixtureTypeInterface
+class CallableDataFixture implements RevertibleDataFixtureInterface
 {
     /**
      * @var callable

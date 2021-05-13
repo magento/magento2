@@ -31,7 +31,7 @@ class DataFixtureDirectivesParserTest extends TestCase
     }
 
     /**
-     * Test parse with different different format
+     * Test parse with different format
      *
      * @param string $directive
      * @dataProvider directivesDataProvider

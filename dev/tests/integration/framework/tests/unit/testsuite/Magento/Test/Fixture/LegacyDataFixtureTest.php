@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Fixture\Type;
+namespace Magento\Test\Fixture;
 
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
-use Magento\TestFramework\Fixture\Type\LegacyDataFixture;
+use Magento\TestFramework\Fixture\LegacyDataFixture;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -72,6 +72,6 @@ class LegacyDataFixtureTest extends TestCase
      */
     public function getFixtureAbsolutePath(string $path): string
     {
-        return dirname(__FILE__, 5) . DIRECTORY_SEPARATOR . $path;
+        return dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . $path;
     }
 }
