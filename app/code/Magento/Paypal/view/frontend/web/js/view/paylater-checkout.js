@@ -16,9 +16,8 @@ define([
     quote
 ) {
     'use strict';
-
-    const payLaterEnabled = window.checkoutConfig.payment.paypalPayLater.enabled;
-    const payLaterConfig = window.checkoutConfig.payment.paypalPayLater.config;
+    var payLaterEnabled = window.checkoutConfig.payment.paypalPayLater.enabled,
+        payLaterConfig = window.checkoutConfig.payment.paypalPayLater.config;
 
     return Component.extend({
         defaults: {
@@ -26,7 +25,7 @@ define([
             sdkUrl: payLaterEnabled ? payLaterConfig.sdkUrl : '',
             attributes: payLaterConfig.attributes,
             amount: ko.observable(),
-            style: 'margin-bottom: 10px;',
+            style: 'margin-bottom: 10px;'
         },
 
         /**
@@ -45,7 +44,8 @@ define([
          * Update amount
          */
         updateAmount: function () {
-            const amount = this.amount;
+            var amount = this.amount;
+
             quote.totals.subscribe(function (newValue) {
                 amount(newValue['base_grand_total']);
             });

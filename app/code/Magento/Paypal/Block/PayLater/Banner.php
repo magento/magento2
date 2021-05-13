@@ -87,7 +87,6 @@ class Banner extends Template
         $componentAttributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];
         $config['attributes'] = array_replace($this->getStyleAttributesConfig(), $componentAttributes);
         $config['attributes']['data-pp-placement'] = $this->placement;
-        $config['sdkUrl'] = $this->getPayPalSdkUrl();
 
         $this->jsLayout = [
             'components' => [

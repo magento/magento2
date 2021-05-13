@@ -42,7 +42,8 @@ class PayLaterCheckoutConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-        $attributes = $this->payLaterConfig->getStyleConfig(PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT);
+        $attributes = $this->payLaterConfig
+            ->getSectionConfig(PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT, PayLaterConfig::CONFIG_KEY_STYLE);
         $attributes['data-pp-placement'] = self::PLACEMENT;
 
         $config['payment']['paypalPayLater']['enabled'] = $this->payLaterConfig->isEnabled(

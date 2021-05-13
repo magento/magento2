@@ -12,7 +12,7 @@ define([
 ], function (
     $,
     ko,
-    Component,
+    Component
 ) {
     'use strict';
 
