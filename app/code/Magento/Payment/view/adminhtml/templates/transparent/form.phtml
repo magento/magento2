@@ -11,6 +11,8 @@ $code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 $ccExpMonth = $block->getInfoData('cc_exp_month');
+$ccNumberElementSelector = '#' . $code . '_cc_number';
+$ccCidElementSelector = '#' . $code . '_cc_cid';
 ?>
 
 <!-- IFRAME for request to Payment Gateway -->
@@ -84,17 +86,17 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'oncopy',
                 "event.preventDefault();",
-                '#' . $code . '_cc_number'
+                $ccNumberElementSelector
             ) ?>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'oncut',
                 "event.preventDefault();",
-                '#' . $code . '_cc_number'
+                $ccNumberElementSelector
             ) ?>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'onpaste',
                 "event.preventDefault();",
-                '#' . $code . '_cc_number'
+                $ccNumberElementSelector
             ) ?>
         </div>
     </div>
@@ -153,17 +155,17 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                     'oncopy',
                     "event.preventDefault();",
-                    '#' . $code . '_cc_cid'
+                    $ccCidElementSelector
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                     'oncut',
                     "event.preventDefault();",
-                    '#' . $code . '_cc_cid'
+                    $ccCidElementSelector
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                     'onpaste',
                     "event.preventDefault();",
-                    '#' . $code . '_cc_cid'
+                    $ccCidElementSelector
                 ) ?>
             </div>
         </div>
