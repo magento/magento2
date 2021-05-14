@@ -192,7 +192,7 @@
     <type name="Magento\Checkout\Block\Onepage">
         <arguments>
             <argument name="layoutProcessors" xsi:type="array">
-                <item name="payLater" xsi:type="object">Magento\PayPal\Block\PayLater\LayoutProcessor</item>
+                <item name="payLater" xsi:type="object">Magento\Paypal\Block\PayLater\LayoutProcessor</item>
             </argument>
         </arguments>
     </type>
