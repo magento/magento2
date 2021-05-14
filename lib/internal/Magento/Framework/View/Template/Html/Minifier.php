@@ -119,7 +119,7 @@ class Minifier implements MinifierInterface
         //Storing Heredocs
         $heredocs = [];
         $content = preg_replace_callback(
-            '/<<<([A-z]+).*?\1;/ims',
+            '/<<<([A-z]+).*?\1\s*;/ims',
             function ($match) use (&$heredocs) {
                 $heredocs[] = $match[0];
 
