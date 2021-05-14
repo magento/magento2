@@ -142,7 +142,6 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                        class="admin__control-text cvv"
                        id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]"
                        value=""
-                       data-container="<?= /* @noEscape */ $code ?>-cc-cvv"
                        data-validate='{"required-number":true, "validate-cc-cvn":"#<?=/* @noEscape */ $code?>_cc_type"}'
                        autocomplete="off"/>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
