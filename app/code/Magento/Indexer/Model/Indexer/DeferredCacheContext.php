@@ -51,7 +51,7 @@ class DeferredCacheContext
     public function registerEntities(string $cacheTag, array $ids): void
     {
         if ($this->isActive()) {
-            $this->entities[$cacheTag] = array_merge($this->tags[$cacheTag] ?? [], $ids);
+            $this->entities[$cacheTag] = array_merge($this->entities[$cacheTag] ?? [], $ids);
         }
     }
 

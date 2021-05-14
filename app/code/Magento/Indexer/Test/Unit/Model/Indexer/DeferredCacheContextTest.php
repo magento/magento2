@@ -42,20 +42,24 @@ class DeferredCacheContextTest extends TestCase
     {
         $productTag = 'cat_p';
         $categoryTag = 'cat_c';
-        $additionalTags = ['cat_c_p'];
-        $productIds = [1, 2, 3];
+        $additionalTags1 = ['cat_c_p'];
+        $additionalTags2 = ['cms_page'];
+        $productIds1 = [1, 2, 3];
+        $productIds2 = [4];
         $categoryIds = [5, 6, 7];
         $this->model->start();
-        $this->model->registerEntities($productTag, $productIds);
+        $this->model->registerEntities($productTag, $productIds1);
+        $this->model->registerTags($additionalTags1);
         $this->model->start();
+        $this->model->registerEntities($productTag, $productIds2);
         $this->model->registerEntities($categoryTag, $categoryIds);
-        $this->model->registerTags($additionalTags);
+        $this->model->registerTags($additionalTags2);
         $this->assertEmpty($this->context->getIdentities());
         $this->model->commit();
         $this->assertEmpty($this->context->getIdentities());
         $this->model->commit();
         $this->assertEquals(
-            ['cat_p_1', 'cat_p_2', 'cat_p_3', 'cat_c_5', 'cat_c_6', 'cat_c_7', 'cat_c_p'],
+            ['cat_p_1', 'cat_p_2', 'cat_p_3', 'cat_p_4', 'cat_c_5', 'cat_c_6', 'cat_c_7', 'cat_c_p', 'cms_page'],
             $this->context->getIdentities()
         );
     }
