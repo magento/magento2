@@ -46,7 +46,6 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
         <label for="<?= /* @noEscape */ $code ?>_cc_type" class="admin__field-label">
             <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
         </label>
-
         <div class="admin__field-control">
             <select id="<?= /* @noEscape */ $code ?>_cc_type"
                     data-container="<?= /* @noEscape */ $code ?>-cc-type"
@@ -64,12 +63,10 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
             </select>
         </div>
     </div>
-
     <div class="admin__field _required field-number">
         <label for="<?= /* @noEscape */ $code ?>_cc_number" class="admin__field-label">
             <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
         </label>
-
         <div class="admin__field-control">
             <input id="<?= /* @noEscape */ $code ?>_cc_number"
                    type="text"
@@ -84,7 +81,7 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
                    }'
                    autocomplete="off"/>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'oncopy',
+                'onpaste',
                 "event.preventDefault();",
                 $ccNumberElementSelector
             ) ?>
@@ -94,18 +91,16 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
                 $ccNumberElementSelector
             ) ?>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'onpaste',
+                'oncopy',
                 "event.preventDefault();",
                 $ccNumberElementSelector
             ) ?>
         </div>
     </div>
-
     <div class="admin__field _required field-date" id="<?= /* @noEscape */ $code ?>_cc_type_exp_div">
         <label for="<?= /* @noEscape */ $code ?>_expiration" class="admin__field-label">
             <span><?= $block->escapeHtml(__('Expiration Date')) ?></span>
         </label>
-
         <div class="admin__field-control">
             <select id="<?= /* @noEscape */ $code ?>_expiration"
                     name="payment[cc_exp_month]"
@@ -120,7 +115,6 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
                     </option>
                 <?php endforeach ?>
             </select>
-
             <select id="<?= /* @noEscape */ $code ?>_expiration_yr"
                     name="payment[cc_exp_year]"
                     class="admin__control-select admin__control-select-year"
@@ -141,7 +135,6 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
             <label for="<?= /* @noEscape */ $code ?>_cc_cid" class="admin__field-label">
                 <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
             </label>
-
             <div class="admin__field-control">
                 <input type="text"
                        title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
@@ -153,7 +146,7 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
                        data-validate='{"required-number":true, "validate-cc-cvn":"#<?=/* @noEscape */ $code?>_cc_type"}'
                        autocomplete="off"/>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'oncopy',
+                    'onpaste',
                     "event.preventDefault();",
                     $ccCidElementSelector
                 ) ?>
@@ -163,7 +156,7 @@ $ccCidElementSelector = '#' . $code . '_cc_cid';
                     $ccCidElementSelector
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'onpaste',
+                    'oncopy',
                     "event.preventDefault();",
                     $ccCidElementSelector
                 ) ?>
