@@ -325,7 +325,7 @@ class Grid extends \Magento\Backend\Block\Widget
         $collection = $this->getCollection();
         if ($collection) {
             $columnIndex = $column->getFilterIndex() ? $column->getFilterIndex() : $column->getIndex();
-            $collection->unshiftOrder($columnIndex, strtoupper($column->getDir()));
+            $collection->setOrder($columnIndex, strtoupper($column->getDir()));
         }
         return $this;
     }
