@@ -22,6 +22,7 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use \Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
@@ -93,6 +94,11 @@ class Reorder
     private $guestCartResolver;
 
     /**
+     * @var
+     */
+    private $jsonSerializer;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param GuestCartResolver $guestCartResolver
@@ -108,7 +114,8 @@ class Reorder
         CartRepositoryInterface $cartRepository,
         ReorderHelper $reorderHelper,
         \Psr\Log\LoggerInterface $logger,
-        ProductCollectionFactory $productCollectionFactory
+        ProductCollectionFactory $productCollectionFactory,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -117,6 +124,7 @@ class Reorder
         $this->customerCartProvider = $customerCartProvider;
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->jsonSerializer = $serializer;
     }
 
     /**
@@ -243,13 +251,14 @@ class Reorder
      */
     private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): void
     {
-        $info = $orderItem->getProductOptionByCode('info_buyRequest');
-        $info = new \Magento\Framework\DataObject($info);
-        $info->setQty($orderItem->getQtyOrdered());
+        $infoBuyRequest = $this->getInfoBuyRequest($orderItem);
+        //$info = $orderItem->getProductOptionByCode('info_buyRequest');
+        $infoBuyRequest  = new \Magento\Framework\DataObject($infoBuyRequest );
+        $infoBuyRequest->setQty($orderItem->getQtyOrdered());
 
         $addProductResult = null;
         try {
-            $addProductResult = $cart->addProduct($product, $info);
+            $addProductResult = $cart->addProduct($product,  $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
         } catch (\Throwable $e) {
@@ -338,4 +347,34 @@ class Reorder
             ? __('Could not add the product with SKU "%1" to the shopping cart: %2', $sku, $message)
             : __('Could not add the product with SKU "%1" to the shopping cart', $sku));
     }
+
+    /**
+     * @param OrderItemInterface $orderItem
+     * @return array|null
+     */
+
+    private function getInfoBuyRequest(OrderItemInterface $orderItem): ?array
+    {
+        $info = $orderItem->getProductOptionByCode('info_buyRequest');
+        $options = $orderItem->getProductOptionByCode('options');
+
+
+        if(empty($options) || !is_array($info['options'])){
+            return $info;
+        }
+
+        foreach($options as $option){
+            if(array_key_exists($option['option_id'],$info['options'])){
+                try{
+                    $value = $this->jsonSerializer->unserialize($option['option_value']);
+                    $info['options'][$option['option_id']] = $value;
+                }catch(\InvalidArgumentException $exception){
+                    //do nothing
+                }
+            }
+        }
+
+        return $info;
+    }
+
 }
