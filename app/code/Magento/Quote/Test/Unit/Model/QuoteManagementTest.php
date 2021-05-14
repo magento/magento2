@@ -784,6 +784,40 @@ class QuoteManagementTest extends TestCase
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
 
+    public function testSubmitValidationFailure()
+    {
+        $exceptionMessage = 'Validation exception';
+        $exception = new \Exception($exceptionMessage);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage($exceptionMessage);
+
+        $orderData = [];
+        $orderMock = $this->createMock(Order::class);
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->expects($this->once())
+            ->method('getAllVisibleItems')
+            ->willReturn(['someData']);
+        $this->submitQuoteValidator->expects($this->once())
+            ->method('validateQuote')
+            ->with($quoteMock)
+            ->willThrowException($exception);
+        $this->orderFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+        $this->eventManager->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'sales_model_service_quote_submit_failure',
+                [
+                    'order' => $orderMock,
+                    'quote' => $quoteMock,
+                    'exception' => $exception,
+                ]
+            );
+
+        $this->model->submit($quoteMock, $orderData);
+    }
+
     public function testPlaceOrderIfCustomerIsGuest()
     {
         $cartId = 100;
