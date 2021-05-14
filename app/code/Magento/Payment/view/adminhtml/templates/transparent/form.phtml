@@ -104,7 +104,8 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
         </label>
 
         <div class="admin__field-control">
-            <select id="<?= /* @noEscape */ $code ?>_expiration" name="payment[cc_exp_month]"
+            <select id="<?= /* @noEscape */ $code ?>_expiration"
+                    name="payment[cc_exp_month]"
                     data-container="<?= /* @noEscape */ $code ?>-cc-month"
                     class="admin__control-select admin__control-select-month"
                     data-validate='{required:true, "validate-cc-exp":"#<?= /* @noEscape */ $code ?>_expiration_yr"}'>
@@ -117,7 +118,8 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                 <?php endforeach ?>
             </select>
 
-            <select id="<?= /* @noEscape */ $code ?>_expiration_yr" name="payment[cc_exp_year]"
+            <select id="<?= /* @noEscape */ $code ?>_expiration_yr"
+                    name="payment[cc_exp_year]"
                     class="admin__control-select admin__control-select-year"
                     data-container="<?= /* @noEscape */ $code ?>-cc-year" data-validate='{required:true}'>
                 <?php foreach ($block->getCcYears() as $k => $v): ?>
@@ -137,10 +139,12 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
             </label>
 
             <div class="admin__field-control">
-                <input type="text" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+                <input type="text"
+                       title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                        data-container="<?= /* @noEscape */ $code ?>-cc-cvv"
                        class="admin__control-text cvv"
-                       id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]"
+                       id="<?= /* @noEscape */ $code ?>_cc_cid"
+                       name="payment[cc_cid]"
                        value=""
                        data-validate='{"required-number":true, "validate-cc-cvn":"#<?=/* @noEscape */ $code?>_cc_type"}'
                        autocomplete="off"/>
