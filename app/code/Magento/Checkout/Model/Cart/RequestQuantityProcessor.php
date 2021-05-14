@@ -41,11 +41,39 @@ class RequestQuantityProcessor
 
         foreach ($cartData as $index => $data) {
             if (isset($data['qty'])) {
+                $data['qty'] = $this->prepareQuantity($data['qty']);
                 $data['qty'] = is_string($data['qty']) ? trim($data['qty']) : $data['qty'];
                 $cartData[$index]['qty'] = $filter->filter($data['qty']);
             }
         }
 
         return $cartData;
+    }
+
+    /**
+     * Prepare quantity with taking into account decimal separator by locale
+     *
+     * @param int|float|string|array $quantity
+     * @return int|float|string|array
+     * @throws \Zend_Locale_Exception
+     */
+    public function prepareQuantity($quantity)
+    {
+        $formatter = new \NumberFormatter($this->localeResolver->getLocale(), \NumberFormatter::CURRENCY);
+        $decimalSymbol = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+
+        if (is_array($quantity)) {
+            foreach ($quantity as $key => $qty) {
+                if (strpos((string)$qty, '.') !== false && $decimalSymbol !== '.') {
+                    $quantity[$key] = str_replace('.', $decimalSymbol, $qty);
+                }
+            }
+        } else {
+            if (strpos((string)$quantity, '.') !== false && $decimalSymbol !== '.') {
+                $quantity = str_replace('.', $decimalSymbol, (string)$quantity);
+            }
+        }
+
+        return $quantity;
     }
 }
