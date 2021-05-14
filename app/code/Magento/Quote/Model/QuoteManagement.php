@@ -306,7 +306,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $customerActiveQuote->setIsActive(0);
             $this->quoteRepository->save($customerActiveQuote);
 
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
@@ -554,6 +554,15 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $order->setCustomerFirstname($quote->getCustomerFirstname());
             $order->setCustomerMiddlename($quote->getCustomerMiddlename());
             $order->setCustomerLastname($quote->getCustomerLastname());
+
+            if ($quote->getOrigOrderId()) {
+                $order->setEntityId($quote->getOrigOrderId());
+            }
+
+            if ($quote->getReservedOrderId()) {
+                $order->setIncrementId($quote->getReservedOrderId());
+            }
+
             $this->submitQuoteValidator->validateOrder($order);
 
             $this->eventManager->dispatch(
@@ -609,7 +618,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 if ($defaultShipping) {
                     try {
                         $shippingAddress = $this->addressRepository->getById($defaultShipping);
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
@@ -643,7 +652,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 if ($defaultBilling) {
                     try {
                         $billingAddress = $this->addressRepository->getById($defaultBilling);
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
