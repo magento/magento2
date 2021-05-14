@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Controller\Product;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Design;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
@@ -66,11 +65,6 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
     private $productRepository;
 
     /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -86,7 +80,6 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
      * @param Data|null $jsonHelper
      * @param Design|null $catalogDesign
      * @param ProductRepositoryInterface|null $productRepository
-     * @param CategoryRepositoryInterface|null $categoryRepository
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
@@ -98,7 +91,6 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
         ?Data $jsonHelper = null,
         ?Design $catalogDesign = null,
         ?ProductRepositoryInterface $productRepository = null,
-        ?CategoryRepositoryInterface $categoryRepository = null,
         ?StoreManagerInterface $storeManager = null
     ) {
         parent::__construct($context);
@@ -113,8 +105,6 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
             ->get(Design::class);
         $this->productRepository = $productRepository ?: ObjectManager::getInstance()
             ->get(ProductRepositoryInterface::class);
-        $this->categoryRepository = $categoryRepository ?: ObjectManager::getInstance()
-            ->get(CategoryRepositoryInterface::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(StoreManagerInterface::class);
     }
@@ -206,17 +196,9 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
     private function applyCustomDesign(int $productId): void
     {
         $product = $this->productRepository->getById($productId, false, $this->storeManager->getStore()->getId());
-        $productSettings = $this->catalogDesign->getDesignSettings($product);
-        if ($productSettings->getCustomDesign()) {
-            $this->catalogDesign->applyCustomDesign($productSettings->getCustomDesign());
-        } else {
-            foreach ($product->getCategoryIds() as $categoryId) {
-                $category = $this->categoryRepository->get($categoryId, $this->storeManager->getStore()->getId());
-                $categorySettings = $this->catalogDesign->getDesignSettings($category);
-                if ($categorySettings->getCustomDesign()) {
-                    $this->catalogDesign->applyCustomDesign($categorySettings->getCustomDesign());
-                }
-            }
+        $settings = $this->catalogDesign->getDesignSettings($product);
+        if ($settings->getCustomDesign()) {
+            $this->catalogDesign->applyCustomDesign($settings->getCustomDesign());
         }
     }
 }
