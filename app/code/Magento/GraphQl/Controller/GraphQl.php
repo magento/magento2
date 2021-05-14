@@ -94,7 +94,7 @@ class GraphQl implements FrontControllerInterface
     /** 
      * @var AreaList $areaList
      */
-    private $appState;
+    private $areaList;
 
     /**
      * @param Response $response
