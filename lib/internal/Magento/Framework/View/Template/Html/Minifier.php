@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Template\Html;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Template\Html\Minifier\Php;
 
 class Minifier implements MinifierInterface
 {
@@ -116,17 +117,37 @@ class Minifier implements MinifierInterface
         $dir = dirname($file);
         $fileName = basename($file);
         $content = $this->readFactory->create($dir)->readFile($fileName);
-        //Storing Heredocs
-        $heredocs = [];
-        $content = preg_replace_callback(
-            '/<<<([A-z]+).*?\1\s*;/ims',
-            function ($match) use (&$heredocs) {
-                $heredocs[] = $match[0];
 
-                return '__MINIFIED_HEREDOC__' .(count($heredocs) - 1);
-            },
+        $parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
+        $heredocs = null;
+
+        try {
+            $ast = $parser->parse($content);
+
+            $traverser = new \PhpParser\NodeTraverser();
+            $traverser->addVisitor(new Php\NodeVisitor());
+            $ast = $traverser->traverse($ast);
+
+            $prettyPrinter = new Php\PrettyPrinter();
+            $content = $prettyPrinter->prettyPrintFile($ast);
+            $heredocs = $prettyPrinter->getDelayedHeredocs();
+        } catch (\PhpParser\Error $error) {
+            // Some PHP code is seemingly invalid.
+        }
+
+        //Storing Heredocs
+        if (null === $heredocs) {
+            $content = preg_replace_callback(
+                '/<<<([A-z]+).*?\1\s*;/ims',
+                function ($match) use (&$heredocs) {
+                    $heredocs[] = $match[0];
+
+                    return '__MINIFIED_HEREDOC__' .(count($heredocs) - 1);
+                },
             ($content ?? '')
-        );
+            );
+        }
+
         $content = preg_replace(
             '#(?<!]]>)\s+</#',
             '</',
