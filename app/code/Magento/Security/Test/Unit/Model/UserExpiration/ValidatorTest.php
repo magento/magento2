@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model\UserExpiration;
 
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Security\Model\UserExpiration\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -18,37 +19,35 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorTest extends TestCase
 {
-
     /**
      * @var Validator
      */
     private $validator;
 
     /**
-     * @var MockObject|\Magento\Framework\Stdlib\DateTime\DateTime
+     * @var MockObject|TimezoneInterface
      */
-    private $dateTimeMock;
-
-    /**@var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Stdlib\DateTime\TimezoneInterface */
     private $timezoneMock;
 
+    /**
+     * @inheirtDoc
+     */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $this->dateTimeMock =
-            $this->createPartialMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, ['gmtTimestamp']);
-        $this->timezoneMock =
-            $this->createPartialMock(
-                Timezone::class,
-                ['date', 'convertConfigTimeToUtc']
-            );
-        $this->validator = $objectManager->getObject(
-            Validator::class,
-            ['dateTime' => $this->dateTimeMock, 'timezone' => $this->timezoneMock]
-        );
+        $dateTimeMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->timezoneMock = $this->getMockBuilder(Timezone::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['date'])
+            ->getMock();
+        $this->validator = new Validator($this->timezoneMock, $dateTimeMock);
     }
 
-    public function testWithInvalidDate()
+    /**
+     * Verify invalid date format.
+     */
+    public function testWithInvalidDate(): void
     {
         $expireDate = 'invalid_date';
         $this->assertFalse($this->validator->isValid($expireDate));
@@ -58,22 +57,22 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testWithPastDate()
+    /**
+     * Verify invalid expire date.
+     *
+     * @return void
+     */
+    public function testWithPastDate(): void
     {
-        /** @var \DateTime|MockObject $dateObject */
-        $dateObject = $this->createMock(\DateTime::class);
-        $this->timezoneMock->expects(static::once())
-            ->method('date')
-            ->willReturn($dateObject);
-
         $currentDate = new \DateTime();
-        $currentDate = $currentDate->getTimestamp();
         $expireDate = new \DateTime();
         $expireDate->modify('-10 days');
-
-        $this->dateTimeMock->expects(static::once())->method('gmtTimestamp')->willReturn($currentDate);
-        $this->timezoneMock->expects(static::once())->method('date')->willReturn($expireDate);
-        $dateObject->expects(static::once())->method('getTimestamp')->willReturn($expireDate->getTimestamp());
+        $this->timezoneMock->expects(static::exactly(2))
+            ->method('date')
+            ->willReturnOnConsecutiveCalls(
+                $currentDate,
+                $expireDate
+            );
         $this->assertFalse($this->validator->isValid($expireDate->format('Y-m-d H:i:s')));
         $this->assertStringContainsString(
             '"Expiration date" must be later than the current date.',
@@ -81,21 +80,27 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testWithFutureDate()
+    /**
+     * Verify valid expire date.
+     *
+     * @return void
+     */
+    public function testWithFutureDate(): void
     {
-        /** @var \DateTime|MockObject $dateObject */
-        $dateObject = $this->createMock(\DateTime::class);
-        $this->timezoneMock->expects(static::once())
-            ->method('date')
-            ->willReturn($dateObject);
         $currentDate = new \DateTime();
-        $currentDate = $currentDate->getTimestamp();
         $expireDate = new \DateTime();
         $expireDate->modify('+10 days');
-
-        $this->dateTimeMock->expects(static::once())->method('gmtTimestamp')->willReturn($currentDate);
-        $this->timezoneMock->expects(static::once())->method('date')->willReturn($expireDate);
-        $dateObject->expects(static::once())->method('getTimestamp')->willReturn($expireDate->getTimestamp());
+        $this->timezoneMock->expects(static::exactly(2))
+            ->method('date')
+            ->willReturnOnConsecutiveCalls(
+                $currentDate,
+                $expireDate
+            );
+        $this->timezoneMock->expects(static::exactly(2))->method('date')
+            ->willReturnOnConsecutiveCalls(
+                $currentDate,
+                $expireDate
+            );
         static::assertTrue($this->validator->isValid($expireDate->format('Y-m-d H:i:s')));
         static::assertEquals([], $this->validator->getMessages());
     }
