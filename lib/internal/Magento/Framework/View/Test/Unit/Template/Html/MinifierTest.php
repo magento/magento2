@@ -150,8 +150,8 @@ class MinifierTest extends TestCase
             var i = 1;// comment
             var j = 1;// <?php echo 'hi' ?>
 //<?php ?> ')){
-// if (<?php echo __('hi')) { ?>
-// if (<?php )) {
+// if (<?php echo __('hi') ?>) {
+// if (<?php {}; ?>)) {
 // comment
             //<![CDATA[
             var someVar = 123;
