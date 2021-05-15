@@ -66,9 +66,12 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                 <span><?= $block->escapeHtml(__('Credit Card Number')) ?></span>
             </label>
             <div class="control">
-                <input type="number" id="<?= /* @noEscape */ $code ?>_cc_number"
+                <input id="<?= /* @noEscape */ $code ?>_cc_number"
+                       type="number"
                        data-container="<?= /* @noEscape */ $code ?>-cc-number" name="payment[cc_number]"
-                       title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="input-text" value=""
+                       title="<?= $block->escapeHtml(__('Credit Card Number')) ?>"
+                       class="input-text"
+                       value=""
                        data-validate='{
                            "required-number":true,
                            "validate-cc-number":"#<?= /* @noEscape */ $code ?>_cc_type",
@@ -81,12 +84,12 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                     '#' . $code . '_cc_number'
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'oncut',
+                    'onpaste',
                     "event.preventDefault();",
                     '#' . $code . '_cc_number'
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'onpaste',
+                    'oncut',
                     "event.preventDefault();",
                     '#' . $code . '_cc_number'
                 ) ?>
@@ -100,8 +103,10 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                 <div class="fields group group-2">
                     <div class="field no-label month">
                         <div class="control">
-                            <select id="<?= /* @noEscape */ $code ?>_expiration" name="payment[cc_exp_month]"
-                                    data-container="<?= /* @noEscape */ $code ?>-cc-month" class="month"
+                            <select id="<?= /* @noEscape */ $code ?>_expiration"
+                                    name="payment[cc_exp_month]"
+                                    data-container="<?= /* @noEscape */ $code ?>-cc-month"
+                                    class="month"
                                     data-validate='{
                                         required:true,
                                         "validate-cc-exp":"#<?= /* @noEscape */ $code ?>_expiration_yr"
@@ -117,8 +122,10 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                     </div>
                     <div class="field no-label year">
                         <div class="control">
-                            <select id="<?= /* @noEscape */ $code ?>_expiration_yr" name="payment[cc_exp_year]"
-                                    class="year" data-container="<?= /* @noEscape */ $code ?>-cc-year"
+                            <select id="<?= /* @noEscape */ $code ?>_expiration_yr"
+                                    name="payment[cc_exp_year]"
+                                    class="year"
+                                    data-container="<?= /* @noEscape */ $code ?>-cc-year"
                                     data-validate='{required:true}'>
                             <?php foreach ($block->getCcYears() as $k => $v): ?>
                                 <option value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
@@ -138,9 +145,13 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                 <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
             </label>
             <div class="control">
-                <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
-                       data-container="<?= /* @noEscape */ $code ?>-cc-cvv" class="input-text cvv"
-                       id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
+                <input id="<?= /* @noEscape */ $code ?>_cc_cid"
+                       name="payment[cc_cid]"
+                       type="number"
+                       title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
+                       data-container="<?= /* @noEscape */ $code ?>-cc-cvv"
+                       class="input-text cvv"
+                       value=""
                        data-validate='{
                            "required-number":true,
                            "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"
@@ -151,12 +162,12 @@ $content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Che
                     '#' . $code . '_cc_cid'
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'oncut',
+                    'onpaste',
                     "event.preventDefault();",
                     '#' . $code . '_cc_cid'
                 ) ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                    'onpaste',
+                    'oncut',
                     "event.preventDefault();",
                     '#' . $code . '_cc_cid'
                 ) ?>
