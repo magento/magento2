@@ -29,6 +29,7 @@ class Factory
         'checkboxes',
         'column',
         'date',
+        'datetime',
         'editablemultiselect',
         'editor',
         'fieldset',
