@@ -692,6 +692,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test that Product Export takes into account filtering by Website
+     *
+     * Fixtures provide two products, one assigned to default website only,
+     * and the other is assigned to to default and custom websites. Only product assigned custom website is exported
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testExportProductWithRestrictedWebsite(): void
+    {
+        $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $website = $websiteRepository->get('second_website');
+
+        $exportData = $this->doExport(['website_id' => $website->getId()]);
+
+        $this->assertStringContainsString('"Simple Product"', $exportData);
+        $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
+    }
+
+    /**
      * Perform export
      *
      * @param array $filters
