@@ -103,4 +103,10 @@
             <resource ref="Magento_TestModule1::resource1" />
         </resources>
     </route>
+    <route method="PUT" url="/V2/testmodule1-withparam">
+        <service class="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" method="update" />
+        <data>
+            <parameter name="paramId" force="true">%param_id%</parameter>
+        </data>
+    </route>
 </routes>
