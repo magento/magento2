@@ -165,7 +165,7 @@ class Minifier implements MinifierInterface
         }
 
         $content = preg_replace(
-            '#(?<!]]>)\s+</#',
+            '#(?<!]]>)\s+</(?!(?>textarea|pre)\b)#',
             '</',
             preg_replace(
                 '#((?:<\?php\s+(?!echo|print|if|elseif|else)[^\?]*)\?>)\s+#',
