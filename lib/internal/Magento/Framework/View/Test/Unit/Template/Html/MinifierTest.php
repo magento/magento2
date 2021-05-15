@@ -133,6 +133,9 @@ class MinifierTest extends TestCase
  */
 ?>
 <?php //one line comment ?>
+<?php //one line comment containing a <span> ?>
+<?php /** multi line comment containing a <span> */ ?>
+<?php echo 'test'; ?>
 <html>
     <head>
         <title>Test title</title>
@@ -180,7 +183,20 @@ class MinifierTest extends TestCase
     \$sometext = <<<SOMETEXT
     mytext
     mytextline2
+    <span>   </span>
 SOMETEXT;
+    ?>
+    <div>
+        // This is not a comment and should be preserved.
+        // This is not a comment <?= 'either.' ?>
+    </div>
+    <?php
+    \$someothertext = <<<SOMEOTHERTEXT
+    mytext
+    {\$block->getChildHtml('someChildBlock')}
+    <span>   </span>
+SOMEOTHERTEXT
+;
     ?>
 </html>
 TEXT;
