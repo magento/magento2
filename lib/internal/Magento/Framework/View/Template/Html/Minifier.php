@@ -117,22 +117,38 @@ class Minifier implements MinifierInterface
         $dir = dirname($file);
         $fileName = basename($file);
         $content = $this->readFactory->create($dir)->readFile($fileName);
-
-        $parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
         $heredocs = null;
 
-        try {
-            $ast = $parser->parse($content);
+        if (null !== $content) {
+            $parser = (new \PhpParser\ParserFactory())->create(\PhpParser\ParserFactory::PREFER_PHP7);
 
-            $traverser = new \PhpParser\NodeTraverser();
-            $traverser->addVisitor(new Php\NodeVisitor());
-            $ast = $traverser->traverse($ast);
+            /**
+             * Prevent problems with deeply nested ASTs if xDebug is enabled.
+             * @see https://github.com/nikic/PHP-Parser/blob/v4.4.0/doc/2_Usage_of_basic_components.markdown#bootstrapping
+             */
+            $nestingLevelConfigValue = ini_get('xdebug.max_nesting_level');
 
-            $prettyPrinter = new Php\PrettyPrinter();
-            $content = $prettyPrinter->prettyPrintFile($ast);
-            $heredocs = $prettyPrinter->getDelayedHeredocs();
-        } catch (\PhpParser\Error $error) {
-            // Some PHP code is seemingly invalid.
+            if (false !== $nestingLevelConfigValue) {
+                ini_set('xdebug.max_nesting_level', '3000');
+            }
+
+            try {
+                $ast = $parser->parse($content);
+
+                $traverser = new \PhpParser\NodeTraverser();
+                $traverser->addVisitor(new Php\NodeVisitor());
+                $ast = $traverser->traverse($ast);
+
+                $prettyPrinter = new Php\PrettyPrinter();
+                $content = $prettyPrinter->prettyPrintFile($ast);
+                $heredocs = $prettyPrinter->getDelayedHeredocs();
+            } catch (\Error $error) {
+                // Some PHP code is seemingly invalid, or too complex.
+            } finally {
+                if (false !== $nestingLevelConfigValue) {
+                    ini_set('xdebug.max_nesting_level', $nestingLevelConfigValue);
+                }
+            }
         }
 
         //Storing Heredocs
