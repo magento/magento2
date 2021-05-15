@@ -69,9 +69,11 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
         </label>
 
         <div class="admin__field-control">
-            <input type="text" id="<?= /* @noEscape */ $code ?>_cc_number"
+            <input type="text"
+                   id="<?= /* @noEscape */ $code ?>_cc_number"
                    data-container="<?= /* @noEscape */ $code ?>-cc-number"
-                   name="payment[cc_number]" title="<?= $block->escapeHtml(__('Credit Card Number')) ?>"
+                   name="payment[cc_number]"
+                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>"
                    class="admin__control-text"
                    value=""
                    data-validate='{
