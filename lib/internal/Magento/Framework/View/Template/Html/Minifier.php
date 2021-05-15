@@ -166,7 +166,7 @@ class Minifier implements MinifierInterface
                             . '(?!(?:(?:[^<]++|<(?!/?(?:script)\b))*+)(?:<(?>script)\b|\z))#',
                             '',
                             preg_replace(
-                                '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*'
+                                '#(?<!:)//[^\n\r]*(\<\?(php|=))[^\n\r]*(\s\?\>)[^\n\r]*'
                                 . '(?!(?:(?:[^<]++|<(?!/?(?:script)\b))*+)(?:<(?>script)\b|\z))#',
                                 '',
                                 ($content ?? '')
