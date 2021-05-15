@@ -24,11 +24,6 @@ class NodeVisitor extends NodeVisitorAbstract
      */
     private $previous;
 
-    /**
-     * @var int
-     */
-    private $heredocCount = 0;
-
     public function beforeTraverse(array $nodes)
     {
         $this->stack = [];
