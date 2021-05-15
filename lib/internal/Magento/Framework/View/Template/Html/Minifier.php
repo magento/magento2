@@ -165,13 +165,9 @@ class Minifier implements MinifierInterface
                             '#(?<!:|\\\\|\'|"|/)//(?!/)(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                             '',
                             preg_replace(
-                                '#(?<!:|\'|")//[^\n\r<]*(\?\>)#',
-                                ' $1',
-                                preg_replace(
-                                    '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
-                                    '',
-                                    ($content ?? '')
-                                )
+                                '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
+                                '',
+                                ($content ?? '')
                             )
                         )
                     )
@@ -205,3 +201,4 @@ class Minifier implements MinifierInterface
         return $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getRelativePath($sourcePath);
     }
 }
+
