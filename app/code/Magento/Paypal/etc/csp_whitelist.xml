@@ -37,5 +37,10 @@
                 <value id="www_pilot_payflowlink_paypal" type="host">pilot-payflowlink.paypal.com</value>
             </values>
         </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="www_sandbox_paypal_com" type="host">www.sandbox.paypal.com</value>
+            </values>
+        </policy>
     </policies>
 </csp_whitelist>
