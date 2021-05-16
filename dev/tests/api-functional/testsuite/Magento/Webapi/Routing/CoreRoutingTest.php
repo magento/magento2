@@ -105,7 +105,7 @@ class CoreRoutingTest extends BaseService
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V2/testmodule1-withparam',
+                'resourcePath' => '/V1/testmodule1/withParam',
                 'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
         ];
