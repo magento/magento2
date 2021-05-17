@@ -184,7 +184,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($dirPath);
         $this->model->execute();
 
-        $this->assertFileNotExists(
+        $this->assertFileDoesNotExist(
             $this->fullDirectoryPath . $dirPath . $this->fileName
         );
     }
@@ -204,7 +204,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertFileNotExists($this->fullDirectoryPath . $newFilename);
+        $this->assertFileDoesNotExist($this->fullDirectoryPath . $newFilename);
     }
 
     /**
