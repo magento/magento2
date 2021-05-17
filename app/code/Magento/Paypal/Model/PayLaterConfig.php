@@ -134,4 +134,14 @@ class PayLaterConfig
 
         return $this->configData[$section][$key];
     }
+
+    /**
+     * Check if billing agreement is enabled
+     *
+     * @return bool
+     */
+    public function isPPBillingAgreementEnabled(): bool
+    {
+        return $this->config->isMethodActive(Config::METHOD_BILLING_AGREEMENT);
+    }
 }
