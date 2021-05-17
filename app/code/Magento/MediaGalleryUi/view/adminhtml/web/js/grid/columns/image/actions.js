@@ -61,7 +61,7 @@ define([
 
             if (!this.allowedActions.includes('delete')) {
                 $.async('.media-gallery-delete-assets', function () {
-                    $('.media-gallery-delete-assets').unbind('click').addClass('action-disabled');
+                    $('.media-gallery-delete-assets').off('click').addClass('action-disabled');
                 });
             }
 

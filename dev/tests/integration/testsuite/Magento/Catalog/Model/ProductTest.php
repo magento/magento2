@@ -814,4 +814,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
         $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
     }
+
+    public function testSetPriceWithoutTypeId()
+    {
+        $this->_model->setAttributeSetId(4);
+        $this->_model->setName('Some name');
+        $this->_model->setSku('some_sku');
+        $this->_model->setPrice(9.95);
+        $this->productRepository->save($this->_model);
+
+        $product = $this->productRepository->get('some_sku', false, null, true);
+        $this->assertEquals(9.95, $product->getPrice());
+    }
 }
