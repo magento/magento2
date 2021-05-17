@@ -189,6 +189,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
 
         $paymentAdditionalInformation = [];
         $payment = $order->getPayment();
+
         if ($payment) {
             $paymentAdditionalInformation = $payment->getAdditionalInformation();
         }
