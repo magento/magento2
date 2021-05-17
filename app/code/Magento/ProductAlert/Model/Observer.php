@@ -22,7 +22,7 @@ class Observer
     /**
      * Error email template configuration
      *
-     * @depreceted
+     * @deprecated
      * @see \Magento\ProductAlert\Model\Mailing\ErrorEmailSender::XML_PATH_ERROR_TEMPLATE
      */
     const XML_PATH_ERROR_TEMPLATE = 'catalog/productalert_cron/error_email_template';
@@ -30,7 +30,7 @@ class Observer
     /**
      * Error email identity configuration
      *
-     * @depreceted
+     * @deprecated
      * @see \Magento\ProductAlert\Model\Mailing\ErrorEmailSender::XML_PATH_ERROR_IDENTITY
      */
     const XML_PATH_ERROR_IDENTITY = 'catalog/productalert_cron/error_email_identity';
@@ -38,7 +38,7 @@ class Observer
     /**
      * 'Send error emails to' configuration
      *
-     * @depreceted
+     * @deprecated
      * @see \Magento\ProductAlert\Model\Mailing\ErrorEmailSender::XML_PATH_ERROR_RECIPIENT
      */
     const XML_PATH_ERROR_RECIPIENT = 'catalog/productalert_cron/error_email';

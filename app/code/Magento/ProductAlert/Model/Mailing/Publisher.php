@@ -47,7 +47,7 @@ class Publisher
     /**
      * @var Json
      */
-    private $jsonHelper;
+    private $jsonSerializer;
 
     /**
      * @var int|null
@@ -59,7 +59,7 @@ class Publisher
      * @param OperationInterfaceFactory $operationFactory
      * @param IdentityGeneratorInterface $identityService
      * @param UserContextInterface $userContextInterface
-     * @param Json $jsonHelper
+     * @param Json $jsonSerializer
      * @param int|null $messageBunchSize
      */
     public function __construct(
@@ -67,14 +67,14 @@ class Publisher
         OperationInterfaceFactory $operationFactory,
         IdentityGeneratorInterface $identityService,
         UserContextInterface $userContextInterface,
-        Json $jsonHelper,
+        Json $jsonSerializer,
         ?int $messageBunchSize = null
     ) {
         $this->bulkManagement = $bulkManagement;
         $this->operationFactory = $operationFactory;
         $this->identityService = $identityService;
         $this->userContext = $userContextInterface;
-        $this->jsonHelper = $jsonHelper;
+        $this->jsonSerializer = $jsonSerializer;
         $this->messageBunchSize = $messageBunchSize ?: self::MESSAGE_BUNCH_SIZE_DEFAULT;
     }
 
@@ -89,7 +89,7 @@ class Publisher
     {
         foreach (array_chunk($customerIds, $this->messageBunchSize) as $bunchOfIds) {
             $bulkUuid = $this->identityService->generateId();
-            $serializedData = $this->jsonHelper->serialize(
+            $serializedData = $this->jsonSerializer->serialize(
                 [
                     'alert_type' => $alertType,
                     'customer_ids' => $bunchOfIds,

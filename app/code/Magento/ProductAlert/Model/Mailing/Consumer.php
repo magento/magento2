@@ -25,7 +25,7 @@ class Consumer
     /**
      * @var Json
      */
-    private $jsonHelper;
+    private $jsonSerializer;
 
     /**
      * @var EntityManager
@@ -39,18 +39,18 @@ class Consumer
 
     /**
      * @param LoggerInterface $logger
-     * @param Json $jsonHelper
+     * @param Json $jsonSerializer
      * @param EntityManager $entityManager
      * @param AlertProcessor $alertProcessor
      */
     public function __construct(
         LoggerInterface $logger,
-        Json $jsonHelper,
+        Json $jsonSerializer,
         EntityManager $entityManager,
         AlertProcessor $alertProcessor
     ) {
         $this->logger = $logger;
-        $this->jsonHelper = $jsonHelper;
+        $this->jsonSerializer = $jsonSerializer;
         $this->entityManager = $entityManager;
         $this->alertProcessor = $alertProcessor;
     }
@@ -67,7 +67,7 @@ class Consumer
         $errorCode = null;
 
         try {
-            $data = $this->jsonHelper->unserialize($operation->getSerializedData());
+            $data = $this->jsonSerializer->unserialize($operation->getSerializedData());
             $this->alertProcessor->process($data['alert_type'], $data['customer_ids'], (int)$data['website_id']);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());

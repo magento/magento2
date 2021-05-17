@@ -68,8 +68,9 @@ class ErrorEmailSender
      *
      * @param array $errors
      * @param int $storeId
+     * @return void
      */
-    public function execute(array $errors, int $storeId)
+    public function execute(array $errors, int $storeId): void
     {
         if (!count($errors)) {
             return;
