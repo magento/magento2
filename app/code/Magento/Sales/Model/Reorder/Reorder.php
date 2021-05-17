@@ -358,17 +358,16 @@ class Reorder
         $info = $orderItem->getProductOptionByCode('info_buyRequest');
         $options = $orderItem->getProductOptionByCode('options');
 
-
-        if(empty($options) || !is_array($info['options'])){
+        if (empty($options) || !is_array($info['options'])) {
             return $info;
         }
 
-        foreach($options as $option){
-            if(array_key_exists($option['option_id'],$info['options'])){
-                try{
+        foreach ($options as $option) {
+            if (array_key_exists($option['option_id'], $info['options'])) {
+                try {
                     $value = $this->jsonSerializer->unserialize($option['option_value']);
                     $info['options'][$option['option_id']] = $value;
-                }catch(\InvalidArgumentException $exception){
+                } catch (\InvalidArgumentException $exception) {
                     //do nothing
                 }
             }

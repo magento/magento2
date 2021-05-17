@@ -19,7 +19,6 @@ use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Order create model
  * @api
@@ -364,7 +363,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customAttributeList = $customAttributeList ?: ObjectManager::getInstance()
             ->get(CustomAttributeListInterface::class);
-
     }
 
     /**
@@ -688,8 +686,16 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 foreach ($productOptions['options'] as $option) {
                     if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
                         $product->setSkipCheckRequiredOption(false);
-                        $formattedOptions[$option['option_id']] = $this->serializer->unserialize($option['option_value']);
-                        //$formattedOptions[$option['option_id']] = $buyRequest->getDataByKey('options')[$option['option_id']];
+                        if ($option['option_type'] === 'file') {
+                            try {
+                                $formattedOptions[$option['option_id']] =
+                                    $this->serializer->unserialize($option['option_value']);
+                            } catch (\InvalidArgumentException $exception) {
+                                //do nothing
+                            }
+                        }
+                        $formattedOptions[$option['option_id']] =
+                            $buyRequest->getDataByKey('options')[$option['option_id']];
                         continue;
                     }
 
