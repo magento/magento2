@@ -84,7 +84,6 @@ interface OrderItemInterface @doc(description: "Order item details") @typeResolv
     product_sku: String! @doc(description: "The SKU of the base product")
     product_url_key: String @doc(description: "URL key of the base product")
     product_type: String @doc(description: "The type of product, such as simple, configurable, etc.")
-    parent_sku: String @doc(description: "The SKU of parent product. For simple product parent_sku is null.")
     status: String @doc(description: "The status of the order item")
     product_sale_price: Money! @doc(description: "The sale price of the base product, including selected options")
     discounts: [Discount] @doc(description: "The final discount information for the product")
