@@ -32,9 +32,14 @@
             <argument name="title" value="{{AdminMenuContentDesignThemes.pageTitle}}"/>
         </actionGroup>
 
-        <click selector="{{AdminThemeSection.viewAction}}" stepKey="clickViewTheme"/>
+        <actionGroup ref="AdminClickViewThemeActionGroup" stepKey="editTheme"/>
+
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seeEditPageTitle">
-            <argument name="title" value="{{MagentoBlankEditTheme.pageTitle}}"/>
+            <argument name="title" value="{{MagentoBlankTheme.pageTitle}}"/>
         </actionGroup>
+
+        <see selector="{{AdminThemeSettingsSection.themePath}}" userInput="{{MagentoBlankTheme.themePath}}" stepKey="assertThemePath"/>
+        <see selector="{{AdminThemeSettingsSection.themeTitle}}" userInput="{{MagentoBlankTheme.themeTitle}}" stepKey="assertThemeTitle"/>
+        <seeElementInDOM selector="{{AdminThemeSettingsSection.themePreviewImage}}" stepKey="seeThemePreviewImage"/>
     </test>
 </tests>
