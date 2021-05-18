@@ -20,11 +20,13 @@ define([
 
         defaults: {
             priceBoxSelector: '.price-box',
+            priceTypeSelector: '[data-price-type]',
             qtyFieldSelector: '#product_addtocart_form [name="qty"]',
             amount: null
         },
         qty: 1,
         price: 0,
+        priceType: '',
 
         /**
          * Initialize
@@ -37,13 +39,14 @@ define([
             this._super();
 
             priceBox = $(this.priceBoxSelector);
+            this.priceType = $(this.priceTypeSelector, priceBox).data('priceType');
             priceBox.on('priceUpdated', this._onPriceChange.bind(this));
 
             if (priceBox.priceBox('option') &&
                 priceBox.priceBox('option').prices &&
-                priceBox.priceBox('option').prices.finalPrice
+                priceBox.priceBox('option').prices[this.priceType]
             ) {
-                this.price = priceBox.priceBox('option').prices.finalPrice.amount;
+                this.price = priceBox.priceBox('option').prices[this.priceType]['amount'];
             }
 
             $(this.qtyFieldSelector).on('change', this._onQtyChange.bind(this));
@@ -74,7 +77,7 @@ define([
          * @private
          */
         _onPriceChange: function (event, data) {
-            this.price = data.finalPrice.amount;
+            this.price = data[this.priceType]['amount'];
             this._updateAmount();
         },
 
