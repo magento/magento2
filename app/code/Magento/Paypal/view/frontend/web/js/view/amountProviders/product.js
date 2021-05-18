@@ -20,7 +20,6 @@ define([
 
         defaults: {
             priceBoxSelector: '.price-box',
-            priceTypeSelector: '[data-price-type]',
             qtyFieldSelector: '#product_addtocart_form [name="qty"]',
             amount: null
         },
@@ -39,13 +38,13 @@ define([
             this._super();
 
             priceBox = $(this.priceBoxSelector);
-            this.priceType = $(this.priceTypeSelector, priceBox).data('priceType');
             priceBox.on('priceUpdated', this._onPriceChange.bind(this));
 
             if (priceBox.priceBox('option') &&
                 priceBox.priceBox('option').prices &&
-                priceBox.priceBox('option').prices[this.priceType]
+                (priceBox.priceBox('option').prices.finalPrice || priceBox.priceBox('option').prices.basePrice)
             ) {
+                this.priceType = priceBox.priceBox('option').prices.finalPrice ? 'finalPrice' : 'basePrice';
                 this.price = priceBox.priceBox('option').prices[this.priceType]['amount'];
             }
 
