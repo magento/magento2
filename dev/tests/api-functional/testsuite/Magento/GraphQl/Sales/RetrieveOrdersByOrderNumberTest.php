@@ -414,16 +414,21 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    customer {
-        orders(changeSortDirection:true) {
-            items {
-                id
-                number
-                status
-                order_date
-            }
-        }
+  customer {
+    orders(
+      sort: {
+        sort_field: ORDER_ID,
+        sort_direction: DESC
+      }
+    ) {
+      items {
+        id
+        number
+         status
+         order_date
+      }
     }
+  }
 }
 QUERY;
 
