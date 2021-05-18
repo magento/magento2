@@ -199,14 +199,18 @@ class Options implements OptionSourceInterface
         /** @var Group $group */
         foreach ($groupCollection as $group) {
             if ($group->getWebsiteId() == $websiteId) {
-                $storeViewIds = $group->getStoreIds();
-                if (!empty($storeViewIds)) {
-                    $code = $group->getCode();
-                    $name = $this->sanitizeName($group->getName());
+                $storeViews = $group->getStores();
+                if (empty($storeViews)) {
+                    continue;
+                }
+
+                foreach ($storeViews as $storeView) {
+                    $code = $storeView->getCode();
+                    $name = $this->sanitizeName($storeView->getName());
                     $groups[$code]['label'] = str_repeat(' ', 4) . $name;
-                    $groups[$code]['value'] = array_values($storeViewIds)[0];
+                    $groups[$code]['value'] = $storeView->getId();
                     $groups[$code]['disabled'] = !$isGlobalScope && $customerWebsiteId !== $websiteId;
-                    $groups[$code]['selected'] = in_array($customerStoreId, $storeViewIds) ? true : false;
+                    $groups[$code]['selected'] = $customerStoreId === $storeView->getId();
                 }
             }
         }
