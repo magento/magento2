@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Store\Model\ScopeInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class to send error emails to administrator
@@ -49,18 +50,26 @@ class ErrorEmailSender
     private $inlineTranslation;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param TransportBuilder $transportBuilder
      * @param StateInterface $inlineTranslation
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         TransportBuilder $transportBuilder,
-        StateInterface $inlineTranslation
+        StateInterface $inlineTranslation,
+        LoggerInterface $logger
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
+        $this->logger = $logger;
     }
 
     /**
@@ -75,6 +84,10 @@ class ErrorEmailSender
         if (!count($errors)) {
             return;
         }
+
+        $this->logger->error(
+            'Product Alerts: ' . count($errors) . ' errors occurred during sending alerts.'
+        );
 
         if (!$this->scopeConfig->getValue(self::XML_PATH_ERROR_TEMPLATE, ScopeInterface::SCOPE_STORE, $storeId)) {
             return;

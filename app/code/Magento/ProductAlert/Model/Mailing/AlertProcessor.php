@@ -204,16 +204,12 @@ class AlertProcessor
      * Validate Alert Type
      *
      * @param string $alertType
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     private function validateAlertType(string $alertType): void
     {
-        switch ($alertType) {
-            case self::ALERT_TYPE_STOCK:
-            case self::ALERT_TYPE_PRICE:
-                break;
-            default:
-                throw new \Exception('Invalid alert type');
+        if (!in_array($alertType, [self::ALERT_TYPE_STOCK, self::ALERT_TYPE_PRICE])) {
+            throw new \InvalidArgumentException('Invalid alert type');
         }
     }
 
@@ -222,8 +218,9 @@ class AlertProcessor
      *
      * @param string $alertType
      * @param array $customerIds
+     * @param int $websiteId
      * @return AbstractCollection
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     private function getAlertCollection(string $alertType, array $customerIds, int $websiteId): AbstractCollection
     {
@@ -244,7 +241,7 @@ class AlertProcessor
                     ->addOrder('product_id');
                 break;
             default:
-                throw new \Exception('Invalid alert type');
+                throw new \InvalidArgumentException('Invalid alert type');
         }
 
         return $collection;
