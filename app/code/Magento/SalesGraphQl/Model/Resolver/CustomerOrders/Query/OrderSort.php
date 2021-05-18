@@ -13,10 +13,13 @@ use Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface;
 use Magento\GiftRegistryGraphQl\Mapper\GiftRegistryDataMapper;
 
 /**
- *
+ * Order sort allows to sort the collection by the specified field and direction
  */
 class OrderSort
 {
+    /**
+     * The sortable field mapper name
+     */
     private const SORTABLE_FIELD_MAP = 'CustomerOrderSortableField';
 
     /**
@@ -42,7 +45,7 @@ class OrderSort
     }
 
     /**
-     *
+     * Create an array of sort orders for sorting customer orders by the specified field and direction
      *
      * @param array $args
      * @return SortOrder[]
@@ -58,7 +61,7 @@ class OrderSort
     }
 
     /**
-     *
+     * Get sort field
      *
      * @param string $field
      * @return string
