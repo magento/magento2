@@ -696,7 +696,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         if ($header instanceof HeaderInterface) {
             return $header->getFieldValue();
         }
-        return false;
+        return  $header;
     }
 
     /**
