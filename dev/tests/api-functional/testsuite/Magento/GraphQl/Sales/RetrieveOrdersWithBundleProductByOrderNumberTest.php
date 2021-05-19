@@ -235,13 +235,13 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
            items{
             __typename
             product_sku
-            parent_sku
             product_name
             product_url_key
             product_sale_price{value}
             quantity_ordered
             discounts{amount{value} label}
             ... on BundleOrderItem{
+              parent_sku
               bundle_options{
                 __typename
                 label
