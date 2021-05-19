@@ -24,6 +24,7 @@ define([
 
     $.widget('mage.priceBox', {
         options: globalOptions,
+        qtyInfo: '#qty',
 
         /**
          * Widget initialisation.
@@ -49,6 +50,7 @@ define([
 
             box.on('reloadPrice', this.reloadPrice.bind(this));
             box.on('updatePrice', this.onUpdatePrice.bind(this));
+            $(this.qtyInfo).on('input', this.updateProductTierPrice.bind(this));
             box.trigger('price-box-initialized');
         },
 
@@ -101,9 +103,9 @@ define([
                     priceValue.adjustments = priceValue.adjustments || {};
 
                     additionalPrice[priceCode] = additionalPrice[priceCode] || {
-                            'amount': 0,
-                            'adjustments': {}
-                        };
+                        'amount': 0,
+                        'adjustments': {}
+                    };
                     additionalPrice[priceCode].amount =  0 + (additionalPrice[priceCode].amount || 0) +
                         priceValue.amount;
                     _.each(priceValue.adjustments, function (adValue, adCode) {
@@ -131,6 +133,7 @@ define([
                 }, this);
             }
 
+            this.element.trigger('priceUpdated', this.cache.displayPrices);
             this.element.trigger('reloadPrice');
         },
 
@@ -214,6 +217,31 @@ define([
             if (config && config.prices) {
                 this.options.prices = config.prices;
             }
+        },
+
+        /**
+         * Updates product final price according to tier prices
+         */
+        updateProductTierPrice: function updateProductTierPrice() {
+            var productQty = $(this.qtyInfo).val(),
+                originalPrice = this.options.prices.finalPrice.amount,
+                tierPrice,
+                prices,
+                i;
+
+            for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
+                if (productQty >= this.options.priceConfig.tierPrices[i].qty) {
+                    tierPrice = this.options.priceConfig.tierPrices[i].price;
+                }
+            }
+            prices = {
+                'prices': {
+                    'finalPrice': {
+                        'amount': tierPrice - originalPrice
+                    }
+                }
+            };
+            this.updatePrice(prices);
         }
     });
 
