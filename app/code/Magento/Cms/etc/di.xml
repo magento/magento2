@@ -230,6 +230,9 @@
         <plugin name="cms" type="Magento\Cms\Model\Plugin\Product" sortOrder="100"/>
     </type>
     <type name="Magento\Cms\Model\PageRepository\ValidationComposite">
+        <plugin name="cms_validate_url_plugin" type="Magento\Cms\Model\Plugin\PageRepository\ValidationCompositePlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Cms\Model\PageRepository\ValidationComposite">
         <arguments>
             <argument name="repository" xsi:type="object">Magento\Cms\Model\PageRepository</argument>
             <argument name="validators" xsi:type="array">
