@@ -257,8 +257,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     private $customAttributeList;
 
-
-
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager

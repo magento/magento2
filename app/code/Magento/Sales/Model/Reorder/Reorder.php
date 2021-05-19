@@ -252,7 +252,6 @@ class Reorder
     private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): void
     {
         $infoBuyRequest = $this->getInfoBuyRequest($orderItem);
-        //$info = $orderItem->getProductOptionByCode('info_buyRequest');
         $infoBuyRequest  = new \Magento\Framework\DataObject($infoBuyRequest );
         $infoBuyRequest->setQty($orderItem->getQtyOrdered());
 
@@ -349,10 +348,11 @@ class Reorder
     }
 
     /**
+     *  Prepare Custom Option for order Item
+     *
      * @param OrderItemInterface $orderItem
      * @return array|null
      */
-
     private function getInfoBuyRequest(OrderItemInterface $orderItem): ?array
     {
         $info = $orderItem->getProductOptionByCode('info_buyRequest');
