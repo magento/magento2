@@ -197,8 +197,8 @@
                 <productpage_logoposition>left</productpage_logoposition>
                 <productpage_textcolor>black</productpage_textcolor>
                 <productpage_textsize>12</productpage_textsize>
-                <productpag_ratio>1x1</productpag_ratio>
-                <productpag_color>blue</productpag_color>
+                <productpage_ratio>1x1</productpage_ratio>
+                <productpage_color>blue</productpage_color>
                 <categorypage_display>0</categorypage_display>
                 <categorypage_position>header</categorypage_position>
                 <categorypage_stylelayout>flex</categorypage_stylelayout>
