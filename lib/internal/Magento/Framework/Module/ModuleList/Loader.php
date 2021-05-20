@@ -208,7 +208,7 @@ class Loader
     ) {
         // Making sure we haven't already called the method for this module higher in the stack
         if (isset($accumulated[$name])) {
-            throw new \LogicException("Circular sequence reference from '{$parentName}' to '{$name}");
+            throw new \LogicException("Circular sequence reference from '{$parentName}' to '{$name}'.");
         }
         $accumulated[$name] = true;
 
