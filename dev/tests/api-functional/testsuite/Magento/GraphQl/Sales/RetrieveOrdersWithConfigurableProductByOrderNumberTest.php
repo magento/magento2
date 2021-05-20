@@ -82,9 +82,11 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
              __typename
              product_sku
              product_name
-             parent_sku
              product_url_key
              quantity_ordered
+             ... on ConfigurableOrderItem {
+               parent_sku
+             }
            }
            total {
              base_grand_total{value currency}
