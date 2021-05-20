@@ -183,9 +183,9 @@ class GuestTest extends TestCase
             ['getLastname', 'getEmail', 'getPostcode']
         );
         $billingAddressMock->expects($this->once())->method('getLastname')
-            ->willReturn(trim($post['oar_billing_lastname']));
-        $billingAddressMock->expects($this->any())->method('getEmail')->willReturn(trim($post['oar_email']));
-        $billingAddressMock->expects($this->any())->method('getPostcode')->willReturn(trim($post['oar_zip']));
+            ->willReturn($post['oar_billing_lastname']);
+        $billingAddressMock->expects($this->any())->method('getEmail')->willReturn($post['oar_email']);
+        $billingAddressMock->expects($this->any())->method('getPostcode')->willReturn($post['oar_zip']);
         $this->salesOrderMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->salesOrderMock->expects($this->once())->method('getProtectCode')->willReturn($protectedCode);
         $metaDataMock = $this->createMock(PublicCookieMetadata::class);

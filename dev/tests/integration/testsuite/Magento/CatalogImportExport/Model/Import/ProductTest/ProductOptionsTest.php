@@ -14,8 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ *
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -68,7 +67,6 @@ class ProductOptionsTest extends ProductTestBase
      * @param int $expectedOptionsQty
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @magentoAppIsolation enabled
      *
      * @return void
      */
@@ -135,7 +133,6 @@ class ProductOptionsTest extends ProductTestBase
      *
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
-     * @magentoAppIsolation enabled
      */
     public function testSaveCustomOptionsWithMultipleStoreViews()
     {
@@ -281,6 +278,7 @@ class ProductOptionsTest extends ProductTestBase
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function getExpectedOptionsData(string $pathToFile, string $storeCode = ''): array
     {
