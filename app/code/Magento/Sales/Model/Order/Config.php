@@ -125,9 +125,10 @@ class Config
      *
      * @param string|null $code
      * @param string $area
+     * @param int|null $storeId
      * @return string|null
      */
-    private function getStatusLabelForArea(?string $code, string $area): ?string
+    private function getStatusLabelForArea(?string $code, string $area, int $storeId = null): ?string
     {
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
@@ -136,7 +137,7 @@ class Config
             return $status->getLabel();
         }
 
-        return $status->getStoreLabel();
+        return $status->getStoreLabel($storeId);
     }
 
     /**
@@ -158,10 +159,24 @@ class Config
      * @param string|null $code
      * @return string|null
      * @since 102.0.1
+     * @deprecated Not used label status config store when receiving the label.
+     * @see getStatusFrontendLabelStore()
      */
     public function getStatusFrontendLabel(?string $code): ?string
     {
         return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND);
+    }
+
+    /**
+     * Retrieve status label for area considering label status config
+     *
+     * @param string|null $code
+     * @param int|null $storeId
+     * @return string|null
+     */
+    public function getStatusFrontendLabelStore(?string $code, int $storeId = null): ?string
+    {
+        return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND, $storeId);
     }
 
     /**

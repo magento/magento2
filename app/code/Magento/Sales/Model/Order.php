@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Model;
 
 use Magento\Config\Model\Config\Source\Nooptreq;
@@ -1104,7 +1105,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getFrontendStatusLabel()
     {
-        return $this->getConfig()->getStatusFrontendLabel($this->getStatus());
+        return $this->getConfig()->getStatusFrontendLabelStore($this->getStatus(), $this->getStoreId());
     }
 
     /**
