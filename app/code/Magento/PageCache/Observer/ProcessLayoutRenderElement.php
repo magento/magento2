@@ -91,7 +91,8 @@ class ProcessLayoutRenderElement implements ObserverInterface
                 'blocks' => $this->jsonSerializer->serialize([$block->getNameInLayout()]),
                 'handles' => $this->base64jsonSerializer->serialize(
                     array_values(array_diff($handles, $pageSpecificHandles))
-                )
+                ),
+                '_type' => \Magento\Framework\UrlInterface::URL_TYPE_WEB
             ]
         );
         // Varnish does not support ESI over HTTPS must change to HTTP

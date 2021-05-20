@@ -136,8 +136,11 @@ class ProcessLayoutRenderElementTest extends TestCase
                     ->method('getUrl')
                     ->with(
                         'page_cache/block/esi',
-                        ['blocks' => '[null]',
-                            'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==']
+                        [
+                            'blocks' => '[null]',
+                            'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==',
+                            '_type' => \Magento\Framework\UrlInterface::URL_TYPE_WEB
+                        ]
                     )
                     ->willReturn(
                         'page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='
