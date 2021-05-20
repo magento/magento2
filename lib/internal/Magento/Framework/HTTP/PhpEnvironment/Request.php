@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -25,7 +26,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     /**#@+
      * Protocols
      */
-    const SCHEME_HTTP  = 'http';
+    const SCHEME_HTTP = 'http';
     const SCHEME_HTTPS = 'https';
     /**#@-*/
 
@@ -123,7 +124,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
                 $uri = UriFactory::factory($uri);
             }
             if ($uri->isValid()) {
-                $path  = $uri->getPath();
+                $path = $uri->getPath();
                 $query = $uri->getQuery();
                 if (!empty($query)) {
                     $path .= '?' . $query;
@@ -302,7 +303,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      */
     public function getParam($key, $default = null)
     {
-        $key = (string) $key;
+        $key = (string)$key;
         $keyName = (null !== ($alias = $this->getAlias($key))) ? $alias : $key;
         if (isset($this->params[$keyName])) {
             return $this->params[$keyName];
@@ -325,7 +326,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      */
     public function setParam($key, $value)
     {
-        $key = (string) $key;
+        $key = (string)$key;
         $keyName = (null !== ($alias = $this->getAlias($key))) ? $alias : $key;
         if ((null === $value) && isset($this->params[$keyName])) {
             unset($this->params[$keyName]);
@@ -696,7 +697,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         if ($header instanceof HeaderInterface) {
             return $header->getFieldValue();
         }
-        return  $header;
+        return $header;
     }
 
     /**
@@ -724,7 +725,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     /**
      * Get the client's IP addres
      *
-     * @param  boolean $checkProxy
+     * @param boolean $checkProxy
      * @return string
      */
     public function getClientIp($checkProxy = true)
@@ -795,7 +796,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     public function getBaseUrl()
     {
         $url = urldecode(parent::getBaseUrl());
-        $url = str_replace(['\\', '/' . DirectoryList::PUB .'/'], '/', $url);
+        $url = str_replace(['\\', '/' . DirectoryList::PUB . '/'], '/', $url);
         return $url;
     }
 
