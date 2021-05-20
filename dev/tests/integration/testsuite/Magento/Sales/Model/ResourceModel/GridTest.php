@@ -154,10 +154,10 @@ class GridTest extends TestCase
         $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)
             ->loadByIncrementId('100000111');
         $select = $connection->select()
-            ->from($constructorArgs['gridTableName'], ['entity_id', 'order_id'])
+            ->from($constructorArgs['gridTableName'], ['order_id'])
             ->where($orderIdField, $order->getEntityId());
         $gridData = $connection->fetchRow($select);
-        $testData = ['entity_id' => $order->getEntityId(), 'order_id' => $order->getEntityId()];
+        $testData = ['order_id' => $order->getEntityId()];
         $this->assertEquals($testData, $gridData);
 
     }
