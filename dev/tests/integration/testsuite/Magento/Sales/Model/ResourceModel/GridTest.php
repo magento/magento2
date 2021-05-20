@@ -134,4 +134,47 @@ class GridTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider shipmentGridDataProvider
+     * @param array $constructorArgs
+     * @param string $orderIdField
+     */
+    public function testSalesShipmentGridOrderIdField(array $constructorArgs, string $orderIdField)
+    {
+        $constructorArgs['orderIdField'] = $constructorArgs['mainTableName'] . '.' . $orderIdField;
+        $constructorArgs['columns'] = [
+            $orderIdField => $constructorArgs['orderIdField'],
+            'created_at' => $constructorArgs['mainTableName'] . '.created_at',
+            'updated_at' => $constructorArgs['mainTableName'] . '.updated_at',
+        ];
+        $constructorArgs['notSyncedDataProvider'] = $this->objectManager->get(UpdatedAtListProvider::class);
+        $grid = $this->objectManager->create(Grid::class, $constructorArgs);
+        $connection = $grid->getConnection();
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class)
+            ->loadByIncrementId('100000111');
+        $select = $connection->select()
+            ->from($constructorArgs['gridTableName'], ['entity_id', 'order_id'])
+            ->where($orderIdField, $order->getEntityId());
+        $gridData = $connection->fetchRow($select);
+        $testData = ['entity_id' => $order->getEntityId(), 'order_id' => $order->getEntityId()];
+        $this->assertEquals($testData, $gridData);
+
+    }
+
+    /**
+     * @return array
+     */
+    public function shipmentGridDataProvider(): array
+    {
+        return [
+            'Magento\Sales\Model\ResourceModel\Grid' => [
+                [
+                    'mainTableName' => 'sales_shipment',
+                    'gridTableName' => 'sales_shipment_grid',
+                ],
+                'entity_id',
+            ],
+        ];
+    }
 }
