@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Controller\Result;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Message\MessageInterface;
@@ -74,18 +73,17 @@ class MessagePlugin
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        InlineInterface $inlineTranslate = null,
+        \Magento\Framework\Serialize\Serializer\Json $serializer,
+        InlineInterface $inlineTranslate,
         ConfigInterface $sessionConfig
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->messageManager = $messageManager;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
         $this->interpretationStrategy = $interpretationStrategy;
-        $this->inlineTranslate = $inlineTranslate ?: ObjectManager::getInstance()->get(InlineInterface::class);
-        $this->sessionConfig = $sessionConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->inlineTranslate = $inlineTranslate;
+        $this->sessionConfig = $sessionConfig;
     }
 
     /**
