@@ -45,7 +45,7 @@ define([
                 (priceBox.priceBox('option').prices.finalPrice || priceBox.priceBox('option').prices.basePrice)
             ) {
                 this.priceType = priceBox.priceBox('option').prices.finalPrice ? 'finalPrice' : 'basePrice';
-                this.price = priceBox.priceBox('option').prices[this.priceType]['amount'];
+                this.price = priceBox.priceBox('option').prices[this.priceType].amount;
             }
 
             $(this.qtyFieldSelector).on('change', this._onQtyChange.bind(this));
@@ -76,7 +76,7 @@ define([
          * @private
          */
         _onPriceChange: function (event, data) {
-            this.price = data[this.priceType]['amount'];
+            this.price = data[this.priceType].amount;
             this._updateAmount();
         },
 

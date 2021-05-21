@@ -96,7 +96,9 @@ define([
                 payLater = registry.get(this.parentName);
 
             for (productId in this.priceInfo) {
-                amount += this.priceInfo[productId].price * this.priceInfo[productId].qty;
+                if (this.priceInfo.hasOwnProperty(productId)) {
+                    amount += this.priceInfo[productId].price * this.priceInfo[productId].qty;
+                }
             }
 
             payLater.amount(amount);
