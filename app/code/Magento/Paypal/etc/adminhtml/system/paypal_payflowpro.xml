@@ -96,7 +96,7 @@
             </field>
             <field id="enable_paypal_paylater_experience" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_paypal_paylater_experience"/>
             <group id="paypal_payflow_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
-                <label>Advertise PayPal Paylater</label>
+                <label>Advertise PayPal PayLater</label>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>

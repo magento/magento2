@@ -72,6 +72,9 @@ class LayoutProcessor implements LayoutProcessorInterface
                 ]
             ];
             $config = array_replace($defaultConfig, $componentConfig);
+            $displayAmount = $config['displayAmount'] ?? false;
+            $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
+                ? false : true;
 
             $attributes = $this->payLaterConfig->getSectionConfig(
                 PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT,
