@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * EAV config model.
@@ -133,6 +134,11 @@ class Config
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+    
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Cache of attributes per set
@@ -163,6 +169,7 @@ class Config
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param SerializerInterface|null $serializer
      * @param ScopeConfigInterface|null $scopeConfig
+     * @param StoreManagerInterface|null $storeManager
      * @param array $attributesForPreload
      * @codeCoverageIgnore
      */
@@ -174,6 +181,7 @@ class Config
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         SerializerInterface $serializer = null,
         ScopeConfigInterface $scopeConfig = null,
+        StoreManagerInterface $storeManager = null,
         $attributesForPreload = []
     ) {
         $this->_cache = $cache;
@@ -183,6 +191,7 @@ class Config
         $this->_universalFactory = $universalFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->attributesForPreload = $attributesForPreload;
     }
 
@@ -494,7 +503,7 @@ class Config
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 $this->serializer->serialize($this->_attributeData[$entityTypeCode]),
-                self::ATTRIBUTES_CACHE_ID . $entityTypeCode,
+                $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
@@ -583,7 +592,7 @@ class Config
             return;
         }
 
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityTypeCode . '-preload';
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode . '-preload';
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {
@@ -644,7 +653,7 @@ class Config
      */
     private function cacheUserDefinedAttribute($entityType, $entityTypeCode, $code): AbstractAttribute
     {
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-attribute-' . $entityTypeCode . '-' . $code;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-attribute-' . $entityTypeCode . '-' . $code;
         $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attribute)
             : null;
@@ -947,7 +956,7 @@ class Config
     private function initAttributesFromCache(Type $entityType)
     {
         $entityTypeCode = $entityType->getEntityTypeCode();
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . $entityTypeCode;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode;
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {
@@ -959,5 +968,15 @@ class Config
             }
         }
         return false;
+    }
+
+    /**
+     * Get current website id
+     * 
+     * @return int
+     */
+    private function getWebsiteId()
+    {
+        return $this->storeManager->getWebsite()->getId();
     }
 }
