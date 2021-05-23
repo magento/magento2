@@ -503,7 +503,7 @@ class Config
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 $this->serializer->serialize($this->_attributeData[$entityTypeCode]),
-                $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode,
+                self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
