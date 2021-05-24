@@ -94,44 +94,38 @@ class SoapUserContext implements UserContextInterface
      *
      * @return void
      */
-    protected function processRequest() //phpcs:ignore CopyPaste
+    private function processRequest() //phpcs:ignore CopyPaste
     {
         if ($this->isRequestProcessed) {
             return;
         }
-
         $authorizationHeaderValue = $this->request->getHeader('Authorization');
         if (!$authorizationHeaderValue) {
             $this->isRequestProcessed = true;
             return;
         }
-
         $headerPieces = explode(" ", $authorizationHeaderValue);
         if (count($headerPieces) !== 2) {
             $this->isRequestProcessed = true;
             return;
         }
-
         $tokenType = strtolower($headerPieces[0]);
         if ($tokenType !== 'bearer') {
             $this->isRequestProcessed = true;
             return;
         }
-
         $bearerToken = $headerPieces[1];
+
         /** @var Token $token */
         $token = $this->tokenFactory->create()->load($bearerToken, 'token');
-
         if (!$token->getId() || $token->getRevoked()) {
             $this->isRequestProcessed = true;
-
             return;
         }
         if (((int) $token->getUserType()) === UserContextInterface::USER_TYPE_INTEGRATION) {
             $this->userId = $this->integrationService->findByConsumerId($token->getConsumerId())->getId();
             $this->userType = UserContextInterface::USER_TYPE_INTEGRATION;
         }
-
         $this->isRequestProcessed = true;
     }
 }
