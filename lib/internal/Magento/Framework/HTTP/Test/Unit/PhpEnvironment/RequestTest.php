@@ -280,4 +280,24 @@ class RequestTest extends TestCase
 
         $this->assertEquals($default, $this->getModel()->getCookie($nullKey, $default));
     }
+
+    /**
+     * Get header with default value test
+     */
+    public function testGetHeaderWithDefaultValue()
+    {
+        $expectedValue = 'test-value';
+        $actualValue = $this->getModel()->getHeader('test-header', $expectedValue);
+        $this->assertEquals($expectedValue, $actualValue);
+    }
+
+    /**
+     * Get header without default value test
+     */
+    public function testGetHeaderWithoutDefaultValue()
+    {
+        $expectedValue = false;
+        $actualValue = $this->getModel()->getHeader('test-header');
+        $this->assertEquals($expectedValue, $actualValue);
+    }
 }
