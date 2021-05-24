@@ -16,7 +16,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
- * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -28,7 +27,6 @@ class ProductStockTest extends ProductTestBase
      * Test if stock item quantity properly saved after import
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
-     * @magentoAppIsolation enabled
      */
     public function testSaveStockItemQty()
     {
@@ -92,7 +90,6 @@ class ProductStockTest extends ProductTestBase
      * Test that is_in_stock set to 0 when item quantity is 0
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
-     * @magentoAppIsolation enabled
      *
      * @return void
      */
@@ -145,7 +142,6 @@ class ProductStockTest extends ProductTestBase
      * Test if stock state properly changed after import
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
-     * @magentoAppIsolation enabled
      */
     public function testStockState()
     {
@@ -174,7 +170,6 @@ class ProductStockTest extends ProductTestBase
      * Test that imported product stock status with backorders functionality enabled can be set to 'out of stock'.
      *
      * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      *
      * @return void
      */
@@ -190,7 +185,6 @@ class ProductStockTest extends ProductTestBase
      * can be set to 'out of stock'.
      *
      * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithBackordersDisabled(): void
     {

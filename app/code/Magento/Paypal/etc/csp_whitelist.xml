@@ -25,6 +25,13 @@
                 <value id="paypal_analytics" type="host">t.paypal.com</value>
             </values>
         </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+            </values>
+        </policy>
         <policy id="frame-src">
             <values>
                 <value id="www_paypal" type="host">www.paypal.com</value>

@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Resolver\Query;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 
 /**
  * Get frontend input type for EAV attribute
  */
-class FrontendType
+class Attribute
 {
     /**
      * @var AttributeRepositoryInterface
@@ -43,9 +44,9 @@ class FrontendType
      *
      * @param string $attributeCode
      * @param string $entityType
-     * @return null|string
+     * @return null | AttributeInterface
      */
-    public function getType(string $attributeCode, string $entityType): ?string
+    public function getAttribute(string $attributeCode, string $entityType): ?AttributeInterface
     {
         $mappedEntityType = $this->serviceTypeMap->getEntityType($entityType);
         if ($mappedEntityType) {
@@ -56,6 +57,6 @@ class FrontendType
         } catch (NoSuchEntityException $e) {
             return null;
         }
-        return $attribute->getFrontendInput();
+        return $attribute;
     }
 }
