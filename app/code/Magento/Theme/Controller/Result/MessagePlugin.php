@@ -64,8 +64,8 @@ class MessagePlugin
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param InlineInterface|null $inlineTranslate
+     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param InlineInterface $inlineTranslate
      * @param ConfigInterface $sessionConfig
      */
     public function __construct(
