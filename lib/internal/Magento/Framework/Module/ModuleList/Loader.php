@@ -222,8 +222,11 @@ class Loader
                 $allSequences[] = $relatedSequence;
             }
             $allSequences[] = $sequence;
+
             // Caching the full sequence list
-            $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
+            if (!empty($allSequences)) {
+                $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
+            }
         }
 
         return $sequenceCache[$name] ?? [];
