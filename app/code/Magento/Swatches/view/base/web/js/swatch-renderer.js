@@ -106,7 +106,7 @@ define([
             $title = $element.find('.title');
             $corner = $element.find('.corner');
 
-            $this.hover(function () {
+            $this.on('mouseenter', function () {
                 if (!$this.hasClass('disabled')) {
                     timer = setTimeout(
                         function () {
@@ -168,7 +168,9 @@ define([
                         $widget.options.delay
                     );
                 }
-            }, function () {
+            });
+
+            $this.on('mouseleave', function () {
                 $element.hide();
                 clearTimeout(timer);
             });
