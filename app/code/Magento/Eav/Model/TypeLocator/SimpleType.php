@@ -3,13 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Model\TypeLocator;
 
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
-use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
 /**
@@ -23,22 +23,14 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
     private $attributeRepository;
 
     /**
-     * @var ServiceTypeListInterface
-     */
-    private $serviceTypeList;
-
-    /**
      * Constructor
      *
      * @param AttributeRepositoryInterface $attributeRepository
-     * @param ServiceTypeListInterface $serviceTypeList
      */
     public function __construct(
-        AttributeRepositoryInterface $attributeRepository,
-        ServiceTypeListInterface $serviceTypeList
+        AttributeRepositoryInterface $attributeRepository
     ) {
         $this->attributeRepository = $attributeRepository;
-        $this->serviceTypeList = $serviceTypeList;
     }
 
     /**
@@ -61,15 +53,5 @@ class SimpleType implements CustomAttributeTypeLocatorInterface
             'decimal' => TypeProcessor::NORMALIZED_DOUBLE_TYPE,
         ];
         return $backendTypeMap[$backendType] ?? TypeProcessor::NORMALIZED_ANY_TYPE;
-    }
-
-    /**
-     * Get data Types from service type list
-     *
-     * @return void
-     */
-    public function getAllServiceDataInterfaces()
-    {
-        $this->serviceTypeList->getDataTypes();
     }
 }

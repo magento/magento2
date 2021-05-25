@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Model;
 
@@ -21,26 +22,18 @@ class TypeLocator implements CustomAttributeTypeLocatorInterface
     private $typeLocators;
 
     /**
-     * @var ServiceTypeListInterface
-     */
-    private $serviceTypeList;
-
-    /**
      * Initialize TypeLocator
      *
-     * @param ServiceTypeListInterface $serviceTypeList
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[] $typeLocators
      */
     public function __construct(
-        ServiceTypeListInterface $serviceTypeList,
         array $typeLocators = []
     ) {
         $this->typeLocators = $typeLocators;
-        $this->serviceTypeList = $serviceTypeList;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType($attributeCode, $entityType)
     {
@@ -52,13 +45,5 @@ class TypeLocator implements CustomAttributeTypeLocatorInterface
         }
 
         return TypeProcessor::NORMALIZED_ANY_TYPE;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAllServiceDataInterfaces()
-    {
-        return $this->serviceTypeList->getDataTypes();
     }
 }

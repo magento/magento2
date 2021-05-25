@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Widget;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Backend\Block\Widget\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -19,8 +23,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $layout = $objectManager->create(\Magento\Framework\View\Layout::class);
         $formBlock = $layout->addBlock(\Magento\Backend\Block\Widget\Form::class);

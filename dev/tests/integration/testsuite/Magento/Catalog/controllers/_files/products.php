@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 // Copy images to tmp media path
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -12,8 +11,6 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $objectManager->get(
     \Magento\Framework\View\DesignInterface::class
-)->setArea(
-    'frontend'
 )->setDefaultDesignTheme();
 
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */

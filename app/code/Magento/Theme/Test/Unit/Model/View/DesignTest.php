@@ -103,7 +103,7 @@ class DesignTest extends TestCase
     /**
      * @return array
      */
-    public function getThemePathDataProvider()
+    public function getThemePathDataProvider(): array
     {
         return [
             ['some_path', '', 'some_path'],
@@ -115,7 +115,7 @@ class DesignTest extends TestCase
     /**
      * @return array
      */
-    public function designThemeDataProvider()
+    public function designThemeDataProvider(): array
     {
         return [
             'single' => [true, ScopeInterface::SCOPE_WEBSITES],
@@ -130,7 +130,7 @@ class DesignTest extends TestCase
      * @dataProvider designThemeDataProvider
      * @return void
      */
-    public function testSetDefaultDesignTheme($storeMode, $scope)
+    public function testSetDefaultDesignTheme($storeMode, $scope): void
     {
         $area = Design::DEFAULT_AREA;
         $this->state->expects($this->any())
@@ -157,7 +157,7 @@ class DesignTest extends TestCase
      * @covers \Magento\Theme\Model\View\Design::getArea
      * @covers \Magento\Theme\Model\View\Design::getDesignTheme
      */
-    public function testGetDesignParams()
+    public function testGetDesignParams(): void
     {
         $locale = 'locale';
         $area = Design::DEFAULT_AREA;
@@ -189,7 +189,7 @@ class DesignTest extends TestCase
      * @covers \Magento\Theme\Model\View\Design::setDesignTheme
      * @covers \Magento\Theme\Model\View\Design::setArea
      */
-    public function testSetDesignTheme()
+    public function testSetDesignTheme(): void
     {
         $area = 'adminhtml';
         $theme = $this->getMockBuilder(ThemeInterface::class)

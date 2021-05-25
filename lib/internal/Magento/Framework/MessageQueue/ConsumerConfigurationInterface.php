@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue;
 
 /**
  * Configuration for the consumer.
+ *
+ * @api
  */
 interface ConsumerConfigurationInterface
 {
@@ -40,16 +44,6 @@ interface ConsumerConfigurationInterface
      * @return string
      */
     public function getQueueName();
-
-    /**
-     * Get consumer type sync|async.
-     *
-     * @return string
-     * @deprecated 103.0.0
-     * @see \Magento\Framework\Communication\ConfigInterface::getTopic
-     * @throws \LogicException
-     */
-    public function getType();
 
     /**
      * Get maximum number of message, which will be read by consumer before termination of the process.

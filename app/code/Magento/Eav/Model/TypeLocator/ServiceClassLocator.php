@@ -73,12 +73,4 @@ class ServiceClassLocator implements CustomAttributeTypeLocatorInterface
 
         return $type;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAllServiceDataInterfaces()
-    {
-        return $this->complexTypeLocator->getDataTypes();
-    }
 }

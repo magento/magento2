@@ -179,10 +179,6 @@ class AreaTest extends TestCase
             ->with(\Magento\Framework\View\DesignInterface::class)
             ->willReturn($designMock);
         $designMock->expects($this->once())
-            ->method('setArea')
-            ->with($this->areaCode)
-            ->willReturnSelf();
-        $designMock->expects($this->once())
             ->method('setDefaultDesignTheme');
         $this->object->load(Area::PART_DESIGN);
     }
@@ -207,10 +203,6 @@ class AreaTest extends TestCase
         $designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $designMock->expects($this->once())
-            ->method('setArea')
-            ->with($this->areaCode)
-            ->willReturnSelf();
         $designMock->expects($this->once())
             ->method('setDefaultDesignTheme');
         $this->objectManagerMock->expects($this->exactly(2))

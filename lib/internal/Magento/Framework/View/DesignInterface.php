@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View;
 
 /**
  * Design Interface
+ *
+ * @api
  */
 interface DesignInterface
 {
@@ -26,15 +30,6 @@ interface DesignInterface
      * Common node path to theme design configuration
      */
     const XML_PATH_THEME_ID = 'design/theme/theme_id';
-
-    /**
-     * Set package area
-     *
-     * @param string $area
-     * @return DesignInterface
-     * @TODO MAGETWO-31474: Remove deprecated method setArea
-     */
-    public function setArea($area);
 
     /**
      * Retrieve package area

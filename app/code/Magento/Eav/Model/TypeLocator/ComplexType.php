@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Model\TypeLocator;
 
@@ -52,7 +53,7 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getType($attributeCode, $entityType)
     {
@@ -83,7 +84,7 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDataTypes()
     {
@@ -94,14 +95,6 @@ class ComplexType implements ServiceTypeListInterface, CustomAttributeTypeLocato
             }
         }
         return array_unique($dataInterfaceArray);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAllServiceDataInterfaces()
-    {
-        return $this->getDataTypes();
     }
 
     /**

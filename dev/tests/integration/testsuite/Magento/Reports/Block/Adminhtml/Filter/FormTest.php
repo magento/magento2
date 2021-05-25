@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Block\Adminhtml\Filter;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Reports\Block\Adminhtml\Filter\Form
  * @magentoAppArea adminhtml
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -18,8 +22,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\View\Layout::class
