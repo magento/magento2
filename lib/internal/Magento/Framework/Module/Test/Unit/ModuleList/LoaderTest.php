@@ -152,7 +152,7 @@ class LoaderTest extends TestCase
     public function testLoadCircular()
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessage('Circular sequence reference from \'b\' to \'a\'');
+        $this->expectExceptionMessage('Circular reference for modules: a, b.');
         $fixture = [
             'a' => ['name' => 'a', 'sequence' => ['b']],
             'b' => ['name' => 'b', 'sequence' => ['a']],
