@@ -1027,4 +1027,14 @@
             <argument name="productAvailabilityChecks" xsi:type="array" />
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\StatusLabel">
+        <arguments>
+            <argument name="maskStatusesMapping" xsi:type="array">
+                <item name="frontend" xsi:type="array">
+                    <item name="fraud" xsi:type="const">Magento\Sales\Model\Order::STATUS_FRAUD</item>
+                    <item name="payment_review" xsi:type="const">Magento\Sales\Model\Order::STATE_PROCESSING</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
