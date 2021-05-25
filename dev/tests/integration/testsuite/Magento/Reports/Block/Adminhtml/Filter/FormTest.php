@@ -22,8 +22,6 @@ class FormTest extends TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\View\Layout::class

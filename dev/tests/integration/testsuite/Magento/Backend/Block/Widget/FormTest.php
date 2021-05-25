@@ -23,8 +23,6 @@ class FormTest extends TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $layout = $objectManager->create(\Magento\Framework\View\Layout::class);
         $formBlock = $layout->addBlock(\Magento\Backend\Block\Widget\Form::class);

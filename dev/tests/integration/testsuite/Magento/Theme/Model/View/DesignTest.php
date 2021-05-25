@@ -95,7 +95,7 @@ class DesignTest extends TestCase
 
     public function testSetDesignTheme()
     {
-        $this->_model->setDesignTheme('Magento/blank', 'frontend');
+        $this->_model->setDesignTheme('Magento/blank', Area::AREA_FRONTEND);
         $this->assertEquals('Magento/blank', $this->_model->getDesignTheme()->getThemePath());
     }
 
@@ -118,11 +118,11 @@ class DesignTest extends TestCase
         $model = $objectManager->get(\Magento\Theme\Model\View\Design::class);
 
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme());
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend'));
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => 0]));
-        $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', ['store' => null]));
-        $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml'));
-        $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml', ['store' => uniqid()]));
+        $this->assertEquals('test_f', $model->getConfigurationDesignTheme(Area::AREA_FRONTEND));
+        $this->assertEquals('test_f', $model->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => 0]));
+        $this->assertEquals('test_f', $model->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => null]));
+        $this->assertEquals('test_a', $model->getConfigurationDesignTheme(Area::AREA_ADMINHTML));
+        $this->assertEquals('test_a', $model->getConfigurationDesignTheme(Area::AREA_ADMINHTML, ['store' => uniqid()]));
     }
 
     /**
@@ -142,11 +142,11 @@ class DesignTest extends TestCase
             ->getId();
         $this->assertEquals('one', $this->_model->getConfigurationDesignTheme());
         $this->assertEquals('one', $this->_model->getConfigurationDesignTheme(null, ['store' => $storeId]));
-        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme('frontend', ['store' => $storeId]));
+        $this->assertEquals('one', $this->_model->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => $storeId]));
         $this->assertEquals('two', $this->_model->getConfigurationDesignTheme(null, ['store' => 'fixturestore']));
         $this->assertEquals(
             'two',
-            $this->_model->getConfigurationDesignTheme('frontend', ['store' => 'fixturestore'])
+            $this->_model->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => 'fixturestore'])
         );
     }
 

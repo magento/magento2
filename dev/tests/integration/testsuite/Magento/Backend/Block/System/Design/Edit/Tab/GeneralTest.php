@@ -23,8 +23,6 @@ class GeneralTest extends TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $objectManager->get(
             \Magento\Framework\Registry::class

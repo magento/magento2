@@ -57,8 +57,6 @@ class AreaTest extends TestCase
         )->getArea();
         $sameDesign = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            $designArea
         );
         $this->assertSame($design, $sameDesign);
     }

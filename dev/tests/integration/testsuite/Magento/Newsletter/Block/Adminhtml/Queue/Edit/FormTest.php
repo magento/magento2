@@ -30,8 +30,6 @@ class FormTest extends TestCase
 
         $objectManager->get(
             \Magento\Framework\View\DesignInterface::class
-        )->setArea(
-            FrontNameResolver::AREA_CODE
         )->setDefaultDesignTheme();
         $objectManager->get(
             \Magento\Framework\Config\ScopeInterface::class
