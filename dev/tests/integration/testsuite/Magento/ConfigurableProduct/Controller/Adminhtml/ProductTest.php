@@ -64,7 +64,7 @@ class ProductTest extends AbstractBackendController
         parent::setUp();
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->_objectManager->get(ProductAttributeRepositoryInterface::class);
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->jsonSerializer = $this->_objectManager->get(SerializerInterface::class);
         $this->eavConfig = $this->_objectManager->get(Config::class);
