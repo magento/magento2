@@ -55,7 +55,7 @@ define([
             });
 
             if (firstSwatch.length) {
-                $(firstSwatch).focus();
+                $(firstSwatch).trigger('focus');
             }
         }
     });

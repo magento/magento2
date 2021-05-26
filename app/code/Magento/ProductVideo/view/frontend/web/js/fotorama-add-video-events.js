@@ -812,7 +812,7 @@ define([
 
                 if (self.isFullscreen && !self.fotoramaItem.data('fotorama').options.fullscreen.arrows) {
                     if ($('.' + self.FTAR + '--prev').is(':focus') || $('.' + self.FTAR + '--next').is(':focus')) {
-                        $(self.FTCF).focus();
+                        $(self.FTCF).trigger('focus');
                     }
                 }
             });
