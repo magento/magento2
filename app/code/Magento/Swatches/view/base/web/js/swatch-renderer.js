@@ -870,7 +870,7 @@ define([
          */
         _OnMoreClick: function ($this) {
             $this.nextAll().show();
-            $this.blur().remove();
+            $this.trigger('blur').remove();
         },
 
         /**
