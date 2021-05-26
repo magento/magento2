@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -760,10 +761,10 @@ class Config
     {
         $entityType = $this->getEntityType($entityType);
         $attributeSetId = 0;
-        $storeId = 0;
+        $storeId = $this->storeManager->getStore()->getId();
         if ($object instanceof \Magento\Framework\DataObject) {
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
-            $storeId = $object->getStoreId() ?: $this->storeManager->getStore()->getId();
+            $storeId = $object->getStoreId() ?: $storeId;
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
 
