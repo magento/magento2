@@ -84,17 +84,6 @@ abstract class AbstractController extends TestCase
         $this->_request = null;
         $this->_response = null;
         $this->_objectManager = null;
-
-        parent::tearDown();
-
-        // Release all objects saved in test class properties
-        $reflection = new \ReflectionObject($this);
-        foreach ($reflection->getProperties() as $property) {
-            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
-                $property->setValue($this, null);
-            }
-        }
     }
 
     /**
