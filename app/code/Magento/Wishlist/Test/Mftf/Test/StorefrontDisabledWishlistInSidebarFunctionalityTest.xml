@@ -21,7 +21,6 @@
             <group value="configuration"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set {{WishlistEnable.path}} {{WishlistEnable.value}}" stepKey="enableWishlist"/>
             <magentoCLI command="config:set {{WishlistHideFromSidebar.path}} {{WishlistHideFromSidebar.value}}" stepKey="disableWishlistInSidebar"/>
             <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -34,9 +33,8 @@
             </actionGroup>
         </before>
         <after>
-            <magentoCLI command="config:set {{WishlistEnable.path}} {{WishlistEnable.value}}" stepKey="enableWishlist"/>
             <magentoCLI command="config:set {{WishlistShowInSidebar.path}} {{WishlistShowInSidebar.value}}" stepKey="enableWishlistInSidebar"/>
-            <magentoCLI command="cache:clean config full_page block_html" stepKey="cacheClean"/>
+            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -55,30 +53,30 @@
         </actionGroup>
 
         <!-- Check the category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPageForLoggedInCustomer"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPageAsLoggedInCustomer"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoadForLoggedInCustomer"/>
-        <dontSeeElementInDOM selector="{{StorefrontSidebarWishlistSection.wishlistBlock}}" stepKey="assertWishlistBlockIsNotVisibleOnCategoryPageForLoggedInCustomer"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnCategoryPageForLoggedInCustomer"/>
 
         <!-- Check the search result page -->
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefrontForLoggedInCustomer">
             <argument name="phrase" value="$createProduct.name$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSearchPageToLoadForLoggedInCustomer"/>
-        <dontSeeElementInDOM selector="{{StorefrontSidebarWishlistSection.wishlistBlock}}" stepKey="assertWishlistBlockIsNotVisibleOnSearchResultPageForLoggedInCustomer"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnSearchResultPageForLoggedInCustomer"/>
 
         <!-- Assert the Wishlist is not visible in sidebar for guest customer -->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
 
         <!-- Check the category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <dontSeeElementInDOM selector="{{StorefrontSidebarWishlistSection.wishlistBlock}}" stepKey="assertWishlistBlockIsNotVisibleOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPageAsGuest"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoadForGuest"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnCategoryPageForGuest"/>
 
         <!-- Check the search result page -->
-        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefront">
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefrontForGuest">
             <argument name="phrase" value="$createProduct.name$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForSearchPageToLoad"/>
-        <dontSeeElementInDOM selector="{{StorefrontSidebarWishlistSection.wishlistBlock}}" stepKey="assertWishlistBlockIsNotVisibleOnSearchResultPage"/>
+        <waitForPageLoad stepKey="waitForSearchPageToLoadForGuest"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnSearchResultPageForGuest"/>
     </test>
 </tests>
