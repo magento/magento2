@@ -6,7 +6,7 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-    <group id="payments_pro_hosted_solution_with_express_checkout" translate="label comment" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="30">
+    <group id="payments_pro_hosted_solution_with_express_checkout" translate="label comment" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml_and_paylater" sortOrder="30">
         <label>Website Payments Pro Hosted Solution</label>
         <attribute type="paypal_ec_separate">0</attribute>
         <group id="pphs_required_settings">
