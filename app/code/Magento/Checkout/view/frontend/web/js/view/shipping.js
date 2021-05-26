@@ -354,7 +354,7 @@ define([
             }
 
             if (!emailValidationResult) {
-                $(loginFormSelector + ' input[name=username]').focus();
+                $(loginFormSelector + ' input[name=username]').trigger('focus');
 
                 return false;
             }

@@ -1,0 +1,11 @@
+{
+    "rules": {
+        "jquery-no-andSelf": 2,
+        "jquery-no-bind-unbind": 2,
+        "jquery-no-click-event-shorthand": 2,
+        "jquery-no-delegate-undelegate": 2,
+        "jquery-no-event-shorthand": 2,
+        "jquery-no-size": 2,
+        "jquery-no-trim": 2
+    }
+}
