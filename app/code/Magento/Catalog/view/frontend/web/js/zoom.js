@@ -92,7 +92,7 @@ define([
             }, this));
 
             // Window resize will change offset for draggable
-            $(window).resize(this._draggableImage());
+            $(window).on('resize', this._draggableImage);
         },
 
         /**
