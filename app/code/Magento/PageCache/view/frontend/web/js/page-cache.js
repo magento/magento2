@@ -52,10 +52,11 @@ define([
              */
             contents = function (elem) {
                 return $.map(elem, function (el) {
-                    var iframeHostName;
+                    var iframeHostName,
+                        isIframe = el.nodeName.toLowerCase() === 'iframe';
 
                     // prevent cross origin iframe content reading
-                    if ($.nodeName(el, 'iframe')) {
+                    if (isIframe) {
                         iframeHostName = $('<a>').prop('href', $(el).prop('src'))
                             .prop('hostname');
 
@@ -65,7 +66,7 @@ define([
                     }
 
                     try {
-                        return el.nodeName.toLowerCase() === 'iframe' ?
+                        return isIframe ?
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
                             $.merge([], el.childNodes);
                     } catch (e) {
