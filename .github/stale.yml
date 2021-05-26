@@ -23,6 +23,7 @@ exemptLabels:
   - "PAP"
   - "Project: Login as Customer"
   - "Project: GraphQL"
+  - "Issue: ready for confirmation"
 
 # Set to true to ignore issues in a project (defaults to false)
 exemptProjects: false
