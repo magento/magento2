@@ -763,7 +763,7 @@ class Config
         $storeId = 0;
         if ($object instanceof \Magento\Framework\DataObject) {
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
-            $storeId = $object->getStoreId() ?: $storeId;
+            $storeId = $object->getStoreId() ?: $this->storeManager->getStore()->getId();
         }
         $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityType->getId() . '-' . $storeId . '-' . $attributeSetId;
 
