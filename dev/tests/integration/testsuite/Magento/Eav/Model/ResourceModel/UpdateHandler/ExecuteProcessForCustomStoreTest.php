@@ -19,7 +19,7 @@ use Magento\Eav\Model\ResourceModel\UpdateHandler;
 class ExecuteProcessForCustomStoreTest extends UpdateHandlerAbstract
 {
     /**
-     * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandlerTest::execute
+     * @covers \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @dataProvider getCustomStoreDataProvider

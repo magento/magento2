@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class ExecuteProcessForAllStoresTest extends UpdateHandlerAbstract
 {
     /**
-     * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
+     * @covers \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider getAllStoresDataProvider
      * @param $code

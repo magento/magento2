@@ -20,7 +20,7 @@ use Magento\Eav\Model\ResourceModel\UpdateHandler;
 class ExecuteProcessForCustomAttributeInCustomStoreTest extends UpdateHandlerAbstract
 {
     /**
-     * @covers       \Magento\Eav\Model\ResourceModel\UpdateHandlerTest::execute
+     * @covers \Magento\Eav\Model\ResourceModel\UpdateHandler::execute
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/dropdown_attribute.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
