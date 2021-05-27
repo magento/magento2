@@ -84,7 +84,6 @@ QUERY;
         $this->graphQlQuery($query);
     }
 
-
     /**
      * Verify that filters category url path and uid can't be used at the same time
      */
@@ -155,7 +154,6 @@ QUERY;
     public function testFilterByWrongCategoryUrlPath()
     {
         $categoryUrlPath = 'test';
-
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No category with the provided `category_url_path` was found');
 
