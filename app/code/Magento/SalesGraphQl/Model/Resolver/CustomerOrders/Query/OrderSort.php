@@ -10,7 +10,6 @@ namespace Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface;
-use Magento\GiftRegistryGraphQl\Mapper\GiftRegistryDataMapper;
 
 /**
  * Order sort allows to sort the collection by the specified field and direction
