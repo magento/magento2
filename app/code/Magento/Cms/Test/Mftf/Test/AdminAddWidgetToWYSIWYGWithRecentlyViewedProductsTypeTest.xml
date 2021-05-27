@@ -59,7 +59,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="amOnProductPage" />
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage" />
         <waitForPageLoad stepKey="waitForPage" />
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="wait5" />

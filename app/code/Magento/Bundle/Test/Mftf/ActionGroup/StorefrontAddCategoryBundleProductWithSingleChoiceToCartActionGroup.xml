@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddCategoryBundleProductWithSingleChoiceToCartActionGroup">
+        <annotations>
+            <description>Adds a Bundled Product with the single choice to the Cart from the Category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="quantity" defaultValue="1" type="string"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="clickAddToCart"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+
+        <!--Open minicart and change Qty-->
+        <scrollToTopOfPage stepKey="scrollToTheTopOfThePage"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForElementToBeVisible"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.quantity}}" stepKey="waitForElementQty"/>
+        <pressKey selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::BACKSPACE]" stepKey="deleteFiled"/>
+        <fillField selector="{{StorefrontMinicartSection.itemQuantity(product.name)}}"  userInput="{{quantity}}" stepKey="changeQty"/>
+        <conditionalClick selector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" dependentSelector="{{StorefrontMinicartSection.itemQuantityUpdate(product.name)}}" visible="true" stepKey="updateQty"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <waitForText userInput="{{quantity}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+
+        <!-- Close minicart -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCartToClose"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+    </actionGroup>
+</actionGroups>

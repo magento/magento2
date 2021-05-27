@@ -752,6 +752,9 @@ abstract class AbstractType
      */
     public function beforeSave($product)
     {
+        if (!$product->getTypeId()) {
+            $product->setTypeId($this->_typeId);
+        }
         $this->_removeNotApplicableAttributes($product);
         $product->canAffectOptions(true);
         return $this;
