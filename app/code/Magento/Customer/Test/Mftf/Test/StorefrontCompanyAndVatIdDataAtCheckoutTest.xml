@@ -21,32 +21,28 @@
         </annotations>
         <before>
             <magentoCLI command="config:set customer/address/taxvat_show opt" stepKey="setShowTaxNumber"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
-                <argument name="tags" value="config"/>
-            </actionGroup>
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
-            <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product1" entity="SimpleProduct">
-                <requiredEntity createDataKey="category"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory" />
+            <createData entity="SimpleProduct" stepKey="createProduct" >
+                <requiredEntity createDataKey="createCategory"/>
             </createData>
         </before>
         <after>
             <magentoCLI command="config:set customer/address/taxvat_show 0" stepKey="setShowTaxNumberBack"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
-                <argument name="tags" value="config"/>
-            </actionGroup>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <deleteData stepKey="deleteCategory" createDataKey="category"/>
-            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
         </after>
         <!--Login customer on storefront-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
         <!-- Add product to the cart -->
-        <amOnPage url="$$product1.name$$.html" stepKey="goToProductPage"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
-            <argument name="productName" value="$$product1.name$$"/>
+            <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <!--Go to Checkout-->
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
