@@ -7,6 +7,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\Oauth\Token as Token;
@@ -58,20 +59,27 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
     private $requestThrottler;
 
     /**
+     * @var CustomerRegistry|mixed|null
+     */
+    private $customerRegistry;
+
+    /**
      * Initialize service
      *
      * @param TokenModelFactory $tokenModelFactory
      * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
-     * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param CredentialsValidator $validatorHelper
+     * @param ManagerInterface|null $eventManager
+     * @param CustomerRegistry|null $customerRegistry
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper,
-        ManagerInterface $eventManager = null
+        ManagerInterface $eventManager = null,
+        CustomerRegistry $customerRegistry = null
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->accountManagement = $accountManagement;
@@ -79,6 +87,8 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
         $this->validatorHelper = $validatorHelper;
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ManagerInterface::class);
+        $this->customerRegistry = $customerRegistry ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(CustomerRegistry::class);
     }
 
     /**
@@ -99,7 +109,11 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
                 )
             );
         }
-        $this->eventManager->dispatch('customer_login', ['customer' => $customerDataObject]);
+
+        $customerModel = $this->customerRegistry->retrieve($customerDataObject->getId());
+        $this->eventManager->dispatch('customer_login', ['customer' => $customerModel]);
+        $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customerDataObject]);
+
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
     }

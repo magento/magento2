@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\CustomerTokenService;
@@ -43,6 +44,9 @@ class CustomerTokenServiceTest extends TestCase
 
     /** @var ManagerInterface|MockObject */
     protected $manager;
+
+    /** @var CustomerRegistry|MockObject */
+    protected $customerRegistry;
 
     protected function setUp(): void
     {
@@ -91,13 +95,18 @@ class CustomerTokenServiceTest extends TestCase
             ->getMock();
 
         $this->manager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->customerRegistry = $this->getMockBuilder(CustomerRegistry::class)
+            ->setMethods(['retrieve'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_tokenService = new CustomerTokenService(
             $this->_tokenFactoryMock,
             $this->_accountManagementMock,
             $this->_tokenModelCollectionFactoryMock,
             $this->validatorHelperMock,
-            $this->manager
+            $this->manager,
+            $this->customerRegistry
         );
     }
 
