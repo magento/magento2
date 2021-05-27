@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
- * Category Path processor class for category uid and category id arguments
+ * Category Path processor class for category url path argument
  */
 class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
 {
@@ -21,7 +21,7 @@ class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
 
     private const UID = 'category_uid';
 
-    private const PATH = 'category_url_path';
+    private const URL_PATH = 'category_url_path';
 
     /**
      * @var CollectionFactory
@@ -50,16 +50,16 @@ class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
     ): array {
         $idFilter = $args['filter'][self::ID] ?? [];
         $uidFilter = $args['filter'][self::UID] ?? [];
-        $pathFilter = $args['filter'][self::PATH] ?? [];
+        $pathFilter = $args['filter'][self::URL_PATH] ?? [];
 
         if (!empty($pathFilter) && $fieldName === 'products') {
             if (!empty($idFilter)) {
                 throw new GraphQlInputException(
-                    __('`%1` and `%2` can\'t be used at the same time.', [self::ID, self::PATH])
+                    __('`%1` and `%2` can\'t be used at the same time.', [self::ID, self::URL_PATH])
                 );
             } elseif (!empty($uidFilter)) {
                 throw new GraphQlInputException(
-                    __('`%1` and `%2` can\'t be used at the same time.', [self::UID, self::PATH])
+                    __('`%1` and `%2` can\'t be used at the same time.', [self::UID, self::URL_PATH])
                 );
             }
 
@@ -70,13 +70,13 @@ class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
 
             if ($collection->count() === 0) {
                 throw new GraphQlInputException(
-                    __('No category with the provided `%1` was found', ['category_url_path'])
+                    __('No category with the provided `%1` was found', [self::URL_PATH])
                 );
             }
             $category = $collection->getFirstItem();
             $args['filter'][self::ID]['eq'] = $category->getId();
 
-            unset($args['filter'][self::PATH]);
+            unset($args['filter'][self::URL_PATH]);
         }
         return $args;
     }
