@@ -48,8 +48,8 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                             <dd>
                                 <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                    <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
-                                <?php else :?>
+                                        <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                    <?php else :?>
                                     <?= $block->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
                             </dd>
@@ -78,6 +78,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                     <a href="#" class="action help map"
                        id="<?= ($block->escapeHtmlAttr($helpLinkId)) ?>"
                        data-mage-init='{"addToCart":{
+                                            "origin": "info",
                                             "helpLinkId": "#<?= $block->escapeJs($block->escapeHtml($helpLinkId)) ?>",
                                             "productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
                                             "showAddToCart": false

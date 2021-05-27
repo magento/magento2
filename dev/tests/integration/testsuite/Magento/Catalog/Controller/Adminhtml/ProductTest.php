@@ -19,7 +19,11 @@ use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\Product;
-use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 
 /**
  * Test class for Product adminhtml actions
@@ -27,7 +31,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class ProductTest extends AbstractBackendController
 {
     /**
      * @var Builder
@@ -45,14 +49,19 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     private $resourceModel;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
-                \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
-                    \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class
+                LayoutUpdateManager::class =>
+                    ProductLayoutUpdateManager::class
             ]
         ]);
         parent::setUp();
@@ -60,6 +69,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
         $this->resourceModel = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -137,9 +147,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $repository->save($product);
         $urlPathAttribute = $product->getCustomAttribute('url_path');
         $this->assertEquals($urlPathAttribute->getValue(), $product->getSku());
-
-        // clean cache
-        CacheCleaner::cleanAll();
 
         // dispatch Save&Duplicate action and check it
         $this->assertSaveAndDuplicateAction($product);
@@ -440,7 +447,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                 'store' => '0',
                 'set' => '4',
                 'back' => 'edit',
-                'type_id' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+                'type_id' => Type::TYPE_SIMPLE,
                 'product' => [],
                 'is_downloadable' => '0',
                 'affect_configurable_product_attributes' => '1',
@@ -502,7 +509,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
                 'set' => '4',
                 'back' => 'edit',
                 'product' => [],
-                'type_id' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
+                'type_id' => Type::TYPE_SIMPLE,
                 'is_downloadable' => '0',
                 'affect_configurable_product_attributes' => '1',
                 'new_variation_attribute_set_id' => '4',
@@ -607,6 +614,94 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         );
         $this->assertSessionMessages(
             $this->containsEqual('You duplicated the product.'),
+            MessageInterface::TYPE_SUCCESS
+        );
+    }
+
+    /**
+     * Provide test data for testSaveActionWithInvalidUrlKey()
+     *
+     * @return array
+     */
+    public function saveActionWithInvalidUrlKeyDataProvider()
+    {
+        return [
+            [
+                'post_data' => [
+                    'product' =>
+                        [
+                            'attribute_set_id' => '4',
+                            'status' => '1',
+                            'name' => 'simple_with_invalid_url',
+                            'url_key' => 'graphql',
+                            'quantity_and_stock_status' =>
+                                [
+                                    'qty' => '10',
+                                    'is_in_stock' => '1',
+                                ],
+                            'website_ids' =>
+                                [
+                                    1 => '1',
+                                ],
+                            'sku' => 'simple_with_invalid_url',
+                            'price' => '3',
+                            'tax_class_id' => '2',
+                            'product_has_weight' => '0',
+                            'visibility' => '4',
+                        ],
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Test create product with invalid existing url key.
+     *
+     * @dataProvider saveActionWithInvalidUrlKeyDataProvider
+     * @magentoDbIsolation disabled
+     * @param array $postData
+     * @return void
+     */
+    public function testSaveActionWithInvalidUrlKey(array $postData)
+    {
+        $identifier = 'graphql';
+        $reservedWords = 'admin, soap, rest, graphql, standard';
+        $this->getRequest()->setPostValue($postData);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('backend/catalog/product/save');
+        /** @var Manager $messageManager */
+        $messageManager = $this->_objectManager->get(Manager::class);
+        $messages = $messageManager->getMessages();
+        $errors = $messages->getItemsByType('error');
+        $this->assertNotEmpty($errors);
+        $message = array_shift($errors);
+        $this->assertSame(
+            sprintf(
+                'URL key "%s" matches a reserved endpoint name (%s). Use another URL key.',
+                $identifier,
+                $reservedWords
+            ),
+            $message->getText()
+        );
+        $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     */
+    public function testSaveProductWithDeletedCategory(): void
+    {
+        $category = $this->_objectManager->get(Category::class);
+        $category->load(333);
+        $category->delete();
+        $product = $this->productRepository->get('simple333');
+        $this->productRepository->save($product);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the product.')]),
             MessageInterface::TYPE_SUCCESS
         );
     }

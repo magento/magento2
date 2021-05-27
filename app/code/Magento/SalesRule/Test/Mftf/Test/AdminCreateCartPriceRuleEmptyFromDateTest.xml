@@ -87,8 +87,10 @@
             <argument name="coupon" value="_defaultCoupon"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$5.00" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="5.00"/>
+        </actionGroup>
 
         <!--Reset timezone-->
         <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset"/>

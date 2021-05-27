@@ -6,15 +6,13 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\Catalog\Model\Product\Image\NotLoadInfoImageException;
+use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\ImageFactory;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Image as MagentoImage;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Catalog\Model\Product\Image\ParamsBuilder;
-use Magento\Framework\Filesystem\Driver\File as FilesystemDriver;
 
 /**
  * Image operations
@@ -203,11 +201,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
-     * @var FilesystemDriver
-     */
-    private $filesystemDriver;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -227,7 +220,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param SerializerInterface $serializer
      * @param ParamsBuilder $paramsBuilder
-     * @param FilesystemDriver $filesystemDriver
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -249,8 +241,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         SerializerInterface $serializer = null,
-        ParamsBuilder $paramsBuilder = null,
-        FilesystemDriver $filesystemDriver = null
+        ParamsBuilder $paramsBuilder = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
@@ -265,7 +256,6 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->paramsBuilder = $paramsBuilder ?: ObjectManager::getInstance()->get(ParamsBuilder::class);
-        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()->get(FilesystemDriver::class);
     }
 
     /**
@@ -675,12 +665,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function isCached()
     {
         $path = $this->imageAsset->getPath();
-        try {
-            $isCached = is_array($this->loadImageInfoFromCache($path)) || $this->filesystemDriver->isExists($path);
-        } catch (FileSystemException $e) {
-            $isCached = false;
-        }
-        return $isCached;
+        return is_array($this->loadImageInfoFromCache($path)) || $this->_mediaDirectory->isExist($path);
     }
 
     /**
@@ -952,7 +937,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function saveImageInfoToCache(array $imageInfo, string $imagePath)
     {
-        $imagePath = $this->cachePrefix  . $imagePath;
+        $imagePath = $this->cachePrefix . $imagePath;
         $this->_cacheManager->save(
             $this->serializer->serialize($imageInfo),
             $imagePath,
@@ -968,7 +953,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     private function loadImageInfoFromCache(string $imagePath)
     {
-        $imagePath = $this->cachePrefix  . $imagePath;
+        $imagePath = $this->cachePrefix . $imagePath;
         $cacheData = $this->_cacheManager->load($imagePath);
         if (!$cacheData) {
             return false;

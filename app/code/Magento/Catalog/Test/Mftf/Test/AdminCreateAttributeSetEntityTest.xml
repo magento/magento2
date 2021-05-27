@@ -64,9 +64,11 @@
         </actionGroup>
 
         <!-- Switch from default attribute set to new attribute set -->
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
 
         <!-- See new attribute set -->
         <see selector="{{AdminProductFormSection.attributeSet}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="seeAttributeSetName"/>

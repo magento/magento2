@@ -61,7 +61,7 @@ class ProductCollectionSearchCriteriaBuilder
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() == CategoryProductLink::KEY_CATEGORY_ID) {
                     $categoryFilter = $this->filterBuilder
-                        ->setField($filter->getField())
+                        ->setField(CategoryProductLink::KEY_CATEGORY_ID)
                         ->setValue($filter->getValue())
                         ->setConditionType($filter->getConditionType())
                         ->create();

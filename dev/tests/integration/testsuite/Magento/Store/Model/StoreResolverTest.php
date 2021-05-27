@@ -12,10 +12,12 @@ class StoreResolverTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\TestFramework\ObjectManager */
     private $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->get(\Magento\Directory\Block\Data::class);
     }
 
     public function testGetStoreData()
@@ -28,7 +30,6 @@ class StoreResolverTest extends \PHPUnit\Framework\TestCase
         $storeResolver = $this->objectManager->get(\Magento\Store\Model\StoreResolver::class);
 
         $storesDataRead = $methodReadStoresData->invoke($storeResolver);
-        CacheCleaner::cleanAll();
         $storesData = $methodGetStoresData->invoke($storeResolver);
         $storesDataCached = $methodGetStoresData->invoke($storeResolver);
         $this->assertEquals($storesDataRead, $storesData);

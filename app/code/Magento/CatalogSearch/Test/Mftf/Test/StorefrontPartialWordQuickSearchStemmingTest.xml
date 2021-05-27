@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPartialWordQuickSearchStemmingTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Partial Word search using Elasticsearch"/>
+            <title value="Partial word search should match only the documents that contain the words of a provided text, in the same order as provided"/>
+            <description value="Partial word search should match only the documents that contain the words of a provided text, in the same order as provided"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-41570"/>
+            <useCaseId value="MC-40981"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <!--Create product1-->
+            <createData entity="SimpleProduct" stepKey="product1">
+                <field key="name">5127SS YALE JUNIOR KNOB ENTRANCE SET 5 PINS SATIN STAI</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Create product2-->
+            <createData entity="SimpleProduct" stepKey="product2">
+                <field key="name">5127AC YALE JUNIOR KNOB ENTRANCE SET 5 PINS ANTIQUE CO</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Create product3-->
+            <createData entity="SimpleProduct" stepKey="product3">
+                <field key="name">5127AB YALE JUNIOR KNOB ENTRANCE SET 5 PINS ANTIQUE BRASS</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Create product4-->
+            <createData entity="SimpleProduct" stepKey="product4">
+                <field key="sku">5127SS-YALE</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Create product5-->
+            <createData entity="SimpleProduct" stepKey="product5">
+                <field key="sku">5127AC-CO</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <!--Create product6-->
+            <createData entity="SimpleProduct" stepKey="product6">
+                <field key="sku">5127AB-BRASS</field>
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete category-->
+            <deleteData createDataKey="category1" stepKey="deleteCategory"/>
+            <!--Delete product1-->
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <!--Delete product2-->
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <!--Delete product3-->
+            <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
+            <!--Delete product4-->
+            <deleteData createDataKey="product4" stepKey="deleteProduct4"/>
+            <!--Delete product5-->
+            <deleteData createDataKey="product5" stepKey="deleteProduct5"/>
+            <!--Delete product6-->
+            <deleteData createDataKey="product6" stepKey="deleteProduct6"/>
+        </after>
+        <!--Navigate to home page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <!--Search for word "5127S"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search1">
+            <argument name="phrase" value="5127S"/>
+        </actionGroup>
+        <!--Assert that product1 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct3">
+            <argument name="productName" value="$$product3.name$$"/>
+        </actionGroup>
+        <!--Assert that product4 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct4">
+            <argument name="productName" value="$$product4.name$$"/>
+        </actionGroup>
+        <!--Assert that product5 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct5">
+            <argument name="productName" value="$$product5.name$$"/>
+        </actionGroup>
+        <!--Assert that product6 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct6">
+            <argument name="productName" value="$$product6.name$$"/>
+        </actionGroup>
+
+        <!--Search for word "5127A"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search2">
+            <argument name="phrase" value="5127A"/>
+        </actionGroup>
+        <!--Assert that product1 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct1">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <!--Assert that product3 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct3">
+            <argument name="productName" value="$$product3.name$$"/>
+        </actionGroup>
+        <!--Assert that product4 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct4">
+            <argument name="productName" value="$$product4.name$$"/>
+        </actionGroup>
+        <!--Assert that product5 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct5">
+            <argument name="productName" value="$$product5.name$$"/>
+        </actionGroup>
+        <!--Assert that product6 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct6">
+            <argument name="productName" value="$$product6.name$$"/>
+        </actionGroup>
+
+        <!--Search for word "5127SS"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search3">
+            <argument name="phrase" value="5127SS"/>
+        </actionGroup>
+        <!--Assert that product1 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1b">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct2b">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <!--Assert that product3 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct3b">
+            <argument name="productName" value="$$product3.name$$"/>
+        </actionGroup>
+        <!--Assert that product4 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct4b">
+            <argument name="productName" value="$$product4.name$$"/>
+        </actionGroup>
+        <!--Assert that product5 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct5b">
+            <argument name="productName" value="$$product5.name$$"/>
+        </actionGroup>
+        <!--Assert that product6 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct6b">
+            <argument name="productName" value="$$product6.name$$"/>
+        </actionGroup>
+    </test>
+</tests>
+

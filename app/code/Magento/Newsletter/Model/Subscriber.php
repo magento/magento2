@@ -308,6 +308,10 @@ class Subscriber extends AbstractModel
      */
     public function setStatus($value)
     {
+        if ($this->getSubscriberStatus() !== $value) {
+            $this->setStatusChanged(true);
+        }
+
         return $this->setSubscriberStatus($value);
     }
 
@@ -449,7 +453,8 @@ class Subscriber extends AbstractModel
         }
 
         if ($this->getSubscriberStatus() != self::STATUS_UNSUBSCRIBED) {
-            $this->setSubscriberStatus(self::STATUS_UNSUBSCRIBED)->save();
+            $this->setStatus(self::STATUS_UNSUBSCRIBED);
+            $this->save();
             $this->sendUnsubscriptionEmail();
         }
         return $this;
