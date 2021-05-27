@@ -48,7 +48,7 @@ class RetrieveOrdersWithConfigurableProductByOrderNumberTest extends GraphQlAbst
         );
 
         $expectedConfigurableOptions = [
-            '__typename' => 'OrderItem',
+            '__typename' => 'ConfigurableOrderItem',
             'product_sku' => 'simple_10',
             'product_name' => 'Configurable Product',
             'parent_sku' => 'configurable',
