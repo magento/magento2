@@ -19,65 +19,6 @@ use PHPUnit\Framework\TestCase;
 class ResolverTest extends TestCase
 {
     /**
-     * Dummy fixture
-     *
-     * @return void
-     */
-    public static function dummyFixture(): void
-    {
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessFixturePath(): void
-    {
-        if (!defined('INTEGRATION_TESTS_DIR')) {
-            define('INTEGRATION_TESTS_DIR', __DIR__);
-        }
-        $fixture = $this->processFixturePath('Some/Module/_files/some_fixture.php');
-        $this->assertEquals(
-            INTEGRATION_TESTS_DIR . '/testsuite/' . 'Some/Module/_files/some_fixture.php',
-            $fixture
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessFixturePathCallableFixture(): void
-    {
-        $fixture = $this->processFixturePath('dummyFixture');
-        $this->assertTrue(is_array($fixture));
-        $this->assertNotFalse(array_search('dummyFixture', $fixture));
-        $this->assertNotFalse(array_search(get_class($this), $fixture));
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessFixturePathNotRegisteredModule(): void
-    {
-        $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage('Can\'t find registered Module with name Some_Module .');
-        $this->processFixturePath('Some_Module::some_fixture.php');
-    }
-
-    /**
-     * @return void
-     */
-    public function testProcessFixturePathRegisteredModule(): void
-    {
-        ComponentRegistrar::register(
-            ComponentRegistrar::MODULE,
-            'Some_Module',
-            __DIR__
-        );
-        $fixture = $this->processFixturePath('Some_Module::some_fixture.php');
-        $this->assertStringEndsWith('some_fixture.php', $fixture);
-    }
-
-    /**
      * @return void
      */
     public function testGetApplierByFixtureType(): void
@@ -101,23 +42,6 @@ class ResolverTest extends TestCase
         $this->createResolverMock();
         $resolver = Resolver::getInstance();
         $resolver->requireDataFixture('path/to/fixture.php');
-    }
-
-    /**
-     * Invoke resolver processFixturePath method
-     *
-     * @param string $annotation
-     * @return string|array
-     */
-    private function processFixturePath(string $annotation)
-    {
-        $resolverMock = $this->createResolverMock();
-        $resolverMock->method('getComponentRegistrar')->willReturn(new ComponentRegistrar());
-        $reflection = new \ReflectionClass(Resolver::class);
-        $reflectionMethod = $reflection->getMethod('processFixturePath');
-        $reflectionMethod->setAccessible(true);
-
-        return $reflectionMethod->invoke($resolverMock, $this, $annotation);
     }
 
     /**
