@@ -70,7 +70,7 @@ class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
 
             if ($collection->count() === 0) {
                 throw new GraphQlInputException(
-                    __('No category with the provided %1 was found', ['category_url_path'])
+                    __('No category with the provided `%1` was found', ['category_url_path'])
                 );
             }
             $category = $collection->getFirstItem();

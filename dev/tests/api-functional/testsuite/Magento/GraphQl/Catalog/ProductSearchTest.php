@@ -84,6 +84,97 @@ QUERY;
         $this->graphQlQuery($query);
     }
 
+
+    /**
+     * Verify that filters category url path and uid can't be used at the same time
+     */
+    public function testUidAndCategoryUrlPathUsageErrorOnProductFilteringCategory()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('`category_uid` and `category_url_path` can\'t be used at the same time');
+        $query = <<<QUERY
+{
+  products(filter: {category_uid: {eq: "OTk5OTk5OTk="}, category_url_path: {eq: "category-1/category-1-2"}}) {
+    filters {
+      name
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     *  Filter by category url path
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByCategoryUrlPath()
+    {
+        $categoryUrlPath = 'category-1/category-1-2';
+        $query = <<<QUERY
+{
+  products(filter:{
+    category_url_path : {eq:"{$categoryUrlPath}"}
+  }) {
+    total_count
+    items {
+      name
+      sku
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product1 = $productRepository->get('simple');
+        $product2 = $productRepository->get('simple-4');
+        $filteredProducts = [$product2, $product1];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+            //validate that correct products are returned
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'sku' => $filteredProducts[$itemIndex]->getSku()
+                ]
+            );
+        }
+    }
+
+    /**
+     *  Filter by wrong category url path
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByWrongCategoryUrlPath()
+    {
+        $categoryUrlPath = 'test';
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No category with the provided `category_url_path` was found');
+
+        $query = <<<QUERY
+{
+  products(filter:{
+    category_url_path : {eq:"{$categoryUrlPath}"}
+  }) {
+    total_count
+    items {
+      name
+      sku
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
     /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
