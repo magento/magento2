@@ -26,9 +26,7 @@
             <!--Set currency allow config-->
             <magentoCLI command="config:set currency/options/allow RHD,CHW,CHE,AMD,EUR,USD" stepKey="setCurrencyAllow"/>
             <!--TODO: Add Api key-->
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <!--Create product-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
@@ -70,9 +68,7 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURInPrice"/>
         <!--Set allowed currencies greater then 10-->
         <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setCurrencyAllow"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
         <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="onCurrencyRatePageSecondTime"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
