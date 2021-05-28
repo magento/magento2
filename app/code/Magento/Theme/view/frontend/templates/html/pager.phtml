@@ -61,7 +61,7 @@
                 <li class="item">
                     <a class="page previous jump"
                        title=""
-                       aria-label="Skip to page <?= $block->escapeHtml($block->getPreviousJumpPage()) ?>"
+                       aria-label="<?= $block->escapeHtml(__('Skip to page %1', $block->getNextJumpPage())) ?>"
                        href="<?= $block->escapeUrl($block->getPreviousJumpUrl()) ?>">
                         <span>...</span>
                     </a>
@@ -90,7 +90,7 @@
                 <li class="item">
                     <a class="page next jump"
                        title=""
-                       aria-label="Skip to page <?= $block->escapeHtml($block->getNextJumpPage()) ?>"
+                       aria-label="<?= $block->escapeHtml(__('Skip to page %1', $block->getNextJumpPage())) ?>"
                        href="<?= $block->escapeUrl($block->getNextJumpUrl()) ?>">
                         <span>...</span>
                     </a>
