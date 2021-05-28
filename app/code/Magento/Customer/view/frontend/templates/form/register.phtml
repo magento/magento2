@@ -276,6 +276,9 @@ $formData = $block->getFormData();
                        autocomplete="off">
             </div>
         </div>
+        <div class="field choice" data-bind="scope: 'showPassword'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
     </fieldset>
 
     <fieldset class="fieldset additional_info">
@@ -352,9 +355,9 @@ script;
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": {$regionJson},
-                "defaultRegion": "{$regionId}",
-                "countriesWithOptionalZip": {$countriesWithOptionalZip}
+                "regionJson": <?= $regionJson ?>,
+                "defaultRegion": <?= $regionId ?>,
+                "countriesWithOptionalZip": <?= $countriesWithOptionalZip ?>
             }
         }
     }
@@ -371,6 +374,14 @@ script;
         "*": {
             "Magento_Customer/js/block-submit-on-send": {
                 "formId": "form-validate"
+            },
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "showPassword": {
+                        "component": "Magento_Customer/js/show-password",
+                        "passwordSelector": "#password,#password-confirmation"
+                    }
+                }
             }
         }
     }

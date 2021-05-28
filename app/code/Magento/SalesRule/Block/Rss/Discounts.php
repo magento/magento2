@@ -29,6 +29,11 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
     protected $httpContext;
 
     /**
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     */
+    private $rssUrlBuilder;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\SalesRule\Model\Rss\Discounts $rssModel

@@ -78,8 +78,8 @@
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
-        <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
-        <executeJS function="return '$createSimpleProductSecond.name$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
+        <executeJS function="return '$createSimpleProductFirst.custom_attributes[url_key]$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
+        <executeJS function="return '$createSimpleProductSecond.custom_attributes[url_key]$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
 
         <!-- Make assertions on frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

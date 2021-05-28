@@ -68,13 +68,13 @@
         <!--See related product in admin-->
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
-        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.name$$" stepKey="seeRelatedProduct"/>
 
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
-        <see userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProductInStorefront"/>
+        <see userInput="$$simpleProduct1.name$$" stepKey="seeRelatedProductInStorefront"/>
     </test>
 </tests>
