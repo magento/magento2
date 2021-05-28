@@ -276,9 +276,20 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         $lastName = $postData['oar_billing_lastname'];
         $zip = $postData['oar_zip'];
         $billingAddress = $order->getBillingAddress();
-        return strtolower($lastName) === strtolower($billingAddress->getLastname()) &&
-            ($type === 'email' && strtolower($email) === strtolower($billingAddress->getEmail()) ||
-                $type === 'zip' && strtolower($zip) === strtolower($billingAddress->getPostcode()));
+        return $this->normalizeStr($lastName) === $this->normalizeStr($billingAddress->getLastname()) &&
+            ($type === 'email' && $this->normalizeStr($email) === $this->normalizeStr($billingAddress->getEmail()) ||
+                $type === 'zip' && $this->normalizeStr($zip) === $this->normalizeStr($billingAddress->getPostcode()));
+    }
+
+    /**
+     * Trim and convert to lower case
+     *
+     * @param string $str
+     * @return string
+     */
+    private function normalizeStr(string $str): string
+    {
+        return trim(strtolower($str));
     }
 
     /**
