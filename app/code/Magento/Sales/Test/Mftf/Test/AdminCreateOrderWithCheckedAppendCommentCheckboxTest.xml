@@ -43,7 +43,7 @@
             <argument name="comment" value="Test Order Comment"/>
         </actionGroup>
         <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsCheckedAfterCommentProvided"/>
-        <scrollTo selector="{{AdminOrderFormPaymentSection.checkMoneyOption}}" stepKey="scrollUp"/>
+        <scrollTo selector="{{AdminOrderFormPaymentSection.header}}" stepKey="scrollUp"/>
         <actionGroup ref="AdminSelectFlatRateShippingMethodOnCreateOrderPageActionGroup" stepKey="selectFlatRate"/>
         <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectPaymentMethod"/>
         <seeCheckboxIsChecked selector="{{AdminOrderFormTotalSection.appendComments}}" stepKey="checkAppendCommentsCheckboxIsCheckedAfterShippingSelected"/>
