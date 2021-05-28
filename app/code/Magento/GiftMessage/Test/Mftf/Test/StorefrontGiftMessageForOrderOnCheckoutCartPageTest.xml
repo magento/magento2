@@ -17,12 +17,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set sales/gift_options/allow_order 1" stepKey="enableGiftMessageForOrder"/>
-
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
-
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
-                <argument name="tags" value="config full_page"/>
-            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set sales/gift_options/allow_order 0" stepKey="disableGiftMessageForOrder"/>
@@ -37,7 +32,7 @@
         <actionGroup ref="AssertStorefrontGiftMessageOnCheckoutCartPageActionGroup" stepKey="seeGiftMessageFields"/>
         <actionGroup ref="StorefrontFieldGiftMessageCartFormActionGroup" stepKey="fillGiftMessageFields"/>
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
-        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+        <actionGroup ref="GuestGiftCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="guestSelectCheckMoneyOrderPayment"/>
