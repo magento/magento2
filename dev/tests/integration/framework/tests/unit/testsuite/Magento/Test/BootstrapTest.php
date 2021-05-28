@@ -105,7 +105,6 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->_envBootstrap = null;
         $this->_docBlockBootstrap = null;
         $this->_profilerBootstrap = null;
-        $this->_memoryBootstrap = null;
         $this->_shell = null;
     }
 
@@ -121,7 +120,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             ->with($this->identicalTo($_SERVER));
         $this->_envBootstrap->expects($this->once())
             ->method('emulateSession')
-            ->with($this->identicalTo(isset($_SESSION) ? $_SESSION : null));
+            ->with($this->identicalTo($_SESSION));
 
         $memUsageLimit = '100B';
         $memLeakLimit = '60B';

@@ -19,7 +19,7 @@
         <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilter"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="clickResetFilter"/>
         <waitForPageLoad stepKey="waitForGridReset"/>
-        <helper class="\Magento\Tax\Test\Mftf\Helper\TaxHelpers" method="deleteAllSpecifiedTaxRuleRows" stepKey="deleteAllSpecifiedTaxRules">
+        <helper class="Magento\Tax\Test\Mftf\Helper\TaxHelpers" method="deleteAllSpecifiedTaxRuleRows" stepKey="deleteAllSpecifiedTaxRules">
             <argument name="rowsToDelete">{{rowsToDelete}}</argument>
             <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>
             <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>

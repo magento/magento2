@@ -254,7 +254,7 @@ define([
                     action += 'uenc/' + params.data.uenc;
                 }
 
-                $(form).attr('action', action).submit();
+                $(form).attr('action', action).trigger('submit');
             });
         },
 
