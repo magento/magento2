@@ -11,5 +11,6 @@
         <element name="saveTemplateButton" type="button" selector=".page-actions-inner .page-actions-buttons .save"/>
         <element name="deleteTemplateButton" type="button" selector=".page-actions-inner .page-actions-buttons .delete"/>
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" timeout="10"/>
+        <element name="saveAndResumeButton" type="button" selector="//span[contains(text(),'Save and Resume')]/ancestor::button"/>
     </section>
 </sections>
