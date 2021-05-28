@@ -50,7 +50,7 @@ define([
 
             $(this.qtyFieldSelector).on('change', this._onQtyChange.bind(this));
 
-            this._updateAmount();
+            priceBox.trigger('updatePrice');
 
             return this;
         },
