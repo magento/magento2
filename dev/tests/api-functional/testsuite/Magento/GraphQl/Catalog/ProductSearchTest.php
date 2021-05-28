@@ -147,13 +147,59 @@ QUERY;
     }
 
     /**
+     *  Filter by multiple categories url paths
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testFilterByMultipleCategoriesUrlPaths()
+    {
+        $categoriesPath = ['category-1/category-1-2','category-1/category-1-1'];
+
+        $query = <<<QUERY
+{
+  products(filter:{
+    category_url_path : {in:["{$categoriesPath[0]}","{$categoriesPath[1]}"]}
+  }) {
+    total_count
+    items {
+      name
+      sku
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(3, $response['products']['total_count']);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product1 = $productRepository->get('simple');
+        $product2 = $productRepository->get('12345');
+        $product3 = $productRepository->get('simple-4');
+        $filteredProducts = [$product3, $product2, $product1];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
+        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
+            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+            //validate that correct products are returned
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'sku' => $filteredProducts[$itemIndex]->getSku()
+                ]
+            );
+        }
+    }
+
+    /**
      *  Filter by wrong category url path
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testFilterByWrongCategoryUrlPath()
     {
-        $categoryUrlPath = 'test';
+        $categoryUrlPath = 'not-a-category url path';
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No category with the provided `category_url_path` was found');
 

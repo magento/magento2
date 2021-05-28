@@ -66,15 +66,22 @@ class CategoryUrlPathArgsProcessor implements ArgumentsProcessorInterface
             /** @var Collection $collection */
             $collection = $this->collectionFactory->create();
             $collection->addAttributeToSelect('entity_id');
-            $collection->addAttributeToFilter('url_path', $pathFilter['eq']);
+            $collection->addAttributeToFilter('url_path', $pathFilter);
 
             if ($collection->count() === 0) {
                 throw new GraphQlInputException(
                     __('No category with the provided `%1` was found', [self::URL_PATH])
                 );
+            } elseif ($collection->count() === 1) {
+                $category = $collection->getFirstItem();
+                $args['filter'][self::ID]['eq'] = $category->getId();
+            } else {
+                $categoryIds = [];
+                foreach ($collection as $category) {
+                    $categoryIds[] = $category->getId();
+                }
+                $args['filter'][self::ID]['in'] = $categoryIds;
             }
-            $category = $collection->getFirstItem();
-            $args['filter'][self::ID]['eq'] = $category->getId();
 
             unset($args['filter'][self::URL_PATH]);
         }
