@@ -1,12 +1,15 @@
 <?php
 /**
- * Observer model factory
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Observer model factory
+ *
+ * @api
+ */
 class ObserverFactory
 {
     /**

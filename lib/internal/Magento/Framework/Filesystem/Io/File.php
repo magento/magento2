@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
  * Filesystem client
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @api
  */
 class File extends AbstractIo
 {
@@ -441,7 +442,7 @@ class File extends AbstractIo
     public function read($filename, $dest = null)
     {
         $result = false;
-        
+
         $this->_cwd();
         if ($dest === null) {
             $result = @file_get_contents($filename);

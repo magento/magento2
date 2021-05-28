@@ -8,6 +8,8 @@ namespace Magento\Catalog\Model\Product\Pricing\Renderer;
 
 /**
  * Interface resolver checks whether product available for sale
+ *
+ * @api
  */
 interface SalableResolverInterface
 {

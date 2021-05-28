@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Model\Type;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -15,6 +17,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
+ * Checkout type onepage model
+ *
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -168,6 +173,11 @@ class Onepage
      * @var \Magento\Quote\Model\Quote\TotalsCollector
      */
     protected $totalsCollector;
+
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    private $_encryptor;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -405,7 +415,7 @@ class Onepage
         $address = $this->getQuote()->getShippingAddress();
 
         $addressForm = $this->_formFactory->create(
-            \customer_address::class,
+            'customer_address',
             'customer_address_edit',
             [],
             $this->_request->isAjax(),

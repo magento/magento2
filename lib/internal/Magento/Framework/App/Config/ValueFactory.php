@@ -7,6 +7,8 @@ namespace Magento\Framework\App\Config;
 
 /**
  * Factory class
+ *
+ * @api
  */
 class ValueFactory
 {

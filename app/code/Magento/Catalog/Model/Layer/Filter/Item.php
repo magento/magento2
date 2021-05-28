@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Filter item model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Catalog\Model\Layer\Filter;
-
 class Item extends \Magento\Framework\DataObject
 {
     /**
