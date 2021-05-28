@@ -272,6 +272,24 @@
         &:active {
             transform: scale(.9);
         }
+
+        .modal-popup &,
+        .modal-slide & {
+            padding: 0;
+            color: @button__color;
+
+            &:hover {
+                color: darken(@text__color, 20%);
+            }
+
+            &:active {
+                transform: scale(.9);
+            }
+
+            &:before {
+                font-size: 1em;
+            }
+        }
     }
 }
 
