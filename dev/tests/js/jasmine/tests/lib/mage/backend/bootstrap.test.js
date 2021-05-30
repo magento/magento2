@@ -25,6 +25,7 @@ define([
                 $pageMainActions.appendTo('body');
                 $('body').notification();
 
+                // eslint-disable-next-line jquery-no-event-shorthand
                 $.ajaxSettings.error();
 
                 expect($('.message-error').length).toBe(1);
