@@ -18,11 +18,11 @@
             <!-- PayPal Logo -->
             <img attr="src: getPaymentAcceptanceMarkSrc(), alt: $t('Acceptance Mark')" class="payment-icon"/>
             <!-- PayPal Logo -->
-            <span text="getTitle()"/>
+            <span text="getTitle()"></span>
             <a class="action action-help"
                attr="href: getPaymentAcceptanceMarkHref()"
                click="showAcceptanceWindow"
-               translate="'What is PayPal?'"/>
+               translate="'What is PayPal?'"></a>
         </label>
     </div>
     <div class="payment-method-content">
@@ -30,6 +30,6 @@
         <div class="checkout-agreements-block">
             <each args="$parent.getRegion('before-place-order')" render=""/>
         </div>
-        <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"/>
+        <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"></div>
     </div>
 </div>
