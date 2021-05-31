@@ -12,7 +12,7 @@ define([
 
     /**
      * @param {String} url
-     * @returns {Object}
+     * @returns {jQuery}
      */
     function getForm(url) {
         return $('<form>', {
@@ -37,7 +37,7 @@ define([
                  * 'Confirm' action handler.
                  */
                 confirm: function () {
-                    getForm(url).appendTo('body').submit();
+                    getForm(url).appendTo('body').trigger('submit');
                 }
             }
         });
@@ -48,12 +48,12 @@ define([
     $('#order-view-hold-button').click(function () {
         var url = $('#order-view-hold-button').data('url');
 
-        getForm(url).appendTo('body').submit();
+        getForm(url).appendTo('body').trigger('submit');
     });
 
     $('#order-view-unhold-button').click(function () {
         var url = $('#order-view-unhold-button').data('url');
 
-        getForm(url).appendTo('body').submit();
+        getForm(url).appendTo('body').trigger('submit');
     });
 });

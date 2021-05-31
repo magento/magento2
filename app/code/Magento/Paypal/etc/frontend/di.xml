@@ -158,6 +158,19 @@
                     <item name="label" xsi:type="string">buynow</item>
                 </item>
             </argument>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Express\InContext\Component">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <plugin name="sdk_url_configuration" type="Magento\Paypal\Plugin\CheckoutIndex" />
+    </type>
+    <type name="Magento\Paypal\Model\SdkUrl">
+        <arguments>
             <argument name="disallowedFundingMap" xsi:type="array">
                 <item name="CREDIT" xsi:type="string">credit</item>
                 <item name="CARD" xsi:type="string">card</item>
@@ -176,9 +189,11 @@
             <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
         </arguments>
     </type>
-    <type name="Magento\Paypal\Block\Express\InContext\Component">
+    <type name="Magento\Checkout\Block\Onepage">
         <arguments>
-            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="payLater" xsi:type="object">Magento\Paypal\Block\PayLater\LayoutProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>
