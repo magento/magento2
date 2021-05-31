@@ -157,6 +157,8 @@ class GenerateTest extends TestCase
             ->method('isAjax')
             ->willReturn(true);
         $ruleMock = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getCouponType'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->registryMock->expects($this->once())
@@ -165,6 +167,9 @@ class GenerateTest extends TestCase
         $ruleMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
+        $ruleMock->expects($this->once())
+            ->method('getCouponType')
+            ->willReturn(\Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO);
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($requestData);
