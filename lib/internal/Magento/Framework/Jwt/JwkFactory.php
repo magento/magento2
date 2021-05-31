@@ -753,7 +753,11 @@ class JwkFactory
     public function createNone(): Jwk
     {
         return new Jwk(
-
+            'none',
+            [],
+            null,
+            [Jwk::KEY_OP_SIGN, Jwk::KEY_OP_ENCRYPT],
+            'none'
         );
     }
 
