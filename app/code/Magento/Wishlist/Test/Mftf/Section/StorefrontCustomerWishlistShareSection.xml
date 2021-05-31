@@ -11,7 +11,7 @@
     <section name="StorefrontCustomerWishlistShareSection">
         <element name="ProductShareWishlistEmail" type="input" selector="#email_address"/>
         <element name="ProductShareWishlistTextMessage" type="input" selector="#message"/>
-        <element name="ProductShareWishlistButton" type="button" selector=".action.submit.primary" timeout="30"/>
+        <element name="ProductShareWishlistButton" type="button" selector=".actions-toolbar .action.submit.primary" timeout="30"/>
         <element name="errorEmailMessage" type="input" selector="#email_address-error"/>
         <element name="captchaField" type="input" selector="#captcha_share_wishlist_form"/>
     </section>
