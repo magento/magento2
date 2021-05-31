@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Paypal\Helper\Shortcut;
 
 /**
  * Interface \Magento\Paypal\Helper\Shortcut\ValidatorInterface
  *
+ * @api
  */
 interface ValidatorInterface
 {

@@ -12,6 +12,8 @@ use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * Exception for GraphQL to be thrown when authorization fails
+ *
+ * @api
  */
 class GraphQlAuthorizationException extends AuthorizationException implements \GraphQL\Error\ClientAware
 {

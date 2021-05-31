@@ -9,6 +9,8 @@ namespace Magento\Newsletter\Model;
 
 /**
  * Interface to update newsletter subscription status
+ *
+ * @api
  */
 interface SubscriptionManagerInterface
 {

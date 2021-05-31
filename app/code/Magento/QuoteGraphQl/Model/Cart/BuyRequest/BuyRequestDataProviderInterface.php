@@ -9,6 +9,8 @@ namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 
 /**
  * Build buy request for adding products to cart
+ *
+ * @api
  */
 interface BuyRequestDataProviderInterface
 {
