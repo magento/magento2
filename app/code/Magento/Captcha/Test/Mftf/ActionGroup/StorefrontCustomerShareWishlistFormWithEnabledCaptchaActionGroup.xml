@@ -18,6 +18,7 @@
         <fillField userInput="{{email}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistEmail}}" stepKey="fillEmailsForShare"/>
         <fillField userInput="{{message}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistTextMessage}}" stepKey="fillShareMessage"/>
         <fillField userInput="{{captcha}}" selector="{{StorefrontCustomerWishlistShareSection.captchaField}}" stepKey="fillCaptchaField"/>
+        <scrollTo selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="scrollToSendWishlistButton"/>
         <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
     </actionGroup>
 </actionGroups>
