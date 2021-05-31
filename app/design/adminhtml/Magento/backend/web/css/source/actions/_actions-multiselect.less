@@ -96,12 +96,12 @@
 
         > .action-close,
         > .action-close:active {
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin-right: 3.2rem;
-            padding: 0.8rem 1.5rem 0.6rem;
             background-color: transparent;
+            margin-right: 3.2rem;
+            padding: .8rem 1.5rem .6rem;
+            position: absolute;
+            right: 0;
+            top: 0;
             transform: none;
 
             &:before {
@@ -277,8 +277,8 @@
 
         .modal-popup &,
         .modal-slide & {
-            padding: 0;
             color: @button__color;
+            padding: 0;
 
             &:hover {
                 color: darken(@text__color, 20%);
