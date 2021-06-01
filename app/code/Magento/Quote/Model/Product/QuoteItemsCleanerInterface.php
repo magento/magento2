@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Interface \Magento\Quote\Model\Product\QuoteItemsCleanerInterface
  *
+ * @api
  */
 interface QuoteItemsCleanerInterface
 {
