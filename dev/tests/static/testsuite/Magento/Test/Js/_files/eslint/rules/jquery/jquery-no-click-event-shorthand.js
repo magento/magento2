@@ -11,7 +11,7 @@ module.exports = {
   create: function(context) {
     return {
       CallExpression: function(node) {
-        let names = ['blur', 'focus', 'focusin', 'focusout', 'resize', 'scroll', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'change', 'select', 'submit', 'keydown', 'keypress', 'keyup', 'contextmenu'],
+        let names = ['blur', 'focus', 'focusin', 'focusout', 'resize', 'scroll', 'dblclick', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'change', 'select', 'submit', 'keydown', 'keypress', 'keyup', 'contextmenu', 'click'],
             name
         if (node.callee.type !== 'MemberExpression') return
         if (!names.includes(node.callee.property.name)) return
