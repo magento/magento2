@@ -1,76 +1,35 @@
 <?php
 /**
- * RegionProvider
- *
- * @copyright Copyright © 2021 Staempfli AG. All rights reserved.
- * @author    juan.alonso@staempfli.com
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\ViewModel\Address;
 
-use Magento\Directory\Helper\Data as DataHelper;
-use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Directory\Model\RegionProvider as DirectoryRegionProvider;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class RegionProvider implements ArgumentInterface
 {
 
-
-    protected $regions = [];
-
     /**
-     * @var DataHelper
+     * @var DirectoryRegionProvider
      */
-    private $directoryHelper;
-    /**
-     * @var JsonSerializer
-     */
-    private $jsonSerializer;
-
+    private $directoryRegionProvider;
 
     /**
      * Constructor
      *
-     * @param DataHelper $directoryHelper
-     * @param JsonSerializer $jsonSerializer
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param DirectoryRegionProvider $directoryRegionProvider
      */
     public function __construct(
-        DataHelper $directoryHelper,
-        JsonSerializer $jsonSerializer
+        DirectoryRegionProvider $directoryRegionProvider
     ) {
-        $this->directoryHelper= $directoryHelper;
-        $this->jsonSerializer = $jsonSerializer;
+        $this->directoryRegionProvider = $directoryRegionProvider;
     }
 
     public function getRegionJson() : string
     {
-        $regions = $this->getRegions();
-        return $this->jsonSerializer->serialize($regions);
+        return $this->directoryRegionProvider->getRegionJson();
     }
-
-
-    /**
-     * @return array
-     */
-    protected function getRegions() : array
-    {
-        if (!$this->regions) {
-            $regions = $this->directoryHelper->getRegionData();
-            $this->regions['config'] = $regions['config'];
-            unset($regions['config']);
-            foreach ($regions as $countryCode => $countryRegions) {
-                foreach ($countryRegions as $regionId => $regionData) {
-                    $this->regions[$countryCode][] = [
-                        'id'   => $regionId,
-                        'name' => $regionData['name'],
-                        'code' => $regionData['code']
-                    ];
-                }
-            }
-
-        }
-        return $this->regions;
-    }
-
 }
