@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder as PlaceholderProvider;
+use Magento\CatalogGraphQl\Service\CheckImageCacheFileService;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -20,6 +21,11 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  */
 class Url implements ResolverInterface
 {
+    /**
+     * @var CheckImageCacheFileService
+     */
+    private $checkImageCacheFileService;
+
     /**
      * @var ImageFactory
      */
@@ -40,9 +46,11 @@ class Url implements ResolverInterface
      * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
+        CheckImageCacheFileService $checkImageCacheFileService,
         ImageFactory $productImageFactory,
         PlaceholderProvider $placeholderProvider
     ) {
+        $this->checkImageCacheFileService = $checkImageCacheFileService;
         $this->productImageFactory = $productImageFactory;
         $this->placeholderProvider = $placeholderProvider;
     }
@@ -69,9 +77,19 @@ class Url implements ResolverInterface
         $product = $value['model'];
         if (isset($value['image_type'])) {
             $imagePath = $product->getData($value['image_type']);
-            return $this->getImageUrl($value['image_type'], $imagePath);
+            $imgUrl = $this->getImageUrl($value['image_type'], $imagePath);
+            return $this->checkImageCacheFileService->execute(
+                $imgUrl,
+                $imagePath,
+                $value['image_type']
+            );
         } elseif (isset($value['file'])) {
-            return $this->getImageUrl('image', $value['file']);
+            $imgUrl = $this->getImageUrl('image', $value['file']);
+            return $this->checkImageCacheFileService->execute(
+                $imgUrl,
+                $value['file'],
+                'image'
+            );
         }
         return [];
     }
