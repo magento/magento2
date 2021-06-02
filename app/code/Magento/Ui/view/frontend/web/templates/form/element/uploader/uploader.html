@@ -10,16 +10,16 @@
         <div class="file-uploader-area">
             <input type="file" afterRender="onElementRender" attr="id: uid, name: inputName, multiple: isMultipleFiles"
                    disable="disabled"/>
-            <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"/>
+            <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"></label>
 
-            <span class="file-uploader-spinner"/>
+            <span class="file-uploader-spinner"></span>
             <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
         </div>
 
         <render args="tooltipTpl" if="$data.tooltip"/>
 
         <div class="field-note" if="$data.notice" attr="id: noticeId">
-            <span html="notice"/>
+            <span><strong translate="NOTE"></strong>: <translate args="$data.notice"/></span>
         </div>
 
         <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"/>
@@ -29,7 +29,7 @@
                    class="file-uploader-placeholder"
                    css="'placeholder-' + placeholderType">
                     <span class="file-uploader-placeholder-text"
-                          translate="'Click here or drag and drop to add files.'"/>
+                          translate="'Click here or drag and drop to add files.'"></span>
             </label>
         </div>
     </div>
