@@ -16,7 +16,7 @@
                 class="action-secondary"
                 type="button"
                 click="processingAddChild.bind($data, false, false, false)">
-            <span translate="addButtonLabel"/>
+            <span translate="addButtonLabel"></span>
         </button>
     </div>
 
@@ -30,7 +30,7 @@
      css="$data.setClasses($data)"
      attr="'data-index': index">
     <label if="$data.label" class="admin__field-label" attr="for: $data.uid">
-        <span translate="$data.label"/>
+        <span translate="$data.label"></span>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
@@ -47,14 +47,14 @@
                 <thead if="element.columnsHeader">
                     <tr>
                         <th if="$data.dndConfig.enabled"
-                            class="data-grid-draggable-row-cell"/>
+                            class="data-grid-draggable-row-cell"></th>
 
                         <th repeat="foreach: labels, item: '$label'"
                             class="data-grid-th"
                             visible="$label().visible"
                             disable="$label().disabled"
                             css="setClasses($label())">
-                            <span translate="$label().label"/>
+                            <span translate="$label().label"></span>
                         </th>
                     </tr>
                 </thead>
@@ -65,7 +65,7 @@
                         css="'_odd-row': $index % 2">
                         <td if="dndConfig.enabled"
                             class="data-grid-draggable-row-cell"
-                            template="name: dndConfig.template, data: dnd"/>
+                            template="name: dndConfig.template, data: dnd"></td>
 
                         <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
                         <td if="elem.template"
@@ -73,7 +73,7 @@
                             disable="elem.disabled"
                             css="$parent.setClasses(elem)"
                             template="elem.template"
-                            attr="'data-index': index"/>
+                            attr="'data-index': index"></td>
                         <!-- /ko -->
                     </tr>
                 </tbody>
