@@ -399,7 +399,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory,
-        OrderStateResolverInterface $orderStateResolver,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
@@ -410,7 +409,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         ScopeConfigInterface $scopeConfig = null,
         RegionFactory $regionFactory = null,
         RegionResource $regionResource = null,
-        StatusLabel $statusLabel = null
+        StatusLabel $statusLabel = null,
+        OrderStateResolverInterface $orderStateResolver = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -443,7 +443,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->regionResource = $regionResource ?: ObjectManager::getInstance()->get(RegionResource::class);
         $this->regionItems = [];
         $this->statusLabel = $statusLabel ?: ObjectManager::getInstance()->get(StatusLabel::class);
-        $this->orderStateResolver = $orderStateResolver;
+        $this->orderStateResolver = $orderStateResolver ?: ObjectManager::getInstance()->get(OrderStateResolverInterface::class);
         parent::__construct(
             $context,
             $registry,
