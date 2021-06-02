@@ -10,6 +10,9 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Script;
+use Magento\Elasticsearch\SearchAdapter\Field;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
 
 /**
@@ -52,21 +55,39 @@ class Sort
     private $map;
 
     /**
+     * @var Script\BuilderInterface
+     */
+    private $scriptBuilder;
+
+    /**
+     * @var Field\ScriptResolverPoolInterface
+     */
+    private $fieldScriptResolverPool;
+
+    /**
      * @param AttributeProvider $attributeAdapterProvider
      * @param FieldNameResolver $fieldNameResolver
      * @param array $skippedFields
      * @param array $map
+     * @param Script\BuilderInterface|null $scriptBuilder
+     * @param Field\ScriptResolverPoolInterface|null $fieldScriptResolverPool
      */
     public function __construct(
         AttributeProvider $attributeAdapterProvider,
         FieldNameResolver $fieldNameResolver,
         array $skippedFields = [],
-        array $map = []
+        array $map = [],
+        ?Script\BuilderInterface $scriptBuilder = null,
+        ?Field\ScriptResolverPoolInterface $fieldScriptResolverPool = null
     ) {
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->skippedFields = array_merge(self::DEFAULT_SKIPPED_FIELDS, $skippedFields);
         $this->map = array_merge(self::DEFAULT_MAP, $map);
+        $this->scriptBuilder = $scriptBuilder ?? ObjectManager::getInstance()
+            ->get(Script\Builder::class);
+        $this->fieldScriptResolverPool = $fieldScriptResolverPool ?? ObjectManager::getInstance()
+            ->get(Field\ScriptResolverPoolInterface::class);
     }
 
     /**
@@ -89,6 +110,25 @@ class Sort
             if (in_array($item['field'], $this->skippedFields)) {
                 continue;
             }
+
+            $fieldScriptResolver = $this->fieldScriptResolverPool->getFieldScriptResolver($item['field']);
+
+            $fieldScript = !$fieldScriptResolver
+                ? null
+                : $fieldScriptResolver->getFieldSortScript($item['field'], $item['direction'], $request->getName());
+
+            if ($fieldScript) {
+                $sorts[] = [
+                    '_script' => [
+                        'script' => $this->scriptBuilder->buildScript($fieldScript),
+                        'type' => $fieldScript->getSortType(),
+                        'order' => strtolower($item['direction']),
+                    ],
+                ];
+
+                continue;
+            }
+
             $attribute = $this->attributeAdapterProvider->getByAttributeCode($item['field']);
             $fieldName = $this->fieldNameResolver->getFieldName($attribute);
             if (isset($this->map[$fieldName])) {

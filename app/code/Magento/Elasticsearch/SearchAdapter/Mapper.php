@@ -47,6 +47,7 @@ class Mapper extends Elasticsearch5Mapper
      */
     public function buildQuery(RequestInterface $request)
     {
+        $this->currentRequest = $request;
         $searchQuery = $this->queryBuilder->initQuery($request);
         $searchQuery['body']['query'] = array_merge(
             $searchQuery['body']['query'],

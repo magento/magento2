@@ -173,6 +173,22 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Model\ResourceModel\Frontend\ProductList\Price\ExpressionModifierPoolInterface">
+        <arguments>
+            <argument name="expressionModifiers" xsi:type="array">
+                <item name="tax" xsi:type="object">Magento\Tax\Model\ResourceModel\Catalog\Frontend\ProductList\Price\TaxExpressionModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
+        <plugin name="add_tax_class_id_to_searchable_attributes" type="Magento\Tax\Plugin\CatalogSearch\Indexer\FullText\Action\DataProvider"/>
+    </type>
+    <type name="Magento\Tax\Model\ResourceModel\Catalog\Frontend\ProductList\Price\TaxExpressionModifier">
+        <arguments>
+            <argument name="taxHelper" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
+            <argument name="taxCalculation" xsi:type="object">Magento\Tax\Model\Calculation\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">

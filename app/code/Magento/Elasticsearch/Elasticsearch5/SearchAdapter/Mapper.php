@@ -11,8 +11,8 @@ use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as QueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
 
 /**
  * Mapper class
@@ -40,6 +40,11 @@ class Mapper
     protected $filterBuilder;
 
     /**
+     * @var RequestInterface
+     */
+    protected $currentRequest = null;
+
+    /**
      * @param QueryBuilder $queryBuilder
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param FilterBuilder $filterBuilder
@@ -63,6 +68,7 @@ class Mapper
      */
     public function buildQuery(RequestInterface $request)
     {
+        $this->currentRequest = $request;
         $searchQuery = $this->queryBuilder->initQuery($request);
         $searchQuery['body']['query'] = array_merge(
             $searchQuery['body']['query'],
@@ -194,7 +200,17 @@ class Mapper
             case FilterQuery::REFERENCE_FILTER:
                 $conditionType = $conditionType === BoolQuery::QUERY_CONDITION_NOT ?
                     MatchQueryBuilder::QUERY_CONDITION_MUST_NOT : $conditionType;
-                $filterQuery = $this->filterBuilder->build($query->getReference(), $conditionType);
+                $filterQuery = (null === $this->currentRequest)
+                    ? $this->filterBuilder->build(
+                        $query->getReference(),
+                        $conditionType
+                    )
+                    : $this->filterBuilder->buildForRequest(
+                        $this->currentRequest,
+                        $query->getReference(),
+                        $conditionType
+                    );
+
                 foreach ($filterQuery['bool'] as $condition => $filter) {
                     $selectQuery['bool'][$condition]= array_merge(
                         isset($selectQuery['bool'][$condition]) ? $selectQuery['bool'][$condition] : [],

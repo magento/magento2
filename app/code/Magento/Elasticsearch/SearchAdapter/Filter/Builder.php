@@ -5,12 +5,16 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Filter;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Elasticsearch\Model\Script;
+use Magento\Elasticsearch\SearchAdapter\Field;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\FilterInterface;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
+use Magento\Framework\Search\RequestInterface;
 
 /**
  * Class Builder to build Elasticsearch filter
@@ -23,20 +27,44 @@ class Builder implements BuilderInterface
     private $filters;
 
     /**
+     * @var string|null
+     */
+    private $requestName = null;
+
+    /**
+     * @var Script\BuilderInterface
+     */
+    private $scriptBuilder;
+
+    /**
+     * @var Field\ScriptResolverPoolInterface
+     */
+    private $fieldScriptResolverPool;
+
+    /**
      * @param Range $range
      * @param Term $term
      * @param Wildcard $wildcard
+     * @param Script\BuilderInterface|null $scriptBuilder
+     * @param Field\ScriptResolverPoolInterface|null $fieldScriptResolverPool
      */
     public function __construct(
         Range $range,
         Term $term,
-        Wildcard $wildcard
+        Wildcard $wildcard,
+        ?Script\BuilderInterface $scriptBuilder = null,
+        ?Field\ScriptResolverPoolInterface $fieldScriptResolverPool = null
     ) {
         $this->filters = [
             RequestFilterInterface::TYPE_RANGE => $range,
             RequestFilterInterface::TYPE_TERM => $term,
             RequestFilterInterface::TYPE_WILDCARD => $wildcard,
         ];
+
+        $this->scriptBuilder = $scriptBuilder ?? ObjectManager::getInstance()
+            ->get(Script\Builder::class);
+        $this->fieldScriptResolverPool = $fieldScriptResolverPool ?? ObjectManager::getInstance()
+            ->get(Field\ScriptResolverPoolInterface::class);
     }
 
     /**
@@ -45,6 +73,22 @@ class Builder implements BuilderInterface
     public function build(RequestFilterInterface $filter, $conditionType)
     {
         return $this->processFilter($filter, $conditionType);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function buildForRequest(RequestInterface $request, RequestFilterInterface $filter, $conditionType)
+    {
+        $this->requestName = $request->getName();
+
+        try {
+            $result = $this->processFilter($filter, $conditionType);
+        } finally {
+            $this->requestName = null;
+        }
+
+        return $result;
     }
 
     /**
@@ -62,10 +106,31 @@ class Builder implements BuilderInterface
             if (!array_key_exists($filter->getType(), $this->filters)) {
                 throw new \InvalidArgumentException('Unknown filter type ' . $filter->getType());
             }
+
+            $fieldName = !$this->requestName || !is_callable([ $filter, 'getField' ])
+                ? null
+                : (string) $filter->getField();
+
+            $fieldScriptResolver = !$fieldName
+                ? null
+                : $this->fieldScriptResolverPool->getFieldScriptResolver($fieldName);
+
+            $fieldScript = !$fieldScriptResolver
+                ? null
+                : $fieldScriptResolver->getFieldFilterScript($fieldName, $filter, $this->requestName);
+
             $query = [
                 'bool' => [
-                    $conditionType => $this->filters[$filter->getType()]->buildFilter($filter),
-                ]
+                    $conditionType => $fieldScript
+                        ? [
+                            [
+                                'script' => [
+                                    'script' => $this->scriptBuilder->buildScript($fieldScript),
+                                ],
+                            ],
+                        ]
+                        : $this->filters[$filter->getType()]->buildFilter($filter),
+                ],
             ];
         }
 

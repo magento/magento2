@@ -436,7 +436,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
-        if ($this->defaultFilterStrategyApplyChecker->isApplicable()) {
+        if (
+            $this->defaultFilterStrategyApplyChecker->isApplicable()
+             || (('price' === $attribute) && $this->getLimitationFilters()->isUsingPriceIndex())
+        ) {
             parent::addAttributeToSort($attribute, $dir);
         } else {
             $this->setOrder($attribute, $dir);
