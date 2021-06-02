@@ -243,7 +243,11 @@ class Elasticsearch
 
         // remove index if already exists
         if ($this->client->indexExists($newIndexName)) {
-            $this->client->deleteIndex($newIndexName);
+            try {
+                $this->client->deleteIndex($newIndexName);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
         }
 
         // prepare new index
@@ -372,7 +376,11 @@ class Elasticsearch
 
         // remove obsolete index
         if ($oldIndex) {
-            $this->client->deleteIndex($oldIndex);
+            try {
+                $this->client->deleteIndex($oldIndex);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
             unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
         }
 
