@@ -175,7 +175,7 @@ define([
                 $.each(regionsEntries, $.proxy(function (key, value) {
                     regionData = value[1];
                     regionId = regionData.id;
-                    this._renderSelectOption(regionList, regionId, regionData);
+                    this._renderSelectOption(regionList, regionId.toString(), regionData);
                 }, this));
 
                 if (this.currentRegionOption) {

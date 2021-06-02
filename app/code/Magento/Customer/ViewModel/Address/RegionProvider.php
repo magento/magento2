@@ -28,7 +28,7 @@ class RegionProvider implements ArgumentInterface
         $this->directoryRegionProvider = $directoryRegionProvider;
     }
 
-    public function getRegionJson() : string
+    public function getRegionJson(): string
     {
         return $this->directoryRegionProvider->getRegionJson();
     }

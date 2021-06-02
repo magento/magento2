@@ -36,7 +36,7 @@ class RegionProvider
         $this->jsonSerializer = $jsonSerializer;
     }
 
-    public function getRegionJson() : string
+    public function getRegionJson(): string
     {
         $regions = $this->getRegions();
         return $this->jsonSerializer->serialize($regions);
