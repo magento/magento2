@@ -660,7 +660,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve default address by type(attribute)
      *
      * @param   string $attributeCode address type attribute code
-     * @return  Address|bool
+     * @return  Address|false
      */
     public function getPrimaryAddress($attributeCode)
     {
@@ -672,7 +672,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get customer default billing address
      *
-     * @return Address|bool
+     * @return Address|false
      */
     public function getPrimaryBillingAddress()
     {
@@ -682,7 +682,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get customer default billing address
      *
-     * @return Address|bool
+     * @return Address|false
      */
     public function getDefaultBillingAddress()
     {
@@ -692,7 +692,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get default customer shipping address
      *
-     * @return Address|bool
+     * @return Address|false
      */
     public function getPrimaryShippingAddress()
     {
@@ -702,7 +702,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get default customer shipping address
      *
-     * @return Address
+     * @return Address|false
      */
     public function getDefaultShippingAddress()
     {
@@ -773,7 +773,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if address is primary
      *
      * @param Address $address
-     * @return boolean
+     * @return bool
      */
     public function isAddressPrimary(Address $address)
     {
@@ -1284,7 +1284,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Check if current reset password link token is expired
      *
-     * @return boolean
+     * @return bool
      */
     public function isResetPasswordLinkTokenExpired()
     {

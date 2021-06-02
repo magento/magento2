@@ -579,7 +579,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve store website
      *
-     * @return Website|bool
+     * @return Website|false
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getWebsite()
@@ -744,7 +744,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @param Filesystem $filesystem
      * @param bool $secure
-     * @return string|bool
+     * @return string|false
      */
     protected function _getMediaScriptUrl(Filesystem $filesystem, $secure)
     {
@@ -815,7 +815,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Check if request was secure
      *
-     * @return boolean
+     * @return bool
      */
     public function isCurrentlySecure()
     {
@@ -1049,7 +1049,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Retrieve group model
      *
-     * @return Group|bool
+     * @return Group|false
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getGroup()
@@ -1163,7 +1163,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Check if store can be deleted
      *
-     * @return boolean
+     * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function isCanDelete()
