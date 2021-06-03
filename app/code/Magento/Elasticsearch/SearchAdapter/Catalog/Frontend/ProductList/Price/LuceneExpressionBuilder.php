@@ -265,7 +265,7 @@ class LuceneExpressionBuilder implements ExpressionBuilderInterface
     {
         $attribute = $this->attributeAdapterProvider->getByAttributeCode($attributeCode);
 
-        if (!$attribute->isIntegerType() || !$attribute->isFloatType()) {
+        if (!$attribute->isIntegerType() && !$attribute->isFloatType()) {
             throw new \InvalidArgumentException(
                 sprintf('The attribute "%s" can not be used in price expressions.', $attributeCode)
             );
