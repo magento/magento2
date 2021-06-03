@@ -9,6 +9,7 @@ namespace Magento\Elasticsearch\SearchAdapter\Catalog\Frontend\ProductList\Price
 
 use Magento\Catalog\Model\ResourceModel\Frontend\ProductList\Price\ExpressionBuilderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Lucene\Expression\BinaryOp;
 use Magento\Elasticsearch\Model\Lucene\Expression\Field;
 use Magento\Elasticsearch\Model\Lucene\Expression\Constant;
@@ -25,11 +26,18 @@ class LuceneExpressionBuilder implements ExpressionBuilderInterface
     private $fieldMapper;
 
     /**
-     * @param FieldMapperInterface $fieldMapper
+     * @var AttributeProvider
      */
-    public function __construct(FieldMapperInterface $fieldMapper)
+    private $attributeAdapterProvider;
+
+    /**
+     * @param FieldMapperInterface $fieldMapper
+     * @param AttributeProvider $attributeAdapterProvider
+     */
+    public function __construct(FieldMapperInterface $fieldMapper, AttributeProvider $attributeAdapterProvider)
     {
         $this->fieldMapper = $fieldMapper;
+        $this->attributeAdapterProvider = $attributeAdapterProvider;
     }
 
     public function bool(bool $value): ExpressionInterface
@@ -255,6 +263,14 @@ class LuceneExpressionBuilder implements ExpressionBuilderInterface
 
     public function attributeValue(string $attributeCode): ExpressionInterface
     {
+        $attribute = $this->attributeAdapterProvider->getByAttributeCode($attributeCode);
+
+        if (!$attribute->isIntegerType() || !$attribute->isFloatType()) {
+            throw new \InvalidArgumentException(
+                sprintf('The attribute "%s" can not be used in price expressions.', $attributeCode)
+            );
+        }
+
         return new Field\Property(
             $this->fieldMapper->getFieldName(
                 $attributeCode,
