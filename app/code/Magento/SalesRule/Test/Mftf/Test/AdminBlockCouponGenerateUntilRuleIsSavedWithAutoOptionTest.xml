@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBlockCouponGenerateUntilRuleIsSavedWithAutoOptionTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
+            <title value="Block the coupon generates until cart price rule is saved with auto generate option enabled"/>
+            <description
+                value="Block the coupon generates until cart price rule is saved with auto generate option enabled"/>
+            <testCaseId value="MC-42288"/>
+            <group value="salesRule"/>
+        </annotations>
+
+        <before>
+            <createData entity="SalesRuleNoCoupon" stepKey="createSalesRule"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
+        <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="$$createSalesRule.name$$"
+                   stepKey="fillFieldFilterByName"/>
+        <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchButton"/>
+        <see selector="{{AdminCartPriceRulesSection.nameColumns}}" userInput="$$createSalesRule.name$$"
+             stepKey="seeRuleName"/>
+        <click selector="{{AdminCartPriceRulesSection.rowContainingText($$createSalesRule.name$$)}}"
+               stepKey="goToEditRule"/>
+
+        <!-- Choose coupon type auto and generate coupon without saving the rule -->
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Auto" stepKey="selectCouponType"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
+                          dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"
+                          stepKey="clickManageCouponCodes"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponQty}}" userInput="1" stepKey="fillFieldCouponQty"/>
+        <click selector="{{AdminCartPriceRulesFormSection.generateCouponsButton}}" stepKey="clickGenerateCoupon"/>
+        <see selector="{{AdminCartPriceRulesFormSection.modalMessage}}" userInput="Rule is not saved with auto generate option enabled. Please save the rule and try again."
+             stepKey="seeModalMessage"/>
+    </test>
+</tests>
