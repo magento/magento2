@@ -134,31 +134,34 @@ class ScriptResolver implements ScriptResolverInterface
         if ($filter instanceof Request\Filter\Range) {
             $priceExpressionBuilder = $this->getPriceExpressionBuilder();
             $priceExpression = $this->getRequestPriceExpression($requestName);
-            $fromCondition = null;
-            $toCondition = null;
 
-            if ($bound = $filter->getFrom()) {
-                $fromCondition = $priceExpressionBuilder->greaterThanOrEqualTo(
-                    $priceExpression,
-                    $priceExpressionBuilder->double((float) $bound)
-                );
-            }
+            if (null !== $priceExpression) {
+                $fromCondition = null;
+                $toCondition = null;
 
-            if ($bound = $filter->getTo()) {
-                $toCondition = $priceExpressionBuilder->lesserThanOrEqualTo(
-                    $priceExpression,
-                    $priceExpressionBuilder->double((float) $bound)
-                );
-            }
-
-            if (null !== $fromCondition) {
-                if (null !== $toCondition) {
-                    $priceExpression = $priceExpressionBuilder->and($fromCondition, $toCondition);
-                } else {
-                    $priceExpression = $fromCondition;
+                if ($bound = $filter->getFrom()) {
+                    $fromCondition = $priceExpressionBuilder->greaterThanOrEqualTo(
+                        $priceExpression,
+                        $priceExpressionBuilder->double((float) $bound)
+                    );
                 }
-            } else {
-                $priceExpression = $toCondition;
+
+                if ($bound = $filter->getTo()) {
+                    $toCondition = $priceExpressionBuilder->lesserThanOrEqualTo(
+                        $priceExpression,
+                        $priceExpressionBuilder->double((float) $bound)
+                    );
+                }
+
+                if (null !== $fromCondition) {
+                    if (null !== $toCondition) {
+                        $priceExpression = $priceExpressionBuilder->and($fromCondition, $toCondition);
+                    } else {
+                        $priceExpression = $fromCondition;
+                    }
+                } else {
+                    $priceExpression = $toCondition;
+                }
             }
         }
 
