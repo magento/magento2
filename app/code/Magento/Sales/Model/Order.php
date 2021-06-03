@@ -1746,11 +1746,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function addStatusHistory(\Magento\Sales\Model\Order\Status\History $history)
     {
         $history->setOrder($this);
-        if ($history->getStatus()){
-            $state = $this->orderStateResolver->getStateForOrder($this);
+        if ($history->getStatus()) {
+            if ($this->getData('state') !== $this->getOrigData('state')) {
+                $state = $this->getData('state');
+            } else {
+                $state = $this->orderStateResolver->getStateForOrder($this);
+            }
             $allowedStatusCodes = array_keys($this->getConfig()->getStateStatuses($state));
             $allowedStatusCodes[] = $this->getConfig()->getStateDefaultStatus($state);
-            if (!in_array($history->getStatus(), $allowedStatusCodes, true)){
+            if (!in_array($history->getStatus(), $allowedStatusCodes, true)) {
                 throw new LocalizedException(__('Order status is not valid'));
             }
 
