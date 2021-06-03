@@ -175,7 +175,7 @@ class MapperTest extends TestCase
             ->method('getType')
             ->willReturn('matchQuery');
         $this->filterBuilder->expects(($this->any()))
-            ->method('build')
+            ->method('buildForRequest')
             ->willReturn([
                 'bool' => [
                     'must' => [],
