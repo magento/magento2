@@ -49,7 +49,7 @@ class SqlExpressionBuilder implements ExpressionBuilderInterface
         return $this->productResource->getConnection();
     }
 
-    public function bool(bool $value): string
+    public function boolean(bool $value): string
     {
         return $value ? '1' : '0';
     }

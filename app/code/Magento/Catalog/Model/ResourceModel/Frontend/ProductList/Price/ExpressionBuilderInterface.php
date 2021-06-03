@@ -7,17 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Frontend\ProductList\Price;
 
-/**
- * Interface ExpressionBuilderInterface
- * @package Magento\Catalog\Model\ResourceModel\Frontend\ProductList\Price
- */
 interface ExpressionBuilderInterface
 {
     /**
      * @param bool $value
      * @return mixed
      */
-    public function bool(bool $value);
+    public function boolean(bool $value);
 
     /**
      * @param int $value

@@ -40,7 +40,7 @@ class LuceneExpressionBuilder implements ExpressionBuilderInterface
         $this->attributeAdapterProvider = $attributeAdapterProvider;
     }
 
-    public function bool(bool $value): ExpressionInterface
+    public function boolean(bool $value): ExpressionInterface
     {
         return new Constant($value ? 1 : 0);
     }
