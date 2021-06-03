@@ -45,7 +45,7 @@ class RegionProvider
     /**
      * @return array
      */
-    protected function getRegions() : array
+    private function getRegions() : array
     {
         if (!$this->regions) {
             $regions = $this->directoryHelper->getRegionData();

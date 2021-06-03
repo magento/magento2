@@ -6,7 +6,7 @@
 var config = {
     map: {
         '*': {
-            directoryRegionUpdater:          'Magento_Directory/js/region-updater',
+            directoryRegionUpdater: 'Magento_Directory/js/region-updater'
         }
     }
 };
