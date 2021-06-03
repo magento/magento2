@@ -51,7 +51,7 @@
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
 
         <!-- Select Mass Action according to dataset: Unhold -->
-        <actionGroup ref="AdminOrderActionOnGridActionGroup" stepKey="actionUnhold">
+        <actionGroup ref="AdminOrderActionForOrderOnGridActionGroup" stepKey="actionUnhold">
             <argument name="action" value="Unhold"/>
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>

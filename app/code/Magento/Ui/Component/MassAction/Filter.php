@@ -95,7 +95,7 @@ class Filter
         $excluded = $this->request->getParam(static::EXCLUDED_PARAM);
 
         $isExcludedIdsValid = (is_array($excluded) && !empty($excluded));
-        $isSelectedIdsValid = (is_array($selected) && !empty($selected));
+        $isSelectedIdsValid = (is_array($selected) && !empty($selected)) || ($selected === 'all');
 
         if ('false' !== $excluded) {
             if (!$isExcludedIdsValid && !$isSelectedIdsValid) {
@@ -105,7 +105,7 @@ class Filter
 
         $filterIds = $this->getFilterIds();
         if (\is_array($selected)) {
-            $filterIds = array_unique(array_merge($filterIds, $selected));
+            $filterIds = array_unique(array_intersect($filterIds, $selected));
         }
         $collection->addFieldToFilter(
             $collection->getResource()->getIdFieldName(),
@@ -118,8 +118,8 @@ class Filter
     /**
      * Apply selection by Excluded Included to Search Result
      *
-     * @throws LocalizedException
      * @return void
+     * @throws LocalizedException
      */
     public function applySelectionOnTargetProvider()
     {
@@ -152,6 +152,8 @@ class Filter
      * @param AbstractDb $collection
      * @return AbstractDb
      * @throws LocalizedException
+     * @deprecated Unused method. Avoid to use this method in custom code
+     *
      */
     protected function applySelection(AbstractDb $collection)
     {
@@ -194,6 +196,7 @@ class Filter
      * Returns Referrer Url
      *
      * @return string|null
+     * @throws LocalizedException
      */
     public function getComponentRefererUrl()
     {
@@ -205,6 +208,7 @@ class Filter
      * Get data provider
      *
      * @return DataProviderInterface
+     * @throws LocalizedException
      */
     private function getDataProvider()
     {
@@ -220,6 +224,7 @@ class Filter
      * Get filter ids as array
      *
      * @return int[]
+     * @throws LocalizedException
      */
     private function getFilterIds()
     {
@@ -238,6 +243,6 @@ class Filter
                 $idsArray[] = $item->getId();
             }
         }
-        return  $idsArray;
+        return $idsArray;
     }
 }
