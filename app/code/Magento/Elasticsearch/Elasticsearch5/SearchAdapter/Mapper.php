@@ -69,21 +69,28 @@ class Mapper
     public function buildQuery(RequestInterface $request)
     {
         $this->currentRequest = $request;
-        $searchQuery = $this->queryBuilder->initQuery($request);
-        $searchQuery['body']['query'] = array_merge(
-            $searchQuery['body']['query'],
-            $this->processQuery(
-                $request->getQuery(),
-                [],
-                BoolQuery::QUERY_CONDITION_MUST
-            )
-        );
 
-        if (isset($searchQuery['body']['query']['bool']['should'])) {
-            $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
+        try {
+            $searchQuery = $this->queryBuilder->initQuery($request);
+
+            $searchQuery['body']['query'] = array_merge(
+                $searchQuery['body']['query'],
+                $this->processQuery(
+                    $request->getQuery(),
+                    [],
+                    BoolQuery::QUERY_CONDITION_MUST
+                )
+            );
+
+            if (isset($searchQuery['body']['query']['bool']['should'])) {
+                $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
+            }
+
+            $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
+        } finally {
+            $this->currentRequest = null;
         }
 
-        $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
         return $searchQuery;
     }
 
