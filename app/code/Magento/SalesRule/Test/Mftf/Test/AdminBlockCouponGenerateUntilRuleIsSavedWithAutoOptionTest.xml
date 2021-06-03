@@ -15,6 +15,7 @@
             <title value="Block the coupon generates until cart price rule is saved with auto generate option enabled"/>
             <description
                 value="Block the coupon generates until cart price rule is saved with auto generate option enabled"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-42288"/>
             <group value="salesRule"/>
         </annotations>
