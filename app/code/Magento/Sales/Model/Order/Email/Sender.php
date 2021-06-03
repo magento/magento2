@@ -109,10 +109,10 @@ abstract class Sender
         $this->templateContainer->setTemplateOptions($this->getTemplateOptions());
 
         if ($order->getCustomerIsGuest()) {
-            $templateId = $this->identityContainer->getGuestTemplateId();
+            $templateId = $this->identityContainer->getGuestTemplateId($order);
             $customerName = $order->getBillingAddress()->getName();
         } else {
-            $templateId = $this->identityContainer->getTemplateId();
+            $templateId = $this->identityContainer->getTemplateId($order);
             $customerName = $order->getCustomerName();
         }
 
