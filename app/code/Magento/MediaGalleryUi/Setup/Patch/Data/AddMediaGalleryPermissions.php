@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Setup\Patch\Data;
 
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
- * Patch is mechanism, that allows to do atomic upgrade data changes
+ * Add child resources permissions for user roles with Magento_Cms::media_gallery permission
  */
 class AddMediaGalleryPermissions implements
     DataPatchInterface,
@@ -32,7 +32,7 @@ class AddMediaGalleryPermissions implements
     }
 
     /**
-     * Add child resources permissions for user roles with Magento_Cms::media_gallery permission
+     * @inheritDoc
      */
     public function apply(): void
     {
