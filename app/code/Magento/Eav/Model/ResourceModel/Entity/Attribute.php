@@ -12,6 +12,7 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
@@ -54,6 +55,11 @@ class Attribute extends AbstractDb
     private $config;
 
     /**
+     * @var EavSetup
+     */
+    private $eavSetup;
+
+    /**
      * Class constructor
      *
      * @param Context $context
@@ -70,6 +76,7 @@ class Attribute extends AbstractDb
     ) {
         $this->_storeManager = $storeManager;
         $this->_eavEntityType = $eavEntityType;
+        $this->eavSetup = ObjectManager::getInstance()->get(EavSetup::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -612,9 +619,10 @@ class Attribute extends AbstractDb
      * Retrieve attribute codes by front-end type
      *
      * @param string $frontendType
+     * @param int|string $entityTypeId
      * @return array
      */
-    public function getAttributeCodesByFrontendType($frontendType)
+    public function getAttributeCodesByFrontendType($frontendType, $entityTypeId = null)
     {
         $connection = $this->getConnection();
         $bind = [':frontend_input' => $frontendType];
@@ -624,6 +632,13 @@ class Attribute extends AbstractDb
         )->where(
             'frontend_input = :frontend_input'
         );
+
+        if($entityTypeId) {
+            $bind[':entity_type_id'] = $this->eavSetup->getEntityTypeId($entityTypeId);
+            $select->where(
+                'entity_type_id = :entity_type_id'
+            );
+        }
 
         return $connection->fetchCol($select, $bind);
     }

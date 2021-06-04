@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Media;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Catalog product media config.
@@ -183,7 +184,8 @@ class Config implements ConfigInterface
     {
         if (!isset($this->mediaAttributeCodes)) {
             // the in-memory object-level caching allows to prevent unnecessary calls to the DB
-            $this->mediaAttributeCodes = $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
+            $this->mediaAttributeCodes = $this->getAttributeHelper()
+                ->getAttributeCodesByFrontendType('media_image', Product::ENTITY);
         }
         return $this->mediaAttributeCodes;
     }
