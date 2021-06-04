@@ -367,7 +367,7 @@ class CommonTaxCollector extends AbstractTotal
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                $itemDataObjects[] = $parentItemDataObject;
+                $itemDataObjects[] = [$parentItemDataObject];
                 foreach ($item->getChildren() as $child) {
                     $childItemDataObject = $this->mapItem(
                         $itemDataObjectFactory,
@@ -376,31 +376,29 @@ class CommonTaxCollector extends AbstractTotal
                         $useBaseCurrency,
                         $parentItemDataObject->getCode()
                     );
-                    $itemDataObjects[] = $childItemDataObject;
+                    $itemDataObjects[] = [$childItemDataObject];
                     $extraTaxableItems = $this->mapItemExtraTaxables(
                         $itemDataObjectFactory,
                         $item,
                         $priceIncludesTax,
                         $useBaseCurrency
                     );
-                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                    $itemDataObjects[] = $extraTaxableItems;
                 }
             } else {
                 $itemDataObject = $this->mapItem($itemDataObjectFactory, $item, $priceIncludesTax, $useBaseCurrency);
-                $itemDataObjects[] = $itemDataObject;
+                $itemDataObjects[] = [$itemDataObject];
                 $extraTaxableItems = $this->mapItemExtraTaxables(
                     $itemDataObjectFactory,
                     $item,
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                $itemDataObjects[] = $extraTaxableItems;
             }
         }
 
-        return $itemDataObjects;
+        return array_merge([], ...$itemDataObjects);
     }
 
     /**
@@ -565,21 +563,24 @@ class CommonTaxCollector extends AbstractTotal
             /** @var TaxDetailsItemInterface $baseTaxDetail */
             $baseTaxDetail = $itemTaxDetail[self::KEY_BASE_ITEM];
             $quoteItem = $keyedAddressItems[$code];
-            $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
 
-            //Update aggregated values
-            if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
-                //avoid double counting
-                continue;
+            if (!$quoteItem->isDeleted()) {
+                $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
+
+                //Update aggregated values
+                if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
+                    //avoid double counting
+                    continue;
+                }
+                $subtotal += $taxDetail->getRowTotal();
+                $baseSubtotal += $baseTaxDetail->getRowTotal();
+                $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
+                $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
+                $tax += $taxDetail->getRowTax();
+                $baseTax += $baseTaxDetail->getRowTax();
+                $subtotalInclTax += $taxDetail->getRowTotalInclTax();
+                $baseSubtotalInclTax += $baseTaxDetail->getRowTotalInclTax();
             }
-            $subtotal += $taxDetail->getRowTotal();
-            $baseSubtotal += $baseTaxDetail->getRowTotal();
-            $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
-            $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
-            $tax += $taxDetail->getRowTax();
-            $baseTax += $baseTaxDetail->getRowTax();
-            $subtotalInclTax += $taxDetail->getRowTotalInclTax();
-            $baseSubtotalInclTax += $baseTaxDetail->getRowTotalInclTax();
         }
 
         //Set aggregated values

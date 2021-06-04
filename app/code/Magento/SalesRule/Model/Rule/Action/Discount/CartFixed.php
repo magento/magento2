@@ -111,7 +111,7 @@ class CartFixed extends AbstractDiscount
                             $address,
                             $baseRuleTotals
                         ) : $baseRuleTotals;
-                $availableDiscountAmount = $this->cartFixedDiscountHelper
+                $maximumItemDiscount = $this->cartFixedDiscountHelper
                     ->getDiscountAmount(
                         $ruleDiscount,
                         $qty,
@@ -119,8 +119,8 @@ class CartFixed extends AbstractDiscount
                         $baseRuleTotals,
                         $discountType
                     );
-                $quoteAmount = $this->priceCurrency->convert($availableDiscountAmount, $store);
-                $baseDiscountAmount = min($baseItemPrice * $qty, $availableDiscountAmount);
+                $quoteAmount = $this->priceCurrency->convert($maximumItemDiscount, $store);
+                $baseDiscountAmount = min($baseItemPrice * $qty, $maximumItemDiscount);
                 $this->deltaPriceRound->reset($discountType);
             } else {
                 $baseRuleTotals = $shippingMethod ?
@@ -190,7 +190,7 @@ class CartFixed extends AbstractDiscount
     /**
      * Set information about usage cart fixed rule by quote address
      *
-     * @deprecated should be removed as it is not longer used
+     * @deprecated 101.2.0 should be removed as it is not longer used
      * @param int $ruleId
      * @param int $itemId
      * @return void
@@ -203,7 +203,7 @@ class CartFixed extends AbstractDiscount
     /**
      * Retrieve information about usage cart fixed rule by quote address
      *
-     * @deprecated should be removed as it is not longer used
+     * @deprecated 101.2.0 should be removed as it is not longer used
      * @param int $ruleId
      * @return int|null
      */

@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -20,37 +23,49 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class StoreConfigResolverTest extends GraphQlAbstract
 {
 
-    /** @var  ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
-     * @magentoConfigFixture default_store store/information/name Test Store
+     * @throws NoSuchEntityException
      */
-    public function testGetStoreConfig()
+    public function testGetStoreConfig(): void
     {
-        /** @var  StoreConfigManagerInterface $storeConfigsManager */
-        $storeConfigsManager = $this->objectManager->get(StoreConfigManagerInterface::class);
+        /** @var  StoreConfigManagerInterface $storeConfigManager */
+        $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
         /** @var StoreResolverInterface $storeResolver */
         $storeResolver = $this->objectManager->get(StoreResolverInterface::class);
         /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
         $storeId = $storeResolver->getCurrentStoreId();
         $store = $storeRepository->getById($storeId);
-        /** @var StoreConfigInterface $storeConfig */
-        $storeConfig = current($storeConfigsManager->getStoreConfigs([$store->getCode()]));
+        /** @var StoreConfigInterface $defaultStoreConfig */
+        $defaultStoreConfig = current($storeConfigManager->getStoreConfigs([$store->getCode()]));
         $query
             = <<<QUERY
 {
-  storeConfig{
+  storeConfig {
     id,
     code,
+    store_code,
+    store_name,
+    store_sort_order,
+    is_default_store,
+    store_group_code,
+    store_group_name,
+    is_default_store_group,
     website_id,
+    website_code,
+    website_name,
     locale,
     base_currency_code,
     default_display_currency_code,
@@ -70,27 +85,56 @@ class StoreConfigResolverTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('storeConfig', $response);
-        $this->assertEquals($storeConfig->getId(), $response['storeConfig']['id']);
-        $this->assertEquals($storeConfig->getCode(), $response['storeConfig']['code']);
-        $this->assertEquals($storeConfig->getLocale(), $response['storeConfig']['locale']);
-        $this->assertEquals($storeConfig->getBaseCurrencyCode(), $response['storeConfig']['base_currency_code']);
+        $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig'], $store);
+    }
+
+    /**
+     * Validate Store Config Data
+     *
+     * @param StoreConfigInterface $storeConfig
+     * @param array $responseConfig
+     * @param Store $store
+     */
+    private function validateStoreConfig(
+        StoreConfigInterface $storeConfig,
+        array $responseConfig,
+        Store $store
+    ): void {
+        $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
+        $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
+
+        $this->assertEquals($store->getName(), $responseConfig['store_name']);
+        $this->assertEquals($store->getSortOrder(), $responseConfig['store_sort_order']);
+        $this->assertEquals(
+            $store->getGroup()->getDefaultStoreId() == $store->getId(),
+            $responseConfig['is_default_store']
+        );
+        $this->assertEquals($store->getGroup()->getCode(), $responseConfig['store_group_code']);
+        $this->assertEquals($store->getGroup()->getName(), $responseConfig['store_group_name']);
+        $this->assertEquals(
+            $store->getWebsite()->getDefaultGroupId() === $store->getGroupId(),
+            $responseConfig['is_default_store_group']
+        );
+        $this->assertEquals($store->getWebsite()->getCode(), $responseConfig['website_code']);
+        $this->assertEquals($store->getWebsite()->getName(), $responseConfig['website_name']);
+        $this->assertEquals($storeConfig->getCode(), $responseConfig['store_code']);
+
+        $this->assertEquals($storeConfig->getLocale(), $responseConfig['locale']);
+        $this->assertEquals($storeConfig->getBaseCurrencyCode(), $responseConfig['base_currency_code']);
         $this->assertEquals(
             $storeConfig->getDefaultDisplayCurrencyCode(),
-            $response['storeConfig']['default_display_currency_code']
+            $responseConfig['default_display_currency_code']
         );
-        $this->assertEquals($storeConfig->getTimezone(), $response['storeConfig']['timezone']);
-        $this->assertEquals($storeConfig->getWeightUnit(), $response['storeConfig']['weight_unit']);
-        $this->assertEquals($storeConfig->getBaseUrl(), $response['storeConfig']['base_url']);
-        $this->assertEquals($storeConfig->getBaseLinkUrl(), $response['storeConfig']['base_link_url']);
-        $this->assertEquals($storeConfig->getBaseStaticUrl(), $response['storeConfig']['base_static_url']);
-        $this->assertEquals($storeConfig->getBaseMediaUrl(), $response['storeConfig']['base_media_url']);
-        $this->assertEquals($storeConfig->getSecureBaseUrl(), $response['storeConfig']['secure_base_url']);
-        $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $response['storeConfig']['secure_base_link_url']);
-        $this->assertEquals(
-            $storeConfig->getSecureBaseStaticUrl(),
-            $response['storeConfig']['secure_base_static_url']
-        );
-        $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $response['storeConfig']['secure_base_media_url']);
-        $this->assertEquals('Test Store', $response['storeConfig']['store_name']);
+        $this->assertEquals($storeConfig->getTimezone(), $responseConfig['timezone']);
+        $this->assertEquals($storeConfig->getWeightUnit(), $responseConfig['weight_unit']);
+        $this->assertEquals($storeConfig->getBaseUrl(), $responseConfig['base_url']);
+        $this->assertEquals($storeConfig->getBaseLinkUrl(), $responseConfig['base_link_url']);
+        $this->assertEquals($storeConfig->getBaseStaticUrl(), $responseConfig['base_static_url']);
+        $this->assertEquals($storeConfig->getBaseMediaUrl(), $responseConfig['base_media_url']);
+        $this->assertEquals($storeConfig->getSecureBaseUrl(), $responseConfig['secure_base_url']);
+        $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
+        $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
+        $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
+        $this->assertEquals($store->getName(), $responseConfig['store_name']);
     }
 }

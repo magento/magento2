@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
+
 class SourceArgumentsReader
 {
     /**
@@ -61,7 +65,7 @@ class SourceArgumentsReader
                 $typeName = 'array';
             } else {
                 try {
-                    $paramClass = $param->getClass();
+                    $paramClass = $this->getParameterClass($param);
                     if ($paramClass) {
                         $typeName = '\\' .$paramClass->getName();
                     }
@@ -82,12 +86,28 @@ class SourceArgumentsReader
     }
 
     /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
+    }
+
+    /**
      * Perform namespace resolution if required and return fully qualified name.
      *
      * @param string $argument
      * @param array $availableNamespaces
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see getConstructorArgumentTypes
      */
     protected function resolveNamespaces($argument, $availableNamespaces)
@@ -102,7 +122,7 @@ class SourceArgumentsReader
      * @param string $token
      * @return string
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     protected function removeToken($argument, $token)
     {
@@ -118,7 +138,7 @@ class SourceArgumentsReader
      *
      * @param array $file
      * @return array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see getConstructorArgumentTypes
      */
     protected function getImportedNamespaces(array $file)

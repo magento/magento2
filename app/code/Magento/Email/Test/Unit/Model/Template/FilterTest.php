@@ -14,6 +14,8 @@ use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
@@ -36,7 +38,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
-use Pelago\Emogrifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -113,11 +114,6 @@ class FilterTest extends TestCase
     private $configVariables;
 
     /**
-     * @var Emogrifier
-     */
-    private $emogrifier;
-
-    /**
      * @var CssInliner
      */
     private $cssInliner;
@@ -141,6 +137,11 @@ class FilterTest extends TestCase
      * @var MockObject|StrategyResolver
      */
     private $variableResolver;
+
+    /**
+     * @var MockObject|VariableResolverInterface
+     */
+    private $variableResolverInterface;
 
     /**
      * @var array
@@ -192,8 +193,6 @@ class FilterTest extends TestCase
         $this->backendUrlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
-        $this->emogrifier = $this->objectManager->getObject(Emogrifier::class);
 
         $this->configVariables = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
@@ -255,18 +254,27 @@ class FilterTest extends TestCase
                     $this->layoutFactory,
                     $this->appState,
                     $this->backendUrlBuilder,
-                    $this->emogrifier,
                     $this->configVariables,
-                    [],
-                    $this->cssInliner,
-                    $this->directiveProcessors,
                     $this->variableResolver,
                     $this->cssProcessor,
-                    $this->pubDirectory
+                    $this->pubDirectory,
+                    $this->cssInliner,
+                    [],
+                    $this->directiveProcessors
                 ]
             )
             ->setMethods($mockedMethods)
             ->getMock();
+    }
+
+    /**
+     * Test exception handling of filter method
+     */
+    public function testFilterExceptionHandler()
+    {
+        $filter = $this->getModel();
+        $filteredValue = $filter->filter(null);
+        $this->assertTrue(is_string($filteredValue));
     }
 
     /**
@@ -451,5 +459,46 @@ class FilterTest extends TestCase
             ->willReturn($scopeConfigValue);
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws MailException
+     * @throws NoSuchEntityException
+     */
+    public function testProtocolDirectiveWithValidSchema()
+    {
+        $model = $this->getModel();
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+
+        $data = [
+            "{{protocol http=\"http://url\" https=\"https://url\"}}",
+            "protocol",
+            " http=\"http://url\" https=\"https://url\""
+        ];
+        $this->assertEquals('https://url', $model->protocolDirective($data));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testProtocolDirectiveWithInvalidSchema()
+    {
+        $this->expectException(
+            \Magento\Framework\Exception\MailException::class
+        );
+
+        $model = $this->getModel();
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+
+        $data = [
+            "{{protocol http=\"https://url\" https=\"http://url\"}}",
+            "protocol",
+            " http=\"https://url\" https=\"http://url\""
+        ];
+        $model->protocolDirective($data);
     }
 }

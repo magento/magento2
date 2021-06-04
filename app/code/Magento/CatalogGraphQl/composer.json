@@ -7,14 +7,15 @@
         "magento/module-eav": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
+        "magento/module-directory": "*",
         "magento/module-search": "*",
         "magento/module-store": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/module-catalog-search": "*",
-        "magento/framework": "*"
+        "magento/framework": "*",
+        "magento/module-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
         "magento/module-graph-ql-cache": "*",
         "magento/module-store-graph-ql": "*"
     },

@@ -10,7 +10,9 @@ namespace Magento\BundleGraphQl\Model\Resolver\Links;
 use Magento\Bundle\Model\Selection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as LinkCollection;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Collection to fetch link data at resolution time.
@@ -42,14 +44,23 @@ class Collection
      */
     private $links = [];
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param CollectionFactory $linkCollectionFactory
      * @param EnumLookup $enumLookup
+     * @param Uid|null $uidEncoder
      */
-    public function __construct(CollectionFactory $linkCollectionFactory, EnumLookup $enumLookup)
-    {
+    public function __construct(
+        CollectionFactory $linkCollectionFactory,
+        EnumLookup $enumLookup,
+        Uid $uidEncoder = null
+    ) {
         $this->linkCollectionFactory = $linkCollectionFactory;
         $this->enumLookup = $enumLookup;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -108,7 +119,7 @@ class Collection
         }
 
         $linkCollection->getSelect()
-            ->where($field . ' IN (?)', $this->parentIds);
+            ->where($field . ' IN (?)', $this->parentIds, \Zend_Db::INT_TYPE);
 
         /** @var Selection $link */
         foreach ($linkCollection as $link) {
@@ -117,6 +128,7 @@ class Collection
                 'price' => $link->getSelectionPriceValue(),
                 'position' => $link->getPosition(),
                 'id' => $link->getSelectionId(),
+                'uid' => $this->uidEncoder->encode((string) $link->getSelectionId()),
                 'qty' => (float)$link->getSelectionQty(),
                 'quantity' => (float)$link->getSelectionQty(),
                 'is_default' => (bool)$link->getIsDefault(),

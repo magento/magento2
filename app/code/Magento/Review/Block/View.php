@@ -103,9 +103,10 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getRating()
     {
+        $reviewId = $this->getReviewId() ?: $this->getReviewData()->getId();
         if (!$this->getRatingCollection()) {
             $ratingCollection = $this->_voteFactory->create()->getResourceCollection()->setReviewFilter(
-                $this->getReviewId()
+                $reviewId
             )->setStoreFilter(
                 $this->_storeManager->getStore()->getId()
             )->addRatingInfo(
@@ -119,7 +120,7 @@ class View extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve rating summary for current product
      *
-     * @deprecated
+     * @deprecated 100.3.3
      * @return string
      */
     public function getRatingSummary()

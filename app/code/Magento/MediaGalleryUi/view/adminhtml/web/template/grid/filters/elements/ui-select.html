@@ -1,0 +1,131 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<ifnot args="disableLabel">
+    <label class="admin__form-field-label" attr="{for: uid}">
+        <span translate="label"></span>
+    </label>
+</ifnot>
+<div class="admin__action-multiselect-wrap action-select-wrap media-gallery-asset-ui-select-filter"
+     tabindex="0" attr="{id: uid}" css="{_active: listVisible,'admin__action-multiselect-tree': isTree()}"
+     event="{focusin: onFocusIn,focusout: onFocusOut,keydown: keydownSwitcher}" outerClick="outerClick.bind($data)">
+    <ifnot args="chipsEnabled">
+        <div class="action-select admin__action-multiselect"
+             data-role="advanced-select"
+             css="{_active: listVisible}"
+             click="function(data, event) {toggleListVisible(data, event)}">
+            <div class="admin__action-multiselect-text" data-role="selected-option"
+                 ifnot="validationLoading" css="{warning: warn().length}" text="setCaption()">
+            </div>
+            <button if="isRemoveSelectedIcon && hasData() || !validationLoading" class="action-close"
+                    type="button" data-action="remove-selected-item" tabindex="-1" click="clear">
+                <span class="action-close-text" translate="'Close'"></span>
+            </button>
+            <div data-role="spinner" class="admin__data-grid-loading-mask" visible="validationLoading"
+                 if="validationLoading">
+                <div class="spinner">
+                    <span repeat="8"></span>
+                </div>
+            </div>
+        </div>
+    </ifnot>
+    <if args="chipsEnabled">
+        <div class="action-select admin__action-multiselect" data-role="advanced-select"
+             css="{_active: listVisible}" click="function(data, event) {toggleListVisible(data, event)}">
+            <div class="admin__action-multiselect-text" visible="!hasData()"
+                 translate="selectedPlaceholders.defaultPlaceholder">
+            </div>
+            <each args="{ data: getSelected(), as: 'option'}">
+            <span class="admin__action-multiselect-crumb">
+                <span text="label">
+                </span>
+                <button class="action-close" type="button" data-action="remove-selected-item"
+                        tabindex="-1" click="$parent.removeSelected.bind($parent, value)">
+                    <span class="action-close-text" translate="'Close'"></span>
+                </button>
+            </span>
+            </each>
+        </div>
+    </if>
+    <div class="action-menu" css="{ _active: listVisible}">
+        <div data-role="spinner" class="admin__data-grid-loading-mask" visible="loading" if="loading">
+            <div class="spinner">
+                <span repeat="8"></span>
+            </div>
+        </div>
+        <if args="filterOptions">
+            <div class="admin__action-multiselect-search-wrap">
+                <input class="admin__control-text admin__action-multiselect-search" data-role="advanced-select-text"
+                       type="text" event="{keydown: filterOptionsKeydown}" attr="{id: uid+2, placeholder: filterPlaceholder}"
+                       ko-focused="filterOptionsFocus" ko-value="filterInputValue" data-bind="valueUpdate:'afterkeydown'">
+                <label class="admin__action-multiselect-search-label"
+                       data-action="advanced-select-search"
+                       attr="{for: uid+2}">
+                </label>
+                <div if="itemsQuantity"
+                     text="itemsQuantity"
+                     class="admin__action-multiselect-search-count">
+                </div>
+            </div>
+            <div ifnot="options().length"
+                 class="admin__action-multiselect-empty-area">
+                <ul text="emptyOptionsHtml"></ul>
+            </div>
+        </if>
+        <ul class="admin__action-multiselect-menu-inner _root"
+            event="{scroll: function(data, event){onScrollDown(data, event)}}">
+            <each args="{ data: options, as: 'option'}">
+                <li class="admin__action-multiselect-menu-inner-item _root"
+                    css="{ _parent: $data.optgroup }"
+                    data-role="option-group">
+                    <div class="action-menu-item"
+                         css="{
+                            _selected: $parent.isSelectedValue(option),
+                            _hover: $parent.isHovered(option, $element),
+                            _expended: $parent.getLevelVisibility($data) && $parent.showLevels($data),
+                            _unclickable: $parent.isLabelDecoration($data),
+                            _last: $parent.addLastElement($data),
+                            '_with-checkbox': $parent.showCheckbox
+                        }"
+                         click="function(data, event){
+                            $parent.toggleOptionSelected($data, $index(), event);
+                        }"
+                         data-bind="clickBubble:false">
+                        <if args="$data.optgroup && $parent.showOpenLevelsActionIcon">
+                            <div class="admin__action-multiselect-dropdown"
+                                 click="function(event){ $parent.showLevels($data); $parent.openChildLevel($data, $element, event);}"
+                                 data-bind="clickBubble:false">
+                            </div>
+                        </if>
+                        <if args="$parent.showCheckbox">
+                            <input class="admin__control-checkbox" type="checkbox"
+                                   tabindex="-1" attr="{ 'checked': $parent.isSelected(option.value) }">
+                        </if>
+                        <label class="admin__action-multiselect-label">
+                            <span text="option.label"></span>
+                            <img class="admin__action-multiselect-item-path"
+                                 attr="{ src: option.src }"/>
+                        </label>
+                    </div>
+                    <if args="$data.optgroup">
+                        <render args="{name: $parent.optgroupTmpl, data: {root: $parent, current: $data}}" ></render>
+                    </if>
+                </li>
+            </each>
+        </ul>
+        <if args="$data.closeBtn">
+            <div class="admin__action-multiselect-actions-wrap">
+                <button class="action-default"
+                        data-action="close-advanced-select"
+                        type="button"
+                        click="outerClick">
+                    <span translate="closeBtnLabel"></span>
+                </button>
+            </div>
+        </if>
+    </div>
+</div>

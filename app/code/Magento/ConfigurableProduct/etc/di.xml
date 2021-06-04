@@ -198,6 +198,7 @@
         <arguments>
             <argument name="tableStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\TemporaryTableStrategy</argument>
             <argument name="connectionName" xsi:type="string">indexer</argument>
+            <argument name="baseSelectProcessor" xsi:type="object">Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price\BaseStockStatusSelectProcessor</argument>
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product">

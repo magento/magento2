@@ -272,12 +272,16 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     {
         if ($this->_cache) {
             if (!$this->_currentCacheKey) {
+                // md5() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 $this->_currentCacheKey = md5(
                     $this->getSerializer()->serialize(
                         [$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes]
                     )
                 );
             }
+            // md5() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $key = md5($this->_currentCacheKey . $this->getSerializer()->serialize($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
@@ -336,7 +340,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
      * Get serializer
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getSerializer()
     {

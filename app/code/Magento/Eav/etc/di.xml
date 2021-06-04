@@ -20,6 +20,7 @@
     <preference for="Magento\Eav\Api\Data\AttributeFrontendLabelInterface" type="Magento\Eav\Model\Entity\Attribute\FrontendLabel" />
     <preference for="Magento\Eav\Api\Data\AttributeOptionInterface" type="Magento\Eav\Model\Entity\Attribute\Option" />
     <preference for="Magento\Eav\Api\AttributeOptionManagementInterface" type="Magento\Eav\Model\Entity\Attribute\OptionManagement" />
+    <preference for="Magento\Eav\Api\AttributeOptionUpdateInterface" type="Magento\Eav\Model\Entity\Attribute\OptionManagement" />
     <preference for="Magento\Eav\Api\Data\AttributeOptionLabelInterface" type="Magento\Eav\Model\Entity\Attribute\OptionLabel" />
     <preference for="Magento\Eav\Api\Data\AttributeValidationRuleInterface" type="Magento\Eav\Model\Entity\Attribute\ValidationRule" />
     <preference for="Magento\Eav\Api\Data\AttributeSearchResultsInterface" type="Magento\Eav\Model\AttributeSearchResults" />

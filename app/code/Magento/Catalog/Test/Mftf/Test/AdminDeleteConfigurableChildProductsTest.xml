@@ -87,13 +87,15 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Open Product in Store Front Page -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="openProductInStoreFront"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
         <!--Verify Product is visible and In Stock -->
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="seeProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createConfigProduct.sku$$" stepKey="seeProductSkuInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_value$$" stepKey="seeProductAttributeLabel"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeProductAttributeOptions"/>
@@ -105,18 +107,20 @@
             <argument name="sku" value="$$createConfigChildProduct2.sku$$"/>
         </actionGroup>
         <!--Verify product is not visible in category store front page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInStoreFrontPage"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickOnCategory"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="dontSeeProductInCategoryPage"/>
         <!--Open Product Store Front Page and Verify Product is Out Of Stock -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront1"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="openProductInStoreFront1"/>
         <waitForPageLoad stepKey="waitForProductToLoad1"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront1"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="dontSeeProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createConfigProduct.sku$$" stepKey="seeProductSkuInStoreFront1"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront1">
+            <argument name="productSku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="OUT OF STOCK" stepKey="seeProductStatusInStoreFront1"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_value$$" stepKey="dontSeeProductAttributeLabel"/>
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="dontSeeProductAttributeOptions"/>

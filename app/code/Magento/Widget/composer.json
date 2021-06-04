@@ -10,9 +10,11 @@
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-cms": "*",
+        "magento/module-email": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "magento/module-variable": "*"
+        "magento/module-variable": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-widget-sample-data": "*"

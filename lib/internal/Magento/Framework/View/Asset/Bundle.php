@@ -13,7 +13,7 @@ use Magento\Framework\View\Asset\File\FallbackContext;
 
 /**
  * Bundle model
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @see \Magento\Deploy\Package\Bundle
  */
 class Bundle
@@ -50,6 +50,11 @@ class Bundle
      * @var Minification
      */
     protected $minification;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @param Filesystem $filesystem

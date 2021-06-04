@@ -38,7 +38,7 @@
         </after>
 
         <!-- Begin creating a new product attribute -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
 
         <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillProductAttributeProperties">
             <argument name="attributeName" value="{{VisualSwatchProductAttribute.attribute_code}}"/>

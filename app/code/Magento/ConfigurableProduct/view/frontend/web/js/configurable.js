@@ -578,7 +578,7 @@ define([
             _.each(elements, function (element) {
                 var selected = element.options[element.selectedIndex],
                     config = selected && selected.config,
-                    priceValue = {};
+                    priceValue = this._calculatePrice({});
 
                 if (config && config.allowedProducts.length === 1) {
                     priceValue = this._calculatePrice(config);
@@ -632,12 +632,10 @@ define([
          */
         _calculatePrice: function (config) {
             var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
-                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)];
+                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)] || {};
 
             _.each(displayPrices, function (price, code) {
-                if (newPrices[code]) {
-                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
-                }
+                displayPrices[code].amount = newPrices[code] ? newPrices[code].amount - displayPrices[code].amount : 0;
             });
 
             return displayPrices;
@@ -740,21 +738,19 @@ define([
          * @private
          */
         _displayTierPriceBlock: function (optionId) {
-            var options, tierPriceHtml;
+            var tierPrices = typeof optionId != 'undefined' && this.options.spConfig.optionPrices[optionId].tierPrices;
 
-            if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].tierPrices != [] // eslint-disable-line eqeqeq
-            ) {
-                options = this.options.spConfig.optionPrices[optionId];
+            if (_.isArray(tierPrices) && tierPrices.length > 0) {
 
                 if (this.options.tierPriceTemplate) {
-                    tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
-                        'tierPrices': options.tierPrices,
-                        '$t': $t,
-                        'currencyFormat': this.options.spConfig.currencyFormat,
-                        'priceUtils': priceUtils
-                    });
-                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    $(this.options.tierPriceBlockSelector).html(
+                        mageTemplate(this.options.tierPriceTemplate, {
+                            'tierPrices': tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.spConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        })
+                    ).show();
                 }
             } else {
                 $(this.options.tierPriceBlockSelector).hide();

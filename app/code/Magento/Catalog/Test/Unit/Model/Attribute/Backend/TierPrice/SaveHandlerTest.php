@@ -180,4 +180,143 @@ class SaveHandlerTest extends TestCase
 
         $this->saveHandler->execute($product);
     }
+
+    /**
+     * @param $tierPrices
+     * @param $tierPricesStored
+     * @param $tierPricesExpected
+     * @dataProvider executeWithWebsitePriceDataProvider
+     */
+    public function testExecuteWithWebsitePrice($tierPrices, $tierPricesStored, $tierPricesExpected): void
+    {
+        $productId = 10;
+        $linkField = 'entity_id';
+
+        /** @var MockObject $product */
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getData','setData', 'getStoreId'])
+            ->getMockForAbstractClass();
+        $product->expects($this->atLeastOnce())->method('getData')->willReturnMap(
+            [
+                ['tier_price', $tierPrices],
+                ['entity_id', $productId]
+            ]
+        );
+        $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);
+        $product->expects($this->atLeastOnce())->method('setData')->with('tier_price_changed', 1);
+        $store = $this->getMockBuilder(StoreInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getWebsiteId'])
+            ->getMockForAbstractClass();
+        $store->expects($this->atLeastOnce())->method('getWebsiteId')->willReturn(1);
+        $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
+        /** @var MockObject $attribute */
+        $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'isScopeGlobal'])
+            ->getMockForAbstractClass();
+        $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
+        $attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(false);
+        $this->attributeRepository->expects($this->atLeastOnce())->method('get')->with('tier_price')
+            ->willReturn($attribute);
+        $productMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkField'])
+            ->getMockForAbstractClass();
+        $productMetadata->expects($this->atLeastOnce())->method('getLinkField')->willReturn($linkField);
+        $this->metadataPoll->expects($this->atLeastOnce())->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($productMetadata);
+        $customerGroup = $this->getMockBuilder(GroupInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
+        $customerGroup->expects($this->atLeastOnce())->method('getId')->willReturn(3200);
+        $this->groupManagement->expects($this->atLeastOnce())->method('getAllCustomersGroup')
+            ->willReturn($customerGroup);
+        $this->tierPriceResource
+            ->expects($this->at(1))
+            ->method('savePriceData')
+            ->with(new \Magento\Framework\DataObject($tierPricesExpected[0]))
+            ->willReturnSelf();
+        $this->tierPriceResource
+            ->expects($this->at(2))
+            ->method('savePriceData')
+            ->with(new \Magento\Framework\DataObject($tierPricesExpected[1]))
+            ->willReturnSelf();
+        $this->tierPriceResource
+            ->expects($this->at(3))
+            ->method('savePriceData')
+            ->with(new \Magento\Framework\DataObject($tierPricesExpected[2]))
+            ->willReturnSelf();
+        $this->tierPriceResource
+            ->expects($this->atLeastOnce())
+            ->method('loadPriceData')
+            ->willReturn($tierPricesStored);
+
+        $this->assertEquals($product, $this->saveHandler->execute($product));
+    }
+
+    public function executeWithWebsitePriceDataProvider(): array
+    {
+        $productId = 10;
+        return [[
+            'tierPrices' => [
+                [
+                    'price_id' => 1,
+                    'website_id' => 0,
+                    'price_qty' => 1,
+                    'cust_group' => 0,
+                    'price' => 10,
+                    'product_id' => $productId
+                ],[
+                    'price_id' => 2,
+                    'website_id' => 1,
+                    'price_qty' => 2,
+                    'cust_group' => 3200,
+                    'price' => null,
+                    'percentage_value' => 20,
+                    'product_id' => $productId
+                ]
+            ],
+            'tierPricesStored' => [
+                [
+                    'price_id' => 3,
+                    'website_id' => 1,
+                    'price_qty' => 3,
+                    'cust_group' => 0,
+                    'price' => 30,
+                    'product_id' => $productId
+                ]
+            ],
+            'tierPricesExpected' => [
+                [
+                    'website_id' => 0,
+                    'qty' => 1,
+                    'customer_group_id' => 0,
+                    'all_groups' => 0,
+                    'value' => 10,
+                    'percentage_value' => null,
+                    'entity_id' => $productId
+                ],[
+                    'website_id' => 1,
+                    'qty' => 2,
+                    'customer_group_id' => 0,
+                    'all_groups' => 1,
+                    'value' => null,
+                    'percentage_value' => 20,
+                    'entity_id' => $productId
+                ],[
+                    'website_id' => 1,
+                    'qty' => 3,
+                    'customer_group_id' => 0,
+                    'all_groups' => 0,
+                    'value' => 30,
+                    'percentage_value' => null,
+                    'entity_id' => $productId
+                ]
+            ]
+        ]];
+    }
 }

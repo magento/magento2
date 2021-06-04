@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaymentsCaptchaWithPayflowProTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Paypal PayflowPro and Captcha"/>
+            <title value="Storefront order creation with Paypal PayflowPro and Captcha"/>
+            <description value="Test for checking captcha while order creation in storefront with Paypal PayflowPro."/>
+            <testCaseId value="MC-41750" />
+            <useCaseId value="MC-41572"/>
+            <severity value="AVERAGE"/>
+            <group value="captcha"/>
+        </annotations>
+        <before>
+            <!-- Configure Paypal Payflow Pro payment method -->
+            <createData entity="PaypalPayflowProConfig" stepKey="configurePaypalPayflowProPayment"/>
+            <createData entity="EnablePaypalPayflowProWithVault" stepKey="enablePaypalPayflowProPaymentWithVault"/>
+
+            <!--  Enable captcha for Checkout/Placing Order -->
+            <magentoCLI command="config:set {{StorefrontCaptchaOnOnepageCheckoutConfigData.path}} {{StorefrontCaptchaOnOnepageCheckoutConfigData.value}}" stepKey="enableOnOpageCheckoutCaptcha" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="alwaysEnableCaptcha" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
+
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create product and category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Set default configuration for Paypal PayflowPro payment method -->
+            <createData entity="DefaultPaypalPayflowProConfig" stepKey="defaultPaypalPayflowProConfig"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+
+            <!-- Set default configuration for captcha -->
+            <magentoCLI command="config:set {{StorefrontCaptchaOnOnepageCheckoutConfigData.path}} {{StorefrontCaptchaOnOnepageCheckoutConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="defaultCaptchaMode" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete product and category-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Add product to cart and proceed to checkout payments method step -->
+        <actionGroup ref="AddProductToCheckoutPageWithPayPalPayflowProActionGroup" stepKey="goToCheckoutPaypalPayflowPro">
+            <argument name="Category" value="$createCategory$"/>
+        </actionGroup>
+
+        <!-- Fill credit card form with card number, expiration and CVV  -->
+        <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
+            <argument name="cardData" value="Visa3DSecureCard"/>
+        </actionGroup>
+
+        <!-- Enter captcha value -->
+        <actionGroup ref="StorefrontCheckoutPaymentsWithCaptchaActionGroup" stepKey="fillCaptchaField">
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}"/>
+        </actionGroup>
+
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Confirm Purchased Simple Product -->
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+    </test>
+</tests>

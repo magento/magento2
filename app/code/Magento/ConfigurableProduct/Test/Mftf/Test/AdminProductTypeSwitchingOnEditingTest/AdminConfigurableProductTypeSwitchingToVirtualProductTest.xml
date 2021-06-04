@@ -36,14 +36,14 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
         <!--Assert virtual product on Admin product page grid-->
         <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForVirtual"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPageForVirtual"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForVirtual">
             <argument name="sku" value="$createProduct.sku$"/>
         </actionGroup>
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Virtual Product',$createProduct.name$)}}" stepKey="seeVirtualProductInGrid"/>
         <!--Assert virtual product on storefront-->
         <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openVirtualProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="openVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontVirtualProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertVirtualProductInStock"/>
     </test>

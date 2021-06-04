@@ -34,6 +34,7 @@
             <deleteData createDataKey="category3" stepKey="deleteCategory3"/>
             <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
             <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="cleanInvalidatedCaches"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <moveMouseOver

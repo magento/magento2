@@ -16,12 +16,7 @@
     <entity name="WysiwygDisabledByDefault">
         <data key="path">cms/wysiwyg/enabled</data>
         <data key="scope_id">0</data>
-        <data key="value">hidden</data>
-    </entity>
-    <entity name="WysiwygTinyMCE3Enable">
-        <data key="path">cms/wysiwyg/editor</data>
-        <data key="scope_id">0</data>
-        <data key="value">Magento_Tinymce3/tinymce3Adapter</data>
+        <data key="value">disabled</data>
     </entity>
     <entity name="WysiwygTinyMCE4Enable">
         <data key="path">cms/wysiwyg/editor</data>

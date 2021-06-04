@@ -9,14 +9,13 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -41,18 +40,26 @@ class CustomerOrders implements ResolverInterface
     private $orderFilter;
 
     /**
+     * @var OrderFormatter
+     */
+    private $orderFormatter;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
+     * @param OrderFormatter $orderFormatter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        OrderFilter $orderFilter
+        OrderFilter $orderFilter,
+        OrderFormatter $orderFormatter
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
+        $this->orderFormatter = $orderFormatter;
     }
 
     /**
@@ -77,49 +84,27 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-
         try {
-            $searchResult = $this->getSearchResult($args, (int) $userId, (int)$store->getId());
+            $searchResult = $this->getSearchResult($args, (int)$userId, (int)$store->getId());
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
+        $ordersArray = [];
+        foreach ($searchResult->getItems() as $orderModel) {
+            $ordersArray[] = $this->orderFormatter->format($orderModel);
+        }
+
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items' => $this->formatOrdersArray($searchResult->getItems()),
-            'page_info'   => [
-                'page_size'    => $searchResult->getPageSize(),
+            'items' => $ordersArray,
+            'page_info' => [
+                'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
             ]
         ];
-    }
-
-    /**
-     * Format order models for graphql schema
-     *
-     * @param OrderInterface[] $orderModels
-     * @return array
-     */
-    private function formatOrdersArray(array $orderModels)
-    {
-        $ordersArray = [];
-        foreach ($orderModels as $orderModel) {
-            $ordersArray[] = [
-                'created_at' => $orderModel->getCreatedAt(),
-                'grand_total' => $orderModel->getGrandTotal(),
-                'id' => base64_encode($orderModel->getEntityId()),
-                'increment_id' => $orderModel->getIncrementId(),
-                'number' => $orderModel->getIncrementId(),
-                'order_date' => $orderModel->getCreatedAt(),
-                'order_number' => $orderModel->getIncrementId(),
-                'status' => $orderModel->getStatusLabel(),
-                'shipping_method' => $orderModel->getShippingDescription(),
-                'model' => $orderModel,
-            ];
-        }
-        return $ordersArray;
     }
 
     /**

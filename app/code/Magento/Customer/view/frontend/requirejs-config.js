@@ -12,6 +12,7 @@ var config = {
             passwordStrengthIndicator: 'Magento_Customer/js/password-strength-indicator',
             zxcvbn: 'Magento_Customer/js/zxcvbn',
             addressValidation: 'Magento_Customer/js/addressValidation',
+            showPassword: 'Magento_Customer/js/show-password',
             'Magento_Customer/address': 'Magento_Customer/js/address',
             'Magento_Customer/change-email-password': 'Magento_Customer/js/change-email-password'
         }

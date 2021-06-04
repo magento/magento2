@@ -4,10 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Store\Model\Website;
+use Magento\Ups\Block\Backend\System\CarrierConfig;
 
-/** @var $upsModel \Magento\Ups\Helper\Config */
-/** @var $block \Magento\Ups\Block\Backend\System\CarrierConfig */
+/**
+ * @var CarrierConfig $block
+ * @var Escaper $escaper
+ * @var SecureHtmlRenderer $secureRenderer
+ */
 $upsCarrierConfig = $block->getCarrierConfig();
 $orShipArr = $upsCarrierConfig->getCode('originShipment');
 $defShipArr = $upsCarrierConfig->getCode('method');
@@ -15,27 +22,30 @@ $defShipArr = $upsCarrierConfig->getCode('method');
 $sectionCode = $block->getRequest()->getParam('section');
 $websiteCode = $block->getRequest()->getParam('website');
 $storeCode = $block->getRequest()->getParam('store');
+/** @var Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 
 if (!$storeCode && $websiteCode) {
-    /** @var $web \Magento\Store\Model\Website */
+    /** @var Website $web */
     $web = $block->getWebsiteModel()->load($websiteCode);
     $storedAllowedMethods = explode(',', $web->getConfig('carriers/ups/allowed_methods'));
-    $storedOriginShipment = $block->escapeHtml($web->getConfig('carriers/ups/origin_shipment'));
-    $storedFreeShipment   = $block->escapeHtml($web->getConfig('carriers/ups/free_method'));
-    $storedUpsType        = $block->escapeHtml($web->getConfig('carriers/ups/type'));
+    $storedOriginShipment = $escaper->escapeHtml($web->getConfig('carriers/ups/origin_shipment'));
+    $storedFreeShipment = $escaper->escapeHtml($web->getConfig('carriers/ups/free_method'));
+    $storedUpsType = $escaper->escapeHtml($web->getConfig('carriers/ups/type'));
 } elseif ($storeCode) {
     $storedAllowedMethods = explode(',', $block->getConfig('carriers/ups/allowed_methods', $storeCode));
-    $storedOriginShipment = $block->escapeHtml($block->getConfig('carriers/ups/origin_shipment', $storeCode));
-    $storedFreeShipment   = $block->escapeHtml($block->getConfig('carriers/ups/free_method', $storeCode));
-    $storedUpsType        = $block->escapeHtml($block->getConfig('carriers/ups/type', $storeCode));
+    $storedOriginShipment = $escaper->escapeHtml($block->getConfig('carriers/ups/origin_shipment', $storeCode));
+    $storedFreeShipment = $escaper->escapeHtml($block->getConfig('carriers/ups/free_method', $storeCode));
+    $storedUpsType = $escaper->escapeHtml($block->getConfig('carriers/ups/type', $storeCode));
 } else {
     $storedAllowedMethods = explode(',', $block->getConfig('carriers/ups/allowed_methods'));
-    $storedOriginShipment = $block->escapeHtml($block->getConfig('carriers/ups/origin_shipment'));
-    $storedFreeShipment   = $block->escapeHtml($block->getConfig('carriers/ups/free_method'));
-    $storedUpsType        = $block->escapeHtml($block->getConfig('carriers/ups/type'));
+    $storedOriginShipment = $escaper->escapeHtml($block->getConfig('carriers/ups/origin_shipment'));
+    $storedFreeShipment = $escaper->escapeHtml($block->getConfig('carriers/ups/free_method'));
+    $storedUpsType = $escaper->escapeHtml($block->getConfig('carriers/ups/type'));
 }
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require(["prototype"], function(){
 
 //<![CDATA[
@@ -84,15 +94,20 @@ require(["prototype"], function(){
                 'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
                 'carriers_ups_mode_xml','carriers_ups_include_taxes'];
             this.onlyUpsElements = ['carriers_ups_gateway_url'];
+            this.authUpsXmlElements = ['carriers_ups_username',
+                'carriers_ups_password','carriers_ups_access_license_number'];
 
-            this.storedOriginShipment = '<?= /* @noEscape */ $storedOriginShipment ?>';
-            this.storedFreeShipment = '<?= /* @noEscape */ $storedFreeShipment ?>';
-            this.storedUpsType = '<?= /* @noEscape */ $storedUpsType ?>';
-            <?php /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */ $jsonHelper = $this->helper(\Magento\Framework\Json\Helper\Data::class); ?>
-            this.storedAllowedMethods = <?= /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) ?>;
-            this.originShipmentObj = <?= /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) ?>;
-            this.originShipmentObj['default'] = <?= /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) ?>;
+script;
+$scriptString .= 'this.storedOriginShipment = \'' . /* @noEscape */ $storedOriginShipment . '\';
+            this.storedFreeShipment = \'' . /* @noEscape */ $storedFreeShipment . '\';
+            this.storedUpsType = \'' . /* @noEscape */ $storedUpsType . '\';';
+?>
+<?php $scriptString .= 'this.storedAllowedMethods = '
+    . /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) . ';
+            this.originShipmentObj = ' . /* @noEscape */ $jsonHelper->jsonEncode($orShipArr) . ';
+            this.originShipmentObj[\'default\'] = ' . /* @noEscape */ $jsonHelper->jsonEncode($defShipArr) . ';';
 
+$scriptString .= <<<script
             this.setFormValues();
             Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
             Event.observe($(this.carriersUpsActiveId), 'change', this.setFormValues.bind(this));
@@ -110,8 +125,14 @@ require(["prototype"], function(){
             while (freeMethod.length > 0) {
                 freeMethod.remove(0);
             }
-            freeMethod.insert(new Element('option', {value:''}).update('<?= $block->escapeHtml(__('None')) ?>'));
 
+script;
+
+$scriptString .= 'freeMethod.insert(new Element(\'option\', {value:\'\'}).update(\''
+    . $escaper->escapeHtml(__('None'))
+    . '\'));';
+
+$scriptString .= <<<script
             var code, option;
             for (code in originShipment) {
                 option = new Element('option', {value:code}).update(originShipment[code]);
@@ -145,7 +166,7 @@ require(["prototype"], function(){
         setFormValues: function()
         {
             var a;
-            if ($F(this.carriersUpsTypeId) == 'UPS') {
+            if (\$F(this.carriersUpsTypeId) == 'UPS') {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
@@ -167,19 +188,22 @@ require(["prototype"], function(){
                 }
                 Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
                 showRowArrayElements(this.onlyUpsXmlElements);
+                if (\$F(this.carriersUpsActiveId) !== '1'){
+                    hideRowArrayElements(this.authUpsXmlElements);
+                }
                 hideRowArrayElements(this.onlyUpsElements);
                 this.changeOriginShipment(null, null);
             }
         },
         changeOriginShipment: function(Event, key)
         {
-            this.originShipmentTitle = key ? key : $F('carriers_ups_origin_shipment');
+            this.originShipmentTitle = key ? key : \$F('carriers_ups_origin_shipment');
             this.updateAllowedMethods(this.originShipmentTitle);
         },
         changeFieldsDisabledState: function (fields, key) {
-            $(fields[key]).disabled = $F(this.carriersUpsActiveId) !== '1'
+            $(fields[key]).disabled = \$F(this.carriersUpsActiveId) !== '1'
                 || $(fields[key] + '_inherit') !== null
-                && $F(fields[key] + '_inherit') === '1';
+                && \$F(fields[key] + '_inherit') === '1';
 
             if ($(fields[key]).next() !== undefined) {
                 $(fields[key]).removeClassName('mage-error').next().remove();
@@ -191,4 +215,6 @@ require(["prototype"], function(){
     //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

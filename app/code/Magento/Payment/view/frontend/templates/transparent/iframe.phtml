@@ -5,14 +5,20 @@
  */
 
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
 $params = $block->getParams();
 ?>
 <html>
     <head>
-        <script>
-        <?php if (isset($params['redirect'])) : ?>
-            window.location="<?= $block->escapeUrl($params['redirect']) ?>";
-        <?php elseif (isset($params['redirect_parent'])) : ?>
+        <?php $scriptString = '' ?>
+        <?php if (isset($params['redirect'])): ?>
+            <?php $scriptString .= <<<script
+            window.location="{$block->escapeJs($params['redirect'])}";
+script;
+            ?>
+        <?php elseif (isset($params['redirect_parent'])): ?>
+            <?php $scriptString .= <<<script
             var require = window.parent.require;
             require(
                 [
@@ -21,10 +27,15 @@ $params = $block->getParams();
                 function($) {
                     var parent = window.parent;
                     $(parent).trigger('clearTimeout');
-                    parent.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
+                    parent.location="{$block->escapeJs($params['redirect_parent'])}";
                 }
             );
-        <?php elseif (isset($params['error_msg'])) : ?>
+script;
+            ?>
+        <?php elseif (isset($params['error_msg'])): ?>
+            <?php
+            $encodedMsg = /* @noEscape */ json_encode($params['error_msg']);
+            $scriptString .= <<<script
             var require = window.parent.require;
             require(
                 [
@@ -33,16 +44,19 @@ $params = $block->getParams();
                     'mage/translate',
                     'Magento_Checkout/js/model/full-screen-loader'
                 ],
-                function($, globalMessageList, $t, fullScreenLoader) {
+                function($, globalMessageList, \$t, fullScreenLoader) {
                     var parent = window.parent;
                     $(parent).trigger('clearTimeout');
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: $t(<?= /* @noEscape */ json_encode($params['error_msg'])?>)
+                        message: \$t({$encodedMsg})
                     });
                 }
             );
-        <?php elseif (isset($params['multishipping'])) : ?>
+script;
+            ?>
+        <?php elseif (isset($params['multishipping'])): ?>
+            <?php $scriptString .= <<<script
             var require = window.parent.require;
             require(
                 [
@@ -51,12 +65,18 @@ $params = $block->getParams();
                 function($) {
                     var parent = window.parent;
                     $(parent).trigger('clearTimeout');
-                    $(parent.document).find('#multishipping-billing-form').submit();
+                    $(parent.document).find('#multishipping-billing-form').trigger('submit');
                 }
             );
-        <?php elseif (isset($params['order_success'])) : ?>
-            window.parent.location = "<?= $block->escapeUrl($params['order_success']) ?>";
-        <?php else : ?>
+script;
+            ?>
+        <?php elseif (isset($params['order_success'])): ?>
+            <?php $scriptString .= <<<script
+            window.parent.location = "{$block->escapeJs($params['order_success'])}";
+script;
+            ?>
+        <?php else: ?>
+            <?php $scriptString .= <<<script
             var require = window.parent.require;
             require(
                 [
@@ -85,8 +105,10 @@ $params = $block->getParams();
                     );
                 }
             );
+script;
+            ?>
         <?php endif; ?>
-        </script>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     </head>
     <body></body>
 </html>

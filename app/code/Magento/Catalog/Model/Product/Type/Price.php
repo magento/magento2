@@ -298,7 +298,7 @@ class Price
 
         $custGroup = $this->_getCustomerGroupId($product);
         if ($qty) {
-            $prevQty = 1;
+            $prevQty = 0;
             $prevPrice = $product->getPrice();
             $prevGroup = $allGroupsId;
 
@@ -379,7 +379,7 @@ class Price
             if (array_key_exists('website_price', $price)) {
                 $value = $price['website_price'];
             } else {
-                $value = $price['price'];
+                $value = $price['price'] ?? 0;
             }
             $tierPrice->setValue($value);
             $tierPrice->setQty($price['price_qty']);
@@ -484,6 +484,7 @@ class Price
      * @param   Product $product
      *
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedTierPrice($qty, $product)
     {
@@ -509,7 +510,7 @@ class Price
      *
      * @return array|float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedTierPrice()
      */
     public function getFormatedTierPrice($qty, $product)
@@ -522,6 +523,7 @@ class Price
      *
      * @param   Product $product
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedPrice($product)
     {
@@ -534,7 +536,7 @@ class Price
      * @param Product $product
      * @return array || float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)

@@ -175,6 +175,11 @@ class Config extends AbstractConfig
     const XML_PATH_PAYPAL_EXPRESS_SKIP_ORDER_REVIEW_STEP_FLAG = 'payment/paypal_express/skip_order_review_step';
 
     /**
+     * PayPal PayLater
+     */
+    const PAYLATER = 'paypal_paylater';
+
+    /**
      * Instructions for generating proper BN code
      *
      * @var array
@@ -1824,6 +1829,21 @@ class Config extends AbstractConfig
     {
         return $this->_scopeConfig->getValue(
             'payment/' . self::METHOD_WPP_BML . '/' . $section . '_size',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
+    }
+
+    /**
+     * Get PayLater config values
+     *
+     * @param string $fieldName
+     * @return mixed
+     */
+    public function getPayLaterConfigValue($fieldName)
+    {
+        return $this->_scopeConfig->getValue(
+            'payment/' . self::PAYLATER . '/' . $fieldName,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );

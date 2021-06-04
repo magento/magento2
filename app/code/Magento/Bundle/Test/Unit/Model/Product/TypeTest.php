@@ -27,6 +27,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\CatalogInventory\Model\StockState;
+use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -42,6 +43,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for bundle product type
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TypeTest extends TestCase
@@ -117,6 +120,11 @@ class TypeTest extends TestCase
     private $arrayUtility;
 
     /**
+     * @var CollectionProcessor|MockObject
+     */
+    private $catalogRuleProcessor;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -172,18 +180,18 @@ class TypeTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->serializer = $this->getMockBuilder(Json::class)
             ->setMethods(null)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->arrayUtility = $this->getMockBuilder(ArrayUtils::class)
             ->setMethods(['flatten'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->catalogRuleProcessor = $this->getMockBuilder(CollectionProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -224,7 +232,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -334,7 +351,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -578,7 +596,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -803,7 +822,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -1022,7 +1042,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -1123,7 +1144,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1250,7 +1280,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1414,7 +1453,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1515,7 +1563,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1540,14 +1597,20 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $buyRequest->method('getOptions')
+            ->willReturn([333 => ['type' => 'image/jpeg']]);
+        $option->method('getId')
+            ->willReturn(333);
         $this->parentClass($group, $option, $buyRequest, $product);
 
-        $product->expects($this->once())
+        $product->expects($this->any())
             ->method('getSkipCheckRequiredOption')
             ->willReturn(true);
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn([0, '', 'str']);
+        $group->expects($this->once())
+            ->method('validateUserValue');
 
         $result = $this->model->prepareForCartAdvanced($buyRequest, $product);
         $this->assertEquals('Please specify product option(s).', $result);
@@ -2423,9 +2486,6 @@ class TypeTest extends TestCase
             ->willReturnSelf();
         $group->expects($this->once())
             ->method('setProcessMode')
-            ->willReturnSelf();
-        $group->expects($this->once())
-            ->method('validateUserValue')
             ->willReturnSelf();
         $group->expects($this->once())
             ->method('prepareForCart')

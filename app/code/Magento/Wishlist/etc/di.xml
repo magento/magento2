@@ -78,4 +78,6 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Wishlist\Model\ResourceModel\Item\Product\CollectionBuilderInterface"
+                type="Magento\Wishlist\Model\ResourceModel\Item\Product\CollectionBuilder"/>
 </config>

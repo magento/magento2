@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
 
-use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SaveButtonTest extends TestCase
@@ -21,15 +18,11 @@ class SaveButtonTest extends TestCase
     protected $block;
 
     /**
-     * @var Context|MockObject
+     * @inheritDoc
      */
-    protected $context;
-
     protected function setUp(): void
     {
-        $this->initContext();
-
-        $this->block = new SaveButton($this->context);
+        $this->block = new SaveButton();
     }
 
     public function testGetButtonData()
@@ -40,19 +33,5 @@ class SaveButtonTest extends TestCase
         $this->assertEquals($result['label'], __('Save Configuration'));
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertIsArray($result['data_attribute']);
-    }
-
-    protected function initContext()
-    {
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($this->urlBuilder);
     }
 }

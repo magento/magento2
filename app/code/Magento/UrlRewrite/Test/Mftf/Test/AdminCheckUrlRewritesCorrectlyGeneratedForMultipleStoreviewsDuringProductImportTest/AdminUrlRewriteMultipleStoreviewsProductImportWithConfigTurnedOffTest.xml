@@ -21,8 +21,7 @@
             <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
             <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
-            <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnableConfig"/>
             <createData entity="ApiCategory" stepKey="createCategory">
                 <field key="name">category-admin</field>
             </createData>
@@ -38,8 +37,7 @@
             <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
             <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
-            <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDisableConfig"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -57,8 +55,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
-            <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>

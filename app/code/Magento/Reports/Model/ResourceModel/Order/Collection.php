@@ -159,7 +159,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         if ($this->_isLive) {
             $this->_prepareSummaryLive($range, $customStart, $customEnd, $isFilter);
         } else {
-            $this->_prepareSummaryAggregated($range, $customStart, $customEnd, $isFilter);
+            $this->_prepareSummaryAggregated($range, $customStart, $customEnd);
         }
 
         return $this;
@@ -818,7 +818,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
      * @param string $baseSubtotalCanceled
      * @param string $baseDiscountCanceled
      * @return string
-     * @deprecated
+     * @deprecated 100.3.2
      * @see getTotalsExpressionWithDiscountRefunded
      */
     protected function getTotalsExpression(
