@@ -78,11 +78,16 @@ class Url implements ResolverInterface
         if (isset($value['image_type'])) {
             $imagePath = $product->getData($value['image_type']);
             $imgUrl = $this->getImageUrl($value['image_type'], $imagePath);
-            return $this->checkImageCacheFileService->execute(
-                $imgUrl,
-                $imagePath,
-                $value['image_type']
-            );
+            if ($imagePath) {
+                return $this->checkImageCacheFileService->execute(
+                    $imgUrl,
+                    $imagePath,
+                    $value['image_type']
+                );
+            } else {
+                return $imgUrl;
+            }
+
         } elseif (isset($value['file'])) {
             $imgUrl = $this->getImageUrl('image', $value['file']);
             return $this->checkImageCacheFileService->execute(
