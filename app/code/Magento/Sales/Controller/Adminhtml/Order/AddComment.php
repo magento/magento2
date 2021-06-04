@@ -66,6 +66,10 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
 
                 $orderCommentSender->send($order, $notify, $comment);
 
+                $gridPool = $this->_objectManager
+                    ->create(\Magento\Sales\Model\ResourceModel\GridPool::class);
+                $gridPool->refreshByOrderId($order->getId());
+
                 return $this->resultPageFactory->create();
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $response = ['error' => true, 'message' => $e->getMessage()];
