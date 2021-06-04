@@ -31,5 +31,8 @@
             <each args="$parent.getRegion('before-place-order')" render=""/>
         </div>
         <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"/>
+        <div class="payment-method-extra-content">
+            <each args="$parent.getRegion('paypal-method-extra-content')" render=""/>
+        </div>
     </div>
 </div>
