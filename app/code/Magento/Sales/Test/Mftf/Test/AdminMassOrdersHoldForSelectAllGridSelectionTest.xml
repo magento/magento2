@@ -56,7 +56,7 @@
         <waitForAjaxLoad stepKey="waitForGridReload"/>
         <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="seeOneRowOnFirstPage"/>
 
-        <actionGroup ref="AdminGridBulkActionGroup" stepKey="massActionHold">
+        <actionGroup ref="AdminUiGridMassForAllActionGroup" stepKey="massActionHold">
             <argument name="actionLabel" value="Hold"/>
         </actionGroup>
 

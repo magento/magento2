@@ -7,11 +7,11 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOrderActionForOrderOnGridActionGroup" extends="AdminOrderActionOnGridActionGroup">
+    <actionGroup name="AdminOrderBulkActionForOrderOnGridActionGroup" extends="AdminUiGridBulkActionGroup">
         <arguments>
             <argument name="orderId" type="string"/>
         </arguments>
-        <checkOption selector="{{AdminOrdersGridSection.selectOrderID(orderId)}}" stepKey="selectOrder" before="openActions"/>
+        <checkOption selector="{{AdminOrdersGridSection.selectOrderID(orderId)}}" stepKey="selectOrder" before="clickActionDropdown"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCheck" after="selectOrder"/>
     </actionGroup>
 </actionGroups>
