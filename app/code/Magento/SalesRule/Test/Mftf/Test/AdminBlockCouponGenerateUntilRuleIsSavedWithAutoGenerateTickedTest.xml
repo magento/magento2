@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminBlockCouponGenerateUntilRuleIsSavedWithAutoOptionTest">
+    <test name="AdminBlockCouponGenerateUntilRuleIsSavedWithAutoGenerateTickedTest">
         <annotations>
             <features value="SalesRule"/>
             <stories value="Create cart price rule"/>
@@ -40,8 +40,11 @@
         <click selector="{{AdminCartPriceRulesSection.rowContainingText($$createSalesRule.name$$)}}"
                stepKey="goToEditRule"/>
 
-        <!-- Choose coupon type auto and generate coupon without saving the rule -->
-        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Auto" stepKey="selectCouponType"/>
+        <!-- Choose coupon type specific coupon and tick auto generation checkbox -->
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.useAutoGeneration}}" stepKey="tickAutoGeneration"/>
+
+        <!-- Navigate to Manage Coupon Codes section to generate 1 coupon code -->
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
                           dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"
                           stepKey="clickManageCouponCodes"/>
