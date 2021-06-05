@@ -245,12 +245,13 @@ class Elasticsearch
         do {
             $newIndexName = $indexPattern . (++$version);
             if ($this->client->indexExists($newIndexName)) {
-                $deleteQueue []= $newIndexName;
+                $deleteQueue[]= $newIndexName;
                 $indexExists = true;
             } else {
                 $indexExists = false;
             }
         } while ($indexExists);
+
 
         foreach ($deleteQueue as $indexToDelete) {
             // remove index if already exists
