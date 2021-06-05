@@ -60,7 +60,6 @@ class BaseStockStatusSelectProcessor implements BaseSelectProcessorInterface
                 []
             );
             $select->where('si.is_in_stock = ?', Stock::STOCK_IN_STOCK);
-            $select->orWhere('si_parent.is_in_stock = ?', Stock::STOCK_OUT_OF_STOCK);
         }
 
         return $select;

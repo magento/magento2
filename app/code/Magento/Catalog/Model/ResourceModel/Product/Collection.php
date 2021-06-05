@@ -1768,7 +1768,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsingPriceIndex()) {
                 $this->getSelect()->order(
-                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$dir}")
+                    new \Zend_Db_Expr("price_index.min_price IS NULL, price_index.min_price {$dir}")
                 );
                 return $this;
             }
