@@ -254,7 +254,7 @@ class Elasticsearch
 
 
         foreach ($deleteQueue as $indexToDelete) {
-            // remove index if already exists
+            // remove index if already exists, wildcard deletion may cause collisions
             try {
                 $this->client->deleteIndex($indexToDelete);
             } catch (\Exception $e) {
