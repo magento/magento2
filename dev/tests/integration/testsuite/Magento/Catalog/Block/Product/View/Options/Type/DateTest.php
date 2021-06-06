@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DateTest extends TestCase
 {
@@ -96,9 +97,10 @@ class DateTest extends TestCase
     }
 
     /**
-     * @magentoAppArea frontend
      * @param array $data
      * @param array $expected
+     * @magentoAppArea frontend
+     * @magentoConfigFixture current_store catalog/custom_options/year_range 2020,2030
      * @dataProvider toHtmlWithDropDownDataProvider
      */
     public function testToHtmlWithDropDown(array $data, array $expected): void
@@ -108,11 +110,12 @@ class DateTest extends TestCase
     }
 
     /**
-     * @magentoAppArea frontend
-     * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
      * @param array $data
      * @param array $expected
      * @param string|null $locale
+     * @magentoAppArea frontend
+     * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
+     * @magentoConfigFixture current_store catalog/custom_options/year_range 2020,2030
      * @dataProvider toHtmlWithCalendarDataProvider
      */
     public function testToHtmlWithCalendar(array $data, array $expected, ?string $locale = null): void

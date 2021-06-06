@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Block\Store;
 
@@ -17,7 +18,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * URL for store switcher hint
      */
-    const HINT_URL = 'https://docs.magento.com/m2/ce/user_guide/configuration/scope.html';
+    const HINT_URL = 'https://docs.magento.com/user-guide/configuration/scope.html';
 
     /**
      * Name of website variable
@@ -114,7 +115,8 @@ class Switcher extends \Magento\Backend\Block\Template
     {
         parent::_construct();
 
-        $this->setUseConfirm(true);
+        $this->setUseConfirm($this->hasData('use_confirm') ? (bool)$this->getData('use_confirm') : true);
+
         $this->setUseAjax(true);
 
         $this->setShowManageStoresLink(0);
@@ -449,14 +451,17 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getCurrentSelectionName()
     {
-        if (!($name = $this->getCurrentStoreName())) {
-            if (!($name = $this->getCurrentStoreGroupName())) {
-                if (!($name = $this->getCurrentWebsiteName())) {
-                    $name = $this->getDefaultSelectionName();
-                }
-            }
+        if ($this->getCurrentStoreName() !== '') {
+            return $this->getCurrentStoreName();
         }
-        return $name;
+        if ($this->getCurrentStoreGroupName() !== '') {
+            return $this->getCurrentStoreGroupName();
+        }
+
+        if ($this->getCurrentWebsiteName() !== '') {
+            return $this->getCurrentWebsiteName();
+        }
+        return $this->getDefaultSelectionName();
     }
 
     /**
@@ -473,6 +478,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $website->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -489,6 +496,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $group->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -505,6 +514,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $store->getName();
             }
         }
+
+        return '';
     }
 
     /**
@@ -586,13 +597,11 @@ class Switcher extends \Magento\Backend\Block\Template
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
-            $html = '<div class="admin__field-tooltip tooltip">' . '<a' . ' href="' . $this->escapeUrl(
-                $url
-            ) . '"' . ' onclick="this.target=\'_blank\'"' . ' title="' . __(
-                'What is this?'
-            ) . '"' . ' class="admin__field-tooltip-action action-help"><span>' . __(
-                'What is this?'
-            ) . '</span></a>' . ' </div>';
+            $html = '<div class="admin__field-tooltip tooltip"><a href="%s" onclick="this.target=\'_blank\'"  title="%s"
+           class="admin__field-tooltip-action action-help"><span>%s</span></a></span></div>';
+            $title =  $this->escapeHtmlAttr(__('What is this?'));
+            $span= $this->escapeHtml(__('What is this?'));
+            $html = sprintf($html, $this->escapeUrl($url), $title, $span);
         }
         return $html;
     }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontNoResultsMessageOnSearchPageActionGroup">
+        <annotations>
+            <description>Check if search returned no results</description>
+        </annotations>
+        <arguments>
+            <argument name="message" type="string" defaultValue="Your search returned no results."/>
+        </arguments>
+        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{message}}" stepKey="seeNoSearchResultsMessage"/>
+    </actionGroup>
+</actionGroups>

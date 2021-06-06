@@ -57,6 +57,11 @@ class Config implements ActionInterface
     protected $handlerPool;
 
     /**
+     * @var array
+     */
+    private $data = [];
+
+    /**
      * Config constructor
      *
      * @param StructureFactory $structureFactory

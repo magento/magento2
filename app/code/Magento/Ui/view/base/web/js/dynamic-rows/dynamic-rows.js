@@ -13,8 +13,9 @@ define([
     'uiLayout',
     'uiCollection',
     'uiRegistry',
-    'mage/translate'
-], function (ko, utils, _, layout, uiCollection, registry, $t) {
+    'mage/translate',
+    'jquery'
+], function (ko, utils, _, layout, uiCollection, registry, $t, $) {
     'use strict';
 
     /**
@@ -620,15 +621,12 @@ define([
          * @param {Array} data
          */
         parsePagesData: function (data) {
-            var pages;
-
             this.relatedData = this.deleteProperty ?
                 _.filter(data, function (elem) {
                     return elem && elem[this.deleteProperty] !== this.deleteValue;
                 }, this) : data;
 
-            pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
-            this.pages(pages);
+            this._updatePagesQuantity();
         },
 
         /**
@@ -886,6 +884,18 @@ define([
         },
 
         /**
+         * Update number of pages.
+         *
+         * @private
+         * @return void
+         */
+        _updatePagesQuantity: function () {
+            var pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
+
+            this.pages(pages);
+        },
+
+        /**
          * Reduce the number of pages
          *
          * @private
@@ -960,9 +970,22 @@ define([
         reload: function () {
             this.clear();
             this.initChildren(false, true);
+            this._updatePagesQuantity();
 
             /* After change page size need to check existing current page */
             this._reducePages();
+        },
+
+        /**
+         * Update page size based on select change event.
+         * The value needs to be retrieved from select as ko value handler is executed after the event handler.
+         *
+         * @param {Object} component
+         * @param {jQuery.Event} event
+         */
+        updatePageSize: function (component, event) {
+            this.pageSize = $(event.target).val();
+            this.reload();
         },
 
         /**

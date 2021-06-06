@@ -1,8 +1,9 @@
-## Overview
+# Magento_InstantPurchase module
 
 Instant Purchase feature allows the Customer to place the order in seconds without going through full checkout. Once clicked, system places the order using default shipping and billing addresses and stored payment method. Order is placed and customer gets confirmation message in notification area.
 
 Prerequisites to display the Instant Purchase button:
+
 1. Instant purchase enabled for a store at `Store / Configurations / Sales / Sales / Instant Purchase`
 2. Customer is logged in
 3. Customer has default shipping and billing address defined
@@ -10,7 +11,7 @@ Prerequisites to display the Instant Purchase button:
 
 ## Structure
 
-In addition to [a typical file structure for a Magento 2 module](https://devdocs.magento.com/guides/v2.3/extension-dev-guide/build/module-file-structure.html) `PaymentMethodsIntegration` directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
+In addition to [a typical file structure for a Magento 2 module](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html) `PaymentMethodsIntegration` directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
 
 ## Extensibility
 
@@ -22,11 +23,11 @@ All payments created for instant purchase also have `'instant-purchase' => true`
 
 ### Payment method integration
 
-Instant purchase support may be implemented for any payment method with [vault support](https://devdocs.magento.com/guides/v2.3/payments-integrations/vault/vault-intro.html).
+Instant purchase support may be implemented for any payment method with [vault support](https://devdocs.magento.com/guides/v2.4/payments-integrations/vault/vault-intro.html).
 Basic implementation provided in `Magento\InstantPurchase\PaymentMethodIntegration` should be enough in most cases. It is not enabled by default to avoid issues on production sites and authors of vault payment method should verify correct work for instant purchase manually.
 To enable basic implementation just add single option to configuration of payemnt method in `config.xml`:
 
-```
+```xml
 <instant_purchase>
     <supported>1</supported>
 </instant_purchase>
@@ -34,7 +35,7 @@ To enable basic implementation just add single option to configuration of payemn
 
 Basic implementation is a good start point but it's recommended to provide own implementation to improve user experience. If instant purchase integration has customization then `supported` option is not required.
 
-```
+```xml
 <instant_purchase>
     <available>Implementation_Of_Magento\InstantPurchase\PaymentMethodIntegration\AvailabilityCheckerInterface</available>
     <tokenFormat>Implementation_Of_Magento\InstantPurchase\PaymentMethodIntegration\PaymentTokenFormatterInterface</tokenFormat>
@@ -52,7 +53,7 @@ Basic implementation is a good start point but it's recommended to provide own i
 
 The `Magento_InstantPurchase` module does not introduce backward incompatible changes.
 
-You can track [backward incompatible changes in patch releases](https://devdocs.magento.com/guides/v2.3/release-notes/backward-incompatible-changes/reference.html).
+You can track [backward incompatible changes in patch releases](https://devdocs.magento.com/guides/v2.4/release-notes/backward-incompatible-changes/reference.html).
 
 ***
 

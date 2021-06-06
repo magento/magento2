@@ -19,7 +19,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Shipping\Model\Shipment\Request;
+use Psr\Log\LoggerInterface;
 
 /**
  * Integration tests for Carrier model class
@@ -44,13 +46,31 @@ class CarrierTest extends TestCase
     private $config;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
+     * @var string[]
+     */
+    private $logs = [];
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class);
         $this->httpClient = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
         $this->config = Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class);
+        $this->logs = [];
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock->method('debug')
+            ->willReturnCallback(
+                function (string $message) {
+                    $this->logs[] = $message;
+                }
+            );
+        $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class, ['logger' => $this->loggerMock]);
     }
 
     /**
@@ -136,6 +156,7 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
      * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      */
@@ -172,6 +193,17 @@ class CarrierTest extends TestCase
         $rates = $this->carrier->collectRates($request)->getAllRates();
         $this->assertEquals($price, $rates[0]->getPrice());
         $this->assertEquals($method, $rates[0]->getMethod());
+
+        $requestFound = false;
+        foreach ($this->logs as $log) {
+            if (mb_stripos($log, 'RatingServiceSelectionRequest') &&
+                mb_stripos($log, 'RatingServiceSelectionResponse')
+            ) {
+                $requestFound = true;
+                break;
+            }
+        }
+        $this->assertTrue($requestFound);
     }
 
     /**
@@ -304,6 +336,7 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
      * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      */

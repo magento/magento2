@@ -13,7 +13,7 @@
         <column xsi:type="smallint" name="attribute_set_id" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="varchar" name="type_id" nullable="false" length="32" default="simple" comment="Type ID"/>
-        <column xsi:type="varchar" name="sku" nullable="true" length="64" comment="SKU"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="64" comment="SKU"/>
         <column xsi:type="smallint" name="has_options" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Has Options"/>
         <column xsi:type="smallint" name="required_options" unsigned="true" nullable="false"
@@ -1693,7 +1693,7 @@
         <constraint xsi:type="foreign" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_product_entity_media_gallery_value_to_entity" column="entity_id"
                     referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
+        <constraint xsi:type="primary" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
             <column name="value_id"/>
             <column name="entity_id"/>
         </constraint>

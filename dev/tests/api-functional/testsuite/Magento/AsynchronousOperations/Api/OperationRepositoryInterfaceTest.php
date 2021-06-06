@@ -36,6 +36,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
                     ],
                 ],
                 'current_page' => 1,
+                'page_size' => 20,
             ],
         ];
 
@@ -93,6 +94,7 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
                     ],
                 ],
                 'current_page' => 1,
+                'page_size' => 20,
             ],
         ];
 
