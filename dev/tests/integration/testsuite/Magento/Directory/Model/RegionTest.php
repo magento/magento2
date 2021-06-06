@@ -20,7 +20,7 @@ class RegionTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->country = Bootstrap::getObjectManager()->create(Country::class);
     }
@@ -56,7 +56,14 @@ class RegionTest extends TestCase
             ['countryId' => 'CO'],
             ['countryId' => 'MX'],
             ['countryId' => 'PL'],
-            ['countryId' => 'IT']
+            ['countryId' => 'IT'],
+            ['countryId' => 'BG'],
+            ['countryId' => 'PT'],
+            ['countryId' => 'IS'],
+            ['countryId' => 'SE'],
+            ['countryId' => 'GR'],
+            ['countryId' => 'DK'],
+            ['countryId' => 'AL']
         ];
     }
 }

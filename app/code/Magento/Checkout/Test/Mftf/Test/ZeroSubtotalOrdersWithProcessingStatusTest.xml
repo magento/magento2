@@ -41,9 +41,7 @@
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
 
-        <!--Open MARKETING > Cart Price Rules-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
 
         <!--Add New Rule-->
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
@@ -93,8 +91,8 @@
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForCreatedOrderPageOpened"/>
+
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!--Verify that Created order is in Processing status-->
         <see selector="{{AdminShipmentOrderInformationSection.orderStatus}}" userInput="Processing" stepKey="seeShipmentOrderStatus"/>

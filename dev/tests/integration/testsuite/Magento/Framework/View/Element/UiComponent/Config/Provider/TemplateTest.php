@@ -26,7 +26,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registerThemes();
@@ -49,7 +49,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
         $this->objectManager->get(\Magento\Framework\View\DesignInterface::class)
             ->setDesignTheme('FrameworkViewUiComponent/default');
-        CacheCleaner::cleanAll();
 
         $resultOne = $this->model->getTemplate('test.xml');
         $resultTwo = $this->model->getTemplate('test.xml');
@@ -70,7 +69,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $registration->register();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(
             \Magento\Framework\App\Arguments\ValidationState::class

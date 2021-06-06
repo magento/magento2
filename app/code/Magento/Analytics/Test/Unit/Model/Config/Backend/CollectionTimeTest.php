@@ -3,23 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend;
 
 use Magento\Analytics\Model\Config\Backend\CollectionTime;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class CollectionTimeTest extends \PHPUnit\Framework\TestCase
+class CollectionTimeTest extends TestCase
 {
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -36,15 +40,11 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -77,20 +77,20 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAfterSaveWrongValue()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->collectionTime->setData('value', '00,01');
         $this->collectionTime->afterSave();
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAfterSaveWithLocalizedException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $exception = new \Exception('Test message');
         $this->collectionTime->setData('value', '05,04,03');
 

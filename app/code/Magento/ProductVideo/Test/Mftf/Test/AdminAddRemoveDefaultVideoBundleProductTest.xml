@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddRemoveDefaultVideoBundleProductTest" extends="AdminAddRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <features value="ProductVideo"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Admin should be able to add/remove default product video for a Bundle Product"/>
+            <description value="Admin should be able to add/remove default product video for a Bundle Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-110"/>
+            <testCaseId value="MC-205"/>
+            <group value="catalog"/>
+            <group value="bundle"/>
+            <group value="productVideo"/>
+        </annotations>
+        <before>
+            <remove keyForRemoval="setYoutubeApiKeyConfig"/>
+            <createData entity="SimpleProduct2" before="createProduct" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" after="createFirstSimpleProduct" stepKey="createSecondSimpleProduct"/>
+            <createData entity="ApiBundleProduct" stepKey="createProduct"/>
+            <createData entity="CheckboxOption" after="createProduct" stepKey="createBundleCheckboxOption">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" after="createBundleCheckboxOption" stepKey="linkFirstSimpleProductToOption">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="createBundleCheckboxOption"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" after="linkFirstSimpleProductToOption" stepKey="linkSecondSimpleProductToOption">
+                <requiredEntity createDataKey="createProduct"/>
+                <requiredEntity createDataKey="createBundleCheckboxOption"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </createData>
+        </before>
+        <after>
+            <remove keyForRemoval="setYoutubeApiKeyDefaultConfig"/>
+            <deleteData createDataKey="createFirstSimpleProduct" after="deleteProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" after="deleteFirstSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+        </after>
+
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideo">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoPresentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage">
+            <argument name="videoType" value="vimeo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoNotInAdminProductPageActionGroup" stepKey="assertProductVideoAbsentInProductEditPage">
+            <argument name="video" value="VimeoProductVideo"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductVideoNotInStorefrontProductPageActionGroup" stepKey="assertProductVideoAbsentInStorefrontProductPage">
+            <argument name="videoType" value="vimeo"/>
+        </actionGroup>
+    </test>
+</tests>

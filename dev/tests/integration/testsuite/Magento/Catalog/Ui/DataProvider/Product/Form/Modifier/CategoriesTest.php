@@ -22,7 +22,7 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $registry = $objectManager->get(\Magento\Framework\Registry::class);
@@ -39,7 +39,6 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
     {
         $inputMeta = include __DIR__ . '/_files/input_meta_for_categories.php';
         $expectedCategories = include __DIR__ . '/_files/expected_categories.php';
-        CacheCleaner::cleanAll();
         $this->assertCategoriesInMeta($expectedCategories, $this->object->modifyMeta($inputMeta));
         // Verify cached data
         $this->assertCategoriesInMeta($expectedCategories, $this->object->modifyMeta($inputMeta));

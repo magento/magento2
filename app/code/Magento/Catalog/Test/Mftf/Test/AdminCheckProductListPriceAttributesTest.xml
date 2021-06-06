@@ -15,6 +15,7 @@
             <description value="Login as admin, create simple product, add cost, special price. Go to Admin
                 Product List page filter grid by created product, add mentioned columns to grid, check values."/>
             <group value="catalog"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

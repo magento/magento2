@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'inputXML' => '<?xml version="1.0" encoding="UTF-8"?><config>'
         . '<view id="view_one" class="Ogogo\Class\One" group="some_view_group"><!--comment-->'
@@ -18,14 +20,19 @@ return [
                 'some_entity' => [
                     'name' => 'some_entity',
                     'column' => 'entity_id',
-                    'subscription_model' => null
+                    'subscription_model' => null,
+                    'additional_columns' => [],
+                    'processor' => \Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor::class
                 ],
                 'some_product_relation' => [
                     'name' => 'some_product_relation',
                     'column' => 'product_id',
-                    'subscription_model' => null
+                    'subscription_model' => null,
+                    'additional_columns' => [],
+                    'processor' => \Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor::class
                 ],
             ],
+            'walker' => \Magento\Framework\Mview\View\ChangeLogBatchWalker::class
         ],
     ]
 ];

@@ -22,7 +22,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 /**
  * Resolver for setting payment method and placing order
  *
- * @deprecated Should use setPaymentMethodOnCart and placeOrder mutations in single request.
+ * @deprecated 100.3.4 Should use setPaymentMethodOnCart and placeOrder mutations in single request.
  * @see \Magento\QuoteGraphQl\Model\Resolver\SetPaymentMethodOnCart
  * @see \Magento\QuoteGraphQl\Model\Resolver\PlaceOrder
  */
@@ -71,14 +71,15 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
-        $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['payment_method']['code']) || empty($args['input']['payment_method']['code'])) {
+        if (empty($args['input']['payment_method']['code'])) {
             throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));
         }
+
+        $maskedCartId = $args['input']['cart_id'];
         $paymentData = $args['input']['payment_method'];
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();

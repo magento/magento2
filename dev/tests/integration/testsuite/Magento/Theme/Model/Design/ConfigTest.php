@@ -16,7 +16,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $storage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Theme\Model\Design\Config\Storage::class

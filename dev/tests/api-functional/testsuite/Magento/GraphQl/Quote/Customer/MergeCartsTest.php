@@ -39,7 +39,7 @@ class MergeCartsTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -48,7 +48,7 @@ class MergeCartsTest extends GraphQlAbstract
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, '1', 'customer_id');
@@ -107,11 +107,12 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The cart isn't active.
      */
     public function testGuestCartExpiryAfterMerge()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The cart isn\'t active.');
+
         $customerQuote = $this->quoteFactory->create();
         $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
 
@@ -140,11 +141,12 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot perform operations on cart
      */
     public function testMergeTwoCustomerCarts()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current user cannot perform operations on cart');
+
         $firstQuote = $this->quoteFactory->create();
         $this->quoteResource->load($firstQuote, 'test_quote', 'reserved_order_id');
         $firstMaskedId = $this->quoteIdToMaskedId->execute((int)$firstQuote->getId());
@@ -168,11 +170,12 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameter "source_cart_id" is missing
      */
     public function testMergeCartsWithEmptySourceCartId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "source_cart_id" is missing');
+
         $customerQuote = $this->quoteFactory->create();
         $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
 
@@ -186,11 +189,12 @@ class MergeCartsTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameter "destination_cart_id" is missing
      */
     public function testMergeCartsWithEmptyDestinationCartId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The parameter "destination_cart_id" cannot be empty');
+
         $guestQuote = $this->quoteFactory->create();
         $this->quoteResource->load(
             $guestQuote,
@@ -203,6 +207,54 @@ class MergeCartsTest extends GraphQlAbstract
 
         $query = $this->getCartMergeMutation($guestQuoteMaskedId, $customerQuoteMaskedId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testMergeCartsWithoutDestinationCartId()
+    {
+        $guestQuote = $this->quoteFactory->create();
+        $this->quoteResource->load(
+            $guestQuote,
+            'test_order_with_virtual_product_without_address',
+            'reserved_order_id'
+        );
+        $guestQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$guestQuote->getId());
+        $query = $this->getCartMergeMutationWithoutDestinationCartId(
+            $guestQuoteMaskedId
+        );
+        $mergeResponse = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('mergeCarts', $mergeResponse);
+        $cartResponse = $mergeResponse['mergeCarts'];
+        self::assertArrayHasKey('items', $cartResponse);
+        self::assertCount(2, $cartResponse['items']);
+
+        $customerQuote = $this->quoteFactory->create();
+        $this->quoteResource->load($customerQuote, 'test_quote', 'reserved_order_id');
+        $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$customerQuote->getId());
+
+        $cartResponse = $this->graphQlMutation(
+            $this->getCartQuery($customerQuoteMaskedId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+
+        self::assertArrayHasKey('cart', $cartResponse);
+        self::assertArrayHasKey('items', $cartResponse['cart']);
+        self::assertCount(2, $cartResponse['cart']['items']);
+        $item1 = $cartResponse['cart']['items'][0];
+        self::assertArrayHasKey('quantity', $item1);
+        self::assertEquals(2, $item1['quantity']);
+        $item2 = $cartResponse['cart']['items'][1];
+        self::assertArrayHasKey('quantity', $item2);
+        self::assertEquals(1, $item2['quantity']);
     }
 
     /**
@@ -240,6 +292,31 @@ mutation {
   mergeCarts(
     source_cart_id: "{$guestQuoteMaskedId}"
     destination_cart_id: "{$customerQuoteMaskedId}"
+  ){
+  items {
+      quantity
+      product {
+        sku
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * Create the mergeCart mutation
+     *
+     * @param string $guestQuoteMaskedId
+     * @return string
+     */
+    private function getCartMergeMutationWithoutDestinationCartId(
+        string $guestQuoteMaskedId
+    ): string {
+        return <<<QUERY
+mutation {
+  mergeCarts(
+    source_cart_id: "{$guestQuoteMaskedId}"
   ){
   items {
       quantity

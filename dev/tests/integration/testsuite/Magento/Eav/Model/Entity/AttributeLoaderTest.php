@@ -30,9 +30,8 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->attributeLoader = $this->objectManager->get(AttributeLoader::class);
         $entityType = $this->objectManager->create(\Magento\Eav\Model\Entity\Type::class)
@@ -62,8 +61,8 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
         // Before load all attributes
         $attributesByCode = $this->resource->getAttributesByCode();
         $attributesByTable = $this->resource->getAttributesByTable();
-        $this->assertEquals(0, count($attributesByCode));
-        $this->assertEquals(0, count($attributesByTable));
+        $this->assertCount(0, $attributesByCode);
+        $this->assertCount(0, $attributesByTable);
 
         // Load all attributes
         $resource2 = $this->attributeLoader->loadAllAttributes(

@@ -294,7 +294,7 @@ class Filesystem extends AbstractBackup
             }
 
             mkdir($backupsDir);
-            chmod($backupsDir);
+            chmod($backupsDir, 0755);
         }
 
         if (!is_writable($backupsDir)) {
@@ -316,8 +316,10 @@ class Filesystem extends AbstractBackup
     }
 
     /**
+     * Get rollback FTP
+     *
      * @return Ftp
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function getRollBackFtp()
     {
@@ -332,8 +334,10 @@ class Filesystem extends AbstractBackup
     }
 
     /**
+     * Get rollback FS
+     *
      * @return Fs
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function getRollBackFs()
     {

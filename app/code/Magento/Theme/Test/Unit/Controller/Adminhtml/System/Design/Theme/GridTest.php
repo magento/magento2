@@ -3,34 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme\Grid;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GridTest extends \PHPUnit\Framework\TestCase
+class GridTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactory;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|MockObject
      */
     protected $repository;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewInterface|MockObject
      */
     protected $view;
 
@@ -39,30 +49,32 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->view = $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)->getMock();
+        $this->view = $this->getMockBuilder(ViewInterface::class)
+            ->getMock();
         $context->expects($this->any())
             ->method('getView')
             ->willReturn($this->view);
 
         $this->registry = $this->getMockBuilder(
-            \Magento\Framework\Registry::class
-        )->disableOriginalConstructor()->getMock();
-        $this->fileFactory = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+            Registry::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->repository = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
+        $this->repository = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Backend\App\Action\Context $context */
+        /** @var Context $context */
         $this->controller = new Grid(
             $context,
             $this->registry,

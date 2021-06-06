@@ -6,9 +6,9 @@
 declare(strict_types=1);
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/rules_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/SalesRule/_files/rules_rollback.php');
 
 $objectManager = Bootstrap::getObjectManager();
 

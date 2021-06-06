@@ -3,51 +3,69 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Mime;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileProcessorTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FileProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UploaderFactory|MockObject
      */
     private $uploaderFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|MockObject
      */
     private $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\File\Mime|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mime|MockObject
      */
     private $mime;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystem->expects($this->any())
@@ -55,18 +73,18 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
+        $this->uploaderFactory = $this->getMockBuilder(UploaderFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
 
-        $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
+        $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->getMockForAbstractClass();
 
-        $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
+        $this->mime = $this->getMockBuilder(Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -102,7 +120,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $result = $model->getStat($fileName);
 
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('size', $result);
         $this->assertEquals(1, $result['size']);
     }
@@ -150,7 +168,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->urlBuilder->expects($this->once())
             ->method('getBaseUrl')
-            ->with(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA])
+            ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
             ->willReturn($baseUrl);
 
         $this->mediaDirectory->expects($this->once())
@@ -194,7 +212,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             'path' => 'filepath'
         ];
 
-        $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
+        $uploaderMock = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $uploaderMock->expects($this->once())
@@ -234,12 +252,11 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File can not be saved to the destination folder.
-     */
     public function testSaveTemporaryFileWithError()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('File can not be saved to the destination folder.');
+
         $attributeCode = 'img1';
 
         $allowedExtensions = [
@@ -249,7 +266,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $absolutePath = '/absolute/filepath';
 
-        $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
+        $uploaderMock = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $uploaderMock->expects($this->once())
@@ -287,39 +304,31 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $model->saveTemporaryFile('customer[' . $attributeCode . ']');
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unable to create directory customer/f/i
-     */
     public function testMoveTemporaryFileUnableToCreateDirectory()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Unable to create directory customer/f/i');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(false);
+        $this->configureMediaDirectoryMock($destinationPath, false);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $model->moveTemporaryFile($filePath);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Destination folder is not writable or does not exists
-     */
     public function testMoveTemporaryFileDestinationFolderDoesNotExists()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Destination folder is not writable or does not exists');
+
         $filePath = '/filename.ext1';
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -335,10 +344,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -351,29 +357,78 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
         $newPath = $destinationPath . $filePath;
 
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method('get')->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn(false);
+        ObjectManager::setInstance($objectManagerMock);
+
         $this->mediaDirectory->expects($this->once())
             ->method('renameFile')
             ->with($path, $newPath)
             ->willReturn(true);
 
+
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $this->assertEquals('/f/i' . $filePath, $model->moveTemporaryFile($filePath));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong while saving the file
-     */
-    public function testMoveTemporaryFileWithException()
+    public function testMoveTemporaryFileNewFileName()
     {
         $filePath = '/filename.ext1';
 
         $destinationPath = 'customer/f/i';
 
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
-            ->method('create')
+            ->method('isWritable')
             ->with($destinationPath)
             ->willReturn(true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with($destinationPath)
+            ->willReturn('/' . $destinationPath);
+
+        $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
+
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method('get')->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturnOnConsecutiveCalls(true, true, false);
+        ObjectManager::setInstance($objectManagerMock);
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('renameFile')
+            ->with($path, 'customer/f/i/filename_2.ext1')
+            ->willReturn(true);
+
+
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $this->assertEquals('/f/i/filename_2.ext1', $model->moveTemporaryFile($filePath));
+    }
+
+    public function testMoveTemporaryFileWithException()
+    {
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn(false);
+        ObjectManager::setInstance($objectManagerMock);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Something went wrong while saving the file');
+
+        $filePath = '/filename.ext1';
+
+        $destinationPath = 'customer/f/i';
+
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -415,5 +470,27 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
         $this->assertEquals($expected, $model->getMimeType($fileName));
+    }
+
+    /**
+     * Configure media directory mock to create media directory.
+     *
+     * @param string $destinationPath
+     * @param bool $directoryCreated
+     */
+    private function configureMediaDirectoryMock(string $destinationPath, bool $directoryCreated): void
+    {
+        $this->mediaDirectory->expects($this->at(0))
+            ->method('isExist')
+            ->with('customer/tmp/filename.ext1')
+            ->willReturn(true);
+        $this->mediaDirectory->expects($this->at(1))
+            ->method('isExist')
+            ->with('customer/filename.ext1')
+            ->willReturn(false);
+        $this->mediaDirectory->expects($this->once())
+            ->method('create')
+            ->with($destinationPath)
+            ->willReturn($directoryCreated);
     }
 }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnePageCheckoutAsCustomerUsingNonExistentCustomerGroupTest">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <stories value="OnePageCheckout within Offline Payment Methods"/>
+            <title value="OnePageCheckout as a customer with non-existent customer group assigned to the quote"/>
+            <description value="Checkout as a customer with non-existent customer group assigned to the quote"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-36385"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+
+            <!-- Create customer group -->
+            <createData entity="CustomCustomerGroup" stepKey="createCustomerGroup"/>
+
+            <!-- Create customer and assign it to the customer group created on the previous step -->
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer">
+                <field key="group_id">$$createCustomerGroup.id$$</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Admin log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Add Simple Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Delete customer group -->
+        <deleteData createDataKey="createCustomerGroup" stepKey="deleteCustomerGroup"/>
+
+        <!-- Go to shopping cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+
+        <!-- Check that error does not appear and shipping methods are available to select -->
+        <dontSee selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="No such entity with id = $$createCustomerGroup.id$$" stepKey="assertErrorMessage"/>
+        <dontSee selector="{{CheckoutShippingMethodsSection.noQuotesMsg}}" userInput="Sorry, no quotes are available for this order at this time" stepKey="assertNoQuotesMessage"/>
+
+        <!-- Fill customer address data -->
+        <waitForElementVisible selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="waitForShipHereVisible"/>
+        <!-- Change address -->
+        <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
+
+        <!-- Click next button to open payment section -->
+        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+
+        <!-- Select payment solution -->
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
+
+        <!-- Check order summary in checkout -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order in backend -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Assert order total -->
+        <scrollTo selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$565.00" stepKey="checkOrderTotalInBackend"/>
+
+        <!-- Assert order addresses -->
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="seeBillingAddressStreet"/>
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{UK_Not_Default_Address.city}}" stepKey="seeBillingAddressCity"/>
+        <see selector="{{AdminShipmentAddressInformationSection.billingAddress}}" userInput="{{UK_Not_Default_Address.postcode}}" stepKey="seeBillingAddressPostcode"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="seeShippingAddressStreet"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{UK_Not_Default_Address.city}}" stepKey="seeShippingAddressCity"/>
+        <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{UK_Not_Default_Address.postcode}}" stepKey="seeShippingAddressPostcode"/>
+    </test>
+</tests>

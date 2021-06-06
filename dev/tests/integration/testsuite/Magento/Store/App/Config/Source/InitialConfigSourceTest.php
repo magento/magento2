@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Store\App\Config\Source;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\FileReader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -18,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test that initial scopes config are loaded if database is available
+ * @magentoAppIsolation enabled
  */
 class InitialConfigSourceTest extends TestCase
 {
@@ -59,7 +62,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->reader = $objectManager->get(FileReader::class);
@@ -76,7 +79,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->clearConfig(ConfigFilePool::APP_CONFIG);
         $this->clearConfig(ConfigFilePool::APP_ENV);
@@ -91,7 +94,7 @@ class InitialConfigSourceTest extends TestCase
      * @param array $websites
      * @param string $defaultWebsite
      * @param bool $offline
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @dataProvider getDefaultDataProvider
      */
     public function testGetWebsites(array $websites, string $defaultWebsite, bool $offline = false): void
@@ -101,7 +104,8 @@ class InitialConfigSourceTest extends TestCase
             $this->clearConfig(ConfigFilePool::APP_ENV);
         }
         $this->assertEquals($defaultWebsite, $this->storeManager->getWebsite()->getCode());
-        $this->assertEquals($websites, array_keys($this->storeManager->getWebsites(true, true)), '', 0.0, 10, true);
+        $actualWebsites = array_keys($this->storeManager->getWebsites(true, true));
+        $this->assertEmpty(array_diff($websites, $actualWebsites));
     }
 
     /**
@@ -113,28 +117,33 @@ class InitialConfigSourceTest extends TestCase
             [
                 [
                     'admin',
+                    'main',
+                ],
+                'main',
+                true
+            ],
+            [
+                [
+                    'admin',
                     'base',
                 ],
                 'base',
                 false
             ],
-            [
-                [
-                    'admin',
-                    'main',
-                ],
-                'main',
-                true
-            ]
         ];
     }
 
     private function clearConfig(string $type): void
     {
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath($type),
-            "<?php\n return [];\n"
-        );
+        $this->filesystem
+            ->getDirectoryWrite(DirectoryList::CONFIG)
+            ->writeFile(
+                $this->configFilePool->getPath($type),
+                "<?" . "php\n return [];\n"
+            );
+        /** @var DeploymentConfig $config */
+        $config = Bootstrap::getObjectManager()->get(DeploymentConfig::class);
+        $config->resetData();
     }
 
     /**

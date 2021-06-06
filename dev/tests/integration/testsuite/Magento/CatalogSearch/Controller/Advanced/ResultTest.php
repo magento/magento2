@@ -28,7 +28,7 @@ class ResultTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productAttributeRepository = $this->_objectManager->create(ProductAttributeRepositoryInterface::class);
@@ -64,7 +64,41 @@ class ResultTest extends AbstractController
         );
         $this->dispatch('catalogsearch/advanced/result');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Simple product name', $responseBody);
+        $this->assertStringContainsString('Simple product name', $responseBody);
+    }
+
+    /**
+     * Advanced search test by difference product attributes.
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search_with_hyphen_in_sku.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     *
+     * @return void
+     */
+    public function testExecuteSkuWithHyphen(): void
+    {
+        $this->getRequest()->setQuery(
+            $this->_objectManager->create(
+                Parameters::class,
+                [
+                    'values' => [
+                        'name' => '',
+                        'sku' => '24-mb01',
+                        'description' => '',
+                        'short_description' => '',
+                        'price' => [
+                            'from' => '',
+                            'to' => '',
+                        ],
+                        'test_searchable_attribute' => '',
+                    ]
+                ]
+            )
+        );
+        $this->dispatch('catalogsearch/advanced/result');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Simple product name', $responseBody);
     }
 
     /**

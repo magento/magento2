@@ -20,9 +20,6 @@ use Magento\Translation\Model\ResourceModel\StringUtilsFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ParserTest to test \Magento\Translation\Model\Inline\Parser
- */
 class ParserTest extends TestCase
 {
     /**
@@ -80,7 +77,7 @@ class ParserTest extends TestCase
      */
     private $cacheManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->translateInlineMock =
@@ -161,7 +158,11 @@ class ParserTest extends TestCase
 
         $processedContent = $this->model->processResponseBodyString($testContent);
         foreach ($processedAttributes as $attribute) {
-            $this->assertContains($attribute, $processedContent, 'data-translate attribute not processed correctly');
+            $this->assertStringContainsString(
+                $attribute,
+                $processedContent,
+                'data-translate attribute not processed correctly'
+            );
         }
     }
 }

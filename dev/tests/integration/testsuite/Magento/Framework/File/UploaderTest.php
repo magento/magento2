@@ -27,7 +27,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uploaderFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\MediaStorage\Model\File\UploaderFactory::class);
@@ -62,13 +62,14 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter given. A valid $fileId[tmp_name] is expected.
      *
      * @return void
      */
     public function testUploadFileFromNotAllowedFolder(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid parameter given. A valid $fileId[tmp_name] is expected.');
+
         $fileName = 'text.txt';
         $tmpDir = 'tmp';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
@@ -85,9 +86,54 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Upload file test when `Old Media Gallery` is disabled
+     *
+     * @magentoConfigFixture system/media_gallery/enabled 1
+     * @magentoAppArea adminhtml
+     * @dataProvider dirCodeDataProvider
+     *
+     * @param string $directoryCode
+     * @return void
+     */
+    public function testUploadFileWhenOldMediaGalleryDisabled(string $directoryCode): void
+    {
+        $destinationDirectory = $this->filesystem->getDirectoryWrite($directoryCode);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+
+        $fileName = 'file.txt';
+        $destinationDir = 'tmp';
+        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+
+        $tmpDirectory->writeFile($fileName, 'some data');
+
+        $type = [
+            'tmp_name' => $filePath,
+            'name' => $fileName,
+        ];
+
+        $uploader = $this->uploaderFactory->create(['fileId' => $type]);
+        $uploader->save($destinationDirectory->getAbsolutePath($destinationDir));
+
+        $this->assertTrue($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
+    }
+
+    /**
+     * DataProvider for testUploadFileWhenOldMediaGalleryDisabled
+     *
+     * @return array
+     */
+    public function dirCodeDataProvider(): array
+    {
+        return [
+            'media destination' => [DirectoryList::MEDIA],
+            'non-media destination' => [DirectoryList::VAR_DIR],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

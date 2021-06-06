@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Sender;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Info;
@@ -125,7 +128,7 @@ class EmailSenderTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
@@ -224,8 +227,8 @@ class EmailSenderTest extends TestCase
         $this->identityContainerMock = $this->getMockBuilder(
             ShipmentIdentity::class
         )
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -234,9 +237,9 @@ class EmailSenderTest extends TestCase
         $this->senderBuilderFactoryMock = $this->getMockBuilder(
             SenderBuilderFactory::class
         )
-        ->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->subject = new EmailSender(
             $this->templateContainerMock,
@@ -256,20 +259,37 @@ class EmailSenderTest extends TestCase
      * @param bool $forceSyncMode
      * @param bool $isComment
      * @param bool $emailSendingResult
+     * @param array $orderData
      *
      * @dataProvider sendDataProvider
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Exception
      */
-    public function testSend($configValue, $forceSyncMode, $isComment, $emailSendingResult)
+    public function testSend($configValue, $forceSyncMode, $isComment, $emailSendingResult, $orderData)
     {
         $this->globalConfigMock->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
             ->willReturn($configValue);
 
+        $this->orderMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($orderData['order_id']);
+        $this->orderMock->expects($this->any())
+            ->method('getCustomerName')
+            ->willReturn($orderData['customer_name']);
+        $this->orderMock->expects($this->any())
+            ->method('getIsNotVirtual')
+            ->willReturn($orderData['is_not_virtual']);
+        $this->orderMock->expects($this->any())
+            ->method('getEmailCustomerNote')
+            ->willReturn($orderData['email_customer_note']);
+        $this->orderMock->expects($this->any())
+            ->method('getFrontendStatusLabel')
+            ->willReturn($orderData['frontend_status_label']);
         if (!$isComment) {
             $this->commentMock = null;
         }
@@ -293,8 +313,14 @@ class EmailSenderTest extends TestCase
                 'store' => $this->storeMock,
                 'formattedShippingAddress' => 'Formatted address',
                 'formattedBillingAddress' => 'Formatted address',
+                'order_data' => [
+                    'customer_name' => $orderData['customer_name'],
+                    'is_not_virtual' => $orderData['is_not_virtual'],
+                    'email_customer_note' => $orderData['email_customer_note'],
+                    'frontend_status_label' => $orderData['frontend_status_label']
+                ]
             ];
-            $transport = new \Magento\Framework\DataObject($transport);
+            $transport = new DataObject($transport);
 
             $this->eventManagerMock->expects($this->once())
                 ->method('dispatch')
@@ -385,15 +411,67 @@ class EmailSenderTest extends TestCase
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function sendDataProvider()
     {
         return [
-            'Successful sync sending with comment' => [0, false, true, true],
-            'Successful sync sending without comment' => [0, false, false, true],
-            'Failed sync sending with comment' => [0, false, true, false],
-            'Successful forced sync sending with comment' => [1, true, true, true],
-            'Async sending' => [1, false, false, false],
+            'Successful sync sending with comment' => [
+                0, false, true, true,
+                [
+                    'order_id' => 1,
+                    'shipment_id' => 1,
+                    'customer_name' => 'test customer',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => 1,
+                    'frontend_status_label' => 'email_sent'
+                ]
+            ],
+            'Successful sync sending without comment' => [
+                0, false, false, true,
+                [
+                    'order_id' => 2,
+                    'shipment_id' => 2,
+                    'customer_name' => 'test customer 1',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => 1,
+                    'frontend_status_label' => 'email_sent'
+                ]
+            ],
+            'Failed sync sending with comment' => [
+                0, false, true, false,
+                [
+                    'order_id' => 3,
+                    'shipment_id' => 3,
+                    'customer_name' => 'test customer 2',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => 1,
+                    'frontend_status_label' => 'send_email'
+                ]
+            ],
+            'Successful forced sync sending with comment' => [
+                1, true, true, true,
+                [
+                    'order_id' => 4,
+                    'shipment_id' => 4,
+                    'customer_name' => 'test customer 3',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => 1,
+                    'frontend_status_label' => 'email_sent'
+                ]
+            ],
+            'Async sending' => [
+                1, false, false, false,
+                [
+                    'order_id' => 5,
+                    'shipment_id' => 5,
+                    'customer_name' => 'test customer 4',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => 1,
+                    'frontend_status_label' => 'send_email'
+                ]
+            ],
         ];
     }
 }

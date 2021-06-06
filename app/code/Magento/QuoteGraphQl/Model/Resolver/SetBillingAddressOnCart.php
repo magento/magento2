@@ -65,10 +65,11 @@ class SetBillingAddressOnCart implements ResolverInterface
         }
         $billingAddress = $args['input']['billing_address'];
 
-        $storeId = $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->checkCartCheckoutAllowance->execute($cart);
         $this->setBillingAddressOnCart->execute($context, $cart, $billingAddress);
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         return [
             'cart' => [

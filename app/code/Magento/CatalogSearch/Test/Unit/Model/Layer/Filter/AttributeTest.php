@@ -3,124 +3,147 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\Filter\Item\DataBuilder;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Catalog\Model\Layer\State;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory;
+use Magento\CatalogSearch\Model\Layer\Filter\Attribute;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filter\StripTags;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit tests for \Magento\CatalogSearch\Model\Layer\Filter\Attribute class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Layer\Filter\Attribute
+     * @var Attribute
      */
     private $target;
 
-    /** @var  \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend|MockObject */
+    /** @var AbstractFrontend|MockObject */
     private $frontend;
 
-    /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject */
+    /** @var Collection|MockObject */
     private $fulltextCollection;
 
-    /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
+    /** @var State|MockObject */
     private $state;
 
-    /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
+    /** @var EavAttribute|MockObject */
     private $attribute;
 
-    /** @var \Magento\Framework\App\RequestInterface|MockObject */
+    /** @var RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory|MockObject */
+    /** @var AttributeFactory|MockObject */
     private $filterAttributeFactory;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
+    /** @var ItemFactory|MockObject */
     private $filterItemFactory;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface|MockObject */
+    /** @var StoreManagerInterface|MockObject */
     private $storeManager;
 
-    /** @var  \Magento\Catalog\Model\Layer|MockObject */
+    /** @var Layer|MockObject */
     private $layer;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder|MockObject */
+    /** @var  DataBuilder|MockObject */
     private $itemDataBuilder;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        /** @var \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory */
-        $this->filterItemFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\ItemFactory::class)
+        /** @var ItemFactory $filterItemFactory */
+        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        /** @var StoreManagerInterface $storeManager */
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        /** @var \Magento\Catalog\Model\Layer $layer */
-        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
+        /** @var Layer $layer */
+        $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
         $this->fulltextCollection =
-            $this->getMockBuilder(\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
-            ->getMock();
+            $this->getMockBuilder(Collection::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['addFieldToFilter', 'getFacetedData', 'getSize'])
+                ->getMock();
         $this->layer->expects($this->atLeastOnce())
             ->method('getProductCollection')
-            ->will($this->returnValue($this->fulltextCollection));
-        /** @var \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder */
-        $this->itemDataBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item\DataBuilder::class)
+            ->willReturn($this->fulltextCollection);
+        /** @var DataBuilder $itemDataBuilder */
+        $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addItemData', 'build'])
             ->getMock();
 
-        $this->filterAttributeFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory::class
-        )
+        $this->filterAttributeFactory = $this->getMockBuilder(AttributeFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
-            ->will($this->returnValue($this->state));
+            ->willReturn($this->state);
 
-        $this->frontend = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
+        $this->frontend = $this->getMockBuilder(AbstractFrontend::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOption', 'getSelectOptions'])
             ->getMock();
-        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+        $this->attribute = $this->getMockBuilder(EavAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
+            ->onlyMethods([
+                'getAttributeCode',
+                'getFrontend',
+                'getIsFilterable',
+                'getBackendType',
+            ])
             ->getMock();
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $stripTagsFilter = $this->getMockBuilder(\Magento\Framework\Filter\StripTags::class)
+        $stripTagsFilter = $this->getMockBuilder(StripTags::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
         $stripTagsFilter->expects($this->any())
             ->method('filter')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Layer\Filter\Attribute::class,
+            Attribute::class,
             [
                 'filterItemFactory' => $this->filterItemFactory,
                 'storeManager' => $this->storeManager,
@@ -132,66 +155,104 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testApplyFilter()
+    /**
+     * @dataProvider attributeDataProvider
+     * @param array $attributeData
+     * @return void
+     */
+    public function testApplyFilter(array $attributeData)
     {
-        $attributeCode = 'attributeCode';
-        $attributeValue = 'attributeValue';
-        $attributeLabel = 'attributeLabel';
-
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeData['attribute_code']);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
-            ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->with($attributeData['attribute_code'])
+            ->willReturn($attributeData['attribute_value']);
+
+        $this->attribute->expects($this->once())
+            ->method('getBackendType')
+            ->willReturn($attributeData['backend_type']);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode, $attributeValue)
-            ->will($this->returnSelf());
+            ->with(
+                $attributeData['attribute_code'],
+                $attributeData['attribute_value']
+            )
+            ->willReturnSelf();
 
         $this->frontend->expects($this->once())
             ->method('getOption')
-            ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->with($attributeData['attribute_value'])
+            ->willReturn($attributeData['attribute_label']);
 
-        $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
+        $filterItem = $this->createFilterItem(
+            0,
+            $attributeData['attribute_label'],
+            $attributeData['attribute_value'],
+            0
+        );
 
         $filterItem->expects($this->once())
             ->method('setFilter')
             ->with($this->target)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
-            ->with($attributeLabel)
-            ->will($this->returnSelf());
+            ->with($attributeData['attribute_label'])
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
-            ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeData['attribute_value'])
+            ->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
             ->with(0)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->state->expects($this->once())
             ->method('addFilter')
             ->with($filterItem)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $result = $this->target->apply($this->request);
 
         $this->assertEquals($this->target, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeDataProvider(): array
+    {
+        return [
+            'Attribute with \'text\' backend type' => [
+                [
+                    'attribute_code' => 'attributeCode',
+                    'attribute_value' => 'attributeValue',
+                    'attribute_label' => 'attributeLabel',
+                    'backend_type' => 'text',
+                ],
+            ],
+            'Attribute with \'int\' backend type' => [
+                [
+                    'attribute_code' => 'attributeCode',
+                    'attribute_value' => '0',
+                    'attribute_label' => 'attributeLabel',
+                    'backend_type' => 'int',
+                ],
+            ],
+        ];
     }
 
     public function testGetItemsWithApply()
@@ -202,33 +263,31 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($attributeCode)
-            ->will($this->returnValue($attributeValue));
+            ->willReturn($attributeValue);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode, $attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeCode, $attributeValue)->willReturnSelf();
 
         $this->frontend->expects($this->once())
             ->method('getOption')
             ->with($attributeValue)
-            ->will($this->returnValue($attributeLabel));
+            ->willReturn($attributeLabel);
         $filterItem = $this->createFilterItem(0, $attributeLabel, $attributeValue, 0);
 
         $this->state->expects($this->once())
             ->method('addFilter')
-            ->with($filterItem)
-            ->will($this->returnSelf());
+            ->with($filterItem)->willReturnSelf();
 
         $expectedFilterItems = [];
 
@@ -286,20 +345,20 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
-            ->will($this->returnValue($attributeCode));
+            ->willReturn($attributeCode);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
         $this->frontend->expects($this->once())
             ->method('getSelectOptions')
-            ->will($this->returnValue($selectedOptions));
+            ->willReturn($selectedOptions);
 
         $this->fulltextCollection->expects($this->once())
             ->method('getFacetedData')
-            ->will($this->returnValue($facetedData));
+            ->willReturn($facetedData);
 
         $this->itemDataBuilder->expects($this->at(0))
             ->method('addItemData')
@@ -307,19 +366,17 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                 $selectedOptions[0]['label'],
                 $selectedOptions[0]['value'],
                 $facetedData[$selectedOptions[0]['value']]['count']
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
         $this->itemDataBuilder->expects($this->at(1))
             ->method('addItemData')
             ->with(
                 $selectedOptions[1]['label'],
                 $selectedOptions[1]['value'],
                 $facetedData[$selectedOptions[1]['value']]['count']
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
-            ->will($this->returnValue($builtData));
+            ->willReturn($builtData);
 
         $expectedFilterItems = [
             $this->createFilterItem(0, $builtData[0]['label'], $builtData[0]['value'], $builtData[0]['count']),
@@ -368,7 +425,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->willReturn(AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS);
         $this->attribute->expects($this->atLeastOnce())
             ->method('getFrontend')
-            ->will($this->returnValue($this->frontend));
+            ->willReturn($this->frontend);
 
         $this->target->setAttributeModel($this->attribute);
 
@@ -386,8 +443,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                 $selectedOptions[0]['label'],
                 $selectedOptions[0]['value'],
                 $facetedData[$selectedOptions[0]['value']]['count']
-            )
-            ->will($this->returnSelf());
+            )->willReturnSelf();
 
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
@@ -433,38 +489,34 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @param string $label
      * @param string $value
      * @param int $count
-     * @return \Magento\Catalog\Model\Layer\Filter\Item|MockObject
+     * @return Item|MockObject
      */
     private function createFilterItem($index, $label, $value, $count)
     {
-        $filterItem = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item::class)
+        $filterItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
 
         $filterItem->expects($this->once())
             ->method('setFilter')
-            ->with($this->target)
-            ->will($this->returnSelf());
+            ->with($this->target)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setLabel')
-            ->with($label)
-            ->will($this->returnSelf());
+            ->with($label)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setValue')
-            ->with($value)
-            ->will($this->returnSelf());
+            ->with($value)->willReturnSelf();
 
         $filterItem->expects($this->once())
             ->method('setCount')
-            ->with($count)
-            ->will($this->returnSelf());
+            ->with($count)->willReturnSelf();
 
         $this->filterItemFactory->expects($this->at($index))
             ->method('create')
-            ->will($this->returnValue($filterItem));
+            ->willReturn($filterItem);
 
         return $filterItem;
     }

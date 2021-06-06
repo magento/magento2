@@ -10,6 +10,8 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class ShipmentCreateTest
+ *
+ * Test shipment save API
  */
 class ShipmentCreateTest extends WebapiAbstract
 {
@@ -24,7 +26,7 @@ class ShipmentCreateTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }

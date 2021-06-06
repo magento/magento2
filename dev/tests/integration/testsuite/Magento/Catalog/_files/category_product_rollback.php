@@ -22,3 +22,5 @@ $category->load(333);
 if ($category->getId()) {
     $category->delete();
 }
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);

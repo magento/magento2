@@ -10,6 +10,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
@@ -38,7 +39,9 @@ try {
     //Product already removed
 }
 
-require __DIR__ . '/visual_swatch_attribute_with_different_options_type_rollback.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Swatches/_files/visual_swatch_attribute_with_different_options_type_rollback.php'
+);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

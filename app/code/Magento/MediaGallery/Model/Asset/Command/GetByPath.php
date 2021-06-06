@@ -16,7 +16,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetListByIds
+ * Provide media asset by path
+ *
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface instead
+ * @see \Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface
  */
 class GetByPath implements GetByPathInterface
 {
@@ -30,7 +33,7 @@ class GetByPath implements GetByPathInterface
     private $resourceConnection;
 
     /**
-     * @var AssetInterface
+     * @var AssetInterfaceFactory
      */
     private $mediaAssetFactory;
 
@@ -57,30 +60,43 @@ class GetByPath implements GetByPathInterface
     }
 
     /**
-     * Return media asset asset list
+     * Return media asset
      *
-     * @param string $mediaFilePath
+     * @param string $path
      *
      * @return AssetInterface
      * @throws IntegrationException
      */
-    public function execute(string $mediaFilePath): AssetInterface
+    public function execute(string $path): AssetInterface
     {
         try {
             $connection = $this->resourceConnection->getConnection();
             $select = $connection->select()
                 ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
-                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $mediaFilePath);
+                ->where(self::MEDIA_GALLERY_ASSET_PATH . ' = ?', $path);
             $data = $connection->query($select)->fetch();
 
             if (empty($data)) {
-                $message = __('There is no such media asset with path "%1"', $mediaFilePath);
+                $message = __('There is no such media asset with path "%1"', $path);
                 throw new NoSuchEntityException($message);
             }
 
-            $mediaAssets = $this->mediaAssetFactory->create(['data' => $data]);
-
-            return $mediaAssets;
+            return $this->mediaAssetFactory->create(
+                [
+                    'id' => $data['id'],
+                    'path' => $data['path'],
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'source' => $data['source'],
+                    'hash' => $data['hash'],
+                    'contentType' => $data['content_type'],
+                    'width' => $data['width'],
+                    'height' => $data['height'],
+                    'size' => $data['size'],
+                    'createdAt' => $data['created_at'],
+                    'updatedAt' => $data['updated_at'],
+                ]
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during get media asset list: %1', $exception->getMessage());
