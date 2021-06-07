@@ -399,6 +399,7 @@ class DiCompileCommand extends Command
             OperationFactory::AREA_CONFIG_GENERATOR => [
                 $compiledPathsList['application'],
                 $compiledPathsList['library'],
+                $compiledPathsList['setup'],
                 $compiledPathsList['generated_helpers'],
             ],
             OperationFactory::INTERCEPTION_CACHE => [
