@@ -24,6 +24,8 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url;
+use Magento\Directory\Api\CountryInformationAcquirerInterface;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\DesignInterface;
 use Magento\Setup\Module\I18n\Locale;
@@ -99,6 +101,16 @@ class TemplateTest extends TestCase
     private $urlModel;
 
     /**
+     * @var CountryInformationAcqirerInterface|MockObject
+     */
+    private $countryInformationAcquirerInterface;
+
+    /**
+     * @var RegionFactory|MockObject
+     */
+    private $regionFactory;
+
+    /**
      * @var Config|MockObject
      */
     private $emailConfig;
@@ -163,6 +175,15 @@ class TemplateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->countryInformationAcquirerInterface = $this->getMockBuilder(CountryInformationAcquirerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->regionFactory = $this->getMockBuilder(RegionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->filterFactory = $this->getMockBuilder(FilterFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -196,6 +217,8 @@ class TemplateTest extends TestCase
                     $this->templateFactory,
                     $this->filterManager,
                     $this->urlModel,
+                    $this->countryInformationAcquirerInterface,
+                    $this->regionFactory,
                     $this->filterFactory,
                     [],
                     $this->serializerMock
@@ -774,6 +797,8 @@ class TemplateTest extends TestCase
                     $this->createMock(TemplateFactory::class),
                     $this->createMock(FilterManager::class),
                     $this->createMock(Url::class),
+                    $this->createMock(CountryInformationAcquirerInterface::class),
+                    $this->createMock(RegionFactory::class),
                     $this->createMock(FilterFactory::class),
                     [],
                     $this->createMock(Json::class)

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Test\Unit\Model;
 
+use Magento\Directory\Model\RegionFactory;
 use Magento\Email\Model\Template\Config;
 use Magento\Email\Model\TemplateFactory;
 use Magento\Framework\App\Area;
@@ -19,6 +20,7 @@ use Magento\Framework\Filter\Template;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Url;
+use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\DesignInterface;
 use Magento\Newsletter\Model\Subscriber;
@@ -104,6 +106,16 @@ class TemplateTest extends TestCase
     private $urlModelMock;
 
     /**
+     * @var CountryInformationAcqirerInterface|MockObject
+     */
+    private $countryInformationAcquirerInterface;
+
+    /**
+     * @var RegionFactory|MockObject
+     */
+    private $regionFactory;
+
+    /**
      * @var RequestInterface|MockObject
      */
     private $requestMock;
@@ -180,6 +192,15 @@ class TemplateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->countryInformationAcquirerInterface = $this->getMockBuilder(CountryInformationAcquirerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->regionFactory = $this->getMockBuilder(RegionFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -213,6 +234,8 @@ class TemplateTest extends TestCase
                     $this->templateFactoryMock,
                     $this->filterManagerMock,
                     $this->urlModelMock,
+                    $this->countryInformationAcquirerInterface,
+                    $this->regionFactory,
                     $this->requestMock,
                     $this->filterFactoryMock,
                 ]
@@ -387,6 +410,8 @@ class TemplateTest extends TestCase
                     'store_phone' => null,
                     'store_hours' => null,
                     'store_email' => null,
+                    'store_country' => null,
+                    'store_region' => null
                 ],
                 'expectedResult' => 'expected result',
             ],
@@ -407,6 +432,8 @@ class TemplateTest extends TestCase
                     'store_hours' => null,
                     'store_email' => null,
                     'template_styles' => null,
+                    'store_country' => null,
+                    'store_region' => null
                 ],
                 'expectedResult' => 'expected result',
             ],

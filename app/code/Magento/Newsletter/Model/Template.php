@@ -81,6 +81,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Url|\Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirerInterface
+     * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory ,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -98,6 +100,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
+        \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirerInterface,
+        \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
         array $data = []
@@ -115,6 +119,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             $templateFactory,
             $filterManager,
             $urlModel,
+            $countryInformationAcquirerInterface,
+            $regionFactory,
             $data
         );
         $this->_storeManager = $storeManager;
