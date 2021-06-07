@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -182,6 +183,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $linkManagement;
 
     /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
@@ -208,6 +214,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param int $cacheLimit [optional]
      * @param ReadExtensions $readExtensions
      * @param CategoryLinkManagementInterface $linkManagement
+     * @param ScopeOverriddenValue|null $scopeOverriddenValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -236,7 +243,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
         ReadExtensions $readExtensions = null,
-        CategoryLinkManagementInterface $linkManagement = null
+        CategoryLinkManagementInterface $linkManagement = null,
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -263,6 +271,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             ->get(ReadExtensions::class);
         $this->linkManagement = $linkManagement ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(CategoryLinkManagementInterface::class);
+        $this->scopeOverriddenValue = $scopeOverriddenValue ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(ScopeOverriddenValue::class);
     }
 
     /**
@@ -599,6 +609,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         && !$attribute->isStatic()
                         && !array_key_exists($attributeCode, $productDataToChange)
                         && $value !== null
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
                     ) {
                         $product->setData($attributeCode);
                         $hasDataChanged = true;
@@ -914,7 +930,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'category_id') {
-                    $categoryIds[] = explode(',', $filter->getValue());
+                    $filterValue = $filter->getValue();
+                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue);
                 }
             }
         }

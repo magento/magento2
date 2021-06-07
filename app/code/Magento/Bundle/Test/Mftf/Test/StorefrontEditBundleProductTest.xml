@@ -106,8 +106,8 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->
-        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.sku$$"/>
-        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.sku$$"/>
+        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.name$$"/>
+        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.name$$"/>
         <waitForElementVisible stepKey="waitForInfoDropdown2" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad4"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>

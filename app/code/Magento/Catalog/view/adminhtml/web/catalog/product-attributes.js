@@ -47,7 +47,7 @@ define([
                 closed: function () {
                     var doc = self.iframe.get(0).document;
 
-                    if (doc && $.isFunction(doc.execCommand)) {
+                    if (doc && typeof doc.execCommand === 'function') {
                         //IE9 break script loading but not execution on iframe removing
                         doc.execCommand('stop');
                         self.iframe.remove();

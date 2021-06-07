@@ -36,9 +36,7 @@
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushFullPageCache">
-                <argument name="tags" value="full_page"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushFullPageCache"/>
         </before>
 
         <after>
