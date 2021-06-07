@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "80243c1cb3eafd96477975b69a66b3bc",
+    "content-hash": "b1ec0c7844a0d1ae9ae27fdb69037524",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -4899,57 +4899,44 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
-            "name": "ramsey/uuid",
-            "version": "3.8.0",
+            "name": "ramsey/collection",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ramsey/uuid.git",
-                "reference": "d09ea80159c1929d75b3f9c60504d613aeb4a1e3"
+                "url": "https://github.com/ramsey/collection.git",
+                "reference": "28a5c4ab2f5111db6a60b2b4ec84057e0f43b9c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/d09ea80159c1929d75b3f9c60504d613aeb4a1e3",
-                "reference": "d09ea80159c1929d75b3f9c60504d613aeb4a1e3",
+                "url": "https://api.github.com/repos/ramsey/collection/zipball/28a5c4ab2f5111db6a60b2b4ec84057e0f43b9c1",
+                "reference": "28a5c4ab2f5111db6a60b2b4ec84057e0f43b9c1",
                 "shasum": ""
             },
             "require": {
-                "paragonie/random_compat": "^1.0|^2.0|9.99.99",
-                "php": "^5.4 || ^7.0",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "replace": {
-                "rhumsaa/uuid": "self.version"
+                "php": "^7.2 || ^8"
             },
             "require-dev": {
-                "codeception/aspect-mock": "^1.0 | ~2.0.0",
-                "doctrine/annotations": "~1.2.0",
-                "goaop/framework": "1.0.0-alpha.2 | ^1.0 | ~2.1.0",
-                "ircmaxell/random-lib": "^1.1",
-                "jakub-onderka/php-parallel-lint": "^0.9.0",
-                "mockery/mockery": "^0.9.9",
-                "moontoast/math": "^1.1",
-                "php-mock/php-mock-phpunit": "^0.3|^1.1",
-                "phpunit/phpunit": "^4.7|^5.0|^6.5",
-                "squizlabs/php_codesniffer": "^2.3"
-            },
-            "suggest": {
-                "ext-ctype": "Provides support for PHP Ctype functions",
-                "ext-libsodium": "Provides the PECL libsodium extension for use with the SodiumRandomGenerator",
-                "ext-uuid": "Provides the PECL UUID extension for use with the PeclUuidTimeGenerator and PeclUuidRandomGenerator",
-                "ircmaxell/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
-                "moontoast/math": "Provides support for converting UUID to 128-bit integer (in string form).",
-                "ramsey/uuid-console": "A console application for generating UUIDs with ramsey/uuid",
-                "ramsey/uuid-doctrine": "Allows the use of Ramsey\\Uuid\\Uuid as Doctrine field type."
+                "captainhook/captainhook": "^5.3",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+                "ergebnis/composer-normalize": "^2.6",
+                "fakerphp/faker": "^1.5",
+                "hamcrest/hamcrest-php": "^2",
+                "jangregor/phpstan-prophecy": "^0.8",
+                "mockery/mockery": "^1.3",
+                "phpstan/extension-installer": "^1",
+                "phpstan/phpstan": "^0.12.32",
+                "phpstan/phpstan-mockery": "^0.12.5",
+                "phpstan/phpstan-phpunit": "^0.12.11",
+                "phpunit/phpunit": "^8.5 || ^9",
+                "psy/psysh": "^0.10.4",
+                "slevomat/coding-standard": "^6.3",
+                "squizlabs/php_codesniffer": "^3.5",
+                "vimeo/psalm": "^4.4"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "Ramsey\\Uuid\\": "src/"
+                    "Ramsey\\Collection\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4961,17 +4948,106 @@
                     "name": "Ben Ramsey",
                     "email": "ben@benramsey.com",
                     "homepage": "https://benramsey.com"
-                },
-                {
-                    "name": "Marijn Huizendveld",
-                    "email": "marijn.huizendveld@gmail.com"
-                },
-                {
-                    "name": "Thibaud Fabre",
-                    "email": "thibaud@aztech.io"
                 }
             ],
-            "description": "Formerly rhumsaa/uuid. A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
+            "description": "A PHP 7.2+ library for representing and manipulating collections.",
+            "keywords": [
+                "array",
+                "collection",
+                "hash",
+                "map",
+                "queue",
+                "set"
+            ],
+            "support": {
+                "issues": "https://github.com/ramsey/collection/issues",
+                "source": "https://github.com/ramsey/collection/tree/1.1.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ramsey",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/ramsey/collection",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-01-21T17:40:04+00:00"
+        },
+        {
+            "name": "ramsey/uuid",
+            "version": "4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ramsey/uuid.git",
+                "reference": "cd4032040a750077205918c86049aa0f43d22947"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/cd4032040a750077205918c86049aa0f43d22947",
+                "reference": "cd4032040a750077205918c86049aa0f43d22947",
+                "shasum": ""
+            },
+            "require": {
+                "brick/math": "^0.8 || ^0.9",
+                "ext-json": "*",
+                "php": "^7.2 || ^8",
+                "ramsey/collection": "^1.0",
+                "symfony/polyfill-ctype": "^1.8"
+            },
+            "replace": {
+                "rhumsaa/uuid": "self.version"
+            },
+            "require-dev": {
+                "codeception/aspect-mock": "^3",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7.0",
+                "doctrine/annotations": "^1.8",
+                "goaop/framework": "^2",
+                "mockery/mockery": "^1.3",
+                "moontoast/math": "^1.1",
+                "paragonie/random-lib": "^2",
+                "php-mock/php-mock-mockery": "^1.3",
+                "php-mock/php-mock-phpunit": "^2.5",
+                "php-parallel-lint/php-parallel-lint": "^1.1",
+                "phpbench/phpbench": "^0.17.1",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan-mockery": "^0.12",
+                "phpstan/phpstan-phpunit": "^0.12",
+                "phpunit/phpunit": "^8.5",
+                "psy/psysh": "^0.10.0",
+                "slevomat/coding-standard": "^6.0",
+                "squizlabs/php_codesniffer": "^3.5",
+                "vimeo/psalm": "3.9.4"
+            },
+            "suggest": {
+                "ext-bcmath": "Enables faster math with arbitrary-precision integers using BCMath.",
+                "ext-ctype": "Enables faster processing of character classification using ctype functions.",
+                "ext-gmp": "Enables faster math with arbitrary-precision integers using GMP.",
+                "ext-uuid": "Enables the use of PeclUuidTimeGenerator and PeclUuidRandomGenerator.",
+                "paragonie/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
+                "ramsey/uuid-doctrine": "Allows the use of Ramsey\\Uuid\\Uuid as Doctrine field type."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ramsey\\Uuid\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PHP library for generating and working with universally unique identifiers (UUIDs).",
             "homepage": "https://github.com/ramsey/uuid",
             "keywords": [
                 "guid",
@@ -4980,9 +5056,16 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
+                "rss": "https://github.com/ramsey/uuid/releases.atom",
                 "source": "https://github.com/ramsey/uuid"
             },
-            "time": "2018-07-19T23:38:55+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/ramsey",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-08-18T17:17:46+00:00"
         },
         {
             "name": "react/promise",
@@ -7814,24 +7897,29 @@
     "packages-dev": [
         {
             "name": "allure-framework/allure-codeception",
-            "version": "1.4.4",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-codeception.git",
-                "reference": "a69800eeef83007ced9502a3349ff72f5fb6b4e2"
+                "reference": "5ccfa4cdc826ef43ddba42b817dab4c0a8be7de2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/a69800eeef83007ced9502a3349ff72f5fb6b4e2",
-                "reference": "a69800eeef83007ced9502a3349ff72f5fb6b4e2",
+                "url": "https://api.github.com/repos/allure-framework/allure-codeception/zipball/5ccfa4cdc826ef43ddba42b817dab4c0a8be7de2",
+                "reference": "5ccfa4cdc826ef43ddba42b817dab4c0a8be7de2",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-php-api": "~1.1.8",
-                "codeception/codeception": "^2.3|^3.0|^4.0",
-                "php": ">=5.6",
-                "symfony/filesystem": ">=2.6",
-                "symfony/finder": ">=2.6"
+                "allure-framework/allure-php-api": "^1.3",
+                "codeception/codeception": "^2.5 | ^3 | ^4",
+                "ext-json": "*",
+                "php": ">=7.1.3",
+                "symfony/filesystem": "^2.7 | ^3 | ^4 | ^5",
+                "symfony/finder": "^2.7 | ^3 | ^4 | ^5"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "phpunit/phpunit": "^7.2 | ^8 | ^9"
             },
             "type": "library",
             "autoload": {
@@ -7846,11 +7934,11 @@
             "authors": [
                 {
                     "name": "Ivan Krutov",
-                    "email": "vania-pooh@yandex-team.ru",
+                    "email": "vania-pooh@aerokube.com",
                     "role": "Developer"
                 }
             ],
-            "description": "A Codeception adapter for Allure report.",
+            "description": "Allure Codeception integration",
             "homepage": "http://allure.qatools.ru/",
             "keywords": [
                 "allure",
@@ -7862,34 +7950,34 @@
                 "testing"
             ],
             "support": {
-                "email": "allure@yandex-team.ru",
+                "email": "allure@qameta.io",
                 "issues": "https://github.com/allure-framework/allure-codeception/issues",
                 "source": "https://github.com/allure-framework/allure-codeception"
             },
-            "time": "2020-09-09T10:51:33+00:00"
+            "time": "2021-03-26T16:11:53+00:00"
         },
         {
             "name": "allure-framework/allure-php-api",
-            "version": "1.1.8",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-php-commons.git",
-                "reference": "5ae2deac1c7e1b992cfa572167370de45bdd346d"
+                "reference": "f64b69afeff472c564a4e2379efb2b69c430ec5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-php-commons/zipball/5ae2deac1c7e1b992cfa572167370de45bdd346d",
-                "reference": "5ae2deac1c7e1b992cfa572167370de45bdd346d",
+                "url": "https://api.github.com/repos/allure-framework/allure-php-commons/zipball/f64b69afeff472c564a4e2379efb2b69c430ec5a",
+                "reference": "f64b69afeff472c564a4e2379efb2b69c430ec5a",
                 "shasum": ""
             },
             "require": {
-                "jms/serializer": "^0.16 || ^1.0",
-                "php": ">=5.4.0",
-                "ramsey/uuid": "^3.0",
-                "symfony/http-foundation": "^2.0 || ^3.0 || ^4.0 || ^5.0"
+                "jms/serializer": "^1 | ^2 | ^3",
+                "php": ">=7.1.3",
+                "ramsey/uuid": "^3 | ^4",
+                "symfony/mime": "^4.3 | ^5"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0.0"
+                "phpunit/phpunit": "^7 | ^8 | ^9"
             },
             "type": "library",
             "autoload": {
@@ -7924,27 +8012,30 @@
                 "issues": "https://github.com/allure-framework/allure-php-commons/issues",
                 "source": "https://github.com/allure-framework/allure-php-api"
             },
-            "time": "2020-03-13T10:47:35+00:00"
+            "time": "2021-03-26T14:32:27+00:00"
         },
         {
             "name": "allure-framework/allure-phpunit",
-            "version": "1.3.1",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-phpunit.git",
-                "reference": "302d1b69c367dc4357b1fdb31d1300d775871e0e"
+                "reference": "56c65ae482c40411b74a65f97629d16b0e7662ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/302d1b69c367dc4357b1fdb31d1300d775871e0e",
-                "reference": "302d1b69c367dc4357b1fdb31d1300d775871e0e",
+                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/56c65ae482c40411b74a65f97629d16b0e7662ee",
+                "reference": "56c65ae482c40411b74a65f97629d16b0e7662ee",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-php-api": "~1.1.0",
-                "mikey179/vfsstream": "1.*",
-                "php": ">=7.1.0",
-                "phpunit/phpunit": ">=7.0.0"
+                "allure-framework/allure-php-api": "^1.3",
+                "php": ">=7.1",
+                "phpunit/phpunit": "^7.2 | ^8 | ^9"
+            },
+            "require-dev": {
+                "ext-dom": "*",
+                "mikey179/vfsstream": "^1"
             },
             "type": "library",
             "autoload": {
@@ -7963,7 +8054,7 @@
                     "role": "Developer"
                 }
             ],
-            "description": "A PHPUnit adapter for Allure report.",
+            "description": "Allure PHPUNit integration",
             "homepage": "http://allure.qatools.ru/",
             "keywords": [
                 "allure",
@@ -7975,11 +8066,11 @@
                 "testing"
             ],
             "support": {
-                "email": "allure@yandex-team.ru",
+                "email": "allure@qameta.io",
                 "issues": "https://github.com/allure-framework/allure-phpunit/issues",
                 "source": "https://github.com/allure-framework/allure-phpunit"
             },
-            "time": "2019-12-09T10:43:05+00:00"
+            "time": "2021-03-26T15:43:03+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -9913,20 +10004,20 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.5.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "4cb2b5bc50c9d1277c647fac0b83f00cb8580be1"
+                "reference": "5a6bdf511182151a6c357b788eb0c3f2fd89954a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/4cb2b5bc50c9d1277c647fac0b83f00cb8580be1",
-                "reference": "4cb2b5bc50c9d1277c647fac0b83f00cb8580be1",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/5a6bdf511182151a6c357b788eb0c3f2fd89954a",
+                "reference": "5a6bdf511182151a6c357b788eb0c3f2fd89954a",
                 "shasum": ""
             },
             "require": {
-                "allure-framework/allure-codeception": "~1.4.0",
+                "allure-framework/allure-codeception": "~1.4.0||~1.5.0",
                 "aws/aws-sdk-php": "^3.132",
                 "codeception/codeception": "~4.1.4",
                 "codeception/module-asserts": "^1.1",
@@ -10003,60 +10094,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.5.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.5.1"
             },
-            "time": "2021-04-06T17:58:00+00:00"
-        },
-        {
-            "name": "mikey179/vfsstream",
-            "version": "v1.6.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bovigo/vfsStream.git",
-                "reference": "231c73783ebb7dd9ec77916c10037eff5a2b6efe"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bovigo/vfsStream/zipball/231c73783ebb7dd9ec77916c10037eff5a2b6efe",
-                "reference": "231c73783ebb7dd9ec77916c10037eff5a2b6efe",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.5|^5.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.6.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "org\\bovigo\\vfs\\": "src/main/php"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Frank Kleine",
-                    "homepage": "http://frankkleine.de/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Virtual file system to mock the real file system in unit tests.",
-            "homepage": "http://vfs.bovigo.org/",
-            "support": {
-                "issues": "https://github.com/bovigo/vfsStream/issues",
-                "source": "https://github.com/bovigo/vfsStream/tree/master",
-                "wiki": "https://github.com/bovigo/vfsStream/wiki"
-            },
-            "time": "2019-10-30T15:31:00+00:00"
+            "time": "2021-05-05T15:01:30+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -12043,57 +12083,6 @@
             "time": "2020-09-28T05:24:23+00:00"
         },
         {
-            "name": "sebastian/finder-facade",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/finder-facade.git",
-                "reference": "9d3e74b845a2ce50e19b25b5f0c2718e153bee6c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/finder-facade/zipball/9d3e74b845a2ce50e19b25b5f0c2718e153bee6c",
-                "reference": "9d3e74b845a2ce50e19b25b5f0c2718e153bee6c",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*",
-                "php": "^7.3",
-                "symfony/finder": "^4.1|^5.0",
-                "theseer/fdomdocument": "^1.6"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de",
-                    "role": "lead"
-                }
-            ],
-            "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
-            "homepage": "https://github.com/sebastianbergmann/finder-facade",
-            "support": {
-                "issues": "https://github.com/sebastianbergmann/finder-facade/issues",
-                "source": "https://github.com/sebastianbergmann/finder-facade/tree/2.0.0"
-            },
-            "abandoned": true,
-            "time": "2020-02-08T06:07:58+00:00"
-        },
-        {
             "name": "sebastian/global-state",
             "version": "4.0.0",
             "source": {
@@ -13040,50 +13029,6 @@
             "time": "2021-03-06T07:59:01+00:00"
         },
         {
-            "name": "theseer/fdomdocument",
-            "version": "1.6.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/theseer/fDOMDocument.git",
-                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/6e8203e40a32a9c770bcb62fe37e68b948da6dca",
-                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "lib-libxml": "*",
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Arne Blankerts",
-                    "email": "arne@blankerts.de",
-                    "role": "lead"
-                }
-            ],
-            "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
-            "homepage": "https://github.com/theseer/fDOMDocument",
-            "support": {
-                "issues": "https://github.com/theseer/fDOMDocument/issues",
-                "source": "https://github.com/theseer/fDOMDocument/tree/master"
-            },
-            "time": "2017-06-30T11:53:12+00:00"
-        },
-        {
             "name": "theseer/tokenizer",
             "version": "1.2.0",
             "source": {
@@ -13334,5 +13279,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

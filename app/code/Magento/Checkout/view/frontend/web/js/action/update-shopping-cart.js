@@ -125,7 +125,7 @@ define([
                 .on('submit', function () {
                     $(document.body).trigger('processStart');
                 })
-                .submit();
+                .trigger('submit');
         }
     });
 
