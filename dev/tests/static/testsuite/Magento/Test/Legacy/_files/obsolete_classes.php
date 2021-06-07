@@ -2845,7 +2845,7 @@ return [
     ['Magento\Framework\Stdlib\CookieManager', 'Magento\Framework\Stdlib\CookieManagerInterface'],
     ['Magento\Framework\Interception\PluginList', 'Magento\Framework\Interception\PluginListInterface'],
     ['Magento\Framework\Interception\Config', 'Magento\Framework\Interception\ConfigInterface'],
-    ['Magento\Framework\Interception\Chain', 'Magento\Framework\Interception\ChainInterface'],
+    ['Magento\Framework\Interception\Chain'],
     ['Magento\Framework\Interception\Definition', 'Magento\Framework\Interception\DefinitionInterface'],
     ['Magento\Framework\ObjectManager\Factory', 'Magento\Framework\ObjectManager\FactoryInterface'],
     ['Magento\Framework\ObjectManager\Config', 'Magento\Framework\ObjectManager\ConfigInterface'],
