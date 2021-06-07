@@ -118,11 +118,16 @@ class Reader
                 }
 
                 if (!$definitionsCollection->hasInstance($preference)) {
-                    // Removing this preference, because its class has been excluded intentionally.
                     // See 'excludePatterns' in Magento\Setup\Module\Di\Code\Reader\ClassesScanner,
                     // populated via Magento\Setup\Console\Command\DiCompileCommand
-                    // TODO: add logging here so developers get useful messaging.
-                    continue;
+                    throw new LocalizedException(new Phrase(
+                        'Preference declared for "%instanceName" as "%preference", but the latter'
+                            . ' has not been included in dependency injection compilation.',
+                        [
+                            'instanceName' => $instanceName,
+                            'preference' => $preference,
+                        ]
+                    ));
                 }
 
                 $config['preferences'][$instanceName] = $preference;
