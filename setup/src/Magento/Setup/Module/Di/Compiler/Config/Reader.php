@@ -7,7 +7,9 @@
 namespace Magento\Setup\Module\Di\Compiler\Config;
 
 use Magento\Framework\App;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\Phrase;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory;
@@ -92,6 +94,37 @@ class Reader
         foreach ($definitionsCollection->getInstancesNamesList() as $instanceName) {
             $preference = $areaConfig->getPreference($instanceName);
             if ($instanceName !== $preference) {
+                if (array_key_exists($preference, $areaConfig->getVirtualTypes())) {
+                    // Special handling is required for virtual types.
+                    $config['preferences'][$instanceName] = $preference;
+                    continue;
+                }
+
+                if (!class_exists($preference)) {
+                    throw new LocalizedException(new Phrase(
+                        'Preference declared for "%instanceName" as "%preference", but the latter does not exist.',
+                        [
+                            'instanceName' => $instanceName,
+                            'preference' => $preference,
+                        ]
+                    ));
+                }
+
+                // Classes defined by PHP extensions are allowed.
+                $reflection = new \ReflectionClass($preference);
+                if ($reflection->getExtension()) {
+                    $config['preferences'][$instanceName] = $preference;
+                    continue;
+                }
+
+                if (!$definitionsCollection->hasInstance($preference)) {
+                    // Removing this preference, because its class has been excluded intentionally.
+                    // See 'excludePatterns' in Magento\Setup\Module\Di\Code\Reader\ClassesScanner,
+                    // populated via Magento\Setup\Console\Command\DiCompileCommand
+                    // TODO: add logging here so developers get useful messaging.
+                    continue;
+                }
+
                 $config['preferences'][$instanceName] = $preference;
             }
         }
