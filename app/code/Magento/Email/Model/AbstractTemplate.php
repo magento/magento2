@@ -15,6 +15,8 @@ use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use \Magento\Directory\Api\CountryInformationAcquirerInterface;
+use \Magento\Directory\Model\RegionFactory;
 
 /**
  * Template model class.
@@ -57,6 +59,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Email logo height
      */
     const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
+
+    /**
+     * Email country id
+     */
+    const XML_PATH_GENERAL_STORE_INFORMATION_COUNTRY_ID = 'general/store_information/country_id';
+
+    /**
+     * Email region id
+     */
+    const XML_PATH_GENERAL_STORE_INFORMATION_REGION_ID = 'general/store_information/region_id';
 
     /**
      * Configuration of design package for template
@@ -166,6 +178,16 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     private $urlModel;
 
     /**
+     * @var \Magento\Directory\Api\CountryInformationAcquirerInterface
+     */
+    protected $countryInformationAcquirerInterface;
+
+    /**
+     * @var \Magento\Directory\Model\RegionFactory
+     */
+    protected $regionFactory;
+
+    /**
      * @var Database
      */
     private $fileStorageDatabase;
@@ -183,6 +205,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
+     * @param CountryInformationAcquirerInterface $countryInformationAcquirerInterface
+     * @param RegionFactory $regionFactory
      * @param array $data
      * @param Database $fileStorageDatabase
      *
@@ -201,6 +225,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
+        CountryInformationAcquirerInterface $countryInformationAcquirerInterface,
+        RegionFactory $regionFactory,
         array $data = [],
         Database $fileStorageDatabase = null
     ) {
@@ -216,6 +242,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->templateFactory = $templateFactory;
         $this->filterManager = $filterManager;
         $this->urlModel = $urlModel;
+        $this->countryInformationAcquirerInterface = $countryInformationAcquirerInterface;
+        $this->regionFactory = $regionFactory;
         $this->fileStorageDatabase = $fileStorageDatabase ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(Database::class);
         parent::__construct($context, $registry, null, null, $data);
@@ -512,6 +540,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
                 $store
             );
         }
+        if (!isset($variables['store_country'])) {
+            $variables['store_country'] = $this->getCountryName($store);
+        }
+        if (!isset($variables['store_region'])) {
+            $variables['store_region'] = $this->getRegionName($store);
+        }
         // If template is text mode, don't include styles
         if (!$this->isPlain() && !isset($variables['template_styles'])) {
             $variables['template_styles'] = $this->getTemplateStyles();
@@ -772,5 +806,47 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $params['_scope_to_url'] = true;
         }
         return $url->getUrl($route, $params);
+    }
+
+    /**
+     * Get country name for the specified store.
+     *
+     * @param Store $store
+     * @return string
+     */
+    protected function getCountryName($store)
+    {
+        $countryName = '';
+        $store = $this->storeManager->getStore($store);
+        $countryId = $this->scopeConfig->getValue(
+            self::XML_PATH_GENERAL_STORE_INFORMATION_COUNTRY_ID,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        if($countryId) {
+            $countryName = $this->countryInformationAcquirerInterface->getCountryInfo($countryId)->getFullNameLocale();
+        }
+        return $countryName;
+    }
+
+    /**
+     * Get region name for the specified store.
+     *
+     * @param Store $store
+     * @return string
+     */
+    protected function getRegionName($store)
+    {
+        $regionName = '';
+        $store = $this->storeManager->getStore($store);
+        $regionId = $this->scopeConfig->getValue(
+            self::XML_PATH_GENERAL_STORE_INFORMATION_REGION_ID,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        if($regionId) {
+            $regionName = $this->regionFactory->create()->load($regionId)->getName();
+        }
+        return $regionName;
     }
 }
