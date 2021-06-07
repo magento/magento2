@@ -256,8 +256,8 @@ class DiCompileCommand extends Command
         }
 
         $excludedModulePaths = [
-            '#^(?:' . join('|', $basePathsRegExps) . ')/Tests?/#',
-            '#^(?:' . join('|', $basePathsRegExps) . ')/tests/#',
+            '#^(?:' . join('|', $basePathsRegExps) . ')/Test#',
+            '#^(?:' . join('|', $basePathsRegExps) . ')/tests#',
         ];
         return $excludedModulePaths;
     }
@@ -278,8 +278,8 @@ class DiCompileCommand extends Command
         );
 
         $excludedLibraryPaths = [
-            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Tests?/#',
-            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests/#',
+            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?Test#',
+            '#^(?:' . join('|', $libraryPaths) . ')/([\\w]+/)?tests#',
         ];
         return $excludedLibraryPaths;
     }
@@ -293,7 +293,7 @@ class DiCompileCommand extends Command
     private function getExcludedSetupPaths($setupPath)
     {
         return [
-            '#^(?:' . preg_quote($setupPath, '#') . ')(/[\\w]+)*/Tests?/#'
+            '#^(?:' . preg_quote($setupPath, '#') . ')(/[\\w]+)*/Test#'
         ];
     }
 
