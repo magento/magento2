@@ -282,7 +282,8 @@ MUTATION;
 
         // Search the specified bundle product for the specified option based on the product sku
         foreach ($bundleProductOptions as $bundleProductOption) {
-            if ($bundleProductOption['product']['sku'] === $selectedOptionSku) {
+            if (isset($bundleProductOption['product'])
+                && $bundleProductOption['product']['sku'] === $selectedOptionSku) {
                 $bundleProductOptionUid = $bundleProductOption['uid'];
                 break;
             }
