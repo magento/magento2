@@ -25,8 +25,13 @@ class CurlHelpers extends Helper
      * @return void
      *
      */
-    public function assertCurlResponseContainsString($url, $expectedString, $postBody = null, $cookieName = 'admin', $message = ''): void
-    {
+    public function assertCurlResponseContainsString(
+        $url,
+        $expectedString,
+        $postBody = null,
+        $cookieName = 'admin',
+        $message = ''
+    ): void {
         $cookie = $this->getCookie($cookieName);
         $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
         $this->assertStringContainsString($expectedString, $curlResponse, $message);
@@ -43,8 +48,13 @@ class CurlHelpers extends Helper
      * @return void
      *
      */
-    public function assertImageContentIsEqual($url, $expectedString, $postBody = null, $cookieName = null, $message = ''): void
-    {
+    public function assertImageContentIsEqual(
+        $url,
+        $expectedString,
+        $postBody = null,
+        $cookieName = null,
+        $message = ''
+    ): void {
         $cookie = $this->getCookie($cookieName);
         $imageContent = $this->getCurlResponse($url, $cookie, $postBody);
         // Must make request twice until bug is resolved: B2B-1789
@@ -65,11 +75,44 @@ class CurlHelpers extends Helper
      * @return void
      *
      */
-    public function assertCurlResponseDoesNotContainString($url, $expectedString, $postBody = null, $cookieName = 'admin'): void
-    {
+    public function assertCurlResponseDoesNotContainString(
+        $url,
+        $expectedString,
+        $postBody = null,
+        $cookieName = 'admin'
+    ): void {
         $cookie = $this->getCookie($cookieName);
         $curlResponse = $this->getCurlResponse($url, $cookie, $postBody);
         $this->assertStringNotContainsString($expectedString, $curlResponse);
+    }
+
+    /**
+     * Assert a that a curl request's response headers contains an expected string
+     *
+     * @param string $url
+     * @param string $expectedString
+     * @param string $postBody
+     * @param string $cookieName
+     * @return void
+     *
+     */
+    public function assertCurlResponseHeadersContainsString(
+        $url,
+        $expectedString,
+        $postBody = null,
+        $cookieName = 'admin'
+    ): void {
+        $cookie = $this->getCookie($cookieName);
+        $curlResponse = $this->getCurlResponse(
+            $url,
+            $cookie,
+            $postBody,
+            [
+                CURLOPT_NOBODY => true,
+                CURLOPT_HEADER => true,
+            ]
+        );
+        $this->assertStringContainsString($expectedString, $curlResponse);
     }
 
     /**
@@ -78,10 +121,11 @@ class CurlHelpers extends Helper
      * @param string $url
      * @param string $cookie
      * @param string $postBody
+     * @param array $options
      * @return string
      *
      */
-    private function getCurlResponse($url, $cookie = null, $postBody = null): string
+    private function getCurlResponse($url, $cookie = null, $postBody = null, array $options = []): string
     {
         // Start Session
         $session = curl_init($url);
@@ -94,6 +138,9 @@ class CurlHelpers extends Helper
         }
         curl_setopt($session, CURLOPT_COOKIE, $cookie);
         curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
+        foreach ($options as $option => $value) {
+            curl_setopt($session, $option, $value);
+        }
 
         // Execute
         $response = curl_exec($session);
