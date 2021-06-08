@@ -1,14 +1,14 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type StoreConfig {
-    zero_subtotal_enabled: Boolean @doc(description: "Zero Subtotal payment method functionality status: enabled/disabled")
+    zero_subtotal_enabled: Boolean @doc(description: "Indicates whether the Zero Subtotal payment method is enabled")
     zero_subtotal_title: String @doc(description: "The title of the Zero Subtotal payment method displayed on the storefront")
     zero_subtotal_new_order_status: String @doc(description: "Status of new orders placed using the Zero Subtotal payment method")
     zero_subtotal_payment_action: String @doc(description: "When the new order status is 'Processing', this can be set to 'authorize_capture' to automatically invoice all items that have a zero balance")
     zero_subtotal_payment_from_applicable_countries: String @doc(description: "States whether All Allowed Countries or Specific Countries can use the Zero Subtotal payment method")
     zero_subtotal_payment_from_specific_countries: String @doc(description: "Comma-separated list of specific countries allowed to use the Zero Subtotal payment method")
     zero_subtotal_sort_order: Int @doc(description: "A number indicating the position of the Zero Subtotal payment method in the list of available payment methods during checkout")
-    check_money_order_enabled: Boolean @doc(description: "Check/Money Order payment method status: enabled/disabled")
+    check_money_order_enabled: Boolean @doc(description: "Indicates whether the Check/Money Order payment method is enabled")
     check_money_order_title: String @doc(description: "The title of the Check/Money Order payment method displayed on the storefront")
     check_money_order_new_order_status: String @doc(description: "Status of new orders placed using the Check/Money Order payment method")
     check_money_order_payment_from_applicable_countries: String @doc(description: "States whether All Allowed Countries or Specific Countries can use the Check/Money Order payment method")
