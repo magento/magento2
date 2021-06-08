@@ -10,7 +10,7 @@ use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Interface \Magento\Framework\Message\ExceptionMessageFactoryInterface
- *
+ * @api
  */
 interface ExceptionMessageFactoryInterface
 {
