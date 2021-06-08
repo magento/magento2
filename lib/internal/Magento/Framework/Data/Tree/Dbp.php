@@ -101,7 +101,7 @@ class Dbp extends \Magento\Framework\Data\Tree
         parent::__construct();
 
         if (!$connection) {
-            throw new \Exception('Wrong "$connection" parametr');
+            throw new \Exception('Wrong "$connection" parameter');
         }
 
         $this->_conn = $connection;
