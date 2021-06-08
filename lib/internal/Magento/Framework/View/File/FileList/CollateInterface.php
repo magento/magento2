@@ -8,6 +8,7 @@ namespace Magento\Framework\View\File\FileList;
 
 /**
  * View file list collate interface
+ * @api
  */
 interface CollateInterface
 {

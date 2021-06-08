@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme\Customization;
 
 /**
  * Theme customization configuration interface
+ * @api
  */
 interface ConfigInterface
 {

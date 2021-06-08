@@ -7,7 +7,7 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Interface \Magento\Framework\View\Layout\GeneratorInterface
- *
+ * @api
  */
 interface GeneratorInterface
 {

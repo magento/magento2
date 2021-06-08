@@ -7,6 +7,7 @@ namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 /**
  * Interface ResultInterface
+ * @api
  */
 interface ResultInterface
 {

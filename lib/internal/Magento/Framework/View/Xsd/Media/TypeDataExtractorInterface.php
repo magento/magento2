@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Xsd\Media;
 
 /**
  * Interface that encapsulates complexity of expression computation
+ * @api
  */
 interface TypeDataExtractorInterface
 {

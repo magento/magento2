@@ -11,6 +11,7 @@ use Magento\Framework\Data\Collection;
 
 /**
  * Interface FilterApplierInterface
+ * @api
  */
 interface FilterApplierInterface
 {

@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface AttributeInterface
+ * @api
  */
 interface AttributeInterface
 {

@@ -7,6 +7,7 @@ namespace Magento\Framework\View;
 
 /**
  * Interface for Template Engine
+ * @api
  */
 interface TemplateEngineInterface
 {

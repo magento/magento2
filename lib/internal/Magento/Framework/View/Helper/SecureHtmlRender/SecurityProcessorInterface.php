@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Helper\SecureHtmlRender;
 
 /**
  * Perform security related modifications or logic for HTML being rendered.
+ * @api
  */
 interface SecurityProcessorInterface
 {

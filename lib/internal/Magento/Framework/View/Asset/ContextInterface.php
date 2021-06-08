@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 /**
  * An abstraction for getting context path of an asset
+ * @api
  */
 interface ContextInterface
 {

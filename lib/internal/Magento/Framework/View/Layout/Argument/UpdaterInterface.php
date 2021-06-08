@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Layout\Argument;
 
 /**
  * Interface of value modification with no value loss
+ * @api
  */
 interface UpdaterInterface
 {

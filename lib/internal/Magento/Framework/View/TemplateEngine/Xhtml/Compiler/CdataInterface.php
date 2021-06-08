@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface CdataInterface
+ * @api
  */
 interface CdataInterface
 {

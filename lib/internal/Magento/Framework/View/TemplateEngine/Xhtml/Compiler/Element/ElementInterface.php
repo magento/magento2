@@ -10,6 +10,7 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
  * Interface ElementInterface
+ * @api
  */
 interface ElementInterface
 {

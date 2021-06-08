@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Page\Config;
  * Interface RendererInterface
  *
  * @package Magento\Framework\View\Page\Config
+ * @api
  */
 interface RendererInterface
 {

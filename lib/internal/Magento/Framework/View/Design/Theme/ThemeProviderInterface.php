@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Interface ThemeProviderInterface
+ * @api
  */
 interface ThemeProviderInterface
 {

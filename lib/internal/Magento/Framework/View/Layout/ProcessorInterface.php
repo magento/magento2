@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Layout;
 
 /**
  * Interface ProcessorInterface
+ * @api
  */
 interface ProcessorInterface
 {

@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Interface ContentTypeInterface
+ * @api
  */
 interface ContentTypeInterface
 {

@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme\Domain;
 
 /**
  * Interface PhysicalInterface
+ * @api
  */
 interface PhysicalInterface
 {

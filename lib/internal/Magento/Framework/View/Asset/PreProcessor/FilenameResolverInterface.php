@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 
 /**
  * Interface FilenameResolverInterface
+ * @api
  */
 interface FilenameResolverInterface
 {

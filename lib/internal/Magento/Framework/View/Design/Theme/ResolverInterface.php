@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Design\Theme;
 
 /**
  * Theme resolver interface
+ * @api
  */
 interface ResolverInterface
 {

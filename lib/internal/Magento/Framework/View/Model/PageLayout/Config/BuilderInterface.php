@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Model\PageLayout\Config;
 
 /**
  * Interface BuilderInterface
+ * @api
  */
 interface BuilderInterface
 {

@@ -23,6 +23,7 @@ namespace Magento\Framework\View\Layout\Condition;
  * </uiComponent>
  *
  * "visibilityCondition" just another optional child element of ui component declaration
+ * @api
  */
 interface VisibilityConditionInterface
 {

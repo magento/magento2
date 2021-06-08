@@ -11,6 +11,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Interface for resolvers of view files using fallback rules
+ * @api
  */
 interface ResolverInterface
 {

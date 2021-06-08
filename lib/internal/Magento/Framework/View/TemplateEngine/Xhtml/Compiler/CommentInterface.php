@@ -9,6 +9,7 @@ use Magento\Framework\DataObject;
 
 /**
  * Interface CommentInterface
+ * @api
  */
 interface CommentInterface
 {

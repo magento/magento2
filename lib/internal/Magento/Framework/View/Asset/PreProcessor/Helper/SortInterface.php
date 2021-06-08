@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset\PreProcessor\Helper;
 
 /**
  * Interface SortInterface
+ * @api
  */
 interface SortInterface
 {

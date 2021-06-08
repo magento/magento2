@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Element\UiComponent\Control;
 
 /**
  * Interface ButtonProviderInterface
+ * @api
  */
 interface ButtonProviderInterface
 {

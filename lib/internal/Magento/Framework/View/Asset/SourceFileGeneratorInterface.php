@@ -11,6 +11,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
  * Interface SourceFileGenerator
  *
  * @package Magento\Framework\View\Asset
+ * @api
  */
 interface SourceFileGeneratorInterface
 {
