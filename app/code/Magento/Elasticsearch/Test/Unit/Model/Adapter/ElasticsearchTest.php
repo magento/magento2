@@ -338,7 +338,7 @@ class ElasticsearchTest extends TestCase
             ->method('getIndexName')
             ->willReturnMap([[1, 'product', [1 => null], '_product_1_v0']]);
 
-        $this->client->expects($this->any())
+        $this->client->expects($this->atLeastOnce())
             ->method('indexExists')
             ->willReturnMap(
                 [
