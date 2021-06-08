@@ -67,6 +67,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                     $this->objectManager->get(\Magento\Email\Model\TemplateFactory::class),
                     $this->objectManager->get(\Magento\Framework\Filter\FilterManager::class),
                     $this->objectManager->get(\Magento\Framework\UrlInterface::class),
+                    $this->objectManager->get(\Magento\Directory\Api\CountryInformationAcquirerInterface::class),
+                    $this->objectManager->get(\Magento\Directory\Model\RegionFactory::class),
                     $this->objectManager->get(\Magento\Email\Model\Template\FilterFactory::class),
                 ]
             )

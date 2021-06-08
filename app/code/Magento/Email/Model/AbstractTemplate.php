@@ -823,7 +823,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             ScopeInterface::SCOPE_STORE,
             $store
         );
-        if($countryId) {
+        if ($countryId) {
             $countryName = $this->countryInformationAcquirerInterface->getCountryInfo($countryId)->getFullNameLocale();
         }
         return $countryName;
@@ -844,7 +844,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             ScopeInterface::SCOPE_STORE,
             $store
         );
-        if($regionId) {
+        if ($regionId) {
             $regionName = $this->regionFactory->create()->load($regionId)->getName();
         }
         return $regionName;
