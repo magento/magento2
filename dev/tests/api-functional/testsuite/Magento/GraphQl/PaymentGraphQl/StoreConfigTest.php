@@ -23,13 +23,13 @@ class StoreConfigTest extends GraphQlAbstract
         zero_subtotal_title
         zero_subtotal_new_order_status
         zero_subtotal_payment_action
-        zero_subtotal_payment_from_applicable_countries
+        zero_subtotal_enable_for_specific_countries
         zero_subtotal_payment_from_specific_countries
         zero_subtotal_sort_order
         check_money_order_enabled
         check_money_order_title
         check_money_order_new_order_status
-        check_money_order_payment_from_applicable_countries
+        check_money_order_enable_for_specific_countries
         check_money_order_payment_from_specific_countries
         check_money_order_make_check_payable_to
         check_money_order_send_check_to
@@ -52,13 +52,13 @@ QUERY;
         self::assertArrayHasKey('zero_subtotal_title', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_new_order_status', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_payment_action', $response['storeConfig']);
-        self::assertArrayHasKey('zero_subtotal_payment_from_applicable_countries', $response['storeConfig']);
+        self::assertArrayHasKey('zero_subtotal_enable_for_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_payment_from_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_sort_order', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_enabled', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_title', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_new_order_status', $response['storeConfig']);
-        self::assertArrayHasKey('check_money_order_payment_from_applicable_countries', $response['storeConfig']);
+        self::assertArrayHasKey('check_money_order_enable_for_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_payment_from_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_make_check_payable_to', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_send_check_to', $response['storeConfig']);
@@ -70,13 +70,13 @@ QUERY;
         self::assertEquals('No Payment Information Required', $response['storeConfig']['zero_subtotal_title']);
         self::assertEquals('pending', $response['storeConfig']['zero_subtotal_new_order_status']);
         self::assertEquals('authorize_capture', $response['storeConfig']['zero_subtotal_payment_action']);
-        self::assertEquals('0', $response['storeConfig']['zero_subtotal_payment_from_applicable_countries']);
+        self::assertFalse($response['storeConfig']['zero_subtotal_enable_for_specific_countries']);
         self::assertNull($response['storeConfig']['zero_subtotal_payment_from_specific_countries']);
         self::assertEquals(1, $response['storeConfig']['zero_subtotal_sort_order']);
         self::assertTrue($response['storeConfig']['check_money_order_enabled']);
         self::assertEquals('Check / Money order', $response['storeConfig']['check_money_order_title']);
         self::assertEquals('pending', $response['storeConfig']['check_money_order_new_order_status']);
-        self::assertEquals('0', $response['storeConfig']['check_money_order_payment_from_applicable_countries']);
+        self::assertFalse($response['storeConfig']['check_money_order_enable_for_specific_countries']);
         self::assertNull($response['storeConfig']['check_money_order_payment_from_specific_countries']);
         self::assertNull($response['storeConfig']['check_money_order_make_check_payable_to']);
         self::assertNull($response['storeConfig']['check_money_order_send_check_to']);
@@ -100,13 +100,13 @@ QUERY;
         self::assertArrayHasKey('zero_subtotal_title', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_new_order_status', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_payment_action', $response['storeConfig']);
-        self::assertArrayHasKey('zero_subtotal_payment_from_applicable_countries', $response['storeConfig']);
+        self::assertArrayHasKey('zero_subtotal_enable_for_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_payment_from_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_sort_order', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_enabled', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_title', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_new_order_status', $response['storeConfig']);
-        self::assertArrayHasKey('check_money_order_payment_from_applicable_countries', $response['storeConfig']);
+        self::assertArrayHasKey('check_money_order_enable_for_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_payment_from_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_make_check_payable_to', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_send_check_to', $response['storeConfig']);
@@ -118,13 +118,13 @@ QUERY;
         self::assertEquals('No Payment Information Required', $response['storeConfig']['zero_subtotal_title']);
         self::assertEquals('pending', $response['storeConfig']['zero_subtotal_new_order_status']);
         self::assertEquals('authorize_capture', $response['storeConfig']['zero_subtotal_payment_action']);
-        self::assertEquals('0', $response['storeConfig']['zero_subtotal_payment_from_applicable_countries']);
+        self::assertFalse($response['storeConfig']['zero_subtotal_enable_for_specific_countries']);
         self::assertNull($response['storeConfig']['zero_subtotal_payment_from_specific_countries']);
         self::assertEquals(1, $response['storeConfig']['zero_subtotal_sort_order']);
         self::assertFalse($response['storeConfig']['check_money_order_enabled']);
         self::assertEquals('Check / Money order', $response['storeConfig']['check_money_order_title']);
         self::assertEquals('pending', $response['storeConfig']['check_money_order_new_order_status']);
-        self::assertEquals('0', $response['storeConfig']['check_money_order_payment_from_applicable_countries']);
+        self::assertFalse($response['storeConfig']['check_money_order_enable_for_specific_countries']);
         self::assertNull($response['storeConfig']['check_money_order_payment_from_specific_countries']);
         self::assertNull($response['storeConfig']['check_money_order_make_check_payable_to']);
         self::assertNull($response['storeConfig']['check_money_order_send_check_to']);
@@ -159,13 +159,13 @@ QUERY;
         self::assertArrayHasKey('zero_subtotal_title', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_new_order_status', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_payment_action', $response['storeConfig']);
-        self::assertArrayHasKey('zero_subtotal_payment_from_applicable_countries', $response['storeConfig']);
+        self::assertArrayHasKey('zero_subtotal_enable_for_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_payment_from_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('zero_subtotal_sort_order', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_enabled', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_title', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_new_order_status', $response['storeConfig']);
-        self::assertArrayHasKey('check_money_order_payment_from_applicable_countries', $response['storeConfig']);
+        self::assertArrayHasKey('check_money_order_enable_for_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_payment_from_specific_countries', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_make_check_payable_to', $response['storeConfig']);
         self::assertArrayHasKey('check_money_order_send_check_to', $response['storeConfig']);
@@ -177,13 +177,13 @@ QUERY;
         self::assertEquals('Test Zero Subtotal Title', $response['storeConfig']['zero_subtotal_title']);
         self::assertEquals('processing', $response['storeConfig']['zero_subtotal_new_order_status']);
         self::assertEquals('authorize_capture', $response['storeConfig']['zero_subtotal_payment_action']);
-        self::assertEquals('1', $response['storeConfig']['zero_subtotal_payment_from_applicable_countries']);
+        self::assertTrue($response['storeConfig']['zero_subtotal_enable_for_specific_countries']);
         self::assertEquals('DZ', $response['storeConfig']['zero_subtotal_payment_from_specific_countries']);
         self::assertEquals(5, $response['storeConfig']['zero_subtotal_sort_order']);
         self::assertTrue($response['storeConfig']['check_money_order_enabled']);
         self::assertEquals('Test Check / Money Order Title', $response['storeConfig']['check_money_order_title']);
         self::assertEquals('pending', $response['storeConfig']['check_money_order_new_order_status']);
-        self::assertEquals('1', $response['storeConfig']['check_money_order_payment_from_applicable_countries']);
+        self::assertTrue($response['storeConfig']['check_money_order_enable_for_specific_countries']);
         self::assertEquals('BR', $response['storeConfig']['check_money_order_payment_from_specific_countries']);
         self::assertEquals('Test Payee', $response['storeConfig']['check_money_order_make_check_payable_to']);
         self::assertEquals('Test Address', $response['storeConfig']['check_money_order_send_check_to']);

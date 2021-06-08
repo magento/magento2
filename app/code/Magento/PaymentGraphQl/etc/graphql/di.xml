@@ -13,13 +13,13 @@
                 <item name="zero_subtotal_title" xsi:type="string">payment/free/title</item>
                 <item name="zero_subtotal_new_order_status" xsi:type="string">payment/free/order_status</item>
                 <item name="zero_subtotal_payment_action" xsi:type="string">payment/free/payment_action</item>
-                <item name="zero_subtotal_payment_from_applicable_countries" xsi:type="string">payment/free/allowspecific</item>
+                <item name="zero_subtotal_enable_for_specific_countries" xsi:type="string">payment/free/allowspecific</item>
                 <item name="zero_subtotal_payment_from_specific_countries" xsi:type="string">payment/free/specificcountry</item>
                 <item name="zero_subtotal_sort_order" xsi:type="string">payment/free/sort_order</item>
                 <item name="check_money_order_enabled" xsi:type="string">payment/checkmo/active</item>
                 <item name="check_money_order_title" xsi:type="string">payment/checkmo/title</item>
                 <item name="check_money_order_new_order_status" xsi:type="string">payment/checkmo/order_status</item>
-                <item name="check_money_order_payment_from_applicable_countries" xsi:type="string">payment/checkmo/allowspecific</item>
+                <item name="check_money_order_enable_for_specific_countries" xsi:type="string">payment/checkmo/allowspecific</item>
                 <item name="check_money_order_payment_from_specific_countries" xsi:type="string">payment/checkmo/specificcountry</item>
                 <item name="check_money_order_make_check_payable_to" xsi:type="string">payment/checkmo/payable_to</item>
                 <item name="check_money_order_send_check_to" xsi:type="string">payment/checkmo/mailing_address</item>
