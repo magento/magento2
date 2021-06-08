@@ -166,7 +166,7 @@ Description,Description
 "Shipping Settings","Shipping Settings"
 Origin,Origin
 Country,Country
-Region/State,Region/State
+Region/State/Province,Region/State/Province
 "ZIP/Postal Code","ZIP/Postal Code"
 City,City
 "Street Address","Street Address"

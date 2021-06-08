@@ -1,4 +1,4 @@
-Country,Region/State,Zip/Postal Code,Weight (and above),Shipping Price
+Country,Region/State/Province,Zip/Postal Code,Weight (and above),Shipping Price
 ASM,*,*,0,9.95
 FSM,*,*,0,9.95
 GUM,*,*,0,9.95

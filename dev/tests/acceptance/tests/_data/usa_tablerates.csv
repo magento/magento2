@@ -1,4 +1,4 @@
-Country,Region/State,"Zip/Postal Code","Order Subtotal (and above)","Shipping Price"
+Country,Region/State/Province,"Zip/Postal Code","Order Subtotal (and above)","Shipping Price"
 USA,*,*,0.0000,7.9900
 USA,*,*,7.0000,6.9900
 USA,*,*,13.0000,5.9900

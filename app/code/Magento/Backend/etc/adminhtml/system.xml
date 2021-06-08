@@ -278,7 +278,7 @@
                     <can_be_empty>1</can_be_empty>
                 </field>
                 <field id="region_id" translate="label" type="text" sortOrder="27" showInDefault="1" showInWebsite="1">
-                    <label>Region/State</label>
+                    <label>Region/State/Province</label>
                 </field>
                 <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1">
                     <label>ZIP/Postal Code</label>

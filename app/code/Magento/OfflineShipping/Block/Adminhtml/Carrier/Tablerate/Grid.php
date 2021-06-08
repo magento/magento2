@@ -145,7 +145,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->addColumn(
             'dest_region',
-            ['header' => __('Region/State'), 'index' => 'dest_region', 'default' => '*']
+            ['header' => __('Region/State/Province'), 'index' => 'dest_region', 'default' => '*']
         );
 
         $this->addColumn(

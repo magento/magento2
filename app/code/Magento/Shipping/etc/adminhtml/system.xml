@@ -19,7 +19,7 @@
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                 </field>
                 <field id="region_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
-                    <label>Region/State</label>
+                    <label>Region/State/Province</label>
                 </field>
                 <field id="postcode" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>ZIP/Postal Code</label>

@@ -1,5 +1,5 @@
 Country,Country
-Region/State,Region/State
+Region/State/Province,Region/State/Province
 "Zip/Postal Code","Zip/Postal Code"
 "Shipping Price","Shipping Price"
 "Export CSV","Export CSV"
@@ -22,7 +22,7 @@ None,None
 "Column ""%1"" not found","Column ""%1"" not found"
 "Please correct Table Rates format in the Row #%1.","Please correct Table Rates format in the Row #%1."
 "Please correct Country ""%1"" in the Row #%2.","Please correct Country ""%1"" in the Row #%2."
-"Please correct Region/State ""%1"" in the Row #%2.","Please correct Region/State ""%1"" in the Row #%2."
+"Please correct Region/State/Province ""%1"" in the Row #%2.","Please correct Region/State/Province ""%1"" in the Row #%2."
 "Please correct %1 ""%2"" in the Row #%3.","Please correct %1 ""%2"" in the Row #%3."
 "Please correct Shipping Price ""%1"" in the Row #%2.","Please correct Shipping Price ""%1"" in the Row #%2."
 "Duplicate Row #%1 (duplicates row #%2)","Duplicate Row #%1 (duplicates row #%2)"

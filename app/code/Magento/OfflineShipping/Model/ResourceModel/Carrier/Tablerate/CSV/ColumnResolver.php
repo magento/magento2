@@ -9,7 +9,7 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
 class ColumnResolver
 {
     const COLUMN_COUNTRY = 'Country';
-    const COLUMN_REGION = 'Region/State';
+    const COLUMN_REGION = 'Region/State/Province';
     const COLUMN_ZIP = 'Zip/Postal Code';
     const COLUMN_WEIGHT = 'Weight (and above)';
     const COLUMN_WEIGHT_DESTINATION = 'Weight (and above)';
