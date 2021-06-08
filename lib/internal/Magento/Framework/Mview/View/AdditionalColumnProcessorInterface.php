@@ -8,6 +8,10 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\DB\Ddl\Table;
 
+/**
+ * Interface \Magento\Framework\Mview\AdditionalColumnProcessorInterface
+ * @api
+ */
 interface AdditionalColumnProcessorInterface
 {
     /**
