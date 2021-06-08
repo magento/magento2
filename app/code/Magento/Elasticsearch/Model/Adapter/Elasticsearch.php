@@ -252,7 +252,6 @@ class Elasticsearch
             }
         } while ($indexExists);
 
-
         foreach ($deleteQueue as $indexToDelete) {
             // remove index if already exists, wildcard deletion may cause collisions
             try {
