@@ -16,7 +16,7 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 /** @var OrderInterface $order */
-$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100001111');
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
