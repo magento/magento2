@@ -141,7 +141,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      */
     public function beforeSave()
     {
-        $html_field = $this->getValue(self::TYPE_TEXT);
+        $html_field = $this->getValue(self::TYPE_HTML);
         parent::beforeSave();
 
         //Validating HTML content.
