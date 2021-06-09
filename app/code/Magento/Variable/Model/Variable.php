@@ -5,6 +5,7 @@
  */
 namespace Magento\Variable\Model;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -19,7 +20,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @since 100.0.2
  */
-class Variable extends \Magento\Framework\Model\AbstractModel
+class Variable extends AbstractModel
 {
     const TYPE_TEXT = 'text';
 
