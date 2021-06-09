@@ -15,8 +15,7 @@
         "magento/module-require-js": "*",
         "magento/module-media-storage": "*",
         "magento/module-variable": "*",
-        "magento/module-ui": "*",
-        "magento/module-directory": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-theme": "*"

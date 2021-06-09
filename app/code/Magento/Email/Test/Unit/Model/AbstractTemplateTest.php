@@ -253,6 +253,7 @@ class AbstractTemplateTest extends TestCase
             ->method('filter')
             ->with($preparedTemplateText)
             ->willReturn($expectedResult);
+
         $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
     }
 
@@ -338,8 +339,6 @@ class AbstractTemplateTest extends TestCase
                     'store_phone' => null,
                     'store_hours' => null,
                     'store_email' => null,
-                    'store_country' => null,
-                    'store_region' => null
                 ],
                 'expectedResult' => 'expected result',
             ],
@@ -360,8 +359,6 @@ class AbstractTemplateTest extends TestCase
                     'store_hours' => null,
                     'store_email' => null,
                     'template_styles' => null,
-                    'store_country' => null,
-                    'store_region' => null
                 ],
                 'expectedResult' => 'expected result',
             ],

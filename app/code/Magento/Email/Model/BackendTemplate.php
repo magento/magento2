@@ -35,8 +35,6 @@ class BackendTemplate extends Template
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirerInterface
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param array $data
@@ -57,8 +55,6 @@ class BackendTemplate extends Template
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
-        \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirerInterface,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Config\Model\Config\Structure $structure,
         array $data = [],
@@ -78,8 +74,6 @@ class BackendTemplate extends Template
             $templateFactory,
             $filterManager,
             $urlModel,
-            $countryInformationAcquirerInterface,
-            $regionFactory,
             $filterFactory,
             $data,
             $serializer

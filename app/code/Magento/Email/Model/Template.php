@@ -118,8 +118,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      * @param TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirerInterface
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param Template\FilterFactory $filterFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
@@ -140,8 +138,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Email\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
-        \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInformationAcquirerInterface,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         array $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null
@@ -162,8 +158,6 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $templateFactory,
             $filterManager,
             $urlModel,
-            $countryInformationAcquirerInterface,
-            $regionFactory,
             $data
         );
     }
