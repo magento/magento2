@@ -43,6 +43,13 @@ class HtmlRendererTest extends TestCase
             $helper->renderTag($tag)
         );
 
+        /** Test any non-void element to not have a closing tag while not having content */
+        $tags = new TagData('script', [], null, false);
+        $this->assertEquals(
+            "<script></script>",
+            $helper->renderTag($tags)
+        );
+
         /** Test any non-void element to not have a closing tag and allow content */
         $tags = new TagData('script', [], 'content', false);
         $this->assertEquals(
