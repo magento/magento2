@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <createData entity="SalesRuleNoCoupon" stepKey="createSalesRule"/>
+            <createData entity="ApiCartRule" stepKey="createSalesRule"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
