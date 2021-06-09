@@ -50,7 +50,7 @@ class MimePart implements MimePartInterface
         $content,
         ?string $type = MimeInterface::TYPE_HTML,
         ?string $fileName = null,
-        ?string $disposition = null,
+        ?string $disposition = MimeInterface::DISPOSITION_INLINE,
         ?string $encoding = MimeInterface::ENCODING_QUOTED_PRINTABLE,
         ?string $description = null,
         ?array $filters = [],
