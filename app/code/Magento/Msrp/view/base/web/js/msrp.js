@@ -290,7 +290,7 @@ define([
             }
 
             e.preventDefault();
-            $(this.options.cartForm).submit();
+            $(this.options.cartForm).trigger('submit');
         },
 
         /**

@@ -99,7 +99,7 @@ class DeployPackage
             function () use ($package, $options, $skipLogging) {
                 // emulate application locale needed for correct file path resolving
                 $this->localeResolver->setLocale($package->getLocale());
-                $this->deployEmulated($package, $options, $skipLogging);
+                return $this->deployEmulated($package, $options, $skipLogging);
             }
         );
         $package->setState(Package::STATE_COMPLETED);
@@ -151,7 +151,7 @@ class DeployPackage
             $processor->process($package, $options);
         }
 
-        return true;
+        return !(bool)$this->errorsCount;
     }
 
     /**

@@ -67,7 +67,8 @@ class ExtractDataFromCategoryTree
                 $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
             }
         }
-        return $tree;
+
+        return $this->sortTree($tree);
     }
 
     /**
@@ -139,6 +140,26 @@ class ExtractDataFromCategoryTree
         if (isset($pathElements[$index])) {
             $tree[$pathElements[$currentIndex]]['children'] = $this->explodePathToArray($pathElements, $index);
         }
+        return $tree;
+    }
+
+    /**
+     * Recursive method to sort tree
+     *
+     * @param array $tree
+     * @return array
+     */
+    private function sortTree(array $tree): array
+    {
+        foreach ($tree as &$node) {
+            if ($node['children']) {
+                uasort($node['children'], function ($element1, $element2) {
+                    return $element1['position'] > $element2['position'];
+                });
+                $node['children'] = $this->sortTree($node['children']);
+            }
+        }
+
         return $tree;
     }
 }
