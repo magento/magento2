@@ -107,6 +107,7 @@ class Index extends AbstractDb
                     $this->tableResolver->resolve('catalog_product_index_price', $dimensions),
                     ['entity_id', 'customer_group_id', 'website_id', 'min_price']
                 );
+                $select->where('min_price IS NOT NULL');
                 if ($productIds) {
                     $select->where('entity_id IN (?)', $productIds);
                 }
