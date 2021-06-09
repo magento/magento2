@@ -149,8 +149,8 @@ class Configurable implements DimensionalIndexerInterface
         );
         $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), []);
 
-        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $this->applyConfigurableOption($temporaryPriceTable, $dimensions, iterator_to_array($entityIds));
+        $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
     }
 
     /**

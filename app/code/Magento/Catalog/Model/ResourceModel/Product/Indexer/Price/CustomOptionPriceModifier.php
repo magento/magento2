@@ -394,8 +394,16 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         );
         $select->columns(
             [
-                'min_price' => new ColumnValueExpression('i.min_price + io.min_price'),
-                'max_price' => new ColumnValueExpression('i.max_price + io.max_price'),
+                'min_price' => $connection->getCheckSql(
+                    'i.min_price IS NOT NULL',
+                    'i.min_price + io.min_price',
+                    'NULL'
+                ),
+                'max_price' => $connection->getCheckSql(
+                    'i.max_price IS NOT NULL',
+                    'i.max_price + io.max_price',
+                    'NULL'
+                ),
                 'tier_price' => $connection->getCheckSql(
                     'i.tier_price IS NOT NULL',
                     'i.tier_price + io.tier_price',
