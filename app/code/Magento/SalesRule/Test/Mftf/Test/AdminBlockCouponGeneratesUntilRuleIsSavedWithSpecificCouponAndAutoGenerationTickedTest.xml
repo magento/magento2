@@ -8,15 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminBlockCouponGenerateUntilRuleIsSavedWithAutoGenerateTickedTest">
+    <test name="AdminBlockCouponGeneratesUntilRuleIsSavedWithSpecificCouponAndAutoGenerationTickedTest">
         <annotations>
             <features value="SalesRule"/>
             <stories value="Create cart price rule"/>
-            <title value="Block the coupon generates until cart price rule is saved with auto generate option enabled"/>
+            <title value="Block the coupon generates until cart price rule is saved with Specific Coupon and Auto Generation ticked"/>
             <description
-                value="Block the coupon generates until cart price rule is saved with auto generate option enabled"/>
+                value="Block the coupon generates until cart price rule is saved with Specific Coupon and Auto Generation ticked"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-42288"/>
+            <testCaseId value="MC-42602"/>
+            <useCaseId value="MC-42288"/>
             <group value="salesRule"/>
         </annotations>
 
