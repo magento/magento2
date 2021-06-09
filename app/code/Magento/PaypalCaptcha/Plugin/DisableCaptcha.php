@@ -30,6 +30,7 @@ class DisableCaptcha
      * @param DisableCaptchaProcessor $subject
      * @param array $jsLayout
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterProcess(DisableCaptchaProcessor $subject, array $jsLayout): array
     {
