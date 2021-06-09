@@ -7,9 +7,6 @@ namespace Magento\Variable\Model;
 
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text;
 
 /**
  * Custom variable model
