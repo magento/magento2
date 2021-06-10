@@ -55,7 +55,8 @@ class Variable extends AbstractModel
         \Magento\Framework\Escaper $escaper,
         \Magento\Variable\Model\ResourceModel\Variable $resource,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null
     ) {
         $this->_escaper = $escaper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -144,14 +145,7 @@ class Variable extends AbstractModel
 
         //Validating HTML content.
         if ($html_field) {
-            try {
-                $this->wysiwygValidator->validate($html_field);
-            } catch (ValidationException $exception) {
-                throw new ValidationException(
-                    __('Content field contains restricted HTML elements. %1', $exception->getMessage()),
-                    $exception
-                );
-            }
+            $this->wysiwygValidator->validate($html_field);
         }
         return $this;
     }
