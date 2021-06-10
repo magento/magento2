@@ -19,6 +19,7 @@
             <argument name="shippingMethod" defaultValue="" type="string"/>
         </arguments>
 
+        <waitForElementVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForEmailField"/>
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customerVar.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customerVar.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customerVar.lastname}}" stepKey="enterLastName"/>
