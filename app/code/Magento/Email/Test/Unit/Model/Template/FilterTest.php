@@ -14,6 +14,7 @@ use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\State;
@@ -35,12 +36,14 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\Information as StoreInformation;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -148,6 +151,16 @@ class FilterTest extends TestCase
      */
     private $directiveProcessors;
 
+    /**
+     * @var StoreInformation
+     */
+    private $storeInformation;
+
+    /**
+     * @var store
+     */
+    private $store;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -232,6 +245,14 @@ class FilterTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock(),
         ];
+
+        $this->store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeInformation = $this->getMockBuilder(StoreInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -260,7 +281,8 @@ class FilterTest extends TestCase
                     $this->pubDirectory,
                     $this->cssInliner,
                     [],
-                    $this->directiveProcessors
+                    $this->directiveProcessors,
+                    $this->storeInformation
                 ]
             )
             ->setMethods($mockedMethods)
@@ -425,8 +447,10 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $storeMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
             ->method('getData')
@@ -434,6 +458,10 @@ class FilterTest extends TestCase
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn($scopeConfigValue);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject([]));
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
@@ -448,8 +476,10 @@ class FilterTest extends TestCase
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-        $storeMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $storeMock->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
             ->method('getData')
@@ -457,6 +487,10 @@ class FilterTest extends TestCase
         $this->scopeConfig->expects($this->never())
             ->method('getValue')
             ->willReturn($scopeConfigValue);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject([]));
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
