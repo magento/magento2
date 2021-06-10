@@ -443,14 +443,10 @@ class FilterTest extends TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
-        $storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
             ->method('getData')
@@ -473,13 +469,10 @@ class FilterTest extends TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
-        $storeMock->expects($this->any())->method('getId')->willReturn(1);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
             ->method('getData')
@@ -493,6 +486,58 @@ class FilterTest extends TestCase
             ->willReturn(new DataObject([]));
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveGetCountry()
+    {
+        $path = "general/store_information/country_id";
+        $availableConfigs = [['value' => $path]];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $expectedCountry = 'United States';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getData')
+            ->willReturn($availableConfigs);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['country_id' => 'US', 'country' => 'United States']));
+
+        $this->assertEquals($expectedCountry, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveGetRegion()
+    {
+        $path = "general/store_information/region_id";
+        $availableConfigs = [['value' => $path]];
+        $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
+        $expectedRegion = 'Texas';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->once())
+            ->method('getData')
+            ->willReturn($availableConfigs);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['region_id' => '57', 'region' => 'Texas']));
+
+        $this->assertEquals($expectedRegion, $this->getModel()->configDirective($construction));
     }
 
     /**
