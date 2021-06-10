@@ -48,7 +48,7 @@ define([
                 container.show()
                     .find('.giftmessage-area:not(:visible)').each(function (x, element) {
                         if ($(element).val().length > 0) {
-                            $(element).change();
+                            $(element).trigger('change');
                             container.find('a').click();
                         }
                     });
