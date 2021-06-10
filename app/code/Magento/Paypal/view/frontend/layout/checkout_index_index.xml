@@ -23,6 +23,19 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="payment" xsi:type="array">
                                                     <item name="children" xsi:type="array">
+                                                        <item name="payments-list" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="before-place-order" xsi:type="array">
+                                                                    <item name="children" xsi:type="array">
+                                                                        <item name="paylater-place-order" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Magento_Paypal/js/view/paylater</item>
+                                                                            <item name="sortOrder" xsi:type="string">100</item>
+                                                                            <item name="displayArea" xsi:type="string">before-place-order</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
