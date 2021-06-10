@@ -157,6 +157,9 @@ class ExtractDataFromCategoryTree
                     return $element1['position'] > $element2['position'];
                 });
                 $node['children'] = $this->sortTree($node['children']);
+                if ($node['children_count']) {
+                    $node['children_count'] = count($node['children']);
+                }
             }
         }
 
