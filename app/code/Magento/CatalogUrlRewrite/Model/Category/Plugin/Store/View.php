@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Store;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category\GetCategoriesCollection;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
@@ -57,24 +58,32 @@ class View
     private $origStore;
 
     /**
+     * @var GetCategoriesCollection
+     */
+    private $getCategoriesCollection;
+
+    /**
      * @param UrlPersistInterface $urlPersist
      * @param CategoryFactory $categoryFactory
      * @param ProductFactory $productFactory
      * @param CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param GetCategoriesCollection $getCategoriesCollection
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
         CategoryFactory $categoryFactory,
         ProductFactory $productFactory,
         CategoryUrlRewriteGenerator $categoryUrlRewriteGenerator,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        GetCategoriesCollection $getCategoriesCollection
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
         $this->categoryFactory = $categoryFactory;
         $this->productFactory = $productFactory;
+        $this->getCategoriesCollection = $getCategoriesCollection;
     }
 
     /**
@@ -154,7 +163,8 @@ class View
     protected function generateCategoryUrls(int $rootCategoryId, int $storeId): array
     {
         $urls = [];
-        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true, false);
+        $categories = $this->getCategoriesCollection
+            ->execute($rootCategoryId, 1, false, true, false, true, false);
         $categories->setStoreId($storeId);
         foreach ($categories as $category) {
             /** @var Category $category */

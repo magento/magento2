@@ -89,6 +89,11 @@ class ViewTest extends TestCase
     private $productMock;
 
     /**
+     * @var Category\GetCategoriesCollection|MockObject
+     */
+    private $getCategoriesCollectionMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -131,6 +136,7 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getCollection'])
             ->getMock();
+        $this->getCategoriesCollectionMock = $this->createMock(Category\GetCategoriesCollection::class);
         $this->plugin = $this->objectManager->getObject(
             StoreViewPlugin::class,
             [
@@ -138,7 +144,8 @@ class ViewTest extends TestCase
                 'categoryFactory' => $this->categoryFactoryMock,
                 'productFactory' => $this->productFactoryMock,
                 'categoryUrlRewriteGenerator' => $this->categoryUrlRewriteGeneratorMock,
-                'productUrlRewriteGenerator' => $this->productUrlRewriteGeneratorMock
+                'productUrlRewriteGenerator' => $this->productUrlRewriteGeneratorMock,
+                'getCategoriesCollection' => $this->getCategoriesCollectionMock
             ]
         );
     }
@@ -171,12 +178,9 @@ class ViewTest extends TestCase
         $categoryCollection->expects($this->any())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
-        $this->categoryMock->expects($this->once())
-            ->method('getCategories')
+        $this->getCategoriesCollectionMock->expects($this->once())
+            ->method('execute')
             ->willReturn($categoryCollection);
-        $this->categoryFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->categoryMock);
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->productMock);

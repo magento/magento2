@@ -176,6 +176,8 @@ class Tree extends Dbp
      * @param boolean $toLoad
      * @param boolean $onlyActive
      * @return $this
+     * @deprecated This method is not intended for usage in child classes
+     * @see addCollectionDataParams($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -228,6 +230,81 @@ class Tree extends Dbp
 
             foreach ($this->getNodes() as $node) {
                 if (!$collection->getItemById($node->getId()) && $node->getParent()) {
+                    $this->removeNode($node);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add data params to collection
+     *
+     * @param Collection|null $collection
+     * @param boolean $sorted
+     * @param array $exclude
+     * @param boolean $toLoad
+     * @param boolean $onlyActive
+     * @param boolean $onlyIncludeInMenu
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function addCollectionDataParams(
+        $collection = null,
+        $sorted = false,
+        $exclude = [],
+        $toLoad = true,
+        $onlyActive = false,
+        $onlyIncludeInMenu = false
+    ) {
+        if ($collection === null) {
+            $collection = $this->getCollection($sorted);
+        } else {
+            $this->setCollection($collection);
+        }
+
+        if (!is_array($exclude)) {
+            $exclude = [$exclude];
+        }
+
+        $nodeIds = [];
+        foreach ($this->getNodes() as $node) {
+            if (!in_array($node->getId(), $exclude)) {
+                $nodeIds[] = $node->getId();
+            }
+        }
+        $collection->addIdFilter($nodeIds);
+
+        if ($onlyActive) {
+            $disabledIds = $this->_getDisabledIds($collection, $nodeIds);
+            if ($disabledIds) {
+                $collection->addFieldToFilter('entity_id', ['nin' => $disabledIds]);
+            }
+            $collection->addAttributeToFilter('is_active', 1);
+            if ($onlyIncludeInMenu) {
+                $collection->addAttributeToFilter('include_in_menu', 1);
+            }
+        }
+
+        if ($this->_joinUrlRewriteIntoCollection) {
+            $collection->joinUrlRewrite();
+            $this->_joinUrlRewriteIntoCollection = false;
+        }
+
+        if ($toLoad) {
+            $collection->load();
+
+            foreach ($collection as $category) {
+                $node = $this->getNodeById($category->getId());
+                if ($node) {
+                    $node->addData($category->getData());
+                }
+            }
+
+            foreach ($this->getNodes() as $node) {
+                if ($node->getParent() && !$collection->getItemById($node->getId())) {
                     $this->removeNode($node);
                 }
             }

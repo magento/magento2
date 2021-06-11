@@ -137,7 +137,7 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->connectionName  = 'catalog';
+        $this->connectionName = 'catalog';
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -292,7 +292,7 @@ class Category extends AbstractResource
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
             $path = explode('/', (string)$object->getPath());
-            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $level = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
             if (!$object->hasPosition()) {
@@ -700,7 +700,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return (int) $counts;
+        return (int)$counts;
     }
 
     /**
@@ -712,6 +712,8 @@ class Category extends AbstractResource
      * @param boolean $asCollection
      * @param boolean $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @deprecated The method doesn't consider onlyActive, onlyIncludeInMenu params
+     * @see \Magento\Catalog\Model\Category\GetCategoriesCollection
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -1116,7 +1118,7 @@ class Category extends AbstractResource
     /**
      * Save entity's attributes into the object's resource
      *
-     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
      */

@@ -222,6 +222,6 @@ class TreeTest extends TestCase
 
         $model->addNode($nodeMock);
 
-        $this->assertSame($model, $model->addCollectionData(null, false, [], false, true));
+        $this->assertSame($model, $model->addCollectionDataParams(null, false, [], false, true, false));
     }
 }

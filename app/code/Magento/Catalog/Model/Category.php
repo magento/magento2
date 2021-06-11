@@ -980,6 +980,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $asCollection
      * @param bool $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @deprecated The method doesn't consider onlyActive, onlyIncludeInMenu params
+     * @see \Magento\Catalog\Model\Category\GetCategoriesCollection
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
