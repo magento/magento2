@@ -63,21 +63,36 @@
         </actionGroup>
 
         <!--Veriy the breadcrumbs on Product Display page-->
-        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs1"/>
-        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategoryOne.name$$" stepKey="seeCorrectBreadCrumbCategory"/>
-        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productOne.name$$" stepKey="seeCorrectBreadCrumbProduct"/>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeHomePageInBreadcrumbs1">
+            <argument name="breadcrumbs" value="Home"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbCategory">
+            <argument name="breadcrumbs" value="$$createCategoryOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbProduct">
+            <argument name="breadcrumbs" value="$$productOne.name$$"/>
+        </actionGroup>
 
-        <click selector="{{StorefrontNavigationSection.topCategory($$createCategoryOne.name$$)}}" stepKey="goBackToCategoryPage"/>
-        <waitForPageLoad stepKey="waitforCategoryPageToLoad2"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goBackToCategoryPage">
+            <argument name="category" value="$createCategoryOne$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitforCategoryPageToLoad2"/>
 
         <!--Open product display page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityTwo.name)}}" stepKey="clickProductToGoSecondProductPage"/>
-        <waitForPageLoad stepKey="waitForProductDisplayPageLoad3"/>
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickProductToGoSecondProductPage">
+            <argument name="productName" value="{{productWithHTMLEntityTwo.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductDisplayPageLoad3"/>
 
         <!--Verify the breadcrumbs on Product Display page-->
-        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="Home" stepKey="seeHomePageInBreadcrumbs2"/>
-        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$createCategoryOne.name$$" stepKey="seeCorrectBreadCrumbCategory2"/>
-        <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$$productTwo.name$$" stepKey="seeCorrectBreadCrumbProduct2"/>
-
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeHomePageInBreadcrumbs2">
+            <argument name="breadcrumbs" value="Home"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbCategory2">
+            <argument name="breadcrumbs" value="$$createCategoryOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontBreadcrubmsAreShownActionGroup" stepKey="seeCorrectBreadCrumbProduct2">
+            <argument name="breadcrumbs" value="$$productTwo.name$$"/>
+        </actionGroup>
     </test>
 </tests>
