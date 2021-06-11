@@ -20,7 +20,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ProductOption;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
@@ -333,11 +332,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $statusLabel;
 
     /**
-     * @var OrderStateResolverInterface
-     */
-    private $orderStateResolver;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -409,8 +403,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         ScopeConfigInterface $scopeConfig = null,
         RegionFactory $regionFactory = null,
         RegionResource $regionResource = null,
-        StatusLabel $statusLabel = null,
-        OrderStateResolverInterface $orderStateResolver = null
+        StatusLabel $statusLabel = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -443,7 +436,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->regionResource = $regionResource ?: ObjectManager::getInstance()->get(RegionResource::class);
         $this->regionItems = [];
         $this->statusLabel = $statusLabel ?: ObjectManager::getInstance()->get(StatusLabel::class);
-        $this->orderStateResolver = $orderStateResolver ?: ObjectManager::getInstance()->get(OrderStateResolverInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -1747,14 +1739,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $history->setOrder($this);
         if ($history->getStatus()) {
-            if ($this->getData('state') !== $this->getOrigData('state')) {
-                $state = $this->getData('state');
-            } else {
-                $state = $this->orderStateResolver->getStateForOrder($this);
-            }
-            $allowedStatusCodes = array_keys($this->getConfig()->getStateStatuses($state));
-            $allowedStatusCodes[] = $this->getConfig()->getStateDefaultStatus($state);
-            if (!in_array($history->getStatus(), $allowedStatusCodes, true)) {
+            if (!array_key_exists($history->getStatus(), $this->getConfig()->getStatuses())) {
                 throw new LocalizedException(__('Order status is not valid'));
             }
 
