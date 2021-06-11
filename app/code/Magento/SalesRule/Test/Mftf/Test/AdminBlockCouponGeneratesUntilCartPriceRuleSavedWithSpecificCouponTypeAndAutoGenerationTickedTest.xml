@@ -15,7 +15,7 @@
             <title value="Block the coupon generates until cart price rule is saved with Specific Coupon type and Use Auto Generation ticked"/>
             <description
                 value="Block the coupon generates until cart price rule is saved with Specific Coupon type and Use Auto Generation ticked"/>
-            <severity value="MAJOR"/>
+            <severity value="MINOR"/>
             <testCaseId value="MC-42602"/>
             <useCaseId value="MC-42288"/>
             <group value="salesRule"/>
