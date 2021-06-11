@@ -1,0 +1,29 @@
+{
+  "name": "tsg/improvements",
+  "description": "Custom Magento 2 module",
+  "require": {
+    "php": "~7.3.0||~7.4.0"
+  },
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "TSG",
+      "email": "vasyl.bondarchuk@transoftgroup.com",
+      "homepage": "https://transoftgroup.com/",
+      "role": "Loader"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Tsg\\Improvements\\": ""
+    }
+  }
+}
