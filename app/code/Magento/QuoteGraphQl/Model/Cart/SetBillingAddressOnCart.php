@@ -100,7 +100,7 @@ class SetBillingAddressOnCart
 
         if (null === $customerAddressId && null === $addressInput && empty($sameAsShipping)) {
             throw new GraphQlInputException(
-                __('The billing address must contain either "customer_address_id", "address" or "same_as_shipping".')
+                __('The billing address must contain either "customer_address_id", "address", or "same_as_shipping".')
             );
         }
 
@@ -123,13 +123,13 @@ class SetBillingAddressOnCart
 
         if (count($shippingAddresses) > 1) {
             throw new GraphQlInputException(
-                __('Could not use the "same_as_shipping" option with multiple shipping addresses set.')
+                __('Could not use the "same_as_shipping" option, because multiple shipping addresses have been set.')
             );
         }
 
         if (empty($shippingAddresses) || $shippingAddresses[0]->validate() !== true) {
             throw new GraphQlInputException(
-                __('Could not use the "same_as_shipping" option as the shipping address has not been set.')
+                __('Could not use the "same_as_shipping" option, because the shipping address has not been set.')
             );
         }
     }
@@ -146,7 +146,7 @@ class SetBillingAddressOnCart
 
         if (count($shippingAddresses) > 1) {
             throw new GraphQlInputException(
-                __('Could not use the "use_for_shipping" option with multiple shipping addresses already set.')
+                __('Could not use the "use_for_shipping" option, because multiple shipping addresses have already been set.')
             );
         }
     }

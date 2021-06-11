@@ -420,7 +420,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'The billing address must contain either "customer_address_id", "address" or "same_as_shipping".'
+           'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -532,7 +532,7 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage(
-            'Could not use the "same_as_shipping" option as the shipping address has not been set.'
+            'Could not use the "same_as_shipping" option, because the shipping address has not been set.'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -570,7 +570,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'Could not use the "same_as_shipping" option with multiple shipping addresses set.'
+            'Could not use the "same_as_shipping" option, because multiple shipping addresses have been set.'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
