@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Price;
 
@@ -11,6 +12,8 @@ use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Final price model
+ *
+ * @api
  */
 class FinalPrice extends AbstractPrice implements FinalPriceInterface
 {

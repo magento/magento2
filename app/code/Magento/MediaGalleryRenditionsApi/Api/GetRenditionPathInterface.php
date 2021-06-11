@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Based on media assset path provides path to an optimized image version for insertion to the content
+ * @api
  */
 interface GetRenditionPathInterface
 {
