@@ -137,8 +137,6 @@ QUERY;
     /**
      * Tests that the "use_for_shipping" option sets the provided billing address for shipping as well.
      *
-     * Note: the "use_for_shipping" option has been deprecated.
-     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
