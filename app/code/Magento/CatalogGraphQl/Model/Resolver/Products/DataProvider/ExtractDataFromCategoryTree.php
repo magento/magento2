@@ -160,6 +160,8 @@ class ExtractDataFromCategoryTree
                 if (isset($node['children_count'])) {
                     $node['children_count'] = count($node['children']);
                 }
+            } elseif (isset($node['children_count'])) {
+                $node['children_count'] = 0;
             }
         }
 
