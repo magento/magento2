@@ -6,7 +6,19 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
+use Magento\Sales\Model\ResourceModel\GridPool;
+use Psr\Log\LoggerInterface;
+use Magento\Backend\App\Action\Context;
 
 /**
  * Class AddComment
@@ -26,6 +38,66 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
      * ACL resource needed to send comment email notification
      */
     const ADMIN_SALES_EMAIL_RESOURCE = 'Magento_Sales::emails';
+
+    /**
+     * @var OrderCommentSender
+     */
+    protected $orderCommentSender;
+
+    /**
+     * @var GridPool
+     */
+    protected $gridPool;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param InlineInterface $translateInline
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
+     * @param OrderCommentSender $orderCommentSender
+     * @param GridPool $gridPool
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        InlineInterface $translateInline,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger,
+        OrderCommentSender $orderCommentSender,
+        GridPool $gridPool
+    ) {
+        $this->orderCommentSender = $orderCommentSender;
+        $this->gridPool = $gridPool;
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $fileFactory,
+            $translateInline,
+            $resultPageFactory,
+            $resultJsonFactory,
+            $resultLayoutFactory,
+            $resultRawFactory,
+            $orderManagement,
+            $orderRepository,
+            $logger
+        );
+    }
 
     /**
      * Add order comment action
@@ -60,15 +132,8 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                 $comment = trim(strip_tags($data['comment']));
 
                 $order->save();
-                /** @var OrderCommentSender $orderCommentSender */
-                $orderCommentSender = $this->_objectManager
-                    ->create(\Magento\Sales\Model\Order\Email\Sender\OrderCommentSender::class);
-
-                $orderCommentSender->send($order, $notify, $comment);
-
-                $gridPool = $this->_objectManager
-                    ->create(\Magento\Sales\Model\ResourceModel\GridPool::class);
-                $gridPool->refreshByOrderId($order->getId());
+                $this->orderCommentSender->send($order, $notify, $comment);
+                $this->gridPool->refreshByOrderId($order->getId());
 
                 return $this->resultPageFactory->create();
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
