@@ -171,6 +171,7 @@ class Config extends \Magento\Eav\Model\Config
             $universalFactory,
             $serializer,
             $scopeConfig,
+            $storeManager,
             $attributesForPreload
         );
     }
