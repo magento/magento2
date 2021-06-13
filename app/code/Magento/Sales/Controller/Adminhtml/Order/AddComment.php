@@ -19,6 +19,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 use Magento\Sales\Model\ResourceModel\GridPool;
 use Psr\Log\LoggerInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AddComment
@@ -42,12 +43,12 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
     /**
      * @var OrderCommentSender
      */
-    protected $orderCommentSender;
+    private $orderCommentSender;
 
     /**
      * @var GridPool
      */
-    protected $gridPool;
+    private $gridPool;
 
     /**
      * @param Context $context
@@ -79,11 +80,11 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
         OrderManagementInterface $orderManagement,
         OrderRepositoryInterface $orderRepository,
         LoggerInterface $logger,
-        OrderCommentSender $orderCommentSender,
-        GridPool $gridPool
+        ?OrderCommentSender $orderCommentSender = null,
+        ?GridPool $gridPool = null
     ) {
-        $this->orderCommentSender = $orderCommentSender;
-        $this->gridPool = $gridPool;
+        $this->orderCommentSender = $orderCommentSender ?? ObjectManager::getInstance()->get(OrderCommentSender::class);
+        $this->gridPool = $gridPool ?? ObjectManager::getInstance()->get(GridPool::class);
         parent::__construct(
             $context,
             $coreRegistry,
