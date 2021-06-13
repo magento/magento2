@@ -77,12 +77,15 @@ class Rows
     ): ActionRows {
         $indexer = $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID);
         if (!empty($entityIds) && $indexer->isScheduled()) {
+            $productIds = [];
+
             foreach ($this->storeManager->getStores() as $store) {
                 $indexTable = $this->getIndexTable((int) $store->getId(), $useTempTable);
-                $productIds = $this->getProductIdsFromIndex($indexTable, $entityIds);
-                if (!empty($productIds)) {
-                    $indexer->reindexList($productIds);
-                }
+                $productIds = array_merge($productIds, $this->getProductIdsFromIndex($indexTable, $entityIds));
+            }
+
+            if (!empty($productIds)) {
+                $indexer->reindexList(array_unique($productIds));
             }
         }
 
