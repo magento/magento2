@@ -127,12 +127,6 @@ class AddCommentTest extends TestCase
             ->method('addStatusHistoryComment')
             ->willReturn($this->statusHistoryCommentMock);
         $this->statusHistoryCommentMock->expects($this->once())->method('setIsCustomerNotified')->with($expectedNotify);
-        $this->objectManagerMock->expects($this->at(0))->method('create')->willReturn(
-            $this->createMock(OrderCommentSender::class)
-        );
-        $this->objectManagerMock->expects($this->at(1))->method('create')->willReturn(
-            $this->createMock(GridPool::class)
-        );
 
         $this->addCommentController->execute();
     }
