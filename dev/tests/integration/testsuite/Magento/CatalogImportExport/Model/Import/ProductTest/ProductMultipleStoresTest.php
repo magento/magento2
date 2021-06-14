@@ -16,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -27,7 +27,6 @@ class ProductMultipleStoresTest extends ProductTestBase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDbIsolation disabled
      */
     public function testProductWithMultipleStoresInDifferentBunches()
     {
