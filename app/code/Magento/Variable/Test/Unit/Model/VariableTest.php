@@ -42,11 +42,6 @@ class VariableTest extends TestCase
      */
     private $validationFailedPhrase;
 
-    /**
-     * @var  ObjectManager
-     */
-    private $objectManager;
-
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -194,5 +189,14 @@ class VariableTest extends TestCase
             'Missing code' => ['', 'some-name'],
             'Missing name' => ['some-code', ''],
         ];
+    }
+
+    public function testBeforeSave()
+    {
+        $type = \Magento\Variable\Model\Variable::TYPE_HTML;
+        $this->model->setData($type, '<script>alert("hi");</script>');
+        $expected = $this->model;
+        $actual = $this->model->beforeSave();
+        self::assertEquals($expected, $actual);
     }
 }
