@@ -123,6 +123,7 @@ class ProductMultipleStoresTest extends ProductTestBase
      * Test import product into multistore system when media is disabled.
      *
      * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_category_store_media_disabled.php
+     * @magentoDbIsolation enabled
      * @return void
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
@@ -164,7 +165,6 @@ class ProductMultipleStoresTest extends ProductTestBase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDbIsolation disabled
      */
     public function testProductsWithMultipleStores()
     {
