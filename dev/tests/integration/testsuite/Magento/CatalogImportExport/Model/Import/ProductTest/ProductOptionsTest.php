@@ -127,6 +127,12 @@ class ProductOptionsTest extends ProductTestBase
         $customOptionValues = $this->getCustomOptionValues($sku);
         $this->createImportModel($pathToFile)->importData();
         $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+
+        // Cleanup imported products
+        try {
+            $this->productRepository->delete($product);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        }
     }
 
     /**
