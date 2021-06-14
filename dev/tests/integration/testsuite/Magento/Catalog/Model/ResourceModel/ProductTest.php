@@ -202,4 +202,28 @@ class ProductTest extends TestCase
         $attribute = $this->model->getAttributeRawValue($product->getId(), $attributeCode, 1);
         $this->assertEmpty($attribute);
     }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute
+     * @magentoDataFixture Magento\Catalog\Fixture\AddProductAttributeToAttributeSet with:{"attribute_code": "fixture_attribute_2"}
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     * @throws NoSuchEntityException
+     */
+    public function testThirdProductCustomSecondAttribute(): void
+    {
+        $product = $this->productRepository->get('simple_3', true, 0, true);
+        $product->setCustomAttribute('fixture_attribute_2', 'default_value');
+        $this->productRepository->save($product);
+
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute_2', 1);
+        $this->assertEquals('default_value', $actual);
+    }
 }

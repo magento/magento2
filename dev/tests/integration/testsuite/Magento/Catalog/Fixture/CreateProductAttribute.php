@@ -10,9 +10,13 @@ namespace Magento\Catalog\Fixture;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\Annotation\FixtureDataResolver;
 
 /**
  * Create product attribute fixture
+ *
+ * @unique attribute_code
+ * @unique default_frontend_label
  */
 class CreateProductAttribute implements RevertibleDataFixtureInterface
 {
@@ -53,13 +57,22 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
      */
     private $serviceFactory;
 
+
+    /**
+     * @var FixtureDataResolver
+     */
+    private $fixtureDataResolver;
+
     /**
      * @param ServiceFactory $serviceFactory
+     * @param FixtureDataResolver $fixtureDataResolver
      */
     public function __construct(
-        ServiceFactory $serviceFactory
+        ServiceFactory $serviceFactory,
+        FixtureDataResolver $fixtureDataResolver
     ) {
         $this->serviceFactory = $serviceFactory;
+        $this->fixtureDataResolver = $fixtureDataResolver;
     }
 
     /**
@@ -70,7 +83,10 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
         $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
         $result = $service->execute(
             [
-                'attribute' => array_merge(self::DEFAULT_DATA, $data)
+                'attribute' => array_merge(
+                    $this->fixtureDataResolver->resolveDataReferences(self::DEFAULT_DATA, $this),
+                    $data
+                )
             ]
         );
 
@@ -81,9 +97,11 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
 
     /**
      * @inheritdoc
+     * @throws \ReflectionException
      */
     public function revert(array $data = []): void
     {
+        $this->fixtureDataResolver->revert($this);
         $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'deleteById');
         $service->execute(
             [

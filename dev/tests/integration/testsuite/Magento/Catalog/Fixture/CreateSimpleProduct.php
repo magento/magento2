@@ -13,9 +13,14 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\Annotation\FixtureDataResolver;
 
 /**
  * Create simple product fixture
+ *
+ * @unique sku;
+ * @unique name;
+ * @unique url_key;
  */
 class CreateSimpleProduct implements RevertibleDataFixtureInterface
 {
@@ -51,12 +56,20 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     private $serviceFactory;
 
     /**
+     * @var FixtureDataResolver
+     */
+    private $fixtureDataResolver;
+
+    /**
      * @param ServiceFactory $serviceFactory
+     * @param FixtureDataResolver $fixtureDataResolver
      */
     public function __construct(
-        ServiceFactory $serviceFactory
+        ServiceFactory $serviceFactory,
+        FixtureDataResolver $fixtureDataResolver
     ) {
         $this->serviceFactory = $serviceFactory;
+        $this->fixtureDataResolver = $fixtureDataResolver;
     }
 
     /**
@@ -67,7 +80,10 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'save');
         $result = $service->execute(
             [
-                'product' => array_merge(self::DEFAULT_DATA, $data)
+                'product' => array_merge(
+                    $this->fixtureDataResolver->resolveDataReferences(self::DEFAULT_DATA, $this),
+                    $data
+                )
             ]
         );
 
@@ -81,6 +97,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
      */
     public function revert(array $data = []): void
     {
+        $this->fixtureDataResolver->revert($this);
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
         $service->execute(
             [
