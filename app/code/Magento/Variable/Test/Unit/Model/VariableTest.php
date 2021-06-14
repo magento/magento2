@@ -202,6 +202,6 @@ class VariableTest extends TestCase
         $this->model->setData($type, '<script>alert("hi");</script>');
         $expected = $this->model;
         $actual = $this->model->beforeSave();
-        self::assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 }
