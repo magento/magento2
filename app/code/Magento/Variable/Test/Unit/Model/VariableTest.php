@@ -42,6 +42,11 @@ class VariableTest extends TestCase
      */
     private $validationFailedPhrase;
 
+    /**
+     * @var  ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
