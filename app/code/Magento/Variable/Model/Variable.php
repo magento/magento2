@@ -136,7 +136,7 @@ class Variable extends AbstractModel
     }
 
     /**
-     * @return AbstractModel
+     * @inheritDoc AbstractModel
      */
     public function beforeSave()
     {
@@ -144,7 +144,7 @@ class Variable extends AbstractModel
         parent::beforeSave();
 
         //Validating HTML content.
-        if ($html_field) {
+        if ($html_field && $html_field !== $this->getOrigData('html_value')) {
             $this->wysiwygValidator->validate($html_field);
         }
         return $this;
