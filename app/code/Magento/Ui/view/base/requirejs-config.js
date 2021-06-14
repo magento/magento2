@@ -7,7 +7,7 @@ var config = {
     deps: [],
     shim: {
         'chartjs/Chart.min': ['moment'],
-        'tiny_mce_4/tinymce.min': {
+        'tiny_mce_5/tinymce.min': {
             exports: 'tinyMCE'
         }
     },
