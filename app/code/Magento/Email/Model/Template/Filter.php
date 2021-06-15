@@ -37,6 +37,7 @@ use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Store\Model\Information as StoreInformation;
+use \Magento\Framework\App\ObjectManager;
 
 /**
  * Core Email Template Filter Model
@@ -250,7 +251,7 @@ class Filter extends Template
         CssInliner $cssInliner,
         $variables = [],
         array $directiveProcessors = [],
-        StoreInformation $storeInformation = null
+        ?StoreInformation $storeInformation = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -268,7 +269,7 @@ class Filter extends Template
         $this->pubDirectory = $pubDirectory;
         $this->configVariables = $configVariables;
         $this->storeInformation = $storeInformation ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(StoreInformation::class);
+            ObjectManager::getInstance()->get(StoreInformation::class);
         parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
@@ -851,9 +852,9 @@ class Filter extends Template
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-            if ($params['path'] == "general/store_information/country_id") {
+            if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
                 $configValue = $storeInformationObj->getData('country');
-            } elseif ($params['path'] == "general/store_information/region_id") {
+            } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
                 $configValue = $storeInformationObj->getData('region')?
                     $storeInformationObj->getData('region'):
                     $configValue;
