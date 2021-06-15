@@ -21,7 +21,9 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE">
+                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnPagePagesGrid"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>

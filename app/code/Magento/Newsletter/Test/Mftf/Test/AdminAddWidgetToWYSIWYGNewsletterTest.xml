@@ -20,7 +20,9 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" >
+                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
         <waitForElementVisible selector="{{BasicFieldNewsletterSection.templateName}}" stepKey="waitForTemplateName"/>

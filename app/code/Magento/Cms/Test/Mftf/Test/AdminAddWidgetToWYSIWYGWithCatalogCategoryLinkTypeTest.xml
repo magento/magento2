@@ -21,7 +21,9 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" >
+                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            </actionGroup>
             <actionGroup ref="ConfigAdminAccountSharingActionGroup" stepKey="allowAdminShareAccount"/>
         </before>
         <!--Main test-->
