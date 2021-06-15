@@ -45,6 +45,7 @@ define(['underscore'], function (_) {
             sameAsBilling: addressData['same_as_billing'],
             saveInAddressBook: addressData['save_in_address_book'],
             customAttributes: _.toArray(addressData['custom_attributes']).reverse(),
+            hash: addressData['hash'],
 
             /**
              * @return {*}
@@ -78,7 +79,7 @@ define(['underscore'], function (_) {
              * @return {String}
              */
             getKey: function () {
-                return this.getType() + this.customerAddressId;
+                return this.getType() + this.customerAddressId + '-' + this.hash;
             },
 
             /**
