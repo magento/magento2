@@ -37,7 +37,7 @@ use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Store\Model\Information as StoreInformation;
-use \Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Core Email Template Filter Model
