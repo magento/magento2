@@ -6,8 +6,8 @@
 define([
     'wysiwygAdapter',
     'underscore',
-    'tinymce4'
-], function (wysiwygAdapter, _, tinyMCE4) {
+    'tinymce'
+], function (wysiwygAdapter, _, tinyMCE) {
     'use strict';
 
     var obj;
@@ -26,7 +26,7 @@ define([
         obj.eventBus = new window.varienEvents();
         obj.initialize(1, {
             'store_id': 0,
-            'tinymce4': {
+            'tinymce': {
                 'content_css': ''
             },
             'files_browser_window_url': 'url'
@@ -42,9 +42,9 @@ define([
 
     describe('"triggerSave" method', function () {
         it('Check method call.', function () {
-            spyOn(tinyMCE4, 'triggerSave');
+            spyOn(tinyMCE, 'triggerSave');
             obj.triggerSave();
-            expect(tinyMCE4.triggerSave).toHaveBeenCalled();
+            expect(tinyMCE.triggerSave).toHaveBeenCalled();
         });
     });
 });
