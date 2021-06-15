@@ -14,5 +14,6 @@
         <element name="resourceCheckboxLink" type="checkbox" selector="//li[@data-id='{{resourceId}}']//a[text()='{{resourceName}}']" timeout="30" parameterized="true"/>
         <element name="resourceCheckbox" type="checkbox" selector="//li[@data-id='{{resourceId}}']/input" timeout="30" parameterized="true"/>
         <element name="userRoles" type="text" selector="//span[contains(text(), 'User Roles')]"/>
+        <element name="roleScopes" type="select" selector="#gws_is_all"/>
     </section>
 </sections>
