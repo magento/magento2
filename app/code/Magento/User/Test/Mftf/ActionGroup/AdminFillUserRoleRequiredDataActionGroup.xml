@@ -10,7 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFillUserRoleRequiredDataActionGroup" extends="AdminCreateRoleActionGroup">
         <remove keyForRemoval="clickRoleResourcesTab"/>
-        <remove keyForRemoval="waitForScopeSelection"/>
         <remove keyForRemoval="selectResourceAccessCustom"/>
         <remove keyForRemoval="waitForElementVisible"/>
         <remove keyForRemoval="clickContentBlockCheckbox"/>
