@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SwitchToVersion4ActionGroup">
+    <actionGroup name="SwitchToVersionActionGroup">
         <annotations>
-            <description>DEPRECATED. Use CliEnableTinyMCE4 instead. Goes to the 'Configuration' page for 'Content Management'. Sets the 'WYSIWYG Editor' to 'TinyMCE 4'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+            <description>DEPRECATED. Use CliEnableTinyMCE instead. Goes to the 'Configuration' page for 'Content Management'. Sets the 'WYSIWYG Editor' to 'TinyMCE 4'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>
 
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>

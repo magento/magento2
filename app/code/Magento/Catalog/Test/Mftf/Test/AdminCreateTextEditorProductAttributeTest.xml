@@ -13,7 +13,7 @@
             <features value="Catalog"/>
             <stories value="Create product Attribute"/>
             <title value="Admin create text editor product attribute test"/>
-            <description value="Create text editor product attribute with TinyMCE4 enabled"/>
+            <description value="Create text editor product attribute with TinyMCE enabled"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6338"/>
             <group value="catalog"/>
@@ -23,7 +23,9 @@
             <magentoCLI command="config:set {{EnableWYSIWYG.path}} {{EnableWYSIWYG.value}}" stepKey="enableWYSIWYG"/>
 
             <!-- Enable TinyMCE 4 -->
-            <magentoCLI command="config:set {{EnableTinyMCE4.path}} {{EnableTinyMCE4.value}}" stepKey="enableTinyMCE4"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" >
+                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            </actionGroup>
 
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
