@@ -53,10 +53,6 @@ class VariableTest extends TestCase
     {
         $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
 
-        $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -208,7 +204,7 @@ class VariableTest extends TestCase
     /**
      * @dataProvider getWysiwygValidationCases
      */
-    public function testAdd(?\Throwable $thrown, bool $exceptionThrown): void
+    public function testBeforeSave(?\Throwable $thrown, bool $exceptionThrown): void
     {
         if ($thrown) {
             $this->wysiwygValidator->method('validate')->willThrowException($thrown);
