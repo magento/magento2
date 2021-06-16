@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ExportTaxRatesTest" extends="AdminExportTaxRatesTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Export Tax"/>
+            <title value="S3 - Export Tax Rates"/>
+            <description value="Exports tax rates from the System > Data Transfer > Import/Export Tax Rates page, from
+            the Tax Rule page, from the Tax Rates grid page as a .csv, and from the Tax Rates grid page as an .xml.
+            Validates contents in downloaded file for each export area. Note that MFTF cannot simply click export and
+            have access to the file that is downloaded in the browser due to the test not having access to the server
+            that is running the test browser. Therefore, this test verifies that the Export button can be successfully
+            clicked, grabs the request URL from the Export button's form, executes the request on the magento machine
+            via a curl request, and verifies the contents of the exported file. Uses S3 for the file system."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38621"/>
+            <group value="importExport"/>
+            <group value="tax"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+
+        <before>
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="revertInitialTaxRateCA"/>
+        </before>
+
+        <after>
+            <!-- Disable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
+        </after>
+    </test>
+</tests>

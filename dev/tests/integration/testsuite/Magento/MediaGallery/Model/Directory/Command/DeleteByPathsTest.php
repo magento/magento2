@@ -54,7 +54,7 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
         $fullPath = $mediaDirectory->getAbsolutePath($this->testDirectoryName);
         $this->assertFileExists($fullPath);
         $this->deleteByPaths->execute([$this->testDirectoryName]);
-        $this->assertFileNotExists($fullPath);
+        $this->assertFileDoesNotExist($fullPath);
     }
 
     /**

@@ -8,6 +8,7 @@ namespace Magento\Sales\Model;
 use Magento\Config\Model\Config\Source\Nooptreq;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Directory\Model\ResourceModel\Region as RegionResource;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -30,6 +31,8 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentColle
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Area;
+use Magento\Sales\Model\Order\StatusLabel;
 
 /**
  * Order model
@@ -319,6 +322,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $regionItems;
 
     /**
+     * @var RegionResource
+     */
+    private $regionResource;
+
+    /**
+     * @var StatusLabel
+     */
+    private $statusLabel;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -343,15 +356,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param ResourceModel\Order\CollectionFactory $salesOrderCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productListFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param ResolverInterface $localeResolver
+     * @param ResolverInterface|null $localeResolver
      * @param ProductOption|null $productOption
-     * @param OrderItemRepositoryInterface $itemRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param ScopeConfigInterface $scopeConfig
-     * @param RegionFactory $regionFactory
+     * @param OrderItemRepositoryInterface|null $itemRepository
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param RegionFactory|null $regionFactory
+     * @param RegionResource|null $regionResource
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -387,7 +401,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         OrderItemRepositoryInterface $itemRepository = null,
         SearchCriteriaBuilder $searchCriteriaBuilder = null,
         ScopeConfigInterface $scopeConfig = null,
-        RegionFactory $regionFactory = null
+        RegionFactory $regionFactory = null,
+        RegionResource $regionResource = null,
+        StatusLabel $statusLabel = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -417,8 +433,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             ->get(SearchCriteriaBuilder::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->regionResource = $regionResource ?: ObjectManager::getInstance()->get(RegionResource::class);
         $this->regionItems = [];
-
+        $this->statusLabel = $statusLabel ?: ObjectManager::getInstance()->get(StatusLabel::class);
         parent::__construct(
             $context,
             $registry,
@@ -1095,7 +1112,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getFrontendStatusLabel()
     {
-        return $this->getConfig()->getStatusFrontendLabel($this->getStatus());
+        return $this->statusLabel->getStatusFrontendLabel(
+            $this->getStatus(),
+            Area::AREA_FRONTEND,
+            $this->getStoreId()
+        );
     }
 
     /**
@@ -1106,7 +1127,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getStatusLabel()
     {
-        return $this->getConfig()->getStatusLabel($this->getStatus());
+        return $this->statusLabel->getStatusLabel($this->getStatus());
     }
 
     /**
@@ -1361,7 +1382,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getAddressesCollection()
     {
-        $region = $this->regionFactory->create();
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
@@ -1370,7 +1390,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                         $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
                     }
                 } else {
-                    $region->loadByName($address->getRegion(), $address->getCountryId());
+                    $region = $this->regionFactory->create();
+                    $this->regionResource->loadByName($region, $address->getRegion(), $address->getCountryId());
                     $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
                     if ($region->getName()) {
                         $address->setRegion($region->getName());

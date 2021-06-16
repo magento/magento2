@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Block\Store;
 
@@ -114,7 +115,8 @@ class Switcher extends \Magento\Backend\Block\Template
     {
         parent::_construct();
 
-        $this->setUseConfirm(true);
+        $this->setUseConfirm($this->hasData('use_confirm') ? (bool)$this->getData('use_confirm') : true);
+
         $this->setUseAjax(true);
 
         $this->setShowManageStoresLink(0);

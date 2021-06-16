@@ -124,7 +124,7 @@ require([
     $('#js_files_uploader').click(function () {
         /** Unbind click event on file change */
         $('#js-file-uploader').html('');
-        $('#js_uploader_button').unbind('click');
+        $('#js_uploader_button').off('click');
     });
 
 

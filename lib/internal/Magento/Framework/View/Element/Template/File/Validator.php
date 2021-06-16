@@ -74,8 +74,11 @@ class Validator
     private $fileDriver;
 
     /**
-     * Class constructor
-     *
+     * @var array
+     */
+    private $moduleDirs;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
      * @param ComponentRegistrar $componentRegistrar
