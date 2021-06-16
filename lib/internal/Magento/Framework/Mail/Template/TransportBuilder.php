@@ -25,6 +25,8 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
+use Zend\Mime\Mime;
+use Zend\Mime\PartFactory;
 
 /**
  * TransportBuilder for Mail Templates
@@ -104,6 +106,16 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
+     * @var PartFactory
+     */
+    protected $partFactory;
+
+    /**
+     * @var array
+     */
+    protected $attachments = [];
+
+    /**
      * Param that used for storing all message data until it will be used
      *
      * @var array
@@ -152,6 +164,7 @@ class TransportBuilder
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory,
+        PartFactory $partFactory,
         MessageInterfaceFactory $messageFactory = null,
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
@@ -162,6 +175,8 @@ class TransportBuilder
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
+        $this->partFactory = $partFactory ?: $this->objectManager
+            ->get(PartFactory::class);
         $this->emailMessageInterfaceFactory = $emailMessageInterfaceFactory ?: $this->objectManager
             ->get(EmailMessageInterfaceFactory::class);
         $this->mimeMessageInterfaceFactory = $mimeMessageInterfaceFactory ?: $this->objectManager
@@ -401,9 +416,12 @@ class TransportBuilder
                 'type' => $partType
             ]
         );
+
+        $parts = count($this->attachments) ? array_merge([$mimePart], $this->attachments) : [$mimePart];
+
         $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
-            ['parts' => [$mimePart]]
+            ['parts' => $parts]
         );
 
         $this->messageData['subject'] = html_entity_decode(
@@ -441,5 +459,29 @@ class TransportBuilder
         } else {
             $this->messageData[$addressType] = $convertedAddressArray;
         }
+    }
+
+    /**
+     * Adds attachment part to email
+     *
+     * @param string|null $content
+     * @param string|null $fileName
+     * @param string|null $fileType
+     *
+     * @return $this
+     */
+    public function addAttachment(?string $content, ?string $fileName, ?string $fileType)
+    {
+        $attachmentPart = $this->partFactory->create();
+
+        $attachmentPart->setContent($content)
+            ->setType($fileType)
+            ->setFileName($fileName)
+            ->setDisposition(Mime::DISPOSITION_ATTACHMENT)
+            ->setEncoding(Mime::ENCODING_BASE64);
+
+        $this->attachments[] = $attachmentPart;
+
+        return $this;
     }
 }
