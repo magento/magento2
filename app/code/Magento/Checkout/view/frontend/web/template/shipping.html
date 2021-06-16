@@ -5,7 +5,7 @@
  */
 -->
 <li id="shipping" class="checkout-shipping-address" data-bind="fadeVisible: visible()">
-    <div class="step-title" translate="'Shipping Address'" data-role="title" />
+    <div class="step-title" translate="'Shipping Address'" data-role="title"></div>
     <div id="checkout-step-shipping"
          class="step-content"
          data-role="content">
@@ -21,18 +21,18 @@
                         class="action action-show-popup"
                         click="showFormPopUp"
                         visible="!isNewAddressAdded()">
-                    <span translate="'New Address'" />
+                    <span translate="'New Address'"></span>
                 </button>
             </div>
             <div id="opc-new-shipping-address"
                  visible="isFormPopUpVisible()"
-                 render="shippingFormTemplate" />
+                 render="shippingFormTemplate"></div>
         </if>
 
         <each args="getRegion('before-form')" render="" />
 
         <!-- Inline address form -->
-        <render if="isFormInline" args="shippingFormTemplate" />
+        <render if="isFormInline" args="shippingFormTemplate"/>
     </div>
 </li>
 
@@ -44,7 +44,7 @@
     <div class="checkout-shipping-method">
         <div class="step-title"
              translate="'Shipping Methods'"
-             data-role="title" />
+             data-role="title"></div>
 
         <each args="getRegion('before-shipping-method-form')" render="" />
 
@@ -67,19 +67,19 @@
                 <div role="alert"
                      if="errorValidationMessage().length"
                      class="message notice">
-                    <span text="errorValidationMessage()" />
+                    <span text="errorValidationMessage()"></span>
                 </div>
                 <div class="actions-toolbar" id="shipping-method-buttons-container">
                     <div class="primary">
                         <button data-role="opc-continue" type="submit" class="button action continue primary">
-                            <span translate="'Next'" />
+                            <span translate="'Next'"></span>
                         </button>
                     </div>
                 </div>
             </form>
             <div class="no-quotes-block"
                  ifnot="rates().length > 0"
-                 translate="'Sorry, no quotes are available for this order at this time'" />
+                 translate="'Sorry, no quotes are available for this order at this time'"></div>
         </div>
     </div>
 </li>
