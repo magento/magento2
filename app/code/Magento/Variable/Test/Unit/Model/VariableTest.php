@@ -12,8 +12,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Validation\ValidationException;
 
 class VariableTest extends TestCase
 {
@@ -49,6 +51,12 @@ class VariableTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
+
+        $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -65,6 +73,7 @@ class VariableTest extends TestCase
                 'escaper' => $this->escaperMock,
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
+                'wysiwygValidator' => $this->wysiwygValidator
             ]
         );
         $this->validationFailedPhrase = __('Validation has failed.');
@@ -196,12 +205,39 @@ class VariableTest extends TestCase
         ];
     }
 
-    public function testBeforeSave()
+    /**
+     * @dataProvider getWysiwygValidationCases
+     */
+    public function testAdd(?\Throwable $thrown, bool $exceptionThrown): void
     {
-        $type = \Magento\Variable\Model\Variable::TYPE_HTML;
-        $this->model->setData($type, '<script>alert("hi");</script>');
-        $expected = $this->model;
-        $actual = $this->model->beforeSave();
-        $this->assertEquals($expected, $actual);
+        if ($thrown) {
+            $this->wysiwygValidator->method('validate')->willThrowException($thrown);
+        }
+
+        $this->model->setData('html_value', $thrown);
+
+        try {
+            $this->model->beforeSave();
+            $actuallyThrown = false;
+        } catch (\Throwable $exception) {
+            $actuallyThrown = true;
+        }
+
+        $this->assertEquals($exceptionThrown, $actuallyThrown);
+    }
+
+    /**
+     * Validation cases.
+     *
+     * @return array
+     */
+    public function getWysiwygValidationCases(): array
+    {
+        return
+        [
+            'invalid-exception' => [new ValidationException(__('Invalid html')), true],
+            'invalid-warning' => [new \RuntimeException('Invalid html'), true],
+            'valid' => [null, false]
+        ];
     }
 }
