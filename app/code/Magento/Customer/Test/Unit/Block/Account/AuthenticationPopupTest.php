@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Test\Unit\Block\Account;
 
 use Magento\Customer\Block\Account\AuthenticationPopup;
+use Magento\Customer\Block\Account\LayoutProcessorInterface;
 use Magento\Customer\Model\Form;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Escaper;
@@ -40,6 +41,11 @@ class AuthenticationPopupTest extends TestCase
 
     /** @var Json|MockObject */
     private $serializerMock;
+
+    /**
+     * @var MockObject
+     */
+    protected $layoutProcessorMock;
 
     protected function setUp(): void
     {
@@ -85,8 +91,13 @@ class AuthenticationPopupTest extends TestCase
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->getMock();
 
+        $this->layoutProcessorMock = $this->createMock(
+            LayoutProcessorInterface::class
+        );
+
         $this->model = new AuthenticationPopup(
             $this->contextMock,
+            [$this->layoutProcessorMock],
             [],
             $this->serializerMock
         );
@@ -237,5 +248,14 @@ class AuthenticationPopupTest extends TestCase
             );
 
         $this->assertEquals(json_encode($result), $this->model->getSerializedConfig());
+    }
+    public function testGetJsLayout()
+    {
+        $processedLayout = ['layout' => ['processed' => true]];
+        $jsonLayout = '{"layout":{"processed":true}}';
+        $this->layoutProcessorMock->expects($this->once())->method('process')->with([])->willReturn($processedLayout);
+        $this->serializerMock->expects($this->once())->method('serialize')->willReturn($jsonLayout);
+
+        $this->assertEquals($jsonLayout, $this->model->getJsLayout());
     }
 }

@@ -15,7 +15,7 @@ class DisableCaptcha
     /**
      * @var Data
      */
-    protected $helper;
+    private $helper;
 
     /**
      * @param Data $helper

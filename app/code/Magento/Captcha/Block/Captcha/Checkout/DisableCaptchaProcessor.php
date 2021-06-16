@@ -13,7 +13,7 @@ class DisableCaptchaProcessor implements LayoutProcessorInterface
     /**
      * @var Data
      */
-    protected $helper;
+    private $helper;
 
     /**
      * @param Data $helper
