@@ -202,15 +202,34 @@ class VariableTest extends TestCase
     }
 
     /**
+     * Test Variable validation.
+     *
+     * @param string $value
+     * @param bool $isChanged
+     * @param bool $isValidated
+     * @param bool $exceptionThrown
      * @dataProvider getWysiwygValidationCases
      */
-    public function testBeforeSave(?\Throwable $thrown, bool $exceptionThrown): void
+    public function testBeforeSave(string $value,bool $isChanged,bool $isValidated, bool $exceptionThrown): void
     {
-        if ($thrown) {
-            $this->wysiwygValidator->method('validate')->willThrowException($thrown);
+        if (!$isValidated) {
+            $this->wysiwygValidator->expects($this->any())
+                ->method('validate')
+                ->willThrowException(new ValidationException(__('HTML is invalid')));
+        } else {
+            $this->wysiwygValidator->expects($this->any())->method('validate');
         }
 
-        $this->model->setData('html_value', $thrown);
+        $this->model->setData('html_value', $value);
+
+        if($isChanged)
+        {
+            $this->model->setOrigData('html_value', $value);
+        }
+        else
+        {
+            $this->model->setOrigData('html_value', $value.'-OLD');
+        }
 
         try {
             $this->model->beforeSave();
@@ -231,9 +250,14 @@ class VariableTest extends TestCase
     {
         return
         [
-            'invalid-exception' => [new ValidationException(__('Invalid html')), true],
-            'invalid-warning' => [new \RuntimeException('Invalid html'), true],
-            'valid' => [null, false]
+            'changed-html-value-without-exception' => ['<b>Test Html</b>',true,false,false],
+            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
+            'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
+            'no-changed-html-value-with-exception' => ['<b>Test Html</b>',false,false,true],
+            'no-html-value-without-exception' => ['',true,false,false],
+            'no-html-value-with-exception' => ['',true,false,true],
+            'invalid-exception' => ['',true,false, true],
+            'valid' => ['',true,null, false]
         ];
     }
 }
