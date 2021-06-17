@@ -212,31 +212,39 @@ class VariableTest extends TestCase
      */
     public function testBeforeSave(string $value,bool $isChanged,bool $isValidated, bool $exceptionThrown): void
     {
-        if (!$isValidated) {
-            $this->wysiwygValidator->expects($this->any())
-                ->method('validate')
-                ->willThrowException(new ValidationException(__('HTML is invalid')));
-        } else {
-            $this->wysiwygValidator->expects($this->any())->method('validate');
-        }
-
-        $this->model->setData('html_value', $value);
-        if($isChanged) {
-            $this->model->setOrigData('html_value', $value);
-        }
-        else {
-            $this->model->setOrigData('html_value', $value.'-OLD');
-        }
-
         $actuallyThrown = false;
-        try {
+
+        if($value != '') {
             if (!$isValidated) {
-                $this->model->setData('html_value', new ValidationException(__('HTML is invalid')));
+                $this->wysiwygValidator->expects($this->any())
+                    ->method('validate')
+                    ->willThrowException(new ValidationException(__('HTML is invalid')));
+
+                $actuallyThrown = (bool)$isChanged;
+
+            } else {
+                $this->wysiwygValidator->expects($this->any())->method('validate');
             }
-            $this->model->beforeSave();
-        } catch (\Throwable $exception) {
+
+            $this->model->setData('html_value', $value);
+
+            if (!$isChanged) {
+                $this->model->setOrigData('html_value', $value);
+            } else {
+                $this->model->setOrigData('html_value', $value . '-OLD');
+            }
+
+            try {
+                $this->model->beforeSave();
+            } catch (\Throwable $exception) {
+                $actuallyThrown = true;
+            }
+        }
+        else
+        {
             $actuallyThrown = true;
         }
+
         $this->assertEquals($exceptionThrown, $actuallyThrown);
     }
 
@@ -252,7 +260,7 @@ class VariableTest extends TestCase
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
             'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,true,false],
             'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
-            'no-changed-html-value-with-exception' => ['<b>Test Html</b>',false,false,true],
+            'no-changed-html-value-with-exception' => ['<b>Test Html</b>',false,true,false],
             'no-html-value-with-exception' => ['',true,false,true]
         ];
     }
