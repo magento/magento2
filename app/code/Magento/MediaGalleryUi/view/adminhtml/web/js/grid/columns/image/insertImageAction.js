@@ -49,7 +49,7 @@ define([
                 if (targetElement.is('textarea')) {
                     this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();
-                    $(targetElement).change();
+                    $(targetElement).trigger('change');
                 } else {
                     targetElement.val(data.content)
                         .data('size', data.size)
