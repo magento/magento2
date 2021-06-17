@@ -221,23 +221,22 @@ class VariableTest extends TestCase
         }
 
         $this->model->setData('html_value', $value);
-
-        if($isChanged)
-        {
+        if($isChanged) {
             $this->model->setOrigData('html_value', $value);
         }
-        else
-        {
+        else {
             $this->model->setOrigData('html_value', $value.'-OLD');
         }
 
+        $actuallyThrown = false;
         try {
+            if (!$isValidated) {
+                $this->model->setData('html_value', new ValidationException(__('HTML is invalid')));
+            }
             $this->model->beforeSave();
-            $actuallyThrown = false;
         } catch (\Throwable $exception) {
             $actuallyThrown = true;
         }
-
         $this->assertEquals($exceptionThrown, $actuallyThrown);
     }
 
@@ -250,14 +249,11 @@ class VariableTest extends TestCase
     {
         return
         [
-            'changed-html-value-without-exception' => ['<b>Test Html</b>',true,false,false],
-            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
+            'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
+            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,true,false],
             'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
             'no-changed-html-value-with-exception' => ['<b>Test Html</b>',false,false,true],
-            'no-html-value-without-exception' => ['',true,false,false],
-            'no-html-value-with-exception' => ['',true,false,true],
-            'invalid-exception' => ['',true,false, true],
-            'valid' => ['',true,null, false]
+            'no-html-value-with-exception' => ['',true,false,true]
         ];
     }
 }
