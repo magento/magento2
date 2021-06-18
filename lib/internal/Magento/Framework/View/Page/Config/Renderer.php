@@ -358,7 +358,7 @@ class Renderer implements RendererInterface
         }
 
         if ($this->canTypeBeFont($contentType)) {
-            return 'rel="preload" as="font" crossorigin="anonymous"';
+            return 'rel="preload" as="font" crossorigin="anonymous" ' . $attributes;
         }
 
         return $attributes;
