@@ -21,8 +21,6 @@ class Security
      */
     public static function compareStrings($expected, $actual)
     {
-        $expected     = (string) $expected;
-        $actual       = (string) $actual;
-        return hash_equals($expected, $actual);
+        return hash_equals((string) $expected, (string) $actual);
     }
 }
