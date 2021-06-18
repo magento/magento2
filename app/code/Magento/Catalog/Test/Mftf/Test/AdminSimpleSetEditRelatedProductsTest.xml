@@ -100,6 +100,7 @@
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee2"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.name$$" stepKey="seeSixthRelatedProduct"/>
         <selectOption selector=".admin__collapsible-block-wrapper[data-index='related'] .admin__control-select" userInput="5" stepKey="selectFivePerPage"/>
+        <waitForPageLoad stepKey="waitForLoadingAfterSelectFivePerPage"/>
         <dontSee selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.name$$" stepKey="dontSeeSixthRelatedProduct"/>
 
         <!--See related product in storefront-->

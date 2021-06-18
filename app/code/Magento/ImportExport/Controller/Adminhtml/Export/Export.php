@@ -76,7 +76,7 @@ class Export extends ExportController implements HttpPostActionInterface
     {
         if ($this->getRequest()->getPost(ExportModel::FILTER_ELEMENT_GROUP)) {
             try {
-                $params = $this->getRequest()->getParams();
+                $params = $this->getRequestParameters();
 
                 if (!array_key_exists('skip_attr', $params)) {
                     $params['skip_attr'] = [];
@@ -108,5 +108,15 @@ class Export extends ExportController implements HttpPostActionInterface
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
+    }
+
+    /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getRequestParameters(): array
+    {
+        return $this->getRequest()->getParams();
     }
 }
