@@ -52,7 +52,6 @@ class VariableTest extends TestCase
     protected function setUp(): void
     {
         $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
-
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -214,34 +213,26 @@ class VariableTest extends TestCase
     {
         $actuallyThrown = false;
 
-        if($value != '') {
-            if (!$isValidated) {
-                $this->wysiwygValidator->expects($this->any())
-                    ->method('validate')
-                    ->willThrowException(new ValidationException(__('HTML is invalid')));
-
-                $actuallyThrown = (bool)$isChanged;
-
-            } else {
-                $this->wysiwygValidator->expects($this->any())->method('validate');
-            }
-
-            $this->model->setData('html_value', $value);
-
-            if (!$isChanged) {
-                $this->model->setOrigData('html_value', $value);
-            } else {
-                $this->model->setOrigData('html_value', $value . '-OLD');
-            }
-
-            try {
-                $this->model->beforeSave();
-            } catch (\Throwable $exception) {
-                $actuallyThrown = true;
-            }
+        if (!($isValidated && $value != '')) {
+            $this->wysiwygValidator->expects($this->any())
+                ->method('validate')
+                ->willThrowException(new ValidationException(__('HTML is invalid')));
+            $actuallyThrown = (bool)$isChanged;
+        } else {
+            $this->wysiwygValidator->expects($this->any())->method('validate');
         }
-        else
-        {
+
+        $this->model->setData('html_value', $value);
+
+        if (!$isChanged) {
+            $this->model->setOrigData('html_value', $value);
+        } else {
+            $this->model->setOrigData('html_value', $value . '-OLD');
+        }
+
+        try {
+            $this->model->beforeSave();
+        } catch (\Throwable $exception) {
             $actuallyThrown = true;
         }
 
