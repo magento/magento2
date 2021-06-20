@@ -145,4 +145,10 @@
         <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
         <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
     </entity>
+    <entity name="StorefrontCaptchaOnShareWishlistFormConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Share Wishlist Form</data>
+        <data key="value">share_wishlist_form</data>
+    </entity>
 </entities>
