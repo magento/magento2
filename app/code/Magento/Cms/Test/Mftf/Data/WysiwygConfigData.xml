@@ -18,4 +18,16 @@
         <data key="scope_id">0</data>
         <data key="value">disabled</data>
     </entity>
+    <entity name="EnableTinyMCE4">
+        <data key="path">cms/wysiwyg/editor</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</data>
+    </entity>
+    <entity name="TinyMCE">
+        <data key="path">cms/wysiwyg/editor</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</data>
+    </entity>
 </entities>
