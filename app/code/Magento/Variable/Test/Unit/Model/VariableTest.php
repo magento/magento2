@@ -250,7 +250,7 @@ class VariableTest extends TestCase
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
             'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
             'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
-            'no-html-value-with-exception' => ['',true,true,false]
+            'no-html-value-with-exception' => ['',true,false,false]
         ];
     }
 }
