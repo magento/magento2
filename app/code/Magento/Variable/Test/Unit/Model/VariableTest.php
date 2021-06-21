@@ -213,11 +213,10 @@ class VariableTest extends TestCase
     {
         $actuallyThrown = false;
 
-        if (!($isValidated && $value != '')) {
+        if (!$isValidated) {
             $this->wysiwygValidator->expects($this->any())
                 ->method('validate')
                 ->willThrowException(new ValidationException(__('HTML is invalid')));
-            $actuallyThrown = (bool)$isChanged;
         } else {
             $this->wysiwygValidator->expects($this->any())->method('validate');
         }
@@ -249,10 +248,9 @@ class VariableTest extends TestCase
         return
         [
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
-            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,true,false],
             'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
-            'no-changed-html-value-with-exception' => ['<b>Test Html</b>',false,true,false],
-            'no-html-value-with-exception' => ['',true,false,true]
+            'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
+            'no-html-value-with-exception' => ['',true,true,false]
         ];
     }
 }
