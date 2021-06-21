@@ -136,7 +136,7 @@ class Variable extends AbstractModel
     }
 
     /**
-     * @inheritDoc AbstractModel
+     * @inheritDoc
      */
     public function beforeSave()
     {
