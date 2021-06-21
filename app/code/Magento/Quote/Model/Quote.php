@@ -2298,6 +2298,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $storeId
         );
 
+        $this->collectTotals()->save();
+
         $addresses = $this->getAllAddresses();
 
         if (!$multishipping) {
