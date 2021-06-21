@@ -66,11 +66,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\View\Element\Text::class
             )
         );
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull(
-            $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER)
-        );
+        /** @var $category \Magento\Catalog\Model\Category */
+        $category = $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
+        $this->assertEquals($this->_category->getId(), $category->getId());
     }
 
     public function testApply()
