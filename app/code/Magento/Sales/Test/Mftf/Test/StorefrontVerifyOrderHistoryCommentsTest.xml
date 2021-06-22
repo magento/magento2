@@ -11,10 +11,10 @@
     <test name="StorefrontVerifyOrderHistoryCommentsTest">
         <annotations>
             <features value="Sales"/>
-            <stories value="Storefront Order History Comments"/>
-            <title value="Verify Order History Comments For Storefront My Account Sales Pages"/>
-            <description value="Verify that the History comments without the HTML tags to the Sales my account pages on the Storefront"/>
-            <testCaseId value="MC-42531"/>
+            <stories value="Storefront Customer Order History Comments"/>
+            <title value="Verify Customer Order History Comments For Storefront My Account Sales Pages"/>
+            <description value="Verify that the Customer order History comments without the HTML tags to the My Orders pages on the Storefront"/>
+            <testCaseId value="MC-42694"/>
             <useCaseId value="MC-42531"/>
             <severity value="MINOR"/>
             <group value="Sales"/>
