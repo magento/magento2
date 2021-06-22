@@ -319,7 +319,7 @@ class GenerateTest extends TestCase
             ->method('jsonEncode')
             ->with([
                 'error' =>
-                    __('Rule is not saved with auto generate option enabled. Please save the rule and try again.')
+                    __('The rule coupon settings changed. Please save the rule before using auto-generation.')
             ]);
         $this->model->execute();
     }

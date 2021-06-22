@@ -83,7 +83,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote imple
         } elseif ((int) $rule->getCouponType() !== \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
             && !$rule->getUseAutoGeneration()) {
             $result['error'] =
-                __('Rule is not saved with auto generate option enabled. Please save the rule and try again.');
+                __('The rule coupon settings changed. Please save the rule before using auto-generation.');
         } else {
             try {
                 $data = $this->getRequest()->getParams();

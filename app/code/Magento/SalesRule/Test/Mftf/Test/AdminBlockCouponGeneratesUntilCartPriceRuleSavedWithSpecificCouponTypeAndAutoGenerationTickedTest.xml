@@ -51,7 +51,7 @@
                           stepKey="clickManageCouponCodes"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.couponQty}}" userInput="1" stepKey="fillFieldCouponQty"/>
         <click selector="{{AdminCartPriceRulesFormSection.generateCouponsButton}}" stepKey="clickGenerateCoupon"/>
-        <see selector="{{AdminCartPriceRulesFormSection.modalMessage}}" userInput="Rule is not saved with auto generate option enabled. Please save the rule and try again."
+        <see selector="{{AdminCartPriceRulesFormSection.modalMessage}}" userInput="The rule coupon settings changed. Please save the rule before using auto-generation."
              stepKey="seeModalMessage"/>
     </test>
 </tests>
