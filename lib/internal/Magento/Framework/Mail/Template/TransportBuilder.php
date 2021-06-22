@@ -25,8 +25,8 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Zend\Mime\Mime;
-use Zend\Mime\PartFactory;
+use Laminas\Mime\Part;
+use Laminas\Mime\Mime;
 
 /**
  * TransportBuilder for Mail Templates
@@ -106,11 +106,6 @@ class TransportBuilder
     protected $mailTransportFactory;
 
     /**
-     * @var PartFactory
-     */
-    protected $partFactory;
-
-    /**
      * @var array
      */
     protected $attachments = [];
@@ -164,7 +159,6 @@ class TransportBuilder
         SenderResolverInterface $senderResolver,
         ObjectManagerInterface $objectManager,
         TransportInterfaceFactory $mailTransportFactory,
-        PartFactory $partFactory,
         MessageInterfaceFactory $messageFactory = null,
         EmailMessageInterfaceFactory $emailMessageInterfaceFactory = null,
         MimeMessageInterfaceFactory $mimeMessageInterfaceFactory = null,
@@ -175,8 +169,6 @@ class TransportBuilder
         $this->objectManager = $objectManager;
         $this->_senderResolver = $senderResolver;
         $this->mailTransportFactory = $mailTransportFactory;
-        $this->partFactory = $partFactory ?: $this->objectManager
-            ->get(PartFactory::class);
         $this->emailMessageInterfaceFactory = $emailMessageInterfaceFactory ?: $this->objectManager
             ->get(EmailMessageInterfaceFactory::class);
         $this->mimeMessageInterfaceFactory = $mimeMessageInterfaceFactory ?: $this->objectManager
@@ -358,6 +350,29 @@ class TransportBuilder
     }
 
     /**
+     * @param string $content
+     * @param string $fileName
+     * @param string|null $fileType
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
+    public function addAttachment(string $content, string $fileName, ?string $fileType = Mime::TYPE_OCTETSTREAM)
+    {
+        $attachmentPart = new Part();
+
+        $attachmentPart->setContent($content)
+            ->setType($fileType)
+            ->setFileName($fileName)
+            ->setDisposition(Mime::DISPOSITION_ATTACHMENT)
+            ->setEncoding(Mime::ENCODING_BASE64);
+
+        $this->attachments[] = $attachmentPart;
+
+        return $this;
+    }
+
+    /**
      * Reset object state
      *
      * @return $this
@@ -459,29 +474,5 @@ class TransportBuilder
         } else {
             $this->messageData[$addressType] = $convertedAddressArray;
         }
-    }
-
-    /**
-     * Adds attachment part to email
-     *
-     * @param string|null $content
-     * @param string|null $fileName
-     * @param string|null $fileType
-     *
-     * @return $this
-     */
-    public function addAttachment(?string $content, ?string $fileName, ?string $fileType)
-    {
-        $attachmentPart = $this->partFactory->create();
-
-        $attachmentPart->setContent($content)
-            ->setType($fileType)
-            ->setFileName($fileName)
-            ->setDisposition(Mime::DISPOSITION_ATTACHMENT)
-            ->setEncoding(Mime::ENCODING_BASE64);
-
-        $this->attachments[] = $attachmentPart;
-
-        return $this;
     }
 }
