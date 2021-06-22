@@ -27,6 +27,7 @@ class LoginAsCustomerButtonDataProviderPlugin
 
     /**
      * @param IsAssistanceEnabled $isAssistanceEnabled
+     * @param IsCustomerEnabled $isCustomerEnabled
      */
     public function __construct(
         IsAssistanceEnabled $isAssistanceEnabled,

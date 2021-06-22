@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerAssistance\Model;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Check if customer is Enabled
@@ -17,22 +15,22 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class IsCustomerEnabled
 {
     /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * @var array
      */
     private $registry = [];
 
     /**
-     * @param CustomerRepositoryInterface $customerRepository
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository
+        ResourceConnection $resourceConnection
     ) {
-        $this->customerRepository = $customerRepository;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -40,14 +38,21 @@ class IsCustomerEnabled
      *
      * @param int $customerId
      * @return bool
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function execute(int $customerId): bool
     {
         if (!isset($this->registry[$customerId])) {
-            $customer = $this->customerRepository->getById($customerId);
-            $isActive = (bool)$customer->getExtensionAttributes()->getCompanyAttributes()->getStatus();
+
+            $connection = $this->resourceConnection->getConnection();
+            $tableName = $this->resourceConnection->getTableName('customer_entity');
+
+            $select = $connection->select()
+                ->from(
+                    $tableName,
+                    'is_active'
+                )
+                ->where('entity_id = ?', $customerId);
+            $isActive = !!$connection->fetchOne($select);
             $this->registry[$customerId] = $isActive;
         }
 
