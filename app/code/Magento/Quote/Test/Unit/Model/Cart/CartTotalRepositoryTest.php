@@ -108,7 +108,8 @@ class CartTotalRepositoryTest extends TestCase
                     'getBillingAddress',
                     'getAllVisibleItems',
                     'getItemsQty',
-                    'collectTotals'
+                    'collectTotals',
+                    'validateMinimumAmount'
                 ]
             )
             ->disableOriginalConstructor()
@@ -137,6 +138,11 @@ class CartTotalRepositoryTest extends TestCase
         $this->totalsConverterMock = $this->createMock(
             TotalsConverter::class
         );
+
+        $this->totalsConverterMock = $this->createMock(
+            TotalsConverter::class
+        );
+
 
         $this->model = new CartTotalRepository(
             $this->totalsFactoryMock,
@@ -246,6 +252,10 @@ class CartTotalRepositoryTest extends TestCase
             ->method('setQuoteCurrencyCode')
             ->with(self::STUB_CURRENCY_CODE)
             ->willReturnSelf();
+
+        $this->quoteMock->expects($this->once())
+            ->method('validateMinimumAmount')
+            ->willReturn(true);
 
         $this->assertEquals($totalsMock, $this->model->get(self::STUB_CART_ID));
     }
