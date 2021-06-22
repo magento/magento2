@@ -40,6 +40,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Processor;
+use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Model\Quote\PaymentFactory;
 use Magento\Quote\Model\ResourceModel\Quote\Address\Collection;
@@ -191,6 +192,11 @@ class QuoteTest extends TestCase
     private $orderIncrementIdChecker;
 
     /**
+     * @var TotalsCollector|MockObject
+     */
+    private $totalsCollector;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -311,6 +317,17 @@ class QuoteTest extends TestCase
             CustomerInterfaceFactory::class,
             ['create']
         );
+
+        /*$this->totalCollector = $this->createPartialMock(
+            TotalsCollector::class,
+            ['collect']
+        );*/
+        $this->totalsCollector = $this->getMockBuilder(TotalsCollector::class)
+                ->onlyMethods(['collect'])
+                ->disableOriginalConstructor()
+                ->getMock();
+
+
         $this->orderIncrementIdChecker = $this->createMock(OrderIncrementIdChecker::class);
         $this->quote = (new ObjectManager($this))
             ->getObject(
@@ -337,6 +354,7 @@ class QuoteTest extends TestCase
                     'customerDataFactory' => $this->customerDataFactoryMock,
                     'itemProcessor' => $this->itemProcessor,
                     'orderIncrementIdChecker' => $this->orderIncrementIdChecker,
+                    'totalsCollector' => $this->totalsCollector,
                     'data' => [
                         'reserved_order_id' => 1000001,
                     ],
@@ -1083,6 +1101,19 @@ class QuoteTest extends TestCase
             ->method('setQuoteFilter')
             ->willReturn([$this->quoteAddressMock]);
 
+        $totalsMock = $this->getMockBuilder(DataObject::class)
+            ->onlyMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $totalsMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([]);
+
+        $this->totalsCollector->expects($this->once())
+            ->method('collect')
+            ->willReturn($totalsMock);
+
         $this->assertTrue($this->quote->validateMinimumAmount());
     }
 
@@ -1109,6 +1140,19 @@ class QuoteTest extends TestCase
         $this->quoteAddressCollectionMock->expects($this->once())
             ->method('setQuoteFilter')
             ->willReturn([$this->quoteAddressMock]);
+
+        $totalsMock = $this->getMockBuilder(DataObject::class)
+            ->onlyMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $totalsMock->expects($this->once())
+            ->method('getData')
+            ->willReturn([]);
+
+        $this->totalsCollector->expects($this->once())
+            ->method('collect')
+            ->willReturn($totalsMock);
 
         $this->assertFalse($this->quote->validateMinimumAmount());
     }
