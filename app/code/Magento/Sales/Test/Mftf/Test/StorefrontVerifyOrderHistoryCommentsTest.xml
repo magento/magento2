@@ -69,6 +69,6 @@
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="navigateToCustomerDashboardPage"/>
         <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
 
-        <dontSee userInput="{{assertCommentsWithHtmlTags.anchorTag}}" selector="{{StorefrontCustomerOrderViewSection.orderComment}}" stepKey="dontSeeExposedHtmlCode"/>
+        <dontSee userInput="{{anchorTagFragment.anchorTag}}" selector="{{StorefrontCustomerOrderViewSection.orderComment}}" stepKey="dontSeeExposedHtmlCode"/>
     </test>
 </tests>

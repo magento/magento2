@@ -13,7 +13,7 @@
             <description>Adding comments on admin sales order details page</description>
         </annotations>
         <arguments>
-            <argument name="comment" type="string"/>
+            <argument name="comment" type="string" defaultValue=""/>
         </arguments>
         <fillField selector="{{AdminSalesOrderCommentsSection.historyComment}}" userInput="{{comment}}" stepKey="fillComment"/>
         <checkOption selector="{{AdminSalesOrderCommentsSection.historyVisible}}" stepKey="checkVisibleOnStoreFront"/>
