@@ -216,11 +216,11 @@ class BaseFinalPrice
         $select->columns(
             [
                 //orig_price in catalog_product_index_price_final_tmp
-                'price' => $price,
+                'price' => $connection->getIfNullSql($price, 0),
                 //price in catalog_product_index_price_final_tmp
-                'final_price' => $finalPrice,
-                'min_price' => $finalPrice,
-                'max_price' => $finalPrice,
+                'final_price' => $connection->getIfNullSql($finalPrice, 0),
+                'min_price' => $connection->getIfNullSql($finalPrice, 0),
+                'max_price' => $connection->getIfNullSql($finalPrice, 0),
                 'tier_price' => $tierPrice,
             ]
         );
