@@ -134,4 +134,35 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(13, $item->getValue());
         $this->assertEquals(2, $item->getCount());
     }
+
+    /**
+     * Check that only children category of current category are aggregated
+     *
+     * @magentoDbIsolation disabled
+     */
+    public function testCategoryAggregation(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $request = $objectManager->get(\Magento\TestFramework\Request::class);
+        $request->setParam('cat', 3);
+        $this->_model->apply($request);
+
+        /** @var $category \Magento\Catalog\Model\Category */
+        $category = $objectManager->get(\Magento\Framework\Registry::class)->registry(self::CURRENT_CATEGORY_FILTER);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $category);
+        $this->assertEquals(3, $category->getId());
+        $metrics = $this->_model->getLayer()->getProductCollection()->getFacetedData('category');
+        $this->assertIsArray($metrics);
+        $actual = [];
+        foreach ($metrics as $categoryId => $metric) {
+            $actual[$categoryId] = $metric['count'];
+        }
+        $this->assertEquals(
+            [
+                4 => 2,
+                13 => 2
+            ],
+            $actual
+        );
+    }
 }
