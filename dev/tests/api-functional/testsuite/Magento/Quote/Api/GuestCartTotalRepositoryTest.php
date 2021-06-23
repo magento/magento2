@@ -87,6 +87,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
             Totals::KEY_QUOTE_CURRENCY_CODE => $quote->getQuoteCurrencyCode(),
             Totals::KEY_ITEMS_QTY => $quote->getItemsQty(),
             Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
+            Totals::KEY_IS_MINIMUM_ORDER_AMOUNT => $quote->validateMinimumAmount()
         ];
 
         $requestData = ['cartId' => $cartId];
