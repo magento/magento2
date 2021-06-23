@@ -250,7 +250,7 @@ define([
              */
             $(container).on('click', '.btn_choose_file_upload', function () {
                 swatchComponents.inputFile.attr('data-called-by', $(this).data('class'));
-                swatchComponents.inputFile.click();
+                swatchComponents.inputFile.trigger('click');
             });
 
             /**

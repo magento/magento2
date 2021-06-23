@@ -384,7 +384,7 @@ define([
              */
             $(document).on('click', '.btn_choose_file_upload', function () {
                 swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
-                swatchComponents.inputFile.click();
+                swatchComponents.inputFile.trigger('click');
             });
 
             /**

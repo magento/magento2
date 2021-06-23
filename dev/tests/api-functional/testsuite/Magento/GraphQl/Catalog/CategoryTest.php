@@ -690,6 +690,51 @@ QUERY;
     }
 
     /**
+     * Test sorting of categories tree
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories_sorted.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCategoriesTreeSorting()
+    {
+        $rootCategoryId = 2;
+        $query = <<<QUERY
+{
+  category(id: {$rootCategoryId}) {
+      children {
+        name
+        children {
+          name
+        }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+        self::assertEquals(
+            'Category 12',
+            $responseDataObject->getData('category/children/0/name')
+        );
+        self::assertEquals(
+            'Category 1',
+            $responseDataObject->getData('category/children/1/name')
+        );
+        self::assertEquals(
+            'Category 2',
+            $responseDataObject->getData('category/children/2/name')
+        );
+        self::assertEquals(
+            'Category 1.2',
+            $responseDataObject->getData('category/children/1/children/0/name')
+        );
+        self::assertEquals(
+            'Category 1.1',
+            $responseDataObject->getData('category/children/1/children/1/name')
+        );
+    }
+
+    /**
      * @return array
      */
     public function categoryImageDataProvider(): array

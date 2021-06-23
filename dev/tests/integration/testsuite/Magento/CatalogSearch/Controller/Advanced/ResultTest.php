@@ -102,6 +102,39 @@ class ResultTest extends AbstractController
     }
 
     /**
+     * Advanced search with an underscore in product attributes.
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search_with_underscore.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     *
+     * @return void
+     */
+    public function testExecuteWithUnderscore(): void
+    {
+        $this->getRequest()->setQuery(
+            $this->_objectManager->create(
+                Parameters::class,
+                [
+                    'values' => [
+                        'name' => 'name',
+                        'sku' => 'sku',
+                        'description' => 'description',
+                        'short_description' => 'short',
+                        'price' => [
+                            'from' => '',
+                            'to' => '',
+                        ],
+                    ],
+                ]
+            )
+        );
+        $this->dispatch('catalogsearch/advanced/result');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertStringContainsString('name_simple_product', $responseBody);
+    }
+
+    /**
      * Data provider with strings for quick search.
      *
      * @return array
