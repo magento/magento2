@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStorefrontProductInfoMainProductNameActionGroup">
         <annotations>
-            <description>Validates that the provided Product Price and Final Product Price are present on the Storefront Product Info Main section on the page.</description>
+            <description>Validates that the provided Product name are present on the Storefront Product Info Main section on the page.</description>
         </annotations>
         <arguments>
             <argument name="value" type="string"/>
