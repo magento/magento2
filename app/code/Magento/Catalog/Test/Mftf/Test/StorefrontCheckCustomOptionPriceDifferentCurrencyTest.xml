@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckCustomOptionPriceDifferentCurrencyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Custom options"/>
+            <title value="Check custom option price with different currency"/>
+            <description value="Check custom option price with different currency on the product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38926"/>
+            <useCaseId value="MC-30626"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setCurrencyAllow"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyWebsitesForEURandUSD"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <updateData createDataKey="createProduct" entity="productWithCheckbox" stepKey="updateProductWithOptions"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setCurrencyAllow"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSDWebsites"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionUSD">
+            <argument name="price" value="12.3"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
+            <argument name="currency" value="EUR"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
+            <argument name="price" value="8.7"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -21,8 +21,8 @@ class GraphQlMutationTest extends GraphQlAbstract
         $query = <<<MUTATION
 mutation {
   testItem(id: {$id}) {
-    item_id,
-    name,
+    item_id
+    name
     integer_list
   }
 }
@@ -47,8 +47,8 @@ MUTATION;
         $query = <<<MUTATION
 mutation {
   testItem(id: {$id}) {
-    item_id,
-    name,
+    item_id
+    name
     integer_list
   }
 }

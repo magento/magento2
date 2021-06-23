@@ -88,8 +88,8 @@
         </actionGroup>
 
         <!-- On order's page click 'Refund offline' button -->
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
-        <waitForPageLoad stepKey="waitForResultPage"/>
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForResultPage"/>
 
         <!-- Perform all assertions: assert refund success create message -->
         <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage"/>

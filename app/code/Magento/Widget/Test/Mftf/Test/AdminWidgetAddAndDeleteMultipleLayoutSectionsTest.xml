@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminWidgetAddAndDeleteMultipleLayoutSectionsTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Add and Delete multiple layouts when creating a Widget"/>
+            <title value="Add and Delete multiple layouts"/>
+            <description value="Admin should be able to Add and Delete multiple layouts"/>
+            <severity value="CRITICAL"/>
+            <group value="Widget"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentWidgetsPageFirst">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitleFirst">
+            <argument name="title" value="{{AdminMenuContentElementsWidgets.pageTitle}}"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <actionGroup ref="AdminCreateWidgetWthoutLayoutActionGroup" stepKey="addWidgetForTest">
+            <argument name="widget" value="ProductsListWidget"/>
+        </actionGroup>
+        <actionGroup ref="AdminWidgetAddLayoutUpdateActionGroup" stepKey="AddSecondLayout"/>
+        <actionGroup ref="AdminWidgetAddLayoutUpdateActionGroup" stepKey="AddThirdLayout"/>
+        <seeNumberOfElements userInput="3" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeThreeDeleteButtons"/>
+        <actionGroup ref="AdminWidgetDeleteLayoutUpdateActionGroup" stepKey="DeleteFirstLayoutForWidget"></actionGroup>
+        <seeNumberOfElements userInput="2" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeTwoDeleteButtons"/>
+        <actionGroup ref="AdminWidgetDeleteLayoutUpdateActionGroup" stepKey="DeleteSecondLayoutForWidget"></actionGroup>
+        <seeNumberOfElements userInput="1" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeOneDeleteButtons"/>
+        <actionGroup ref="AdminWidgetDeleteLayoutUpdateActionGroup" stepKey="DeleteThirdLayoutForWidget"></actionGroup>
+        <seeNumberOfElements userInput="0" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeZeroDeleteButtons"/>
+    </test>
+</tests>

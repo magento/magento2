@@ -58,6 +58,7 @@ define([
                 deferral = new $.Deferred(),
                 paymentData = {
                     method: 'checkmo',
+                    title: 'Method title',
                     additionalData: null,
                     __disableTmpl: {
                         title: true

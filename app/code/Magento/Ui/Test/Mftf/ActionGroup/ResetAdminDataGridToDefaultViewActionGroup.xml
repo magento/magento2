@@ -13,6 +13,7 @@
             <description>Resets an Admin Grid page to the 'Default View'.</description>
         </annotations>
 
+        <waitForElementVisible selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="waitForViewBookmarks"/>
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
         <click selector="{{AdminDataGridHeaderSection.bookmarkOption('Default View')}}" stepKey="selectDefaultGridView"/>
         <see selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>

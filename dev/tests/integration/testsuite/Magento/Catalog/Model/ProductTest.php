@@ -246,7 +246,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
-        copy($sourceFile, $mediaDirectory->getAbsolutePath($targetFile));
+        $mediaDirectory->getDriver()->filePutContents($mediaDirectory->getAbsolutePath($targetFile), file_get_contents($sourceFile));
 
         return $targetFile;
     }
@@ -813,5 +813,17 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
         $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
         $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
+    }
+
+    public function testSetPriceWithoutTypeId()
+    {
+        $this->_model->setAttributeSetId(4);
+        $this->_model->setName('Some name');
+        $this->_model->setSku('some_sku');
+        $this->_model->setPrice(9.95);
+        $this->productRepository->save($this->_model);
+
+        $product = $this->productRepository->get('some_sku', false, null, true);
+        $this->assertEquals(9.95, $product->getPrice());
     }
 }

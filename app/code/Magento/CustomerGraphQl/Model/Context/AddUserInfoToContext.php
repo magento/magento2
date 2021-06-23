@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Model\Session;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
 
@@ -22,12 +24,28 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
     private $userContext;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
      * @param UserContextInterface $userContext
+     * @param Session $session
+     * @param CustomerRepository $customerRepository
      */
     public function __construct(
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        Session $session,
+        CustomerRepository $customerRepository
     ) {
         $this->userContext = $userContext;
+        $this->session = $session;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -47,7 +65,13 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
         }
         $contextParameters->setUserType($currentUserType);
 
-        $contextParameters->addExtensionAttribute('is_customer', $this->isCustomer($currentUserId, $currentUserType));
+        $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
+        $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
+        if ($isCustomer) {
+            $customer = $this->customerRepository->getById($currentUserId);
+            $this->session->setCustomerData($customer);
+            $this->session->setCustomerGroupId($customer->getGroupId());
+        }
         return $contextParameters;
     }
 
@@ -60,6 +84,8 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
      */
     private function isCustomer(?int $customerId, ?int $customerType): bool
     {
-        return !empty($customerId) && !empty($customerType) && $customerType !== UserContextInterface::USER_TYPE_GUEST;
+        return !empty($customerId)
+            && !empty($customerType)
+            && $customerType === UserContextInterface::USER_TYPE_CUSTOMER;
     }
 }
