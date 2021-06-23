@@ -69,7 +69,9 @@
         <!--Verify Product In Store Front-->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
             <argument name="productSku" value="{{SimpleProduct.sku}}"/>

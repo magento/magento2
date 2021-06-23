@@ -49,7 +49,10 @@
         <!-- Verify not able to add configurable product to cart when no option is selected in storefront product view -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
         <waitForPageLoad stepKey="wait"/>
-        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <see userInput="" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{StorefrontProductInfoMainSection.productName}}"/>
+        </actionGroup>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
         <see userInput="This is a required field" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsError}}" stepKey="seeError"/>

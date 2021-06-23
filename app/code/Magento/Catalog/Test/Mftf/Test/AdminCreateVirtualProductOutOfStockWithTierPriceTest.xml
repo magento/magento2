@@ -71,7 +71,9 @@
         <!-- Verify we see created virtual product out of stock with tier price on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(virtualProductOutOfStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{virtualProductOutOfStock.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
             <argument name="productSku" value="{{virtualProductOutOfStock.sku}}"/>
         </actionGroup>

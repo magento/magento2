@@ -84,12 +84,16 @@
         <click stepKey="selectFirstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
         <waitForPageLoad stepKey="waitForFirstStoreView"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
         <!--Verify product and category is visible in Second Store View -->
         <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
         <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
         <waitForPageLoad stepKey="waitForSecondStoreView"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

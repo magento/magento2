@@ -49,7 +49,9 @@
         <!--Open product display page-->
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" stepKey="clickProductToGoProductPage"/>
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName">
+            <argument name="value" value="{{SimpleProductNameWithDoubleQuote.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku">
             <argument name="productSku" value="{{SimpleProductNameWithDoubleQuote.sku}}"/>
         </actionGroup>

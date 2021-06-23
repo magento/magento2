@@ -95,7 +95,9 @@
         <see userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
         <!-- Add product visible on default store to wishlist -->
         <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageOnDefaultStore"/>
-        <see userInput="$$product.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertFirstProductNameTitle"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertFirstProductNameTitle">
+            <argument name="value" value="$$product.name$$"/>
+        </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addFirstProductToWishlist"/>
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>

@@ -45,7 +45,9 @@
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" stepKey="clickProductToGoProductPage"/>
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad2"/>
 
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{productWithHTMLEntityOne.name}}" stepKey="seeCorrectName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName">
+            <argument name="value" value="{{productWithHTMLEntityOne.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku">
             <argument name="productSku" value="{{productWithHTMLEntityOne.sku}}"/>
         </actionGroup>
