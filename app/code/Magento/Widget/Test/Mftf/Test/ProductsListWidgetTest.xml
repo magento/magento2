@@ -39,7 +39,7 @@
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
         <waitForPageLoad stepKey="waitForContentSection"/>
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
         <waitForPageLoad stepKey="waitForSlideOut"/>
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectWidgetType"/>
         <waitForPageLoad stepKey="waitForWidgetOptions"/>

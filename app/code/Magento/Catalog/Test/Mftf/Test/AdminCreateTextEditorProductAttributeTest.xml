@@ -101,14 +101,14 @@
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(productTextEditorAttribute.attribute_code)}}" stepKey="seeAttributeLabelInProductForm"/>
 
         <!-- TinyMCE 4 is displayed in WYSIWYG content area -->
-        <seeElement selector="{{TinyMCESection.TinyMCE4}}" stepKey="seeTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.TinyMCE}}" stepKey="seeTinyMCE"/>
 
         <!-- Verify toolbar menu -->
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyToolbarMenu"/>
 
         <!-- Click Show/Hide button and see Insert Image button -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
-        <click selector="{{ProductAttributeWYSIWYGSection.showHideBtn(productTextEditorAttribute.attribute_code)}}" stepKey="clickShowHideBtn"/>
+        <click selector="{{AdminProductFormSection.divByDataIndex(productTextEditorAttribute.attribute_code)}} {{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
         <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImageBtn"/>
 
         <!-- Add content into attribute -->
