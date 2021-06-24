@@ -23,7 +23,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE">
-                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
             </actionGroup>
             <waitForPageLoad stepKey="waitConfigToSave"/>
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>

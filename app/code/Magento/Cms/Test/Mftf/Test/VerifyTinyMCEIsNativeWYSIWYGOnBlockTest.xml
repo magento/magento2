@@ -22,8 +22,8 @@
             <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" >
-                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
             </actionGroup>
         </before>
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>

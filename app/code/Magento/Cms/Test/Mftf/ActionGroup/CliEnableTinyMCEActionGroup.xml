@@ -16,6 +16,6 @@
             <argument name="TinyMCEValue" type="string"/>
         </arguments>
 
-        <magentoCLI command="config:set {{TinyMCE.path}} {{TinyMCEValue}}" stepKey="enableTinyMCE"/>
+        <magentoCLI command="config:set {{EnableTinyMCE.path}} {{TinyMCEValue}}" stepKey="enableTinyMCE"/>
     </actionGroup>
 </actionGroups>

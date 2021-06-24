@@ -23,8 +23,8 @@
             <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}" stepKey="enableWYSIWYG"/>
 
             <!-- Enable TinyMCE 4 -->
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" >
-                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
             </actionGroup>
 
             <!-- Login as admin -->

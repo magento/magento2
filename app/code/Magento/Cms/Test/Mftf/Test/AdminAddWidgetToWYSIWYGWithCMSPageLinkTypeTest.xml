@@ -21,8 +21,8 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="switchToTinyMCE" >
-                <argument name="TinyMCEValue" value="{{TinyMCE.value}}"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
             </actionGroup>
         </before>
         <!--Main test-->
