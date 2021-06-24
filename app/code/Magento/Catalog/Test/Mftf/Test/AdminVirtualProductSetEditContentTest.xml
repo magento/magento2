@@ -35,6 +35,8 @@
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{defaultVirtualProduct.urlKey}}.html" stepKey="goToStorefront"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStorefront">
+            <argument name="url" value="{{defaultVirtualProduct.urlKey}}.html"/>
+        </actionGroup>
     </test>
 </tests>

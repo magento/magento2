@@ -27,7 +27,9 @@
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage2"/>
+            <actionGroup ref="AmOnPageActionGroup" stepKey="goToAdminCatalogPriceRuleGridPage2">
+                <argument name="url" value="{{AdminCatalogPriceRuleGridPage.url}}"/>
+            </actionGroup>
             <!-- It sometimes is loading too long for default 10s -->
             <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded2"/>
             <!--Create the catalog price rule -->
@@ -54,7 +56,9 @@
         </after>
 
         <!--Open order by Id-->
-        <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToOrderPage">
+            <argument name="url" value="{{AdminOrderPage.url($createGuestCart.return$)}}"/>
+        </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <!--Verify order item row-->

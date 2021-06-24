@@ -32,7 +32,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup ref="AmOnPageActionGroup" stepKey="goToPriceRulePage">
+                <argument name="url" value="{{CatalogRulePage.url}}"/>
+            </actionGroup>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -71,7 +73,9 @@
         </actionGroup>
 
         <!-- Check simple product prices on store front category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="url" value="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Price">
             <argument name="productInfo" value="$5.00"/>
             <argument name="productNumber" value="1"/>

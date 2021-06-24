@@ -74,7 +74,9 @@
         </actionGroup>
 
         <comment userInput="5. Open Marketing - SEO and Search - URL Rewrites" stepKey="commentVerifyURLAfterImport" />
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage2"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnUrlRewriteIndexPage2">
+            <argument name="url" value="{{AdminUrlRewriteIndexPage.url}}"/>
+        </actionGroup>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$-new.html" stepKey="inputProductName2"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearchButton2"/>

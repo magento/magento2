@@ -25,7 +25,9 @@
             <argument name="user" value="inactiveAdmin"/>
             <argument name="role" value="roleDefaultAdministrator"/>
         </actionGroup>
-        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToAdminUsersGrid"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToAdminUsersGrid">
+            <argument name="url" value="{{AdminUsersPage.url}}"/>
+        </actionGroup>
         <actionGroup ref="AssertAdminUserIsInGridActionGroup" stepKey="assertAdminIsInGrid">
             <argument name="user" value="inactiveAdmin"/>
         </actionGroup>

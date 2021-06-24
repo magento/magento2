@@ -34,7 +34,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to product page-->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToSimpleProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
 
         <!--Add Product to Shopping Cart-->
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">

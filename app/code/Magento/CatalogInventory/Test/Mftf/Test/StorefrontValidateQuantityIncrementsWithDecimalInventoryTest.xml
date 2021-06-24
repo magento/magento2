@@ -55,7 +55,9 @@
         <!--Step3. Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton2"/>
         <!--Step4. Open *Customer view* (Go to *Store Front*). Open *prod1* page (Find via search and click on product name) -->
-        <amOnPage url="{{StorefrontHomePage.url}}$$createPreReqSimpleProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnProductPage">
+            <argument name="url" value="{{StorefrontHomePage.url}}$$createPreReqSimpleProduct.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
         <!--Step5. Fill *23.31* in *Qty*. Click on button *Add to Cart*-->
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="23.31" stepKey="fillQty"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="clickOnAddToCart"/>

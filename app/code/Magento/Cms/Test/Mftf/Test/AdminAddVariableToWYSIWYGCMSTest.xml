@@ -79,7 +79,9 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
-        <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnPageTestPage">
+            <argument name="url" value="{{_defaultCmsPage.identifier}}"/>
+        </actionGroup>
         <!--see Default Variable on Storefront-->
         <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />
         <!--see Custom Variable on Storefront-->

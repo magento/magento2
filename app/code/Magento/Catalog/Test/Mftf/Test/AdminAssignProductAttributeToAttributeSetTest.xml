@@ -39,7 +39,9 @@
         </after>
 
         <!-- Go to default attribute set edit page -->
-        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="onAttributeSetEdit">
+            <argument name="url" value="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/"/>
+        </actionGroup>
         <!-- Assert created attribute in unassigned section -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="seeAttributeInUnassigned"/>
         <!-- Assign attribute to a group -->

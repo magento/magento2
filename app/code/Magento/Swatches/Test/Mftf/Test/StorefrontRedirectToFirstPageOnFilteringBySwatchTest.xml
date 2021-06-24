@@ -55,7 +55,9 @@
             <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
         </after>
 
-        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="onAttributeSetEdit">
+            <argument name="url" value="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/"/>
+        </actionGroup>
         <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
             <argument name="group" value="Product Details"/>
             <argument name="attribute" value="{{textSwatchAttribute.attribute_code}}"/>

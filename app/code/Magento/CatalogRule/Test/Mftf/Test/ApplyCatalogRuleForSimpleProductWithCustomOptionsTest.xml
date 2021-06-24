@@ -75,8 +75,9 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToCategoryPage">
+            <argument name="url" value="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
         <!-- Check product 1 price on store front category page -->
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$51.10" stepKey="storefrontProduct1Price"/>
 
@@ -96,8 +97,9 @@
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$56.78" stepKey="storefrontProduct3RegularPrice"/>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToProductPage1">
+            <argument name="url" value="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
             <argument name="customOption" value="{{ProductOptionValueDropdown1.title}} +$0.01"/>
@@ -111,8 +113,9 @@
         </actionGroup>
 
         <!-- Navigate to product 2 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage2"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToProductPage2">
+            <argument name="url" value="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown3 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices2">
             <argument name="customOption" value="{{ProductOptionValueDropdown3.title}} +$5.11"/>
@@ -126,8 +129,9 @@
         </actionGroup>
 
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct3.custom_attributes[url_key]$)}}" stepKey="goToProductPage3"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToProductPage3">
+            <argument name="url" value="{{StorefrontProductPage.url($createProduct3.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
         <!-- Add product 3 to cart with no custom option -->
         <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct3ToCart">
             <argument name="productQty" value="1"/>

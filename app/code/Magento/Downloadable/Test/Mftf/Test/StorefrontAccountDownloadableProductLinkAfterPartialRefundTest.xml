@@ -80,7 +80,9 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="onOrdersPage">
+            <argument name="url" value="{{AdminOrdersPage.url}}"/>
+        </actionGroup>
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
             <argument name="keyword" value="$grabOrderNumber"/>
         </actionGroup>
