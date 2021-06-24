@@ -61,14 +61,20 @@
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Verify product is visible in category front page -->
-        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="openCategoryStoreFrontPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="openCategoryStoreFrontPage">
+            <argument name="url" value="$$createCategory.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForCategoryPageToLoad"/>
+
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryInFrontPage"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInCategoryPage"/>
         <!--Verify Product In Store Front-->
-        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStorefrontPage">
+            <argument name="url" value="$$createSimpleProduct.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForProductFrontPageToLoad"/>
+
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">

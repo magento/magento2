@@ -73,8 +73,10 @@
         </actionGroup>
         <!-- Add product to Wish List -->
         <comment userInput="Add product to Wish List" stepKey="commentAddProductToWishList"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnBundleProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnBundleProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForProductPage"/>
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>

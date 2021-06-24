@@ -42,14 +42,18 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->
-        <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="onProductPage1">
+            <argument name="url" value="/$$product.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="wait1"/>
         <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkAttributeInMoreInformationTab">
             <argument name="attributeLabel" value="$$attribute.attribute[frontend_labels][0][label]$$"/>
             <argument name="attributeValue" value="$$option2.option[store_labels][0][label]$$"/>
         </actionGroup>
         <!-- Go to default attribute set edit page -->
-        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="onAttributeSetEdit">
+            <argument name="url" value="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/"/>
+        </actionGroup>
         <!-- Assert created attribute in a group -->
         <see userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <!-- Unassign attribute from group -->
@@ -64,13 +68,17 @@
         <!-- Clear cache -->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearPageCacheActionGroup"/>
         <!-- Go to create new product page -->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="url" value="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="wait2"/>
         <!-- Assert attribute not present in product creation -->
         <dontSeeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
         <!-- Assert removed attribute not presence in storefront product additional information -->
-        <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage2"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="onProductPage2">
+            <argument name="url" value="/$$product.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="wait3"/>
         <dontSeeElement selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="dontSeeProductAttribute"/>
         <dontSee userInput="$$attribute.attribute[frontend_labels][0][label]$$" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="dontSeeAttributeLabel"/>
     </test>

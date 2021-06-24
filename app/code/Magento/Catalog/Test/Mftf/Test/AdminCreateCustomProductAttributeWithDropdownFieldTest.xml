@@ -114,8 +114,10 @@
         <see selector="{{AdminProductAttributeGridSection.isComparableColumn}}" userInput="Yes" stepKey="seeComparableColumn"/>
 
         <!--Verify Product Attribute is present in Category Store Front Page -->
-        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStorefrontPage">
+            <argument name="url" value="$$createCategory.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForProductFrontPageToLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="clickOnCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct"/>

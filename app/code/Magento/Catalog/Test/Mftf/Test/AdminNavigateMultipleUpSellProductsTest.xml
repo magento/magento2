@@ -156,8 +156,10 @@
         <waitForPageLoad stepKey="waitForUpdatesTobeSaved1"/>
 
         <!--Go to SimpleProduct store front page-->
-        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductFrontPage"/>
-        <waitForPageLoad stepKey="waitForProduct"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToSimpleProductFrontPage">
+            <argument name="url" value="$$createSimpleProduct.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForProduct"/>
         <see stepKey="seeProductName" userInput="$$createSimpleProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
         <scrollTo stepKey="scrollToTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
@@ -167,8 +169,10 @@
         <see stepKey="seeConfigProduct" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createConfigProduct.name$$"/>
 
         <!--Go to Config Product store front page-->
-        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="goToConfigProductFrontPage"/>
-        <waitForPageLoad stepKey="waitForConfigProductToBeLoaded"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToConfigProductFrontPage">
+            <argument name="url" value="$$createConfigProduct.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForConfigProductToBeLoaded"/>
         <scrollTo stepKey="scrollToTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
         <!--Verify Up Sell Products displayed in ConfigProduct page-->
@@ -176,8 +180,10 @@
         <see stepKey="seeSimpleProduct2" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createSimpleProduct1.name$$"/>
 
         <!--Go to SimpleProduct1 store front page-->
-        <amOnPage url="$$createSimpleProduct1.custom_attributes[url_key]$$.html" stepKey="goToSimpleProduct1FrontPage"/>
-        <waitForPageLoad stepKey="waitForSimpleProduct1ToBeLoaded"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToSimpleProduct1FrontPage">
+            <argument name="url" value="$$createSimpleProduct1.custom_attributes[url_key]$$.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForSimpleProduct1ToBeLoaded"/>
 
         <!--Verify No Up Sell Products displayed in SimplProduct1 page-->
         <dontSee stepKey="dontSeeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>

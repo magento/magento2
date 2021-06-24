@@ -79,8 +79,10 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer see updated virtual product on storefront page by url key -->
-        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice99OutOfStock.urlKey)}}" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url(updateVirtualProductRegularPrice99OutOfStock.urlKey)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForStorefrontProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
@@ -98,8 +100,10 @@
         </assertEquals>
 
         <!--Verify customer don't see updated virtual product link on magento storefront page -->
-        <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice99OutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToMagentoStorefrontPage">
+            <argument name="url" value="{{StorefrontProductPage.url(updateVirtualProductRegularPrice99OutOfStock.urlKey)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForStoreFrontProductPageLoad"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductName">
             <argument name="phrase" value="{{updateVirtualProductRegularPrice99OutOfStock.sku}}"/>
         </actionGroup>
@@ -111,8 +115,10 @@
         </actionGroup>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$initialCategoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="openCategoryPage">
+            <argument name="url" value="{{StorefrontCategoryPage.url($$initialCategoryEntity.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.name}}" stepKey="dontSeeVirtualProductLinkOnCategoryPage"/>
     </test>
 </tests>

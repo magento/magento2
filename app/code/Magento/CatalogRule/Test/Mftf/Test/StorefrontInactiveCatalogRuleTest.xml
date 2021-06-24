@@ -46,13 +46,17 @@
         </after>
 
         <!-- Verify price is not discounted on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoaded"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="openCategoryPageOnFrontend">
+            <argument name="url" value="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForCategoryPageLoaded"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="seeProductPriceOnCategoryPage"/>
 
         <!-- Verify price is not discounted on the product page -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="openProductPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="openProductPageOnFrontend">
+            <argument name="url" value="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForProductPageLoaded"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$createProduct.price$" stepKey="seePriceOnProductPage"/>
 
         <!-- Verify price is not discounted in the cart -->

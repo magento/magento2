@@ -44,8 +44,10 @@
             <argument name="numOfProductsPerPage" value="12"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.custom_attributes[url_key]$$)}}" stepKey="navigateToCategory2Page"/>
-        <waitForPageLoad stepKey="waitForCategory2PageToLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToCategory2Page">
+            <argument name="url" value="{{StorefrontCategoryPage.url($$defaultCategory2.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForCategory2PageToLoad"/>
 
         <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory2PageParameters">
             <argument name="category" value="$$defaultCategory2$$"/>

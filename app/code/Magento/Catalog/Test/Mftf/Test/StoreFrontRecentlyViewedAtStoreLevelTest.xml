@@ -96,8 +96,12 @@
         </actionGroup>
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterWidgetCreated"/>
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStoreOneProductPageTwo"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.custom_attributes[url_key]$)}}" stepKey="goToStoreOneProductPageThree"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStoreOneProductPageTwo">
+            <argument name="url" value="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStoreOneProductPageThree">
+            <argument name="url" value="{{StorefrontProductPage.url($createSimpleProduct3.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreFrontHomePage"/>
         <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStoreOneRecentlyViewedProduct2">
@@ -111,8 +115,12 @@
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectCustomStore"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct1.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage1"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage2"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStore2ProductPage1">
+            <argument name="url" value="{{StorefrontProductPage.url($createSimpleProduct1.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToStore2ProductPage2">
+            <argument name="url" value="{{{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage2"/>
         <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertNextStore1RecentlyViewedProduct1">

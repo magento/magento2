@@ -61,7 +61,9 @@
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage3"/>
          <!-- Filter By Attribute Code on Export > Products page -->
-        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="navigateToSystemExport"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToSystemExport">
+            <argument name="url" value="{{AdminExportIndexPage.url}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
         <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
         <click selector="{{AdminExportAttributeSection.resetFilter}}" stepKey="resetFilter"/>

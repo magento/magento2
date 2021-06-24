@@ -35,7 +35,9 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnAttributeSetPage">
+            <argument name="url" value="{{AdminProductAttributeSetGridPage.url}}"/>
+        </actionGroup>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
         <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
@@ -47,8 +49,10 @@
             <argument name="simpleProduct" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-        <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="goProductPageOnStorefront"/>
-        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goProductPageOnStorefront">
+            <argument name="url" value="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForProductPageToLoad"/>
         <dontSeeElement selector="//table[@id='product-attribute-specs-table']/tbody/tr/th[contains(text(),'testattribute')]" stepKey="seeAttribute2"/>
     </test>
     </tests>
