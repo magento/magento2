@@ -28,6 +28,7 @@
         <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
         <element name="CancelBtn" type="button" selector="#cancel"/>
         <element name="FolderName" type="button" selector="input[data-role='promptField']"/>
+        <element name="FolderContainer" type="button" selector="div[data-role='tree']"/>
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept"/>
         <element name="StorageRootArrow" type="button" selector="#root &gt; .jstree-icon"/>
         <element name="checkIfArrowExpand" type="button" selector="//li[@id='root' and contains(@class,'jstree-closed')]"/>
