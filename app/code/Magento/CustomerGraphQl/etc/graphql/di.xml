@@ -40,4 +40,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQl\Controller\GraphQl">
+        <plugin name="ClearCustomerSessionAfterRequest" type="Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest" sortOrder="1" disabled="false" />
+    </type>
 </config>

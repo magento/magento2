@@ -104,7 +104,10 @@ class View
         Store $object,
         Store $store
     ): Store {
-        if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
+        if (
+            $this->origStore->getData('group_id')
+            && ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id'))
+        ) {
             $categoryRewriteUrls = $this->generateCategoryUrls(
                 (int)$this->origStore->getRootCategoryId(),
                 (int)$this->origStore->getId()
