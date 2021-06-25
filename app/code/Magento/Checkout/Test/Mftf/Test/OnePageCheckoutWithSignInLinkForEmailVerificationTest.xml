@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnePageCheckoutWithSignInLinkForEmailVerificationlTest">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <title value="OnePageCheckout with sign in link for email verification test"/>
+            <description value="Verify that error message is correct for invalid a email entered with 'Sign in' form"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-42592"/>
+            <group value="checkout"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">560</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!-- Add Simple Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Go to shopping cart -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+
+        <!-- Try to login using invalid email and Sign In link from checkout page -->
+        <actionGroup ref="LoginAsCustomerUsingSignInLinkActionGroup" stepKey="customerLogin">
+            <argument name="customerEmail" value="invalid @example.com"/>
+            <argument name="customerPwd" value="Password123"/>
+        </actionGroup>
+
+        <!-- Assert that error message is correct -->
+        <actionGroup ref="StorefrontFillEmailFieldOnCheckoutActionGroup" stepKey="fillIncorrectEmailForthAttempt">
+            <argument name="email" value="invalid @example.com"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageForthAttempt"/>
+    </test>
+</tests>
