@@ -37,7 +37,7 @@
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="clickExpandContent"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
