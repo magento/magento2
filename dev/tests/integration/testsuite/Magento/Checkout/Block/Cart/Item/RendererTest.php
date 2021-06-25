@@ -113,8 +113,11 @@ class RendererTest extends TestCase
         $this->renderer->getLayout()->setBlock('checkout.item.price.row', $priceBlock);
         $html = $this->renderer->toHtml();
 
-        $this->assertMatchesRegularExpression('/Test product simple with
+        $this->assertMatchesRegularExpression(<<<EOT
+/Test product simple with
 custom option text area
-with more 50 characters/', $html);
+with more 50 characters/
+EOT
+, $html);
     }
 }

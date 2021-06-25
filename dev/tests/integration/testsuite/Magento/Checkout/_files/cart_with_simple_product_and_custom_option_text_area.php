@@ -29,9 +29,11 @@ foreach ($product->getOptions() as $option) {
             $value = key($option->getValues());
             break;
         default:
-            $value = 'Test product simple with
+            $value = <<<EOT
+            Test product simple with
 custom option text area
-with more 50 characters';
+with more 50 characters
+EOT;
             break;
     }
     $options[$option->getId()] = $value;
