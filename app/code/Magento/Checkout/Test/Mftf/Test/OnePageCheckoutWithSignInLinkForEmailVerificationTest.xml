@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="OnePageCheckoutWithSignInLinkForEmailVerificationlTest">
+    <test name="OnePageCheckoutWithSignInLinkForEmailVerificationTest">
         <annotations>
             <features value="OnePageCheckout"/>
             <title value="OnePageCheckout with sign in link for email verification test"/>
             <description value="Verify that error message is correct for invalid a email entered with 'Sign in' form"/>
             <severity value="MINOR"/>
-            <testCaseId value="MC-42592"/>
+            <testCaseId value="MC-42729"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -38,22 +38,16 @@
 
         <!-- Go to shopping cart -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
-        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
-            <argument name="address" value="US_Address_CA"/>
-        </actionGroup>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
         <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Try to login using invalid email and Sign In link from checkout page -->
-        <actionGroup ref="LoginAsCustomerUsingSignInLinkActionGroup" stepKey="customerLogin">
-            <argument name="customerEmail" value="invalid @example.com"/>
-            <argument name="customerPwd" value="Password123"/>
-        </actionGroup>
+        <click selector="{{StorefrontCustomerSignInLinkSection.signInLink}}" stepKey="clickOnCustomizeAndAddToCartButton"/>
+        <fillField selector="{{StorefrontCustomerSignInLinkSection.email}}" userInput="invalid @example.com" stepKey="fillEmail"/>
+        <fillField selector="{{StorefrontCustomerSignInLinkSection.password}}" userInput="Password123" stepKey="fillPassword"/>
+        <click selector="{{StorefrontCustomerSignInLinkSection.signInBtn}}" stepKey="clickSignInBtn"/>
 
-        <!-- Assert that error message is correct -->
-        <actionGroup ref="StorefrontFillEmailFieldOnCheckoutActionGroup" stepKey="fillIncorrectEmailForthAttempt">
-            <argument name="email" value="invalid @example.com"/>
-        </actionGroup>
-        <actionGroup ref="AssertStorefrontEmailValidationMessageOnCheckoutActionGroup" stepKey="verifyValidationErrorMessageForthAttempt"/>
+        <waitForElementVisible selector="#login-email-error" stepKey="waitForFormValidation"/>
+        <see selector="#login-email-error" userInput="Please enter a valid email address (Ex: johndoe@domain.com)." stepKey="seeTheCorrectErrorMessageIsDisplayed"/>
     </test>
 </tests>
