@@ -13,6 +13,7 @@
             <features value="OnePageCheckout"/>
             <title value="OnePageCheckout with sign in link for email verification test"/>
             <description value="Verify that error message is correct for invalid a email entered with 'Sign in' form"/>
+            <stories value="Inconsistent customer email validation on frontend"/>
             <severity value="MINOR"/>
             <testCaseId value="MC-42729"/>
             <group value="checkout"/>
