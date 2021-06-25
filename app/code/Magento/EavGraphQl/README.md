@@ -1,6 +1,6 @@
 # Magento_EavGraphQl module
 
-Magento_EavGraphQl module extends Magento_GraphQl and Magento_Eav modules to provides type and resolver information for  GraphQL API.
+Magento_EavGraphQl module extends Magento_GraphQl and Magento_Eav modules to provides type and resolver information for GraphQL API.
 
 ## Installation details
 
