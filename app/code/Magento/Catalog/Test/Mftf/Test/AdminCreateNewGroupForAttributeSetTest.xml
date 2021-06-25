@@ -35,8 +35,10 @@
         </after>
 
         <!-- Navigate to Stores > Attributes > Attribute Set -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToAttributeSetPage">
+            <argument name="url" value="{{AdminProductAttributeSetGridPage.url}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForPageLoad"/>
 
         <!-- Search and open Attribute Set from preconditions -->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">

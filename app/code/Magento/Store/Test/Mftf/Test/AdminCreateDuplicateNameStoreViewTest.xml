@@ -39,10 +39,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
             <!--Get Id of store views-->
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoreViews"/>
+            <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToStoreViews">
+                <argument name="url" value="{{AdminSystemStorePage.url}}"/>
+            </actionGroup>
             <click selector="{{AdminStoresGridSection.storeViewLinkInNthRow('2')}}" stepKey="openFirstViewPAge" />
             <grabFromCurrentUrl stepKey="getStoreViewIdFirst" regex="~/store_id/(\d+)/~"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoreViewsAgain"/>
+            <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToStoreViewsAgain">
+                <argument name="url" value="{{AdminSystemStorePage.url}}"/>
+            </actionGroup>
             <click selector="{{AdminStoresGridSection.storeViewLinkInNthRow('3')}}" stepKey="openSecondViewPAge" />
             <grabFromCurrentUrl stepKey="getStoreViewIdSecond" regex="~/store_id/(\d+)/~"/>
             <!--Go to catalog -> product grid, open the filter and check the listed store view-->

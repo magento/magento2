@@ -74,7 +74,9 @@
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToCategoryPage">
+            <argument name="url" value="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}"/>
+        </actionGroup>
 
         <!-- Check product 1 name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductName">

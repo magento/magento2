@@ -31,8 +31,11 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToAttributeSets">
+            <argument name="url" value="{{AdminProductAttributeSetGridPage.url}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForPageLoad"/>
+
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
@@ -47,9 +50,10 @@
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets2"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToAttributeSets2">
+            <argument name="url" value="{{AdminProductAttributeSetGridPage.url}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForPageLoad2"/>
         <!-- Assert an attribute in the group-->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel2">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>

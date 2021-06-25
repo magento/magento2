@@ -37,8 +37,10 @@
         </after>
 
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="url" value="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Create bundle product-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
@@ -70,8 +72,10 @@
 
         <!--Creating Second bundle product-->
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage2" />
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad2"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToBundleProductCreationPage2">
+            <argument name="url" value="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForBundleProductCreatePageToLoad2"/>
 
         <!--Create bundle product 2-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
@@ -123,12 +127,17 @@
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
 
         <!--Testing deletion of products-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="GoToProductPageAgain">
+            <argument name="url" value="{{BundleProduct.urlKey}}.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="WaitForProductPageToLoadToShowElement"/>
+
         <dontSeeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
         <seeElement stepKey="LookingForPageNotFoundMessage" selector="{{StorefrontBundledSection.pageNotFound}}"/>
-        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageAgain2"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement2"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="GoToProductPageAgain2">
+            <argument name="url" value="{{BundleProduct.urlKey2}}.html"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="WaitForProductPageToLoadToShowElement2"/>
         <dontSeeElement stepKey="LookingForNameOfProduct2" selector="{{StorefrontBundledSection.bundleProductName}}"/>
         <seeElement stepKey="LookingForPageNotFoundMessage2" selector="{{StorefrontBundledSection.pageNotFound}}"/>
     </test>

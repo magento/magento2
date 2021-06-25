@@ -50,7 +50,9 @@
 
         <!-- Checking the correctness of displayed prices for user parameters -->
 
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsPrice(ProductOptionField.title, ProductOptionField.price)}}" stepKey="checkFieldProductOption"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsPrice(ProductOptionArea.title, '1.7')}}" stepKey="checkAreaProductOption"/>
@@ -170,7 +172,9 @@
 
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
 
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnOrderPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnOrderPage">
+            <argument name="url" value="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}"/>
+        </actionGroup>
 
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>

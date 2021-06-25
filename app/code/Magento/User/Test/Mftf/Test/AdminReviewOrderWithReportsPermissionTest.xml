@@ -81,7 +81,9 @@
                 <argument name="user" value="NewAdminUser"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAdminUserGridFilters"/>
-            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid"/>
+            <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToUserRoleGrid">
+                <argument name="url" value="{{AdminRolesPage.url}}"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteRole">
                 <argument name="role" value="limitedRole"/>
             </actionGroup>

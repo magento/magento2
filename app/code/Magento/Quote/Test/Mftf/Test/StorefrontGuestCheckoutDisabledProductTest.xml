@@ -94,12 +94,16 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Step 1: Add simple product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnSimpleProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToConfigProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToConfigProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectOption"/>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart" />
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$createConfigProduct.name$$)}}" time="30" stepKey="assertMessage"/>
@@ -129,7 +133,9 @@
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
         <!-- Add simple product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage2"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnSimpleProductPage2">
+            <argument name="url" value="{{StorefrontProductPage.url($$createSimpleProduct2.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
             <argument name="productCount" value="1"/>

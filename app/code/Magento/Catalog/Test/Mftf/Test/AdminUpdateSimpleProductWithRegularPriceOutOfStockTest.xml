@@ -94,8 +94,10 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPrice32503OutOfStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer don't see updated simple product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="openCategoryPage">
+            <argument name="url" value="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{simpleProductRegularPrice32503OutOfStock.name}}" stepKey="dontSeeSimpleProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
@@ -124,8 +126,10 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="assertOldPriceTextOnProductPage"/>
 
         <!--Verify customer don't see updated simple product link on magento storefront page and is searchable by sku -->
-        <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPrice32503OutOfStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToMagentoStorefrontPage">
+            <argument name="url" value="{{StorefrontProductPage.url(simpleProductRegularPrice32503OutOfStock.urlKey)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForStoreFrontProductPageLoad"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
             <argument name="phrase" value="{{simpleProductRegularPrice32503OutOfStock.sku}}"/>
         </actionGroup>

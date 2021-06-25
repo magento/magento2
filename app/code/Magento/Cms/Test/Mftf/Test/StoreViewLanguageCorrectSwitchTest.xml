@@ -47,18 +47,24 @@
         </actionGroup>
 
         <!-- Check that Cms Page is open -->
-        <amOnPage url="{{StorefrontHomePage.url}}/$$createFirstCmsPage.identifier$$" stepKey="gotToFirstCmsPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="gotToFirstCmsPage">
+            <argument name="url" value="{{StorefrontHomePage.url}}/$$createFirstCmsPage.identifier$$"/>
+        </actionGroup>
         <see userInput="$$createFirstCmsPage.title$$" stepKey="seePageTitle"/>
 
         <!-- Switch StoreView and check that Cms Page is open -->
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
             <argument name="storeView" value="NewStoreViewData"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontHomePage.url}}/$$createSecondCmsPage.identifier$$" stepKey="gotToSecondCmsPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="gotToSecondCmsPage">
+            <argument name="url" value="{{StorefrontHomePage.url}}/$$createSecondCmsPage.identifier$$"/>
+        </actionGroup>
         <see userInput="$$createSecondCmsPage.title$$" stepKey="seePageTitle1"/>
 
         <!--Open first Cms page on custom store view-->
-        <amOnPage url="{{StorefrontHomePage.url}}/$$createFirstCmsPage.identifier$$" stepKey="gotToFirstCmsPage1"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="gotToFirstCmsPage1">
+            <argument name="url" value="{{StorefrontHomePage.url}}/$$createFirstCmsPage.identifier$$"/>
+        </actionGroup>
         <see userInput="Whoops, our bad..." stepKey="seePageError"/>
 
         <!--Switch to default store view and check Cms page-->

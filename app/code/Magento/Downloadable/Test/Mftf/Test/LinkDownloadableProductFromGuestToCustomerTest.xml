@@ -38,7 +38,9 @@
         <!--Step 1: Go to Storefront as Guest-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <!--Step 2: Add downloadable product to shopping cart-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnStorefrontProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
             <argument name="productCount" value="1"/>

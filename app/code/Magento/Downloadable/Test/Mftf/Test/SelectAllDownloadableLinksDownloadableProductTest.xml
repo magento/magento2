@@ -79,9 +79,9 @@
         </after>
 
         <!-- Step 1: Navigate to store front Product page as guest -->
-        <amOnPage url="/{{DownloadableProduct.sku}}.html"
-                  stepKey="amOnStorefrontProductPage"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="amOnStorefrontProductPage">
+            <argument name="url" value="/{{DownloadableProduct.sku}}.html"/>
+        </actionGroup>
         <!-- Step 2: click on select all checkbox -->
         <click
             selector="{{StorefrontDownloadableProductSection.downloadableLinkSelectAllCheckbox}}"

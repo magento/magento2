@@ -95,8 +95,9 @@
         <actionGroup ref="GenerateAndSaveConfiguredProductAfterSettingOptionsActionGroup" stepKey="saveProductForm"/>
 
         <!-- Go to the category page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
-
+        <actionGroup ref="AmOnPageActionGroup" stepKey="goToProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="StorefrontAssertActiveProductImage"/>
 
          <!--Click a swatch and expect to see the image from the swatch from the configurable product -->

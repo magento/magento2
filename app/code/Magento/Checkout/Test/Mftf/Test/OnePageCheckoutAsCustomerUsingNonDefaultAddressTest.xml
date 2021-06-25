@@ -43,8 +43,10 @@
         </after>
 
         <!-- Add Simple Product to cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AmOnPageActionGroup" stepKey="navigateToSimpleProductPage">
+            <argument name="url" value="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace waitForPageLoad tag for preserving Backward Compatibility" stepKey="waitForSimpleProductPageLoad"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
