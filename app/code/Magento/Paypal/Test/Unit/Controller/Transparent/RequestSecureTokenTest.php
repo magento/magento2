@@ -28,37 +28,37 @@ class RequestSecureTokenTest extends TestCase
     /**
      * @var Transparent|MockObject
      */
-    private $transparent;
+    private $transparentMock;
 
     /**
-     * @var RequestSecureToken|MockObject
+     * @var RequestSecureToken
      */
     private $controller;
 
     /**
      * @var Context|MockObject
      */
-    private $context;
+    private $contextMock;
 
     /**
      * @var JsonFactory|MockObject
      */
-    private $resultJsonFactory;
+    private $resultJsonFactoryMock;
 
     /**
      * @var Generic|MockObject
      */
-    private $sessionTransparent;
+    private $sessionTransparentMock;
 
     /**
      * @var SecureToken|MockObject
      */
-    private $secureTokenService;
+    private $secureTokenServiceMock;
 
     /**
      * @var SessionManager|MockObject
      */
-    private $sessionManager;
+    private $sessionManagerMock;
 
     /**
      * Set up
@@ -67,43 +67,36 @@ class RequestSecureTokenTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
+        $this->contextMock = $this->createMock(Context::class);
+        $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
+        $this->sessionTransparentMock = $this->getMockBuilder(Generic::class)
+            ->addMethods(['setQuoteId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultJsonFactory = $this->getMockBuilder(JsonFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionTransparent = $this->getMockBuilder(Generic::class)
-            ->setMethods(['setQuoteId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->secureTokenService = $this->getMockBuilder(
-            SecureToken::class
-        )
+        $this->secureTokenServiceMock = $this->getMockBuilder(SecureToken::class)
             ->setMethods(['requestToken'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMockBuilder(SessionManager::class)
-            ->setMethods(['getQuote'])
+        $this->sessionManagerMock = $this->getMockBuilder(SessionManager::class)
+            ->addMethods(['getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transparent = $this->getMockBuilder(Transparent::class)
+        $this->transparentMock = $this->getMockBuilder(Transparent::class)
             ->setMethods(['getCode', 'isActive'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->controller = new RequestSecureToken(
-            $this->context,
-            $this->resultJsonFactory,
-            $this->sessionTransparent,
-            $this->secureTokenService,
-            $this->sessionManager,
-            $this->transparent
+            $this->contextMock,
+            $this->resultJsonFactoryMock,
+            $this->sessionTransparentMock,
+            $this->secureTokenServiceMock,
+            $this->sessionManagerMock,
+            $this->transparentMock
         );
     }
 
-    public function testExecuteSuccess()
+    public function testExecuteSuccess(): void
     {
         $quoteId = 99;
         $storeId = 2;
@@ -117,35 +110,30 @@ class RequestSecureTokenTest extends TestCase
             'error' => false
         ];
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteMock->method('getStoreId')
-            ->willReturn($storeId);
-        $tokenMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getItemsCount')->willReturn(1);
+        $quoteMock->method('getStoreId')->willReturn($storeId);
 
-        $this->sessionManager->expects($this->atLeastOnce())
+        $tokenMock = $this->createMock(DataObject::class);
+        $jsonMock = $this->createMock(Json::class);
+
+        $this->sessionManagerMock->expects($this->atLeastOnce())
             ->method('getQuote')
             ->willReturn($quoteMock);
-        $this->transparent->method('isActive')
+        $this->transparentMock->method('isActive')
             ->with($storeId)
             ->willReturn(true);
         $quoteMock->expects($this->once())
             ->method('getId')
             ->willReturn($quoteId);
-        $this->sessionTransparent->expects($this->once())
+        $this->sessionTransparentMock->expects($this->once())
             ->method('setQuoteId')
             ->with($quoteId);
-        $this->secureTokenService->expects($this->once())
+        $this->secureTokenServiceMock->expects($this->once())
             ->method('requestToken')
             ->with($quoteMock)
             ->willReturn($tokenMock);
-        $this->transparent->method('getCode')
+        $this->transparentMock->method('getCode')
             ->willReturn('transparent');
         $tokenMock->expects($this->atLeastOnce())
             ->method('getData')
@@ -155,7 +143,7 @@ class RequestSecureTokenTest extends TestCase
                     ['securetoken', null, $secureToken]
                 ]
             );
-        $this->resultJsonFactory->expects($this->once())
+        $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($jsonMock);
         $jsonMock->expects($this->once())
@@ -166,7 +154,7 @@ class RequestSecureTokenTest extends TestCase
         $this->assertEquals($jsonMock, $this->controller->execute());
     }
 
-    public function testExecuteTokenRequestException()
+    public function testExecuteTokenRequestException(): void
     {
         $quoteId = 99;
         $storeId = 2;
@@ -176,32 +164,30 @@ class RequestSecureTokenTest extends TestCase
             'error_messages' => __('Your payment has been declined. Please try again.')
         ];
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getItemsCount')->willReturn(1);
         $quoteMock->method('getStoreId')
             ->willReturn($storeId);
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $this->sessionManager->expects($this->atLeastOnce())
+        $jsonMock = $this->createMock(Json::class);
+
+        $this->sessionManagerMock->expects($this->atLeastOnce())
             ->method('getQuote')
             ->willReturn($quoteMock);
         $quoteMock->expects($this->once())
             ->method('getId')
             ->willReturn($quoteId);
-        $this->transparent->method('isActive')
+        $this->transparentMock->method('isActive')
             ->with($storeId)
             ->willReturn(true);
-        $this->sessionTransparent->expects($this->once())
+        $this->sessionTransparentMock->expects($this->once())
             ->method('setQuoteId')
             ->with($quoteId);
-        $this->secureTokenService->expects($this->once())
+        $this->secureTokenServiceMock->expects($this->once())
             ->method('requestToken')
             ->with($quoteMock)
             ->willThrowException(new \Exception());
-        $this->resultJsonFactory->expects($this->once())
+        $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($jsonMock);
         $jsonMock->expects($this->once())
@@ -212,7 +198,7 @@ class RequestSecureTokenTest extends TestCase
         $this->assertEquals($jsonMock, $this->controller->execute());
     }
 
-    public function testExecuteEmptyQuoteError()
+    public function testExecuteEmptyQuoteError(): void
     {
         $resultExpectation = [
             'success' => false,
@@ -221,14 +207,39 @@ class RequestSecureTokenTest extends TestCase
         ];
 
         $quoteMock = null;
-        $jsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $jsonMock = $this->createMock(Json::class);
 
-        $this->sessionManager->expects($this->atLeastOnce())
+        $this->sessionManagerMock->expects($this->atLeastOnce())
             ->method('getQuote')
             ->willReturn($quoteMock);
-        $this->resultJsonFactory->expects($this->once())
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($jsonMock);
+        $jsonMock->expects($this->once())
+            ->method('setData')
+            ->with($resultExpectation)
+            ->willReturnSelf();
+
+        $this->assertEquals($jsonMock, $this->controller->execute());
+    }
+
+    public function testExecuteNoItemsQuoteError(): void
+    {
+        $resultExpectation = [
+            'success' => false,
+            'error' => true,
+            'error_messages' => __('Your payment has been declined. Please try again.')
+        ];
+
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getItemsCount')->willReturn(0);
+
+        $jsonMock = $this->createMock(Json::class);
+
+        $this->sessionManagerMock->expects($this->atLeastOnce())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
+        $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($jsonMock);
         $jsonMock->expects($this->once())
