@@ -64,7 +64,7 @@
         "magento/composer": "1.6.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
-        "monolog/monolog": "~1.26.1",
+        "monolog/monolog": "^2.2",
         "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~2.10.0",
@@ -86,7 +86,7 @@
         "friendsofphp/php-cs-fixer": "~2.18.1",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^3.0",
+        "magento/magento2-functional-testing-framework": "dev-package/monolog",
         "pdepend/pdepend": "~2.7.1",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "^2.8.0",
@@ -333,6 +333,10 @@
     "conflict": {
         "gene/bluefoot": "*"
     },
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/drpayyne/magento2-functional-testing-framework.git"
+    }],
     "extra": {
         "component_paths": {
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
