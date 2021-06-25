@@ -38,7 +38,7 @@
         <waitForElementVisible selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.TinyMCE}}" stepKey="waitForDescription" />
         <scrollTo selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
         <click selector="{{ProductDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
-        <click selector="{{ProductDescriptionWysiwygSection.form}} {{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse1" />
         <waitForLoadingMaskToDisappear stepKey="waitForBrowseModal" />
         <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn1" />
         <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn1" />
@@ -48,11 +48,12 @@
         <fillField selector="{{MediaGallerySection.FolderName}}" userInput="{{ImageFolder.name}}" stepKey="fillFolderName1" />
         <click selector="{{MediaGallerySection.AcceptFolderName}}" stepKey="acceptFolderName11" />
         <conditionalClick selector="{{MediaGallerySection.StorageRootArrow}}" dependentSelector="{{MediaGallerySection.checkIfArrowExpand}}" stepKey="clickStorageRootArrowIfClosed" visible="true"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForStorageRootLoadingMaskDisappear"/>
         <conditionalClick selector="{{MediaGallerySection.WysiwygArrow}}" dependentSelector="{{MediaGallerySection.checkIfWysiwygArrowExpand}}" stepKey="clickWysiwygArrowIfClosed" visible="true"/>
         <waitForText userInput="{{ImageFolder.name}}" stepKey="waitForNewFolder1" />
         <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder1" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading4"/>
-        <attachFile selector="{{ProductDescriptionWysiwygSection.form}} {{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage1"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage1"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFileUpload1"/>
         <waitForElementVisible  selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage1" />
         <seeElement selector="{{MediaGallerySection.imageSelected(ImageUpload1.value)}}" stepKey="seeImageSelected1" />
@@ -63,7 +64,9 @@
         <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="waitForImageDeleted1" />
         <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="dontSeeImage1" />
         <dontSeeElement selector="{{MediaGallerySection.InsertFile}}" stepKey="dontSeeAddSelectedBtn2" />
-        <attachFile selector="{{ProductDescriptionWysiwygSection.form}} {{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage2"/>
+        <click userInput="{{ImageFolder.name}}" stepKey="selectCreatedFolder1" />
+        <waitForLoadingMaskToDisappear stepKey="waitForSelectFolder"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload1.value}}" stepKey="uploadImage2"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFileUpload2"/>
         <waitForElementVisible selector="{{MediaGallerySection.image(ImageUpload1.value)}}" stepKey="waitForUploadImage2" />
         <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn1" />
@@ -73,7 +76,7 @@
         <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn1" />
         <scrollTo selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.ShowHideBtn}}" y="-150" x="0" stepKey="scrollToTinyMCE" />
         <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon2" />
-        <click selector="{{ProductShortDescriptionWysiwygSection.form}} {{MediaGallerySection.Browse}}" stepKey="clickBrowse2" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse2" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
         <waitForElementVisible selector="{{MediaGallerySection.CancelBtn}}" stepKey="waitForCancelButton2"/>
         <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn2" />
@@ -83,7 +86,7 @@
         <click userInput="Storage Root" stepKey="clickOnRootFolder" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading15"/>
         <dontSeeElement selector="{{MediaGallerySection.InsertFile}}" stepKey="dontSeeAddSelectedBtn3" />
-        <attachFile selector="{{ProductShortDescriptionWysiwygSection.form}} {{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage3"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFileUpload3"/>
         <waitForElementVisible  selector="{{MediaGallerySection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage3" />
         <waitForElement selector="{{MediaGallerySection.DeleteSelectedBtn}}" stepKey="waitForDeletebtn" />
@@ -92,7 +95,9 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirm3"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete2" />
         <dontSeeElement selector="{{MediaGallerySection.InsertFile}}" stepKey="dontSeeAddSelectedBtn4" />
-        <attachFile selector="{{ProductShortDescriptionWysiwygSection.form}} {{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
+        <click userInput="{{ImageFolder.name}}" stepKey="selectCreatedFolder2" />
+        <waitForLoadingMaskToDisappear stepKey="waitForSelectFolder2"/>
+        <attachFile selector="{{MediaGallerySection.BrowseUploadImage}}" userInput="{{ImageUpload3.value}}" stepKey="uploadImage4"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFileUpload4"/>
         <waitForElementVisible selector="{{MediaGallerySection.image(ImageUpload3.value)}}" stepKey="waitForUploadImage4" />
         <click selector="{{MediaGallerySection.InsertFile}}" stepKey="clickInsertBtn" />
