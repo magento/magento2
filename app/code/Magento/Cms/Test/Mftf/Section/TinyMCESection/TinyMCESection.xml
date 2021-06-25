@@ -31,7 +31,7 @@
         <element name="SpecialCharacter" type="button" selector=".mce-i-charmap"/>
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
         <element name="EditorContent" type="input" selector="#tinymce"/>
-        <element name="Content" type="textarea" selector="textarea.textarea"/>
+        <element name="Content" type="textarea" selector="textarea"/>
         <element name="ShowHideBtn" type="button" selector=".scalable.action-show-hide"/>
         <element name="EditArea" type="text" selector=".mce-edit-area"/>
         <element name="EditAreaIframe" type="iframe" selector=".mce-edit-area iframe"/>
