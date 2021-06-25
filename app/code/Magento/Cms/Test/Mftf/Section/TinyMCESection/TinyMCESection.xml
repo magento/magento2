@@ -36,5 +36,7 @@
         <element name="EditArea" type="text" selector=".mce-edit-area"/>
         <element name="EditAreaIframe" type="iframe" selector=".mce-edit-area iframe"/>
         <element name="IframeContent" type="block" selector=".mce-content-body"/>
+        <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
+        <element name="ImageAlt" type="text" selector="//img[contains(@alt,'{{var1}}')]" parameterized="true"/>
     </section>
 </sections>
