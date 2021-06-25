@@ -24,6 +24,7 @@
         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
         <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.store}}" userInput="{{storeName}}" stepKey="selectStore"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear" />
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

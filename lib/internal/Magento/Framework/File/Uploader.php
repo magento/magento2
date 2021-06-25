@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filter\ArrayFilter;
 use Magento\Framework\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 
@@ -139,6 +140,11 @@ class Uploader
      */
     private $logger;
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     /**#@+
      * File upload type (multiple or single)
      */
@@ -201,6 +207,7 @@ class Uploader
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
      * @param TargetDirectory|null $targetDirectory
+     * @param Filesystem|null $filesystem
      * @throws \DomainException
      */
     public function __construct(
@@ -208,10 +215,12 @@ class Uploader
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null
+        TargetDirectory $targetDirectory = null,
+        Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -306,6 +315,11 @@ class Uploader
      */
     private function validateDestination(string $destinationFolder): void
     {
+        if (strlen($this->getFileDriver()->getRealPathSafety($destinationFolder)) > 4096) {
+            throw new \InvalidArgumentException(
+                'Destination folder path is too long; must be 255 characters or less'
+            );
+        }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
         } elseif (!$this->getTargetDirectory()
