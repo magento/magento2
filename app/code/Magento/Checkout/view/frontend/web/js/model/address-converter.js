@@ -99,7 +99,7 @@ define([
                 customAttributesObject;
 
             $.each(addrs, function (key) {
-                if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
+                if (addrs.hasOwnProperty(key) && typeof addrs[key] !== 'function') {
                     output[self.toUnderscore(key)] = addrs[key];
                 }
             });

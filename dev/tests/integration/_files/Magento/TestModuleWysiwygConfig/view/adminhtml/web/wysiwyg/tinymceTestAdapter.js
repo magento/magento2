@@ -7,8 +7,8 @@
 /* eslint-disable strict */
 define([
     'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
-], function (tinyMCE4) {
+], function (tinyMCE) {
     'use strict';
 
-    return tinyMCE4;
+    return tinyMCE;
 });
