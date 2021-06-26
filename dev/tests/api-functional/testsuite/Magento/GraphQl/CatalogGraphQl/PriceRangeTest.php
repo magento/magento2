@@ -114,6 +114,114 @@ class PriceRangeTest extends GraphQlAbstract
     }
 
     /**
+     * Test to make sure tax amount is displayed correctly for a logged-in user
+     *
+     * @magentoConfigFixture default_store tax/display/type 2
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_shipping_address_36104.php
+     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_postal_36104.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testTaxDisplayAppliesToCustomer(): void
+    {
+        $productSku = 'simple';
+        $query = $this->getProductSearchQuery($productSku);
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password')
+        );
+
+        $this->assertNotEmpty($response['products']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        $this->assertEquals(10.75, round($priceRange['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(10.75, round($priceRange['minimum_price']['final_price']['value'], 2));
+        $this->assertEquals(10.75, round($priceRange['maximum_price']['regular_price']['value'], 2));
+        $this->assertEquals(10.75, round($priceRange['maximum_price']['final_price']['value'], 2));
+    }
+
+    /**
+     * Test to make sure tax rule is not applied in display for guest
+     *
+     * @magentoConfigFixture default_store tax/display/type 2
+     *
+     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_postal_36104.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testTaxDisplayDoesNotApplyToGuest(): void
+    {
+        $productSku = 'simple';
+        $query = $this->getProductSearchQuery($productSku);
+        $response = $this->graphQlQuery($query);
+
+        $this->assertNotEmpty($response['products']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        $this->assertEquals(10, $priceRange['minimum_price']['regular_price']['value']);
+        $this->assertEquals(10, $priceRange['minimum_price']['final_price']['value']);
+        $this->assertEquals(10, $priceRange['maximum_price']['regular_price']['value']);
+        $this->assertEquals(10, $priceRange['maximum_price']['final_price']['value']);
+    }
+
+    /**
+     * Test to make sure tax rule is applied for customer group
+     *
+     * @magentoConfigFixture default_store tax/display/type 2
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_with_group_and_address.php
+     * @magentoApiDataFixture Magento/Tax/_files/tax_class_customer_group.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testTaxDisplayAppliesToCustomerGroup()
+    {
+        $productSku = 'simple';
+        $query = $this->getProductSearchQuery($productSku);
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password')
+        );
+
+        $this->assertNotEmpty($response['products']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        $this->assertEquals(10.75, round($priceRange['minimum_price']['regular_price']['value'], 2));
+        $this->assertEquals(10.75, round($priceRange['minimum_price']['final_price']['value'], 2));
+        $this->assertEquals(10.75, round($priceRange['maximum_price']['regular_price']['value'], 2));
+        $this->assertEquals(10.75, round($priceRange['maximum_price']['final_price']['value'], 2));
+    }
+
+    /**
+     * Test to make sure tax rule is not applied for a customer in the wrong group
+     *
+     * @magentoConfigFixture default_store tax/display/type 2
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_with_group_and_address.php
+     * @magentoApiDataFixture Magento/Customer/_files/second_customer_with_group_and_address.php
+     * @magentoApiDataFixture Magento/Tax/_files/tax_class_customer_group.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testTaxDisplayDoesNotApplyToWrongCustomerGroup(): void
+    {
+        $productSku = 'simple';
+        $query = $this->getProductSearchQuery($productSku);
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthenticationHeader->execute('secondcustomer@example.com', 'password')
+        );
+
+        $this->assertNotEmpty($response['products']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        $this->assertEquals(10, $priceRange['minimum_price']['regular_price']['value']);
+        $this->assertEquals(10, $priceRange['minimum_price']['final_price']['value']);
+        $this->assertEquals(10, $priceRange['maximum_price']['regular_price']['value']);
+        $this->assertEquals(10, $priceRange['maximum_price']['final_price']['value']);
+    }
+
+    /**
      * Get a query which user filter for product sku and returns price_tiers
      *
      * @param string $productSku
