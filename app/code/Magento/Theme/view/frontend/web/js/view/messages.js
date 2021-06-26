@@ -29,7 +29,7 @@ define([
         initialize: function () {
             this._super();
 
-            this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
+            this.cookieMessages = _.unique($.mage.cookies.get('mage-messages'), 'text');
             this.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
             });
