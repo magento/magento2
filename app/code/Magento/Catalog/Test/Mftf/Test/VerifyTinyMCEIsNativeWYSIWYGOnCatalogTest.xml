@@ -13,8 +13,8 @@
             <features value="Catalog"/>
             <stories value="MAGETWO-72137-Apply new WYSIWYG on Categories Page"/>
             <group value="Catalog"/>
-            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Catalog Page"/>
-            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Catalog Page"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Catalog Page"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Catalog Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-82551"/>
         </annotations>

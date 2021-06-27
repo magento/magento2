@@ -12,8 +12,8 @@
             <features value="Catalog"/>
             <stories value="MAGETWO-72114-TinyMCE v4.6 as a native WYSIWYG editor"/>
             <group value="Catalog"/>
-            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Product Page"/>
-            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Product Page"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Product Page"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-81819"/>
         </annotations>
