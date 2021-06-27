@@ -5,9 +5,11 @@
  */
 namespace Magento\Framework\App;
 
+use IPTools\IP;
+use IPTools\Range;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Filesystem;
 
 /**
  * Application Maintenance Mode
@@ -17,7 +19,7 @@ class MaintenanceMode
     /**
      * Maintenance flag file name
      *
-     * DO NOT consolidate this file and the IP white list into one.
+     * DO NOT consolidate this file and the IP allow list into one.
      * It is going to work much faster in 99% of cases: the isOn() will return false whenever file doesn't exist.
      */
     const FLAG_FILENAME = '.maintenance.flag';
@@ -45,19 +47,30 @@ class MaintenanceMode
     private $eventManager;
 
     /**
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param Manager|null $eventManager
+     * @var Utility\IPAddressNormaliser
      */
-    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
-    {
+    private $ipAddressNormaliser;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param Manager|null $eventManager
+     * @param Utility\IPAddressNormaliser $ipAddressNormaliser
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        Manager $eventManager = null,
+        Utility\IPAddressNormaliser $ipAddressNormaliser = null
+    ) {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);
+        $this->ipAddressNormaliser = $ipAddressNormaliser ?:
+            ObjectManager::getInstance()->get(Utility\IPAddressNormaliser::class);
     }
 
     /**
      * Checks whether mode is on
      *
-     * Optionally specify an IP-address to compare against the white list
+     * Optionally specify an IP-address to compare against the allow list
      *
      * @param string $remoteAddr
      * @return bool
@@ -67,8 +80,16 @@ class MaintenanceMode
         if (!$this->flagDir->isExist(self::FLAG_FILENAME)) {
             return false;
         }
-        $info = $this->getAddressInfo();
-        return !in_array($remoteAddr, $info);
+        if ($remoteAddr) {
+            $allowedAddresses = $this->getAddressInfo();
+            $remoteAddress = new IP($remoteAddr);
+            foreach ($allowedAddresses as $allowed) {
+                if (Range::parse($allowed)->contains($remoteAddress)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -109,6 +130,9 @@ class MaintenanceMode
         if (!preg_match('/^[^\s,]+(,[^\s,]+)*$/', $addresses)) {
             throw new \InvalidArgumentException("One or more IP-addresses is expected (comma-separated)\n");
         }
+        $addressList = explode(',', $addresses);
+        $addressList = $this->ipAddressNormaliser->execute($addressList);
+        $addresses = implode(',', $addressList);
         $result = $this->flagDir->writeFile(self::IP_FILENAME, $addresses);
         return false !== $result;
     }

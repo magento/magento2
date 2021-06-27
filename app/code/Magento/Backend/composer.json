@@ -23,7 +23,8 @@
         "magento/module-store": "*",
         "magento/module-translation": "*",
         "magento/module-ui": "*",
-        "magento/module-user": "*"
+        "magento/module-user": "*",
+        "s1lentium/iptools": "^1.1"
     },
     "suggest": {
         "magento/module-theme": "*"

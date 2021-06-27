@@ -45,6 +45,7 @@ class IpValidatorTest extends TestCase
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
+            [['127.0.0.0/24'], []],
             [['none'], []],
             [['none', '127.0.0.1'], ["Multiple values are not allowed when 'none' is used"]],
             [['127.0.0.1', 'none'], ["Multiple values are not allowed when 'none' is used"]],
@@ -72,6 +73,7 @@ class IpValidatorTest extends TestCase
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
+            [['127.0.0.0/24'], []],
             [['none'], ["'none' is not allowed"]],
             [['none', '127.0.0.1'], ["'none' is not allowed"]],
             [['127.0.0.1', 'none'], ["'none' is not allowed"]],
