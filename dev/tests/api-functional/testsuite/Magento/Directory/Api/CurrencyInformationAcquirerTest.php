@@ -34,6 +34,7 @@ class CurrencyInformationAcquirerTest extends WebapiAbstract
         $this->assertArrayHasKey('default_display_currency_symbol', $result);
         $this->assertArrayHasKey('available_currency_codes', $result);
         $this->assertArrayHasKey('exchange_rates', $result);
+        $this->assertArrayHasKey('available_currencies', $result);
 
         $this->assertTrue(
             in_array($result['base_currency_code'], $result['available_currency_codes']),

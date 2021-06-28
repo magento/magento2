@@ -80,13 +80,15 @@ class CurrencyInformationAcquirer implements \Magento\Directory\Api\CurrencyInfo
         foreach ($store->getAvailableCurrencyCodes(true) as $currencyCode) {
             $currency = $this->localeCurrency->getCurrency($currencyCode);
 
-            /** @var \Magento\Directory\Model\Data\AvailableCurrency $availableCurrency */
-            $availableCurrency = $this->availableCurrencyFactory->create();
-            $availableCurrency->setSymbol($currency->getSymbol());
-            $availableCurrency->setName($currency->getName());
-            $availableCurrency->setValue($currency->getValue());
-            $availableCurrency->setCode($currencyCode);
-            $availableCurrencies[] = $availableCurrency;
+            if ($currency instanceof \Magento\Framework\Currency) {
+                /** @var \Magento\Directory\Model\Data\AvailableCurrency $availableCurrency */
+                $availableCurrency = $this->availableCurrencyFactory->create();
+                $availableCurrency->setSymbol($currency->getSymbol());
+                $availableCurrency->setName($currency->getName());
+                $availableCurrency->setValue($currency->getValue());
+                $availableCurrency->setCode($currencyCode);
+                $availableCurrencies[] = $availableCurrency;
+            }
 
             /** @var \Magento\Directory\Model\Data\ExchangeRate $exchangeRate */
             $exchangeRate = $this->exchangeRateFactory->create();

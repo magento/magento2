@@ -10,6 +10,8 @@ namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyInformationAcquirer;
+use Magento\Directory\Model\Data\AvailableCurrency;
+use Magento\Directory\Model\Data\AvailableCurrencyFactory;
 use Magento\Directory\Model\Data\CurrencyInformation;
 use Magento\Directory\Model\Data\CurrencyInformationFactory;
 use Magento\Directory\Model\Data\ExchangeRate;
@@ -40,6 +42,11 @@ class CurrencyInformationAcquirerTest extends TestCase
     /**
      * @var MockObject
      */
+    protected $availableCurrencyFactory;
+
+    /**
+     * @var MockObject
+     */
     protected $storeManager;
 
     /**
@@ -64,6 +71,11 @@ class CurrencyInformationAcquirerTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
+        $this->availableCurrencyFactory = $this->getMockBuilder(AvailableCurrencyFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
+
         $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getStore'])
@@ -74,6 +86,7 @@ class CurrencyInformationAcquirerTest extends TestCase
             [
                 'currencyInformationFactory' => $this->currencyInformationFactory,
                 'exchangeRateFactory' => $this->exchangeRateFactory,
+                'availableCurrencyFactory' => $this->availableCurrencyFactory,
                 'storeManager' => $this->storeManager,
             ]
         );
@@ -92,6 +105,15 @@ class CurrencyInformationAcquirerTest extends TestCase
 
         $exchangeRate->expects($this->any())->method('load')->willReturnSelf();
         $this->exchangeRateFactory->expects($this->any())->method('create')->willReturn($exchangeRate);
+
+        /** @var  AvailableCurrency $availableCurrency */
+        $availableCurrency = $this->getMockBuilder(AvailableCurrency::class)
+            ->addMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $availableCurrency->expects($this->any())->method('load')->willReturnSelf();
+        $this->availableCurrencyFactory->expects($this->any())->method('create')->willReturn($availableCurrency);
 
         /** @var CurrencyInformation $currencyInformation */
         $currencyInformation = $this->getMockBuilder(CurrencyInformation::class)
@@ -132,5 +154,11 @@ class CurrencyInformationAcquirerTest extends TestCase
         $this->assertEquals([$exchangeRate], $result->getExchangeRates());
         $this->assertEquals('0.80', $result->getExchangeRates()[0]->getRate());
         $this->assertEquals('AUD', $result->getExchangeRates()[0]->getCurrencyTo());
+        $this->assertIsArray($result->getAvailableCurrencies());
+        $this->assertEquals([$availableCurrency], $result->getAvailableCurrencies());
+        $this->assertEquals('AUD', $result->getAvailableCurrencies()[0]->getCode());
+        $this->assertEquals('Australian Dollar', $result->getAvailableCurrencies()[0]->getName());
+        $this->assertEquals('A$', $result->getAvailableCurrencies()[0]->getSymbol());
+        $this->assertEquals('0', $result->getAvailableCurrencies()[0]->getValue());
     }
 }
