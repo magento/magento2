@@ -50,7 +50,7 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="disableCategory"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
