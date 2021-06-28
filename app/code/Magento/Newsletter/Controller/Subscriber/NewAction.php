@@ -33,6 +33,10 @@ use Magento\Newsletter\Model\SubscriberFactory;
 class NewAction extends SubscriberController implements HttpPostActionInterface
 {
     /**
+     * Config path is subscription enabled
+     */
+    public const XML_PATH_IS_SUBSCRIPTION_ENABLED = 'newsletter/general/active';
+    /**
      * @var CustomerAccountManagement
      */
     protected $customerAccountManagement;
@@ -126,6 +130,17 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     }
 
     /**
+     * Check subscription is enabled in configuration
+     *
+     * @return bool
+     */
+    protected function validateIsSubscriptionEnabled()
+    {
+        return (bool)$this->_objectManager->get(ScopeConfigInterface::class)
+            ->getValue(self::XML_PATH_IS_SUBSCRIPTION_ENABLED);
+    }
+
+    /**
      * Validates the format of the email address
      *
      * @param string $email
@@ -146,7 +161,8 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      */
     public function execute()
     {
-        if ($this->getRequest()->isPost() && $this->getRequest()->getPost('email')) {
+        if ($this->validateIsSubscriptionEnabled() &&
+            $this->getRequest()->isPost() && $this->getRequest()->getPost('email')) {
             $email = (string)$this->getRequest()->getPost('email');
 
             try {
