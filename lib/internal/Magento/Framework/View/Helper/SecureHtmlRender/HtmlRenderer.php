@@ -74,7 +74,7 @@ class HtmlRenderer
         }
 
         $html = '<' .$tagData->getTag() .$attributesHtml;
-        if (in_array($tagData->getTag(), self::VOID_ELEMENTS)) {
+        if (isset(self::VOID_ELEMENTS_MAP[$tagData->getTag()])) {
             $html .= '/>';
         } else {
             $html .= '>' .$content .'</' .$tagData->getTag() .'>';
