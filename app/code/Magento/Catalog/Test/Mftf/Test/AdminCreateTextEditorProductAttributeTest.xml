@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Enable WYSIWYG editor -->
-            <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
 
             <!-- Enable TinyMCE 4 -->
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
