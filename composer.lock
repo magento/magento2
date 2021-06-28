@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1bc34a0790b0db5a166973219cdab09",
+    "content-hash": "493418cd144927561b32e05b09e1f1d1",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.183.11",
+            "version": "3.183.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f42dcf893227842aca11e8ea19f7b2123cf3244b"
+                "reference": "3995354f4791f8ca85f5208325cef9065e471f3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f42dcf893227842aca11e8ea19f7b2123cf3244b",
-                "reference": "f42dcf893227842aca11e8ea19f7b2123cf3244b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3995354f4791f8ca85f5208325cef9065e471f3b",
+                "reference": "3995354f4791f8ca85f5208325cef9065e471f3b",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2021-06-02T18:14:10+00:00"
+            "time": "2021-06-01T18:13:35+00:00"
         },
         {
             "name": "brick/math",
@@ -1321,56 +1321,6 @@
                 "laminas"
             ],
             "time": "2021-02-11T15:06:51+00:00"
-        },
-        {
-            "name": "laminas/laminas-crypt",
-            "version": "3.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-crypt.git",
-                "reference": "a058eeb2fe57824b958ac56753faff790a649e18"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-crypt/zipball/a058eeb2fe57824b958ac56753faff790a649e18",
-                "reference": "a058eeb2fe57824b958ac56753faff790a649e18",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "^1.2",
-                "ext-mbstring": "*",
-                "laminas/laminas-math": "^3.0",
-                "laminas/laminas-stdlib": "^2.7.7 || ^3.1",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^7.3 || ~8.0.0"
-            },
-            "replace": {
-                "zendframework/zend-crypt": "^3.3.1"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^9.3"
-            },
-            "suggest": {
-                "ext-openssl": "Required for most features of Laminas\\Crypt"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Crypt\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Strong cryptography tools and password hashing",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "crypt",
-                "laminas"
-            ],
-            "time": "2021-02-11T19:40:03+00:00"
         },
         {
             "name": "laminas/laminas-db",
@@ -4237,10 +4187,6 @@
                 "queue",
                 "set"
             ],
-            "support": {
-                "issues": "https://github.com/ramsey/collection/issues",
-                "source": "https://github.com/ramsey/collection/tree/1.1.3"
-            },
             "time": "2021-01-21T17:40:04+00:00"
         },
         {
@@ -4322,11 +4268,6 @@
                 "identifier",
                 "uuid"
             ],
-            "support": {
-                "issues": "https://github.com/ramsey/uuid/issues",
-                "rss": "https://github.com/ramsey/uuid/releases.atom",
-                "source": "https://github.com/ramsey/uuid"
-            },
             "time": "2020-08-18T17:17:46+00:00"
         },
         {
@@ -5272,16 +5213,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v5.3.1",
+            "version": "v5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "8827b90cf8806e467124ad476acd15216c2fceb6"
+                "reference": "31f25d99b329a1461f42bcef8505b54926a30be6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/8827b90cf8806e467124ad476acd15216c2fceb6",
-                "reference": "8827b90cf8806e467124ad476acd15216c2fceb6",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/31f25d99b329a1461f42bcef8505b54926a30be6",
+                "reference": "31f25d99b329a1461f42bcef8505b54926a30be6",
                 "shasum": ""
             },
             "require": {
@@ -5324,7 +5265,7 @@
             ],
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
-            "time": "2021-06-02T09:32:00+00:00"
+            "time": "2021-05-26T17:43:10+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -6770,11 +6711,6 @@
                 "steps",
                 "testing"
             ],
-            "support": {
-                "email": "allure@qameta.io",
-                "issues": "https://github.com/allure-framework/allure-codeception/issues",
-                "source": "https://github.com/allure-framework/allure-codeception"
-            },
             "time": "2021-03-26T16:11:53+00:00"
         },
         {
@@ -6828,11 +6764,6 @@
                 "php",
                 "report"
             ],
-            "support": {
-                "email": "allure@yandex-team.ru",
-                "issues": "https://github.com/allure-framework/allure-php-commons/issues",
-                "source": "https://github.com/allure-framework/allure-php-api"
-            },
             "time": "2021-03-26T14:32:27+00:00"
         },
         {
@@ -6886,11 +6817,6 @@
                 "steps",
                 "testing"
             ],
-            "support": {
-                "email": "allure@qameta.io",
-                "issues": "https://github.com/allure-framework/allure-phpunit/issues",
-                "source": "https://github.com/allure-framework/allure-phpunit"
-            },
             "time": "2021-03-26T15:43:03+00:00"
         },
         {
@@ -8697,10 +8623,6 @@
                 "magento",
                 "testing"
             ],
-            "support": {
-                "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.5.1"
-            },
             "time": "2021-05-05T15:01:30+00:00"
         },
         {
@@ -11369,7 +11291,6 @@
         "ext-pdo_mysql": "*",
         "ext-simplexml": "*",
         "ext-soap": "*",
-        "ext-spl": "*",
         "ext-xsl": "*",
         "ext-zip": "*",
         "lib-libxml": "*"
