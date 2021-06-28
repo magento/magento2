@@ -63,12 +63,29 @@ class Builder implements BuilderInterface
                         ),
                         'char_filter' => array_keys($charFilter)
                     ],
+                    // this analyzer must not include stemmer filter
+                    'prefix_search' => [
+                        'type' => 'custom',
+                        'tokenizer' => key($tokenizer),
+                        'filter' => array_merge(
+                            ['lowercase', 'keyword_repeat']
+                        ),
+                        'char_filter' => array_keys($charFilter)
+                    ],
                     'sku' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
                         'filter' => array_merge(
                             ['lowercase', 'keyword_repeat'],
                             array_keys($filter)
+                        ),
+                    ],
+                    // this analyzer must not include stemmer filter
+                    'sku_prefix_search' => [
+                        'type' => 'custom',
+                        'tokenizer' => 'keyword',
+                        'filter' => array_merge(
+                            ['lowercase', 'keyword_repeat']
                         ),
                     ]
                 ],

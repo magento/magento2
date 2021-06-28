@@ -5,8 +5,8 @@
  */
 -->
 <div style="display: none;" css="stickyClass" afterRender="setStickyNode">
-    <span class="data-grid-cap-left" afterRender="setLeftCap"/>
-    <span class="data-grid-cap-right" afterRender="setRightCap"/>
+    <span class="data-grid-cap-left" afterRender="setLeftCap"></span>
+    <span class="data-grid-cap-right" afterRender="setRightCap"></span>
 
     <div afterRender="setStickyToolbarNode">
         <div class="admin__data-grid-header">
@@ -14,7 +14,7 @@
                 <scope args="requestChild('listing_massaction')" render=""/>
                 <scope args="requestChild('listing_paging')" render="totalTmpl"/>
                 <each args="getRegion('dataGridFilters')" render=" $data.stickyTmpl || getTemplate()"/>
-                <div class="admin__data-grid-actions-wrap" each="getRegion('dataGridActions')" render=""/>
+                <div class="admin__data-grid-actions-wrap" each="getRegion('dataGridActions')" render=""></div>
                 <scope args="requestChild('listing_paging')" render=""/>
             </div>
         </div>

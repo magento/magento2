@@ -262,7 +262,7 @@ class RepositoryTest extends TestCase
             ->getMock();
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
-        $this->optionMock->expects($this->once())->method('getValues')->willReturn([
+        $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn([
             $originalValue1,
             $originalValue2,
             $originalValue3
@@ -291,7 +291,7 @@ class RepositoryTest extends TestCase
             ->getMock();
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
-        $this->optionMock->expects($this->once())->method('getValues')->willReturn(null);
+        $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn(null);
         $this->assertEquals($this->optionMock, $this->optionRepository->save($this->optionMock));
     }
 }

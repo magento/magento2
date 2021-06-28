@@ -9,7 +9,7 @@
           css="_required: required"
           attr="'data-index': index">
     <legend class="admin__field-label" if="showLabel">
-        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"></span>
     </legend>
 
     <div class="admin__field-control" css="$data.additionalClasses">
@@ -24,7 +24,7 @@
 
         <each args="elems" if="validateWholeGroup">
             <if args="!$data.additionalForGroup">
-                <label class="admin__field-error" if="error() && visible()" attr="for: uid" text="error"/>
+                <label class="admin__field-error" if="error() && visible()" attr="for: uid" text="error"></label>
             </if>
         </each>
     </div>
