@@ -240,6 +240,7 @@
         "magento/module-offline-shipping": "*",
         "magento/module-page-cache": "*",
         "magento/module-payment": "*",
+        "magento/module-payment-graph-ql": "*",
         "magento/module-paypal": "*",
         "magento/module-paypal-captcha": "*",
         "magento/module-paypal-graph-ql": "*",
@@ -327,7 +328,8 @@
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*",
-        "magento/module-jwt-framework-adapter": "*"
+        "magento/module-jwt-framework-adapter": "*",
+        "magento/module-jwt-user-token": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"
