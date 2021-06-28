@@ -13,22 +13,19 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
-use Magento\TestFramework\Annotation\FixtureDataResolver;
+use Magento\TestFramework\Fixture\Data\CompositeProcessor;
+use Magento\TestFramework\Fixture\Data\UniqueIdProcessor;
 
 /**
  * Create simple product fixture
- *
- * @unique sku;
- * @unique name;
- * @unique url_key;
  */
 class CreateSimpleProduct implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'type_id' => Type::TYPE_SIMPLE,
         'attribute_set_id' => 4,
-        'name' => 'Simple Product',
-        'sku' => 'simple',
+        'name' => 'Simple Product ' . UniqueIdProcessor::UNIQUE_ID_KEY,
+        'sku' => 'simple_' . UniqueIdProcessor::UNIQUE_ID_KEY,
         'price' => 10,
         'weight' => 1,
         'visibility' => Visibility::VISIBILITY_BOTH,
@@ -37,6 +34,10 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
             [
                 'attribute_code' => 'tax_class_id',
                 'value' => '2',
+            ],
+            [
+                'attribute_code' => 'url_key',
+                'value' => 'simple_url_key_' . UniqueIdProcessor::UNIQUE_ID_KEY,
             ]
         ],
         'extension_attributes' => [
@@ -56,20 +57,20 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     private $serviceFactory;
 
     /**
-     * @var FixtureDataResolver
+     * @var CompositeProcessor
      */
-    private $fixtureDataResolver;
+    private $compositeProcessor;
 
     /**
      * @param ServiceFactory $serviceFactory
-     * @param FixtureDataResolver $fixtureDataResolver
+     * @param CompositeProcessor $compositeProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        FixtureDataResolver $fixtureDataResolver
+        CompositeProcessor $compositeProcessor
     ) {
         $this->serviceFactory = $serviceFactory;
-        $this->fixtureDataResolver = $fixtureDataResolver;
+        $this->compositeProcessor = $compositeProcessor;
     }
 
     /**
@@ -78,12 +79,10 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     public function apply(array $data = []): ?array
     {
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'save');
+        $fixtureData = array_merge(self::DEFAULT_DATA, $data);
         $result = $service->execute(
             [
-                'product' => array_merge(
-                    $this->fixtureDataResolver->resolveDataReferences(self::DEFAULT_DATA, $this),
-                    $data
-                )
+                'product' => $this->compositeProcessor->process($fixtureData, $this)
             ]
         );
 
@@ -97,7 +96,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
      */
     public function revert(array $data = []): void
     {
-        $this->fixtureDataResolver->revert($this);
+        $this->compositeProcessor->revert($this);
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
         $service->execute(
             [

@@ -56,7 +56,7 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValue()
     {
-        $sku = 'simple';
+        $sku = 'simple_1';
         $attribute = 'name';
 
         $product = $this->productRepository->get($sku);
@@ -76,11 +76,11 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetDefault()
     {
-        $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', 'default_value');
+        $product = $this->productRepository->get('simple_1', true, 0, true);
+        $product->setCustomAttribute('fixture_attribute_1', 'default_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute_1', 1);
         $this->assertEquals('default_value', $actual);
     }
 
@@ -96,15 +96,15 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetStoreSpecificValueNoDefault()
     {
-        $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', null);
+        $product = $this->productRepository->get('simple_1', true, 0, true);
+        $product->setCustomAttribute('fixture_attribute_1', null);
         $this->productRepository->save($product);
 
-        $product = $this->productRepository->get('simple', true, 1, true);
-        $product->setCustomAttribute('fixture_attribute', 'store_value');
+        $product = $this->productRepository->get('simple_1', true, 1, true);
+        $product->setCustomAttribute('fixture_attribute_1', 'store_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute_1', 1);
         $this->assertEquals('store_value', $actual);
     }
 
@@ -120,15 +120,15 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetStoreSpecificValueWithDefault()
     {
-        $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', 'default_value');
+        $product = $this->productRepository->get('simple_1', true, 0, true);
+        $product->setCustomAttribute('fixture_attribute_1', 'default_value');
         $this->productRepository->save($product);
 
-        $product = $this->productRepository->get('simple', true, 1, true);
-        $product->setCustomAttribute('fixture_attribute', 'store_value');
+        $product = $this->productRepository->get('simple_1', true, 1, true);
+        $product->setCustomAttribute('fixture_attribute_1', 'store_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute_1', 1);
         $this->assertEquals('store_value', $actual);
     }
 
@@ -145,11 +145,11 @@ class ProductTest extends TestCase
      */
     public function testGetAttributeRawValueGetStoreValueFallbackToDefault()
     {
-        $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', 'default_value');
+        $product = $this->productRepository->get('simple_1', true, 0, true);
+        $product->setCustomAttribute('fixture_attribute_1', 'default_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute_1', 1);
         $this->assertEquals('default_value', $actual);
     }
 
@@ -162,15 +162,15 @@ class ProductTest extends TestCase
     public function testUpdateStoreSpecificSpecialPrice()
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get('simple', true, 1);
+        $product = $this->productRepository->get('simple_1', true, 1);
         $this->assertEquals(5.99, $product->getSpecialPrice());
 
         $product->setSpecialPrice('');
         $this->model->save($product);
-        $product = $this->productRepository->get('simple', false, 1, true);
+        $product = $this->productRepository->get('simple_1', false, 1, true);
         $this->assertEmpty($product->getSpecialPrice());
 
-        $product = $this->productRepository->get('simple', false, 0, true);
+        $product = $this->productRepository->get('simple_1', false, 0, true);
         $this->assertEquals(5.99, $product->getSpecialPrice());
     }
 
