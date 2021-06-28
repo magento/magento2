@@ -19,23 +19,23 @@ class HtmlRenderer
      *
      * @var array
      */
-    private const VOID_ELEMENTS = [
-        'area',
-        'base',
-        'br',
-        'col',
-        'command',
-        'embed',
-        'hr',
-        'img',
-        'input',
-        'keygen',
-        'link',
-        'meta',
-        'param',
-        'source',
-        'track',
-        'wbr'
+    private const VOID_ELEMENTS_MAP = [
+        'area' => true,
+        'base' => true,
+        'br' => true,
+        'col' => true,
+        'command' => true,
+        'embed' => true,
+        'hr' => true,
+        'img' => true,
+        'input' => true,
+        'keygen' => true,
+        'link' => true,
+        'meta' => true,
+        'param' => true,
+        'source' => true,
+        'track' => true,
+        'wbr' => true,
     ];
 
     /**
