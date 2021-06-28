@@ -84,7 +84,7 @@
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
                         <item name="text" xsi:type="string" translate="true"><![CDATA[
                         <p>By clicking on <b>Allow</b>, you agree that we may collect anonymous usage data from you to:</p>
-                        <ol class="modal_list">
+                        <ol class="modal-list">
                             <li>Help us improve the Magento Admin user experience</li>
                             <li>Provide interactive in-product guidance, such as technical support and tips to improve utilization of the product from within the Admin UI. This may include notifications of new features, product support/guidance, onboarding information, tooltips, and more.</li>
                         </ol>
