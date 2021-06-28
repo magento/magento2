@@ -111,7 +111,7 @@
         </actionGroup>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$initialCategoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$initialCategoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPrice99OutOfStock.name}}" stepKey="dontSeeVirtualProductLinkOnCategoryPage"/>
     </test>

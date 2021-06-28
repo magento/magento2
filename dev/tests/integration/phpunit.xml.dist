@@ -53,6 +53,8 @@
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
         <const name="TESTS_INSTALL_CONFIG_FILE" value="etc/install-config-mysql.php"/>
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
+        <const name="TESTS_POST_INSTALL_SETUP_COMMAND_CONFIG_FILE" value="etc/post-install-setup-command-config.php"/>
+        <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
         <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
@@ -85,7 +87,7 @@
     </php>
     <!-- Test listeners -->
     <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
