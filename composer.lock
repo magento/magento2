@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54908b4775173331688705b8c354cf26",
+    "content-hash": "d0d19ab3365281f0c84e7def0ccb0016",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1151,64 +1151,6 @@
                 "schema"
             ],
             "time": "2020-05-27T16:41:55+00:00"
-        },
-        {
-            "name": "laminas/laminas-captcha",
-            "version": "2.10.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-captcha.git",
-                "reference": "9a0134e434cd792934ecca42cb66f316be7bba50"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-captcha/zipball/9a0134e434cd792934ecca42cb66f316be7bba50",
-                "reference": "9a0134e434cd792934ecca42cb66f316be7bba50",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-math": "^2.7 || ^3.0",
-                "laminas/laminas-stdlib": "^3.3",
-                "laminas/laminas-zendframework-bridge": "^1.1",
-                "php": "^7.3 || ~8.0.0"
-            },
-            "replace": {
-                "zendframework/zend-captcha": "^2.9.0"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~2.1.4",
-                "laminas/laminas-recaptcha": "^3.0",
-                "laminas/laminas-session": "^2.10",
-                "laminas/laminas-text": "^2.8",
-                "laminas/laminas-validator": "^2.14",
-                "phpunit/phpunit": "^9.4.3",
-                "psalm/plugin-phpunit": "^0.15.1",
-                "vimeo/psalm": "^4.6"
-            },
-            "suggest": {
-                "laminas/laminas-i18n-resources": "Translations of captcha messages",
-                "laminas/laminas-recaptcha": "Laminas\\ReCaptcha component",
-                "laminas/laminas-session": "Laminas\\Session component",
-                "laminas/laminas-text": "Laminas\\Text component",
-                "laminas/laminas-validator": "Laminas\\Validator component"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Captcha\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Generate and validate CAPTCHAs using Figlets, images, ReCaptcha, and more",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "captcha",
-                "laminas"
-            ],
-            "time": "2021-03-17T16:42:11+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -2621,52 +2563,6 @@
                 "stdlib"
             ],
             "time": "2020-11-19T20:18:59+00:00"
-        },
-        {
-            "name": "laminas/laminas-text",
-            "version": "2.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-text.git",
-                "reference": "d696fa1fb3880b9b8f02c08be58685013b421608"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/d696fa1fb3880b9b8f02c08be58685013b421608",
-                "reference": "d696fa1fb3880b9b8f02c08be58685013b421608",
-                "shasum": ""
-            },
-            "require": {
-                "laminas/laminas-servicemanager": "^3.4",
-                "laminas/laminas-stdlib": "^3.1",
-                "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^7.3 || ~8.0.0"
-            },
-            "replace": {
-                "zendframework/zend-text": "^2.7.1"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "laminas/laminas-config": "^3.4",
-                "phpunit/phpunit": "^9.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Text\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Create FIGlets and text-based tables",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "text"
-            ],
-            "time": "2021-02-17T21:24:58+00:00"
         },
         {
             "name": "laminas/laminas-uri",
