@@ -11,6 +11,12 @@ namespace Magento\TestFramework\TestCase\HttpClient;
 class CurlClient
 {
     const EMPTY_REQUEST_BODY = 'Empty body';
+    const TMP_COOKIE_FILE = TESTS_TEMP_DIR . '/cookie.txt';
+
+    public function __destruct()
+    {
+        unlink(self::TMP_COOKIE_FILE);
+    }
 
     /**
      * Perform HTTP GET request
@@ -186,6 +192,8 @@ class CurlClient
             CURLOPT_MAXREDIRS => 10, // but don't redirect more than 10 times
             CURLOPT_HTTPHEADER => [],
             CURLOPT_HEADER => 1,
+            CURLOPT_COOKIEJAR => self::TMP_COOKIE_FILE,
+            CURLOPT_COOKIEFILE => self::TMP_COOKIE_FILE
         ];
 
         // merge headers
