@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller\Subscriber;
 
+use Exception;
+use Laminas\Stdlib\Parameters;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
@@ -14,7 +16,6 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResource;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\TestFramework\TestCase\AbstractController;
-use Laminas\Stdlib\Parameters;
 
 /**
  * Class checks subscription behaviour from frontend
@@ -24,6 +25,9 @@ use Laminas\Stdlib\Parameters;
  */
 class NewActionTest extends AbstractController
 {
+    /** @var CustomerRepositoryInterface */
+    private $customerRepository;
+
     /** @var Session */
     private $session;
 
@@ -35,9 +39,6 @@ class NewActionTest extends AbstractController
 
     /** @var string|null */
     private $subscriberToDelete;
-
-    /** @var CustomerRepositoryInterface */
-    private $customerRepository;
 
     /** @var Url */
     private $customerUrl;
@@ -82,6 +83,38 @@ class NewActionTest extends AbstractController
         $this->dispatch('newsletter/subscriber/new');
 
         $this->performAsserts($expectedMessage);
+    }
+
+    /**
+     * @magentoConfigFixture newsletter/general/active 1
+     *
+     * @return void
+     */
+    public function testNewActionWithSubscriptionConfigEnabled(): void
+    {
+        $email = 'good_subscription@example.com';
+        $this->subscriberToDelete = $email;
+        $this->prepareRequest($email);
+        $this->dispatch('newsletter/subscriber/new');
+        $subscriberCollection = $this->subscriberCollectionFactory->create();
+        $subscriberCollection->addFieldToFilter('subscriber_email', $email)->setPageSize(1);
+        $this->assertEquals(1, count($subscriberCollection));
+        $this->assertEquals($email, $subscriberCollection->getFirstItem()->getEmail());
+    }
+
+    /**
+     * @magentoConfigFixture newsletter/general/active 0
+     *
+     * @return void
+     */
+    public function testNewActionWithSubscriptionConfigDisabled(): void
+    {
+        $email = 'bad_subscription@example.com';
+        $this->prepareRequest($email);
+        $this->dispatch('newsletter/subscriber/new');
+        $subscriberCollection = $this->subscriberCollectionFactory->create();
+        $subscriberCollection->addFieldToFilter('subscriber_email', $email)->setPageSize(1);
+        $this->assertEquals(0, count($subscriberCollection));
     }
 
     /**
@@ -242,7 +275,9 @@ class NewActionTest extends AbstractController
      * Delete subscribers by email
      *
      * @param string $email
+     *
      * @return void
+     * @throws Exception
      */
     private function deleteSubscriber(string $email): void
     {
