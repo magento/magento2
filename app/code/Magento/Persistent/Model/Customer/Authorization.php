@@ -35,7 +35,8 @@ class Authorization implements AuthorizationInterface
     public function __construct(
         CustomerSession $customerSession,
         PersistentSession $persistentSession
-    ) {
+    )
+    {
         $this->customerSession = $customerSession;
         $this->persistentSession = $persistentSession;
     }
@@ -48,8 +49,13 @@ class Authorization implements AuthorizationInterface
     public function isAllowed(
         $resource,
         $privilege = null
-    ) {
-        if ($this->persistentSession->isPersistent() && !$this->customerSession->isLoggedIn()) {
+    )
+    {
+        if (
+            $this->persistentSession->isPersistent() &&
+            $this->customerSession->getCustomerId() &&
+            $this->customerSession->getIsCustomerEmulated()
+        ) {
             return false;
         }
 
