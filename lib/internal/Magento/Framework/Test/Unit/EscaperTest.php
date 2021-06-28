@@ -385,10 +385,6 @@ class EscaperTest extends TestCase
     {
         return [
             [
-                'data'     => 1,
-                'expected' => '1',
-            ],
-            [
                 'data'     => '*%string{foo}%::',
                 'expected' => '\2A \25 string\7B foo\7D \25 \3A \3A ',
             ]
@@ -422,14 +418,6 @@ class EscaperTest extends TestCase
             [
                 'data'     => "example string",
                 'expected' => "example%20string",
-            ],
-            [
-                'data'     => 1,
-                'expected' => "1",
-            ],
-            [
-                'data'     => null,
-                'expected' => "",
             ]
         ];
     }
