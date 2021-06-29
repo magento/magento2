@@ -224,7 +224,7 @@ define('globalNavigation', [
 
             if (e.which === 13) {
                 this._close(e);
-                $(selectors.topLevelHref, menuItem).focus();
+                $(selectors.topLevelHref, menuItem).trigger('focus');
             }
         },
 

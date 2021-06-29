@@ -36,7 +36,7 @@
     <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
         <arguments>
             <argument name="adapterOptions" xsi:type="array">
-                <item name="tinymce4" xsi:type="array">
+                <item name="tinymce" xsi:type="array">
                     <item name="value" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</item>
                     <item name="label" xsi:type="string" translatable="true">TinyMCE 4</item>
                 </item>
