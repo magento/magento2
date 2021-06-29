@@ -8,11 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="EnabledWYSIWYGActionGroup">
+    <actionGroup name="AdminMediaGalleryClickOkButtonTinyMceActionGroup">
         <annotations>
-            <description>Enables the WYSIWYG Editor via the CLI.</description>
+            <description>Click ok button on upload image tinyMce4 popup.</description>
         </annotations>
 
-        <magentoCLI stepKey="enableWYSIWYG" command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}"/>
+        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn"/>
+        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn"/>
+        <waitForPageLoad stepKey="wait"/>
     </actionGroup>
 </actionGroups>
