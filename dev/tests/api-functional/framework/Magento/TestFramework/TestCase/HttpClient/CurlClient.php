@@ -20,6 +20,13 @@ class CurlClient
         }
     }
 
+    public function __construct()
+    {
+        if (!file_exists(TESTS_TEMP_DIR)) {
+            mkdir(TESTS_TEMP_DIR);
+        }
+    }
+
     /**
      * Perform HTTP GET request
      *
