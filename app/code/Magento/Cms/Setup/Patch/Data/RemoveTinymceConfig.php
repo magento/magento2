@@ -46,8 +46,8 @@ class RemoveTinymceConfig implements DataPatchInterface
 
         $configValue = $this->moduleDataSetup->getConnection()->fetchOne($select);
 
-        if (strpos($configValue, 'Tinymce3/tinymce3Adapter') !== false
-            || strpos($configValue, 'tiny_mce/tinymce4Adapter') !== false
+        if ($configValue && (strpos($configValue, 'Tinymce3/tinymce3Adapter') !== false
+            || strpos($configValue, 'tiny_mce/tinymce4Adapter') !== false)
         ) {
             $this->moduleDataSetup->getConnection()->query(
                 $select->deleteFromSelect(
