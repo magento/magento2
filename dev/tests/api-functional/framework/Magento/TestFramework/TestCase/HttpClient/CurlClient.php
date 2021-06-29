@@ -15,7 +15,9 @@ class CurlClient
 
     public function __destruct()
     {
-        unlink(self::TMP_COOKIE_FILE);
+        if (file_exists(self::TMP_COOKIE_FILE)) {
+            unlink(self::TMP_COOKIE_FILE);
+        }
     }
 
     /**
