@@ -48,8 +48,8 @@ define([
 
             date = moment.utc(this._super());
 
-            if (!_.isUndefined(this.timezone)) {
-                date = date.tz(this.timezone);
+            if (!_.isUndefined(this.timeZone)) {
+                date = date.tz(this.timeZone);
             }
 
             date = date.isValid() && value[this.index] ?
