@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAssistance\Model;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\LoginAsCustomerAssistance\Model\ResourceModel\GetIsCustomerEnabled;
 
 /**
  * Check if customer is Enabled
@@ -20,17 +21,17 @@ class IsCustomerEnabled
     private $registry = [];
 
     /**
-     * @var ResourceConnection
+     * @var GetIsCustomerEnabled
      */
-    private $resourceConnection;
+    private $getIsCustomerEnabled;
 
     /**
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        GetIsCustomerEnabled $getIsCustomerEnabled
     ) {
-        $this->resourceConnection = $resourceConnection;
+        $this->getIsCustomerEnabled = $getIsCustomerEnabled;
     }
 
     /**
@@ -43,17 +44,7 @@ class IsCustomerEnabled
     {
         if (!isset($this->registry[$customerId])) {
 
-            $connection = $this->resourceConnection->getConnection();
-            $tableName = $this->resourceConnection->getTableName('customer_entity');
-
-            $select = $connection->select()
-                ->from(
-                    $tableName,
-                    'is_active'
-                )
-                ->where('entity_id = ?', $customerId);
-            $isActive = !!$connection->fetchOne($select);
-            $this->registry[$customerId] = $isActive;
+            $this->registry[$customerId] = $this->getIsCustomerEnabled->execute($customerId);
         }
 
         return $this->registry[$customerId];
