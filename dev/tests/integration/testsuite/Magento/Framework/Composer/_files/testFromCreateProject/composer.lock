@@ -2593,10 +2593,6 @@
                         "lib/web/css"
                     ],
                     [
-                        "lib/web/es6-collections.js",
-                        "lib/web/es6-collections.js"
-                    ],
-                    [
                         "lib/web/extjs",
                         "lib/web/extjs"
                     ],
