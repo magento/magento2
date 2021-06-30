@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ScopeInterface;
-use Magento\Framework\DB\Select;
 
 /**
  * Build select object for retrieving configurable options.
@@ -44,6 +43,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope)
     {
+        $productLinkField = $this->attributeOptionProvider->getProductEntityLinkField();
         $select = $this->attributeResource->getConnection()->select()->from(
             ['super_attribute' => $this->attributeResource->getTable('catalog_product_super_attribute')],
             [
@@ -76,8 +76,17 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 [
                     'entity_value.attribute_id = super_attribute.attribute_id',
                     'entity_value.store_id = 0',
-                    "entity_value.{$this->attributeOptionProvider->getProductEntityLinkField()} = "
-                    . "entity.{$this->attributeOptionProvider->getProductEntityLinkField()}",
+                    "entity_value.$productLinkField = entity.$productLinkField",
+                ]
+            ),
+            []
+        )->joinInner(
+            ['entity_website' => $this->attributeResource->getTable('catalog_product_website')],
+            implode(
+                ' AND ',
+                [
+                    "entity_website.product_id = entity.$productLinkField",
+                    "entity_website.website_id = {$scope->getWebsiteId()}",
                 ]
             ),
             []
