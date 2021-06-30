@@ -9,10 +9,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface"
                 type="Magento\LoginAsCustomer\Model\AuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\GenerateAuthenticationSecretInterface"
+                type="Magento\LoginAsCustomer\Model\GenerateAuthenticationSecret"/>
     <preference for="Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface"
                 type="Magento\LoginAsCustomer\Model\ResourceModel\SaveAuthenticationData"/>
     <preference for="Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface"
-                type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticationDataBySecret"/>
+                type="Magento\LoginAsCustomer\Model\GetAuthenticationDataBySecret"/>
     <preference for="Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface"
                 type="Magento\LoginAsCustomer\Model\AuthenticateCustomerBySecret"/>
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface"

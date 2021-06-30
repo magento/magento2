@@ -508,28 +508,17 @@ class ProductTest extends TestCase
     /**
      * @dataProvider getSingleStoreIds
      * @param bool $isObjectNew
+     * @return void
      */
-    public function testGetStoreSingleSiteModelIds(
-        bool $isObjectNew
-    ) {
+    public function testGetStoreSingleSiteModelIds(bool $isObjectNew): void
+    {
         $websiteIDs = [0 => 2];
-        $this->model->setWebsiteIds(
-            !$isObjectNew ? $websiteIDs : array_flip($websiteIDs)
-        );
+        $this->model->setWebsiteIds(!$isObjectNew ? $websiteIDs : array_flip($websiteIDs));
 
         $this->model->isObjectNew($isObjectNew);
 
-        $this->storeManager->expects(
-            $this->exactly(
-                (int)!$isObjectNew
-            )
-        )
-            ->method('isSingleStoreMode')
-            ->willReturn(true);
-
-        $this->website->expects(
-            $this->once()
-        )->method('getStoreIds')
+        $this->website->expects($this->once())
+            ->method('getStoreIds')
             ->willReturn($websiteIDs);
 
         $this->assertEquals($websiteIDs, $this->model->getStoreIds());
@@ -1093,6 +1082,35 @@ class ProductTest extends TestCase
         $this->configureSaveTest();
         $this->model->beforeSave();
         $this->model->afterSave();
+    }
+
+    /**
+     * Test for save method behavior with type options
+     */
+    public function testSaveWithoutTypeOptions()
+    {
+        $this->model->setCanSaveCustomOptions(false);
+        $this->model->setTypeHasOptions(true);
+        $this->model->setTypeHasRequiredOptions(true);
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+        $this->assertTrue($this->model->getTypeHasOptions());
+        $this->assertTrue($this->model->getTypeHasRequiredOptions());
+    }
+
+    /**
+     * Test for save method with provided options data
+     */
+    public function testSaveWithProvidedRequiredOptions()
+    {
+        $this->model->setData("has_options", "1");
+        $this->model->setData("required_options", "1");
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+        $this->assertTrue($this->model->getHasOptions());
+        $this->assertTrue($this->model->getRequiredOptions());
     }
 
     public function testGetIsSalableSimple()

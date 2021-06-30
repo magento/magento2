@@ -77,6 +77,16 @@ $scriptString .= <<<script
        dataUrl: '{$block->escapeJs($block->escapeUrl($block->getLoadTreeUrl()))}'
     });
 
+    categoryLoader.processResponse = function (response, parent, callback) {
+        var config = JSON.parse(response.responseText);
+
+        this.buildCategoryTree(parent, config);
+
+        if (typeof callback == "function") {
+            callback(this, parent);
+        }
+    };
+
     categoryLoader.buildCategoryTree = function(parent, config)
     {
         if (!config) return null;
@@ -164,8 +174,10 @@ $scriptString .= <<<script
     };
 
     categoryLoader.on("beforeload", function(treeLoader, node) {
-        $('{$block->escapeJs($_divId)}').fire('category:beforeLoad', {treeLoader:treeLoader});
         treeLoader.baseParams.id = node.attributes.id;
+        treeLoader.baseParams.store = node.attributes.store;
+        treeLoader.baseParams.form_key = FORM_KEY;
+        $('{$block->escapeJs($_divId)}').fire('category:beforeLoad', {treeLoader:treeLoader});
     });
 
     tree{$block->escapeJs($block->getId())} = new Ext.tree.TreePanel.Enhanced('{$block->escapeJs($_divId)}', {

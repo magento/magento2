@@ -83,7 +83,7 @@ class Csv implements ReportProcessorInterface
             }
         }
 
-        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $outputFileName = $this->generateOutputFileName($originalFileName);
         $directory->writeFile(Import::IMPORT_HISTORY_DIR . $outputFileName, $outputCsv->getContents());
 
@@ -136,7 +136,7 @@ class Csv implements ReportProcessorInterface
         return $this->sourceCsvFactory->create(
             [
                 'file' => $sourceFile,
-                'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR),
+                'directory' => $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT),
                 'delimiter' => $this->reportHelper->getDelimiter(),
             ]
         );

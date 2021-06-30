@@ -191,7 +191,7 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     {
         $allPaths = $this->getFieldPaths();
 
-        if (isset($allPaths[$path])) {
+        if (isset($allPaths[$path]) && is_array($allPaths[$path])) {
             $path = array_shift($allPaths[$path]);
         }
 
