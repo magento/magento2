@@ -383,6 +383,7 @@ class TransportBuilder
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->attachments = [];
         return $this;
     }
 
