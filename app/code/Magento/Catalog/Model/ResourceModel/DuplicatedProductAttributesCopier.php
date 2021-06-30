@@ -3,14 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\ResourceModel;
+declare(strict_types=1);
 
-/**
- * DuplicatedProductAttributesCopier
- *
- * Is used to copy product attributes related to non-global scope
- * from source to target product during product duplication
- */
+namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
@@ -20,7 +15,10 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
 /**
+ * DuplicatedProductAttributesCopier
  *
+ * Is used to copy product attributes related to non-global scope
+ * from source to target product during product duplication
  */
 class DuplicatedProductAttributesCopier
 {
