@@ -48,6 +48,7 @@ class Variable extends AbstractModel
      * @param \Magento\Variable\Model\ResourceModel\Variable $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param WYSIWYGValidatorInterface|null $wysiwygValidator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

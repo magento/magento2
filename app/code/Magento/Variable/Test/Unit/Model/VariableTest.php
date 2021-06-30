@@ -49,6 +49,11 @@ class VariableTest extends TestCase
      */
     private $objectManager;
 
+    /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
     protected function setUp(): void
     {
         $this->wysiwygValidator = $this->createMock(WYSIWYGValidatorInterface::class);
