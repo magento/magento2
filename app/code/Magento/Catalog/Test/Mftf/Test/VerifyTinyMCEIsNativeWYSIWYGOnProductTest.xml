@@ -7,20 +7,22 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnProductTest">
+    <test name="VerifyTinyMCEIsNativeWYSIWYGOnProductTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="MAGETWO-72114-TinyMCE v4.6 as a native WYSIWYG editor"/>
             <group value="Catalog"/>
-            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Product Page"/>
-            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Product Page"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Product Page"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Product Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-81819"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
         <waitForPageLoad stepKey="wait1"/>
