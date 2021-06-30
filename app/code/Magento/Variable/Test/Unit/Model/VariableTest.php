@@ -209,7 +209,7 @@ class VariableTest extends TestCase
      * @param bool $exceptionThrown
      * @dataProvider getWysiwygValidationCases
      */
-    public function testBeforeSave(string $value,bool $isChanged,bool $isValidated, bool $exceptionThrown): void
+    public function testBeforeSave(string $value, bool $isChanged, bool $isValidated, bool $exceptionThrown): void
     {
         $actuallyThrown = false;
 
@@ -245,8 +245,7 @@ class VariableTest extends TestCase
      */
     public function getWysiwygValidationCases(): array
     {
-        return
-        [
+        return [
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],
             'changed-html-value-with-exception' => ['<b>Test Html</b>',true,false,true],
             'no-changed-html-value-without-exception' => ['<b>Test Html</b>',false,false,false],
