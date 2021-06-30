@@ -1964,4 +1964,9 @@
             <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader">
+        <arguments>
+            <argument name="dbHelper" xsi:type="object">Magento\Framework\DB\Helper\Proxy</argument>
+        </arguments>
+    </type>
 </config>
