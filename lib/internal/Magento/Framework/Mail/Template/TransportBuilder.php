@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Template;
 
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
@@ -25,8 +27,6 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Mail\TransportInterfaceFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
-use Laminas\Mime\Part;
-use Laminas\Mime\Mime;
 
 /**
  * TransportBuilder for Mail Templates
@@ -384,6 +384,7 @@ class TransportBuilder
         $this->templateVars = null;
         $this->templateOptions = null;
         $this->attachments = [];
+
         return $this;
     }
 
