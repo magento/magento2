@@ -31,8 +31,8 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Module\ModuleListInterface;
     use Magento\Framework\ObjectManagerInterface;
     use Magento\Framework\Registry;
+    use Magento\Framework\Setup\ConsoleLoggerInterface;
     use Magento\Framework\Setup\FilePermissions;
-    use Magento\Framework\Setup\LoggerInterface;
     use Magento\Framework\Setup\Patch\PatchApplier;
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
     use Magento\Framework\Setup\SampleData\State;
@@ -118,7 +118,7 @@ namespace Magento\Setup\Test\Unit\Model {
         private $adminFactory;
 
         /**
-         * @var LoggerInterface|MockObject
+         * @var ConsoleLoggerInterface|MockObject
          */
         private $logger;
 
@@ -243,7 +243,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->directoryList =
                 $this->createMock(DirectoryList::class);
             $this->adminFactory = $this->createMock(AdminAccountFactory::class);
-            $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+            $this->logger = $this->getMockForAbstractClass(ConsoleLoggerInterface::class);
             $this->random = $this->createMock(Random::class);
             $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
             $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
@@ -419,9 +419,10 @@ namespace Magento\Setup\Test\Unit\Model {
                 ],
                 $logMessages
             );
-            $this->logger->expects($this->exactly(2))
+            $this->logger->expects($this->exactly(3))
                 ->method('logSuccess')
                 ->withConsecutive(
+                    ['Cache cleared successfully'],
                     ['Magento installation complete.'],
                     ['Magento Admin URI: /']
                 );
@@ -439,16 +440,13 @@ namespace Magento\Setup\Test\Unit\Model {
                 [
                     'request' => $this->request,
                     'logMessages' => [
-                        ['Starting Magento installation:'],
                         ['File permissions check...'],
                         ['Required extensions check...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
-                        ['Schema creation/updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
@@ -458,18 +456,13 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Data install/update:'],
-                        ['Disabling caches:'],
                         ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
                         ['Current status:'],
                         ['Caches clearing:'],
-                        ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
@@ -490,16 +483,13 @@ namespace Magento\Setup\Test\Unit\Model {
                         AdminAccount::KEY_LAST_NAME => 'Doe',
                     ],
                     'logMessages' => [
-                        ['Starting Magento installation:'],
                         ['File permissions check...'],
                         ['Required extensions check...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
-                        ['Schema creation/updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
@@ -509,19 +499,14 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['foo: 1'],
                         ['bar: 1'],
                         ['Installing data...'],
-                        ['Data install/update:'],
-                        ['Disabling caches:'],
                         ['Current status:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
                         ['Current status:'],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
-                        ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
@@ -687,12 +672,12 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $installer = $this->prepareForUpdateModulesTests();
 
-            $this->logger->expects($this->at(0))->method('log')->with('Cache types config flushed successfully');
-            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(2))->method('log')->with('File system cleanup:');
+            $this->logger->expects($this->at(0))->method('logSuccess')->with('Cache types config flushed successfully');
+            $this->logger->expects($this->at(1))->method('logSuccess')->with('Cache cleared successfully');
+            $this->logger->expects($this->at(2))->method('logMeta')->with('File system cleanup:');
             $this->logger->expects($this->at(3))->method('log')
                 ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
-            $this->logger->expects($this->at(4))->method('log')->with('Updating modules:');
+            $this->logger->expects($this->at(4))->method('logMeta')->with('Updating modules:');
             $installer->updateModulesSequence(false);
         }
 
@@ -702,9 +687,9 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $installer = $this->prepareForUpdateModulesTests();
 
-            $this->logger->expects($this->at(0))->method('log')->with('Cache types config flushed successfully');
-            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(2))->method('log')->with('Updating modules:');
+            $this->logger->expects($this->at(0))->method('logSuccess')->with('Cache types config flushed successfully');
+            $this->logger->expects($this->at(1))->method('logSuccess')->with('Cache cleared successfully');
+            $this->logger->expects($this->at(2))->method('logMeta')->with('Updating modules:');
             $installer->updateModulesSequence(true);
         }
 
@@ -736,7 +721,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->willReturnMap([
                     [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
                 ]);
-            $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
+            $this->logger->expects($this->at(0))->method('logMeta')->with('Starting Magento uninstallation:');
             $this->logger
                 ->expects($this->at(2))
                 ->method('log')
@@ -748,8 +733,8 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('get')
                 ->with(Manager::class)
                 ->willReturn($cacheManager);
-            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
+            $this->logger->expects($this->at(1))->method('logSuccess')->with('Cache cleared successfully');
+            $this->logger->expects($this->at(3))->method('logMeta')->with('File system cleanup:');
             $this->logger
                 ->expects($this->at(4))
                 ->method('log')
@@ -766,7 +751,10 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->expects($this->at(7))
                 ->method('log')
                 ->with("The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup");
-            $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
+            $this->logger
+                ->expects($this->at(8))
+                ->method('logSuccess')
+                ->with('Magento uninstallation complete.');
             $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->willReturn(
                 [
                     "The directory '/var' doesn't exist - skipping cleanup",

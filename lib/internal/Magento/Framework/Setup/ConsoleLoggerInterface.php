@@ -10,11 +10,8 @@ namespace Magento\Framework\Setup;
  * Interface to Log Message in Setup
  *
  * @api
- * @deprecared
- *
- * @since 100.0.2
  */
-interface LoggerInterface
+interface ConsoleLoggerInterface
 {
     /**
      * Logs success message
@@ -22,7 +19,7 @@ interface LoggerInterface
      * @param string $message
      * @return void
      */
-    public function logSuccess($message);
+    public function logSuccess(string $message);
 
     /**
      * Logs error message
@@ -38,7 +35,7 @@ interface LoggerInterface
      * @param string $message
      * @return void
      */
-    public function log($message);
+    public function log(string $message);
 
     /**
      * Logs a message in the current line
@@ -46,7 +43,7 @@ interface LoggerInterface
      * @param string $message
      * @return void
      */
-    public function logInline($message);
+    public function logInline(string $message);
 
     /**
      * Logs meta information
@@ -54,5 +51,13 @@ interface LoggerInterface
      * @param string $message
      * @return void
      */
-    public function logMeta($message);
+    public function logMeta(string $message);
+
+    /**
+     * Logs meta information in the current line
+     *
+     * @param string $message
+     * @return void
+     */
+    public function logMetaInline(string $message);
 }
