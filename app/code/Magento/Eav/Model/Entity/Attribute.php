@@ -441,12 +441,13 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Retrieve attribute codes by frontend type
      *
      * @param string $type
+     * @param int|string $entityTypeId
      * @return array
      * @codeCoverageIgnore
      */
-    public function getAttributeCodesByFrontendType($type)
+    public function getAttributeCodesByFrontendType($type, $entityTypeId = null)
     {
-        return $this->getResource()->getAttributeCodesByFrontendType($type);
+        return $this->getResource()->getAttributeCodesByFrontendType($type, $entityTypeId);
     }
 
     /**
