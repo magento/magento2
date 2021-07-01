@@ -7,6 +7,7 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
+use Magento\Payment\Model\Method\Free;
 
 /**
  * Checking order status and adjusting order status before saving
@@ -36,13 +37,29 @@ class State
                 && !$order->canShip()
                 && $order->getIsNotVirtual()
             ) {
-                $order->setState(Order::STATE_CLOSED)
-                    ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_CLOSED));
+                if ($order->getPayment()->getMethodInstance()->getCode() === Free::PAYMENT_METHOD_FREE_CODE) {
+                    $this->setOrderStateAndStatus($order, Order::STATE_COMPLETE, Order::STATE_COMPLETE);
+                } else {
+                    $this->setOrderStateAndStatus($order, Order::STATE_CLOSED, Order::STATE_CLOSED);
+                }
             } elseif ($currentState === Order::STATE_PROCESSING && !$order->canShip()) {
-                $order->setState(Order::STATE_COMPLETE)
-                    ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_COMPLETE));
+                $this->setOrderStateAndStatus($order, Order::STATE_COMPLETE, Order::STATE_COMPLETE);
             }
         }
         return $this;
+    }
+
+    /**
+     * Set Order status
+     *
+     * @param Order $order
+     * @param string $state
+     * @param string $status
+     * @return void
+     */
+    private function setOrderStateAndStatus(Order $order, $state, $status)
+    {
+        $order->setState($state)
+            ->setStatus($order->getConfig()->getStateDefaultStatus($status));
     }
 }
