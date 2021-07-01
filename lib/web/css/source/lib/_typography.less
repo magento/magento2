@@ -26,9 +26,9 @@
     }
 }
 
-// When need specify font format also should define font type include
-// The available types for @font-type are 'woff', 'woff2', 'truetype', 'opentype', 'embedded-opentype', and 'svg'
-// Enclose it in single quotes
+//  When need specify font format also should define font type include
+//  The available types for @font-type are 'woff', 'woff2', 'truetype', 'opentype', 'embedded-opentype', and 'svg'
+//  Enclose it in single quotes
 //  _____________________________________________
 
 .lib-font-face(
@@ -63,8 +63,18 @@
     .lib-css(font-size, @fontValue);
 }
 
-//  Rem line height
-.lib-line-height(@heightValue) when not (@heightValue = false) and not (@heightValue = normal) and not (ispercentage(@heightValue)) {
+//  Lib line-height
+//  Support unitless. Ex: .lib-line-height(1.5) => line-height: 1.5
+//
+//  _____________________________________________
+
+//  Check for unitless values (e.g. 0, 1, etc)
+.lib-line-height(@heightValue) when not (@heightValue = false) and not (@heightValue = normal) and not (ispercentage(@heightValue)) and (isnumber(@heightValue)) {
+    .lib-css(line-height, @heightValue);
+}
+
+//  Check for non-unitless values
+.lib-line-height(@heightValue) when not (@heightValue = false) and not (@heightValue = normal) and not (ispercentage(@heightValue)) and not (isnumber(@heightValue)) {
     .lib-font-size-value(@heightValue);
     .lib-css(line-height, @fontValue);
 }
@@ -102,9 +112,9 @@
 //  Optional hyphenation
 .lib-hyphens(@mode: auto) {
     -webkit-hyphens: @mode;
-       -moz-hyphens: @mode;
-        -ms-hyphens: @mode; // IE10+
-            hyphens: @mode;
+    -moz-hyphens: @mode;
+    -ms-hyphens: @mode; // IE10+
+    hyphens: @mode;
 }
 
 .lib-typography(
@@ -332,9 +342,9 @@
         small,
         .small {
             .lib-typography(
-            @_heading-small-size,
-            @_heading-small-color,
-            @_line-height: @_heading-small-line-height
+                @_heading-small-size,
+                @_heading-small-color,
+                @_line-height: @_heading-small-line-height
             );
         }
     }
@@ -576,4 +586,3 @@
     .lib-typography-code();
     .lib-typography-blockquote();
 }
-
