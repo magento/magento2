@@ -63,6 +63,7 @@ type DownloadableProductSamples @doc(description: "DownloadableProductSamples de
     sample_url: String @doc(description: "URL to the downloadable sample")
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    uid: ID! @doc(description: "The unique ID for a `DownloadableProductLinks` object.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
 }
 
 type DownloadableOrderItem implements OrderItemInterface {
