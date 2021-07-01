@@ -164,3 +164,7 @@ Apply,Apply
 "Apply to Shipping Amount","Apply to Shipping Amount"
 "Discard subsequent rules","Discard subsequent rules"
 "Default Rule Label for All Store Views","Default Rule Label for All Store Views"
+"Category (Parent Only)","Category (Parent Only)"
+"Category (Children Only)","Category (Children Only)"
+"%1 (Parent Only)","%1 (Parent Only)"
+"%1 (Children Only)","%1 (Children Only)"
