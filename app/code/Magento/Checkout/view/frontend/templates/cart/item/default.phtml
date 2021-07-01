@@ -48,7 +48,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                             <dd>
                                 <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                        <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                        <?= $block->escapeHtml($_formatedOptionValue['full_view'], ['span', 'a']) ?>
                                     <?php else :?>
                                     <?= $block->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
