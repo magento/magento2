@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Store\Model\Store;
 
 /**
  * Build select object for retrieving configurable options.
@@ -44,6 +43,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     public function getSelect(AbstractAttribute $superAttribute, int $productId)
     {
         $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+
         $select = $this->attributeResource->getConnection()->select()->from(
             ['super_attribute' => $this->attributeResource->getTable('catalog_product_super_attribute')],
             [
@@ -86,7 +86,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ' AND ',
                 [
                     'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                    'attribute_label.store_id = ' . Store::DEFAULT_STORE_ID,
+                    'attribute_label.store_id = 0',
                 ]
             ),
             []
@@ -111,7 +111,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                     ' AND ',
                     [
                         'option_value.option_id = entity_value.value',
-                        'option_value.store_id = ' . Store::DEFAULT_STORE_ID,
+                        'option_value.store_id = 0',
                     ]
                 ),
                 [

@@ -12,11 +12,8 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilde
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
-use Magento\Framework\App\ScopeInterface;
-use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,16 +26,6 @@ class AttributeOptionProviderTest extends TestCase
      * @var AttributeOptionProvider
      */
     private $model;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
-     * @var ScopeResolverInterface|MockObject
-     */
-    private $scopeResolver;
 
     /**
      * @var Select|MockObject
@@ -56,11 +43,6 @@ class AttributeOptionProviderTest extends TestCase
     private $abstractAttribute;
 
     /**
-     * @var ScopeInterface|MockObject
-     */
-    private $scope;
-
-    /**
      * @var Attribute|MockObject
      */
     private $attributeResource;
@@ -72,45 +54,13 @@ class AttributeOptionProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->select = $this->createMock(Select::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->attributeResource = $this->createMock(Attribute::class);
+        $this->optionSelectBuilder = $this->createMock(OptionSelectBuilderInterface::class);
+        $this->abstractAttribute = $this->createMock(AbstractAttribute::class);
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->scope = $this->getMockBuilder(ScopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->attributeResource = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->optionSelectBuilder = $this->getMockBuilder(OptionSelectBuilderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getSourceModel', 'getSource'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $this->objectManagerHelper->getObject(
-            AttributeOptionProvider::class,
-            [
-                'attributeResource' => $this->attributeResource,
-                'scopeResolver' => $this->scopeResolver,
-                'optionSelectBuilder' => $this->optionSelectBuilder,
-            ]
-        );
+        $this->model = new AttributeOptionProvider($this->attributeResource, $this->optionSelectBuilder);
     }
 
     /**
@@ -119,13 +69,9 @@ class AttributeOptionProviderTest extends TestCase
      */
     public function testGetAttributeOptions(array $options)
     {
-        $this->scopeResolver->expects($this->any())
-            ->method('getScope')
-            ->willReturn($this->scope);
-
-        $this->optionSelectBuilder->expects($this->any())
+        $this->optionSelectBuilder->expects($this->once())
             ->method('getSelect')
-            ->with($this->abstractAttribute, 4, $this->scope)
+            ->with($this->abstractAttribute, 4)
             ->willReturn($this->select);
 
         $this->attributeResource->expects($this->once())
@@ -149,14 +95,7 @@ class AttributeOptionProviderTest extends TestCase
      */
     public function testGetAttributeOptionsWithBackendModel(array $options)
     {
-        $this->scopeResolver->expects($this->any())
-            ->method('getScope')
-            ->willReturn($this->scope);
-
-        $source = $this->getMockBuilder(AbstractSource::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllOptions'])
-            ->getMockForAbstractClass();
+        $source = $this->createMock(AbstractSource::class);
         $source->expects($this->once())
             ->method('getAllOptions')
             ->willReturn([
@@ -165,16 +104,16 @@ class AttributeOptionProviderTest extends TestCase
                 ['value' => 15, 'label' => 'Option Value for index 15']
             ]);
 
-        $this->abstractAttribute->expects($this->any())
+        $this->abstractAttribute->expects($this->atLeastOnce())
             ->method('getSource')
             ->willReturn($source);
         $this->abstractAttribute->expects($this->atLeastOnce())
             ->method('getSourceModel')
             ->willReturn('getSourceModel value');
 
-        $this->optionSelectBuilder->expects($this->any())
+        $this->optionSelectBuilder->expects($this->once())
             ->method('getSelect')
-            ->with($this->abstractAttribute, 1, $this->scope)
+            ->with($this->abstractAttribute, 1)
             ->willReturn($this->select);
 
         $this->attributeResource->expects($this->once())
