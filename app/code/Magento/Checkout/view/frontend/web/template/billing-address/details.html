@@ -8,9 +8,15 @@
     <text args="currentBillingAddress().prefix"></text> <text args="currentBillingAddress().firstname"></text>
     <text args="currentBillingAddress().middlename"></text>
     <text args="currentBillingAddress().lastname"></text> <text args="currentBillingAddress().suffix"></text><br/>
+    <if args="currentBillingAddress().company">
+        <text args="currentBillingAddress().company"/><br/>
+    </if>
     <text args="currentBillingAddress().street.join(', ')"></text><br/>
     <text args="currentBillingAddress().city "></text>, <span text="currentBillingAddress().region"></span>
     <text args="currentBillingAddress().postcode"></text><br/>
+    <if args="currentBillingAddress().vatId">
+        <text args="currentBillingAddress().vatId"/><br/>
+    </if>
     <text args="getCountryName(currentBillingAddress().countryId)"></text><br/>
     <a if="currentBillingAddress().telephone" attr="'href': 'tel:' + currentBillingAddress().telephone" text="currentBillingAddress().telephone"></a><br/>
 
