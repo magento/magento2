@@ -85,7 +85,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->cartRepositoryMock = $this->createPartialMock(CartRepositoryInterface::class, []);
 
-        $this->reorderHelperMock = $this->createPartialMock(ReorderHelper::class, []);
+        $this->reorderHelperMock = $this->createPartialMock(ReorderHelper::class, ['isAllowed']);
 
         $this->logger = $this->createPartialMock(\Psr\Log\LoggerInterface::class,[]);
 
@@ -150,14 +150,15 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->with($customerId)
             ->willReturn( $cartMock);
 
-//         $this->customerManagementMock->expects($this->once())
-//                ->method('getCartForCustomer')
-//             ->with($customerId)
-//             ->willReturn($cartMock);
+        $this->reorderHelperMock->expects($this->once())
+            ->method('isAllowed')
+            ->willReturn(false);
 
         $result = $reorderModel->execute($orderNumber, $storeId);
-        print_r($result);
-        $expectedResult = null;
+
+        $outputResult = $result->getErrors()[0]->getMessage();
+        $expectedResult = 'Reorders are not allowed.';
+        $this->assertEquals($expectedResult,$outputResult);
 
     }
 
