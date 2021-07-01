@@ -134,38 +134,33 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $request = $input->getOptions();
-            $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
-            $installer = $this->installerFactory->create(new ConsoleLogger($output));
-            $installer->updateModulesSequence($keepGenerated);
-            $searchConfig = $this->searchConfigFactory->create();
-            $this->cache->clean();
-            $searchConfig->validateSearchEngine();
-            $installer->removeUnusedTriggers();
-            $installer->installSchema($request);
-            $installer->installDataFixtures($request, true);
+        $request = $input->getOptions();
+        $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
+        $installer = $this->installerFactory->create(new ConsoleLogger($output));
+        $installer->updateModulesSequence($keepGenerated);
+        $searchConfig = $this->searchConfigFactory->create();
+        $this->cache->clean();
+        $searchConfig->validateSearchEngine();
+        $installer->removeUnusedTriggers();
+        $installer->installSchema($request);
+        $installer->installDataFixtures($request, true);
 
-            if ($this->deploymentConfig->isAvailable()) {
-                $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
-                $arrayInput = new ArrayInput([]);
-                $arrayInput->setInteractive($input->isInteractive());
-                $result = $importConfigCommand->run($arrayInput, $output);
-                if ($result === Cli::RETURN_FAILURE) {
-                    throw new RuntimeException(
-                        __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
-                    );
-                }
-            }
-
-            if (!$keepGenerated && $this->appState->getMode() === AppState::MODE_PRODUCTION) {
-                $output->writeln(
-                    '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
+        if ($this->deploymentConfig->isAvailable()) {
+            $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
+            $arrayInput = new ArrayInput([]);
+            $arrayInput->setInteractive($input->isInteractive());
+            $result = $importConfigCommand->run($arrayInput, $output);
+            if ($result === Cli::RETURN_FAILURE) {
+                throw new RuntimeException(
+                    __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
                 );
             }
-        } catch (\Exception $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return Cli::RETURN_FAILURE;
+        }
+
+        if (!$keepGenerated && $this->appState->getMode() === AppState::MODE_PRODUCTION) {
+            $output->writeln(
+                '<info>Please re-run Magento compile command. Use the command "setup:di:compile"</info>'
+            );
         }
 
         return Cli::RETURN_SUCCESS;
