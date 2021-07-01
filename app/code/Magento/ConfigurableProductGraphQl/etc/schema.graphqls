@@ -45,6 +45,10 @@ type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOpti
     use_default_value: Boolean @doc(description: "Indicates whether to use the default_label")
 }
 
+type ConfigurableOrderItem implements OrderItemInterface {
+    parent_sku: String @doc(description: "The SKU of parent product.")
+}
+
 input AddConfigurableProductsToCartInput {
     cart_id: String!
     cart_items: [ConfigurableProductCartItemInput!]!

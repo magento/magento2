@@ -77,6 +77,10 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             'bundle-product-two-dropdown-options-simple1-simple2',
             $bundledItemInTheOrder['product_sku']
         );
+        $this->assertEquals(
+            'bundle-product-two-dropdown-options',
+            $bundledItemInTheOrder['parent_sku']
+        );
         $priceOfBundledItemInOrder = $bundledItemInTheOrder['product_sale_price']['value'];
         $this->assertEquals(15, $priceOfBundledItemInOrder);
         $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
@@ -237,6 +241,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             quantity_ordered
             discounts{amount{value} label}
             ... on BundleOrderItem{
+              parent_sku
               bundle_options{
                 __typename
                 label
