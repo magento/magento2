@@ -89,7 +89,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     public function execute()
     {
         $this->enableAdminUsage();
-        $this->markUserNotified();
+        return $this->markUserNotified();
     }
 
     /**
