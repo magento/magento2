@@ -154,7 +154,7 @@ define([
 
                 $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({
                     data: price
-                }));
+                })).attr('data-price-amount', price.amount);
             }, this);
         },
 
