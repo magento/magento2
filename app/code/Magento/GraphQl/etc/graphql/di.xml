@@ -30,4 +30,19 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\GraphQl\Model\Cors\ConfigurationProviderInterface" type="Magento\GraphQl\Model\Cors\ConfigurationProvider" />
+    <preference
+        for="Magento\GraphQl\Model\Cors\Validator\RequestValidatorInterface"
+        type="Magento\GraphQl\Model\Cors\Validator\RequestValidator"/>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="CorsAllowHeaders" xsi:type="object">Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowHeadersHeaderProvider</item>
+                <item name="CorsAllowOrigin" xsi:type="object">Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowOriginHeaderProvider</item>
+                <item name="CorsAllowMethods" xsi:type="object">Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowMethodsHeaderProvider</item>
+                <item name="CorsMaxAge" xsi:type="object">Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\MaxAgeHeaderProvider</item>
+                <item name="CorsAllowCredentials" xsi:type="object">Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowCredentialsHeaderProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
