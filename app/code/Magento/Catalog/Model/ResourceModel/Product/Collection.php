@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
+use Magento\Catalog\Model\ResourceModel\Frontend;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -311,6 +312,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $categoryResourceModel;
 
     /**
+     * @var Frontend\ProductList\Price\ExpressionResolverInterface
+     */
+    private $priceExpressionResolver;
+
+    /**
+     * @var Frontend\ProductList\Price\SqlExpressionBuilderFactory
+     */
+    private $priceExpressionBuilderFactory;
+
+    /**
+     * @var array
+     */
+    private $priceExpressionJoinedAttributes = [];
+
+    /**
      * Collection constructor
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -339,7 +355,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
      * @param Category|null $categoryResourceModel
-     *
+     * @param Frontend\ProductList\Price\ExpressionResolverInterface|null $priceExpressionResolver
+     * @param Frontend\ProductList\Price\SqlExpressionBuilderFactory|null $priceExpressionBuilderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -368,7 +385,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        Category $categoryResourceModel = null
+        Category $categoryResourceModel = null,
+        Frontend\ProductList\Price\ExpressionResolverInterface $priceExpressionResolver = null,
+        Frontend\ProductList\Price\SqlExpressionBuilderFactory $priceExpressionBuilderFactory = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -404,6 +423,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
         $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()
             ->get(Category::class);
+        $this->priceExpressionResolver = $priceExpressionResolver ?: ObjectManager::getInstance()
+            ->get(Frontend\ProductList\Price\ExpressionResolverInterface::class);
+        $this->priceExpressionBuilderFactory = $priceExpressionBuilderFactory ?: ObjectManager::getInstance()
+            ->get(Frontend\ProductList\Price\SqlExpressionBuilderFactory::class);
     }
 
     /**
@@ -427,6 +450,48 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function getCatalogPreparedSelect()
     {
         return $this->_catalogPreparePriceSelect;
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @throws \InvalidArgumentException
+     */
+    private function getAttributeForPriceExpression(
+        string $attributeCode
+    ): \Magento\Eav\Model\Entity\Attribute\AbstractAttribute {
+        $attribute = $this->getAttribute($attributeCode);
+
+        if (false === $attribute) {
+            throw new \InvalidArgumentException(
+                sprintf('The attribute "%s" does not exist.', $attributeCode)
+            );
+        } elseif (!in_array($attribute->getBackendType(), [ 'decimal', 'int', 'smallint' ], true)) {
+            throw new \InvalidArgumentException(
+                sprintf('The attribute "%s" can not be used in price expressions.', $attributeCode)
+            );
+        }
+
+        return $attribute;
+    }
+
+    /**
+     * @param string $priceExpression
+     * @param Frontend\ProductList\Price\ExpressionBuilderInterface $priceExpressionBuilder
+     * @param Select $select
+     * @return string
+     */
+    private function getModifiedPriceExpression(
+        string $priceExpression,
+        Frontend\ProductList\Price\ExpressionBuilderInterface $priceExpressionBuilder
+    ): string {
+        return $this->priceExpressionResolver->getPriceExpression(
+                $priceExpression,
+                Collection::class,
+                get_class($this),
+                (int) $this->getStoreId(),
+                $priceExpressionBuilder
+            ) ?? $priceExpression;
     }
 
     /**
@@ -457,9 +522,100 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->_eventManager->dispatch('catalog_prepare_price_select', $eventArgs);
 
-        $additional = join('', $response->getAdditionalCalculations());
-        $this->_priceExpression = $table . '.min_price';
-        $this->_additionalPriceExpression = $additional;
+        $priceExpressionBuilder = $this->priceExpressionBuilderFactory->create(
+            [
+                'attributeCallback' => function ($attributeCode) use ($select) {
+                    if ('tax_class_id' === $attributeCode) {
+                        return static::INDEX_TABLE_ALIAS . '.tax_class_id';
+                    }
+
+                    $fieldExpression = null;
+
+                    // Do not join attributes twice (or more) when a select is reused.
+                    if (isset($this->priceExpressionJoinedAttributes[$attributeCode])) {
+                        foreach ($this->priceExpressionJoinedAttributes[$attributeCode] as $attribute) {
+                            $tables = $select->getPart(Select::FROM);
+
+                            if (isset($tables[$attribute['table_alias']])) {
+                                $fieldExpression = $attribute['expression'];
+                                break;
+                            }
+                        }
+                    }
+
+                    if (null === $fieldExpression) {
+                        $collectionSelect = $this->getSelect();
+                        $this->_select = $select;
+
+                        // The select may not be the one of the collection,
+                        // so we can't be sure whether the attribute was already joined.
+                        // Use a unique attribute alias to ensure that there are no conflicts.
+                        $entity = $this->getEntity();
+                        $connection = $this->getConnection();
+
+                        $attribute = $this->getAttributeForPriceExpression($attributeCode);
+                        $fieldCode = uniqid($attributeCode);
+                        $tableAlias = uniqid($this->_getAttributeTableAlias($attributeCode));
+
+                        $joinConditions = [
+                            $connection->quoteIdentifier(
+                                $tableAlias . '.' . $this->getEntityPkName($entity)
+                            )
+                            . '=' .
+                            $connection->quoteIdentifier(
+                                static::MAIN_TABLE_ALIAS . '.' . $this->getEntityPkName($entity)
+                            ),
+                        ];
+
+
+                        if ($attribute->getBackend()->isStatic()) {
+                            $fieldExpression = $tableAlias . '.' . $attribute->getAttributeCode();
+                        } else {
+                            $fieldExpression = $tableAlias . '.value';
+
+                            $joinConditions[] = $connection->quoteIdentifier($tableAlias . '.' . 'attribute_id')
+                                . ' = '
+                                . $connection->quote($attribute->getId());
+                        }
+
+                        $this->_joinAttributeToSelect(
+                            'joinLeft',
+                            $attribute,
+                            $tableAlias,
+                            $joinConditions,
+                            $fieldCode,
+                            $fieldExpression
+                        );
+
+                        unset($this->_joinAttributes[$fieldCode]);
+
+                        $columns = $select->getPart(Select::COLUMNS);
+
+                        foreach ($columns as $key => $column) {
+                            if ($column[2] === $fieldCode) {
+                                $fieldExpression = $column[1];
+                                unset($columns[$key]);
+                                break;
+                            }
+                        }
+
+                        $select->setPart(Select::COLUMNS, $columns);
+
+                        $this->_select = $collectionSelect;
+
+                        $this->priceExpressionJoinedAttributes[$attributeCode][] = [
+                            'table_alias' => $tableAlias,
+                            'expression' => $fieldExpression,
+                        ];
+                    }
+
+                    return $fieldExpression;
+                },
+            ]
+        );
+
+        $this->_priceExpression = $this->getModifiedPriceExpression($table . '.min_price', $priceExpressionBuilder);
+        $this->_additionalPriceExpression = join('', $response->getAdditionalCalculations());
         $this->_catalogPreparePriceSelect = clone $select;
 
         return $this;
@@ -1728,6 +1884,67 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * @param string $direction
+     * @param int $storeId
+     * @return void
+     */
+    private function addIndexedPriceToSort($direction, $storeId)
+    {
+        $select = $this->getSelect();
+
+        $joinedAttributeCodes = [];
+
+        $priceExpressionBuilder = $this->priceExpressionBuilderFactory->create(
+            [
+                'attributeCallback' => function ($attributeCode) use (&$joinedAttributeCodes) {
+                    if ('tax_class_id' === $attributeCode) {
+                        return static::INDEX_TABLE_ALIAS . '.tax_class_id';
+                    }
+
+                    // Make sure that the attribute exists and is suitable in price expressions.
+                    $this->getAttributeForPriceExpression($attributeCode);
+                    $joinedAttributeCodes[] = $attributeCode;
+
+                    return '{{' . $attributeCode . '}}';
+                },
+            ]
+        );
+
+        $basePriceExpression = 'price_index.min_price';
+        $priceExpression = $this->getModifiedPriceExpression($basePriceExpression, $priceExpressionBuilder);
+
+        if ($priceExpression === $basePriceExpression) {
+            $sortExpression = $basePriceExpression;
+        } else {
+            $sortExpression = uniqid('price_for_sort');
+
+            $this->addExpressionAttributeToSelect(
+                $sortExpression,
+                $priceExpression,
+                $joinedAttributeCodes
+            );
+
+            unset($this->_joinFields[$sortExpression]);
+
+            $columns = $select->getPart(Select::COLUMNS);
+
+            foreach ($columns as $key => $column) {
+                if ($column[2] === $sortExpression) {
+                    $sortExpression = $column[1];
+                    unset($columns[$key]);
+                    break;
+                }
+            }
+
+            $select->setPart(Select::COLUMNS, $columns);
+        }
+
+        $select->order(
+            new \Zend_Db_Expr("price_index.min_price = 0, $sortExpression {$direction}")
+        );
+    }
+
+    /**
      * Add attribute to sort order
      *
      * @param string $attribute
@@ -1767,9 +1984,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsingPriceIndex()) {
-                $this->getSelect()->order(
-                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$dir}")
-                );
+                $this->addIndexedPriceToSort($dir, (int) $storeId);
                 return $this;
             }
         }

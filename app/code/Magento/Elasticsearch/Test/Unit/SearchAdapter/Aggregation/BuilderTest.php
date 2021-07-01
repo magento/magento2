@@ -72,7 +72,7 @@ class BuilderTest extends TestCase
             DataProviderFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['createForRequest'])
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -128,7 +128,7 @@ class BuilderTest extends TestCase
             ->willReturn([]);
 
         $this->dataProviderFactory->expects($this->once())
-            ->method('create')
+            ->method('createForRequest')
             ->willReturnArgument(0);
 
         $queryContainer = $this->getMockBuilder(QueryContainer::class)

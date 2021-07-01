@@ -75,11 +75,7 @@ class SearchResultApplier implements SearchResultApplierInterface
         $sortOrder = $this->searchResult->getSearchCriteria()
             ->getSortOrders();
         if (!empty($sortOrder['price']) && $this->collection->getLimitationFilters()->isUsingPriceIndex()) {
-            $sortDirection = $sortOrder['price'];
-            $this->collection->getSelect()
-                ->order(
-                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$sortDirection}")
-                );
+            $this->collection->addAttributeToSort('price', $sortOrder['price']);
         } else {
             $orderList = join(',', $ids);
             $this->collection->getSelect()

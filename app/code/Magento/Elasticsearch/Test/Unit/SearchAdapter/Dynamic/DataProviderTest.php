@@ -348,6 +348,9 @@ class DataProviderTest extends TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
+        $bucket->expects($this->any())
+            ->method('getField')
+            ->willReturn('price');
         $dimension->expects($this->never())
             ->method('getValue');
         $this->scopeResolver->expects($this->never())
@@ -401,6 +404,9 @@ class DataProviderTest extends TestCase
         $bucket = $this->createMock(BucketInterface::class);
         $dimension = $this->createMock(Dimension::class);
 
+        $bucket->expects($this->any())
+            ->method('getField')
+            ->willReturn('price');
         $this->queryContainer->expects($this->once())
             ->method('getQuery')
             ->willReturn([]);

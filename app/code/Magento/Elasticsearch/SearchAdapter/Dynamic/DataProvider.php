@@ -5,9 +5,12 @@
  */
 namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
+use Magento\Elasticsearch\Model\Script;
+use Magento\Elasticsearch\SearchAdapter\Field;
 use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Search\RequestInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -91,6 +94,21 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     private $logger;
 
     /**
+     * @var RequestInterface|null
+     */
+    private $request;
+
+    /**
+     * @var Script\BuilderInterface
+     */
+    private $scriptBuilder;
+
+    /**
+     * @var Field\ScriptResolverPoolInterface
+     */
+    private $fieldScriptResolverPool;
+
+    /**
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
      * @param \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface $fieldMapper
      * @param \Magento\Catalog\Model\Layer\Filter\Price\Range $range
@@ -102,6 +120,9 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param QueryContainer|null $queryContainer
      * @param LoggerInterface|null $logger
+     * @param RequestInterface|null $request
+     * @param Script\BuilderInterface|null $scriptBuilder
+     * @param Field\ScriptResolverPoolInterface|null $fieldScriptResolverPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,7 +136,10 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $indexerId,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         QueryContainer $queryContainer = null,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        RequestInterface $request = null,
+        Script\BuilderInterface $scriptBuilder = null,
+        Field\ScriptResolverPoolInterface $fieldScriptResolverPool = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -128,6 +152,10 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $this->scopeResolver = $scopeResolver;
         $this->queryContainer = $queryContainer;
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->request = $request;
+        $this->scriptBuilder = $scriptBuilder ?? ObjectManager::getInstance()->get(Script\Builder::class);
+        $this->fieldScriptResolverPool = $fieldScriptResolverPool ?? ObjectManager::getInstance()
+            ->get(Field\ScriptResolverPoolInterface::class);
     }
 
     /**
@@ -155,11 +183,24 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $query = $this->getBasicSearchQuery($entityStorage);
 
         $fieldName = $this->fieldMapper->getFieldName('price');
+        $fieldScript = null;
+
+        if (null !== $this->request) {
+            $fieldScriptResolver = $this->fieldScriptResolverPool->getFieldScriptResolver('price');
+
+            $fieldScript = !$fieldScriptResolver
+                ? null
+                : $fieldScriptResolver->getFieldAggregationScript('price', null, $this->request->getName());
+        }
+
         $query['body']['aggregations'] = [
             'prices' => [
-                'extended_stats' => [
-                    'field' => $fieldName,
-                ],
+                'extended_stats' => array_filter(
+                    [
+                        'field' => $fieldName,
+                        'script' => $fieldScript ? $this->scriptBuilder->buildScript($fieldScript) : null,
+                    ]
+                ),
             ],
         ];
 
@@ -217,13 +258,33 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $query = $this->getBasicSearchQuery($entityStorage);
 
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
+        $fieldScript = null;
+
+        if (null !== $this->request) {
+            $fieldScriptResolver = $this->fieldScriptResolverPool->getFieldScriptResolver($bucket->getField());
+
+            $fieldScript = !$fieldScriptResolver
+                ? null
+                : $fieldScriptResolver->getFieldAggregationScript(
+                    $bucket->getField(),
+                    $bucket,
+                    $this->request->getName()
+                );
+        }
+
         $query['body']['aggregations'] = [
             'prices' => [
-                'histogram' => [
-                    'field' => $fieldName,
-                    'interval' => (float)$range,
-                    'min_doc_count' => 1,
-                ],
+                'histogram' => array_filter(
+                    [
+                        'field' => $fieldName,
+                        'interval' => (float) $range,
+                        'min_doc_count' => 1,
+                        'script' => $fieldScript ? $this->scriptBuilder->buildScript($fieldScript) : null,
+                    ],
+                    function ($value) {
+                        return null !== $value;
+                    }
+                ),
             ],
         ];
 

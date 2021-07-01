@@ -13,6 +13,8 @@
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <preference for="Magento\Elasticsearch\Model\Script\BuilderInterface" type="Magento\Elasticsearch\Model\Script\Builder" />
+    <preference for="Magento\Elasticsearch\SearchAdapter\Field\ScriptResolverPoolInterface" type="Magento\Elasticsearch\SearchAdapter\Field\ScriptResolverPool" />
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider" />
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier"/>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Rows">
@@ -316,6 +318,13 @@
         <arguments>
             <argument name="stopwordsModule" xsi:type="string">Magento_Elasticsearch</argument>
             <argument name="stopwordsDirectory" xsi:type="string">stopwords</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\SearchAdapter\Field\ScriptResolverPoolInterface">
+        <arguments>
+            <argument name="scriptResolvers" xsi:type="array">
+                <item name="price" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Catalog\Frontend\ProductList\Price\ScriptResolver</item>
+            </argument>
         </arguments>
     </type>
     <!-- @api -->

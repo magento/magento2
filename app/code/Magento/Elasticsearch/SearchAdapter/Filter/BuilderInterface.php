@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\SearchAdapter\Filter;
 
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
+use Magento\Framework\Search\RequestInterface;
 
 /**
  * @api
@@ -26,4 +27,12 @@ interface BuilderInterface
      * @since 100.1.0
      */
     public function build(RequestFilterInterface $filter, $conditionType);
+
+    /**
+     * @param RequestInterface $request
+     * @param RequestFilterInterface $filter
+     * @param string $conditionType
+     * @return string
+     */
+    public function buildForRequest(RequestInterface $request, RequestFilterInterface $filter, $conditionType);
 }

@@ -79,8 +79,9 @@ class Builder
         $aggregations = [];
         $buckets = $request->getAggregation();
 
-        $dataProvider = $this->dataProviderFactory->create(
+        $dataProvider = $this->dataProviderFactory->createForRequest(
             $this->dataProviderContainer[$request->getIndex()],
+            $request,
             $this->query
         );
         foreach ($buckets as $bucket) {

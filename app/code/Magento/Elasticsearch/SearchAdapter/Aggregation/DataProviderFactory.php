@@ -10,6 +10,7 @@ use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
+use Magento\Framework\Search\RequestInterface;
 
 /**
  * It's a factory which allows to override instance of DataProviderInterface
@@ -65,6 +66,46 @@ class DataProviderFactory
 
             $className = get_class($dataProvider);
             $result = $this->objectManager->create($className, ['queryContainer' => $query]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @see create()
+     *
+     * @param DataProviderInterface $dataProvider
+     * @param RequestInterface $request
+     * @param QueryContainer|null $query
+     * @return DataProviderInterface|mixed
+     * @throws \LogicException
+     */
+    public function createForRequest(
+        DataProviderInterface $dataProvider,
+        RequestInterface $request,
+        QueryContainer $query = null
+    ) {
+        $result = $dataProvider;
+
+        if ($dataProvider instanceof QueryAwareInterface) {
+            if (null === $query) {
+                throw new \LogicException(
+                    sprintf(
+                        'Instance of %s must be configured with a search query, but the query is empty',
+                        QueryAwareInterface::class
+                    )
+                );
+            }
+
+            $className = get_class($dataProvider);
+
+            $result = $this->objectManager->create(
+                $className,
+                [
+                    'request' => $request,
+                    'queryContainer' => $query,
+                ]
+            );
         }
 
         return $result;
