@@ -199,10 +199,10 @@ class CliCommand
         $result = [];
 
         foreach ($params as $key => $value) {
-            if (!empty($value)) {
-                $result["--{$key}=%s"] = $value;
-            } else {
+            if ($value === $key) {
                 $result["--{$key}"] = null;
+            } elseif (!empty($value)) {
+                $result["--{$key}=%s"] = $value;
             }
         }
 
