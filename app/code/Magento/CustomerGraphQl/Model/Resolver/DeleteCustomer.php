@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\Registry;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
@@ -24,13 +25,19 @@ class DeleteCustomer implements ResolverInterface
      */
     private $deleteCustomer;
 
+    /** @var Registry */
+    private $registry;
+
     /**
      * @param DeleteCustomerModel $deleteCustomer
+     * @param Registry $registry
      */
     public function __construct(
-        DeleteCustomerModel $deleteCustomer
+        DeleteCustomerModel $deleteCustomer,
+        Registry $registry
     ) {
         $this->deleteCustomer = $deleteCustomer;
+        $this->registry =$registry;
     }
 
     /**
@@ -48,7 +55,15 @@ class DeleteCustomer implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
+        $isSecure = $this->registry->registry('isSecureArea');
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+
         $this->deleteCustomer->execute($context);
+
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', $isSecure);
         return true;
     }
 }
