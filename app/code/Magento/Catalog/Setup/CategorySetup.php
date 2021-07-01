@@ -209,7 +209,7 @@ class CategorySetup extends EavSetup
                         'required' => false,
                         'sort_order' => 20,
                         'global' => ScopedAttributeInterface::SCOPE_STORE,
-                        'group' => 'Display Settings',
+                        'group' => 'Content',
                     ],
                     'is_anchor' => [
                         'type' => 'int',
