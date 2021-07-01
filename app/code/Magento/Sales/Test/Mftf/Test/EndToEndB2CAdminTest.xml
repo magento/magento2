@@ -92,7 +92,9 @@
         <closeAdminNotification stepKey="closeAdminNotificationInvoice" after="seeConfigurableProductInItemsOrdered"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction" after="closeAdminNotificationInvoice"/>
         <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl" after="clickInvoiceAction"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage" after="seeOrderInvoiceUrl"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seePageNameNewInvoicePage" after="seeOrderInvoiceUrl">
+            <argument name="value" value="New Invoice"/>
+        </actionGroup>
 
         <!--Check Invoice Data-->
         <see selector="{{AdminInvoiceOrderInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingInvoice" after="seePageNameNewInvoicePage"/>
@@ -108,7 +110,9 @@
         <!--Invoice created successfully-->
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPageInvoice" after="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess" after="seeViewOrderPageInvoice"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="$getOrderId" stepKey="seePageNameMatchesOrderIdAfterInvoice" after="seeInvoiceCreateSuccess"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seePageNameMatchesOrderIdAfterInvoice" after="seeInvoiceCreateSuccess">
+            <argument name="value" value="{$getOrderId}"/>
+        </actionGroup>
 
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab" after="seePageNameMatchesOrderIdAfterInvoice"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask" after="clickOrderInvoicesTab"/>
@@ -132,7 +136,9 @@
         <comment userInput="Admin creates credit memo" stepKey="createCreditMemoComment" after="clickOrderIdOnShipment"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo" after="createCreditMemoComment"/>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage" after="clickCreateCreditMemo"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle" after="seeNewCreditMemoPage"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewMemoInPageTitle" after="seeNewCreditMemoPage">
+            <argument name="value" value="New Memo"/>
+        </actionGroup>
         <!--Check Credit Memo Order Data-->
         <actionGroup ref="VerifyBasicCreditMemoInformationActionGroup" stepKey="verifyOrderCreditMemoInformation" after="seeNewMemoInPageTitle">
             <argument name="customer" value="Simple_US_Customer"/>
