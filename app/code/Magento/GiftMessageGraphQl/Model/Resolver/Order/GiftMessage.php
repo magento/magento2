@@ -60,6 +60,7 @@ class GiftMessage implements ResolverInterface
         }
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $orderId = (int)base64_decode($value['id']) ?: (int)$value['id'];
+
         try {
             $orderGiftMessage = $this->orderRepository->get($orderId);
         } catch (LocalizedException $e) {
