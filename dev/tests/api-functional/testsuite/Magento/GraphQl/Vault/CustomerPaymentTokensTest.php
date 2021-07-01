@@ -83,7 +83,6 @@ query {
 }
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
-
         $this->assertCount(2, $response['customerPaymentTokens']['items']);
         $this->assertArrayHasKey('public_hash', $response['customerPaymentTokens']['items'][0]);
         $this->assertArrayHasKey('details', $response['customerPaymentTokens']['items'][0]);
@@ -91,6 +90,10 @@ QUERY;
         $this->assertArrayHasKey('type', $response['customerPaymentTokens']['items'][0]);
         // Validate gateway token is NOT returned
         $this->assertArrayNotHasKey('gateway_token', $response['customerPaymentTokens']['items'][0]);
+        $cartDetails1 = json_decode($response['customerPaymentTokens']['items'][0]['details'], true);
+        $cartDetails2 = json_decode($response['customerPaymentTokens']['items'][1]['details'], true);
+        $this->assertSame('Visa', $cartDetails1['type']);
+        $this->assertSame('American Express', $cartDetails2['cc_type']);
     }
 
     /**
