@@ -30,7 +30,7 @@ class NewActionTest extends AbstractBackendController
     private $escaper;
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

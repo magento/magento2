@@ -69,7 +69,7 @@ class CopierTest extends TestCase
     private $metadata;
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -50,7 +50,7 @@ abstract class AbstractCurrencyTest extends TestCase
     }
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

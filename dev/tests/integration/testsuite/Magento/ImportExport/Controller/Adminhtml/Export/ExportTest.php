@@ -40,7 +40,7 @@ class ExportTest extends AbstractBackendController
     private $deleteTopicRelatedMessages;
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

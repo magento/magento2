@@ -91,7 +91,7 @@ class StaticResourceTest extends TestCase
     private $object;
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

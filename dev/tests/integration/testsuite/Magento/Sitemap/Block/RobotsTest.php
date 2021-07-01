@@ -36,7 +36,7 @@ class RobotsTest extends TestCase
     private $storeManager;
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

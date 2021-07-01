@@ -588,7 +588,7 @@ class Data
      * Get product metadata pool.
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecared
+     * @deprecated
      */
     protected function getMetadataPool()
     {
