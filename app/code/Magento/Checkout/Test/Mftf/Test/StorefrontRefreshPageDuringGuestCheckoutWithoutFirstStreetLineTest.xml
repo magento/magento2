@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRefreshPageDuringGuestCheckoutWithoutFirstStreetLineTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Guest checkout"/>
+            <title value="Storefront refresh page during guest checkout without first street line test"/>
+            <description value="Address is not lost for guest checkout if guest fills address data, then clears only first street line and refresh page during checkout"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-41161"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionAndClearingFirstStreetLineActionGroup" stepKey="fillShippingSection"/>
+
+        <grabValueFrom selector="{{CheckoutShippingSection.street}}" stepKey="grabStreetLine1"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.street2}}" stepKey="grabStreetLine2"/>
+
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
+
+        <grabValueFrom selector="{{CheckoutShippingSection.street}}" stepKey="grabStreetLine1AfterReload"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.street2}}" stepKey="grabStreetLine2AfterReload"/>
+
+        <assertEquals stepKey="assertStreetLine1" message="pass">
+            <expectedResult type="variable">grabStreetLine1</expectedResult>
+            <actualResult type="variable">grabStreetLine1AfterReload</actualResult>
+        </assertEquals>
+        <assertEquals stepKey="assertStreetLine2" message="pass">
+            <expectedResult type="variable">grabStreetLine2</expectedResult>
+            <actualResult type="variable">grabStreetLine2AfterReload</actualResult>
+        </assertEquals>
+    </test>
+</tests>
