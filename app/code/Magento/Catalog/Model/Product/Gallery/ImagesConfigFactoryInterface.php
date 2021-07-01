@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+/**
+ * Interface ImagesConfigFactoryInterface
+ * @api
+ */
 interface ImagesConfigFactoryInterface
 {
     /**
