@@ -18,21 +18,20 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  - custom_price - new price that can be declared by user and recalculated during calculation process
  *  - original_custom_price - original defined value of custom price without any conversion
  *
- * @api
  * @method float getDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountAmount(float $amount)
  * @method float getBaseDiscountAmount()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountAmount(float $amount)
  * @method float getDiscountPercent()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountPercent(float $percent)
  * @method float getOriginalDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setOriginalDiscountAmount(float $amount)
  * @method float getBaseOriginalDiscountAmount()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseOriginalDiscountAmount(float $amount)
  * @method float getDiscountCalculationPrice()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountCalculationPrice()
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setDiscountCalculationPrice(float $amount)
  * @method float getBaseDiscountCalculationPrice()
- * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice($price)
+ * @method \Magento\Quote\Model\Quote\Item\AbstractItem setBaseDiscountCalculationPrice(float $price)
  * @method int[] getAppliedRuleIds()
  * @method \Magento\Quote\Model\Quote\Item\AbstractItem setAppliedRuleIds(array $ruleIds)
  * @method float getBaseTaxAmount()
@@ -255,7 +254,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     /**
      * Add message of quote item to array of messages
      *
-     * @param   string $message
+     * @param string $message
      * @return $this
      */
     public function addMessage($message)
