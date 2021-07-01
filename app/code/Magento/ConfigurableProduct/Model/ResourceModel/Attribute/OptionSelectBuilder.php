@@ -3,14 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Attribute;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\DB\Select;
 
 /**
  * Build select object for retrieving configurable options.
@@ -18,32 +16,34 @@ use Magento\Framework\EntityManager\MetadataPool;
 class OptionSelectBuilder implements OptionSelectBuilderInterface
 {
     /**
+     * Configurable Attribute Resource Model.
+     *
      * @var Attribute
      */
     private $attributeResource;
 
     /**
-     * @var MetadataPool
+     * Option Provider.
+     *
+     * @var OptionProvider
      */
-    private $metadataPool;
+    private $attributeOptionProvider;
 
     /**
      * @param Attribute $attributeResource
-     * @param MetadataPool $metadataPool
+     * @param OptionProvider $attributeOptionProvider
      */
-    public function __construct(Attribute $attributeResource, MetadataPool $metadataPool)
+    public function __construct(Attribute $attributeResource, OptionProvider $attributeOptionProvider)
     {
         $this->attributeResource = $attributeResource;
-        $this->metadataPool = $metadataPool;
+        $this->attributeOptionProvider = $attributeOptionProvider;
     }
 
     /**
      * @inheritdoc
      */
-    public function getSelect(AbstractAttribute $superAttribute, int $productId)
+    public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope)
     {
-        $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-
         $select = $this->attributeResource->getConnection()->select()->from(
             ['super_attribute' => $this->attributeResource->getTable('catalog_product_super_attribute')],
             [
@@ -55,7 +55,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
             ]
         )->joinInner(
             ['product_entity' => $this->attributeResource->getTable('catalog_product_entity')],
-            "product_entity.$productLinkField = super_attribute.product_id",
+            "product_entity.{$this->attributeOptionProvider->getProductEntityLinkField()} = super_attribute.product_id",
             []
         )->joinInner(
             ['product_link' => $this->attributeResource->getTable('catalog_product_super_link')],
@@ -76,7 +76,8 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 [
                     'entity_value.attribute_id = super_attribute.attribute_id',
                     'entity_value.store_id = 0',
-                    "entity_value.$productLinkField = entity.$productLinkField",
+                    "entity_value.{$this->attributeOptionProvider->getProductEntityLinkField()} = "
+                    . "entity.{$this->attributeOptionProvider->getProductEntityLinkField()}",
                 ]
             ),
             []
@@ -86,7 +87,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ' AND ',
                 [
                     'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                    'attribute_label.store_id = 0',
+                    'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             ),
             []
@@ -105,19 +106,34 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
         );
 
         if (!$superAttribute->getSourceModel()) {
-            $select->joinLeft(
+            $select->columns(
+                [
+                    'option_title' => $this->attributeResource->getConnection()->getIfNullSql(
+                        'option_value.value',
+                        'default_option_value.value'
+                    ),
+                    'default_title' => 'default_option_value.value',
+                ]
+            )->joinLeft(
                 ['option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
                 implode(
                     ' AND ',
                     [
                         'option_value.option_id = entity_value.value',
-                        'option_value.store_id = 0',
+                        'option_value.store_id = ' . $scope->getId(),
                     ]
                 ),
-                [
-                    'option_title' => 'option_value.value',
-                    'default_title' => 'option_value.value',
-                ]
+                []
+            )->joinLeft(
+                ['default_option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
+                implode(
+                    ' AND ',
+                    [
+                        'default_option_value.option_id = entity_value.value',
+                        'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+                    ]
+                ),
+                []
             );
         }
 
