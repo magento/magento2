@@ -28,8 +28,6 @@
 @import 'data-grid/_data-grid-static.less';
 @import 'data-grid/_data-grid-header.less';
 
-//
-
 .admin__data-grid-outer-wrap {
     min-height: @data-grid-spinner__size + @indent__base * 2;
     position: relative; // Used to keep spinner inside
@@ -38,9 +36,14 @@
 .admin__data-grid-wrap {
     margin-bottom: 2rem;
     max-width: 100%;
-    overflow-x: auto;
     padding-bottom: 1rem;
     padding-top: @data-grid-header-row__indent;
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .admin__data-grid-wrap {
+        overflow-x: auto;
+    }
 }
 
 .admin__data-grid-loading-mask {
@@ -427,6 +430,7 @@ body._in-resize {
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
         padding-right: @data-grid-cell__padding-horizontal * 2;
+        position: relative;
         text-align: center;
         width: 1%;
     }
