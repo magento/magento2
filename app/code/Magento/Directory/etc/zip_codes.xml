@@ -354,6 +354,7 @@
     <zip countryCode="IN">
         <codes>
             <code id="pattern_1" active="true" example="123456">^[0-9]{6}$</code>
+            <code id="pattern_2" active="true" example="123 456">^[0-9]{3}\s[0-9]{3}$</code>
         </codes>
     </zip>
     <zip countryCode="IO">
@@ -505,7 +506,7 @@
     </zip>
     <zip countryCode="MS">
         <codes>
-            <code id="pattern_1" active="true" example="MSR1250">^MSR\s?\d{4}$</code>
+            <code id="pattern_1" active="true" example="MSR 1250 or MSR1250">^MSR\s?\d{4}$</code>
         </codes>
     </zip>
     <zip countryCode="MQ">
@@ -568,7 +569,7 @@
     </zip>
     <zip countryCode="NL">
         <codes>
-            <code id="pattern_1" active="true" example="1234 AB/1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="1234 AB or 1234AB">^[1-9][0-9]{3}\s?[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="NO">
