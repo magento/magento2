@@ -20,5 +20,6 @@
         <element name="reviewAuthor" type="text" selector=".item.review-item:nth-of-type({{row}}) .review-author .review-details-value" parameterized="true"/>
         <!-- The tab transform to an accordion when window resize -->
         <element name="reviewsSectionToggleState" type="button" selector="//*[@id='tab-label-reviews-title']/ancestor::div[@aria-selected='{{boolean}}'][@aria-expanded='{{boolean}}']" parameterized="true"/>
+        <element name="infoForNotLoggedIn" type="block" selector=".block-content .message.info.notlogged"/>
     </section>
 </sections>
