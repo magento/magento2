@@ -3,20 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Ui\Controller\Index;
 
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Model\UiComponentTypeResolver;
-use Magento\Framework\Escaper;
-use Magento\Framework\Controller\Result\JsonFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\Result\Json;
-use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Is responsible for providing ui components information on store front.
@@ -24,7 +32,7 @@ use Magento\Framework\Controller\ResultInterface;
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Render extends \Magento\Framework\App\Action\Action
+class Render extends Action implements HttpGetActionInterface
 {
     /**
      * @var Context
@@ -62,7 +70,6 @@ class Render extends \Magento\Framework\App\Action\Action
     private $authorization;
 
     /**
-     * Render constructor.
      * @param Context $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UiComponentTypeResolver|null $contentTypeResolver
@@ -96,9 +103,10 @@ class Render extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        if ($this->_request->getParam('namespace') === null) {
-            return $this->_redirect('noroute');
+        if ($this->getRequest()->getParam('namespace') === null) {
+            return $this->redirect('noroute');
         }
+
         try {
             $component = $this->uiComponentFactory->create($this->getRequest()->getParam('namespace'));
             if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
@@ -108,32 +116,32 @@ class Render extends \Magento\Framework\App\Action\Action
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
                 return $this->getResponse();
-            } else {
-                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-                $resultJson = $this->resultJsonFactory->create();
-                $resultJson->setStatusHeader(
-                    \Laminas\Http\Response::STATUS_CODE_403,
-                    \Laminas\Http\AbstractMessage::VERSION_11,
-                    'Forbidden'
-                );
-                return $resultJson->setData(
-                    [
-                        'error' => $this->escaper->escapeHtml('Forbidden'),
-                        'errorcode' => 403
-                    ]
-                );
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+
+            /** @var Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setStatusHeader(
+                Response::STATUS_CODE_403,
+                AbstractMessage::VERSION_11,
+                'Forbidden'
+            );
+            return $resultJson->setData(
+                [
+                    'error' => $this->escaper->escapeHtml('Forbidden'),
+                    'errorcode' => 403
+                ]
+            );
+        } catch (LocalizedException $e) {
             $this->logger->critical($e);
             $result = [
                 'error' => $this->escaper->escapeHtml($e->getMessage()),
                 'errorcode' => $this->escaper->escapeHtml($e->getCode())
             ];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setStatusHeader(
-                \Laminas\Http\Response::STATUS_CODE_400,
-                \Laminas\Http\AbstractMessage::VERSION_11,
+                Response::STATUS_CODE_400,
+                AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 
@@ -144,11 +152,11 @@ class Render extends \Magento\Framework\App\Action\Action
                 'error' => __('UI component could not be rendered because of system exception'),
                 'errorcode' => $this->escaper->escapeHtml($e->getCode())
             ];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            /** @var Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             $resultJson->setStatusHeader(
-                \Laminas\Http\Response::STATUS_CODE_400,
-                \Laminas\Http\AbstractMessage::VERSION_11,
+                Response::STATUS_CODE_400,
+                AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 
@@ -157,37 +165,50 @@ class Render extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Call prepare method in the component UI
+     * Set redirect into response
      *
-     * @param UiComponentInterface $component
-     * @return void
+     * @param string $path
+     * @param array $arguments
+     * @return ResponseInterface
      */
-    private function prepareComponent(UiComponentInterface $component)
+    private function redirect(string $path, $arguments = []): ResponseInterface
     {
-        foreach ($component->getChildComponents() as $child) {
-            $this->prepareComponent($child);
-        }
-        $component->prepare();
+        $this->_redirect->redirect($this->getResponse(), $path, $arguments);
+        return $this->getResponse();
     }
 
     /**
      * Optionally validate ACL resource of components with a DataSource/DataProvider
      *
      * @param mixed $dataProviderConfigData
-     * @return bool
+     * @return boolean
      */
-    private function validateAclResource($dataProviderConfigData)
+    private function validateAclResource($dataProviderConfigData): bool
     {
-        if (isset($dataProviderConfigData['aclResource'])) {
-            if (!$this->authorization->isAllowed($dataProviderConfigData['aclResource'])) {
-                if (!$this->_request->isAjax()) {
-                    $this->_redirect('noroute');
-                }
-
-                return false;
+        if (isset($dataProviderConfigData['aclResource'])
+            && !$this->authorization->isAllowed($dataProviderConfigData['aclResource'])
+        ) {
+            if (!$this->getRequest()->isAjax()) {
+                $this->redirect('noroute');
             }
+
+            return false;
         }
 
         return true;
+    }
+
+    /**
+     * Call prepare method in the component UI
+     *
+     * @param UiComponentInterface $component
+     * @return void
+     */
+    private function prepareComponent(UiComponentInterface $component): void
+    {
+        foreach ($component->getChildComponents() as $child) {
+            $this->prepareComponent($child);
+        }
+        $component->prepare();
     }
 }
