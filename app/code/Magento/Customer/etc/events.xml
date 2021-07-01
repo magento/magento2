@@ -18,6 +18,7 @@
     <event name="customer_save_after_data_object">
         <observer name="upgrade_order_customer_email" instance="Magento\Customer\Observer\UpgradeOrderCustomerEmailObserver"/>
         <observer name="upgrade_quote_customer_email" instance="Magento\Customer\Observer\UpgradeQuoteCustomerEmailObserver"/>
+        <observer name="clear_quote_session_after_updating_customer" instance="Magento\Customer\Observer\ClearQuoteSessionAfterChangingCustomer"/>
     </event>
     <event name="customer_customer_authenticated">
         <observer name="customerGroupAuthenticate" instance="Magento\Customer\Observer\CustomerGroupAuthenticate" />
