@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\DB\Select;
 
 /**
@@ -19,8 +18,7 @@ interface OptionSelectBuilderInterface
      *
      * @param AbstractAttribute $superAttribute
      * @param int $productId
-     * @param ScopeInterface $scope
      * @return Select
      */
-    public function getSelect(AbstractAttribute $superAttribute, int $productId, ScopeInterface $scope);
+    public function getSelect(AbstractAttribute $superAttribute, int $productId);
 }

@@ -8,15 +8,18 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Build select object for retrieving configurable options.
+ * Build select object for retrieving configurable options considering scope.
  */
-class OptionSelectBuilder implements OptionSelectBuilderInterface
+class ScopedOptionSelectBuilder implements OptionSelectBuilderInterface
 {
     /**
      * @var Attribute
@@ -29,13 +32,31 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
     private $metadataPool;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfig;
+
+    /**
      * @param Attribute $attributeResource
      * @param MetadataPool $metadataPool
+     * @param StoreManagerInterface $storeManager
+     * @param StockConfigurationInterface $stockConfig
      */
-    public function __construct(Attribute $attributeResource, MetadataPool $metadataPool)
-    {
+    public function __construct(
+        Attribute $attributeResource,
+        MetadataPool $metadataPool,
+        StoreManagerInterface $storeManager,
+        StockConfigurationInterface $stockConfig
+    ) {
         $this->attributeResource = $attributeResource;
         $this->metadataPool = $metadataPool;
+        $this->storeManager = $storeManager;
+        $this->stockConfig = $stockConfig;
     }
 
     /**
@@ -43,6 +64,7 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId)
     {
+        $store = $this->storeManager->getStore();
         $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $this->attributeResource->getConnection()->select()->from(
             ['super_attribute' => $this->attributeResource->getTable('catalog_product_super_attribute')],
@@ -80,6 +102,16 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
                 ]
             ),
             []
+        )->joinInner(
+            ['entity_website' => $this->attributeResource->getTable('catalog_product_website')],
+            implode(
+                ' AND ',
+                [
+                    "entity_website.product_id = entity.$productLinkField",
+                    "entity_website.website_id = {$store->getWebsiteId()}",
+                ]
+            ),
+            []
         )->joinLeft(
             ['attribute_label' => $this->attributeResource->getTable('catalog_product_super_attribute_label')],
             implode(
@@ -104,20 +136,46 @@ class OptionSelectBuilder implements OptionSelectBuilderInterface
             $superAttribute->getAttributeId()
         );
 
+        if (!$this->stockConfig->isShowOutOfStock()) {
+            $select->joinInner(
+                ['stock' => $this->attributeResource->getTable('cataloginventory_stock_status')],
+                'stock.product_id = entity.entity_id',
+                []
+            )->where(
+                'stock.stock_status = ?',
+                StockStatus::STATUS_IN_STOCK
+            );
+        }
+
         if (!$superAttribute->getSourceModel()) {
-            $select->joinLeft(
+            $select->columns(
+                [
+                    'option_title' => $this->attributeResource->getConnection()->getIfNullSql(
+                        'option_value.value',
+                        'default_option_value.value'
+                    ),
+                    'default_title' => 'default_option_value.value',
+                ]
+            )->joinLeft(
                 ['option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
                 implode(
                     ' AND ',
                     [
                         'option_value.option_id = entity_value.value',
-                        'option_value.store_id = ' . Store::DEFAULT_STORE_ID,
+                        'option_value.store_id = ' . $store->getId(),
                     ]
                 ),
-                [
-                    'option_title' => 'option_value.value',
-                    'default_title' => 'option_value.value',
-                ]
+                []
+            )->joinLeft(
+                ['default_option_value' => $this->attributeResource->getTable('eav_attribute_option_value')],
+                implode(
+                    ' AND ',
+                    [
+                        'default_option_value.option_id = entity_value.value',
+                        'default_option_value.store_id = ' . Store::DEFAULT_STORE_ID,
+                    ]
+                ),
+                []
             );
         }
 

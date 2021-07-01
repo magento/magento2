@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface" type="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder" />
     <type name="Magento\CatalogGraphQl\Model\ProductInterfaceTypeResolverComposite">
         <arguments>
             <argument name="productTypeNameResolvers" xsi:type="array">
@@ -46,10 +47,6 @@
 
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <plugin name="used_products_cache_graphql" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache" />
-    </type>
-
-    <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
-        <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder_GraphQl" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
     </type>
 
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
