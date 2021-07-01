@@ -30,6 +30,20 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_associatedEntitiesMap;
 
     /**
+     * Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'salesrule_rule_collection';
+
+    /**
+     * Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = 'rule_collection';
+
+    /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
      * @since 100.1.0
      */
@@ -437,6 +451,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
                 ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }
