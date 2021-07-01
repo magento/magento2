@@ -17,9 +17,11 @@
                         <container name="extra_customer_info"/>
                     </block>
                     <block class="Magento\Sales\Block\Adminhtml\Order\Payment" name="order_payment"/>
+                    <!-- Argument viewModel was discouraged use view_model argument instead, viewModel will be remove in next release -->
                     <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="Magento_Sales::order/creditmemo/create/items.phtml">
                         <arguments>
                             <argument name="viewModel" xsi:type="object">Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton</argument>
+                            <argument name="view_model" xsi:type="object">Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton</argument>
                             <argument name="itemsToRenderViewModel" xsi:type="object">Magento\Sales\ViewModel\CreditMemo\Create\ItemsToRender</argument>
                         </arguments>
                         <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" name="order_items.default" as="default" template="Magento_Sales::order/creditmemo/create/items/renderer/default.phtml"/>
