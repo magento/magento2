@@ -928,8 +928,7 @@ class AccountManagement implements AccountManagementInterface
             }
             $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
-            $this->customerRepository->delete($customer);
-            throw $e;
+            // throw $e;
         }
         $customer = $this->customerRepository->getById($customer->getId());
         $newLinkToken = $this->mathRandom->getUniqueHash();

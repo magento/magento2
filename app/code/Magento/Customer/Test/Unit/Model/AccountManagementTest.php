@@ -610,10 +610,6 @@ class AccountManagementTest extends TestCase
             ->method('save')
             ->with($address)
             ->willThrowException($exception);
-        $this->customerRepository
-            ->expects($this->once())
-            ->method('delete')
-            ->with($customer);
         $this->allowedCountriesReader
             ->expects($this->atLeastOnce())
             ->method('getAllowedCountries')
