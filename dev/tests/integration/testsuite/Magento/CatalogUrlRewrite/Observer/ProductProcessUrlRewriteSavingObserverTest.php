@@ -5,9 +5,12 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -630,6 +633,124 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
             $this->assertContainsEquals($row, $actual);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture default_store catalog/seo/generate_category_product_rewrites 1
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoDataFixture Magento/Catalog/_files/category_in_second_root_category.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testChangeCategoryGlobalScopeWithStoreOverriddenUrlKey()
+    {
+        $baseStore = $this->storeManager->getStore('default');
+        $secondStore = $this->storeManager->getStore('test_store_1');
+        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+
+        $categoryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
+        /** @var Collection $categoryCollection */
+        $categoryCollection = $categoryCollectionFactory->create();
+        $firstStoreCategory = $categoryCollection
+            ->addAttributeToFilter('url_key', 'cat-1')
+            ->setPageSize(1)
+            ->getFirstItem();
+
+        $categoryCollection = $categoryCollectionFactory->create();
+        $secondStoreCategory = $categoryCollection
+            ->addAttributeToFilter(CategoryInterface::KEY_NAME, 'Root2 Category 1')
+            ->setPageSize(1)
+            ->getFirstItem();
+
+        $productFilter = [
+            UrlRewrite::ENTITY_TYPE => 'product',
+        ];
+
+        $product = $this->productRepository->get('p002', false, null, true);
+        $product->setStoreId($baseStore->getId());
+        $product->setUrlKey('base-store-overridden-url-key')->save();
+
+        $expected = [
+            [
+                'request_path' => "base-store-overridden-url-key.html",
+                'target_path' => "catalog/product/view/id/{$product->getId()}",
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $baseStore->getId(),
+            ],
+            [
+                'request_path' => "cat-1/base-store-overridden-url-key.html",
+                'target_path' => "catalog/product/view/id/{$product->getId()}/category/{$firstStoreCategory->getId()}",
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $baseStore->getId(),
+            ]
+        ];
+        $actual = $this->getActualResults($productFilter);
+        foreach ($expected as $row) {
+            $this->assertContains($row, $actual);
+        }
+
+        // assign product to second website
+        $product->setStoreIds(array_merge($product->getStoreIds(), [$secondStore->getId()]));
+        $product->setWebsiteIds(array_merge($product->getWebsiteIds(), [$secondStore->getWebsiteId()]));
+        $this->productRepository->save($product);
+
+        //Update product url key on local scope and change categories
+        $this->storeManager->setCurrentStore($secondStore->getId());
+        $product = $this->productRepository->get('p002', false, null, true);
+        $product->setStoreId($secondStore->getId());
+        $product->setUrlKey('second-store-overridden-url-key')->save();
+
+        //Update categories on global scope
+        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+        $categoryIds = array_filter(
+            $product->getCategoryIds(),
+            function ($categoryId) use ($firstStoreCategory) {
+                return $categoryId !== $firstStoreCategory->getId();
+            }
+        );
+        $product->setCategoryIds($categoryIds);
+        $product->setStoreId(Store::DEFAULT_STORE_ID);
+        $this->productRepository->save($product);
+
+        // check if rewrite was deleted for unassigned category
+        $this->assertNotContains(
+            [
+                'request_path' => "cat-1/base-store-overridden-url-key.html",
+                'target_path' => "catalog/product/view/id/{$product->getId()}/category/{$firstStoreCategory->getId()}",
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $baseStore->getId(),
+            ],
+            $this->getActualResults($productFilter)
+        );
+
+        $product = $this->productRepository->get('p002', false, null, true);
+        $categoryIds = $product->getCategoryIds();
+        $categoryIds[] = $secondStoreCategory->getId();
+        $product->setCategoryIds($categoryIds);
+        $this->productRepository->save($product);
+        $expected = [
+            [
+                'request_path' => "second-store-overridden-url-key.html",
+                'target_path' => "catalog/product/view/id/{$product->getId()}",
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $secondStore->getId(),
+            ],
+            [
+                'request_path' => "root2-category-1/second-store-overridden-url-key.html",
+                'target_path' => "catalog/product/view/id/{$product->getId()}/category/{$secondStoreCategory->getId()}",
+                'is_auto_generated' => 1,
+                'redirect_type' => 0,
+                'store_id' => $secondStore->getId(),
+            ]
+        ];
+        $actual = $this->getActualResults($productFilter);
+        foreach ($expected as $row) {
+            $this->assertContains($row, $actual);
         }
     }
 }
