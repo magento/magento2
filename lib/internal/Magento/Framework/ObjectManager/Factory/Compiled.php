@@ -64,6 +64,7 @@ class Compiled extends AbstractFactory
              *
              * Argument key meanings:
              *
+             * _vdic_: variadic argument
              * _i_: shared instance of a class or interface
              * _ins_: non-shared instance of a class or interface
              * _v_: non-array literal value
@@ -73,7 +74,21 @@ class Compiled extends AbstractFactory
              * _d_: default value in case environment variable specified by _a_ does not exist
              */
             foreach ($args as $key => &$argument) {
-                if (isset($arguments[$key])) {
+                if (isset($argument['_vdic_'])) {
+                    // Process variadic
+                    if (isset($arguments[$key])) {
+                        $argument = (array)$arguments[$key];
+                    } else {
+                        $argument = (array)$argument['_vdic_'];
+                        $this->parseArray($argument);
+                    }
+                    unset($args[$key]);
+                    if (count($argument)) {
+                        array_push($args, ...array_values($argument));
+                    }
+                    // Variadic argument is always the last one
+                    break;
+                } elseif (isset($arguments[$key])) {
                     $argument = $arguments[$key];
                 } elseif (isset($argument['_i_'])) {
                     $argument = $this->get($argument['_i_']);
