@@ -122,4 +122,17 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         }
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function isModified(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $parentValue = parent::isModified($object);
+
+        $originalPostCode = $object->getOrigData("postcode");
+        $currentPostCode = $object->getDataByKey("postcode");
+
+        return $parentValue || ($originalPostCode !== $currentPostCode);
+    }
 }
