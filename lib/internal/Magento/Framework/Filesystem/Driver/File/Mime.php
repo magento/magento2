@@ -113,7 +113,9 @@ class Mime
             $result = $this->getNativeMimeType($path);
         } else {
             $imageInfo = getimagesize($path);
-            $result = $imageInfo['mime'];
+            if ($imageInfo) {
+                $result = $imageInfo['mime'];
+            }
         }
 
         if (null === $result && isset($this->mimeTypes[$extension])) {
