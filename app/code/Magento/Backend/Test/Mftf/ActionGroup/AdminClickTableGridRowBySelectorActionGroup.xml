@@ -8,11 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlocksGridActionGroup">
+    <actionGroup name="AdminClickTableGridRowBySelectorActionGroup">
         <annotations>
-            <description>Open grid of CMS Blocks.</description>
+            <description>Click table grid row by selector.</description>
         </annotations>
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+        <arguments>
+            <argument name="selector" type="string"/>
+        </arguments>
+
+        <click selector="{{selector}}" stepKey="clickRow"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

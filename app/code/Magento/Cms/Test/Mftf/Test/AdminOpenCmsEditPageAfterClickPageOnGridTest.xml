@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOpenCmsEditPageAfterClickPageOnGridTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Open CMS Edit Page"/>
+            <title value="Open CMS Edit Page after choosing page on the grid."/>
+            <description value="Open CMS Edit Page after choosing page on the grid."/>
+            <testCaseId value="MC-38854"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCmsPagesGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+
+        <actionGroup ref="AdminClickTableGridRowBySelectorActionGroup" stepKey="clickTableRow">
+            <argument name="selector" value="{{CmsPagesPageActionsSection.homePage}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="Home page"/>
+        </actionGroup>
+    </test>
+</tests>

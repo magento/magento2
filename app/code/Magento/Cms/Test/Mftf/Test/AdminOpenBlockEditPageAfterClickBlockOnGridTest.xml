@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOpenBlockEditPageAfterClickBlockOnGridTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Open CMS Block Edit Page"/>
+            <title value="Open CMS Block Edit Page after choosing block on the grid."/>
+            <description value="Open CMS Block Edit Page after choosing block on the grid."/>
+            <testCaseId value="MC-38853"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="openCmsBlocksGrid"/>
+
+        <actionGroup ref="AdminClickTableGridRowBySelectorActionGroup" stepKey="clickTableRow">
+            <argument name="selector" value="{{AdminBlockGridSection.blockEditPage(_defaultBlock.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{_defaultBlock.title}}"/>
+        </actionGroup>
+    </test>
+</tests>
