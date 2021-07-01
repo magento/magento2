@@ -67,13 +67,6 @@
     }
 }
 
-//  Remove address and phone number link color on iOS
-.email-non-inline() {
-    .address-details a {
-        &:extend(.no-link a);
-    }
-}
-
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
     //  Stack columns
     .order-details {
@@ -131,7 +124,7 @@
         > tr {
             > th,
             > td {
-                background-color: @color-gray95
+                background-color: @color-gray95;
             }
         }
     }
@@ -243,5 +236,10 @@
 .email-non-inline() {
     .email-items {
         .lib-table-overflow();
+    }
+
+    //  Remove address and phone number link color on iOS
+    .address-details a {
+        &:extend(.no-link a);
     }
 }
