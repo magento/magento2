@@ -24,7 +24,7 @@
 
             <!-- Enable TinyMCE 4 -->
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
-                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+                <argument name="TinyMCEValue"/>
             </actionGroup>
 
             <!-- Login as admin -->
