@@ -1,14 +1,15 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Model\Plugin;
 
 /**
- * Class PriceBackend
- *
- *  Make price validation optional for bundle dynamic
+ * Make price validation optional for bundle dynamic
  */
 class PriceBackend
 {
@@ -30,6 +31,7 @@ class PriceBackend
         ) {
             return true;
         }
+
         return $proceed($object);
     }
 }

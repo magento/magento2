@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Url\Plugin;
 
-use \Magento\Store\Model\Store;
-use \Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Plugin for \Magento\Framework\Url\SecurityInfo
@@ -39,8 +41,8 @@ class SecurityInfo
     {
         if ($this->scopeConfig->getValue(Store::XML_PATH_SECURE_IN_FRONTEND, StoreScopeInterface::SCOPE_STORE)) {
             return $proceed($url);
-        } else {
-            return false;
         }
+
+        return false;
     }
 }
