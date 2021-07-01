@@ -46,9 +46,12 @@ class Field
     {
         if (isset($fieldData['separator'])) {
             $this->_values = explode($fieldData['separator'], $fieldData['value']);
+        } elseif (isset($fieldData['values'])) {
+            $this->_values = array_values($fieldData['values']);
         } else {
             $this->_values = [isset($fieldData['value']) ? $fieldData['value'] : ''];
         }
+
         $fieldId = $fieldPrefix . (isset(
             $fieldData['dependPath']
         ) && is_array(
