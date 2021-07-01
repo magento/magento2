@@ -67,7 +67,7 @@ class StockItemValidator
             throw new LocalizedException(
                 __(
                     'The "%1" value is invalid for stock item ID. '
-                    . 'Enter either zero or a number than zero to try again.',
+                    . 'Enter either null or a number greater than zero to try again.',
                     $stockItemId
                 )
             );
