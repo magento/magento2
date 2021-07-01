@@ -6,39 +6,53 @@
 
 namespace Magento\CatalogInventory\Observer;
 
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Reindex quote inventory
+ */
 class ReindexQuoteInventoryObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
+     * @var StockProcessor
      */
-    protected $stockIndexerProcessor;
+    private $stockIndexerProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @var PriceProcessor
      */
-    protected $priceIndexer;
+    private $priceIndexer;
 
     /**
-     * @var \Magento\CatalogInventory\Observer\ItemsForReindex
+     * @var ItemsForReindex
      */
-    protected $itemsForReindex;
+    private $itemsForReindex;
 
     /**
-     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
-     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param StockProcessor $stockIndexerProcessor
+     * @param PriceProcessor $priceIndexer
      * @param ItemsForReindex $itemsForReindex
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
-        ItemsForReindex $itemsForReindex
+        StockProcessor $stockIndexerProcessor,
+        PriceProcessor $priceIndexer,
+        ItemsForReindex $itemsForReindex,
+        LoggerInterface $logger
     ) {
         $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->priceIndexer = $priceIndexer;
         $this->itemsForReindex = $itemsForReindex;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,7 +77,11 @@ class ReindexQuoteInventoryObserver implements ObserverInterface
         }
 
         if ($productIds) {
-            $this->stockIndexerProcessor->reindexList($productIds);
+            try {
+                $this->stockIndexerProcessor->reindexList($productIds);
+            } catch (\Exception $exception) {
+                $this->logger->error($exception);
+            }
         }
 
         // Reindex previously remembered items
