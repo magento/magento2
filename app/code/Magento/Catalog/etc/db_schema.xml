@@ -25,11 +25,11 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
         </constraint>
+        <constraint xsi:type="unique" referenceId="CATALOG_PRODUCT_ENTITY_SKU">
+            <column name="sku"/>
+        </constraint>
         <index referenceId="CATALOG_PRODUCT_ENTITY_ATTRIBUTE_SET_ID" indexType="btree">
             <column name="attribute_set_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_ENTITY_SKU" indexType="btree">
-            <column name="sku"/>
         </index>
     </table>
     <table name="catalog_product_entity_datetime" resource="default" engine="innodb"
