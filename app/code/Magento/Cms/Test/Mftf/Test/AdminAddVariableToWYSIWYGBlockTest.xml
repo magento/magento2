@@ -22,9 +22,7 @@
             <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
-                <argument name="TinyMCEValue"/>
-            </actionGroup>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <!--Create Custom Variable-->
         <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
