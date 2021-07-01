@@ -150,7 +150,9 @@ class Collection
             $attributeData = $this->getAttributesCodes($product);
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
-            $childCollection->setProductFilter($product);
+            $childCollection
+                ->setProductFilter($product)
+                ->addFilterByRequiredOptions();
             $this->collectionProcessor->process(
                 $childCollection,
                 $this->searchCriteriaBuilder->create(),
