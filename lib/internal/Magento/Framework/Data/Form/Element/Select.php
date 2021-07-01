@@ -86,8 +86,9 @@ class Select extends AbstractElement
             foreach ($values as $key => $option) {
                 if (!is_array($option)) {
                     $html .= $this->_optionToHtml(['value' => $key, 'label' => $option], $value);
-                } elseif (is_array($option['value'])) {
-                    $html .= '<optgroup label="' . $option['label'] . '">' . "\n";
+                } elseif (isset($option['value']) && is_array($option['value'])) {
+                    $label = isset($option['label']) ? $option['label'] : '';
+                    $html .= '<optgroup label="' . $label . '">' . "\n";
                     foreach ($option['value'] as $groupItem) {
                         $html .= $this->_optionToHtml($groupItem, $value);
                     }
@@ -119,24 +120,35 @@ class Select extends AbstractElement
      */
     protected function _optionToHtml($option, $selected)
     {
-        if (is_array($option['value'])) {
+        if (isset($option['value']) && is_array($option['value'])) {
+            $label = isset($option['label']) ? $option['label'] : '';
             $html = '<optgroup label="' . $option['label'] . '">' . "\n";
+
             foreach ($option['value'] as $groupItem) {
                 $html .= $this->_optionToHtml($groupItem, $selected);
             }
+
             $html .= '</optgroup>' . "\n";
         } else {
+            $value = isset($option['value']) ? $option['value'] : '';
+            $label = isset($option['label']) ? $option['label'] : '';
+
             $optionId = 'optId' .$this->random->getRandomString(8);
-            $html = '<option value="' . $this->_escape($option['value']) . '" id="' .$optionId .'" ';
+
+            $html = '<option value="' . $this->_escape($value) . '" id="' .$optionId .'" ';
             $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
-            if (in_array($option['value'], $selected)) {
+
+            if (in_array($value, $selected)) {
                 $html .= ' selected="selected"';
             }
-            $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";
+
+            $html .= '>' . $this->_escape($label) . '</option>' . "\n";
+
             if (!empty($option['style'])) {
                 $html .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$optionId");
             }
         }
+
         return $html;
     }
 
