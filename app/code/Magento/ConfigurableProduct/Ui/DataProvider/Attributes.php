@@ -48,22 +48,14 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getData()
     {
-        $items = [];
-        $skippedItems = 0;
-        foreach ($this->getCollection()->getItems() as $attribute) {
-            if ($this->configurableAttributeHandler->isAttributeApplicable($attribute)) {
-                $items[] = $attribute->toArray();
-            } else {
-                $skippedItems++;
-            }
+        if (!$this->getCollection()->isLoaded()) {
+            $this->getCollection()->load();
         }
-        return [
-            'totalRecords' => $this->collection->getSize() - $skippedItems,
-            'items' => $items
-        ];
+
+        return $this->getCollection()->toArray();
     }
 }
