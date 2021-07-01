@@ -667,7 +667,7 @@
         <column xsi:type="varchar" name="cc_cid_status" nullable="true" length="32" comment="Cc Cid Status"/>
         <column xsi:type="varchar" name="cc_owner" nullable="true" length="128" comment="Cc Owner"/>
         <column xsi:type="varchar" name="cc_type" nullable="true" length="32" comment="Cc Type"/>
-        <column xsi:type="varchar" name="po_number" nullable="true" length="32" comment="Po Number"/>
+        <column xsi:type="varchar" name="po_number" nullable="true" length="255" comment="Po Number"/>
         <column xsi:type="varchar" name="cc_exp_year" nullable="true" length="4" comment="Cc Exp Year"/>
         <column xsi:type="varchar" name="cc_status" nullable="true" length="4" comment="Cc Status"/>
         <column xsi:type="varchar" name="echeck_routing_number" nullable="true" length="32"
