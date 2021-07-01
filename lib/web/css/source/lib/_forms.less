@@ -55,7 +55,6 @@
     .lib-css(padding, @_padding);
     .lib-css(vertical-align, @_vertical-align);
     .lib-css(width, @_width);
-    box-sizing: border-box;
 
     ._lib-form-element-focus(
         @_background,
@@ -476,7 +475,6 @@
         .lib-css(margin, @_legend-margin);
         .lib-css(padding, @_legend-padding);
         .lib-css(width, @_legend-width);
-        box-sizing: border-box;
         float: left;
 
         .lib-typography(
@@ -603,7 +601,6 @@
     .fields.group {
         .lib-clearfix();
         .field {
-            box-sizing: border-box;
             float: left;
         }
 
@@ -752,13 +749,11 @@
 ) {
     .lib-clearfix();
     .lib-css(margin, @_type-inline-margin);
-    box-sizing: border-box;
 
     &.choice:before,
     &.no-label:before {
         .lib-css(padding, @_type-inline-label-padding);
         .lib-css(width, @_type-inline-label-width);
-        box-sizing: border-box;
         content: ' ';
         float: left;
         height: 1px;
@@ -768,7 +763,6 @@
         .lib-css(padding, @_type-inline-label-padding);
         .lib-css(text-align, @_type-inline-label-align);
         .lib-css(width, @_type-inline-label-width);
-        box-sizing: border-box;
         float: left;
     }
 
@@ -778,7 +772,6 @@
             .lib-css(padding, @_type-inline-label-padding);
             .lib-css(text-align, @_type-inline-label-align);
             .lib-css(width, @_type-inline-label-width);
-            box-sizing: border-box;
             float: left;
         }
 
@@ -967,7 +960,6 @@
     @_column-number: @form-field-column__number
 ) when (@_column = true) {
     .lib-css(padding, @_column-padding);
-    box-sizing: border-box;
     display: inline-block;
 
     .lib-form-field-column-number(@_column-number);

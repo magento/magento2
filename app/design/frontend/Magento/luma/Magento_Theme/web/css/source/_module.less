@@ -74,10 +74,6 @@
     }
 
     .page-main {
-        .lib-vendor-prefix-flex-grow(1);
-    }
-
-    .page-main {
         > .page-title-wrapper {
             .page-title {
                 hyphens: auto;
@@ -179,7 +175,6 @@
         &:focus {
             .lib-css(background, @color-gray94);
             .lib-css(padding, @indent__s);
-            box-sizing: border-box;
             left: 0;
             position: absolute;
             text-align: center;
@@ -283,7 +278,6 @@
     .copyright {
         .lib-css(background-color, @copyright__background-color);
         .lib-css(color, @color-white);
-        box-sizing: border-box;
         display: block;
         padding: @indent__s;
         text-align: center;
@@ -664,7 +658,6 @@
         > .breadcrumbs,
         > .top-container,
         > .widget {
-            box-sizing: border-box;
             width: 100%;
         }
     }

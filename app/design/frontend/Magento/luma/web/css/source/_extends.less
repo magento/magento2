@@ -584,6 +584,7 @@
 
 //
 //  Box-sizing
+//  @deprecated: Magento already applied border-box model, No need to re-define border-box
 //  ---------------------------------------------
 
 @abs-add-box-sizing: {
@@ -757,7 +758,6 @@
                 &.qty,
                 &.price,
                 &.subtotal {
-                    box-sizing: border-box;
                     float: left;
                     text-align: center;
                     white-space: nowrap;
@@ -1622,7 +1622,6 @@
     .abs-field-date {
         .control {
             position: relative;
-            &:extend(.abs-add-box-sizing all);
         }
 
         input {
@@ -1648,7 +1647,6 @@
 
 & when (@media-common = true) {
     .abs-field-tooltip {
-        &:extend(.abs-add-box-sizing all);
         position: relative;
 
         input {

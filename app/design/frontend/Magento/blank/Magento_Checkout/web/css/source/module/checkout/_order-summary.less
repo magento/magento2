@@ -27,9 +27,9 @@
     //  ---------------------------------------------
 
     .opc-block-summary {
-        &:extend(.abs-add-box-sizing all);
         .lib-css(background, @checkout-summary__background-color);
         .lib-css(padding, @checkout-summary__padding);
+        box-sizing: border-box;
         margin: 0 0 @indent__base;
 
         > .title {
