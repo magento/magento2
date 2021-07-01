@@ -79,7 +79,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create', 'loadByIncrementIdAndStoreId']);
 
-        $this->customerCartProviderMock = $this->createPartialMock(CustomerCartResolver::class, []);
+        $this->customerCartProviderMock = $this->createPartialMock(CustomerCartResolver::class, ['resolve']);
 
         $this->guestCartResolverMock = $this->createPartialMock(GuestCartResolver::class, []);
 
@@ -145,15 +145,15 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $cartMock = $this->createMock(Quote::class);
 
-//        $this->customerCartProviderMock->expects($this->once())
-//            ->method('getCartForCustomer')
-//            ->with($customerId)
-//            ->willReturn( $this->customerManagementMock);
+        $this->customerCartProviderMock->expects($this->once())
+            ->method('resolve')
+            ->with($customerId)
+            ->willReturn( $cartMock);
 
-         $this->customerManagementMock->expects($this->once())
-                ->method('getCartForCustomer')
-             ->with($customerId)
-             ->with($cartMock);
+//         $this->customerManagementMock->expects($this->once())
+//                ->method('getCartForCustomer')
+//             ->with($customerId)
+//             ->willReturn($cartMock);
 
         $result = $reorderModel->execute($orderNumber, $storeId);
         print_r($result);
