@@ -40,17 +40,22 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var Product
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
+
+    /**
+     * @var ProductFactory
+     */
+    private $productFactory;
 
     /**
      * @inheritdoc
@@ -59,7 +64,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->_model = $this->objectManager->create(Product::class);
+        $this->model = $this->objectManager->create(Product::class);
+        $this->productFactory = $this->objectManager->create(ProductFactory::class);
     }
 
     /**
@@ -93,9 +99,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanAffectOptions()
     {
-        $this->assertFalse($this->_model->canAffectOptions());
-        $this->_model->canAffectOptions(true);
-        $this->assertTrue($this->_model->canAffectOptions());
+        $this->assertFalse($this->model->canAffectOptions());
+        $this->model->canAffectOptions(true);
+        $this->assertTrue($this->model->canAffectOptions());
     }
 
     /**
@@ -107,7 +113,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testCRUD()
     {
-        $this->_model->setTypeId(
+        $this->model->setTypeId(
             'simple'
         )->setAttributeSetId(
             4
@@ -128,7 +134,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->setStatus(
             Status::STATUS_ENABLED
         );
-        $crud = new \Magento\TestFramework\Entity($this->_model, ['sku' => uniqid()]);
+        $crud = new \Magento\TestFramework\Entity($this->model, ['sku' => uniqid()]);
         $crud->testCrud();
     }
 
@@ -150,7 +156,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $random = Bootstrap::getObjectManager()->get(Random::class);
         $longDescription = $random->getRandomString(70000);
 
-        $this->_model->setTypeId(
+        $this->model->setTypeId(
             'simple'
         )->setAttributeSetId(
             4
@@ -174,7 +180,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             Status::STATUS_ENABLED
         );
 
-        $this->productRepository->save($this->_model);
+        $this->productRepository->save($this->model);
         $product = $this->productRepository->get($sku);
 
         $this->assertEquals($longDescription, $product->getDescription());
@@ -195,7 +201,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ['catalog_product_999']
         );
         // potential bug: it cleans by cache tags, generated from its ID, which doesn't make much sense
-        $this->_model->setId(999)->cleanCache();
+        $this->model->setId(999)->cleanCache();
         $this->assertFalse(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Framework\App\CacheInterface::class
@@ -215,8 +221,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         // Model accepts only files in tmp media path, we need to copy fixture file there
         $mediaFile = $this->_copyFileToBaseTmpMediaPath(dirname(__DIR__) . '/_files/magento_image.jpg');
 
-        $this->_model->addImageToMediaGallery($mediaFile);
-        $gallery = $this->_model->getData('media_gallery');
+        $this->model->addImageToMediaGallery($mediaFile);
+        $gallery = $this->model->getData('media_gallery');
         $this->assertNotEmpty($gallery);
         $this->assertTrue(isset($gallery['images'][0]['file']));
         $this->assertStringStartsWith('/m/a/magento_image', $gallery['images'][0]['file']);
@@ -259,18 +265,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testDuplicate()
     {
-        $this->_model = $this->productRepository->get('simple');
+        $this->model = $this->productRepository->get('simple');
 
         // fixture
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Copier::class
         );
-        $duplicate = $copier->copy($this->_model);
+        $duplicate = $copier->copy($this->model, $this->productFactory->create());
         try {
             $this->assertNotEmpty($duplicate->getId());
-            $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
-            $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
+            $this->assertNotEquals($duplicate->getId(), $this->model->getId());
+            $this->assertNotEquals($duplicate->getSku(), $this->model->getSku());
             $this->assertEquals(
                 Status::STATUS_DISABLED,
                 $duplicate->getStatus()
@@ -290,14 +296,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testDuplicateSkuGeneration()
     {
-        $this->_model = $this->productRepository->get('simple');
+        $this->model = $this->productRepository->get('simple');
 
-        $this->assertEquals('simple', $this->_model->getSku());
+        $this->assertEquals('simple', $this->model->getSku());
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Copier::class
         );
-        $duplicate = $copier->copy($this->_model);
+        $duplicate = $copier->copy($this->model, $this->productFactory->create());
         $this->assertEquals('simple-5', $duplicate->getSku());
     }
 
@@ -329,18 +335,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             [Status::STATUS_ENABLED],
-            $this->_model->getVisibleInCatalogStatuses()
+            $this->model->getVisibleInCatalogStatuses()
         );
         $this->assertEquals(
             [Status::STATUS_ENABLED],
-            $this->_model->getVisibleStatuses()
+            $this->model->getVisibleStatuses()
         );
 
-        $this->_model->setStatus(Status::STATUS_DISABLED);
-        $this->assertFalse($this->_model->isVisibleInCatalog());
+        $this->model->setStatus(Status::STATUS_DISABLED);
+        $this->assertFalse($this->model->isVisibleInCatalog());
 
-        $this->_model->setStatus(Status::STATUS_ENABLED);
-        $this->assertTrue($this->_model->isVisibleInCatalog());
+        $this->model->setStatus(Status::STATUS_ENABLED);
+        $this->assertTrue($this->model->isVisibleInCatalog());
 
         $this->assertEquals(
             [
@@ -348,16 +354,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 Visibility::VISIBILITY_IN_CATALOG,
                 Visibility::VISIBILITY_BOTH,
             ],
-            $this->_model->getVisibleInSiteVisibilities()
+            $this->model->getVisibleInSiteVisibilities()
         );
 
-        $this->assertFalse($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(Visibility::VISIBILITY_IN_SEARCH);
-        $this->assertTrue($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(Visibility::VISIBILITY_IN_CATALOG);
-        $this->assertTrue($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(Visibility::VISIBILITY_BOTH);
-        $this->assertTrue($this->_model->isVisibleInSiteVisibility());
+        $this->assertFalse($this->model->isVisibleInSiteVisibility());
+        $this->model->setVisibility(Visibility::VISIBILITY_IN_SEARCH);
+        $this->assertTrue($this->model->isVisibleInSiteVisibility());
+        $this->model->setVisibility(Visibility::VISIBILITY_IN_CATALOG);
+        $this->assertTrue($this->model->isVisibleInSiteVisibility());
+        $this->model->setVisibility(Visibility::VISIBILITY_BOTH);
+        $this->assertTrue($this->model->isVisibleInSiteVisibility());
     }
 
     /**
@@ -368,9 +374,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsDuplicable()
     {
-        $this->assertTrue($this->_model->isDuplicable());
-        $this->_model->setIsDuplicable(0);
-        $this->assertFalse($this->_model->isDuplicable());
+        $this->assertTrue($this->model->isDuplicable());
+        $this->model->setIsDuplicable(0);
+        $this->assertFalse($this->model->isDuplicable());
     }
 
     /**
@@ -383,13 +389,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsSalable()
     {
-        $this->_model = $this->productRepository->get('simple');
+        $this->model = $this->productRepository->get('simple');
 
         // fixture
-        $this->assertTrue((bool) $this->_model->isSalable());
-        $this->assertTrue((bool) $this->_model->isSaleable());
-        $this->assertTrue((bool) $this->_model->isAvailable());
-        $this->assertTrue($this->_model->isInStock());
+        $this->assertTrue((bool) $this->model->isSalable());
+        $this->assertTrue((bool) $this->model->isSaleable());
+        $this->assertTrue((bool) $this->model->isAvailable());
+        $this->assertTrue($this->model->isInStock());
     }
 
     /**
@@ -402,13 +408,13 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsNotSalableWhenStatusDisabled()
     {
-        $this->_model = $this->productRepository->get('simple');
+        $this->model = $this->productRepository->get('simple');
 
-        $this->_model->setStatus(0);
-        $this->assertFalse((bool) $this->_model->isSalable());
-        $this->assertFalse((bool) $this->_model->isSaleable());
-        $this->assertFalse((bool) $this->_model->isAvailable());
-        $this->assertFalse($this->_model->isInStock());
+        $this->model->setStatus(0);
+        $this->assertFalse((bool) $this->model->isSalable());
+        $this->assertFalse((bool) $this->model->isSaleable());
+        $this->assertFalse((bool) $this->model->isAvailable());
+        $this->assertFalse($this->model->isInStock());
     }
 
     /**
@@ -419,8 +425,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsVirtual()
     {
-        $this->assertFalse($this->_model->isVirtual());
-        $this->assertFalse($this->_model->getIsVirtual());
+        $this->assertFalse($this->model->isVirtual());
+        $this->assertFalse($this->model->getIsVirtual());
 
         /** @var $model \Magento\Catalog\Model\Product */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -438,9 +444,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testToArray()
     {
-        $this->assertEquals([], $this->_model->toArray());
-        $this->_model->setSku('sku')->setName('name');
-        $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->toArray());
+        $this->assertEquals([], $this->model->toArray());
+        $this->model->setSku('sku')->setName('name');
+        $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->model->toArray());
     }
 
     /**
@@ -450,8 +456,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testFromArray()
     {
-        $this->_model->fromArray(['sku' => 'sku', 'name' => 'name', 'stock_item' => ['key' => 'value']]);
-        $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->_model->getData());
+        $this->model->fromArray(['sku' => 'sku', 'name' => 'name', 'stock_item' => ['key' => 'value']]);
+        $this->assertEquals(['sku' => 'sku', 'name' => 'name'], $this->model->getData());
     }
 
     /**
@@ -461,9 +467,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetOrigDataBackend()
     {
-        $this->assertEmpty($this->_model->getOrigData());
-        $this->_model->setOrigData('key', 'value');
-        $this->assertEquals('value', $this->_model->getOrigData('key'));
+        $this->assertEmpty($this->model->getOrigData());
+        $this->model->setOrigData('key', 'value');
+        $this->assertEquals('value', $this->model->getOrigData('key'));
     }
 
     /**
@@ -473,24 +479,24 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testReset()
     {
-        $model = $this->_model;
+        $model = $this->model;
 
         $this->_assertEmpty($model);
 
-        $this->_model->setData('key', 'value');
-        $this->_model->reset();
+        $this->model->setData('key', 'value');
+        $this->model->reset();
         $this->_assertEmpty($model);
 
-        $this->_model->setOrigData('key', 'value');
-        $this->_model->reset();
+        $this->model->setOrigData('key', 'value');
+        $this->model->reset();
         $this->_assertEmpty($model);
 
-        $this->_model->addCustomOption('key', 'value');
-        $this->_model->reset();
+        $this->model->addCustomOption('key', 'value');
+        $this->model->reset();
         $this->_assertEmpty($model);
 
-        $this->_model->canAffectOptions(true);
-        $this->_model->reset();
+        $this->model->canAffectOptions(true);
+        $this->model->reset();
         $this->_assertEmpty($model);
     }
 
@@ -519,7 +525,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product2 = $this->productRepository->get('simple2');
 
         $this->assertTrue(
-            $this->_model->isProductsHasSku(
+            $this->model->isProductsHasSku(
                 [$product1->getId(), $product2->getId()]
             )
         );
@@ -533,7 +539,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testProcessBuyRequest()
     {
         $request = new \Magento\Framework\DataObject();
-        $result = $this->_model->processBuyRequest($request);
+        $result = $this->model->processBuyRequest($request);
         $this->assertInstanceOf(\Magento\Framework\DataObject::class, $result);
         $this->assertArrayHasKey('errors', $result->getData());
     }
@@ -545,7 +551,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate()
     {
-        $this->_model->setTypeId(
+        $this->model->setTypeId(
             'simple'
         )->setAttributeSetId(
             4
@@ -568,7 +574,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->setCollectExceptionMessages(
             true
         );
-        $validationResult = $this->_model->validate();
+        $validationResult = $this->model->validate();
         $this->assertEquals('SKU length should be 64 characters maximum.', $validationResult['sku']);
         unset($validationResult['sku']);
         foreach ($validationResult as $error) {
@@ -588,7 +594,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'unique_input_attribute');
-        $this->_model->setTypeId(
+        $this->model->setTypeId(
             'simple'
         )->setAttributeSetId(
             4
@@ -611,7 +617,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             true
         );
 
-        $validationResult = $this->_model->validate();
+        $validationResult = $this->model->validate();
         $this->assertCount(1, $validationResult);
 
         $this->assertContains(
@@ -633,11 +639,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'unique_input_attribute');
-        $this->_model = $this->_model->loadByAttribute(
+        $this->model = $this->model->loadByAttribute(
             'sku',
             'simple product with unique input attribute'
         );
-        $this->_model->setTypeId(
+        $this->model->setTypeId(
             'simple'
         )->setAttributeSetId(
             4
@@ -660,7 +666,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             true
         );
 
-        $validationResult = $this->_model->validate();
+        $validationResult = $this->model->validate();
         $this->assertTrue($validationResult);
     }
 
@@ -672,8 +678,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOptions()
     {
-        $this->_model = $this->productRepository->get('simple_with_custom_options');
-        $options = $this->_model->getOptions();
+        $this->model = $this->productRepository->get('simple_with_custom_options');
+        $options = $this->model->getOptions();
         $this->assertNotEmpty($options);
         $expectedValue = [
             '3-1-select' => -3000.00,
