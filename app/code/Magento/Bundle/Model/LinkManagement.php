@@ -422,7 +422,7 @@ class LinkManagement implements ProductLinkManagementInterface
         $selectionPriceType = $selectionPrice = null;
 
         /** @var Selection $product */
-        if ($product->getPriceType()) {
+        if ($product->getPriceType() !== null) {
             $selectionPriceType = $selection->getSelectionPriceType();
             $selectionPrice = $selection->getSelectionPriceValue();
         }
