@@ -7,36 +7,30 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor;
 
+use InvalidArgumentException;
 use Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DB\Select;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class FilterProcessorTest extends TestCase
 {
     /**
-     * Return model
-     *
-     * @param CustomFilterInterface[] $customFilters
-     * @param array $fieldMapping
-     * @return FilterProcessor
-     */
-    private function getModel(array $customFilters, array $fieldMapping)
-    {
-        return new FilterProcessor($customFilters, $fieldMapping);
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testProcess()
+    public function testProcess(): void
     {
         /** @var CustomFilterInterface|MockObject $customFilterMock */
-        $customFilterMock = $this->createPartialMock(CustomFilterInterface::class, ['apply']);
+        $customFilterMock = $this->createPartialMock(
+            CustomFilterInterface::class,
+            ['apply']
+        );
 
         $customFilterField = 'customFilterField';
         $customFilters = [$customFilterField => $customFilterMock];
@@ -145,14 +139,21 @@ class FilterProcessorTest extends TestCase
                 [$resultTwo]
             )->willReturnSelf();
 
+        $selectMock = $this->createMock(Select::class);
+        $collectionMock->method('getSelect')->willReturn($selectMock);
+        $selectMock->method('getPart')
+            ->with(Select::WHERE)
+            ->willReturn([0 => '']);
+
         $model->process($searchCriteriaMock, $collectionMock);
     }
 
-    public function testProcessWithException()
+    public function testProcessWithException(): void
     {
         $this->expectException('InvalidArgumentException');
-        /** @var \stdClass|MockObject $customFilterMock */
-        $customFilterMock = $this->getMockBuilder(\stdClass::class)->addMethods(['apply'])
+        /** @var stdClass|MockObject $customFilterMock */
+        $customFilterMock = $this->getMockBuilder(stdClass::class)
+            ->addMethods(['apply'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -198,5 +199,19 @@ class FilterProcessorTest extends TestCase
             ->method('addFieldToFilter');
 
         $model->process($searchCriteriaMock, $collectionMock);
+    }
+
+    /**
+     * Returns model
+     *
+     * @param CustomFilterInterface[] $customFilters
+     * @param array $fieldMapping
+     * @return FilterProcessor
+     */
+    private function getModel(
+        array $customFilters,
+        array $fieldMapping
+    ): FilterProcessor {
+        return new FilterProcessor($customFilters, $fieldMapping);
     }
 }
