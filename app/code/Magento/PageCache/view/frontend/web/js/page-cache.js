@@ -45,18 +45,6 @@ define([
          * @param {jQuery} element - Comment holder
          */
         (function lookup(element) {
-            var iframeHostName;
-
-            // prevent cross origin iframe content reading
-            if ($(element).prop('tagName') === 'IFRAME') {
-                iframeHostName = $('<a>').prop('href', $(element).prop('src'))
-                    .prop('hostname');
-
-                if (window.location.hostname !== iframeHostName) {
-                    return [];
-                }
-            }
-
             /**
              * Rewrite jQuery contents().
              *
@@ -64,8 +52,21 @@ define([
              */
             contents = function (elem) {
                 return $.map(elem, function (el) {
+                    var iframeHostName,
+                        isIframe = el.nodeName.toLowerCase() === 'iframe';
+
+                    // prevent cross origin iframe content reading
+                    if (isIframe) {
+                        iframeHostName = $('<a>').prop('href', $(el).prop('src'))
+                            .prop('hostname');
+
+                        if (window.location.hostname !== iframeHostName) {
+                            return [];
+                        }
+                    }
+
                     try {
-                        return el.nodeName.toLowerCase() === 'iframe' ?
+                        return isIframe ?
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
                             $.merge([], el.childNodes);
                     } catch (e) {
