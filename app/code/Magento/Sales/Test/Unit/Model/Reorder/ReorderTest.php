@@ -9,7 +9,9 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
+use Magento\Quote\Model\CustomerManagement;
 use Magento\Quote\Model\GuestCart\GuestCartResolver;
+use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Reorder\Reorder;
@@ -64,6 +66,11 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
      */
     private $jsonSerializer;
 
+    /**
+     * @var CustomerManagement|MockObject
+     */
+    private $customerManagementMock;
+
     function setUp(): void
     {
         parent::setUp();
@@ -84,20 +91,13 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->productCollectionFactoryMock = $this->createPartialMock(ProductCollectionFactory::class, []);
 
+        $this->customerManagementMock = $this->createPartialMock(CustomerManagement::class,['getCartForCustomer']);
+
 
 
         $this->jsonSerializer = $this->getMockBuilder(Json::class)
             ->onlyMethods(['unserialize'])
             ->getMock();
-
-//        $this->reorderModel = $this->objectManager->getObject(Reorder::class,
-//            [
-//                'orderFactory' => $this->orderFactoryMock,
-//                'serializer' => $this->jsonSerializer
-//            ]
-//        );
-
-
 
     }
 
@@ -119,9 +119,8 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             $this->jsonSerializer
         );
 
-//orderMock
-        $order = $this->createMock(Order::class);
-        $order->expects($this->once())
+        $orderMock = $this->createMock(Order::class);
+        $orderMock->expects($this->once())
             ->method('load')
             ->with($orderNumber)
             ->willReturnSelf();
@@ -133,15 +132,28 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $this->orderFactoryMock->expects($this->once())
             ->method('loadByIncrementIdAndStoreId')
             ->with($orderNumber, $storeId)
-            ->willReturn($order);
+            ->willReturn($orderMock);
 
-        $order->expects($this->once())
+        $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn($orderNumber);
 
-        $order->expects($this->once())
+        $orderMock->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
+
+
+        $cartMock = $this->createMock(Quote::class);
+
+//        $this->customerCartProviderMock->expects($this->once())
+//            ->method('getCartForCustomer')
+//            ->with($customerId)
+//            ->willReturn( $this->customerManagementMock);
+
+         $this->customerManagementMock->expects($this->once())
+                ->method('getCartForCustomer')
+             ->with($customerId)
+             ->with($cartMock);
 
         $result = $reorderModel->execute($orderNumber, $storeId);
         print_r($result);
