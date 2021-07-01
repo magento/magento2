@@ -203,8 +203,7 @@ class DeclarativeSchemaDependencyProvider
         $declaration = [];
         foreach (Files::init()->getDbSchemaFiles() as $filePath) {
             $filePath = reset($filePath);
-            preg_match('#app/code/(\w+/\w+)#', $filePath, $result);
-            $moduleName = str_replace('/', '\\', $result[1]);
+            $moduleName = $this->getModuleNameFromSchemaPath($filePath);
             $moduleDeclaration = $this->getDbSchemaDeclaration($filePath);
 
             foreach ($moduleDeclaration[self::SCHEMA_ENTITY_TABLE] as $tableName => $tableDeclaration) {
@@ -214,9 +213,10 @@ class DeclarativeSchemaDependencyProvider
                 array_push($tableDeclaration['modules'], $moduleName);
                 $moduleDeclaration = array_replace_recursive(
                     $moduleDeclaration,
-                    [self::SCHEMA_ENTITY_TABLE => [
-                        $tableName => $tableDeclaration,
-                    ]
+                    [
+                        self::SCHEMA_ENTITY_TABLE => [
+                            $tableName => $tableDeclaration,
+                        ]
                     ]
                 );
                 foreach ($entityTypes as $entityType) {
@@ -225,9 +225,10 @@ class DeclarativeSchemaDependencyProvider
                     }
                     $moduleDeclaration = array_replace_recursive(
                         $moduleDeclaration,
-                        [self::SCHEMA_ENTITY_TABLE => [
-                            $tableName => $this->addModuleAssigment($tableDeclaration, $entityType, $moduleName)
-                        ]
+                        [
+                            self::SCHEMA_ENTITY_TABLE => [
+                                $tableName => $this->addModuleAssigment($tableDeclaration, $entityType, $moduleName)
+                            ]
                         ]
                     );
                 }
@@ -237,6 +238,23 @@ class DeclarativeSchemaDependencyProvider
         $this->dbSchemaDeclaration = $declaration;
 
         return $this->dbSchemaDeclaration;
+    }
+
+    /**
+     * Get module name from DB schema path.
+     *
+     * @param string $filePath
+     *
+     * @return string
+     */
+    private function getModuleNameFromSchemaPath(string $filePath): string
+    {
+        $moduleXml = dirname($filePath);
+        $moduleXml .= DIRECTORY_SEPARATOR . 'module.xml';
+        $xml = simplexml_load_file($moduleXml);
+        $result = (string)$xml->children()[0]['name'];
+
+        return str_replace('_', '\\', $result);
     }
 
     /**
