@@ -155,6 +155,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $rowTax = array_sum($rowTaxes);
         $rowTaxBeforeDiscount = array_sum($rowTaxesBeforeDiscount);
         $rowTotalInclTax = $rowTotal + $rowTaxBeforeDiscount;
+        $discountTaxCompensationAmount = $rowTaxBeforeDiscount - $rowTax;
         $priceInclTax = $rowTotalInclTax / $quantity;
 
         if ($round) {
