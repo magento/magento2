@@ -15,7 +15,6 @@
             <description value="Create Creditmemo for bundle product with without receiving product back(all child item qty = 0)"/>
             <features value="Sales"/>
             <severity value="AVERAGE"/>
-            <group value="Sales"/>
         </annotations>
 
         <before>
@@ -72,7 +71,7 @@
         </actionGroup>
         <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
             <argument name="product" value="$$product$$"/>
-            <argument name="quantity" value="1"/>
+            <argument name="quantity" value="2"/>
             <argument name="price" value="$738.00"/>
         </actionGroup>
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
