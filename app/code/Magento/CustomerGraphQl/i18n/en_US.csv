@@ -1,0 +1,6 @@
+"Cannot reset the customer's password","Cannot reset the customer's password"
+"Cannot set the customer's password","Cannot set the customer's password"
+"newPassword must be specified","newPassword must be specified"
+"resetPasswordToken must be specified","resetPasswordToken must be specified"
+"The email address has an invalid format.","The email address has an invalid format."
+"You must specify an email address.","You must specify an email address."
