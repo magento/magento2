@@ -11,7 +11,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Update bml config settings to the equivalent paylater settings
+ * Remove old tinymce versions from the configuration
  */
 class RemoveTinymceConfig implements DataPatchInterface
 {
@@ -21,7 +21,6 @@ class RemoveTinymceConfig implements DataPatchInterface
     private $moduleDataSetup;
 
     /**
-     * PrepareInitialConfig constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
