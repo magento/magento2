@@ -176,16 +176,15 @@ class Price extends AbstractFilter
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @param boolean $isLast
      * @return float|\Magento\Framework\Phrase
      */
-    protected function _renderRangeLabel($fromPrice, $toPrice, $isLast = false)
+    protected function _renderRangeLabel($fromPrice, $toPrice)
     {
         $fromPrice = empty($fromPrice) ? 0 : $fromPrice * $this->getCurrencyRate();
         $toPrice = empty($toPrice) ? $toPrice : $toPrice * $this->getCurrencyRate();
 
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
-        if ($isLast) {
+        if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
         } elseif ($fromPrice == $toPrice && $this->dataProvider->getOnePriceIntervalValue()) {
             return $formattedFromPrice;
@@ -216,15 +215,13 @@ class Price extends AbstractFilter
 
         $data = [];
         if (count($facets) > 1) { // two range minimum
-            $lastFacet = array_key_last($facets);
             foreach ($facets as $key => $aggregation) {
                 $count = $aggregation['count'];
                 if (strpos($key, '_') === false) {
                     continue;
                 }
 
-                $isLast = $lastFacet === $key;
-                $data[] = $this->prepareData($key, $count, $isLast);
+                $data[] = $this->prepareData($key, $count);
             }
         }
 
@@ -268,13 +265,18 @@ class Price extends AbstractFilter
      *
      * @param string $key
      * @param int $count
-     * @param boolean $isLast
      * @return array
      */
-    private function prepareData($key, $count, $isLast = false)
+    private function prepareData($key, $count)
     {
         [$from, $to] = explode('_', $key);
-        $label = $this->_renderRangeLabel($from, $to, $isLast);
+        if ($from == '*') {
+            $from = $this->getFrom($to);
+        }
+        if ($to == '*') {
+            $to = $this->getTo($to);
+        }
+        $label = $this->_renderRangeLabel($from, $to);
         $value = $from . '-' . $to . $this->dataProvider->getAdditionalRequestData();
 
         $data = [
