@@ -62,13 +62,15 @@ class AvailableShippingMethods implements ResolverInterface
         $address = clone $value['model'];
         $address->setLimitCarrier(null);
 
+        $cart = $address->getQuote();
+        $address = $cart->getShippingAddress();
+
         // Allow shipping rates by setting country id for new addresses
         if (!$address->getCountryId() && $address->getCountryCode()) {
             $address->setCountryId($address->getCountryCode());
         }
 
         $address->setCollectShippingRates(true);
-        $cart = $address->getQuote();
         $this->totalsCollector->collectAddressTotals($cart, $address);
         $methods = [];
         $shippingRates = $address->getGroupedAllShippingRates();
