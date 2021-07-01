@@ -98,16 +98,17 @@ class Inbox extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
             if (empty($item['url'])) {
                 $select->where('url IS NULL');
+                unset($item['url']);
             } else {
                 $select->where('url = ?', $item['url']);
             }
 
             if (isset($item['internal'])) {
                 $row = false;
-                unset($item['internal']);
             } else {
                 $row = $connection->fetchRow($select);
             }
+            unset($item['internal']);
 
             if (!$row) {
                 $connection->insert($this->getMainTable(), $item);
