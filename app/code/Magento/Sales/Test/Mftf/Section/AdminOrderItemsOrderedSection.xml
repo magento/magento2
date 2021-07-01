@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderItemsOrderedSection">
         <element name="itemProductName" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-title" parameterized="true"/>
+        <element name="itemCustomOptionDownload" type="button" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .item-options dd a" parameterized="true"/>
         <element name="itemProductSku" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-product .product-sku-block" parameterized="true"/>
         <element name="itemStatus" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-status" parameterized="true"/>
         <element name="itemOriginalPrice" type="text" selector=".edit-order-table tr:nth-of-type({{row}}) .col-original-price .price" parameterized="true"/>

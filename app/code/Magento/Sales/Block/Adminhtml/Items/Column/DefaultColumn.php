@@ -87,16 +87,17 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Return custom option html
      *
      * @param array $optionInfo
+     * @param int $itemId
      * @return string
      */
-    public function getCustomizedOptionValue($optionInfo)
+    public function getCustomizedOptionValue($optionInfo, $itemId)
     {
-        // render customized option view
         $_default = $optionInfo['value'];
         if (isset($optionInfo['option_type'])) {
             try {
                 $group = $this->_optionFactory->create()->groupFactory($optionInfo['option_type']);
-                return $group->getCustomizedView($optionInfo);
+                $params =  ['order_item_id' => $itemId, 'option_id' => $optionInfo['option_id']];
+                return $group->getCustomizedView($optionInfo, $params);
             } catch (\Exception $e) {
                 return $_default;
             }

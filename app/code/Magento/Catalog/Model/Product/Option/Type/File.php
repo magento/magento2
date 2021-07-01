@@ -155,13 +155,15 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Return option html
      *
      * @param array $optionInfo
+     * @param array $params
      * @return string|void
      */
-    public function getCustomizedView($optionInfo)
+    public function getCustomizedView($optionInfo, $params = null)
     {
         try {
             if (isset($optionInfo['option_value'])) {
-                return $this->_getOptionHtml($optionInfo['option_value']);
+                $optionValue = $this->parseValue($optionInfo, $params);
+                return $this->_getOptionHtml($optionValue);
             } elseif (isset($optionInfo['value'])) {
                 return $optionInfo['value'];
             }
@@ -375,13 +377,13 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Format File option html
      *
-     * @param string|array $optionValue Serialized string of option data or its data array
+     * @param array $value option data
+     * @param array $params
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _getOptionHtml($optionValue)
+    protected function _getOptionHtml($value)
     {
-        $value = $this->_unserializeValue($optionValue);
         try {
             $sizes = $this->prepareSize($value);
 
@@ -559,5 +561,21 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $sizes = $value['width'] . ' x ' . $value['height'] . ' ' . __('px.');
         }
         return $sizes;
+    }
+
+    /**
+     * @param array $optionInfo
+     * @param array|null $params
+     * @return array|string
+     */
+    private function parseValue(array $optionInfo, ?array $params)
+    {
+        $optionValue = $optionInfo['option_value'];
+        $value = $this->_unserializeValue($optionValue);
+        if (!isset($params)) {
+            return $value;
+        }
+        $value['url']['params'] = array_merge($value['url']['params'], $params);
+        return $value;
     }
 }

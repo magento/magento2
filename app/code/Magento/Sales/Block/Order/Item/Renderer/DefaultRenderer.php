@@ -125,6 +125,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * Accept option value and return its formatted view
      *
      * @param mixed $optionValue
+     * @param int $itemId
      * Method works well with these $optionValue format:
      *      1. String
      *      2. Indexed array e.g. array(val1, val2, ...)
@@ -142,7 +143,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getFormatedOptionValue($optionValue)
+    public function getFormatedOptionValue($optionValue, $itemId)
     {
         $optionInfo = [];
 
@@ -164,7 +165,8 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
             if (isset($optionInfo['option_type'])) {
                 try {
                     $group = $this->_productOptionFactory->create()->groupFactory($optionInfo['option_type']);
-                    return ['value' => $group->getCustomizedView($optionInfo)];
+                    $params =  ['order_item_id' => $itemId, 'option_id' => $optionInfo['option_id']];
+                    return ['value' => $group->getCustomizedView($optionInfo, $params)];
                 } catch (\Exception $e) {
                     return $_default;
                 }
