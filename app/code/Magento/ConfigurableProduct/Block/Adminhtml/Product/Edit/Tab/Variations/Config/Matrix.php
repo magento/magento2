@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 /**
  * Product variations matrix block
@@ -67,6 +68,11 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $locator;
 
     /**
+     * @var DirectoryHelper
+     */
+    protected $directoryHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -75,6 +81,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\Catalog\Helper\Image $image
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param LocatorInterface $locator
+     * @param DirectoryHelper $directoryHelper
      * @param array $data
      */
     public function __construct(
@@ -86,6 +93,7 @@ class Matrix extends \Magento\Backend\Block\Template
         \Magento\Catalog\Helper\Image $image,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         LocatorInterface $locator,
+        DirectoryHelper $directoryHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -96,6 +104,7 @@ class Matrix extends \Magento\Backend\Block\Template
         $this->localeCurrency = $localeCurrency;
         $this->image = $image;
         $this->locator = $locator;
+        $this->directoryHelper = $directoryHelper;
     }
 
     /**
@@ -442,5 +451,13 @@ class Matrix extends \Magento\Backend\Block\Template
         $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
 
         return [$attributes, $variationOptions];
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeightUnit()
+    {
+        return $this->directoryHelper->getWeightUnit();
     }
 }

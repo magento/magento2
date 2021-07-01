@@ -754,6 +754,114 @@ $jsonHelper = $block->getData('jsonHelper');
             </div>
         </div>
     </div>
+
+    <div data-bind="with: sections().weight" class="steps-wizard-section">
+        <div data-role="section">
+            <div class="steps-wizard-section-title">
+                <span><?= $block->escapeHtml(__('Weight')) ?></span>
+            </div>
+            <ul class="steps-wizard-section-list">
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="apply-single-weight-radio"
+                               class="admin__control-radio"
+                               value="single"
+                               data-bind="checked: type" />
+                        <label for="apply-single-weight-radio" class="admin__field-label">
+                            <span><?= $block->escapeHtml(__('Apply single weight to each SKUs')) ?></span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="apply-unique-weight-radio"
+                               class="admin__control-radio"
+                               value="each"
+                               data-bind="checked: type" />
+                        <label for="apply-unique-weight-radio" class="admin__field-label">
+                            <span><?= $block->escapeHtml(__('Apply unique weight by attribute to each SKU')) ?></span>
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="admin__field admin__field-option">
+                        <input type="radio"
+                               id="skip-weight-radio"
+                               class="admin__control-radio"
+                               value="none"
+                               checked
+                               data-bind="checked: type" />
+                        <label for="skip-weight-radio" class="admin__field-label">
+                            <span><?= $block->escapeHtml(__('Skip weight at this time')) ?></span>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+
+            <form data-role="attributes-values-form">
+                <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
+                    <div class="admin__field _required">
+                        <label for="apply-single-weight-input" class="admin__field-label">
+                            <span><?= $block->escapeHtml(__('Weight')) ?></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <div class="admin__control-addon">
+                                <input type="text"
+                                       id="apply-single-weight-input"
+                                       class="admin__control-text required-entry validate-zero-or-greater"
+                                       data-bind="value: value, uniqueName: true" />
+                                <label for="apply-single-weight-input" class="admin__addon-suffix">
+                                    <span data-bind="text: unit"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+
+            <div data-bind="visible: type() == 'each'">
+                <fieldset class="admin__fieldset bulk-attribute-values">
+                    <div class="admin__field _required">
+                        <label for="apply-single-weight-input-qty" class="admin__field-label">
+                            <span><?= $block->escapeHtml(__('Select attribute')) ?></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <select id="apply-single-weight-input-qty" class="admin__control-select" data-bind="
+                                options: $parent.attributes,
+                                optionsText: 'label',
+                                value: attribute,
+                                optionsCaption: 'Select'"></select>
+                        </div>
+                    </div>
+                </fieldset>
+                <form data-role="attributes-values-form">
+                    <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
+                        <!-- ko foreach: attribute().chosen -->
+                        <div class="admin__field _required">
+                            <label data-bind="attr: {for: 'apply-weight-input-' + $index()}" class="admin__field-label">
+                                <span data-bind="text:label"></span>
+                            </label>
+                            <div class="admin__field-control">
+                                <div class="admin__control-addon">
+                                    <input id="apply-single-weight-input-value"
+                                       class="admin__control-text required-entry validate-zero-or-greater" type="text"
+                                       data-bind="value:sections()[$parent.label], uniqueName: true,
+                                            attr: {id: 'apply-weight-input-' + $index()}"/>
+                                    <label data-bind="attr: {for: 'apply-weight-input-' + $index()}"
+                                           class="admin__addon-suffix">
+                                        <span data-bind="text: $parent.unit"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /ko -->
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
     </form>
 </div>
 

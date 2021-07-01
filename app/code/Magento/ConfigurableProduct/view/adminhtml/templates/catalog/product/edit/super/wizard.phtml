@@ -13,6 +13,7 @@ $jsonHelper = $block->getData('jsonHelper');
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
+$weightUnit = $block->getWeightUnit();
 ?>
 <div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>"
      data-role="step-wizard-dialog"
@@ -62,6 +63,7 @@ $currencySymbol = $block->getCurrencySymbol();
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
                         "variations": <?= /* @noEscape */ $jsonHelper->jsonEncode($productMatrix) ?>,
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
+                        "weightUnit": "<?= /* @noEscape */ $weightUnit ?>",
                         "attributeSetCreationUrl": "<?= /* @noEscape */ $block->getUrl('*/product_set/save') ?>"
                     }
                 }
