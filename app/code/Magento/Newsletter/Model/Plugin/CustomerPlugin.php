@@ -360,11 +360,6 @@ class CustomerPlugin
      */
     private function getCurrentStoreId(CustomerInterface $customer): int
     {
-        $storeId = (int)$this->storeManager->getStore()->getId();
-        if ($storeId === Store::DEFAULT_STORE_ID) {
-            $storeId = (int)$customer->getStoreId();
-        }
-
-        return $storeId;
+        return (int)$customer->getStoreId();
     }
 }
