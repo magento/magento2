@@ -8,13 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup">
+    <actionGroup name="AdminExpandSeoSectionActionGroup">
         <annotations>
-            <description>Click ok button on upload image tinyMce4 popup.</description>
+            <description>Expand SEO section on the Admin CMS Page creation/edit.</description>
         </annotations>
-
-        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn"/>
-        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn"/>
-        <waitForPageLoad stepKey="wait"/>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="expandSeoSection"/>
+        <waitForPageLoad stepKey="waitForSeoSection"/>
     </actionGroup>
 </actionGroups>
