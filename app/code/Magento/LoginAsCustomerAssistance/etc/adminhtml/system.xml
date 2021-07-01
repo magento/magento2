@@ -9,10 +9,10 @@
     <system>
         <section id="login_as_customer" showInWebsite="1">
             <group id="general" showInWebsite="1">
-                <field id="shopping_assistance_checkbox_title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="shopping_assistance_checkbox_title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title for Login as Customer opt-in checkbox</label>
                 </field>
-                <field id="shopping_assistance_checkbox_tooltip" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="shopping_assistance_checkbox_tooltip" translate="label" type="textarea" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Login as Customer checkbox tooltip</label>
                 </field>
             </group>
