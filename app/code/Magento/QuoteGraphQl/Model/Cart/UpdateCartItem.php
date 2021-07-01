@@ -114,6 +114,7 @@ class UpdateCartItem
             );
         }
         $cartItem->setQty($quantity);
+        $cartItem->getProduct()->setQty($quantity);
         $this->validateCartItem($cartItem);
     }
 
