@@ -132,8 +132,9 @@ define([
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
 
-                if(field.valid())
+                if (field.valid()) {
                     optionInstance.trigger('change');
+                }
             }
         },
 
