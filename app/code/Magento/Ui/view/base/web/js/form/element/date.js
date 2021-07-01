@@ -201,6 +201,26 @@ define([
                 utils.convertToMomentFormat(this.outputDateFormat);
 
             this.validationParams.dateFormat = this.outputDateFormat;
+        },
+
+        /**
+         * Make sure the datepicker is set to empty
+         */
+        clear: function () {
+            /**
+             * @type {NodeListOf<HTMLInputElement>}
+             */
+            var element = document.getElementsByName(this.inputName);
+
+            this.value('');
+
+            if (!element.length) {
+                return this;
+            }
+
+            element[0].value = '';
+
+            return this;
         }
     });
 });
