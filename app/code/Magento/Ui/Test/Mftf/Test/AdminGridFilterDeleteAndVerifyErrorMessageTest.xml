@@ -11,10 +11,10 @@
         <annotations>
             <stories value="Delete Grid Filter"/>
             <title value="Grid Filter Delete and Verify Error Message"/>
-            <description value="Test log in to uI and Delete Grid Filter Test"/>
+            <description value="Test log in to UI and Delete Grid Filter Test"/>
             <testCaseId value="MC-14272"/>
             <severity value="CRITICAL"/>
-            <group value="uI"/>
+            <group value="ui"/>
             <group value="mtf_migrated"/>
         </annotations>
 

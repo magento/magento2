@@ -31,6 +31,10 @@ define([
              * Used only in date picker mode
              * (this.options.showsTime == false).
              *
+             * Locale examples:
+             * - (en_US):  YYYY-MM-DD
+             * - (nl_NL):  YYYY-MM-DD
+             *
              * @type {String}
              */
             inputDateFormat: 'y-MM-dd',
@@ -41,6 +45,10 @@ define([
              *
              * Used only in date picker mode
              * (this.options.showsTime == false).
+             *
+             * Locale examples:
+             * - (en_US):  MM/DD/YYYY
+             * - (nl_NL):  DD-MM-YYYY
              *
              * @type {String}
              */
@@ -117,22 +125,27 @@ define([
         /**
          * Prepares and sets date/time value that will be displayed
          * in the input field.
-         *
-         * @param {String} value
          */
-        onValueChange: function (value) {
-            var shiftedValue;
+        setInitialValue: function () {
+            const value = this.getInitialValue();
+            let shiftedValue;
 
             if (value) {
                 if (this.options.showsTime && !this.options.timeOnly) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    shiftedValue = moment(value, this.outputDateFormat, true);
+                    if (this.parentScope.startsWith('filters.')) {
+                        /*
+                         * Date element in filter will get date value in outputDateFormat,
+                         * because the server does not convert it from client format to
+                         * server format when saving UI bookmark data.
+                         */
+                        shiftedValue = moment(value, this.outputDateFormat, true);
+                    } else {
+                        shiftedValue = moment(value, this.inputDateFormat, true);
+                    }
                 }
 
-                if (!shiftedValue.isValid()) {
-                    shiftedValue = moment(value, this.inputDateFormat);
-                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';
@@ -141,6 +154,8 @@ define([
             if (shiftedValue !== this.shiftedValue()) {
                 this.shiftedValue(shiftedValue);
             }
+
+            return this._super();
         },
 
         /**

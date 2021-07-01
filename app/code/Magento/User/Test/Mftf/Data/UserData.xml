@@ -123,6 +123,12 @@
         <data key="name" unique="suffix">admin</data>
         <data key="is_active">0</data>
     </entity>
+    <entity name="dutchActiveAdmin" type="user" extends="NewAdminUser">
+        <data key="name" unique="suffix">admin</data>
+        <data key="is_active">1</data>
+        <data key="interface_local">nl_NL</data>
+        <data key="interface_local_label">Nederlands (Nederland)</data>
+    </entity>
 
     <entity name="adminUserCorrectPassword" type="user">
         <data key="username">admin_user_with_correct_password</data>
