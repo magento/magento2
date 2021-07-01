@@ -23,6 +23,7 @@ use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class for managing quote
@@ -159,6 +160,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     private $remoteAddress;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -179,6 +185,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param QuoteFactory $quoteFactory
+     * @param LoggerInterface $logger
      * @param \Magento\Quote\Model\QuoteIdMaskFactory|null $quoteIdMaskFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface|null $addressRepository
      * @param \Magento\Framework\App\RequestInterface|null $request
@@ -206,6 +213,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        LoggerInterface $logger,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory = null,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository = null,
         \Magento\Framework\App\RequestInterface $request = null,
@@ -231,6 +239,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
         $this->quoteFactory = $quoteFactory;
+        $this->logger = $logger;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         $this->addressRepository = $addressRepository ?: ObjectManager::getInstance()
@@ -308,6 +317,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
 
         $quote->setCustomer($customer);

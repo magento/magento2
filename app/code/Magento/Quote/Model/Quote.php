@@ -18,6 +18,7 @@ use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
 use Magento\Sales\Model\Status;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Quote model
@@ -368,6 +369,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     private $allowedCountriesReader;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -405,6 +411,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\TotalsReader $totalsReader
      * @param ShippingFactory $shippingFactory
      * @param ShippingAssignmentFactory $shippingAssignmentFactory
+     * @param LoggerInterface $logger
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -450,6 +457,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
+        LoggerInterface $logger,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
@@ -489,6 +497,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->totalsReader = $totalsReader;
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
+        $this->logger = $logger;
         $this->orderIncrementIdChecker = $orderIncrementIdChecker ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\OrderIncrementIdChecker::class);
         $this->allowedCountriesReader = $allowedCountriesReader
@@ -950,6 +959,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
                     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                    $this->logger->error($e);
                 }
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
@@ -964,6 +974,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
                     // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                    $this->logger->error($e);
                 }
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */

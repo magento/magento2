@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\WriteInterface;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\MediaStorage\Model\File\Storage\Database;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Synchronization
@@ -31,15 +32,23 @@ class Synchronization
     protected $mediaDirectory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param DatabaseFactory $storageFactory
      * @param DirectoryWrite $directory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         DatabaseFactory $storageFactory,
-        DirectoryWrite $directory
+        DirectoryWrite $directory,
+        LoggerInterface $logger
     ) {
         $this->storageFactory = $storageFactory;
         $this->mediaDirectory = $directory;
+        $this->logger = $logger;
     }
 
     /**
@@ -56,6 +65,7 @@ class Synchronization
         try {
             $storage->loadByFilename($relativeFileName);
         } catch (\Exception $e) {
+            $this->logger->error($e);
         }
         if ($storage->getId()) {
             /** @var WriteInterface $file */

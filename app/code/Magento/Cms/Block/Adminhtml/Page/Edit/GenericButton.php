@@ -7,6 +7,7 @@ namespace Magento\Cms\Block\Adminhtml\Page\Edit;
 
 use Magento\Backend\Block\Widget\Context;
 use Magento\Cms\Api\PageRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -25,15 +26,23 @@ class GenericButton
     protected $pageRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Context $context
      * @param PageRepositoryInterface $pageRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        PageRepositoryInterface $pageRepository
+        PageRepositoryInterface $pageRepository,
+        LoggerInterface $logger
     ) {
         $this->context = $context;
         $this->pageRepository = $pageRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -48,6 +57,7 @@ class GenericButton
                 $this->context->getRequest()->getParam('page_id')
             )->getId();
         } catch (NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
         return null;
     }

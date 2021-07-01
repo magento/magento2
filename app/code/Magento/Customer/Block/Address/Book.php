@@ -8,6 +8,7 @@ namespace Magento\Customer\Block\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Block\Address\Grid as AddressesGrid;
+use Psr\Log\LoggerInterface;
 
 /**
  * Customer address book block
@@ -49,11 +50,17 @@ class Book extends \Magento\Framework\View\Element\Template
     private $addressesGrid;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param CustomerRepositoryInterface|null $customerRepository
      * @param AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @param LoggerInterface $logger
      * @param Mapper $addressMapper
      * @param array $data
      * @param AddressesGrid|null $addressesGrid
@@ -65,6 +72,7 @@ class Book extends \Magento\Framework\View\Element\Template
         AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Customer\Model\Address\Config $addressConfig,
+        LoggerInterface $logger,
         Mapper $addressMapper,
         array $data = [],
         Grid $addressesGrid = null
@@ -72,6 +80,7 @@ class Book extends \Magento\Framework\View\Element\Template
         $this->currentCustomer = $currentCustomer;
         $this->addressRepository = $addressRepository;
         $this->_addressConfig = $addressConfig;
+        $this->logger = $logger;
         $this->addressMapper = $addressMapper;
         $this->addressesGrid = $addressesGrid ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(AddressesGrid::class);
@@ -167,6 +176,7 @@ class Book extends \Magento\Framework\View\Element\Template
         try {
             $addresses = $this->addressesGrid->getAdditionalAddresses();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
         return empty($addresses) ? false : $addresses;
     }
@@ -198,6 +208,7 @@ class Book extends \Magento\Framework\View\Element\Template
         try {
             $customer = $this->currentCustomer->getCustomer();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
         return $customer;
     }

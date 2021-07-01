@@ -11,6 +11,7 @@ use Magento\Framework\Xml\Security;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflowpro;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class FraudHandler
@@ -40,15 +41,22 @@ class FraudHandler implements HandlerInterface
     private $xmlSecurity;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param Info $paypalInfoManager
      * @param Security $xmlSecurity
+     * @param LoggerInterface $logger
      */
-    public function __construct(Info $paypalInfoManager, Security $xmlSecurity)
+    public function __construct(Info $paypalInfoManager, Security $xmlSecurity, LoggerInterface $logger)
     {
         $this->paypalInfoManager = $paypalInfoManager;
         $this->xmlSecurity = $xmlSecurity;
+        $this->logger = $logger;
     }
 
     /**
@@ -106,6 +114,7 @@ class FraudHandler implements HandlerInterface
                 $rules[(string)$rule->{'ruleDescription'}] = (string)$rule->{'triggeredMessage'};
             }
         } catch (\Exception $e) {
+            $this->logger->error($e);
         } finally {
             libxml_use_internal_errors(false);
         }

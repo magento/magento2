@@ -26,6 +26,7 @@ use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Newsletter\Helper\Data;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Subscriber model
@@ -160,6 +161,11 @@ class Subscriber extends AbstractModel
     private $subscriptionManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param Data $newsletterData
@@ -170,6 +176,7 @@ class Subscriber extends AbstractModel
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param StateInterface $inlineTranslation
+     * @param LoggerInterface $logger
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
@@ -190,6 +197,7 @@ class Subscriber extends AbstractModel
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         StateInterface $inlineTranslation,
+        LoggerInterface $logger,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = [],
@@ -213,6 +221,7 @@ class Subscriber extends AbstractModel
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->inlineTranslation = $inlineTranslation;
+        $this->logger = $logger;
         $this->subscriptionManager = $subscriptionManager ?: ObjectManager::getInstance()
             ->get(SubscriptionManagerInterface::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -643,6 +652,7 @@ class Subscriber extends AbstractModel
             }
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
         return $this;
     }
