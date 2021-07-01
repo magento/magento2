@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSortByPositionOnCategoryPageTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Elasticsearch"/>
+            <title value="Sort by position when products have the same positions"/>
+            <description value="When two products have the same position user should be see newest product first using ElasticSearch"/>
+            <severity value="MAJOR"/>
+            <group value="SearchEngineElasticsearch" />
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
+                <field key="name">First simple product</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
+                <field key="name">Second simple product</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCategoryPageOpenProductsInCategorySectionActionGroup" stepKey="openProductsInCategorySection"/>
+        <actionGroup ref="AdminSetProductPositionInCategoryProductsGirdActionGroup" stepKey="setProductPositionForSecondProduct">
+            <argument name="positionInGrid" value="1"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetProductPositionInCategoryProductsGirdActionGroup" stepKey="setProductPositionForFirstProduct">
+            <argument name="positionInGrid" value="2"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPageToResetFilter">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductPositionActionGroup" stepKey="seeSecondProductFirstInList">
+            <argument name="position" value="1"/>
+            <argument name="productName" value="$$createSecondProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductPositionActionGroup" stepKey="seeFirstProductLastInList">
+            <argument name="position" value="2"/>
+            <argument name="productName" value="$$createFirstProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -20,15 +20,14 @@ class Sort
     /**
      * List of fields that need to skipp by default.
      */
-    private const DEFAULT_SKIPPED_FIELDS = [
-        'entity_id',
-    ];
+    private const DEFAULT_SKIPPED_FIELDS = [];
 
     /**
      * Default mapping for special fields.
      */
     private const DEFAULT_MAP = [
         'relevance' => '_score',
+        'entity_id' => '_id',
     ];
 
     /**

@@ -71,7 +71,7 @@ class MultipleFiltersTest extends AbstractFiltersTest
                     ],
                 ],
                 'filters' => [],
-                'expected_products' => ['simple1000', 'simple1001', 'simple1002'],
+                'expected_products' => ['simple1002', 'simple1001', 'simple1000'],
             ],
             'applied_first_option_in_both_filters' => [
                 'products_data' => [
@@ -87,7 +87,7 @@ class MultipleFiltersTest extends AbstractFiltersTest
                     ],
                 ],
                 'filters' => ['test_configurable' => 'Option 1', 'dropdown_attribute' => 'Option 1'],
-                'expected_products' => ['simple1000', 'simple1001'],
+                'expected_products' => ['simple1001', 'simple1000'],
             ],
             'applied_mixed_options_in_filters' => [
                 'products_data' => [
