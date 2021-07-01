@@ -7,6 +7,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class to uninstall a module component
@@ -94,6 +95,19 @@ class ModuleUninstaller
             $this->getPatchApplier()->revertDataPatches($module);
         }
     }
+    
+    /**
+     * Checks wether auth.json exists in the Magento root.
+     * @throws FileNotFoundException when auth.json is not found with a reference to the developer documentation.
+     */
+    private function failOnMissingAuthJson() 
+    {
+        $auth_json_path = BP . DIRECTORY_SEPARATOR . 'auth.json';
+        if (!file_exists($auth_json_path)) {
+            $error_message = sprintf('auth.json at %s could not be found. Refer to https://devdocs.magento.com/guides/v2.4/install-gde/prereq/dev_install.html#authentication-file how to install this file.', $auth_json_path);
+            throw new FileNotFoundException($error_message);
+        }
+    }
 
     /**
      * Run 'composer remove' to remove code
@@ -104,6 +118,7 @@ class ModuleUninstaller
      */
     public function uninstallCode(OutputInterface $output, array $modules)
     {
+        $this->failOnMissingAuthJson();
         $output->writeln('<info>Removing code from Magento codebase:</info>');
         $packages = [];
         /** @var \Magento\Framework\Module\PackageInfo $packageInfo */
