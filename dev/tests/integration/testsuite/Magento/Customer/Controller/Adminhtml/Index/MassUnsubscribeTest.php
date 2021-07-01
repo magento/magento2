@@ -13,22 +13,20 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Test mass subscribe action on customers grid.
  *
+ * DbIsolation should be disabled because customer flat grid indexer call on zero transaction level
+ *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  */
 class MassUnsubscribeTest extends AbstractBackendController
 {
     /** @var ObjectManagerInterface */
     private $objectManager;
-
-    /** @var CustomerRepositoryInterface */
-    private $customerRepository;
 
     /** @var CollectionFactory */
     private $subscriberCollectionFactory;
@@ -42,7 +40,6 @@ class MassUnsubscribeTest extends AbstractBackendController
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->subscriberCollectionFactory = $this->objectManager->get(CollectionFactory::class);
-        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
