@@ -1,0 +1,25 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type StoreConfig {
+    catalog_productalert_allow_stock: Boolean @doc(description: "Allow Alert When Product Comes Back in Stock")
+    catalog_productalert_allow_price: Boolean @doc(description: "Allow Alert When Product Price Changes")
+}
+
+type Customer {
+    productAlertStock: [ProductAlert] @resolver(class:"Magento\\ProductAlertGraphQl\\Model\\Resolver\\Customer\\Stock") @doc(description: "Customer subscription to Stock Alerts") @cache(cacheable: false)
+    productAlertPrice: [ProductAlert] @resolver(class:"Magento\\ProductAlertGraphQl\\Model\\Resolver\\Customer\\Price") @doc(description: "Customer subscription to Price Alerts") @cache(cacheable: false)
+}
+
+type Mutation {
+    subscribeProductAlertStock(productId: Int!): ProductAlert @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\Stock\\Subscribe") @doc(description: "Subscribe customer to Stock Alert")
+    unsubscribeProductAlertStock(productId: Int!): Boolean @resolver(class:  "Magento\\ProductAlertGraphQl\\Model\\Resolver\\Stock\\Unsubscribe") @doc(description: "Unsubscribe customer to Stock Alert")
+    subscribeProductAlertPrice(productId: Int!): ProductAlert @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\Price\\Subscribe") @doc(description: "Subscribe customer to Price Alert")
+    unsubscribeProductAlertPrice(productId: Int!): Boolean @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\Price\\Unsubscribe") @doc(description: "Unsubscribe customer to Prce Alert")
+}
+
+type ProductAlert @doc(description: "Product Alert") {
+    id: Int! @doc(description: "Product Alert identifier")
+    add_date: String @doc(description: "Product Alert Add Date") 
+    product: ProductInterface @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\ProductResolver")
+}
