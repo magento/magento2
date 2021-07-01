@@ -62,6 +62,10 @@ class DeployMarker extends Command
                 'user',
                 InputArgument::OPTIONAL,
                 'Deployment User'
+            )->addArgument(
+                'revision',
+                InputArgument::OPTIONAL,
+                'Revision'
             );
         parent::configure();
     }
@@ -74,7 +78,8 @@ class DeployMarker extends Command
         $this->deploymentsFactory->create()->setDeployment(
             $input->getArgument('message'),
             $input->getArgument('change_log'),
-            $this->serviceShellUser->get($input->getArgument('user'))
+            $this->serviceShellUser->get($input->getArgument('user')),
+            $input->getArgument('revision')
         );
         $output->writeln('<info>NewRelic deployment information sent</info>');
     }

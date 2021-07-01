@@ -15,7 +15,7 @@ class Deployments
     /**
      * API URL for New Relic deployments
      */
-    const API_URL = 'https://api.newrelic.com/deployments.xml';
+    const API_URL = 'https://api.newrelic.com/v2/applications/%s/deployments.json';
 
     /**
      * @var \Magento\NewRelicReporting\Model\Config
@@ -58,28 +58,39 @@ class Deployments
      *
      * @return bool|string
      */
-    public function setDeployment($description, $change = false, $user = false)
+    public function setDeployment($description, $change = false, $user = false, $revision = null)
     {
         $apiUrl = $this->config->getNewRelicApiUrl();
-
         if (empty($apiUrl)) {
             $this->logger->notice('New Relic API URL is blank, using fallback URL');
             $apiUrl = self::API_URL;
         }
+
+        $apiUrl = sprintf($apiUrl, $this->config->getNewRelicAppId());
 
         /** @var \Magento\Framework\HTTP\ZendClient $client */
         $client = $this->clientFactory->create();
         $client->setUri($apiUrl);
         $client->setMethod(ZendClient::POST);
 
-        $client->setHeaders(['x-api-key' => $this->config->getNewRelicApiKey()]);
+        $client->setHeaders(
+            [
+                'Api-Key' => $this->config->getNewRelicApiKey(),
+                'Content-Type' => 'application/json'
+            ]
+        );
+
+        if (!$revision) {
+            $revision = hash('sha256', time());
+        }
 
         $params = [
-            'deployment[app_name]'       => $this->config->getNewRelicAppName(),
-            'deployment[application_id]' => $this->config->getNewRelicAppId(),
-            'deployment[description]'    => $description,
-            'deployment[changelog]'      => $change,
-            'deployment[user]'           => $user
+            'deployment' => [
+                'description' => $description,
+                'changelog' => $change,
+                'user' => $user,
+                'revision' => $revision
+            ]
         ];
 
         $client->setParameterPost($params);
