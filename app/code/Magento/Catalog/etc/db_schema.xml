@@ -1092,12 +1092,6 @@
             <column name="parent_id"/>
             <column name="child_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="CAT_PRD_RELATION_CHILD_ID_CAT_PRD_ENTT_ENTT_ID"
-                    table="catalog_product_relation" column="child_id" referenceTable="catalog_product_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="CAT_PRD_RELATION_PARENT_ID_CAT_PRD_ENTT_ENTT_ID"
-                    table="catalog_product_relation" column="parent_id" referenceTable="catalog_product_entity"
-                    referenceColumn="entity_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_PRODUCT_RELATION_CHILD_ID" indexType="btree">
             <column name="child_id"/>
         </index>
