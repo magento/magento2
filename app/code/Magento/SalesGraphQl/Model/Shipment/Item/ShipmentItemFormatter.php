@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Shipment\Item;
 
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 
@@ -15,6 +16,20 @@ use Magento\Sales\Api\Data\ShipmentItemInterface;
  */
 class ShipmentItemFormatter implements FormatterInterface
 {
+    /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
+     * ShipmentItemFormatter constructor.
+     * @param PriceCurrency $priceCurrency
+     */
+    public function __construct(PriceCurrency $priceCurrency)
+    {
+        $this->priceCurrency = $priceCurrency;
+    }
+
     /**
      * @inheritDoc
      */
@@ -27,7 +42,8 @@ class ShipmentItemFormatter implements FormatterInterface
             'product_sku' => $item->getSku(),
             'product_sale_price' => [
                 'value' => $item->getPrice(),
-                'currency' => $order->getOrderCurrencyCode()
+                'currency' => $order->getOrderCurrencyCode(),
+                'formatted' => $this->priceCurrency->format($item->getPrice(),false,null,null,$order->getOrderCurrencyCode())
             ],
             'product_type' => $item->getOrderItem()->getProductType(),
             'quantity_shipped' => $item->getQty(),

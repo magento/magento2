@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
 
@@ -20,6 +21,19 @@ use Magento\Quote\Model\Quote\Address\Rate;
  */
 class SelectedShippingMethod implements ResolverInterface
 {
+    /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
+     * Discounts constructor.
+     * @param PriceCurrency $priceCurrency
+     */
+    public function __construct(PriceCurrency $priceCurrency){
+        $this->priceCurrency = $priceCurrency;
+    }
+
     /**
      * @inheritdoc
      */
@@ -57,6 +71,7 @@ class SelectedShippingMethod implements ResolverInterface
             'amount' => [
                 'value' => $address->getShippingAmount(),
                 'currency' => $address->getQuote()->getQuoteCurrencyCode(),
+                'formatted' => $this->priceCurrency->format($address->getShippingAmount(),false,null,null,$address->getQuote()->getQuoteCurrencyCode()),
             ],
             /** @deprecated The field should not be used on the storefront */
             'base_amount' => null,

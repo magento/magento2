@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\SalesItem\ShippingTaxCalculator;
@@ -36,19 +37,28 @@ class CreditMemoTotal implements ResolverInterface
      * @var ShippingTaxCalculator
      */
     private $shippingTaxCalculator;
+
+    /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
     /**
      * @param OrderTaxManagementInterface $orderTaxManagement
      * @param TaxHelper $taxHelper
      * @param ShippingTaxCalculator $shippingTaxCalculator
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         OrderTaxManagementInterface $orderTaxManagement,
         TaxHelper $taxHelper,
-        ShippingTaxCalculator $shippingTaxCalculator
+        ShippingTaxCalculator $shippingTaxCalculator,
+        PriceCurrency $priceCurrency
     ) {
         $this->taxHelper = $taxHelper;
         $this->orderTaxManagement = $orderTaxManagement;
         $this->shippingTaxCalculator = $shippingTaxCalculator;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -76,11 +86,11 @@ class CreditMemoTotal implements ResolverInterface
         $currency = $orderModel->getOrderCurrencyCode();
         $baseCurrency = $orderModel->getBaseCurrencyCode();
         return [
-            'base_grand_total' => ['value' => $creditMemo->getBaseGrandTotal(), 'currency' => $baseCurrency],
-            'grand_total' => ['value' =>  $creditMemo->getGrandTotal(), 'currency' => $currency],
-            'subtotal' => ['value' =>  $creditMemo->getSubtotal(), 'currency' => $currency],
-            'total_tax' => ['value' =>  $creditMemo->getTaxAmount(), 'currency' => $currency],
-            'total_shipping' => ['value' => $creditMemo->getShippingAmount(), 'currency' => $currency],
+            'base_grand_total' => ['value' => $creditMemo->getBaseGrandTotal(), 'currency' => $baseCurrency, 'formatted' => $this->priceCurrency->format($creditMemo->getBaseGrandTotal(),false,null,null,$baseCurrency)],
+            'grand_total' => ['value' =>  $creditMemo->getGrandTotal(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($creditMemo->getGrandTotal(),false,null,null,$currency)],
+            'subtotal' => ['value' =>  $creditMemo->getSubtotal(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($creditMemo->getSubtotal(),false,null,null,$currency)],
+            'total_tax' => ['value' =>  $creditMemo->getTaxAmount(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($creditMemo->getTaxAmount(),false,null,null,$currency)],
+            'total_shipping' => ['value' => $creditMemo->getShippingAmount(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($creditMemo->getShippingAmount(),false,null,null,$currency)],
             'discounts' => $this->getDiscountDetails($creditMemo),
             'taxes' => $this->formatTaxes(
                 $orderModel,
@@ -89,15 +99,18 @@ class CreditMemoTotal implements ResolverInterface
             'shipping_handling' => [
                 'amount_excluding_tax' => [
                     'value' => $creditMemo->getShippingAmount() ?? 0,
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($creditMemo->getShippingAmount() ?? 0,false,null,null,$currency)
                 ],
                 'amount_including_tax' => [
                     'value' => $creditMemo->getShippingInclTax() ?? 0,
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($creditMemo->getShippingInclTax() ?? 0,false,null,null,$currency)
                 ],
                 'total_amount' => [
                     'value' => $creditMemo->getShippingAmount() ?? 0,
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($creditMemo->getShippingAmount() ?? 0,false,null,null,$currency)
                 ],
                 'discounts' => $this->getShippingDiscountDetails($creditMemo, $orderModel),
                 'taxes' => $this->formatTaxes(
@@ -107,7 +120,8 @@ class CreditMemoTotal implements ResolverInterface
             ],
             'adjustment' => [
                 'value' =>  abs($creditMemo->getAdjustment()),
-                'currency' => $currency
+                'currency' => $currency,
+                'formatted' => $this->priceCurrency->format(abs($creditMemo->getAdjustment()),false,null,null,$currency)
             ]
         ];
     }
@@ -133,7 +147,8 @@ class CreditMemoTotal implements ResolverInterface
             $shippingDiscounts[] = [
                 'amount' => [
                     'value' => sprintf('%.2f', abs($calculatedCreditmemoShippingDiscount)),
-                    'currency' => $creditmemoModel->getOrderCurrencyCode()
+                    'currency' => $creditmemoModel->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(sprintf('%.2f', abs($calculatedCreditmemoShippingDiscount)),false,null,null,$creditmemoModel->getOrderCurrencyCode())
                 ]
             ];
         }
@@ -154,7 +169,8 @@ class CreditMemoTotal implements ResolverInterface
                 'label' => $creditmemo->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => abs($creditmemo->getDiscountAmount()),
-                    'currency' => $creditmemo->getOrderCurrencyCode()
+                    'currency' => $creditmemo->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(abs($creditmemo->getDiscountAmount()),false,null,null,$creditmemo->getOrderCurrencyCode())
                 ]
             ];
         }
@@ -177,7 +193,8 @@ class CreditMemoTotal implements ResolverInterface
                 'title' => $appliedTax['title'] ?? null,
                 'amount' => [
                     'value' => $appliedTax['tax_amount'] ?? 0,
-                    'currency' => $order->getOrderCurrencyCode()
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($appliedTax['tax_amount'] ?? 0,false,null,null,$order->getOrderCurrencyCode())
                 ]
             ];
             $taxes[] = $appliedTaxesArray;

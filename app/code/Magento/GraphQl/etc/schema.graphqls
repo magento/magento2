@@ -103,6 +103,7 @@ type ComplexTextValue {
 type Money @doc(description: "A Money object defines a monetary value, including a numeric value and a currency code.") {
     value: Float @doc(description: "A number expressing a monetary value")
     currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR")
+    formatted: String @doc(description: "Formatted price with currency symbol and floating point precision")
 }
 
 enum CurrencyEnum @doc(description: "The list of available currency codes") {

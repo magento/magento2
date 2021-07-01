@@ -10,6 +10,7 @@ namespace Magento\WeeeGraphQl\Model\Resolver;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Weee\Helper\Data;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Tax\Helper\Data as TaxHelper;
@@ -32,13 +33,20 @@ class FixedProductTax implements ResolverInterface
     private $taxHelper;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param Data $weeeHelper
      * @param TaxHelper $taxHelper
+     * @param PriceCurrency $priceCurrency
      */
-    public function __construct(Data $weeeHelper, TaxHelper $taxHelper)
+    public function __construct(Data $weeeHelper, TaxHelper $taxHelper, PriceCurrency $priceCurrency)
     {
         $this->weeeHelper = $weeeHelper;
         $this->taxHelper = $taxHelper;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -76,6 +84,7 @@ class FixedProductTax implements ResolverInterface
                     'amount' => [
                         'value' => $amount,
                         'currency' => $value['final_price']['currency'],
+                        'formatted' => $this->priceCurrency->format($amount,false,null,null,$value['final_price']['currency']),
                     ],
                     'label' => $attribute->getData('name')
                 ];

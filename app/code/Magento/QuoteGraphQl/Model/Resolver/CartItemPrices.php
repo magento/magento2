@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\TotalsCollector;
@@ -31,12 +32,20 @@ class CartItemPrices implements ResolverInterface
     private $totals;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param TotalsCollector $totalsCollector
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
-        TotalsCollector $totalsCollector
+        TotalsCollector $totalsCollector,
+        PriceCurrency $priceCurrency
     ) {
         $this->totalsCollector = $totalsCollector;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -62,18 +71,22 @@ class CartItemPrices implements ResolverInterface
             'price' => [
                 'currency' => $currencyCode,
                 'value' => $cartItem->getCalculationPrice(),
+                'formatted' => $this->priceCurrency->format($cartItem->getCalculationPrice(),false,null,null,$currencyCode),
             ],
             'row_total' => [
                 'currency' => $currencyCode,
                 'value' => $cartItem->getRowTotal(),
+                'formatted' => $this->priceCurrency->format($cartItem->getRowTotal(),false,null,null,$currencyCode),
             ],
             'row_total_including_tax' => [
                 'currency' => $currencyCode,
                 'value' => $cartItem->getRowTotalInclTax(),
+                'formatted' => $this->priceCurrency->format($cartItem->getRowTotalInclTax(),false,null,null,$currencyCode),
             ],
             'total_item_discount' => [
                 'currency' => $currencyCode,
                 'value' => $cartItem->getDiscountAmount(),
+                'formatted' => $this->priceCurrency->format($cartItem->getDiscountAmount(),false,null,null,$currencyCode),
             ],
             'discounts' => $this->getDiscountValues($cartItem, $currencyCode)
         ];
@@ -100,6 +113,7 @@ class CartItemPrices implements ResolverInterface
                 $discount['label'] = $value->getRuleLabel() ?: __('Discount');
                 $amount['value'] = $discountAmount;
                 $amount['currency'] = $currencyCode;
+                $amount['formatted']= $this->priceCurrency->format($discountAmount,false,null,null,$currencyCode);
                 $discount['amount'] = $amount;
                 $discountValues[] = $discount;
             }

@@ -186,7 +186,8 @@ class PriceTiers implements ResolverInterface
             "quantity" => $tierPrice->getQty(),
             "final_price" => [
                 "value" => $tierPrice->getValue(),
-                "currency" => $currencyCode
+                "currency" => $currencyCode,
+                "formatted" => $this->priceCurrency->format($tierPrice->getValue(),false,null,null,$currencyCode)
             ]
         ];
     }

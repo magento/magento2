@@ -10,6 +10,7 @@ namespace Magento\SalesGraphQl\Model\OrderItem;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
@@ -46,6 +47,11 @@ class DataProvider
     private $optionsProcessor;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @var int[]
      */
     private $orderItemIds = [];
@@ -61,19 +67,22 @@ class DataProvider
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OptionsProcessor $optionsProcessor
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         OrderItemRepositoryInterface $orderItemRepository,
         ProductRepositoryInterface $productRepository,
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        OptionsProcessor $optionsProcessor
+        OptionsProcessor $optionsProcessor,
+        PriceCurrency $priceCurrency
     ) {
         $this->orderItemRepository = $orderItemRepository;
         $this->productRepository = $productRepository;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->optionsProcessor = $optionsProcessor;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -141,7 +150,8 @@ class DataProvider
                 'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                 'product_sale_price' => [
                     'value' => $orderItem->getPrice(),
-                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                    'currency' => $associatedOrder->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($orderItem->getPrice(),false,null,null,$associatedOrder->getOrderCurrencyCode())
                 ],
                 'selected_options' => $itemOptions['selected_options'],
                 'entered_options' => $itemOptions['entered_options'],
@@ -228,7 +238,8 @@ class DataProvider
                 'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => abs($orderItem->getDiscountAmount()) ?? 0,
-                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                    'currency' => $associatedOrder->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(abs($orderItem->getDiscountAmount()) ?? 0,false,null,null,$associatedOrder->getOrderCurrencyCode())
                 ]
             ];
         }
