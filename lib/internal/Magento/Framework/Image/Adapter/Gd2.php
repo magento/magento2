@@ -65,7 +65,7 @@ class Gd2 extends AbstractAdapter
     {
         if (!file_exists($filename)) {
             throw new FileSystemException(
-                new Phrase('File "%1" does not exist.', [$this->_fileName])
+                new Phrase('File "%1" does not exist.', [$filename])
             );
         }
         if (!$filename || filesize($filename) === 0 || !$this->validateURLScheme($filename)) {
