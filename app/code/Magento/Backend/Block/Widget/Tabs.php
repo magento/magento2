@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Widget;
 
 use Magento\Backend\Block\Widget\Tab\TabInterface;
@@ -129,7 +131,7 @@ class Tabs extends \Magento\Backend\Block\Widget
             }
         } elseif (is_string($tab)) {
             $this->_addTabByName($tab, $tabId);
-            
+
             if (!$this->_tabs[$tabId] instanceof TabInterface) {
                 unset($this->_tabs[$tabId]);
                 return $this;
@@ -137,7 +139,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         } else {
             throw new \Exception(__('Please correct the tab configuration and try again.'));
         }
-        
+
         if ($this->_tabs[$tabId]->getUrl() === null) {
             $this->_tabs[$tabId]->setUrl('#');
         }
@@ -148,7 +150,7 @@ class Tabs extends \Magento\Backend\Block\Widget
 
         $this->_tabs[$tabId]->setId($tabId);
         $this->_tabs[$tabId]->setTabId($tabId);
-        
+
         if (true === $this->_tabs[$tabId]->getActive()) {
             $this->setActiveTab($tabId);
         }
@@ -241,7 +243,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     protected function _beforeToHtml()
     {
         $this->_tabs = $this->reorderTabs();
-        
+
         if ($activeTab = $this->getRequest()->getParam('active_tab')) {
             $this->setActiveTab($activeTab);
         } elseif ($activeTabId = $this->_authSession->getActiveTabId()) {
@@ -252,11 +254,11 @@ class Tabs extends \Magento\Backend\Block\Widget
             /** @var TabInterface $tab */
             $this->_activeTab = (reset($this->_tabs))->getId();
         }
-        
+
         $this->assign('tabs', $this->_tabs);
         return parent::_beforeToHtml();
     }
-    
+
     /**
      * Reorder the tabs.
      *
@@ -267,7 +269,7 @@ class Tabs extends \Magento\Backend\Block\Widget
         $orderByIdentity = [];
         $orderByPosition = [];
         $position        = 100;
-    
+
         /**
          * Set the initial positions for each tab.
          *
@@ -276,10 +278,10 @@ class Tabs extends \Magento\Backend\Block\Widget
          */
         foreach ($this->_tabs as $key => $tab) {
             $tab->setPosition($position);
-    
+
             $orderByIdentity[$key]      = $tab;
             $orderByPosition[$position] = $tab;
-            
+
             $position += 100;
         }
 
@@ -343,7 +345,7 @@ class Tabs extends \Magento\Backend\Block\Widget
 
         return $ordered;
     }
-    
+
     /**
      * Get js object name
      *
