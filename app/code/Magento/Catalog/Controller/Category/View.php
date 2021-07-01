@@ -1,12 +1,12 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Helper\Category as CategoryHelper;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
@@ -22,11 +22,11 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -189,6 +189,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
         $this->_coreRegistry->register('current_category', $category);
         $this->toolbarMemorizer->memorizeParams();
+
+        $this->processHomepage($category);
+
         try {
             $this->_eventManager->dispatch(
                 'catalog_controller_category_init_after',
@@ -251,9 +254,12 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('category-' . $category->getUrlKey());
 
             return $page;
-        } elseif (!$this->getResponse()->isRedirect()) {
+        }
+
+        if (!$this->getResponse()->isRedirect()) {
             $result = $this->resultForwardFactory->create()->forward('noroute');
         }
+
         return $result;
     }
 
@@ -261,6 +267,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * Get page type based on category
      *
      * @param Category $category
+     *
      * @return string
      */
     private function getPageType(Category $category) : string
@@ -278,6 +285,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      *
      * @param Page $page
      * @param DataObject $settings
+     *
      * @return void
      */
     private function applyLayoutUpdates(
@@ -295,6 +303,34 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         //Selected files
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
+        }
+    }
+
+    /**
+     * Check if current page is homepage
+     *
+     * @return bool
+     */
+    private function isHomepage(): bool
+    {
+        $pathInfo = $this->_request->getPathInfo();
+
+        return $pathInfo === '/' || !$pathInfo;
+    }
+
+    /**
+     * If category is used as homepage - set its url as alias for layered navigation links
+     *
+     * @param CategoryInterface $category
+     */
+    private function processHomepage(CategoryInterface $category): void
+    {
+        if ($this->isHomepage() &&
+            !$this->_request->getAlias(UrlInterface::REWRITE_REQUEST_PATH_ALIAS)) {
+            $this->_request->setAlias(
+                UrlInterface::REWRITE_REQUEST_PATH_ALIAS,
+                str_replace($this->_url->getBaseUrl(), '', $category->getUrl())
+            );
         }
     }
 }

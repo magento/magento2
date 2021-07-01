@@ -11,16 +11,22 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Controller\Category\View;
 use Magento\Catalog\Helper\Category;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\Session;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Page\Config;
@@ -30,6 +36,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,168 +45,182 @@ use PHPUnit\Framework\TestCase;
 class ViewTest extends TestCase
 {
     /**
+     * @var View
+     */
+    private $action;
+
+    /**
      * @var RequestInterface|MockObject
      */
-    protected $request;
+    private $requestMock;
 
     /**
      * @var ResponseInterface|MockObject
      */
-    protected $response;
+    private $responseMock;
 
     /**
      * @var Category|MockObject
      */
-    protected $categoryHelper;
+    private $categoryHelperMock;
 
     /**
      * @var ObjectManagerInterface|MockObject
      */
-    protected $objectManager;
+    private $objectManagerMock;
 
     /**
      * @var ManagerInterface|MockObject
      */
-    protected $eventManager;
+    private $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|MockObject
+     * @var Layout|MockObject
      */
-    protected $layout;
+    private $layoutMock;
 
     /**
      * @var ProcessorInterface|MockObject
      */
-    protected $update;
+    private $updateMock;
 
     /**
      * @var ViewInterface|MockObject
      */
-    protected $view;
+    private $viewMock;
 
     /**
      * @var Context|MockObject
      */
-    protected $context;
+    private $contextMock;
 
     /**
      * @var \Magento\Catalog\Model\Category|MockObject
      */
-    protected $category;
+    private $categoryMock;
 
     /**
      * @var CategoryRepositoryInterface|MockObject
      */
-    protected $categoryRepository;
+    private $categoryRepositoryMock;
 
     /**
      * @var Store|MockObject
      */
-    protected $store;
+    private $storeMock;
 
     /**
      * @var StoreManagerInterface|MockObject
      */
-    protected $storeManager;
+    private $storeManagerMock;
 
     /**
      * @var Design|MockObject
      */
-    protected $catalogDesign;
-
-    /**
-     * @var View
-     */
-    protected $action;
+    private $catalogDesignMock;
 
     /**
      * @var ResultFactory|MockObject
      */
-    protected $resultFactory;
+    private $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Page|MockObject
+     * @var Page|MockObject
      */
-    protected $page;
+    private $pageMock;
 
     /**
-     * @var Config
+     * @var Config|MockObject
      */
-    protected $pageConfig;
+    private $pageConfigMock;
 
     /**
      * Set up instances and mock objects
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(
+            RequestInterface::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getPathInfo']
+        );
+        $this->requestMock->method('getPathInfo')->willReturn('/category.html');
+        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
 
-        $this->categoryHelper = $this->createMock(Category::class);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->categoryHelperMock = $this->createMock(Category::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
-        $this->update = $this->getMockForAbstractClass(ProcessorInterface::class);
-        $this->layout = $this->createMock(Layout::class);
-        $this->layout->expects($this->any())->method('getUpdate')->willReturn($this->update);
+        $this->updateMock = $this->getMockForAbstractClass(ProcessorInterface::class);
+        $this->layoutMock = $this->createMock(Layout::class);
+        $this->layoutMock->method('getUpdate')->willReturn($this->updateMock);
 
-        $this->pageConfig = $this->getMockBuilder(Config::class)
+        $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageConfig->expects($this->any())->method('addBodyClass')->willReturnSelf();
+        $this->pageConfigMock->method('addBodyClass')->willReturnSelf();
 
-        $this->page = $this->getMockBuilder(Page::class)
+        $this->pageMock = $this->getMockBuilder(Page::class)
             ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout', 'addUpdate'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->page->expects($this->any())->method('getConfig')->willReturn($this->pageConfig);
-        $this->page->expects($this->any())->method('addPageLayoutHandles')->willReturnSelf();
-        $this->page->expects($this->any())->method('getLayout')->willReturn($this->layout);
-        $this->page->expects($this->any())->method('addUpdate')->willReturnSelf();
+        $this->pageMock->method('getConfig')->willReturn($this->pageConfigMock);
+        $this->pageMock->method('addPageLayoutHandles')->willReturnSelf();
+        $this->pageMock->method('getLayout')->willReturn($this->layoutMock);
+        $this->pageMock->method('addUpdate')->willReturnSelf();
 
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->view->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->viewMock->method('getLayout')->willReturn($this->layoutMock);
 
-        $this->resultFactory = $this->createMock(ResultFactory::class);
-        $this->resultFactory->expects($this->any())->method('create')->willReturn($this->page);
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultFactoryMock->method('create')->willReturn($this->pageMock);
 
-        $this->context = $this->createMock(Context::class);
-        $this->context->expects($this->any())->method('getRequest')->willReturn($this->request);
-        $this->context->expects($this->any())->method('getResponse')->willReturn($this->response);
-        $this->context->expects($this->any())->method('getObjectManager')
-            ->willReturn($this->objectManager);
-        $this->context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
-        $this->context->expects($this->any())->method('getView')->willReturn($this->view);
-        $this->context->expects($this->any())->method('getResultFactory')
-            ->willReturn($this->resultFactory);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->contextMock->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->method('getResponse')->willReturn($this->responseMock);
+        $this->contextMock->method('getObjectManager')
+            ->willReturn($this->objectManagerMock);
+        $this->contextMock->method('getEventManager')->willReturn($this->eventManagerMock);
+        $this->contextMock->method('getView')->willReturn($this->viewMock);
+        $this->contextMock->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
 
-        $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
 
-        $this->store = $this->createMock(Store::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock->method('getStore')->willReturn($this->storeMock);
 
-        $this->catalogDesign = $this->createMock(Design::class);
+        $this->catalogDesignMock = $this->createMock(Design::class);
 
-        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
+        $resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultPageFactory->expects($this->atLeastOnce())
+        $resultPageFactoryMock->expects($this->atLeastOnce())
             ->method('create')
-            ->willReturn($this->page);
+            ->willReturn($this->pageMock);
 
-        $this->action = (new ObjectManager($this))->getObject(
-            View::class,
-            [
-                'context' => $this->context,
-                'catalogDesign' => $this->catalogDesign,
-                'categoryRepository' => $this->categoryRepository,
-                'storeManager' => $this->storeManager,
-                'resultPageFactory' => $resultPageFactory,
-                'categoryHelper' => $this->categoryHelper
-            ]
+        $this->action = new View(
+            $this->contextMock,
+            $this->catalogDesignMock,
+            $this->createMock(Session::class),
+            $this->createMock(Registry::class),
+            $this->storeManagerMock,
+            $this->createMock(CategoryUrlPathGenerator::class),
+            $resultPageFactoryMock,
+            $this->createMock(ForwardFactory::class),
+            $this->createMock(Resolver::class),
+            $this->categoryRepositoryMock,
+            $this->createMock(ToolbarMemorizer::class),
+            $this->createMock(LayoutUpdateManager::class),
+            $this->categoryHelperMock,
+            $this->getMockForAbstractClass(LoggerInterface::class)
         );
     }
 
@@ -207,6 +228,8 @@ class ViewTest extends TestCase
      * Apply custom layout update is correct
      *
      * @dataProvider getInvocationData
+     * @param array $expectedData
+     *
      * @return void
      */
     public function testApplyCustomLayoutUpdate(array $expectedData): void
@@ -214,35 +237,38 @@ class ViewTest extends TestCase
         $categoryId = 123;
         $pageLayout = 'page_layout';
 
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
+        $this->requestMock->method('getParam')->willReturnMap(
             [
                 [Action::PARAM_NAME_URL_ENCODED],
                 ['id', false, $categoryId]
             ]
         );
 
-        $this->categoryRepository->expects($this->any())->method('get')->with($categoryId)
-            ->willReturn($this->category);
+        $this->categoryRepositoryMock->method('get')->with($categoryId)
+            ->willReturn($this->categoryMock);
 
-        $this->categoryHelper->expects($this->once())->method('canShow')->with($this->category)->willReturn(true);
+        $this->categoryHelperMock->expects($this->once())
+            ->method('canShow')
+            ->with($this->categoryMock)
+            ->willReturn(true);
 
         $settings = $this->getMockBuilder(DataObject::class)
             ->addMethods(['getPageLayout', 'getLayoutUpdates'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->category->expects($this->at(1))
+        $this->categoryMock->expects($this->at(1))
             ->method('hasChildren')
             ->willReturn(true);
-        $this->category->expects($this->at(2))
+        $this->categoryMock->expects($this->at(2))
             ->method('hasChildren')
-            ->willReturn($expectedData[1][0]['type'] === 'default' ? true : false);
-        $this->category->expects($this->once())
+            ->willReturn($expectedData[1][0]['type'] === 'default');
+        $this->categoryMock->expects($this->once())
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->willReturn($pageLayout);
         $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
-        $this->catalogDesign->expects($this->any())->method('getDesignSettings')->willReturn($settings);
+        $this->catalogDesignMock->method('getDesignSettings')->willReturn($settings);
 
         $this->action->execute();
     }
@@ -251,6 +277,7 @@ class ViewTest extends TestCase
      * Expected invocation for Layout Handles
      *
      * @param array $data
+     *
      * @return void
      */
     private function expectationForPageLayoutHandles($data): void
@@ -258,7 +285,7 @@ class ViewTest extends TestCase
         $index = 1;
 
         foreach ($data as $expectedData) {
-            $this->page->expects($this->at($index))
+            $this->pageMock->expects($this->at($index))
                 ->method('addPageLayoutHandles')
                 ->with($expectedData[0], $expectedData[1], $expectedData[2]);
             $index++;
