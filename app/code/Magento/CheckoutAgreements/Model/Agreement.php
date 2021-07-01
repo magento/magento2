@@ -10,6 +10,16 @@ use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
 class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
     /**
+     * @var string
+     */
+    protected $_eventPrefix = 'checkout_agreement';
+
+    /**
+     * @var string
+     */
+    protected $_eventObject = 'agreement';
+
+    /**
      * Allowed CSS units for height field
      *
      * @var array
