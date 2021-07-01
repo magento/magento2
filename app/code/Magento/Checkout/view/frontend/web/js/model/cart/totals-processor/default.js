@@ -77,16 +77,6 @@ define([
          * @param {Object} address
          */
         estimateTotals: function (address) {
-            var data = {
-                shippingMethodCode: null,
-                shippingCarrierCode: null
-            };
-
-            if (quote.shippingMethod() && quote.shippingMethod()['method_code']) {
-                data.shippingMethodCode = quote.shippingMethod()['method_code'];
-                data.shippingCarrierCode = quote.shippingMethod()['carrier_code'];
-            }
-
             return loadFromServer(address);
         }
     };
