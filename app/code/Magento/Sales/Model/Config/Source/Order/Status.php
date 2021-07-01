@@ -52,7 +52,7 @@ class Status implements \Magento\Framework\Option\ArrayInterface
             ? $this->_orderConfig->getStateStatuses($this->_stateStatuses)
             : $this->_orderConfig->getStatuses();
 
-        $options = [['value' => '', 'label' => __('-- Please Select --')]];
+        $options = [['value' => '', 'label' => __(self::UNDEFINED_OPTION_LABEL)]];
         foreach ($statuses as $code => $label) {
             $options[] = ['value' => $code, 'label' => $label];
         }
