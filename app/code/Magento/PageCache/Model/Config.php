@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Model is responsible for replacing default vcl template file configuration with user-defined from configuration
@@ -39,6 +40,8 @@ class Config
     const XML_VARNISH_PAGECACHE_BACKEND_PORT = 'system/full_page_cache/varnish/backend_port';
 
     const XML_VARNISH_PAGECACHE_BACKEND_HOST = 'system/full_page_cache/varnish/backend_host';
+
+    const XML_VARNISH_PAGECACHE_BACKEND_ERROR_FILE = 'system/full_page_cache/varnish/backend_errormsgfile';
 
     const XML_VARNISH_PAGECACHE_GRACE_PERIOD = 'system/full_page_cache/varnish/grace_period';
 
@@ -90,6 +93,11 @@ class Config
     private $vclGeneratorFactory;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
@@ -103,6 +111,7 @@ class Config
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Module\Dir\Reader $reader,
         VclGeneratorFactory $vclGeneratorFactory,
+        DirectoryList $directoryList,
         Json $serializer = null
     ) {
         $this->readFactory = $readFactory;
@@ -111,6 +120,7 @@ class Config
         $this->reader = $reader;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->vclGeneratorFactory = $vclGeneratorFactory;
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -133,6 +143,24 @@ class Config
     public function getTtl()
     {
         return $this->_scopeConfig->getValue(self::XML_PAGECACHE_TTL);
+    }
+
+    /**
+     * Return customized error file path
+     * (replacement of 503 guru meditation error from varnish)
+     *
+     * @return string
+     */
+    public function getErrorFilePath()
+    {
+        $errorMsgFile = $this->_scopeConfig->getValue(
+            self::XML_VARNISH_PAGECACHE_BACKEND_ERROR_FILE
+        );
+
+        if (empty(trim($errorMsgFile))) {
+            $errorMsgFile = $this->directoryList->getPath('pub').'/varnish/error503.html';
+        }
+        return $errorMsgFile;
     }
 
     /**
@@ -167,6 +195,7 @@ class Config
             [
                 'backendHost' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_HOST),
                 'backendPort' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_BACKEND_PORT),
+                'errorMsgFile' => $this->getErrorFilePath(),
                 'accessList' => $accessList ? explode(',', $accessList) : [],
                 'designExceptions' => $designExceptions ? $this->serializer->unserialize($designExceptions) : [],
                 'sslOffloadedHeader' => $sslOffloadedHeader,
@@ -273,4 +302,6 @@ class Config
     {
         return $this->_cacheState->isEnabled(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
+
+
 }

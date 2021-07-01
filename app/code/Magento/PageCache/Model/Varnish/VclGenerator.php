@@ -45,6 +45,11 @@ class VclGenerator implements VclGeneratorInterface
     private $sslOffloadedHeader;
 
     /**
+     * @var string
+     */
+    private $errorMsgFile;
+
+    /**
      * @var array
      */
     private $designExceptions;
@@ -55,6 +60,7 @@ class VclGenerator implements VclGeneratorInterface
      * @param VclTemplateLocatorInterface $vclTemplateLocator
      * @param string $backendHost
      * @param int $backendPort
+     * @param string $errorMsgFile
      * @param array $accessList
      * @param int $gracePeriod
      * @param string $sslOffloadedHeader
@@ -64,6 +70,7 @@ class VclGenerator implements VclGeneratorInterface
         VclTemplateLocatorInterface $vclTemplateLocator,
         $backendHost,
         $backendPort,
+        $errorMsgFile,
         $accessList,
         $gracePeriod,
         $sslOffloadedHeader,
@@ -71,6 +78,7 @@ class VclGenerator implements VclGeneratorInterface
     ) {
         $this->backendHost = $backendHost;
         $this->backendPort = $backendPort;
+        $this->errorMsgFile = $errorMsgFile;
         $this->accessList = $accessList;
         $this->gracePeriod = $gracePeriod;
         $this->vclTemplateLocator = $vclTemplateLocator;
@@ -101,6 +109,7 @@ class VclGenerator implements VclGeneratorInterface
         return [
             '/* {{ host }} */' => $this->getBackendHost(),
             '/* {{ port }} */' => $this->getBackendPort(),
+            '/* {{ error_msg_file }} */' => $this->getErrorFileLocation(),
             '/* {{ ips }} */' => $this->getTransformedAccessList(),
             '/* {{ design_exceptions_code }} */' => $this->getRegexForDesignExceptions(),
             // http headers get transformed by php `X-Forwarded-Proto: https`
@@ -197,6 +206,16 @@ class VclGenerator implements VclGeneratorInterface
     private function getBackendPort()
     {
         return $this->backendPort;
+    }
+
+    /**
+     * Get 503 Error Message File Location From Configuration
+     *
+     * @return string
+     */
+    private function getErrorFileLocation()
+    {
+        return $this->errorMsgFile;
     }
 
     /**

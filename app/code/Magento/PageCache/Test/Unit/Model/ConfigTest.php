@@ -23,7 +23,7 @@ use Magento\PageCache\Model\Varnish\VclTemplateLocator;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
+use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -49,6 +49,11 @@ class ConfigTest extends TestCase
      * @var MockObject|Reader
      */
     private $moduleReader;
+
+    /**
+     * @var MockObject|DirectoryList
+     */
+    private $directoryList;
 
     /**
      * @var MockObject|Json
@@ -99,6 +104,12 @@ class ConfigTest extends TestCase
                     '8080'
                 ],
                 [
+                    Config::XML_VARNISH_PAGECACHE_BACKEND_ERROR_FILE,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                    null,
+                    '/var/html/magento/pub/varnish/error503.html'
+                ],
+                [
                     Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
@@ -128,6 +139,9 @@ class ConfigTest extends TestCase
         $this->moduleReader = $this->createMock(Reader::class);
         $this->serializerMock = $this->createMock(Json::class);
 
+        /** @var MockObject $directoryList */
+        $this->directoryList = $this->createMock(DirectoryList::class);
+
         /** @var MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(VclTemplateLocator::class)
             ->disableOriginalConstructor()
@@ -144,6 +158,7 @@ class ConfigTest extends TestCase
         $expectedParams = [
             'backendHost' => 'example.com',
             'backendPort' => '8080',
+            'errorMsgFile' => '/var/html/magento/pub/varnish/error503.html',
             'accessList' =>  explode(',', '127.0.0.1, 192.168.0.1,127.0.0.2'),
             'designExceptions' => [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
             'sslOffloadedHeader' => 'X_Forwarded_Proto: https',
@@ -156,6 +171,7 @@ class ConfigTest extends TestCase
                 $vclTemplateLocator,
                 'example.com',
                 '8080',
+                '/var/html/magento/pub/varnish/error503.html',
                 explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
                 120,
                 'X_Forwarded_Proto: https',
@@ -169,7 +185,8 @@ class ConfigTest extends TestCase
                 'cacheState' => $this->cacheState,
                 'reader' => $this->moduleReader,
                 'serializer' => $this->serializerMock,
-                'vclGeneratorFactory' => $vclGeneratorFactory
+                'vclGeneratorFactory' => $vclGeneratorFactory,
+                'directoryList' => $this->directoryList
             ]
         );
     }
@@ -183,6 +200,9 @@ class ConfigTest extends TestCase
             ->method('unserialize')
             ->with('serializedConfig')
             ->willReturn([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]);
+        $this->directoryList->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValue('/var/html/magento'));
         $test = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
