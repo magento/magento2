@@ -1,19 +1,21 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
 use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\PrefixSuffixWithWebsites;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
@@ -81,12 +83,18 @@ class AttributeMetadataResolver
     private $groupManagement;
 
     /**
+     * @var PrefixSuffixWithWebsites
+     */
+    private $prefixSuffixWithWebsites;
+
+    /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
      * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
-     * @param GroupManagement|null $groupManagement
+     * @param GroupManagement $groupManagement
+     * @param PrefixSuffixWithWebsites $prefixSuffixWithWebsites
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
@@ -94,14 +102,16 @@ class AttributeMetadataResolver
         FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
         ShareConfig $shareConfig,
-        ?GroupManagement $groupManagement = null
+        GroupManagement $groupManagement,
+        PrefixSuffixWithWebsites $prefixSuffixWithWebsites
     ) {
         $this->countryWithWebsiteSource = $countryWithWebsiteSource;
         $this->eavValidationRules = $eavValidationRules;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->context = $context;
         $this->shareConfig = $shareConfig;
-        $this->groupManagement = $groupManagement ?? ObjectManager::getInstance()->get(GroupManagement::class);
+        $this->groupManagement = $groupManagement;
+        $this->prefixSuffixWithWebsites = $prefixSuffixWithWebsites;
     }
 
     /**
@@ -111,7 +121,7 @@ class AttributeMetadataResolver
      * @param Type $entityType
      * @param bool $allowToShowHiddenAttributes
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getAttributesMeta(
         AbstractAttribute $attribute,
@@ -166,6 +176,12 @@ class AttributeMetadataResolver
             $attribute,
             $meta['arguments']['data']['config']
         );
+
+        $this->modifyPrefixSuffixMeta(
+            $attribute,
+            $meta['arguments']['data']['config']
+        );
+
         return $meta;
     }
 
@@ -237,6 +253,51 @@ class AttributeMetadataResolver
                 'target' => 'customer_form.customer_form_data_source:data.customer.website_id',
                 'field' => 'website_ids'
             ];
+        }
+
+        if (isset($meta[AddressInterface::PREFIX]) && !$this->shareConfig->isGlobalScope()) {
+            $meta[AddressInterface::PREFIX]['arguments']['data']['config']['imports'] = [
+                'update' => 'customer_form.customer_form_data_source:data.customer.website_id:value'
+            ];
+
+            $meta[AddressInterface::PREFIX]['arguments']['data']['config']['filterBy'] = [
+                'target' => 'customer_form.customer_form_data_source:data.customer.website_id',
+                'field' => 'website_ids'
+            ];
+        }
+
+        if (isset($meta[AddressInterface::SUFFIX]) && !$this->shareConfig->isGlobalScope()) {
+            $meta[AddressInterface::SUFFIX]['arguments']['data']['config']['imports'] = [
+                'update' => 'customer_form.customer_form_data_source:data.customer.website_id:value'
+            ];
+
+            $meta[AddressInterface::SUFFIX]['arguments']['data']['config']['filterBy'] = [
+                'target' => 'customer_form.customer_form_data_source:data.customer.website_id',
+                'field' => 'website_ids'
+            ];
+        }
+    }
+
+    /**
+     * Change prefix and suffix to input/select with correct options and required or not if configured
+     *
+     * @param AttributeInterface $attribute
+     * @param array $meta
+     */
+    private function modifyPrefixSuffixMeta(AttributeInterface $attribute, &$meta): void
+    {
+        $attributeCode = $attribute->getAttributeCode();
+        if (!in_array($attributeCode, [AddressInterface::PREFIX, AddressInterface::SUFFIX], false)) {
+            return;
+        }
+
+        $meta['requiredPerWebsite'] = $this->prefixSuffixWithWebsites->getIsRequired($attributeCode);
+        $meta['customEntry'] = $attributeCode . '_input';
+
+        $options = $this->prefixSuffixWithWebsites->getAllOptions($attributeCode);
+
+        if (count($options) > 0) {
+            $meta['options'] = $options;
         }
     }
 }

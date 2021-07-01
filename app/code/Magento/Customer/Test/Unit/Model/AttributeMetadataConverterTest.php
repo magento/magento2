@@ -20,12 +20,13 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\Api\DataObjectHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeMetadatConverterTest extends TestCase
+class AttributeMetadataConverterTest extends TestCase
 {
     /**
      * @var OptionInterfaceFactory|MockObject
@@ -47,10 +48,14 @@ class AttributeMetadatConverterTest extends TestCase
      */
     private $dataObjectHelper;
 
-    /** @var  AttributeMetadataConverter */
+    /**
+     * @var AttributeMetadataConverter
+     */
     private $model;
 
-    /** @var  Attribute|MockObject */
+    /**
+     * @var Attribute|MockObject
+     */
     private $attribute;
 
     protected function setUp(): void
@@ -74,11 +79,15 @@ class AttributeMetadatConverterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new AttributeMetadataConverter(
-            $this->optionFactory,
-            $this->validationRuleFactory,
-            $this->attributeMetadataFactory,
-            $this->dataObjectHelper
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            AttributeMetadataConverter::class,
+            [
+                'optionFactory' => $this->optionFactory,
+                'validationRuleFactory' => $this->validationRuleFactory,
+                'attributeMetadataFactory' => $this->attributeMetadataFactory,
+                'dataObjectHelper' => $this->dataObjectHelper
+            ]
         );
     }
 

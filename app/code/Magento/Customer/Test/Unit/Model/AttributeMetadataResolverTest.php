@@ -9,12 +9,10 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\AttributeMetadataResolver;
-use Magento\Customer\Model\Config\Share as ShareConfig;
 use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\GroupManagement;
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
 use Magento\Eav\Model\Entity\Type;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\EavValidationRules;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,91 +24,52 @@ use PHPUnit\Framework\TestCase;
 class AttributeMetadataResolverTest extends TestCase
 {
     /**
-     * @var CountryWithWebsites|MockObject
-     */
-    private $countryWithWebsiteSource;
-
-    /**
-     * @var EavValidationRules|MockObject
-     */
-    private $eavValidationRules;
-
-    /**
-     * @var FileUploaderDataResolver|MockObject
-     */
-    private $fileUploaderDataResolver;
-
-    /**
-     * @var ShareConfig|MockObject
-     */
-    private $shareConfig;
-
-    /**
-     * @var GroupManagement|MockObject
-     */
-    private $groupManagement;
-
-    /**
-     * @var ContextInterface|MockObject
-     */
-    private $context;
-
-    /**
-     * @var  AttributeMetadataResolver
+     * @var AttributeMetadataResolver
      */
     private $model;
 
     /**
-     * @var Attribute|MockObject
+     * @var EavValidationRules|MockObject
      */
-    private $attribute;
+    private $eavValidationRulesMock;
+
+    /**
+     * @var FileUploaderDataResolver|MockObject
+     */
+    private $fileUploaderDataResolverMock;
+
+    /**
+     * @var GroupManagement|MockObject
+     */
+    private $groupManagementMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->countryWithWebsiteSource = $this->getMockBuilder(CountryWithWebsites::class)
-            ->setMethods(['getAllOptions'])
+        $this->eavValidationRulesMock = $this->getMockBuilder(EavValidationRules::class)
+            ->onlyMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
-            ->setMethods(['build'])
+        $this->fileUploaderDataResolverMock = $this->getMockBuilder(FileUploaderDataResolver::class)
+            ->onlyMethods(['overrideFileUploaderMetadata'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileUploaderDataResolver = $this->getMockBuilder(FileUploaderDataResolver::class)
-            ->setMethods(['overrideFileUploaderMetadata'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context =  $this->getMockBuilder(ContextInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->shareConfig =  $this->getMockBuilder(ShareConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->groupManagement =  $this->getMockBuilder(GroupManagement::class)
-            ->setMethods(['getId', 'getDefaultGroup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attribute = $this->getMockBuilder(Attribute::class)
-            ->setMethods([
-                'usesSource',
-                'getDataUsingMethod',
-                'getAttributeCode',
-                'getFrontendInput',
-                'getSource',
-                'setDataUsingMethod'
-            ])
+        $this->groupManagementMock = $this->getMockBuilder(GroupManagement::class)
+            ->onlyMethods(['getDefaultGroup'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new AttributeMetadataResolver(
-            $this->countryWithWebsiteSource,
-            $this->eavValidationRules,
-            $this->fileUploaderDataResolver,
-            $this->context,
-            $this->shareConfig,
-            $this->groupManagement
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            AttributeMetadataResolver::class,
+            [
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolverMock,
+                'groupManagement' => $this->groupManagementMock
+            ]
         );
     }
 
@@ -121,6 +80,18 @@ class AttributeMetadataResolverTest extends TestCase
      */
     public function testGetAttributesMetaHasDefaultAttributeValue(): void
     {
+        $attributeMock = $this->getMockBuilder(Attribute::class)
+            ->onlyMethods([
+                'usesSource',
+                'getDataUsingMethod',
+                'getAttributeCode',
+                'getFrontendInput',
+                'getSource',
+                'setDataUsingMethod'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $rules = [
             'required-entry' => true
         ];
@@ -130,36 +101,36 @@ class AttributeMetadataResolverTest extends TestCase
         $entityType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->attribute->expects($this->once())
+        $attributeMock->expects(self::once())
             ->method('usesSource')
             ->willReturn($usesSource);
-        $this->attribute->expects($this->once())
+        $attributeMock->expects(self::exactly(2))
             ->method('getAttributeCode')
             ->willReturn('group_id');
-        $this->groupManagement->expects($this->once())
+        $this->groupManagementMock->expects(self::once())
             ->method('getDefaultGroup')
             ->willReturnSelf();
-        $this->groupManagement->expects($this->once())
+        $this->groupManagementMock->expects(self::once())
             ->method('getId')
             ->willReturn($defaultGroupId);
-        $this->attribute->expects($this->at(9))
+        $attributeMock->expects(self::at(9))
             ->method('getDataUsingMethod')
             ->with('default_value')
             ->willReturn($defaultGroupId);
-        $this->attribute->expects($this->once())
+        $attributeMock->expects(self::once())
             ->method('setDataUsingMethod')
             ->willReturnSelf();
-        $this->eavValidationRules->expects($this->once())
+        $this->eavValidationRulesMock->expects(self::once())
             ->method('build')
-            ->with($this->attribute)
+            ->with($attributeMock)
             ->willReturn($rules);
-        $this->fileUploaderDataResolver->expects($this->once())
+        $this->fileUploaderDataResolverMock->expects(self::once())
             ->method('overrideFileUploaderMetadata')
-            ->with($entityType, $this->attribute)
+            ->with($entityType, $attributeMock)
             ->willReturnSelf();
 
-        $meta = $this->model->getAttributesMeta($this->attribute, $entityType, $allowToShowHiddenAttributes);
-        $this->assertArrayHasKey('default', $meta['arguments']['data']['config']);
-        $this->assertEquals($defaultGroupId, $meta['arguments']['data']['config']['default']);
+        $meta = $this->model->getAttributesMeta($attributeMock, $entityType, $allowToShowHiddenAttributes);
+        self::assertArrayHasKey('default', $meta['arguments']['data']['config']);
+        self::assertEquals($defaultGroupId, $meta['arguments']['data']['config']['default']);
     }
 }
