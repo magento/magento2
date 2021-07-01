@@ -7,9 +7,11 @@
  */
 namespace Magento\PageCache\Controller;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
@@ -41,27 +43,37 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private $layoutCacheKeyName = 'mage_pagecache';
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * Block constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param Json $jsonSerializer
-     * @param Base64Json $base64jsonSerializer
-     * @param LayoutCacheKeyInterface $layoutCacheKey
+     * @param LoggerInterface $logger
+     * @param Json|null $jsonSerializer
+     * @param Base64Json|null $base64jsonSerializer
+     * @param LayoutCacheKeyInterface|null $layoutCacheKey
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Translate\InlineInterface $translateInline,
+        LoggerInterface $logger = null,
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
         LayoutCacheKeyInterface $layoutCacheKey = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
+        $this->logger = $logger
+            ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->jsonSerializer = $jsonSerializer
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+            ?: ObjectManager::getInstance()->get(Json::class);
         $this->base64jsonSerializer = $base64jsonSerializer
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
+            ?: ObjectManager::getInstance()->get(Base64Json::class);
         $this->layoutCacheKey = $layoutCacheKey
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
+            ?: ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
     }
 
     /**
@@ -77,7 +89,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         if (!$handles || !$blocks) {
             return [];
         }
-        $blocks = $this->jsonSerializer->unserialize($blocks);
+        $blocks = $this->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
         $layout = $this->_view->getLayout();
@@ -94,5 +106,16 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
 
         return $data;
+    }
+
+    /**
+     * Unserialize JSON string
+     *
+     * @param string $string
+     * @return array|null
+     */
+    protected function unserialize($string)
+    {
+        return $this->jsonSerializer->unserialize($string);
     }
 }
