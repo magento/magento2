@@ -16,6 +16,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\App\ObjectManager;
 
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -43,6 +44,11 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     private $visibility;
 
     /**
+     * @var Type
+     */
+    private $type;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -50,6 +56,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param array $data
      * @param Visibility|null $visibility
      * @param Status|null $status
+     * @param Type|null $type
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,17 +65,19 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Registry $coreRegistry,
         array $data = [],
         Visibility $visibility = null,
-        Status $status = null
+        Status $status = null,
+        Type $type = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->visibility = $visibility ?: ObjectManager::getInstance()->get(Visibility::class);
         $this->status = $status ?: ObjectManager::getInstance()->get(Status::class);
+        $this->type = $type ?: ObjectManager::getInstance()->get(Type::class);
         parent::__construct($context, $backendHelper, $data);
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -79,6 +88,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve current category instance
+     *
      * @return array|null
      */
     public function getCategory()
@@ -87,6 +98,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -110,6 +123,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -121,6 +136,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'name'
         )->addAttributeToSelect(
             'sku'
+        )->addAttributeToSelect(
+            'type_id'
         )->addAttributeToSelect(
             'visibility'
         )->addAttributeToSelect(
@@ -153,6 +170,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare columns
+     *
      * @return Extended
      */
     protected function _prepareColumns()
@@ -182,6 +201,15 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         );
         $this->addColumn('name', ['header' => __('Name'), 'index' => 'name']);
         $this->addColumn('sku', ['header' => __('SKU'), 'index' => 'sku']);
+        $this->addColumn(
+            'type_id',
+            [
+                'header' => __('Type'),
+                'index' => 'type_id',
+                'type' => 'options',
+                'options' => $this->type->getOptionArray()
+            ]
+        );
         $this->addColumn(
             'visibility',
             [
@@ -230,6 +258,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -238,6 +268,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()
