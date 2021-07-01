@@ -9,7 +9,7 @@
     <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
         <arguments>
             <argument name="exceptionMessageFactoryMap" xsi:type="array">
-                <item name="Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException" xsi:type="object">\Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory</item>
+                <item name="Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException" xsi:type="object">Magento\UrlRewrite\Model\Message\UrlRewriteExceptionMessageFactory</item>
             </argument>
         </arguments>
     </type>
@@ -17,7 +17,7 @@
         <arguments>
             <argument name="configurationsMap" xsi:type="array">
                 <item name="urlDuplicateMessageMapId" xsi:type="array">
-                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="renderer" xsi:type="const">Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">
                         <item name="template" xsi:type="string">Magento_UrlRewrite::messages/url_duplicate_message.phtml</item>
                     </item>

@@ -47,7 +47,7 @@
     <type name="Magento\Sales\Model\ResourceModel\Report\Bestsellers">
         <arguments>
             <argument name="ignoredProductTypes" xsi:type="array">
-                <item name="configurable" xsi:type="const">\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
+                <item name="configurable" xsi:type="const">Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
             </argument>
         </arguments>
     </type>

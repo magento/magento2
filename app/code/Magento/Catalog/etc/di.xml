@@ -73,7 +73,7 @@
     <preference for="Magento\Catalog\Model\Indexer\Product\Price\UpdateIndexInterface" type="Magento\Catalog\Model\Indexer\Product\Price\InvalidateIndex" />
     <preference for="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactoryInterface" type="Magento\Catalog\Model\Product\Gallery\ImagesConfigFactory" />
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
-    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
+    <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="Magento\Catalog\Model\MassAction" />
     <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
     <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
@@ -185,7 +185,7 @@
     <type name="Magento\Catalog\Helper\Output">
         <arguments>
             <argument name="directivePatterns" xsi:type="array">
-                <item name="construct" xsi:type="const">\Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
+                <item name="construct" xsi:type="const">Magento\Framework\Filter\Template::CONSTRUCTION_PATTERN</item>
             </argument>
         </arguments>
     </type>
@@ -255,7 +255,7 @@
     </type>
     <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="invalidatePriceIndexerOnWebsite" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
-        <plugin name="categoryProductWebsiteAfterDelete" type="\Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
+        <plugin name="categoryProductWebsiteAfterDelete" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\Website"/>
     </type>
     <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
@@ -366,7 +366,7 @@
     </type>
     <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
         <arguments>
-            <argument name="productModel" xsi:type="string">\Magento\Catalog\Model\Product</argument>
+            <argument name="productModel" xsi:type="string">Magento\Catalog\Model\Product</argument>
             <argument name="reservedAttributes" xsi:type="array">
                 <item name="position" xsi:type="string">position</item>
             </argument>
@@ -1000,10 +1000,10 @@
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
         <arguments>
             <argument name="productProviders" xsi:type="array">
-                <item name="image" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image</item>
-                <item name="price" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price</item>
-                <item name="url" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url</item>
-                <item name="additional_info" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo</item>
+                <item name="image" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Image</item>
+                <item name="price" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Price</item>
+                <item name="url" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\Url</item>
+                <item name="additional_info" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Listing\Collector\AdditionalInfo</item>
             </argument>
         </arguments>
     </type>

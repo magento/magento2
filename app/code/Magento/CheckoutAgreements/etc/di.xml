@@ -12,7 +12,7 @@
     <type name="Magento\CheckoutAgreements\Model\AgreementsValidator">
         <arguments>
             <argument name="list" xsi:type="array">
-                <item name="checkoutagreements" xsi:type="object">\Magento\CheckoutAgreements\Model\AgreementsProvider</item>
+                <item name="checkoutagreements" xsi:type="object">Magento\CheckoutAgreements\Model\AgreementsProvider</item>
             </argument>
         </arguments>
     </type>

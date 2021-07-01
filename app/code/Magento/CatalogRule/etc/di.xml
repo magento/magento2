@@ -78,7 +78,7 @@
     <virtualType name="catalogRuleSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">catalogrule</argument>
-            <argument name="resourceModel" xsi:type="string">\Magento\CatalogRule\Model\ResourceModel\Rule</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\CatalogRule\Model\ResourceModel\Rule</argument>
         </arguments>
     </virtualType>
     <type name="Magento\CatalogRule\Model\Rule\Condition\Combine">
