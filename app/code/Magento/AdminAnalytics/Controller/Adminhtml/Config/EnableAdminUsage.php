@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Backend\App\Action;
 use Magento\Config\Model\Config\Factory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
- * Controller to record that the current admin user has responded to Admin Analytics notice
+ * Controller to record that the current admin user has responded to Admin Analytics notice.
  */
 class EnableAdminUsage extends Action implements HttpPostActionInterface
 {
@@ -54,35 +54,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     }
 
     /**
-     * Change the value of config/admin/usage/enabled
-     */
-    private function enableAdminUsage()
-    {
-        $configModel = $this->configFactory->create();
-        $configModel->setDataByPath('admin/usage/enabled', 1);
-        $configModel->save();
-    }
-
-    /**
-     * Log information about the last user response
-     *
-     * @return ResultInterface
-     */
-    private function markUserNotified(): ResultInterface
-    {
-        $responseContent = [
-            'success' => $this->notificationLogger->log(
-                $this->productMetadata->getVersion()
-            ),
-            'error_message' => ''
-        ];
-
-        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        return $resultJson->setData($responseContent);
-    }
-
-    /**
-     * Log information about the last shown advertisement
+     * Log information about the last shown advertisement.
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
@@ -98,5 +70,34 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
+    }
+
+    /**
+     * Change the value of config/admin/usage/enabled.
+     */
+    private function enableAdminUsage()
+    {
+        $configModel = $this->configFactory->create();
+        $configModel->setDataByPath('admin/usage/enabled', 1);
+        $configModel->save();
+    }
+
+    /**
+     * Log information about the last user response.
+     *
+     * @return ResultInterface
+     */
+    private function markUserNotified(): ResultInterface
+    {
+        $responseContent = [
+            'success' => $this->notificationLogger->log(
+                $this->productMetadata->getVersion()
+            ),
+            'error_message' => ''
+        ];
+
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+
+        return $resultJson->setData($responseContent);
     }
 }

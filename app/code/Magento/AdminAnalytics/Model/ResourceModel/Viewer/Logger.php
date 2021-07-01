@@ -19,7 +19,7 @@ use Magento\Framework\App\ResourceConnection;
 class Logger
 {
     /**
-     * Admin Analytics usage version log table name
+     * Admin Analytics usage version log table name.
      */
     const LOG_TABLE_NAME = 'admin_analytics_usage_version_log';
 
@@ -64,6 +64,7 @@ class Logger
                 'last_viewed_in_version',
             ]
         );
+
         return true;
     }
 
@@ -80,17 +81,18 @@ class Logger
     /**
      * Checks is log already exists.
      *
-     * @return boolean
+     * @return bool
      */
     public function checkLogExists(): bool
     {
         $data = $this->logFactory->create(['data' => $this->loadLatestLogData()]);
         $lastViewedVersion = $data->getLastViewVersion();
+
         return isset($lastViewedVersion);
     }
 
     /**
-     * Load release notification viewer log data by last view version
+     * Load release notification viewer log data by last view version.
      *
      * @return array
      */
@@ -106,6 +108,7 @@ class Logger
         if (!$data) {
             $data = [];
         }
+
         return $data;
     }
 }

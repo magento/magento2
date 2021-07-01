@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\AdminAnalytics\ViewModel;
 
-use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\AdminAnalytics\Model\Condition\CanViewNotification as AdminAnalyticsNotification;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\ReleaseNotification\Model\Condition\CanViewNotification as ReleaseNotification;
 
 /**
- * Control display of admin analytics and release notification modals
+ * Control display of admin analytics and release notification modals.
  */
 class Notification implements ArgumentInterface
 {
@@ -39,7 +39,7 @@ class Notification implements ArgumentInterface
     }
 
     /**
-     * Determine if the analytics popup is visible
+     * Determine if the analytics popup is visible.
      *
      * @return bool
      */
@@ -49,7 +49,7 @@ class Notification implements ArgumentInterface
     }
 
     /**
-     * Determine if the release popup is visible
+     * Determine if the release popup is visible.
      *
      * @return bool
      */
