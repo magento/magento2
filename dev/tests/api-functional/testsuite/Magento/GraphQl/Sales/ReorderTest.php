@@ -84,6 +84,44 @@ class ReorderTest extends GraphQlAbstract
     }
 
     /**
+     * Execute GraphQL Mutation for default customer with different store id
+     * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store_with_second_currency.php
+     */
+    public function testReorderMutationOnDifferentStore()
+    {
+        $storeCodeFromFixture = 'fixture_second_store';
+        $query = $this->getQuery(self::ORDER_NUMBER);
+        $currentPassword = 'password';
+        $customerAuthHeaders = $this->getCustomerAuthHeaders(self::CUSTOMER_EMAIL, $currentPassword);
+        $customerAuthHeaders['Store'] = $storeCodeFromFixture;
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $customerAuthHeaders
+        );
+        $this->assertResponseFields(
+            $response['reorderItems'] ?? [],
+            [
+                'cart' => [
+                    'email' => self::CUSTOMER_EMAIL,
+                    'total_quantity' => 1,
+                    'items' => [
+                        [
+                            'quantity' => 1,
+                            'product' => [
+                                'sku' => 'simple',
+                            ],
+                        ]
+                    ],
+                ],
+                'userInputErrors' => []
+            ]
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
      */
     public function testReorderWithoutAuthorisedCustomer()
