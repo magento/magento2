@@ -389,7 +389,7 @@ abstract class AbstractDb extends AbstractResource
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws \Exception
+     * @throws \Throwable
      * @throws AlreadyExistsException
      * @api
      */
@@ -429,7 +429,7 @@ abstract class AbstractDb extends AbstractResource
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw new AlreadyExistsException(new Phrase('Unique constraint violation found'), $e);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->rollBack();
             $object->setHasDataChanges(true);
             throw $e;
