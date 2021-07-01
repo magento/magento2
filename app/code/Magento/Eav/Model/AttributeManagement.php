@@ -173,11 +173,11 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
     /**
      * {@inheritdoc}
      */
-    public function getAttributes($entityType, $attributeSetId)
+    public function getAttributes($entityTypeCode, $attributeSetId)
     {
         /** @var \Magento\Eav\Api\Data\AttributeSetInterface $attributeSet */
         $attributeSet = $this->setRepository->get($attributeSetId);
-        $requiredEntityTypeId = $this->eavConfig->getEntityType($entityType)->getId();
+        $requiredEntityTypeId = $this->eavConfig->getEntityType($entityTypeCode)->getId();
         if (!$attributeSet->getAttributeSetId() || $attributeSet->getEntityTypeId() != $requiredEntityTypeId) {
             throw NoSuchEntityException::singleField('attributeSetId', $attributeSetId);
         }
