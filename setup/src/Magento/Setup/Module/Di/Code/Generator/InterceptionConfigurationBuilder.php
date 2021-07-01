@@ -11,8 +11,8 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config as InterceptionConfig;
-use Magento\Setup\Module\Di\Code\Reader\Type;
 use Magento\Framework\ObjectManager\InterceptableValidator;
+use Magento\Setup\Module\Di\Code\Reader\Type;
 
 class InterceptionConfigurationBuilder
 {
@@ -138,22 +138,26 @@ class InterceptionConfigurationBuilder
                 $pluginListCloned->setScopePriorityScheme($scopePriority);
             }
             $key = implode('', $scopePriority);
-            $inheritedConfig[$key] = $this->filterNullInheritance($pluginListCloned->getPluginsConfig());
+            $inheritedConfig[$key] = $this->filterPluginsConfig($pluginListCloned->getPluginsConfig());
         }
         return $inheritedConfig;
     }
 
     /**
-     * Filters plugin inheritance list for instances without plugins, and abstract/interface
+     * Filters plugin inheritance list for instances without plugins, abstract/interface, and non-interceptable.
      *
      * @param array $pluginInheritance
      * @return array
      */
-    private function filterNullInheritance($pluginInheritance)
+    private function filterPluginsConfig($pluginInheritance)
     {
         $filteredData = [];
         foreach ($pluginInheritance as $instance => $plugins) {
-            if ($plugins === null || !$this->typeReader->isConcrete($instance)) {
+            if (
+                $plugins === null ||
+                !$this->typeReader->isConcrete($instance) ||
+                !$this->interceptableValidator->validate($instance)
+            ) {
                 continue;
             }
 
