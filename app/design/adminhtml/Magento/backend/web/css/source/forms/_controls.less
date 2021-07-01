@@ -15,7 +15,7 @@
 
 //  Common
 .__form-control-pattern() {
-    -webkit-appearance: none;
+    .lib-vendor-prefix-appearance(none);
     background-color: @field-control__background-color;
     border: @field-control__border-width solid @field-control__border-color;
     border-radius: @field-control__border-radius;
@@ -58,7 +58,7 @@
 //  Select styles
 .admin__control-select {
     &:extend(.abs-form-control-pattern all);
-    .lib-css(appearance, none, 1);
+    .lib-vendor-prefix-appearance(none);
     background-image+: url('../images/arrows-bg.svg');
     background-position+: ~'calc(100% - 12px)' -34px;
     background-size+: auto;
