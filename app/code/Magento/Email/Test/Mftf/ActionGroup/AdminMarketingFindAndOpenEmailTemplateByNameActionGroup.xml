@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMarketingFindAndOpenEmailTemplateByNameActionGroup">
+        <arguments>
+            <argument name="templateName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateEmailTemplatePage" />
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+        <fillField selector="{{AdminEmailTemplateIndexSection.searchTemplateField}}" userInput="{{templateName}}" stepKey="findCreatedTemplate"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <waitForElementVisible selector="{{AdminEmailTemplateIndexSection.templateRowByName(templateName)}}" stepKey="waitForTemplatesAppeared"/>
+        <click selector="{{AdminEmailTemplateIndexSection.templateRowByName(templateName)}}" stepKey="clickToOpenTemplate"/>
+        <waitForElementVisible selector="{{AdminEmailTemplateEditSection.templateCode}}" stepKey="waitForTemplateNameVisible"/>
+        <seeInField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{templateName}}" stepKey="checkTemplateName"/>
+    </actionGroup>
+</actionGroups>
