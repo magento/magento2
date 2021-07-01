@@ -26,7 +26,7 @@ var config = {
             uiLayout:       'Magento_Ui/js/core/renderer/layout',
             buttonAdapter:  'Magento_Ui/js/form/button-adapter',
             chartJs:        'chartjs/Chart.min',
-            tinymce4:       'tiny_mce_4/tinymce.min',
+            tinymce:        'tiny_mce_4/tinymce.min',
             wysiwygAdapter: 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter'
         }
     }
