@@ -22,6 +22,30 @@ define([
         },
 
         /**
+         * @param {*} amount
+         * @return {*|String}
+         */
+        getFormattedPercent: function (amount) {
+            var format = Object.assign({}, quote.getPriceFormat());
+
+            format.requiredPrecision = this.countPrecision(amount, format.decimalSymbol);
+            format.pattern = '%s';
+
+            return priceUtils.formatPrice(amount, format, false);
+        },
+
+        /**
+         * @param {*} amount
+         * @param {*} decimalSymbol
+         * @return {*|Number}
+         */
+        countPrecision: function (amount, decimalSymbol) {
+            var decimalValue = amount.toString().split(decimalSymbol);
+
+            return decimalValue[1].length;
+        },
+
+        /**
          * @return {*}
          */
         getTotals: function () {
