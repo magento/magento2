@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/** @var \Magento\Wishlist\Block\Customer\Sidebar $block */
 ?>
 <?php
 $wishlstViewModel = $block->getData('wishlistDataViewModel');
@@ -14,7 +12,9 @@ $wishlstViewModel = $block->getData('wishlistDataViewModel');
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
             <!-- ko if: wishlist().counter -->
-            <span data-bind="text: wishlist().counter" class="counter"></span>
+            <span class="counter no-display" data-bind="css: {'no-display': !wishlist().counter}">
+                <span data-bind="text: getCounterLabel()"></span>
+            </span>
             <!-- /ko -->
         </div>
         <div class="block-content">

@@ -75,7 +75,7 @@ class LoadTest extends AbstractController
     {
         $this->customerSession->setCustomerId(1);
         $response = $this->performWishListSectionRequest();
-        $this->assertEquals('3 items', $response['wishlist']['counter']);
+        $this->assertEquals(3, $response['wishlist']['counter']);
     }
 
     /**
@@ -88,7 +88,7 @@ class LoadTest extends AbstractController
     {
         $this->customerSession->setCustomerId(1);
         $response = $this->performWishListSectionRequest();
-        $this->assertEquals('1 item', $response['wishlist']['counter']);
+        $this->assertEquals(1, $response['wishlist']['counter']);
     }
 
     /**

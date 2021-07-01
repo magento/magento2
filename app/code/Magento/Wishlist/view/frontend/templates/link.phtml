@@ -9,13 +9,15 @@
 <li class="link wishlist" data-bind="scope: 'wishlist'">
     <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><?= $block->escapeHtml($block->getLabel()) ?>
         <!-- ko if: wishlist().counter -->
-        <span data-bind="text: wishlist().counter" class="counter qty"></span>
+            <span class="counter qty">
+                <span data-bind="text: getCounterLabel()"></span>
+            </span>
         <!-- /ko -->
     </a>
 </li>
 <script type="text/x-magento-init">
     {
-        "*": {
+        ".wishlist.link": {
             "Magento_Ui/js/core/app": {
                 "components": {
                     "wishlist": {

@@ -80,29 +80,13 @@ class Wishlist implements SectionSourceInterface
     }
 
     /**
-     * Get counter
+     * Get number of Wishlist items
      *
      * @return string
      */
     protected function getCounter()
     {
-        return $this->createCounter($this->wishlistHelper->getItemCount());
-    }
-
-    /**
-     * Create button label based on wishlist item quantity
-     *
-     * @param int $count
-     * @return \Magento\Framework\Phrase|null
-     */
-    protected function createCounter($count)
-    {
-        if ($count > 1) {
-            return __('%1 items', $count);
-        } elseif ($count == 1) {
-            return __('1 item');
-        }
-        return null;
+        return (string) $this->wishlistHelper->getItemCount();
     }
 
     /**
