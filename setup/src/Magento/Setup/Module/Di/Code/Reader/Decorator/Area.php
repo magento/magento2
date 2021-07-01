@@ -50,7 +50,7 @@ class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterfa
     {
         $classes = [];
         foreach ($this->classesScanner->getList($path) as $className) {
-            $classes[$className] = $this->classReaderDecorator->getConstructor($className);
+            $classes[$className] = (array) $this->classReaderDecorator->getConstructor($className);
         }
 
         return $classes;
