@@ -18,6 +18,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\AddComment;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
+use Magento\Sales\Model\ResourceModel\GridPool;
 use Magento\Sales\Model\Order\Status\History;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -126,9 +127,6 @@ class AddCommentTest extends TestCase
             ->method('addStatusHistoryComment')
             ->willReturn($this->statusHistoryCommentMock);
         $this->statusHistoryCommentMock->expects($this->once())->method('setIsCustomerNotified')->with($expectedNotify);
-        $this->objectManagerMock->expects($this->once())->method('create')->willReturn(
-            $this->createMock(OrderCommentSender::class)
-        );
 
         $this->addCommentController->execute();
     }
