@@ -31,7 +31,7 @@
             <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
                <argument name="category" value="$$category$$"/>
             </actionGroup>
-            <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
                 <argument name="name" value="wysiwyg"/>
@@ -53,7 +53,7 @@
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstIMage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -64,7 +64,7 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryGridPage"/>
 
