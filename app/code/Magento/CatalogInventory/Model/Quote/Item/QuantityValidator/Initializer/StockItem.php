@@ -10,7 +10,6 @@ use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 
 /**
@@ -34,15 +33,11 @@ class StockItem
     protected $stockState;
 
     /**
-     * @var StockStateProviderInterface
-     */
-    private $stockStateProvider;
-
-    /**
      * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockStateInterface $stockState
-     * @param StockStateProviderInterface|null $stockStateProvider
+     * @param StockStateProviderInterface|null $stockStateProvider @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ConfigInterface $typeConfig,
@@ -53,8 +48,6 @@ class StockItem
         $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
         $this->stockState = $stockState;
-        $this->stockStateProvider = $stockStateProvider ?: ObjectManager::getInstance()
-            ->get(StockStateProviderInterface::class);
     }
 
     /**
@@ -121,11 +114,6 @@ class StockItem
         if ($result->getHasError() === true && in_array($result->getErrorCode(), ['qty_available', 'out_stock'])) {
             $quoteItem->setHasError(true);
         }
-
-        /* We need to ensure that any possible plugin will not erase the data */
-        $backOrdersQty = $this->stockStateProvider->checkQuoteItemQty($stockItem, $rowQty, $qtyForCheck, $qty)
-            ->getItemBackorders();
-        $result->setItemBackorders($backOrdersQty);
 
         if ($stockItem->hasIsChildItem()) {
             $stockItem->unsIsChildItem();

@@ -48,11 +48,6 @@ class StockItemTest extends TestCase
     protected $stockStateMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\StockStateProviderInterface|MockObject
-     */
-    private $stockStateProviderMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -72,18 +67,12 @@ class StockItemTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->stockStateProviderMock = $this
-            ->getMockBuilder(StockStateProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->model = $objectManagerHelper->getObject(
             StockItem::class,
             [
                 'quoteItemQtyList' => $this->quoteItemQtyList,
                 'typeConfig' => $this->typeConfig,
-                'stockState' => $this->stockStateMock,
-                'stockStateProvider' => $this->stockStateProviderMock
+                'stockState' => $this->stockStateMock
             ]
         );
     }
@@ -173,10 +162,6 @@ class StockItemTest extends TestCase
             ->method('checkQuoteItemQty')
             ->withAnyParameters()
             ->willReturn($result);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->withAnyParameters()
-            ->willReturn($result);
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('product_type')
@@ -213,7 +198,7 @@ class StockItemTest extends TestCase
         $quoteItem->expects($this->once())->method('setUseOldQty')->with('item')->willReturnSelf();
         $result->expects($this->exactly(2))->method('getMessage')->willReturn('message');
         $quoteItem->expects($this->once())->method('setMessage')->with('message')->willReturnSelf();
-        $result->expects($this->exactly(3))->method('getItemBackorders')->willReturn('backorders');
+        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn('backorders');
         $quoteItem->expects($this->once())->method('setBackorders')->with('backorders')->willReturnSelf();
         $quoteItem->expects($this->once())->method('setStockStateResult')->with($result)->willReturnSelf();
 
@@ -276,10 +261,6 @@ class StockItemTest extends TestCase
             ->method('checkQuoteItemQty')
             ->withAnyParameters()
             ->willReturn($result);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->withAnyParameters()
-            ->willReturn($result);
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('product_type')
@@ -299,7 +280,7 @@ class StockItemTest extends TestCase
         $result->expects($this->once())->method('getHasQtyOptionUpdate')->willReturn(false);
         $result->expects($this->once())->method('getItemUseOldQty')->willReturn(null);
         $result->expects($this->once())->method('getMessage')->willReturn(null);
-        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn(null);
+        $result->expects($this->once())->method('getItemBackorders')->willReturn(null);
 
         $this->model->initialize($stockItem, $quoteItem, $qty);
     }
