@@ -120,6 +120,7 @@ class Url
                 ScopeInterface::SCOPE_STORE
             )
             && !$this->customerSession->getNoReferer()
+            && $this->request->isGet()
         ) {
             $referer = $this->urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
             $referer = $this->urlEncoder->encode($referer);
