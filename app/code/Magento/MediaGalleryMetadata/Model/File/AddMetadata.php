@@ -67,8 +67,13 @@ class AddMetadata implements AddMetadataInterface
     {
         try {
             $file = $this->fileReader->execute($path);
-        } catch (ValidatorException $e) {
-            return;
+        } catch (ValidatorException $exception) {
+            throw new LocalizedException(
+                __(
+                    'An error occurred during save image metadata: %error_message',
+                    ['error_message' => $exception->getMessage()]
+                )
+            );
         } catch (\Exception $exception) {
             throw new LocalizedException(
                 __('Could not parse the image file for metadata: %path', ['path' => $path])

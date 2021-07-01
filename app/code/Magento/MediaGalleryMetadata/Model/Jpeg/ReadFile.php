@@ -95,7 +95,7 @@ class ReadFile implements ReadFileInterface
     public function execute(string $path): FileInterface
     {
         if (!$this->isApplicable($path)) {
-            throw new ValidatorException(__('Not a JPEG image'));
+            throw new ValidatorException(__('Not a JPEG image or image corrupted.'));
         }
 
         $resource = $this->driver->fileOpen($path, 'rb');
@@ -133,7 +133,7 @@ class ReadFile implements ReadFileInterface
      *
      * @param resource $resource
      * @return string
-     * @throws FileSystemException
+     * @throws LocalizedException
      */
     private function readMarker($resource): string
     {

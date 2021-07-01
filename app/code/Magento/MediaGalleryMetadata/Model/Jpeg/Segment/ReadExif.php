@@ -62,15 +62,15 @@ class ReadExif implements ReadMetadataInterface
     }
 
     /**
-     * Parese exif data from segment
+     * Parse exif data from segment.
      *
      * @param string $filePath
+     * @return MetadataInterface
      */
     private function getExifData(string $filePath): MetadataInterface
     {
         $title = null;
         $description = null;
-        $keywords = null;
 
         $data = exif_read_data($filePath);
 
@@ -82,7 +82,7 @@ class ReadExif implements ReadMetadataInterface
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => $keywords
+            'keywords' => null
         ]);
     }
 
