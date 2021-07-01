@@ -24,6 +24,7 @@ use Magento\Framework\Setup\Patch\PatchRegistryFactory;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use phpDocumentor\Reflection\Types\True_;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -203,8 +204,6 @@ class PatchApplierTest extends TestCase
      */
     public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessageMatches('"Unable to apply data patch .+ cannot be applied twice"');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -218,6 +217,7 @@ class PatchApplierTest extends TestCase
 
         $patch1 = $this->getMockForAbstractClass(DataPatchInterface::class);
         $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->never())->method('apply');
         $patchClass = get_class($patch1);
 
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
@@ -232,15 +232,6 @@ class PatchApplierTest extends TestCase
             [
                 ['\\' . $patchClass, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
             ]
-        );
-        $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
-        $this->connectionMock->expects($this->never())->method('commit');
-        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
-            function ($param1) {
-                if ($param1 == 'PatchAlias') {
-                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                }
-            }
         );
         $this->patchApllier->applyDataPatch($moduleName);
     }
@@ -516,8 +507,6 @@ class PatchApplierTest extends TestCase
      */
     public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
     {
-        $this->expectException('Exception');
-        $this->expectExceptionMessageMatches('"Unable to apply patch .+ cannot be applied twice"');
         $this->schemaPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)

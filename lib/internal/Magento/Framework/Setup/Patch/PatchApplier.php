@@ -159,10 +159,9 @@ class PatchApplier
             } else {
                 try {
                     $this->moduleDataSetup->getConnection()->beginTransaction();
-                    $dataPatch->apply();
-                    $this->patchHistory->fixPatch(get_class($dataPatch));
-                    foreach ($dataPatch->getAliases() as $patchAlias) {
-                        $this->patchHistory->fixPatch($patchAlias);
+                    if (!$this->checkPatchAliases($dataPatch)) {
+                        $dataPatch->apply();
+                        $this->patchHistory->fixPatch(get_class($dataPatch));
                     }
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
@@ -238,10 +237,9 @@ class PatchApplier
                  * @var SchemaPatchInterface $schemaPatch
                  */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
-                $schemaPatch->apply();
-                $this->patchHistory->fixPatch(get_class($schemaPatch));
-                foreach ($schemaPatch->getAliases() as $patchAlias) {
-                    $this->patchHistory->fixPatch($patchAlias);
+                if (!$this->checkPatchAliases($schemaPatch)) {
+                    $schemaPatch->apply();
+                    $this->patchHistory->fixPatch(get_class($schemaPatch));
                 }
             } catch (\Exception $e) {
                 throw new SetupException(
@@ -291,5 +289,21 @@ class PatchApplier
                 }
             }
         }
+    }
+
+    /**
+     * Checks is patch was applied with current alias name
+     *
+     * @param DataPatchInterface|SchemaPatchInterface $dataPatch
+     * @return bool
+     */
+    private function checkPatchAliases($dataPatch): bool
+    {
+        if ($dataPatchAliases = $dataPatch->getAliases()) {
+            foreach ($dataPatchAliases as $patchAlias) {
+                return $this->patchHistory->isApplied($patchAlias) ?? true;
+            }
+        }
+        return false;
     }
 }
