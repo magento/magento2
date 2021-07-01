@@ -7,32 +7,31 @@ declare(strict_types=1);
 
 namespace Magento\Cron\Setup;
 
+use Magento\Cron\Model\ResourceModel\Schedule;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
- * Cron recurring setup
+ * Overrides the running Cron Jobs status to ERROR
  */
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule
+     * @var Schedule
      */
     private $schedule;
 
     /**
-     * Recurring constructor.
-     * @param \Magento\Cron\Model\ResourceModel\Schedule $schedule
+     * @param Schedule $schedule
      */
-    public function __construct(
-        \Magento\Cron\Model\ResourceModel\Schedule $schedule
-    ) {
+    public function __construct(Schedule $schedule)
+    {
         $this->schedule = $schedule;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
