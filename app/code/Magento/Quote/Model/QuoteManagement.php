@@ -306,7 +306,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $customerActiveQuote->setIsActive(0);
             $this->quoteRepository->save($customerActiveQuote);
 
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
@@ -497,81 +497,82 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
-        $order = $this->orderFactory->create();
-        $this->submitQuoteValidator->validateQuote($quote);
-        if (!$quote->getCustomerIsGuest()) {
-            if ($quote->getCustomerId()) {
-                $this->_prepareCustomerQuote($quote);
-                $this->customerManagement->validateAddresses($quote);
+        try {
+            $order = $this->orderFactory->create();
+            $this->submitQuoteValidator->validateQuote($quote);
+            if (!$quote->getCustomerIsGuest()) {
+                if ($quote->getCustomerId()) {
+                    $this->_prepareCustomerQuote($quote);
+                    $this->customerManagement->validateAddresses($quote);
+                }
+                $this->customerManagement->populateCustomerInfo($quote);
             }
-            $this->customerManagement->populateCustomerInfo($quote);
-        }
-        $addresses = [];
-        $quote->reserveOrderId();
-        if ($quote->isVirtual()) {
-            $this->dataObjectHelper->mergeDataObjects(
-                \Magento\Sales\Api\Data\OrderInterface::class,
-                $order,
-                $this->quoteAddressToOrder->convert($quote->getBillingAddress(), $orderData)
-            );
-        } else {
-            $this->dataObjectHelper->mergeDataObjects(
-                \Magento\Sales\Api\Data\OrderInterface::class,
-                $order,
-                $this->quoteAddressToOrder->convert($quote->getShippingAddress(), $orderData)
-            );
-            $shippingAddress = $this->quoteAddressToOrderAddress->convert(
-                $quote->getShippingAddress(),
+            $addresses = [];
+            $quote->reserveOrderId();
+            if ($quote->isVirtual()) {
+                $this->dataObjectHelper->mergeDataObjects(
+                    \Magento\Sales\Api\Data\OrderInterface::class,
+                    $order,
+                    $this->quoteAddressToOrder->convert($quote->getBillingAddress(), $orderData)
+                );
+            } else {
+                $this->dataObjectHelper->mergeDataObjects(
+                    \Magento\Sales\Api\Data\OrderInterface::class,
+                    $order,
+                    $this->quoteAddressToOrder->convert($quote->getShippingAddress(), $orderData)
+                );
+                $shippingAddress = $this->quoteAddressToOrderAddress->convert(
+                    $quote->getShippingAddress(),
+                    [
+                        'address_type' => 'shipping',
+                        'email' => $quote->getCustomerEmail()
+                    ]
+                );
+                $shippingAddress->setData('quote_address_id', $quote->getShippingAddress()->getId());
+                $addresses[] = $shippingAddress;
+                $order->setShippingAddress($shippingAddress);
+                $order->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
+            }
+            $billingAddress = $this->quoteAddressToOrderAddress->convert(
+                $quote->getBillingAddress(),
                 [
-                    'address_type' => 'shipping',
+                    'address_type' => 'billing',
                     'email' => $quote->getCustomerEmail()
                 ]
             );
-            $shippingAddress->setData('quote_address_id', $quote->getShippingAddress()->getId());
-            $addresses[] = $shippingAddress;
-            $order->setShippingAddress($shippingAddress);
-            $order->setShippingMethod($quote->getShippingAddress()->getShippingMethod());
-        }
-        $billingAddress = $this->quoteAddressToOrderAddress->convert(
-            $quote->getBillingAddress(),
-            [
-                'address_type' => 'billing',
-                'email' => $quote->getCustomerEmail()
-            ]
-        );
-        $billingAddress->setData('quote_address_id', $quote->getBillingAddress()->getId());
-        $addresses[] = $billingAddress;
-        $order->setBillingAddress($billingAddress);
-        $order->setAddresses($addresses);
-        $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
-        $order->setItems($this->resolveItems($quote));
-        if ($quote->getCustomer()) {
-            $order->setCustomerId($quote->getCustomer()->getId());
-        }
-        $order->setQuoteId($quote->getId());
-        $order->setCustomerEmail($quote->getCustomerEmail());
-        $order->setCustomerFirstname($quote->getCustomerFirstname());
-        $order->setCustomerMiddlename($quote->getCustomerMiddlename());
-        $order->setCustomerLastname($quote->getCustomerLastname());
+            $billingAddress->setData('quote_address_id', $quote->getBillingAddress()->getId());
+            $addresses[] = $billingAddress;
+            $order->setBillingAddress($billingAddress);
+            $order->setAddresses($addresses);
+            $order->setPayment($this->quotePaymentToOrderPayment->convert($quote->getPayment()));
+            $order->setItems($this->resolveItems($quote));
+            if ($quote->getCustomer()) {
+                $order->setCustomerId($quote->getCustomer()->getId());
+            }
+            $order->setQuoteId($quote->getId());
+            $order->setCustomerEmail($quote->getCustomerEmail());
+            $order->setCustomerFirstname($quote->getCustomerFirstname());
+            $order->setCustomerMiddlename($quote->getCustomerMiddlename());
+            $order->setCustomerLastname($quote->getCustomerLastname());
 
-        if ($quote->getOrigOrderId()) {
-            $order->setEntityId($quote->getOrigOrderId());
-        }
+            if ($quote->getOrigOrderId()) {
+                $order->setEntityId($quote->getOrigOrderId());
+            }
 
-        if ($quote->getReservedOrderId()) {
-            $order->setIncrementId($quote->getReservedOrderId());
-        }
+            if ($quote->getReservedOrderId()) {
+                $order->setIncrementId($quote->getReservedOrderId());
+            }
 
-        $this->submitQuoteValidator->validateOrder($order);
+            $this->submitQuoteValidator->validateOrder($order);
 
-        $this->eventManager->dispatch(
-            'sales_model_service_quote_submit_before',
-            [
-                'order' => $order,
-                'quote' => $quote
-            ]
-        );
-        try {
+            $this->eventManager->dispatch(
+                'sales_model_service_quote_submit_before',
+                [
+                    'order' => $order,
+                    'quote' => $quote
+                ]
+            );
+
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
             $this->eventManager->dispatch(
@@ -617,7 +618,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 if ($defaultShipping) {
                     try {
                         $shippingAddress = $this->addressRepository->getById($defaultShipping);
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
@@ -651,7 +652,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 if ($defaultBilling) {
                     try {
                         $billingAddress = $this->addressRepository->getById($defaultBilling);
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (LocalizedException $e) {
                         // no address
                     }
