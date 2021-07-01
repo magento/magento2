@@ -63,7 +63,7 @@ class ScopedOptionSelectBuilder implements OptionSelectBuilderInterface
      */
     public function getSelect(AbstractAttribute $superAttribute, int $productId)
     {
-        $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $store = $this->storeManager->getStore();
 
         $select = $this->attributeResource->getConnection()->select()->from(
@@ -76,16 +76,26 @@ class ScopedOptionSelectBuilder implements OptionSelectBuilderInterface
                 'super_attribute_label' => 'attribute_label.value',
             ]
         )->joinInner(
-            ['product_entity' => $this->attributeResource->getTable('catalog_product_entity')],
-            "product_entity.$productLinkField = super_attribute.product_id",
-            []
-        )->joinInner(
             ['product_link' => $this->attributeResource->getTable('catalog_product_super_link')],
             'product_link.parent_id = super_attribute.product_id',
             []
         )->joinInner(
+            ['product_entity' => $this->attributeResource->getTable('catalog_product_entity')],
+            "product_entity.{$productMetadata->getLinkField()} = super_attribute.product_id",
+            []
+        )->joinInner(
             ['attribute' => $this->attributeResource->getTable('eav_attribute')],
             'attribute.attribute_id = super_attribute.attribute_id',
+            []
+        )->joinLeft(
+            ['attribute_label' => $this->attributeResource->getTable('catalog_product_super_attribute_label')],
+            implode(
+                ' AND ',
+                [
+                    'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
+                    'attribute_label.store_id = 0',
+                ]
+            ),
             []
         )->joinInner(
             ['entity' => $this->attributeResource->getTable('catalog_product_entity')],
@@ -96,7 +106,7 @@ class ScopedOptionSelectBuilder implements OptionSelectBuilderInterface
             implode(
                 ' AND ',
                 [
-                    "entity_website.product_id = entity.$productLinkField",
+                    "entity_website.product_id = entity.{$productMetadata->getIdentifierField()}",
                     "entity_website.website_id = {$store->getWebsiteId()}",
                 ]
             ),
@@ -108,17 +118,7 @@ class ScopedOptionSelectBuilder implements OptionSelectBuilderInterface
                 [
                     'entity_value.attribute_id = super_attribute.attribute_id',
                     'entity_value.store_id = 0',
-                    "entity_value.$productLinkField = entity.$productLinkField",
-                ]
-            ),
-            []
-        )->joinLeft(
-            ['attribute_label' => $this->attributeResource->getTable('catalog_product_super_attribute_label')],
-            implode(
-                ' AND ',
-                [
-                    'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                    'attribute_label.store_id = 0',
+                    "entity_value.{$productMetadata->getLinkField()} = entity.{$productMetadata->getLinkField()}",
                 ]
             ),
             []
