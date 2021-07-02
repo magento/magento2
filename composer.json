@@ -30,7 +30,7 @@
         "lib-libxml": "*",
         "colinmollenhour/cache-backend-file": "~1.4.1",
         "colinmollenhour/cache-backend-redis": "1.11.0",
-        "colinmollenhour/credis": "1.11.1",
+        "colinmollenhour/credis": "1.12.1",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.9 || ^2.0",
         "elasticsearch/elasticsearch": "~7.11.0",
