@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteTierPriceActionGroup">
         <annotations>
-            <description>Deletes Tier price (first one if there are more than>1</description>
+            <description>Deletes Tier price (first one if there are >1)</description>
         </annotations>
 
         <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButtonFull}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
