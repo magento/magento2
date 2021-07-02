@@ -323,11 +323,11 @@ define([
 
             if (this._autoplay) {
                 additionalParams += '&autoplay=1';
+                additionalParams += '&muted=1';
             }
 
             if (this._loop) {
                 additionalParams += '&loop=1';
-                additionalParams += '&muted=1';
             }
             src = 'https://player.vimeo.com/video/' +
                 this._code + '?api=1&player_id=vimeo' +
