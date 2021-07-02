@@ -25,7 +25,9 @@
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <!--Main test-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
@@ -59,7 +61,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="amOnProductPage" />
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage" />
         <waitForPageLoad stepKey="waitForPage" />
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <waitForPageLoad stepKey="wait5" />
