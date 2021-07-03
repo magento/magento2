@@ -74,7 +74,7 @@ class ParamsBuilder
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments, int $scopeId = null, Theme $theme = null): array
+    public function build(array $imageArguments, int $scopeId = null, /*Theme*/ $theme = null): array
     {
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
@@ -94,7 +94,7 @@ class ParamsBuilder
      * @param array $imageArguments
      * @return array
      */
-    private function overwriteDefaultValues(array $imageArguments, Theme $theme = null): array
+    private function overwriteDefaultValues(array $imageArguments, /*Theme*/ $theme = null): array
     {
         $frame = $imageArguments['frame'] ?? $this->hasDefaultFrame($theme);
         $constrain = $imageArguments['constrain'] ?? $this->defaultConstrainOnly;
@@ -169,7 +169,7 @@ class ParamsBuilder
      *
      * @return bool
      */
-    private function hasDefaultFrame(Theme $theme = null): bool
+    private function hasDefaultFrame(/*Theme*/ $theme = null): bool
     {
         $viewConfigParams = ['area' => \Magento\Framework\App\Area::AREA_FRONTEND];
         if ($theme) {
