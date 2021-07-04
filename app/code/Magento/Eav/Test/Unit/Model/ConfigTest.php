@@ -16,9 +16,13 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -89,13 +93,36 @@ class ConfigTest extends TestCase
 
         $this->typeMock = $this->createMock(Type::class);
 
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->setMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $websiteId = 1;
+        $websiteMock = $this->createMock(Website::class);
+        $websiteMock->method('getId')->willReturn($websiteId);
+
+        $storeId = 1;
+        $storeMock = $this->createMock(Store::class);
+        $storeMock
+            ->method('getId')->willReturn($storeId);
+
+        $this->storeManagerMock->method('getWebsite')->willReturn($websiteMock);
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+
         $this->config = new Config(
             $this->cacheMock,
             $this->typeFactoryMock,
             $this->collectionFactoryMock,
             $this->cacheStateMock,
             $this->universalFactoryMock,
-            $this->serializerMock
+            $this->serializerMock,
+            $this->scopeConfigMock,
+            $this->storeManagerMock
         );
     }
 
