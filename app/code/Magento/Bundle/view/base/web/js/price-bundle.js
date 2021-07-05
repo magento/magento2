@@ -132,8 +132,8 @@ define([
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
 
-                if (parseInt(field.val()) >= field.data('validate')['validate-item-quantity']['minAllowed'] &&
-                    parseInt(field.val()) <= field.data('validate')['validate-item-quantity']['maxAllowed']
+                if (field.val() >= field.data('validate')['validate-item-quantity'].minAllowed &&
+                    field.val() <= field.data('validate')['validate-item-quantity'].maxAllowed
                 ) {
                     optionInstance.trigger('change');
                 }
