@@ -12,4 +12,10 @@
     <event name="customer_logout">
         <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLogoutObserver" shared="false" />
     </event>
+    <event name="controller_action_predispatch_catalogsearch_advanced_result">
+        <observer name="catalog" instance="Magento\Catalog\Observer\ToolbarMemoriserObserver"/>
+    </event>
+    <event name="controller_action_predispatch_catalogsearch_result_index">
+        <observer name="catalog" instance="Magento\Catalog\Observer\ToolbarMemoriserObserver"/>
+    </event>
 </config>
