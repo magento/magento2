@@ -9,11 +9,21 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item\Processor;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
+use Magento\Framework\App\CacheInterface;
 
 /**
  * Add simple product to cart mutation
@@ -31,15 +41,32 @@ class AddSimpleProductToCart
     private $buyRequestBuilder;
 
     /**
+     * @var Processor
+     */
+    private $itemProcessor;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param BuyRequestBuilder $buyRequestBuilder
+     * @param Processor $itemProcessor
+     * @param Context $context
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        BuyRequestBuilder $buyRequestBuilder
+        BuyRequestBuilder $buyRequestBuilder,
+        Processor $itemProcessor,
+        Context $context,
+        CacheInterface $cache
     ) {
         $this->productRepository = $productRepository;
         $this->buyRequestBuilder = $buyRequestBuilder;
+        $this->itemProcessor = $itemProcessor;
+        $this->eventManager = $context->getEventDispatcher();
     }
 
     /**
@@ -62,7 +89,11 @@ class AddSimpleProductToCart
         }
 
         try {
-            $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
+            $result = $this->addProductToCartWithConcurrency(
+                $cart,
+                $product,
+                $this->buyRequestBuilder->build($cartItemData)
+            );
         } catch (Exception $e) {
             throw new GraphQlInputException(
                 __(
@@ -99,5 +130,80 @@ class AddSimpleProductToCart
             throw new GraphQlInputException(__('Missed "sku" in cart item data'));
         }
         return (string)$cartItemData['data']['sku'];
+    }
+
+    /**
+     * @param Quote $cart
+     * @param Product $product
+     * @param DataObject $request
+     * @return Item
+     * @throws LocalizedException
+     */
+    private function addProductToCartWithConcurrency(Quote $cart, Product $product, DataObject $request) : Item
+    {
+        if (!$product->isSalable()) {
+            throw new LocalizedException(
+                __('Product that you are trying to add is not available.')
+            );
+        }
+        $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced(
+            $request,
+            $product,
+            AbstractType::PROCESS_MODE_FULL
+        );
+        if (is_string($cartCandidates) || $cartCandidates instanceof Phrase) {
+            throw new LocalizedException((string)$cartCandidates);
+        }
+        if (!is_array($cartCandidates)) {
+            $cartCandidates = [$cartCandidates];
+        }
+        $parentItem = null;
+        $errors = [];
+        $items = [];
+        foreach ($cartCandidates as $candidate) {
+            $stickWithinParent = $candidate->getParentProductId() ? $parentItem : null;
+            $candidate->setStickWithinParent($stickWithinParent);
+            $item = null;
+            $itemsCollection = $cart->getItemsCollection(false);
+
+            foreach ($itemsCollection as $item) {
+                if (!$item->isDeleted() && $item->representProduct($product)) {
+                    break;
+                }
+            }
+
+            if (!$item) {
+                $item = $this->itemProcessor->init($candidate, $request);
+                $item->setQuote($cart);
+                $item->setOptions($candidate->getCustomOptions());
+                $item->setProduct($candidate);
+                $cart->addItem($item);
+            }
+            $items[] = $item;
+
+            if (!$parentItem) {
+                $parentItem = $item;
+            }
+            if ($parentItem && $candidate->getParentProductId() && !$item->getParentItem()) {
+                $item->setParentItem($parentItem);
+            }
+
+            $this->itemProcessor->prepare($item, $request, $candidate);
+
+            if ($item->getHasError()) {
+                $cart->deleteItem($item);
+                foreach ($item->getMessage(false) as $message) {
+                    if (!in_array($message, $errors)) {
+                        $errors[] = $message;
+                    }
+                }
+                break;
+            }
+        }
+        if (!empty($errors)) {
+            throw new LocalizedException(__(implode("\n", $errors)));
+        }
+        $this->eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
+        return $parentItem;
     }
 }
