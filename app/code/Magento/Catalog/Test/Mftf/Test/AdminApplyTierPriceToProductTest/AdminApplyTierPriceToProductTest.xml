@@ -86,7 +86,8 @@
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton2"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerGroupPriceAddButton2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForcustomerGroupPriceAddButton2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectCustomerGroupNameAttribute1"/>
         <actionGroup ref="AdminProductFormAdvancedPricingUpdateTierPriceActionGroup" stepKey="selectCustomerGroupGeneral">
             <argument name="customerGroup" value="General"/>
             <argument name="quantity" value="1"/>
@@ -137,6 +138,9 @@
             <argument name="priceType" value="Discount"/>
             <argument name="amount" value="18"/>
         </actionGroup> 
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="fillProductTierPriceQtyInput20"/>
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="selectProductTierPriceValueType2"/>
+        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="selectProductTierPricePriceInput18"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton3"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
 
@@ -167,7 +171,7 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('2', '82')}}" stepKey="assertProductTierPriceAmountForSecondRow1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '18')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow1"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity1_"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity1"/>
 
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="quantity" value="10"/>
@@ -192,7 +196,7 @@
             <actualResult type="variable">grabTextFromSubtotalField2</actualResult>
         </assertEquals>
 
-        <actionGroup ref="StorefrontChangeProductQtyInTheCartActionGroup" stepKey="fillProductQuantity1">
+        <actionGroup ref="StorefrontChangeProductQtyInTheCartActionGroup" stepKey="fillProductQuantity3">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
             <argument name="qty" value="20"/>
         </actionGroup>
@@ -303,6 +307,7 @@
         <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" stepKey="dontSeeQtyInputOfFirstRow"/>
         <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" stepKey="dontSeeQtyInputOfSecondRow"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="closeAdvancedPricingPopup"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminProductFormSectionProductPriceInput"/>
         <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPrice200">
             <argument name="price" value="200"/>
         </actionGroup>
