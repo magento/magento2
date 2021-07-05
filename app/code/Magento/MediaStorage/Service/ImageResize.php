@@ -27,7 +27,7 @@ use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
-use Magento\Theme\Model\Theme;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Image resize service.
@@ -239,7 +239,7 @@ class ImageResize
     {
         $viewImages = [];
         $stores = $this->storeManager->getStores(true);
-        /** @var Theme $theme */
+        /** @var ThemeInterface $theme */
         foreach ($themes as $theme) {
             $config = $this->viewConfig->getViewConfig(
                 [

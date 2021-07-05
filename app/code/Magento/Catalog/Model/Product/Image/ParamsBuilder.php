@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Product\Image;
-use Magento\Theme\Model\Theme;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Builds parameters array used to build Image Asset
@@ -70,11 +70,12 @@ class ParamsBuilder
      *
      * @param array $imageArguments
      * @param int $scopeId
+     * @param ThemeInterface $theme
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments, int $scopeId = null, /*Theme*/ $theme = null): array
+    public function build(array $imageArguments, int $scopeId = null, /*ThemeInterface*/ $theme = null): array
     {
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
@@ -92,9 +93,10 @@ class ParamsBuilder
      * Overwrite default values
      *
      * @param array $imageArguments
+     * @param ThemeInterface $theme
      * @return array
      */
-    private function overwriteDefaultValues(array $imageArguments, /*Theme*/ $theme = null): array
+    private function overwriteDefaultValues(array $imageArguments, /*ThemeInterface*/ $theme = null): array
     {
         $frame = $imageArguments['frame'] ?? $this->hasDefaultFrame($theme);
         $constrain = $imageArguments['constrain'] ?? $this->defaultConstrainOnly;
@@ -166,10 +168,12 @@ class ParamsBuilder
 
     /**
      * Get frame from product_image_white_borders
+     * 
+     * @param ThemeInterface $theme
      *
      * @return bool
      */
-    private function hasDefaultFrame(/*Theme*/ $theme = null): bool
+    private function hasDefaultFrame(/*ThemeInterface*/ $theme = null): bool
     {
         $viewConfigParams = ['area' => \Magento\Framework\App\Area::AREA_FRONTEND];
         if ($theme) {
