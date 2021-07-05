@@ -100,10 +100,10 @@ class RequestQuantityProcessor
     /**
      * Phrase quantity value if needed.
      *
-     * @param float|int|array|string $quantity
+     * @param float|int|string $quantity
      * @param NumberFormatter $formatter
      *
-     * @return float|int|array|string
+     * @return float|int|string
      */
     private function parseFormat($quantity, NumberFormatter $formatter)
     {
