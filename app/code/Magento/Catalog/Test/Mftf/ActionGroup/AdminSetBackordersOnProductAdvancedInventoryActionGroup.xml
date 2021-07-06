@@ -17,6 +17,6 @@
         </arguments>
         
         <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettingsForBackorders}}" stepKey="uncheckUseConfigSettings"/>
-        <selectOption selector="{{AdminProductFormAdvancedInventorySection.backorders}}" userInput="{{backorders}}" stepKey="fillBackordersy"/>
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.backorders}}" userInput="{{backorders}}" stepKey="fillBackorders"/>
     </actionGroup>
 </actionGroups>
