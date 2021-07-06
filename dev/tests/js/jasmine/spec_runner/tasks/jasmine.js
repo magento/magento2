@@ -64,6 +64,8 @@ function init(config) {
                     consolidate: true
                 },
 
+                noSandbox: true,
+
                 /**
                  * @todo rename "helpers" to "specs" (implies overriding grunt-contrib-jasmine code)
                  */
