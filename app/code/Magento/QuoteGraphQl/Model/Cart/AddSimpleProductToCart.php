@@ -89,11 +89,14 @@ class AddSimpleProductToCart
         }
 
         try {
+            $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
+            /*
             $result = $this->addProductToCartWithConcurrency(
                 $cart,
                 $product,
                 $this->buyRequestBuilder->build($cartItemData)
             );
+            */
         } catch (Exception $e) {
             throw new GraphQlInputException(
                 __(
