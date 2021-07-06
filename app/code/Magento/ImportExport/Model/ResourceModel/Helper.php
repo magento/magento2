@@ -53,11 +53,20 @@ class Helper extends \Magento\Framework\DB\Helper
     public function getNextAutoincrement($tableName)
     {
         $connection = $this->getConnection();
-        $entityStatus = $connection->showTableStatus($tableName);
-
-        if (empty($entityStatus['Auto_increment'])) {
+        $sql = sprintf(
+            'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = DATABASE()',
+            $this->quote($tableName),
+            $fromDbName
+        );
+        $entityStatus = $connection->fetchRow($sql);
+        if (empty($entityStatus['AUTO_INCREMENT']))
+        {
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot get autoincrement value'));
         }
-        return $entityStatus['Auto_increment'];
+        
+        return $entityStatus['AUTO_INCREMENT'];
+        
+
+
     }
 }
