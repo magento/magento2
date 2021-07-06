@@ -89,12 +89,6 @@ class AddSimpleProductToCart
         }
 
         try {
-            $items = [];
-            $collection = $cart->getItemsCollection(false);
-            foreach ($collection as $item) {
-                $items[] = $item;
-            }
-            $cart->setItems($items);
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
             /*
             $result = $this->addProductToCartWithConcurrency(

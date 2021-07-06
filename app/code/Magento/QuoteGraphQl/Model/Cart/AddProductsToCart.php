@@ -10,7 +10,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
  * Adding products to cart using GraphQL
@@ -28,23 +28,23 @@ class AddProductsToCart
     private $addProductToCart;
 
     /**
-     * @var CacheInterface
+     * @var LockManagerInterface
      */
-    private $cache;
+    private $lockManager;
 
     /**
      * @param CartRepositoryInterface $cartRepository
      * @param AddSimpleProductToCart $addProductToCart
-     * @param CacheInterface $cache
+     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         AddSimpleProductToCart $addProductToCart,
-        CacheInterface $cache
+        LockManagerInterface $lockManager
     ) {
         $this->cartRepository = $cartRepository;
         $this->addProductToCart = $addProductToCart;
-        $this->cache = $cache;
+        $this->lockManager = $lockManager;
     }
 
     /**
@@ -58,16 +58,32 @@ class AddProductsToCart
      */
     public function execute(Quote $cart, array $cartItems): void
     {
-        $ck = 'cart_processing_mutex_' . $cart->getId();
-        while ($this->cache->load($ck) === '1') {
+        $lockName = 'cart_processing_lock_' . $cart->getId();
+        while ($this->lockManager->isLocked($lockName)) {
             // wait till other process working with the same cart complete
             usleep(rand (300, 600));
         }
-        $this->cache->save('1', $ck, [], 1);
+        $this->lockManager->lock($lockName);
+        $this->refreshCartCache($cart);
         foreach ($cartItems as $cartItemData) {
             $this->addProductToCart->execute($cart, $cartItemData);
         }
         $this->cartRepository->save($cart);
-        $this->cache->remove($ck);
+        $this->lockManager->unlock($lockName);
+    }
+
+    /**
+     * Refresh cart collection cache
+     *
+     * @param Quote $cart
+     */
+    private function refreshCartCache(Quote $cart) : void
+    {
+        $items = [];
+        $collection = $cart->getItemsCollection(false);
+        foreach ($collection as $item) {
+            $items[] = $item;
+        }
+        $cart->setItems($items);
     }
 }
