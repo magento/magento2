@@ -32,6 +32,9 @@ class AllPurposeAction extends AbstractRule implements ClassAware
             return;
         }
         try {
+            if (!class_exists($node->getFullQualifiedName(), true)) {
+                return;
+            }
             $impl = class_implements($node->getFullQualifiedName(), true);
         } catch (\Throwable $exception) {
             //Couldn't load a class.
