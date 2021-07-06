@@ -201,7 +201,7 @@ class DataProvider
         $lastProductId = 0,
         $batch = 100
     ) {
-
+        $batch = 10;
         $select = $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch);
         if ($productIds === null) {
             $select->where(
@@ -230,7 +230,7 @@ class DataProvider
      * @param int $batch
      * @return Select
      */
-    private function getSelectForSearchableProducts(
+    public function getSelectForSearchableProducts(
         $storeId,
         array $staticFields,
         $productIds,
