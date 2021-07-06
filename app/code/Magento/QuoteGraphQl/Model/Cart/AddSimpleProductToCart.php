@@ -199,6 +199,16 @@ class AddSimpleProductToCart
                 }
                 break;
             }
+
+            $itemsToUpdate = [];
+            foreach ($cart->getItems() as $itemToUpdate) {
+                if ($itemToUpdate->getItemId() === $item->getItemId()) {
+                    $itemsToUpdate[] = $item;
+                } else {
+                    $itemsToUpdate[] = $itemToUpdate;
+                }
+            }
+            $cart->setItems($itemsToUpdate);
         }
         if (!empty($errors)) {
             throw new LocalizedException(__(implode("\n", $errors)));
