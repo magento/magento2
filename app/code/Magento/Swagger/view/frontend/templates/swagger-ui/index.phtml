@@ -54,6 +54,4 @@ $schemaUrl = $block->getSchemaUrl();
     </defs>
 </svg>
 
-<div id="swagger-ui">
-    <input id="input_baseUrl" type="hidden" value="<?= $escaper->escapeUrl($schemaUrl) ?>"/>
-</div>
+<div id="swagger-ui" data-base-url="<?= $escaper->escapeUrl($schemaUrl) ?>"></div>

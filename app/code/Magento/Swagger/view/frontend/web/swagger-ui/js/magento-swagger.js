@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-/*global SwaggerUIBundle */
+/*global SwaggerUIBundle SwaggerUIStandalonePreset */
 
 /**
  * @api
@@ -11,8 +11,8 @@
 (function () {
     'use strict';
 
-    var elementBaseUrl = document.querySelector('#input_baseUrl'),
-        url = elementBaseUrl.value,
+    var elementBaseUrl = document.querySelector('#swagger-ui'),
+        url = elementBaseUrl.dataset.baseUrl,
         originalAuthorize,
         originalLogout;
 
