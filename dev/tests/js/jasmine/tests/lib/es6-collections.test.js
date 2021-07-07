@@ -1,9 +1,10 @@
+/* eslint-disable */
+/* jscs:disable */
 (function (exports) {'use strict';
     //shared pointer
     var i;
     //shortcuts
-    var defineProperty = Object.defineProperty, is = function(a,b) { return isNaN(a)? isNaN(b): a === b; };
-
+    var defineProperty = Object.defineProperty, is = function(a,b) { return (a === b) || (a !== a && b !== b) };
 
     //Polyfill global objects
     if (typeof WeakMap == 'undefined') {
@@ -79,7 +80,6 @@
         }, true);
     }
 
-
     /**
      * ES6 collection constructor
      * @return {Function} a collection class
@@ -110,10 +110,8 @@
         return Collection;
     }
 
-
     /** parse initial iterable argument passed */
     function init(a){
-        var i;
         //init Set argument, like `[1,2,3,{}]`
         if (this.add)
             a.forEach(this.add, this);
@@ -121,7 +119,6 @@
         else
             a.forEach(function(a){this.set(a[0],a[1])}, this);
     }
-
 
     /** delete */
     function sharedDelete(key) {
@@ -133,7 +130,7 @@
         }
         // Aurora here does it while Canary doesn't
         return -1 < i;
-    };
+    }
 
     function sharedGet(key) {
         return this.has(key) ? this._values[i] : undefined;
@@ -143,7 +140,7 @@
         if (this.objectOnly && key !== Object(key))
             throw new TypeError("Invalid value used as weak collection key");
         //NaN or 0 passed
-        if (key != key || key === 0) for (i = list.length; i-- && !is(list[i], key);){}
+        if (key !== key || key === 0) for (i = list.length; i-- && !is(list[i], key);){}
         else i = list.indexOf(key);
         return -1 < i;
     }
