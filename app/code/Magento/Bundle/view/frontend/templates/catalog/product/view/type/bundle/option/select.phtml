@@ -62,7 +62,7 @@ $viewModel = $block->getData('validateQuantityViewModel');
                            class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                            type="number"
                            min="0"
-                           data-validate="<?= $block->escapeHtml(json_encode($viewModel->getQuantityValidators())) ?>"
+                           data-validate="<?= $block->escapeHtmlAttr($viewModel->getQuantityValidators()) ?>"
                            name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                            data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                            value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>

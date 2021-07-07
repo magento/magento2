@@ -7,31 +7,41 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\ViewModel;
 
-use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Catalog\Block\Product\View as ProductView;
 
 /**
  * ViewModel for Bundle Option Block
  */
-
 class ValidateQuantity implements ArgumentInterface
 {
     /**
-     * @var ProductView
+     * @var Json
      */
-    private $productView;
+    private Json $serializer;
 
     /**
+     * @var ProductView
+     */
+    private ProductView $productView;
+
+    /**
+     * @param Json $serializer
      * @param ProductView $productView
      */
-    public function __construct(ProductView $productView)
-    {
+    public function __construct(
+        Json $serializer,
+        ProductView $productView
+    ) {
+        $this->serializer = $serializer;
         $this->productView = $productView;
     }
 
-    public function getQuantityValidators(): array
+    public function getQuantityValidators(): string
     {
-        return $this->productView->getQuantityValidators();
+        return $this->serializer->serialize(
+            $this->productView->getQuantityValidators()
+        );
     }
 }
