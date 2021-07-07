@@ -144,29 +144,12 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);  //here is checking that Reorder is allowed or not by true and false
 
 
-        //Now we have to mock three parameters $cartMock, $ItemsCollectionMock ,$storeId
-        //$cartMock and $storeId already we have
-        //so mock the $ItemsCollectionMock and we will return this mockObject by $orderMock->getItemsCollection method
-
-        $orderItems = [
-            [
-                'item_id' => 1,
-                'product_id' => 1,
-                'order_id' => 1,
-                'base_price' => 10,
-                'price' => 10,
-                'row_total' => 10,
-                'product_type' => 'simple',
-                'product_options' => []
-            ]
-        ];
-
-        $orderMock->setData($orderItems);
-        $ItemsCollectionMock = $this->createMock(ItemCollection::class);
+        $ItemsCollectionMock = $this->getMockBuilder(ItemCollection::class)
+                                    ->disableOriginalConstructor()
+                                    ->getMock();
         $orderMock->expects($this->once())
             ->method('getItemsCollection')
             ->willReturn($ItemsCollectionMock);
-
 
         $reorderModel = new Reorder(
             $this->orderFactoryMock,
