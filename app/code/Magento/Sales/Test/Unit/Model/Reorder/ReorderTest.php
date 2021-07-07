@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Reorder\Reorder;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 
@@ -107,23 +108,11 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
         $storeId    ='1';
         $customerId ='1';
 
-//Shift+f6
-        $reorderModel = new Reorder(
-            $this->orderFactoryMock,
-            $this->customerCartProviderMock,
-            $this->guestCartResolverMock,
-            $this->cartRepositoryMock,
-            $this->reorderHelperMock,
-            $this->logger,
-            $this->productCollectionFactoryMock,
-            $this->jsonSerializer
-        );
-
         $orderMock = $this->createMock(Order::class);
-        $orderMock->expects($this->once())
+       /* $orderMock->expects($this->once())
             ->method('load')
             ->with($orderNumber)
-            ->willReturnSelf();
+            ->willReturnSelf();*/
 
         $this->orderFactoryMock->expects($this->once())
             ->method('create')
@@ -152,13 +141,47 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
 
         $this->reorderHelperMock->expects($this->once())
             ->method('isAllowed')
-            ->willReturn(false);
+            ->willReturn(true);  //here is checking that Reorder is allowed or not by true and false
+
+
+        //Now we have to mock three parameters $cartMock, $ItemsCollectionMock ,$storeId
+        //$cartMock and $storeId already we have
+        //so mock the $ItemsCollectionMock and we will return this mockObject by $orderMock->getItemsCollection method
+
+        $orderItems = [
+            [
+                'item_id' => 1,
+                'product_id' => 1,
+                'order_id' => 1,
+                'base_price' => 10,
+                'price' => 10,
+                'row_total' => 10,
+                'product_type' => 'simple',
+                'product_options' => []
+            ]
+        ];
+
+        $orderMock->setData($orderItems);
+        $ItemsCollectionMock = $this->createMock(ItemCollection::class);
+        $orderMock->expects($this->once())
+            ->method('getItemsCollection')
+            ->willReturn($ItemsCollectionMock);
+
+
+        $reorderModel = new Reorder(
+            $this->orderFactoryMock,
+            $this->customerCartProviderMock,
+            $this->guestCartResolverMock,
+            $this->cartRepositoryMock,
+            $this->reorderHelperMock,
+            $this->logger,
+            $this->productCollectionFactoryMock,
+            $this->jsonSerializer
+        );
 
         $result = $reorderModel->execute($orderNumber, $storeId);
 
-        $outputResult = $result->getErrors()[0]->getMessage();
-        $expectedResult = 'Reorders are not allowed.';
-        $this->assertEquals($expectedResult,$outputResult);
+
 
     }
 
