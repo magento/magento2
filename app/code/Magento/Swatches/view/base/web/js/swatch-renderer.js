@@ -61,132 +61,6 @@ define([
     });
 
     /**
-     * Render tooltips by attributes (only to up).
-     * Required element attributes:
-     *  - data-option-type (integer, 0-3)
-     *  - data-option-label (string)
-     *  - data-option-tooltip-thumb
-     *  - data-option-tooltip-value
-     *  - data-thumb-width
-     *  - data-thumb-height
-     */
-    $.widget('mage.SwatchRendererTooltip', {
-        options: {
-            delay: 200,                             //how much ms before tooltip to show
-            tooltipClass: 'swatch-option-tooltip'  //configurable, but remember about css
-        },
-
-        /**
-         * @private
-         */
-        _init: function () {
-            var $widget = this,
-                $this = this.element,
-                $element = $('.' + $widget.options.tooltipClass),
-                timer,
-                type = parseInt($this.data('option-type'), 10),
-                label = $this.data('option-label'),
-                thumb = $this.data('option-tooltip-thumb'),
-                value = $this.data('option-tooltip-value'),
-                width = $this.data('thumb-width'),
-                height = $this.data('thumb-height'),
-                $image,
-                $title,
-                $corner;
-
-            if (!$element.length) {
-                $element = $('<div class="' +
-                    $widget.options.tooltipClass +
-                    '"><div class="image"></div><div class="title"></div><div class="corner"></div></div>'
-                );
-                $('body').append($element);
-            }
-
-            $image = $element.find('.image');
-            $title = $element.find('.title');
-            $corner = $element.find('.corner');
-
-            $this.on('mouseenter', function () {
-                if (!$this.hasClass('disabled')) {
-                    timer = setTimeout(
-                        function () {
-                            var leftOpt = null,
-                                leftCorner = 0,
-                                left,
-                                $window;
-
-                            if (type === 2) {
-                                // Image
-                                $image.css({
-                                    'background': 'url("' + thumb + '") no-repeat center', //Background case
-                                    'background-size': 'initial',
-                                    'width': width + 'px',
-                                    'height': height + 'px'
-                                });
-                                $image.show();
-                            } else if (type === 1) {
-                                // Color
-                                $image.css({
-                                    background: value
-                                });
-                                $image.show();
-                            } else if (type === 0 || type === 3) {
-                                // Default
-                                $image.hide();
-                            }
-
-                            $title.text(label);
-
-                            leftOpt = $this.offset().left;
-                            left = leftOpt + $this.width() / 2 - $element.width() / 2;
-                            $window = $(window);
-
-                            // the numbers (5 and 5) is magick constants for offset from left or right page
-                            if (left < 0) {
-                                left = 5;
-                            } else if (left + $element.width() > $window.width()) {
-                                left = $window.width() - $element.width() - 5;
-                            }
-
-                            // the numbers (6,  3 and 18) is magick constants for offset tooltip
-                            leftCorner = 0;
-
-                            if ($element.width() < $this.width()) {
-                                leftCorner = $element.width() / 2 - 3;
-                            } else {
-                                leftCorner = (leftOpt > left ? leftOpt - left : left - leftOpt) + $this.width() / 2 - 6;
-                            }
-
-                            $corner.css({
-                                left: leftCorner
-                            });
-                            $element.css({
-                                left: left,
-                                top: $this.offset().top - $element.height() - $corner.height() - 18
-                            }).show();
-                        },
-                        $widget.options.delay
-                    );
-                }
-            });
-
-            $this.on('mouseleave', function () {
-                $element.hide();
-                clearTimeout(timer);
-            });
-
-            $(document).on('tap', function () {
-                $element.hide();
-                clearTimeout(timer);
-            });
-
-            $this.on('tap', function (event) {
-                event.stopPropagation();
-            });
-        }
-    });
-
-    /**
      * Render swatch controls with options and use tooltips.
      * Required two json:
      *  - jsonConfig (magento's option config)
@@ -202,8 +76,6 @@ define([
     $.widget('mage.SwatchRenderer', {
         options: {
             classes: {
-                attributeClass: 'swatch-attribute',
-                attributeLabelClass: 'swatch-attribute-label',
                 attributeSelectedOptionLabelClass: 'swatch-attribute-selected-option',
                 attributeOptionsWrapper: 'swatch-attribute-options',
                 attributeInput: 'swatch-input',
@@ -385,7 +257,7 @@ define([
                 isInProductView = false;
 
             productId = this.element.parents('.product-item-details')
-                    .find('.price-box.price-final_price').attr('data-product-id');
+                .find('.price-box.price-final_price').attr('data-product-id');
 
             if (!productId) {
                 // Check individual product.
@@ -406,86 +278,52 @@ define([
          */
         _RenderControls: function () {
             var $widget = this,
-                container = this.element,
-                classes = this.options.classes,
-                chooseText = this.options.jsonConfig.chooseText,
-                showTooltip = this.options.showTooltip;
+                container = $widget.element,
+                options = $widget.options,
+                jsonConfig = options.jsonConfig,
+                showTooltip = options.showTooltip;
 
             $widget.optionsMap = {};
 
-            $.each(this.options.jsonConfig.attributes, function () {
-                var item = this,
-                    controlLabelId = 'option-label-' + item.code + '-' + item.id,
-                    options = $widget._RenderSwatchOptions(item, controlLabelId),
-                    select = $widget._RenderSwatchSelect(item, chooseText),
-                    input = $widget._RenderFormInput(item),
-                    listLabel = '',
-                    label = '';
+            jsonConfig.attributes.forEach(function (item) {
+                var itemId = item.id;
 
                 // Show only swatch controls
-                if ($widget.options.onlySwatches && !$widget.options.jsonSwatchConfig.hasOwnProperty(item.id)) {
+                if (options.onlySwatches && !options.jsonSwatchConfig.hasOwnProperty(itemId)) {
                     return;
                 }
 
-                if ($widget.options.enableControlLabel) {
-                    label +=
-                        '<span id="' + controlLabelId + '" class="' + classes.attributeLabelClass + '">' +
-                        $('<i></i>').text(item.label).html() +
-                        '</span>' +
-                        '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
-                }
-
-                if ($widget.inProductList) {
-                    $widget.productForm.append(input);
-                    input = '';
-                    listLabel = 'aria-label="' + $('<i></i>').text(item.label).html() + '"';
-                } else {
-                    listLabel = 'aria-labelledby="' + controlLabelId + '"';
-                }
-
-                // Create new control
-                container.append(
-                    '<div class="' + classes.attributeClass + ' ' + item.code + '" ' +
-                         'data-attribute-code="' + item.code + '" ' +
-                         'data-attribute-id="' + item.id + '">' +
-                        label +
-                        '<div aria-activedescendant="" ' +
-                             'tabindex="0" ' +
-                             'aria-invalid="false" ' +
-                             'aria-required="true" ' +
-                             'role="listbox" ' + listLabel +
-                             'class="' + classes.attributeOptionsWrapper + ' clearfix">' +
-                            options + select +
-                        '</div>' + input +
-                    '</div>'
-                );
-
-                $widget.optionsMap[item.id] = {};
+                $widget.optionsMap[itemId] = {};
 
                 // Aggregate options array to hash (key => value)
-                $.each(item.options, function () {
-                    if (this.products.length > 0) {
-                        $widget.optionsMap[item.id][this.id] = {
+                item.options.forEach(function (option) {
+                    var optionProducts = option.products;
+
+                    if (optionProducts.length > 0) {
+                        $widget.optionsMap[itemId][option.id] = {
                             price: parseInt(
-                                $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
+                                jsonConfig.optionPrices[optionProducts[0]].finalPrice.amount,
                                 10
                             ),
-                            products: this.products
+                            products: optionProducts
                         };
                     }
                 });
             });
 
-            if (showTooltip === 1) {
-                // Connect Tooltip
-                container
-                    .find('[data-option-type="1"], [data-option-type="2"],' +
-                        ' [data-option-type="0"], [data-option-type="3"]')
-                    .SwatchRendererTooltip();
+            if ($widget.inProductList) {
+                // Move all inputs to product form.
+                $widget.productForm.append(container.find('.' + $widget.options.classes.attributeInput));
             }
 
-            // Hide all elements below more button
-            $('.' + classes.moreButton).nextAll().hide();
+            if (showTooltip === 1) {
+                require(['Magento_Swatches/js/swatch-renderer-tooltip'], function () {
+                    container
+                        .find('[data-option-type="1"], [data-option-type="2"],' +
+                            ' [data-option-type="0"], [data-option-type="3"]')
+                        .SwatchRendererTooltip();
+                });
+            }
 
             // Handle events like click or change
             $widget._EventListener();
@@ -493,165 +331,9 @@ define([
             // Rewind options
             $widget._Rewind(container);
 
-            //Emulate click on all swatches from Request
+            // Emulate click on all swatches from request
             $widget._EmulateSelected($.parseQuery());
             $widget._EmulateSelected($widget._getSelectedAttributes());
-        },
-
-        /**
-         * Render swatch options by part of config
-         *
-         * @param {Object} config
-         * @param {String} controlId
-         * @returns {String}
-         * @private
-         */
-        _RenderSwatchOptions: function (config, controlId) {
-            var optionConfig = this.options.jsonSwatchConfig[config.id],
-                optionClass = this.options.classes.optionClass,
-                sizeConfig = this.options.jsonSwatchImageSizeConfig,
-                moreLimit = parseInt(this.options.numberToShow, 10),
-                moreClass = this.options.classes.moreButton,
-                moreText = this.options.moreButtonText,
-                countAttributes = 0,
-                html = '';
-
-            if (!this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
-                return '';
-            }
-
-            $.each(config.options, function (index) {
-                var id,
-                    type,
-                    value,
-                    thumb,
-                    label,
-                    width,
-                    height,
-                    attr,
-                    swatchImageWidth,
-                    swatchImageHeight;
-
-                if (!optionConfig.hasOwnProperty(this.id)) {
-                    return '';
-                }
-
-                // Add more button
-                if (moreLimit === countAttributes++) {
-                    html += '<a href="#" class="' + moreClass + '"><span>' + moreText + '</span></a>';
-                }
-
-                id = this.id;
-                type = parseInt(optionConfig[id].type, 10);
-                value = optionConfig[id].hasOwnProperty('value') ?
-                    $('<i></i>').text(optionConfig[id].value).html() : '';
-                thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
-                width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
-                height = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.height : 90;
-                label = this.label ? $('<i></i>').text(this.label).html() : '';
-                attr =
-                    ' id="' + controlId + '-item-' + id + '"' +
-                    ' index="' + index + '"' +
-                    ' aria-checked="false"' +
-                    ' aria-describedby="' + controlId + '"' +
-                    ' tabindex="0"' +
-                    ' data-option-type="' + type + '"' +
-                    ' data-option-id="' + id + '"' +
-                    ' data-option-label="' + label + '"' +
-                    ' aria-label="' + label + '"' +
-                    ' role="option"' +
-                    ' data-thumb-width="' + width + '"' +
-                    ' data-thumb-height="' + height + '"';
-
-                attr += thumb !== '' ? ' data-option-tooltip-thumb="' + thumb + '"' : '';
-                attr += value !== '' ? ' data-option-tooltip-value="' + value + '"' : '';
-
-                swatchImageWidth = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.width : 30;
-                swatchImageHeight = _.has(sizeConfig, 'swatchImage') ? sizeConfig.swatchImage.height : 20;
-
-                if (!this.hasOwnProperty('products') || this.products.length <= 0) {
-                    attr += ' data-option-empty="true"';
-                }
-
-                if (type === 0) {
-                    // Text
-                    html += '<div class="' + optionClass + ' text" ' + attr + '>' + (value ? value : label) +
-                        '</div>';
-                } else if (type === 1) {
-                    // Color
-                    html += '<div class="' + optionClass + ' color" ' + attr +
-                        ' style="background: ' + value +
-                        ' no-repeat center; background-size: initial;">' + '' +
-                        '</div>';
-                } else if (type === 2) {
-                    // Image
-                    html += '<div class="' + optionClass + ' image" ' + attr +
-                        ' style="background: url(' + value + ') no-repeat center; background-size: initial;width:' +
-                        swatchImageWidth + 'px; height:' + swatchImageHeight + 'px">' + '' +
-                        '</div>';
-                } else if (type === 3) {
-                    // Clear
-                    html += '<div class="' + optionClass + '" ' + attr + '></div>';
-                } else {
-                    // Default
-                    html += '<div class="' + optionClass + '" ' + attr + '>' + label + '</div>';
-                }
-            });
-
-            return html;
-        },
-
-        /**
-         * Render select by part of config
-         *
-         * @param {Object} config
-         * @param {String} chooseText
-         * @returns {String}
-         * @private
-         */
-        _RenderSwatchSelect: function (config, chooseText) {
-            var html;
-
-            if (this.options.jsonSwatchConfig.hasOwnProperty(config.id)) {
-                return '';
-            }
-
-            html =
-                '<select class="' + this.options.classes.selectClass + ' ' + config.code + '">' +
-                '<option value="0" data-option-id="0">' + chooseText + '</option>';
-
-            $.each(config.options, function () {
-                var label = this.label,
-                    attr = ' value="' + this.id + '" data-option-id="' + this.id + '"';
-
-                if (!this.hasOwnProperty('products') || this.products.length <= 0) {
-                    attr += ' data-option-empty="true"';
-                }
-
-                html += '<option ' + attr + '>' + label + '</option>';
-            });
-
-            html += '</select>';
-
-            return html;
-        },
-
-        /**
-         * Input for submit form.
-         * This control shouldn't have "type=hidden", "display: none" for validation work :(
-         *
-         * @param {Object} config
-         * @private
-         */
-        _RenderFormInput: function (config) {
-            return '<input class="' + this.options.classes.attributeInput + ' super-attribute-select" ' +
-                'name="super_attribute[' + config.id + ']" ' +
-                'type="text" ' +
-                'value="" ' +
-                'data-selector="super_attribute[' + config.id + ']" ' +
-                'data-validate="{required: true}" ' +
-                'aria-required="true" ' +
-                'aria-invalid="false">';
         },
 
         /**
@@ -702,8 +384,8 @@ define([
          */
         _loadMedia: function () {
             var $main = this.inProductList ?
-                    this.element.parents('.product-item-info') :
-                    this.element.parents('.column.main'),
+                this.element.parents('.product-item-info') :
+                this.element.parents('.column.main'),
                 images;
 
             if (this.options.useAjax) {
@@ -828,7 +510,7 @@ define([
          */
         _toggleCheckedAttributes: function ($this, $wrapper) {
             $wrapper.attr('aria-activedescendant', $this.attr('id'))
-                    .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
+                .find('.' + this.options.classes.optionClass).attr('aria-checked', false);
             $this.attr('aria-checked', true);
         },
 
@@ -989,13 +671,13 @@ define([
                 }
             );
 
-            isShow = typeof result != 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
+            isShow = typeof result !== 'undefined' && result.oldPrice.amount !== result.finalPrice.amount;
 
             $productPrice.find('span:first').toggleClass('special-price', isShow);
 
             $product.find(this.options.slyOldPriceSelector)[isShow ? 'show' : 'hide']();
 
-            if (typeof result != 'undefined' && result.tierPrices && result.tierPrices.length) {
+            if (typeof result !== 'undefined' && result.tierPrices && result.tierPrices.length) {
                 if (this.options.tierPriceTemplate) {
                     tierPriceHtml = mageTemplate(
                         this.options.tierPriceTemplate,

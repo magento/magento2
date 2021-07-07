@@ -20,7 +20,7 @@
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption(nthSwatch)}}" userInput="style" stepKey="grabStyle1"/>
         <assertEquals stepKey="assertStyle1">
             <actualResult type="string">{$grabStyle1}</actualResult>
-            <expectedResult type="string">background: center center no-repeat {{expectedRgb}};</expectedResult>
+            <expectedResult type="string">background-color: {{expectedRgb}};</expectedResult>
         </assertEquals>
     </actionGroup>
 </actionGroups>

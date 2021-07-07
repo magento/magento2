@@ -3,50 +3,69 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-use Magento\Catalog\Model\Product;
-use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
-use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
-
-/** @var Configurable $block */
-/** @var Product $product */
-$product = $block->getProduct()
 ?>
-<?php if ($product && $product->isAvailable()): ?>
-    <?php $productId = $product->getId() ?>
-    <?php /** @var ConfigurableViewModel $configurableViewModel */ ?>
-    <?php $configurableViewModel = $block->getConfigurableViewModel() ?>
-    <div class="swatch-opt-<?= $block->escapeHtmlAttr($productId) ?>"
-         data-role="swatch-option-<?= $block->escapeHtmlAttr($productId) ?>"></div>
+<?php
+/** @var \Magento\Swatches\Block\Product\Renderer\Listing\Configurable $block */
+$productId = $block->getProduct()->getId();
+/** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */
+/** @var \Magento\Framework\Escaper $escaper */
+$configurableViewModel = $block->getConfigurableViewModel();
 
-    <script type="text/x-magento-init">
-        {
-            "[data-role=swatch-option-<?= $block->escapeJs($productId) ?>]": {
-                "Magento_Swatches/js/swatch-renderer": {
-                    "selectorProduct": ".product-item-details",
-                    "onlySwatches": true,
-                    "enableControlLabel": false,
-                    "numberToShow": <?=  $block->escapeJs($block->getNumberSwatchesPerProduct()) ?>,
-                    "jsonConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
-                    "jsonSwatchConfig": <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
-                    "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
-                    "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>,
-                    "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
+$config = json_decode($block->getJsonConfig(), true);
+$swatchConfig = json_decode($block->getJsonSwatchConfig(), true);
+$sizeConfig = json_decode($block->getJsonSwatchSizeConfig(), true);
+$chooseText = $block->getChooseText();
+$classes = $block->getClasses();
+$getShowTooltip = $configurableViewModel ? $configurableViewModel->getShowSwatchTooltip() : 1;
+?>
+<div class="swatch-opt-<?= $escaper->escapeHtmlAttr($productId) ?>"
+     data-role="swatch-option-<?= $escaper->escapeHtmlAttr($productId) ?>">
+    <?= $block->getChildBlock('swatch_attributes')
+        ->setConfig($config)
+        ->setSwatchConfig($swatchConfig)
+        ->setSizeConfig($sizeConfig)
+        ->setClasses($classes)
+        ->setMoreButtonLimit($block->getNumberSwatchesPerProduct())
+        ->setChooseText($chooseText)
+        ->toHtml();
+    ?>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "[data-role=swatch-option-<?= $escaper->escapeJs($productId) ?>]": {
+            "Magento_Swatches/js/swatch-renderer": {
+                "selectorProduct": ".product-item-details",
+                "enableControlLabel": false,
+                "jsonConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                "jsonSwatchConfig": <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
+                "mediaCallback": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
+                "showTooltip": <?= $escaper->escapeJs($getShowTooltip) ?>,
+                "chooseText": "<?= $escaper->escapeJs($chooseText) ?>",
+                "classes": {
+                    "attributeClass": "<?= $escaper->escapeJs($classes['attribute']) ?>",
+                    "attributeSelectedOptionLabelClass":
+                        "<?= $escaper->escapeJs($classes['attribute_selected_option']) ?>",
+                    "attributeOptionsWrapper": "<?= $escaper->escapeJs($classes['attribute_options_wrapper']) ?>",
+                    "attributeInput": "<?= $escaper->escapeJs($classes['attribute_input']) ?>",
+                    "optionClass": "<?= $escaper->escapeJs($classes['option']) ?>",
+                    "selectClass": "<?= $escaper->escapeJs($classes['select']) ?>",
+                    "moreButton": "<?= $escaper->escapeJs($classes['more_button']) ?>"
                 }
             }
         }
-    </script>
+    }
+</script>
 
-    <script type="text/x-magento-init">
-        {
-            "[data-role=priceBox][data-price-box=product-id-<?= $block->escapeJs($productId) ?>]": {
-                "priceBox": {
-                    "priceConfig": {
-                        "priceFormat": <?= /* @noEscape */ $block->getPriceFormatJson() ?>,
-                        "prices": <?= /* @noEscape */ $block->getPricesJson() ?>
-                    }
+<script type="text/x-magento-init">
+    {
+        "[data-role=priceBox][data-price-box=product-id-<?= $escaper->escapeJs($productId) ?>]": {
+            "priceBox": {
+                "priceConfig": {
+                    "priceFormat": <?= /* @noEscape */ $block->getPriceFormatJson(); ?>,
+                    "prices": <?= /* @noEscape */ $block->getPricesJson(); ?>
                 }
             }
         }
-    </script>
-<?php endif; ?>
+    }
+</script>

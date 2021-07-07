@@ -22,6 +22,7 @@ use Magento\Swatches\Helper\Media;
 use Magento\Swatches\Model\Swatch;
 use Magento\Framework\App\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributesProvider;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Swatch renderer block
@@ -31,7 +32,7 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
  * @since 100.0.2
  */
 class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
-    \Magento\Framework\DataObject\IdentityInterface
+    IdentityInterface
 {
     /**
      * Path to template file with Swatch renderer.
@@ -499,7 +500,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function getIdentities()
     {
-        if ($this->product instanceof \Magento\Framework\DataObject\IdentityInterface) {
+        if ($this->product instanceof IdentityInterface) {
             return $this->product->getIdentities();
         } else {
             return [];

@@ -11,7 +11,6 @@ define([
 
     describe('Magento_Swatches/js/swatch-renderer.js', function () {
         var widget,
-            html,
             optionConfig,
             attribute,
             optionId = 2,
@@ -63,7 +62,6 @@ define([
             widget = new SwatchRenderer(options);
 
             optionConfig = widget.options.jsonSwatchConfig[attribute.id];
-            html = $(widget._RenderSwatchOptions(attribute, 'option-label-control-id-1'))[0];
         });
 
         afterEach(function () {
@@ -76,21 +74,6 @@ define([
 
         it('check if option config has option id', function () {
             expect(optionConfig.hasOwnProperty(optionId)).toEqual(true);
-        });
-
-        it('check swatch thumbnail image height attribute', function () {
-            expect(html.hasAttribute('data-thumb-height')).toBe(true);
-            expect(html.getAttribute('data-thumb-height')).toEqual(swathThumbImageHeight);
-        });
-
-        it('check swatch thumbnail image width attribute', function () {
-            expect(html.hasAttribute('data-thumb-width')).toBe(true);
-            expect(html.getAttribute('data-thumb-width')).toEqual(swathThumbImageWidth);
-        });
-
-        it('check swatch image styles', function () {
-            expect(html.style.height).toEqual(swathImageHeight + 'px');
-            expect(html.style.width).toEqual(swathImageWidth + 'px');
         });
 
         it('check udate price method', function () {
