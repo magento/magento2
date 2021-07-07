@@ -210,7 +210,7 @@ class DataProvider
         $lastProductId = 0,
         $batch = 100
     ) {
-        $select = $this->selectSearchableProducts->execute($storeId, $staticFields, $productIds, $lastProductId, $batch);
+        $select = $this->selectSearchableProducts->execute((int)$storeId, $staticFields, $productIds, $lastProductId, $batch);
         if ($productIds === null) {
             $select->where(
                 'e.entity_id < ?',
@@ -221,7 +221,7 @@ class DataProvider
         if ($productIds === null && !$products) {
             // try to search without limit entity_id by batch size for cover case with a big gap between entity ids
             $products = $this->connection->fetchAll(
-                $this->selectSearchableProducts->execute($storeId, $staticFields, $productIds, $lastProductId, $batch)
+                $this->selectSearchableProducts->execute((int)$storeId, $staticFields, $productIds, $lastProductId, $batch)
             );
         }
 

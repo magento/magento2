@@ -10,18 +10,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\CatalogSearch\Model\ResourceModel\EngineProvider;
-use Magento\Eav\Model\Config;
-use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -53,50 +49,35 @@ class GetSearchableProductsSelect
      * @var EntityMetadata
      */
     private $metadata;
+
     /**
-     * @var Config
+     * @var AttributeRepositoryInterface
      */
-    private $eavConfig;
-    /**
-     * @var CollectionFactory
-     */
-    private $productAttributeCollectionFactory;
-    /**
-     * @var ManagerInterface
-     */
-    private $eventManager;
-    private $searchableAttributes;
-    private $searchableAttributesByBackendType;
+    private $attributeRepository;
 
     /**
      * @param ResourceConnection $resource
      * @param Type $catalogProductType
-     * @param Config $eavConfig
-     * @param CollectionFactory $prodAttributeCollectionFactory
      * @param EngineProvider $engineProvider
-     * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
+     * @param AttributeRepositoryInterface $attributeRepository
      * @throws \Exception
      */
     public function __construct(
         ResourceConnection $resource,
         Type $catalogProductType,
-        Config $eavConfig,
-        CollectionFactory $prodAttributeCollectionFactory,
         EngineProvider $engineProvider,
-        ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        AttributeRepositoryInterface $attributeRepository
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
-        $this->eavConfig = $eavConfig;
-        $this->productAttributeCollectionFactory = $prodAttributeCollectionFactory;
-        $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
         $this->engine = $engineProvider->get();
         $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -151,11 +132,12 @@ class GetSearchableProductsSelect
      * @param string $attributeCode
      * @param int $storeId
      * @param array $whereValue
+     * @throws NoSuchEntityException
      */
-    private function joinAttribute(Select $select, $attributeCode, $storeId, array $whereValue)
+    private function joinAttribute(Select $select, string $attributeCode, int $storeId, array $whereValue)
     {
         $linkField = $this->metadata->getLinkField();
-        $attribute = $this->getSearchableAttribute($attributeCode);
+        $attribute = $this->attributeRepository->get(Product::ENTITY, $attributeCode);
         $attributeTable = $this->resource->getTableName('catalog_product_entity_' . $attribute->getBackendType());
         $defaultAlias = $attributeCode . '_default';
         $storeAlias = $attributeCode . '_store';
@@ -190,96 +172,5 @@ class GetSearchableProductsSelect
             $whereCondition . ' IN (?)',
             $whereValue
         );
-    }
-
-    /**
-     * Retrieve searchable attributes
-     *
-     * @param string $backendType
-     * @return Attribute[]
-     * @throws LocalizedException
-     * @since 100.0.3
-     */
-    private function getSearchableAttributes($backendType = null)
-    {
-        /** TODO: Remove this block in the next minor release and add a new public method instead */
-        if ($this->eavConfig->getEntityType(Product::ENTITY)->getNeedRefreshSearchAttributesList()) {
-            $this->clearSearchableAttributesList();
-        }
-        if (null === $this->searchableAttributes) {
-            $this->searchableAttributes = [];
-
-            $productAttributes = $this->productAttributeCollectionFactory->create();
-            $productAttributes->addToIndexFilter(true);
-
-            /** @var Attribute[] $attributes */
-            $attributes = $productAttributes->getItems();
-
-            /** @deprecated */
-            $this->eventManager->dispatch(
-                'catelogsearch_searchable_attributes_load_after',
-                ['engine' => $this->engine, 'attributes' => $attributes]
-            );
-
-            $this->eventManager->dispatch(
-                'catalogsearch_searchable_attributes_load_after',
-                ['engine' => $this->engine, 'attributes' => $attributes]
-            );
-
-            $entity = $this->eavConfig->getEntityType(Product::ENTITY)->getEntity();
-
-            foreach ($attributes as $attribute) {
-                $attribute->setEntity($entity);
-                $this->searchableAttributes[$attribute->getAttributeId()] = $attribute;
-                $this->searchableAttributes[$attribute->getAttributeCode()] = $attribute;
-            }
-        }
-
-        if ($backendType !== null) {
-            if (isset($this->searchableAttributesByBackendType[$backendType])) {
-                return $this->searchableAttributesByBackendType[$backendType];
-            }
-            $this->searchableAttributesByBackendType[$backendType] = [];
-            foreach ($this->searchableAttributes as $attribute) {
-                if ($attribute->getBackendType() == $backendType) {
-                    $this->searchableAttributesByBackendType[$backendType][$attribute->getAttributeId()] = $attribute;
-                }
-            }
-
-            return $this->searchableAttributesByBackendType[$backendType];
-        }
-
-        return $this->searchableAttributes;
-    }
-
-    /**
-     * Remove searchable attributes list.
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    private function clearSearchableAttributesList(): void
-    {
-        $this->searchableAttributes = null;
-        $this->searchableAttributesByBackendType = [];
-        $this->eavConfig->getEntityType(Product::ENTITY)->unsNeedRefreshSearchAttributesList();
-    }
-
-    /**
-     * Retrieve searchable attribute by Id or code
-     *
-     * @param int|string $attribute
-     * @return Attribute
-     * @throws LocalizedException
-     * @since 100.0.3
-     */
-    private function getSearchableAttribute($attribute)
-    {
-        $attributes = $this->getSearchableAttributes();
-        if (isset($attributes[$attribute])) {
-            return $attributes[$attribute];
-        }
-
-        return $this->eavConfig->getAttribute(Product::ENTITY, $attribute);
     }
 }
