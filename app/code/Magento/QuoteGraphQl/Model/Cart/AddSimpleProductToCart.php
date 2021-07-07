@@ -9,15 +9,11 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Item\Processor;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
-use Magento\Framework\App\CacheInterface;
 
 /**
  * Add simple product to cart mutation
@@ -35,32 +31,15 @@ class AddSimpleProductToCart
     private $buyRequestBuilder;
 
     /**
-     * @var Processor
-     */
-    private $itemProcessor;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $eventManager;
-
-    /**
      * @param ProductRepositoryInterface $productRepository
      * @param BuyRequestBuilder $buyRequestBuilder
-     * @param Processor $itemProcessor
-     * @param Context $context
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        BuyRequestBuilder $buyRequestBuilder,
-        Processor $itemProcessor,
-        Context $context,
-        CacheInterface $cache
+        BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->productRepository = $productRepository;
         $this->buyRequestBuilder = $buyRequestBuilder;
-        $this->itemProcessor = $itemProcessor;
-        $this->eventManager = $context->getEventDispatcher();
     }
 
     /**
