@@ -33,6 +33,9 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -42,13 +45,15 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
     }
 
     /**
+     * Test for assigning customer to the guest cart
+     *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testAssignCustomerToGuestCart()
+    public function testAssignCustomerToGuestCart(): void
     {
         $guestQuote = $this->getQuoteByReservedOrderId->execute('test_order_with_virtual_product_without_address');
         $guestQuoteItem = $guestQuote->getAllVisibleItems()[0];
@@ -76,13 +81,15 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
     }
 
     /**
+     * Test that customer cart is expired after assigning
+     *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testCustomerCartExpiryAfterAssigning()
+    public function testCustomerCartExpiryAfterAssigning(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The cart isn\'t active.');
@@ -108,9 +115,11 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
     }
 
     /**
+     * Test for assigning customer to non existent cart
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testAssigningCustomerToNonExistentCart()
+    public function testAssigningCustomerToNonExistentCart(): void
     {
         $guestQuoteMaskedId = "non_existent_masked_id";
         $this->expectException(\Exception::class);
@@ -125,12 +134,14 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
     }
 
     /**
+     * Test for assigning customer to the customer cart
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testAssignCustomerToCustomerCart()
+    public function testAssignCustomerToCustomerCart(): void
     {
         $customerQuote = $this->getQuoteByReservedOrderId->execute('test_quote');
         $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$customerQuote->getId());
@@ -193,6 +204,8 @@ QUERY;
     }
 
     /**
+     * Retrieve customer authorization headers
+     *
      * @param string $username
      * @param string $password
      * @return array

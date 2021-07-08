@@ -21,11 +21,15 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
      * @var QuoteIdToMaskedQuoteIdInterface
      */
     private $quoteIdToMaskedId;
+
     /**
      * @var GetQuoteByReservedOrderId
      */
     private $getQuoteByReservedOrderId;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -34,10 +38,12 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
     }
 
     /**
+     * Test for assigning guest to the guest cart
+     *
      * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
-    public function testAssignCustomerToGuestCartForGuest()
+    public function testAssignCustomerToGuestCartForGuest(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
