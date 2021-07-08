@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -24,30 +23,20 @@ class DeleteCustomerTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
-     * @var LockCustomer
-     */
-    private $lockCustomer;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
-        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
-        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
     }
 
     /**
+     * Test deleting customer
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testDeleteCustomer()
+    public function testDeleteCustomer(): void
     {
         $response = $this->graphQlMutation($this->getMutation(), [], '', $this->getHeaderMap());
         $this->assertArrayHasKey('deleteCustomer', $response);
@@ -55,8 +44,9 @@ class DeleteCustomerTest extends GraphQlAbstract
     }
 
     /**
+     * Test deleting non authorized customer
      */
-    public function testDeleteCustomerIfUserIsNotAuthorized()
+    public function testDeleteCustomerIfUserIsNotAuthorized(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
@@ -64,15 +54,16 @@ class DeleteCustomerTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * Test deleting locked customer
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/locked_customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function testDeleteCustomerIfAccountIsLocked()
+    public function testDeleteCustomerIfAccountIsLocked(): void
     {
-        $this->lockCustomer->execute(1);
-        $response = $this->graphQlMutation($this->getMutation(), [], '', $this->getHeaderMap());
-        $this->assertArrayHasKey('deleteCustomer', $response);
-        $this->assertTrue($response['deleteCustomer']);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later');
+        $this->graphQlMutation($this->getMutation(), [], '', $this->getHeaderMap());
     }
 
     /**
@@ -80,7 +71,7 @@ class DeleteCustomerTest extends GraphQlAbstract
      *
      * @return string
      */
-    private function getMutation()
+    private function getMutation(): string
     {
         return <<<MUTATION
 mutation {

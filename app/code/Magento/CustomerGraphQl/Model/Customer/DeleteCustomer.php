@@ -8,14 +8,13 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
- * Get customer
+ * Delete customer
  */
 class DeleteCustomer
 {
@@ -34,30 +33,15 @@ class DeleteCustomer
     }
 
     /**
-     * Get customer
+     * Delete customer
      *
-     * @param ContextInterface $context
+     * @param CustomerInterface
      * @return void
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(ContextInterface $context): void
+    public function execute(CustomerInterface $customer): void
     {
-        $currentUserId = $context->getUserId();
-
-        try {
-            $customer = $this->customerRepository->getById($currentUserId);
-            // @codeCoverageIgnoreStart
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(
-                __('Customer with id "%customer_id" does not exist.', ['customer_id' => $currentUserId]),
-                $e
-            );
-        } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()));
-            // @codeCoverageIgnoreEnd
-        }
-
         try {
             $this->customerRepository->delete($customer);
         } catch (LocalizedException $e) {
