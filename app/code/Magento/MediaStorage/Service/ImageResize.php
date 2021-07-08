@@ -27,7 +27,7 @@ use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaStorage\Helper\File\Storage\Database as FileStorageDatabase;
-use Magento\Theme\Model\Theme;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Image resize service.
@@ -206,7 +206,7 @@ class ImageResize
                 $error = __('Cannot resize image "%1" - original image not found', $originalImagePath);
             }
 
-            yield ['filename' => $originalImageName, 'error' => (string) $error] => $count;
+            yield ['filename' => $originalImageName, 'error' => (string)$error] => $count;
         }
     }
 
@@ -239,7 +239,7 @@ class ImageResize
     {
         $viewImages = [];
         $stores = $this->storeManager->getStores(true);
-        /** @var Theme $theme */
+        /** @var ThemeInterface $theme */
         foreach ($themes as $theme) {
             $config = $this->viewConfig->getViewConfig(
                 [
@@ -250,7 +250,7 @@ class ImageResize
             $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
             foreach ($images as $imageId => $imageData) {
                 foreach ($stores as $store) {
-                    $data = $this->paramsBuilder->build($imageData, (int) $store->getId());
+                    $data = $this->paramsBuilder->build($imageData, (int)$store->getId(), $theme);
                     $uniqIndex = $this->getUniqueImageIndex($data);
                     $data['id'] = $imageId;
                     $viewImages[$uniqIndex] = $data;
