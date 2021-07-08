@@ -39,7 +39,7 @@ class ProductSearchTest extends GraphQlAbstract
      *
      * @throws \Exception
      */
-    public function testFilterForNonExistingCategory()
+    public function testFilterForNonExistingCategory(): void
     {
         $query = <<<QUERY
 {
@@ -68,7 +68,7 @@ QUERY;
     /**
      * Verify that filters id and uid can't be used at the same time
      */
-    public function testUidAndIdUsageErrorOnProductFilteringCategory()
+    public function testUidAndIdUsageErrorOnProductFilteringCategory(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('`category_id` and `category_uid` can\'t be used at the same time');
@@ -87,7 +87,7 @@ QUERY;
     /**
      * Verify that filters category url path and uid can't be used at the same time
      */
-    public function testUidAndCategoryUrlPathUsageErrorOnProductFilteringCategory()
+    public function testUidAndCategoryUrlPathUsageErrorOnProductFilteringCategory(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('`category_uid` and `category_url_path` can\'t be used at the same time');
@@ -108,7 +108,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
-    public function testFilterByCategoryUrlPath()
+    public function testFilterByCategoryUrlPath(): void
     {
         $categoryUrlPath = 'category-1/category-1-2';
         $query = <<<QUERY
@@ -152,7 +152,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterByMultipleCategoriesUrlPaths()
+    public function testFilterByMultipleCategoriesUrlPaths(): void
     {
         $categoriesPath = ['category-1/category-1-2','category-1/category-1-1'];
 
@@ -197,7 +197,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
-    public function testFilterByWrongCategoryUrlPath()
+    public function testFilterByWrongCategoryUrlPath(): void
     {
         $categoryUrlPath = 'not-a-category url path';
         $this->expectException(\Exception::class);
@@ -226,7 +226,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterLn()
+    public function testFilterLn(): void
     {
         $query = <<<QUERY
 {
@@ -293,25 +293,25 @@ QUERY;
      * @param array $b
      * @return int
      */
-    private function compareFilterNames(array $a, array $b)
+    private function compareFilterNames(array $a, array $b): int
     {
         return strcmp($a['name'], $b['name']);
     }
 
     /**
-     *  Layered navigation for Configurable products with out of stock options
+     * Layered navigation for Configurable products with out of stock options
      * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
      *
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testLayeredNavigationForConfigurableProducts()
+    public function testLayeredNavigationForConfigurableProducts(): void
     {
         $attributeCode = 'test_configurable';
 
         /** @var Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
+        $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -409,7 +409,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterProductsByDropDownCustomAttribute()
+    public function testFilterProductsByDropDownCustomAttribute(): void
     {
         CacheCleaner::clean(['eav']);
         $attributeCode = 'second_test_configurable';
@@ -513,7 +513,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_with_multiselect_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterProductsByMultiSelectCustomAttributes()
+    public function testFilterProductsByMultiSelectCustomAttributes(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $attributeCode = 'multiselect_attribute';
@@ -591,7 +591,7 @@ QUERY;
     private function getDefaultAttributeOptionValue(string $attributeCode): string
     {
         /** @var Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
+        $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -607,7 +607,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSearchAndFilterByCustomAttribute()
+    public function testSearchAndFilterByCustomAttribute(): void
     {
         $attribute_code = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attribute_code);
@@ -754,7 +754,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterByCategoryIdAndCustomAttribute()
+    public function testFilterByCategoryIdAndCustomAttribute(): void
     {
         /** @var GetCategoryByName $getCategoryByName */
         $getCategoryByName = Bootstrap::getObjectManager()->get(GetCategoryByName::class);
@@ -901,18 +901,18 @@ QUERY;
      * @param array $b
      * @return int
      */
-    private function compareLabels(array $a, array $b)
+    private function compareLabels(array $a, array $b): int
     {
         return strcmp($a['label'], $b['label']);
     }
 
     /**
-     *  Filter by exact match of product url key
+     * Filter by exact match of product url key
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterBySingleProductUrlKey()
+    public function testFilterBySingleProductUrlKey(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -1027,12 +1027,12 @@ QUERY;
     }
 
     /**
-     *  Filter by multiple product url keys
+     * Filter by multiple product url keys
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterByMultipleProductUrlKeys()
+    public function testFilterByMultipleProductUrlKeys(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -1112,10 +1112,10 @@ QUERY;
      *
      * @return array
      */
-    private function getExpectedFiltersDataSet()
+    private function getExpectedFiltersDataSet(): array
     {
         /** @var Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
+        $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
         /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -1172,7 +1172,7 @@ QUERY;
      * @param array $expectedFilters
      * @param string $message
      */
-    private function assertFilters($response, $expectedFilters, $message = '')
+    private function assertFilters($response, $expectedFilters, $message = ''): void
     {
         $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
         $this->assertIsArray(($response['products']['filters']), 'Product filters is not array');
@@ -1199,7 +1199,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterWithinSpecificPriceRangeSortedByNameDesc()
+    public function testFilterWithinSpecificPriceRangeSortedByNameDesc(): void
     {
         $query
             = <<<QUERY
@@ -1264,7 +1264,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testSortByPosition()
+    public function testSortByPosition(): void
     {
         // Get category ID for filtering
         /** @var Collection $categoryCollection */
@@ -1352,7 +1352,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
 
-    public function testSearchWithFilterWithPageSizeEqualTotalCount()
+    public function testSearchWithFilterWithPageSizeEqualTotalCount(): void
     {
         $query
             = <<<QUERY
@@ -1412,7 +1412,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterByMultipleFilterFieldsSortedByMultipleSortFields()
+    public function testFilterByMultipleFilterFieldsSortedByMultipleSortFields(): void
     {
         $query
             = <<<QUERY
@@ -1498,7 +1498,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      */
-    public function testFilterProductsForExactMatchingName()
+    public function testFilterProductsForExactMatchingName(): void
     {
         $query
             = <<<QUERY
@@ -1597,7 +1597,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
-    public function testFilteringForProductsFromMultipleCategories()
+    public function testFilteringForProductsFromMultipleCategories(): void
     {
         $categoriesIds = ["4","5","12"];
         $query
@@ -1654,7 +1654,7 @@ QUERY;
      * @return void
      * @dataProvider filterProductsBySingleCategoryIdDataProvider
      */
-    public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId)
+    public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId): void
     {
         if (is_numeric($queryCategoryId)) {
             $queryCategoryId = (int) $queryCategoryId;
@@ -1749,7 +1749,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      * @return void
      */
-    public function testSearchAndSortByRelevance()
+    public function testSearchAndSortByRelevance(): void
     {
         $search_term = "blue";
         $query
@@ -1818,7 +1818,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testFilterByExactSkuAndSortByPriceDesc()
+    public function testFilterByExactSkuAndSortByPriceDesc(): void
     {
         $query
             = <<<QUERY
@@ -1877,7 +1877,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      */
-    public function testProductBasicFullTextSearchQuery()
+    public function testProductBasicFullTextSearchQuery(): void
     {
         $textToSearch = 'blue';
         $query
@@ -1968,7 +1968,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
-    public function testProductPartialNameFullTextSearchQuery()
+    public function testProductPartialNameFullTextSearchQuery(): void
     {
         $textToSearch = 'Sim';
         $query
@@ -2058,7 +2058,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
      */
-    public function testProductPartialSkuFullTextSearchQuery()
+    public function testProductPartialSkuFullTextSearchQuery(): void
     {
         $textToSearch = 'prd';
         $query
@@ -2148,7 +2148,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
      */
-    public function testProductPartialSkuHyphenatedFullTextSearchQuery()
+    public function testProductPartialSkuHyphenatedFullTextSearchQuery(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -2238,7 +2238,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      */
-    public function testFilterWithinASpecificPriceRangeSortedByPriceDESC()
+    public function testFilterWithinASpecificPriceRangeSortedByPriceDESC(): void
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -2247,7 +2247,7 @@ QUERY;
         $prod2 = $productRepository->get('simple2');
         $filteredProducts = [$prod1, $prod2];
         /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
-        $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $categoryLinkManagement = Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
         foreach ($filteredProducts as $product) {
             $categoryLinkManagement->assignProductToCategories(
@@ -2337,7 +2337,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryFilterNoMatchingItems()
+    public function testQueryFilterNoMatchingItems(): void
     {
         $query
             = <<<QUERY
@@ -2396,7 +2396,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryPageOutOfBoundException()
+    public function testQueryPageOutOfBoundException(): void
     {
         $query
             = <<<QUERY
@@ -2453,7 +2453,7 @@ QUERY;
      * No filter or search arguments used
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testQueryWithNoSearchOrFilterArgumentException()
+    public function testQueryWithNoSearchOrFilterArgumentException(): void
     {
         $query
             = <<<QUERY
@@ -2485,7 +2485,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_few_out_of_stock.php
      */
-    public function testFilterProductsThatAreOutOfStockWithConfigSettings()
+    public function testFilterProductsThatAreOutOfStockWithConfigSettings(): void
     {
         $query
             = <<<QUERY
@@ -2537,7 +2537,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
-    public function testInvalidCurrentPage()
+    public function testInvalidCurrentPage(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('currentPage value must be greater than 0');
@@ -2567,7 +2567,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
-    public function testInvalidPageSize()
+    public function testInvalidPageSize(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('pageSize value must be greater than 0');
@@ -2598,7 +2598,7 @@ QUERY;
      * @param Product[] $filteredProducts
      * @param array $actualResponse
      */
-    private function assertProductItems(array $filteredProducts, array $actualResponse)
+    private function assertProductItems(array $filteredProducts, array $actualResponse): void
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
         $count = count($filteredProducts);
@@ -2624,7 +2624,13 @@ QUERY;
         }
     }
 
-    private function assertProductItemsWithPriceCheck(array $filteredProducts, array $actualResponse)
+    /**
+     * Asserts the different fields of items with price check returned after search query is executed
+     *
+     * @param Product[] $filteredProducts
+     * @param array $actualResponse
+     */
+    private function assertProductItemsWithPriceCheck(array $filteredProducts, array $actualResponse): void
     {
         $productItemsInResponse = array_map(null, $actualResponse['products']['items'], $filteredProducts);
 
