@@ -20,7 +20,7 @@
      * Adds token to request header.
      */
     function addApiKeyAuthorization(key) {
-        if (key && typeof key !== "undefined") {
+        if (key && typeof key !== 'undefined') {
             key = key.trim();
 
             /**
@@ -71,7 +71,7 @@
             SwaggerUIBundle.plugins.DownloadUrl
         ],
         docExpansion: 'none',
-        layout: "StandaloneLayout"
+        layout: 'StandaloneLayout'
     });
     // End Swagger UI call region
     window.ui = ui;
@@ -79,7 +79,7 @@
     originalAuthorize = ui.authActions.authorize;
     ui.authActions.authorize = function (payload) {
         var apiKeyData = payload.api_key,
-            keyValue = typeof apiKeyData !== "undefined" ? apiKeyData.value : '';
+            keyValue = typeof apiKeyData !== 'undefined' ? apiKeyData.value : '';
 
         addApiKeyAuthorization(keyValue);
         ui.specActions.download();
