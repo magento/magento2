@@ -48,6 +48,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @var ConfiguredPriceSelection
      */
     private $configuredPriceSelection;
+    /**
+     * @var \Magento\Bundle\Pricing\Price\DiscountCalculator
+     */
+    private $discountCalculator;
 
     /**
      * @param Product $saleableItem
@@ -63,6 +67,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $quantity,
         BundleCalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
+        DiscountCalculator $discountCalculator,
         ItemInterface $item = null,
         JsonSerializer $serializer = null,
         ConfiguredPriceSelection $configuredPriceSelection = null
@@ -73,6 +78,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $this->configuredPriceSelection = $configuredPriceSelection
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(ConfiguredPriceSelection::class);
+        $this->discountCalculator = $discountCalculator;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
@@ -146,10 +152,9 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     {
         if ($this->item) {
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
-            return parent::getValue() +
-                $this->priceInfo
-                    ->getPrice(self::PRICE_CODE)
-                    ->calculateDiscount($configuredOptionsAmount);
+            if (!empty($this->item->getProduct())) {
+                return parent::getValue() + $this->discountCalculator->calculateDiscount($this->item->getProduct(), $configuredOptionsAmount);
+            }
         }
         return parent::getValue();
     }
