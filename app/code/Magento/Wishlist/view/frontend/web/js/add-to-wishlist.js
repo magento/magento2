@@ -118,12 +118,22 @@ define([
                 buttons = this._getAddToWishlistButton(event);
 
             buttons.each(function (index, element) {
-                var params = $(element).data('post');
+                var params = $(element).data('post'),
+                    currentTarget = event.currentTarget,
+                    targetElement,
+                    targetValue;
 
                 if (!params) {
                     params = {
                         'data': {}
                     };
+                } else if ($(currentTarget).data('selector') || $(currentTarget).attr('name')) {
+                    targetElement = self._getElementData(currentTarget);
+                    targetValue = Object.keys(targetElement)[0];
+
+                    if (params.data.hasOwnProperty(targetValue) && !dataToAdd.hasOwnProperty(targetValue)) {
+                        delete params.data[targetValue];
+                    }
                 }
 
                 params.data = $.extend({}, params.data, dataToAdd, {
@@ -144,7 +154,7 @@ define([
                 return productListWrapper.find(this.options.actionElement);
             }
 
-            return $(event.currentTarget).closest(this.options.productPageWrapper).find(this.options.actionElement);
+            return $(this.options.actionElement);
         },
 
         /**
@@ -244,7 +254,7 @@ define([
                     action += 'uenc/' + params.data.uenc;
                 }
 
-                $(form).attr('action', action).submit();
+                $(form).attr('action', action).trigger('submit');
             });
         },
 

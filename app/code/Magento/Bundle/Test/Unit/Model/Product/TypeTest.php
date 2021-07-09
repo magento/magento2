@@ -232,7 +232,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -342,7 +351,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -586,7 +596,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -811,7 +822,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -1030,7 +1042,8 @@ class TypeTest extends TestCase
                     'getData',
                     'getQty',
                     'getBundleOption',
-                    'getBundleOptionQty'
+                    'getBundleOptionQty',
+                    'getBundleOptionsData',
                 ]
             )
             ->disableOriginalConstructor()
@@ -1131,7 +1144,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1258,7 +1280,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1422,7 +1453,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
@@ -1523,7 +1563,16 @@ class TypeTest extends TestCase
         /** @var MockObject|DataObject $buyRequest */
         $buyRequest = $this->getMockBuilder(DataObject::class)
             ->setMethods(
-                ['__wakeup', 'getOptions', 'getSuperProductConfig', 'unsetData', 'getData', 'getQty', 'getBundleOption']
+                [
+                    '__wakeup',
+                    'getOptions',
+                    'getSuperProductConfig',
+                    'unsetData',
+                    'getData',
+                    'getQty',
+                    'getBundleOption',
+                    'getBundleOptionsData',
+                ]
             )
             ->disableOriginalConstructor()
             ->getMock();
