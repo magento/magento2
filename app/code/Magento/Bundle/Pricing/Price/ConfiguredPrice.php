@@ -148,7 +148,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
             return parent::getValue() +
                 $this->priceInfo
-                    ->getPrice(BundleDiscountPrice::PRICE_CODE)
+                    ->getPrice(self::PRICE_CODE)
                     ->calculateDiscount($configuredOptionsAmount);
         }
         return parent::getValue();
