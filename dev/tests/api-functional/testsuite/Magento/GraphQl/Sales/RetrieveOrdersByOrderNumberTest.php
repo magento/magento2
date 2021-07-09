@@ -342,10 +342,10 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
-        $this->assertEquals(6, $response['customer']['orders']['total_count']);
-        $this->assertCount(6, $response['customer']['orders']['items']);
+        $this->assertEquals(7, $response['customer']['orders']['total_count']);
+        $this->assertCount(7, $response['customer']['orders']['items']);
         $customerOrderItems = $response['customer']['orders']['items'];
-        $expectedOrderNumbers = ['100000002', '100000004', '100000005','100000006', '100000007', '100000008'];
+        $expectedOrderNumbers = ['100000002', '100000003', '100000004', '100000005','100000006', '100000007', '100000008'];
         $actualOrdersFromResponse = [];
         foreach ($customerOrderItems as $order) {
             array_push($actualOrdersFromResponse, $order['number']);
@@ -400,7 +400,7 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
-        $this->assertEquals(6, $response['customer']['orders']['total_count']);
+        $this->assertEquals(7, $response['customer']['orders']['total_count']);
         $this->assertCount($response['customer']['orders']['total_count'], $response['customer']['orders']['items']);
     }
 
@@ -782,10 +782,10 @@ QUERY;
                 '100000002', 'fixture_second_store', 1
             ],
             'firstStoreSecondOrder' => [
-                '100000002', 'default', 0
+                '100000002', 'default', 1
             ],
             'secondStoreFirstOrder' => [
-                '100000001', 'fixture_second_store', 0
+                '100000001', 'fixture_second_store', 1
             ],
         ];
     }

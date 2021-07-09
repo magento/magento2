@@ -71,7 +71,7 @@ class OrderFilter
     public function createFilterGroups(
         array $args,
         int $userId,
-        int $storeId
+        ?int $storeId = null
     ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
@@ -79,10 +79,12 @@ class OrderFilter
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
-        $this->filterGroupBuilder->setFilters(
-            [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
-        );
-        $filterGroups[] = $this->filterGroupBuilder->create();
+        if ($storeId !== null) {
+            $this->filterGroupBuilder->setFilters(
+                [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
+            );
+            $filterGroups[] = $this->filterGroupBuilder->create();
+        }
 
         if (isset($args['filter'])) {
             $filters = [];

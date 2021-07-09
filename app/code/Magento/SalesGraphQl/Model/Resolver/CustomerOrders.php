@@ -82,10 +82,9 @@ class CustomerOrders implements ResolverInterface
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
         $userId = $context->getUserId();
-        /** @var StoreInterface $store */
-        $store = $context->getExtensionAttributes()->getStore();
+
         try {
-            $searchResult = $this->getSearchResult($args, (int)$userId, (int)$store->getId());
+            $searchResult = $this->getSearchResult($args, (int)$userId);
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
@@ -112,13 +111,12 @@ class CustomerOrders implements ResolverInterface
      *
      * @param array $args
      * @param int $userId
-     * @param int $storeId
      * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
      * @throws InputException
      */
-    private function getSearchResult(array $args, int $userId, int $storeId)
+    private function getSearchResult(array $args, int $userId)
     {
-        $filterGroups = $this->orderFilter->createFilterGroups($args, $userId, (int)$storeId);
+        $filterGroups = $this->orderFilter->createFilterGroups($args, $userId);
         $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
         if (isset($args['currentPage'])) {
             $this->searchCriteriaBuilder->setCurrentPage($args['currentPage']);
