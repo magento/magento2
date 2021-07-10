@@ -31,6 +31,11 @@ class ImagesResizeCommand extends Command
     const ASYNC_RESIZE = 'async';
 
     /**
+     * Do not process images marked as hidden from product page
+     */
+    const SKIP_HIDDEN_IMAGES = 'skip_hidden_images';
+
+    /**
      * @var ImageResizeScheduler
      */
     private $imageResizeScheduler;
@@ -54,6 +59,11 @@ class ImagesResizeCommand extends Command
      * @var ProductImage
      */
     private $productImage;
+
+    /**
+     * @var bool
+     */
+    private $skipHiddenImages = false;
 
     /**
      * @param State $appState
@@ -102,6 +112,12 @@ class ImagesResizeCommand extends Command
                 InputOption::VALUE_NONE,
                 'Resize image in asynchronous mode'
             ),
+            new InputOption(
+                self::SKIP_HIDDEN_IMAGES,
+                null,
+                InputOption::VALUE_NONE,
+                'Do not process images marked as hidden from product page'
+            ),
         ];
     }
 
@@ -112,6 +128,7 @@ class ImagesResizeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->skipHiddenImages = $input->getOption(self::SKIP_HIDDEN_IMAGES);
         $result = $input->getOption(self::ASYNC_RESIZE) ?
             $this->executeAsync($output) : $this->executeSync($output);
 
@@ -129,7 +146,7 @@ class ImagesResizeCommand extends Command
         try {
             $errors = [];
             $this->appState->setAreaCode(Area::AREA_GLOBAL);
-            $generator = $this->imageResize->resizeFromThemes();
+            $generator = $this->imageResize->resizeFromThemes(null, $this->skipHiddenImages);
 
             /** @var ProgressBar $progress */
             $progress = $this->progressBarFactory->create(
@@ -194,7 +211,7 @@ class ImagesResizeCommand extends Command
             $progress = $this->progressBarFactory->create(
                 [
                     'output' => $output,
-                    'max' => $this->productImage->getCountUsedProductImages()
+                    'max' => $this->imageResize->getCountProductImages($this->skipHiddenImages)
                 ]
             );
             $progress->setFormat(
@@ -205,7 +222,7 @@ class ImagesResizeCommand extends Command
                 $progress->setOverwrite(false);
             }
 
-            $productImages = $this->productImage->getUsedProductImages();
+            $productImages = $this->imageResize->getProductImages($this->skipHiddenImages);
             foreach ($productImages as $image) {
                 $result = $this->imageResizeScheduler->schedule($image['filepath']);
 

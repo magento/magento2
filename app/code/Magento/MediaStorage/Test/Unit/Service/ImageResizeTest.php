@@ -119,6 +119,12 @@ class ImageResizeTest extends TestCase
      * @var string
      */
     private $testfilepath;
+
+    /**
+     * @var string
+     */
+    private $testImageHiddenFilename;
+
     /**
      * @var MockObject|StoreManagerInterface
      */
@@ -131,6 +137,7 @@ class ImageResizeTest extends TestCase
     protected function setUp(): void
     {
         $this->testfilename = "image.jpg";
+        $this->testImageHiddenFilename = "image_hidden.jpg";
         $this->testfilepath = "/image.jpg";
 
         $this->appStateMock = $this->createMock(State::class);
@@ -278,13 +285,80 @@ class ImageResizeTest extends TestCase
             ->method('saveFile')
             ->with($this->testfilepath);
 
-        $generator = $this->service->resizeFromThemes(['test-theme']);
+        $generator = $this->service->resizeFromThemes(['test-theme'], true);
         while ($generator->valid()) {
             $resizeInfo = $generator->key();
             $this->assertEquals('image.jpg', $resizeInfo['filename']);
             $this->assertEmpty($resizeInfo['error']);
             $generator->next();
         }
+    }
+
+    public function testResizeFromThemesHiddenImagesMediaStorageDatabase()
+    {
+        $this->databaseMock->expects($this->any())
+            ->method('checkDbUsage')
+            ->willReturn(true);
+        $this->databaseMock->expects($this->any())
+            ->method('fileExists')
+            ->willReturn(false);
+
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $this->productImageMock->expects($this->any())
+            ->method('getCountUsedProductImages')
+            ->willReturn(1);
+        $this->productImageMock->expects($this->any())
+            ->method('getUsedProductImages')
+            ->willReturnCallback(
+                function () {
+                    $data = [[ 'filepath' => $this->testfilename ]];
+                    foreach ($data as $e) {
+                        yield $e;
+                    }
+                }
+            );
+
+        $this->productImageMock->expects($this->any())
+            ->method('getCountAllProductImages')
+            ->willReturn(2);
+        $this->productImageMock->expects($this->any())
+            ->method('getAllProductImages')
+            ->willReturnCallback(
+                function () {
+                    $data = [[ 'filepath' => $this->testfilename ], [ 'filepath' => $this->testImageHiddenFilename ]];
+                    foreach ($data as $e) {
+                        yield $e;
+                    }
+                }
+            );
+
+        $this->mediaDirectoryMock->expects($this->any())
+            ->method('isFile')
+            ->with($this->testfilepath)
+            ->willReturn(true);
+
+        $this->databaseMock->expects($this->once())
+            ->method('saveFileToFilesystem')
+            ->with($this->testfilepath);
+        $this->databaseMock->expects($this->once())
+            ->method('saveFile')
+            ->with($this->testfilepath);
+
+        $this->assertEquals(2, $this->service->getCountProductImages());
+        $this->assertEquals(1, $this->service->getCountProductImages(true));
+
+        $generator = $this->service->resizeFromThemes(['test-theme']);
+        while ($generator->valid()) {
+            $resizeInfo = $generator->key();
+            $this->assertContains($resizeInfo['filename'], [$this->testfilename, $this->testImageHiddenFilename]);
+            $this->assertEmpty($resizeInfo['error']);
+            $generator->next();
+        }
+
     }
 
     public function testResizeFromThemesUnsupportedImage()
@@ -319,7 +393,7 @@ class ImageResizeTest extends TestCase
             ->with($this->testfilepath)
             ->willReturn(true);
 
-        $generator = $this->service->resizeFromThemes(['test-theme']);
+        $generator = $this->service->resizeFromThemes(['test-theme'], true);
         while ($generator->valid()) {
             $resizeInfo = $generator->key();
             $this->assertEquals('Unsupported image format.', $resizeInfo['error']);
