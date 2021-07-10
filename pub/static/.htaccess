@@ -144,3 +144,17 @@ AddType application/xml xml
     ExpiresByType font/truetype "access plus 1 year"
 
 </IfModule>
+
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript application/javascript
+    AddOutputFilterByType DEFLATE application/rss+xml application/xml application/xhtml+xml application/atom+xml
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/x-font application/x-font-truetype application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font-ttf font/ttf 
+    AddOutputFilterByType DEFLATE application/x-font-otf font/otf 
+    AddOutputFilterByType DEFLATE application/x-font-woff font/woff
+    AddOutputFilterByType DEFLATE font/woff2 application/font-woff2
+    AddOutputFilterByType DEFLATE application/x-font-opentype font/opentype    
+    AddOutputFilterByType DEFLATE image/x-icon image/svg+xml svg svgz
+</IfModule>
