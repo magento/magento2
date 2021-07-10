@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyGuestCartMinimumAmountTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Minimum amount order on checkout page"/>
+            <title value="Verify minimum amount on checkout page"/>
+            <description value="When the minimum order amount is set it must consider the tax value"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-28285"/>
+            <group value="checkout"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <createData entity="MinimumOrderAmount100" stepKey="minimumOrderAmount"/>
+            <createData entity="taxRate_US_NY_8_1" stepKey="createTaxRateUSNY"/>
+            <createData entity="DefaultTaxRuleWithCustomTaxRate" stepKey="createTaxRuleUSNY">
+                <requiredEntity createDataKey="createTaxRateUSNY" />
+            </createData>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">95.00</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createTaxRuleUSNY" stepKey="deleteTaxRuleUSNY"/>
+            <deleteData createDataKey="createTaxRateUSNY" stepKey="deleteTaxRateUSNY"/>
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
+        </after>
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addSimpleProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckoutDisabled}}" stepKey="goToCheckoutDisabled"/>
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
+            <argument name="address" value="US_Address_NY_Default_Shipping"/>
+        </actionGroup>
+        <click selector="{{CheckoutCartSummarySection.shippingMethodElementId('freeshipping', 'freeshipping')}}" stepKey="selectShippingMethod"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$7.70" stepKey="seeTaxAmount"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToProceedToCheckout" />
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
+    </test>
+</tests>

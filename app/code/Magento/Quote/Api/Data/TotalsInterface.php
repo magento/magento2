@@ -69,8 +69,6 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const KEY_ITEMS_QTY = 'items_qty';
 
-    const KEY_IS_MINIMUM_ORDER_AMOUNT = 'is_minimum_order_amount';
-
     /**#@-*/
 
     /**
@@ -477,18 +475,7 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setTotalSegments($totals = []);
-
-    /**
-     * @return bool
-     */
-    public function getIsMinimumOrderAmount();
-
-    /**
-     * @param bool $isMinimumAmount
-     * @return mixed
-     */
-    public function setIsMinimumOrderAmount(bool $isMinimumAmount);
-
+    
     /**
      * Retrieve existing extension attributes object or create a new one.
      *

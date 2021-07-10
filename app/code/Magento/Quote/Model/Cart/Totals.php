@@ -575,22 +575,6 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
 
     /**
      * {@inheritdoc}
-     */
-    public function getIsMinimumOrderAmount()
-    {
-        return $this->getData(self::KEY_IS_MINIMUM_ORDER_AMOUNT);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIsMinimumOrderAmount(bool $isMinimumAmount)
-    {
-        return $this->setData(self::KEY_IS_MINIMUM_ORDER_AMOUNT, $isMinimumAmount);
-    }
-
-    /**
-     * {@inheritdoc}
      *
      * @return \Magento\Quote\Api\Data\TotalsExtensionInterface|null
      */

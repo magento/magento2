@@ -318,15 +318,10 @@ class QuoteTest extends TestCase
             ['create']
         );
 
-        /*$this->totalCollector = $this->createPartialMock(
-            TotalsCollector::class,
-            ['collect']
-        );*/
         $this->totalsCollector = $this->getMockBuilder(TotalsCollector::class)
                 ->onlyMethods(['collect'])
                 ->disableOriginalConstructor()
                 ->getMock();
-
 
         $this->orderIncrementIdChecker = $this->createMock(OrderIncrementIdChecker::class);
         $this->quote = (new ObjectManager($this))
