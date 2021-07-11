@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55b373c1a62a0f38e6685648529d0351",
+    "content-hash": "33e0bc9b4828e21852a0fba44525893c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3389,6 +3389,68 @@
             "time": "2020-04-10T16:34:50+00:00"
         },
         {
+            "name": "paragonie/constant_time_encoding",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paragonie/constant_time_encoding.git",
+                "reference": "f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c",
+                "reference": "f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7|^8"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6|^7|^8|^9",
+                "vimeo/psalm": "^1|^2|^3|^4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ParagonIE\\ConstantTime\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Steve 'Sc00bz' Thomas",
+                    "email": "steve@tobtu.com",
+                    "homepage": "https://www.tobtu.com",
+                    "role": "Original Developer"
+                }
+            ],
+            "description": "Constant-time Implementations of RFC 4648 Encoding (Base-64, Base-32, Base-16)",
+            "keywords": [
+                "base16",
+                "base32",
+                "base32_decode",
+                "base32_encode",
+                "base64",
+                "base64_decode",
+                "base64_encode",
+                "bin2hex",
+                "encoding",
+                "hex",
+                "hex2bin",
+                "rfc4648"
+            ],
+            "time": "2020-12-06T15:14:20+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v9.99.100",
             "source": {
@@ -3664,24 +3726,27 @@
         },
         {
             "name": "phpseclib/mcrypt_compat",
-            "version": "1.0.8",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/mcrypt_compat.git",
-                "reference": "f74c7b1897b62f08f268184b8bb98d9d9ab723b0"
+                "reference": "66a012ebdb8ed373e1e084311f0e8286fd6e378b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/f74c7b1897b62f08f268184b8bb98d9d9ab723b0",
-                "reference": "f74c7b1897b62f08f268184b8bb98d9d9ab723b0",
+                "url": "https://api.github.com/repos/phpseclib/mcrypt_compat/zipball/66a012ebdb8ed373e1e084311f0e8286fd6e378b",
+                "reference": "66a012ebdb8ed373e1e084311f0e8286fd6e378b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
-                "phpseclib/phpseclib": ">=2.0.11 <3.0.0"
+                "php": ">=5.6.1",
+                "phpseclib/phpseclib": "^3.0"
+            },
+            "provide": {
+                "ext-mcrypt": "5.6.40"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0"
+                "phpunit/phpunit": "^5.7|^6.0|^9.4"
             },
             "suggest": {
                 "ext-openssl": "Will enable faster cryptographic operations"
@@ -3703,34 +3768,52 @@
                     "homepage": "http://phpseclib.sourceforge.net"
                 }
             ],
-            "description": "PHP 7.1 polyfill for the mcrypt extension from PHP <= 7.0",
+            "description": "PHP 5.x/7.x polyfill for mcrypt extension",
             "keywords": [
                 "cryptograpy",
                 "encryption",
-                "mcrypt"
+                "mcrypt",
+                "polyfill"
             ],
-            "time": "2018-08-22T03:11:43+00:00"
+            "support": {
+                "email": "terrafrost@php.net",
+                "issues": "https://github.com/phpseclib/mcrypt_compat/issues",
+                "source": "https://github.com/phpseclib/mcrypt_compat"
+            },
+            "funding": [
+                {
+                    "url": "https://www.patreon.com/phpseclib",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/mcrypt_compat",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-12-23T15:58:21+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.31",
+            "version": "3.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "233a920cb38636a43b18d428f9a8db1f0a1a08f4"
+                "reference": "a127a5133804ff2f47ae629dd529b129da616ad7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/233a920cb38636a43b18d428f9a8db1f0a1a08f4",
-                "reference": "233a920cb38636a43b18d428f9a8db1f0a1a08f4",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/a127a5133804ff2f47ae629dd529b129da616ad7",
+                "reference": "a127a5133804ff2f47ae629dd529b129da616ad7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "paragonie/constant_time_encoding": "^1|^2",
+                "paragonie/random_compat": "^1.4|^2.0|^9.99.99",
+                "php": ">=5.6.1"
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4",
+                "phpunit/phpunit": "^5.7|^6.0|^9.4",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
@@ -3745,7 +3828,7 @@
                     "phpseclib/bootstrap.php"
                 ],
                 "psr-4": {
-                    "phpseclib\\": "phpseclib/"
+                    "phpseclib3\\": "phpseclib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -3800,7 +3883,25 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2021-04-06T13:56:45+00:00"
+            "support": {
+                "issues": "https://github.com/phpseclib/phpseclib/issues",
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.9"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/terrafrost",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpseclib",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-06-14T06:54:45+00:00"
         },
         {
             "name": "psr/container",
@@ -8722,68 +8823,6 @@
                 "object graph"
             ],
             "time": "2020-11-13T09:40:50+00:00"
-        },
-        {
-            "name": "paragonie/constant_time_encoding",
-            "version": "v2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paragonie/constant_time_encoding.git",
-                "reference": "f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c",
-                "reference": "f34c2b11eb9d2c9318e13540a1dbc2a3afbd939c",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7|^8"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6|^7|^8|^9",
-                "vimeo/psalm": "^1|^2|^3|^4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "ParagonIE\\ConstantTime\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Paragon Initiative Enterprises",
-                    "email": "security@paragonie.com",
-                    "homepage": "https://paragonie.com",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Steve 'Sc00bz' Thomas",
-                    "email": "steve@tobtu.com",
-                    "homepage": "https://www.tobtu.com",
-                    "role": "Original Developer"
-                }
-            ],
-            "description": "Constant-time Implementations of RFC 4648 Encoding (Base-64, Base-32, Base-16)",
-            "keywords": [
-                "base16",
-                "base32",
-                "base32_decode",
-                "base32_encode",
-                "base64",
-                "base64_decode",
-                "base64_encode",
-                "bin2hex",
-                "encoding",
-                "hex",
-                "hex2bin",
-                "rfc4648"
-            ],
-            "time": "2020-12-06T15:14:20+00:00"
         },
         {
             "name": "pdepend/pdepend",
