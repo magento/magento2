@@ -28,7 +28,6 @@
             <!-- Create Simple Product     -->
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
 
-
         </before>
 
         <after>
@@ -38,6 +37,48 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         </after>
+
+        <!-- Search default simple product in the grid -->
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Create simple product with customizable option -->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton1"/>
+        <waitForPageLoad stepKey="waitForDataToLoad"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{simpleProductCustomizableOptionOne.title}}" stepKey="fillOptionTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDown"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', simpleProductCustomizableOptionOne.type)}}" stepKey="selectOptionFieldFromDropDown"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBox"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_title}}" stepKey="fillOptionTitleForCustomizableOption"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_price}}" stepKey="fillOptionPrice"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_price_type}}" stepKey="selectOptionPriceType"/>
+
+
+        <!-- Add third Options        -->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection3"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton3"/>
+        <waitForPageLoad stepKey="waitForDataToLoad3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{simpleProductCustomizableOptionThree.title}}" stepKey="fillOptionTitle3"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDown2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', simpleProductCustomizableOptionThree.type)}}" stepKey="selectOptionFieldFromDropDown3"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('1')}}" stepKey="checkRequiredCheckBox3"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_title}}" stepKey="fillOptionTitleForCustomizableOption3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_price}}" stepKey="fillOptionPrice3"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_price_type}}" stepKey="selectOptionPriceType3"/>
+
+
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+
+        <!--Verify customer see success message-->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
     </test>
 </tests>

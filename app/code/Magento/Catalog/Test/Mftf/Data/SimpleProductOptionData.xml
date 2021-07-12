@@ -17,4 +17,37 @@
         <data key="option_0_price_type">Percent</data>
         <data key="option_0_sku" unique="suffix">sku_drop_down_row_1</data>
     </entity>
+
+    <!-- Simple product option one    -->
+    <entity name="simpleProductCustomizableOptionOne">
+        <data key="title">Test 1</data>
+        <data key="type">Drop-down</data>
+        <data key="is_required">1</data>
+        <data key="option_1_title">X</data>
+        <data key="option_1_price">10.00</data>
+        <data key="option_1_price_type">fixed</data>
+    </entity>
+
+    <!-- Simple product file option two   -->
+    <entity name="simpleProductCustomizableOptionTwo">
+        <data key="title">File</data>
+        <data key="type">file</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">2</data>
+        <data key="option_2_price">0.00</data>
+        <data key="option_2_price_type">fixed</data>
+        <data key="option_2_file_extension">imed</data>
+        <data key="option_2_image_size_x">0</data>
+        <data key="option_2_image_size_y">0</data>
+    </entity>
+
+    <!-- Simple product Option three   -->
+    <entity name="simpleProductCustomizableOptionThree">
+        <data key="title">Test 2</data>
+        <data key="type">Drop-down</data>
+        <data key="is_required">1</data>
+        <data key="option_3_title">D</data>
+        <data key="option_3_price">10.00</data>
+        <data key="option_3_price_type">fixed</data>
+    </entity>
 </entities>
