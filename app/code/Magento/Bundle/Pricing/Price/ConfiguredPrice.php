@@ -150,11 +150,9 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      */
     public function getValue()
     {
-        if ($this->item) {
+        if ($this->item && $this->item->getProduct()->getId()) {
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
-            if (!empty($this->item->getProduct())) {
-                return parent::getValue() + $this->discountCalculator->calculateDiscount($this->item->getProduct(), $configuredOptionsAmount);
-            }
+            return parent::getValue() + $this->discountCalculator->calculateDiscount($this->item->getProduct(), $configuredOptionsAmount);
         }
         return parent::getValue();
     }
