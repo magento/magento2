@@ -92,10 +92,11 @@ class BundlePriceTest extends TestCase
         $this->priceInfo = $this->createMock(Base::class);
         $this->priceInfo->expects($this->any())->method('getPrice')->willReturn($basePrice);
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getPriceInfo', 'getOptionById', 'getResource'])
+            ->setMethods(['getPriceInfo', 'getOptionById', 'getResource', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->product->expects($this->once())->method('getPriceInfo')->willReturn($this->priceInfo);
+        $this->product->expects($this->any())->method('getId')->willReturn(123);
 
         $this->item = $this->getMockBuilder(ItemInterface::class)
             ->getMock();
@@ -124,7 +125,16 @@ class BundlePriceTest extends TestCase
             ->getMock();
         $this->discountCalculator->expects($this->any())->method('calculateDiscount')
             ->willReturn(-5.0);
-        $this->model = new ConfiguredPrice($this->product, 1, $this->calculator, $this->priceCurrencyMock, $this->discountCalculator,null, $this->jsonSerializerMock, $this->configuredPriceSelectionMock);
+        $this->model = new ConfiguredPrice(
+            $this->product,
+            1,
+            $this->calculator,
+            $this->priceCurrencyMock,
+            $this->discountCalculator,
+            null,
+            $this->jsonSerializerMock,
+            $this->configuredPriceSelectionMock
+        );
         $this->model->setItem($this->item);
     }
 
@@ -141,6 +151,7 @@ class BundlePriceTest extends TestCase
             $second
         ];
     }
+
     /**
      * Test of value getter
      */
@@ -148,5 +159,24 @@ class BundlePriceTest extends TestCase
     {
         $valueFromMock = $this->model->getValue();
         $this->assertEquals(95., $valueFromMock);
+    }
+
+    /**
+     * Test of value getter if no product item
+     */
+    public function testGetValueMethodNoItem()
+    {
+        unset($this->item);
+        $this->product = $this->getMockBuilder(Product::class)
+            //->setMethods(['getPriceInfo', 'getOptionById', 'getResource', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->item = $this->getMockBuilder(ItemInterface::class)
+            ->getMock();
+        $this->item->expects($this->any())->method('getProduct')->willReturn($this->product);
+        $this->product->expects($this->any())->method('getId')->willReturn(false);
+        $this->model->setItem($this->item);
+        $valueFromMock = $this->model->getValue();
+        $this->assertEquals(100., $valueFromMock);
     }
 }
