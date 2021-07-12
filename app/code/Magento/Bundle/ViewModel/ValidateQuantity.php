@@ -19,12 +19,12 @@ class ValidateQuantity implements ArgumentInterface
     /**
      * @var Json
      */
-    private Json $serializer;
+    private $serializer;
 
     /**
      * @var ProductView
      */
-    private ProductView $productView;
+    private $productView;
 
     /**
      * @param Json $serializer
