@@ -73,10 +73,6 @@ class BundlePriceTest extends TestCase
      */
     private $configuredPriceSelectionMock;
     /**
-     * @var array
-     */
-    private $selectionPriceDataSampleData;
-    /**
      * @var AmountInterface|MockObject
      */
     private $amountInterfaceMock;
