@@ -8,13 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup">
+    <actionGroup name="CliEnableTinyMCEActionGroup">
         <annotations>
-            <description>Click ok button on upload image tinyMce4 popup.</description>
+            <description>Enable Tiny MCE  by CLI command config:set</description>
         </annotations>
+        <arguments>
+            <argument name="TinyMCEValue" type="string"/>
+        </arguments>
 
-        <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn"/>
-        <click selector="{{MediaGallerySection.OkBtn}}" stepKey="clickOkBtn"/>
-        <waitForPageLoad stepKey="wait"/>
+        <magentoCLI command="config:set {{EnableTinyMCE.path}} {{TinyMCEValue}}" stepKey="enableTinyMCE"/>
     </actionGroup>
 </actionGroups>
