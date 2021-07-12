@@ -59,15 +59,29 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_price}}" stepKey="fillOptionPrice"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_price_type}}" stepKey="selectOptionPriceType"/>
 
+        <!-- Add Second File Options    -->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton2"/>
+        <waitForPageLoad stepKey="waitForDataToLoad2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{simpleProductCustomizableOptionTwo.title}}" stepKey="fillOptionTitle2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDown2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', simpleProductCustomizableOptionTwo.type)}}" stepKey="selectOptionFieldFromDropDown2"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('1')}}" stepKey="checkRequiredCheckBox2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_price}}" stepKey="fillOptionPrice2"/>
+        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_price_type}}" stepKey="selectOptionPriceType2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_file_extension}}" stepKey="fillOptionFileExtension2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_image_size_x}}" stepKey="fillOptionImageSizeX2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_image_size_y}}" stepKey="fillOptionImageSizeY"/>
 
         <!-- Add third Options        -->
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection3"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton3"/>
         <waitForPageLoad stepKey="waitForDataToLoad3"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{simpleProductCustomizableOptionThree.title}}" stepKey="fillOptionTitle3"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDown2"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', simpleProductCustomizableOptionThree.type)}}" stepKey="selectOptionFieldFromDropDown3"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('1')}}" stepKey="checkRequiredCheckBox3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('2')}}" userInput="{{simpleProductCustomizableOptionThree.title}}" stepKey="fillOptionTitle3"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('3')}}" stepKey="selectOptionTypeDropDown3"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('3', simpleProductCustomizableOptionThree.type)}}" stepKey="selectOptionFieldFromDropDown3"/>
+        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('2')}}" stepKey="checkRequiredCheckBox3"/>
         <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton3"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_title}}" stepKey="fillOptionTitleForCustomizableOption3"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_price}}" stepKey="fillOptionPrice3"/>
