@@ -130,10 +130,10 @@ class BundlePriceTest extends TestCase
             1,
             $this->calculator,
             $this->priceCurrencyMock,
-            $this->discountCalculator,
             null,
             $this->jsonSerializerMock,
-            $this->configuredPriceSelectionMock
+            $this->configuredPriceSelectionMock,
+            $this->discountCalculator,
         );
         $this->model->setItem($this->item);
     }

@@ -67,10 +67,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $quantity,
         BundleCalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
-        DiscountCalculator $discountCalculator,
         ItemInterface $item = null,
         JsonSerializer $serializer = null,
-        ConfiguredPriceSelection $configuredPriceSelection = null
+        ConfiguredPriceSelection $configuredPriceSelection = null,
+        DiscountCalculator $discountCalculator = null
     ) {
         $this->item = $item;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
@@ -78,7 +78,8 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
         $this->configuredPriceSelection = $configuredPriceSelection
             ?: \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(ConfiguredPriceSelection::class);
-        $this->discountCalculator = $discountCalculator;
+        $this->discountCalculator = $discountCalculator
+            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(DiscountCalculator::class);
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
     }
 
