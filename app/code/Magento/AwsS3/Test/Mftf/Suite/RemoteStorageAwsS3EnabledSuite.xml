@@ -11,6 +11,10 @@
             <!-- Enable AWS S3 Remote Storage -->
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
         </before>
+        <after>
+            <!-- Disable Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+        </after>
         <include>
             <group name="remote_storage_aws_s3"/>
         </include>
