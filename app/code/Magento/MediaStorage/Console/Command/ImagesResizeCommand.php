@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Command\Command;
-use Magento\Catalog\Model\ResourceModel\Product\Image as ProductImage;
+
 
 /**
  * Resizes product images according to theme view definitions.
@@ -56,11 +56,6 @@ class ImagesResizeCommand extends Command
     private $progressBarFactory;
 
     /**
-     * @var ProductImage
-     */
-    private $productImage;
-
-    /**
      * @var bool
      */
     private $skipHiddenImages = false;
@@ -70,22 +65,19 @@ class ImagesResizeCommand extends Command
      * @param ImageResize $imageResize
      * @param ImageResizeScheduler $imageResizeScheduler
      * @param ProgressBarFactory $progressBarFactory
-     * @param ProductImage $productImage
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         State $appState,
         ImageResize $imageResize,
         ImageResizeScheduler $imageResizeScheduler,
-        ProgressBarFactory $progressBarFactory,
-        ProductImage $productImage
+        ProgressBarFactory $progressBarFactory
     ) {
         parent::__construct();
         $this->appState = $appState;
         $this->imageResize = $imageResize;
         $this->imageResizeScheduler = $imageResizeScheduler;
         $this->progressBarFactory = $progressBarFactory;
-        $this->productImage = $productImage;
     }
 
     /**
