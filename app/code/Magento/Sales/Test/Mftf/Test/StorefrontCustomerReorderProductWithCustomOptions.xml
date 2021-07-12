@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerReorderProductWithCustomOptions">
+        <annotations>
+            <stories value="Reorder product with custom options"/>
+            <title value="Make reorder as customer on frontend"/>
+            <description value="Make reorder as customer on Frontend with simple product custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value=""/>
+            <useCaseId value="MC-41981" />
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <!-- Login As Admin            -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Simple Category    -->
+            <createData entity="_defaultCategory" stepKey="initialCategoryEntity"/>
+
+            <!-- Create Simple Product     -->
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
+
+
+        </before>
+
+        <after>
+
+            <deleteData stepKey="deleteDefaultCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleProduct" createDataKey="initialSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        </after>
+
+    </test>
+</tests>
