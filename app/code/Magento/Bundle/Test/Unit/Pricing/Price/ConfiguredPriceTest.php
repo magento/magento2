@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for \Magento\Bundle\Pricing\Price\ConfiguredPrice
  */
-class BundlePriceTest extends TestCase
+class ConfiguredPriceTest extends TestCase
 {
     /**
      * @var float
