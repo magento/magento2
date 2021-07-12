@@ -58,6 +58,7 @@ class AddProductsToCart
      */
     public function execute(Quote $cart, array $cartItems): void
     {
+        /*
         $lockName = 'cart_processing_lock_' . $cart->getId();
         $needToRefreshCache = false;
         while ($this->lockManager->isLocked($lockName)) {
@@ -69,11 +70,12 @@ class AddProductsToCart
         if ($needToRefreshCache) {
             $this->refreshCartCache($cart);
         }
+        */
         foreach ($cartItems as $cartItemData) {
             $this->addProductToCart->execute($cart, $cartItemData);
         }
         $this->cartRepository->save($cart);
-        $this->lockManager->unlock($lockName);
+        //$this->lockManager->unlock($lockName);
     }
 
     /**
