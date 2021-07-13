@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Css\PreProcessor\Instruction;
 
 use Magento\Framework\App\ObjectManager;
@@ -58,24 +60,33 @@ class MagentoImport implements PreProcessorInterface
     private $themeProvider;
 
     /**
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $moduleManager;
+
+    /**
      * @param DesignInterface $design
      * @param CollectorInterface $fileSource
      * @param ErrorHandlerInterface $errorHandler
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
+     * @param \Magento\Framework\Module\Manager|null $moduleManager
      */
     public function __construct(
         DesignInterface $design,
         CollectorInterface $fileSource,
         ErrorHandlerInterface $errorHandler,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Design\Theme\ListInterface $themeList
+        \Magento\Framework\View\Design\Theme\ListInterface $themeList,
+        ?\Magento\Framework\Module\Manager $moduleManager = null
     ) {
         $this->design = $design;
         $this->fileSource = $fileSource;
         $this->errorHandler = $errorHandler;
         $this->assetRepo = $assetRepo;
         $this->themeList = $themeList;
+        $this->moduleManager = $moduleManager
+            ?? ObjectManager::getInstance()->get(\Magento\Framework\Module\Manager::class);
     }
 
     /**
@@ -108,9 +119,16 @@ class MagentoImport implements PreProcessorInterface
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
+                $moduleName = $importFile->getModule();
+
+                if ($moduleName &&
+                    !$this->moduleManager->isEnabled($moduleName)) {
+                    continue;
+                }
+
                 $referenceString = $isReference ? '(reference) ' : '';
-                $importsContent .= $importFile->getModule()
-                    ? "@import $referenceString'{$importFile->getModule()}::{$resolvedPath}';\n"
+                $importsContent .= $moduleName
+                    ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
                     : "@import $referenceString'{$matchedFileId}';\n";
             }
         } catch (\LogicException $e) {
