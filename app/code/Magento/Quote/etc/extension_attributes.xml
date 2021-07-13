@@ -12,5 +12,6 @@
 
     <extension_attributes for="Magento\Quote\Api\Data\TotalsInterface">
         <attribute code="coupon_label" type="string" />
+        <attribute code="is_minimum_order_amount" type="int" />
     </extension_attributes>
 </config>

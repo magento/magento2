@@ -22,6 +22,7 @@
         <element name="total" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price']"/>
         <element name="totalAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='grand totals']//td//span[@class='price' and contains(text(), '{{amount}}')]" parameterized="true"/>
         <element name="proceedToCheckout" type="button" selector=".action.primary.checkout span" timeout="30"/>
+        <element name="proceedToCheckoutDisabled" type="button" selector=".action.primary.checkout.disabled" timeout="30"/>
         <element name="discountAmount" type="text" selector="td[data-th='Discount']"/>
         <element name="shippingHeading" type="button" selector="#block-shipping-heading" timeout="10"/>
         <element name="postcode" type="input" selector="input[name='postcode']" timeout="10"/>
