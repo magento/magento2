@@ -80,8 +80,7 @@ class AuthorizationTest extends TestCase
         ?int $customerId,
         ?bool $isCustomerEmulated,
         bool $shouldBeAllowed
-    ): void
-    {
+    ): void {
         $this->persistentSessionMock->expects($this->any())->method('isPersistent')->willReturn($isPersistent);
         $this->customerSessionMock->expects($this->any())->method('getCustomerId')->willReturn($customerId);
         $this->customerSessionMock->expects($this->any())->method('getIsCustomerEmulated')->willReturn($isCustomerEmulated);
