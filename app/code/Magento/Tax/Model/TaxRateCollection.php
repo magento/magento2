@@ -71,6 +71,21 @@ class TaxRateCollection extends AbstractServiceCollection
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getColumnValues($colName)
+    {
+        $col = [];
+        $searchCriteria = $this->getSearchCriteria();
+        $searchResults = $this->taxRateRepository->getList($searchCriteria);
+        foreach ($searchResults->getItems() as $taxRate) {
+            $col[] = $this->createTaxRateCollectionItem($taxRate)->getData($colName);
+        }
+
+        return $col;
+    }
+
+    /**
      * Creates a collection item that represents a tax rate for the tax rates grid.
      *
      * @param TaxRate $taxRate Input data for creating the item.
