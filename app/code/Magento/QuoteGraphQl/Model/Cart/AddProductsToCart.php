@@ -10,7 +10,6 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Framework\Lock\LockManagerInterface;
 
 /**
  * Adding products to cart using GraphQL
@@ -28,23 +27,15 @@ class AddProductsToCart
     private $addProductToCart;
 
     /**
-     * @var LockManagerInterface
-     */
-    private $lockManager;
-
-    /**
      * @param CartRepositoryInterface $cartRepository
      * @param AddSimpleProductToCart $addProductToCart
-     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
-        AddSimpleProductToCart $addProductToCart,
-        LockManagerInterface $lockManager
+        AddSimpleProductToCart $addProductToCart
     ) {
         $this->cartRepository = $cartRepository;
         $this->addProductToCart = $addProductToCart;
-        $this->lockManager = $lockManager;
     }
 
     /**
@@ -58,24 +49,10 @@ class AddProductsToCart
      */
     public function execute(Quote $cart, array $cartItems): void
     {
-        /*
-        $lockName = 'cart_processing_lock_' . $cart->getId();
-        $needToRefreshCache = false;
-        while ($this->lockManager->isLocked($lockName)) {
-            // wait till other process working with the same cart complete
-            usleep(rand(100, 600));
-            $needToRefreshCache = true;
-        }
-        $this->lockManager->lock($lockName, 1);
-        if ($needToRefreshCache) {
-            $this->refreshCartCache($cart);
-        }
-        */
         foreach ($cartItems as $cartItemData) {
             $this->addProductToCart->execute($cart, $cartItemData);
         }
         $this->cartRepository->save($cart);
-        //$this->lockManager->unlock($lockName);
     }
 
     /**
