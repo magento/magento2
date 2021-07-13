@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
+use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderSort;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -45,21 +46,29 @@ class CustomerOrders implements ResolverInterface
     private $orderFormatter;
 
     /**
+     * @var OrderSort
+     */
+    private $orderSort;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      * @param OrderFormatter $orderFormatter
+     * @param OrderSort $orderSort
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter,
-        OrderFormatter $orderFormatter
+        OrderFormatter $orderFormatter,
+        OrderSort $orderSort
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->orderFormatter = $orderFormatter;
+        $this->orderSort = $orderSort;
     }
 
     /**
@@ -125,6 +134,10 @@ class CustomerOrders implements ResolverInterface
         }
         if (isset($args['pageSize'])) {
             $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
+        }
+        if (isset($args['sort'])) {
+            $sortOrders = $this->orderSort->createSortOrders($args);
+            $this->searchCriteriaBuilder->setSortOrders($sortOrders);
         }
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
     }

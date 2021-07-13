@@ -42,4 +42,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="CustomerOrderSortableField" xsi:type="array">
+                    <item name="order_id" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

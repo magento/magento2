@@ -407,6 +407,57 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
+     * @return void
+     * @throws AuthenticationException
+     */
+    public function testGetCustomerDescendingSortedOrders()
+    {
+        $query = <<<QUERY
+{
+  customer {
+    orders(
+      sort: {
+        sort_field: ORDER_ID,
+        sort_direction: DESC
+      }
+    ) {
+      items {
+        id
+        number
+         status
+         order_date
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
+        $expectedOrderNumbers = ['100000008', '100000007','100000006', '100000005', '100000004','100000002'];
+
+        foreach ($expectedOrderNumbers as $key => $data) {
+            $orderItemInResponse = $customerOrderItemsInResponse[$key];
+            $this->assertEquals(
+                $orderItemInResponse['number'],
+                $expectedOrderNumbers[$key],
+                "The order number is different than the expected for order - {$orderItemInResponse['number']}"
+            );
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
