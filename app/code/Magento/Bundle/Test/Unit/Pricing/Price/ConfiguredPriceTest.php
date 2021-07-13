@@ -153,7 +153,7 @@ class ConfiguredPriceTest extends TestCase
     }
 
     /**
-     * Test of value getter
+     * Test of value getter when item presented
      */
     public function testGetValueMethod()
     {
