@@ -95,9 +95,11 @@ class ShippingAddressAssignmentTest extends TestCase
     public function testSetAddressUseForShippingTrue()
     {
         $addressId = 1;
+        $shippingMethod = "flatrate_flatrate";
         $addressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
+        $addressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
         $this->addressMock->expects($this->once())->method('setSameAsBilling')->with(1);
         $this->quoteMock->expects($this->once())->method('removeAddress')->with($addressId);
         $this->quoteMock->expects($this->once())->method('setShippingAddress')->with($this->addressMock);
