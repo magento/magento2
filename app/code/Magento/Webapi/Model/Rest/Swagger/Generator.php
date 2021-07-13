@@ -7,6 +7,10 @@ namespace Magento\Webapi\Model\Rest\Swagger;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\Exception as WebapiException;
@@ -926,7 +930,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * Generate method exception error responses
      *
-     * @param array $exceptionClass
+     * @param string $exceptionClass
      * @param array $responses
      * @return array
      */
@@ -934,13 +938,18 @@ class Generator extends AbstractSchemaGenerator
     {
         $httpCode = '500';
         $description = 'Internal Server error';
-        if (is_subclass_of($exceptionClass, \Magento\Framework\Exception\LocalizedException::class)) {
+        $strippedExceptionClass = substr($exceptionClass, 1);
+        if ($strippedExceptionClass == LocalizedException::class ||
+            is_subclass_of($exceptionClass, LocalizedException::class)) {
             // Map HTTP codes for LocalizedExceptions according to exception type
-            if (is_subclass_of($exceptionClass, \Magento\Framework\Exception\NoSuchEntityException::class)) {
+            if ($strippedExceptionClass == NoSuchEntityException::class ||
+                is_subclass_of($exceptionClass, NoSuchEntityException::class)) {
                 $httpCode = WebapiException::HTTP_NOT_FOUND;
                 $description = '404 Not Found';
-            } elseif (is_subclass_of($exceptionClass, \Magento\Framework\Exception\AuthorizationException::class)
-                || is_subclass_of($exceptionClass, \Magento\Framework\Exception\AuthenticationException::class)
+            } elseif ($strippedExceptionClass == AuthorizationException::class ||
+                $strippedExceptionClass == AuthenticationException::class ||
+                is_subclass_of($exceptionClass, AuthorizationException::class) ||
+                is_subclass_of($exceptionClass, AuthenticationException::class)
             ) {
                 $httpCode = WebapiException::HTTP_UNAUTHORIZED;
                 $description = self::UNAUTHORIZED_DESCRIPTION;
