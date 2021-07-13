@@ -8,11 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CliEnableTinyMCE4ActionGroup">
+    <actionGroup name="CliEnableTinyMCEActionGroup">
         <annotations>
-            <description>Enable Tiny MCE 4 by CLI command config:set</description>
+            <description>Enable Tiny MCE  by CLI command config:set</description>
         </annotations>
+        <arguments>
+            <argument name="TinyMCEValue" type="string" defaultValue="{{EnableTinyMCE.value}}"/>
+        </arguments>
 
-        <magentoCLI command="config:set {{EnableTinyMCE4.path}} {{EnableTinyMCE4.value}}" stepKey="enableTinyMCE4"/>
+        <magentoCLI command="config:set {{EnableTinyMCE.path}} {{TinyMCEValue}}" stepKey="enableTinyMCE"/>
     </actionGroup>
 </actionGroups>
