@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassDeleteTaxRatesTest">
+        <annotations>
+            <stories value="Mass Delete Tax Rates"/>
+            <title value="Mass delete tax rate"/>
+            <description value="Test Mass Delete Tax Rate"/>
+            <severity value="MAJOR"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate1"/>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate2"/>
+            <createData entity="defaultTaxRate" stepKey="initialTaxRate3"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Open Tax Rates Grid Page -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+
+        <!-- Check Tax Rates -->
+        <actionGroup ref="AdminCheckTaxRateOnTaxRateGridActionGroup" stepKey="clickCheckbox1">
+            <argument name="rate" value="$$initialTaxRate1$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckTaxRateOnTaxRateGridActionGroup" stepKey="clickCheckbox2">
+            <argument name="rate" value="$$initialTaxRate2$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckTaxRateOnTaxRateGridActionGroup" stepKey="clickCheckbox3">
+            <argument name="rate" value="$$initialTaxRate3$$"/>
+        </actionGroup>
+
+        <!-- Delete Tax Rates -->
+        <actionGroup ref="AdminMassDeleteSelectedTaxRatesActionGroup" stepKey="deleteSelectedItems">
+            <argument name="deleteCount" value="3"/>
+        </actionGroup>
+    </test>
+</tests>

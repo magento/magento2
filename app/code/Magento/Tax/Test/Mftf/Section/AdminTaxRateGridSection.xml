@@ -24,5 +24,8 @@
         <element name="rateByRow" type="text" parameterized="true" selector="#tax_rate_grid_table tbody tr:nth-of-type({{rowIndex}}) [data-column=rate]"/>
         <element name="allNonDefaultTaxRates" type="block" selector="//table[@id='tax_rate_grid_table']//tbody//tr//td[@data-column='code' and not(contains(.,'US-CA-*-Rate 1')) and not(contains(.,'US-NY-*-Rate 1'))]"/>
         <element name="emptyText" type="text" selector=".empty-text"/>
+        <element name="rateRowCheckboxByCode" type="block" parameterized="true" selector="//table[@id='tax_rate_grid_table']//tbody//tr//td[@data-column='code' and contains(., '{{taxRateCode}}')]//..//td[@data-column='massaction']//input[@data-role='select-row']"/>
+        <element name="massActionSelect" type="select" selector="#tax_rate_grid_massaction-select" />
+        <element name="massActionSubmitButton" type="button" selector="#tax_rate_grid_massaction-form button" />
     </section>
 </sections>

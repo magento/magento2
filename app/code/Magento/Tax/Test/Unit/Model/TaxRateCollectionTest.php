@@ -154,4 +154,27 @@ class TaxRateCollectionTest extends TestCase
 
         $this->model->loadData();
     }
+
+    public function testGetColumnValues(): void
+    {
+        $this->rateServiceMock->expects($this->once())
+            ->method('getList')
+            ->with($this->searchCriteriaMock)
+            ->willReturn($this->searchResultsMock);
+        $this->searchResultsMock->expects($this->once())->method('getItems')->willReturn([$this->taxRateMock]);
+        $this->taxRateMock->expects($this->once())->method('getId')->willReturn(33);
+        $this->taxRateMock->expects($this->once())->method('getCode')->willReturn(44);
+        $this->taxRateMock->expects($this->once())->method('getTaxCountryId')->willReturn('CountryId');
+        $this->taxRateMock->expects($this->once())->method('getTaxRegionId')->willReturn(55);
+        $this->taxRateMock->expects($this->once())->method('getRegionName')->willReturn('Region Name');
+        $this->taxRateMock->expects($this->once())->method('getTaxPostcode')->willReturn('Post Code');
+        $this->taxRateMock->expects($this->once())->method('getRate')->willReturn(1.85);
+        $this->rateConverterMock->expects($this->once())
+            ->method('createTitleArrayFromServiceObject')
+            ->with($this->taxRateMock)
+            ->willReturn([]);
+        $this->taxRateMock->expects($this->once())->method('getZipTo')->willReturn(null);
+        $this->taxRateMock->expects($this->never())->method('getZipFrom');
+        $this->model->getColumnValues('tax_country_id');
+    }
 }
