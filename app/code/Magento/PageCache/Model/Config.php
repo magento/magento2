@@ -116,7 +116,7 @@ class Config
     /**
      * Return currently selected cache type: built in or varnish
      *
-     * @return int
+     * @return int|string
      * @api
      */
     public function getType()
