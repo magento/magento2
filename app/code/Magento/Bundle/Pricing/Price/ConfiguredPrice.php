@@ -49,7 +49,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      */
     private $configuredPriceSelection;
     /**
-     * @var \Magento\Bundle\Pricing\Price\DiscountCalculator
+     * @var DiscountCalculator
      */
     private $discountCalculator;
 
