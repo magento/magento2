@@ -127,7 +127,7 @@ class Current extends Template
      */
     protected function _toHtml()
     {
-        if (false != $this->getTemplate()) {
+        if ($this->getTemplate()) {
             return parent::_toHtml();
         }
 

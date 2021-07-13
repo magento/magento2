@@ -70,7 +70,7 @@ class Links extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        if (false != $this->getTemplate()) {
+        if ($this->getTemplate()) {
             return parent::_toHtml();
         }
 
