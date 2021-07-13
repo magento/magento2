@@ -204,7 +204,6 @@ class ImageResizeTest extends TestCase
             ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
         $this->mediaDirectoryMock->expects($this->any())
             ->method('getRelativePath')
-            ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath)
             ->willReturnOnConsecutiveCalls($this->testfilepath, $this->testImageHiddenfilepath);
 
         $this->viewMock->expects($this->any())
@@ -418,13 +417,13 @@ class ImageResizeTest extends TestCase
             ->willReturn(false);
 
         $imageMock = $this->createMock(Image::class);
-        $this->imageFactoryMock->expects($this->any())
+        $this->imageFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($imageMock);
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath])
+            ->with($this->testfilepath)
             ->willReturnOnConsecutiveCalls(
                 $this->returnValue(false),
                 $this->returnValue(true)
@@ -441,12 +440,12 @@ class ImageResizeTest extends TestCase
                 ['0' => []]
             );
 
-        $this->databaseMock->expects($this->any())
+        $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath]);
-        $this->databaseMock->expects($this->any())
+            ->with($this->testfilepath);
+        $this->databaseMock->expects($this->once())
             ->method('saveFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath]);
+            ->with($this->testfilepath);
 
         $this->service->resizeFromImageName($this->testfilename);
     }
@@ -489,7 +488,7 @@ class ImageResizeTest extends TestCase
 
         $this->mediaDirectoryMock->expects($this->any())
             ->method('isFile')
-            ->withConsecutive([$this->testfilepath], [$this->testImageHiddenfilepath])
+            ->with($this->testfilepath)
             ->willReturnOnConsecutiveCalls(
                 $this->returnValue(false),
                 $this->returnValue(true)
