@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Product\Image;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Builds parameters array used to build Image Asset
@@ -69,11 +70,12 @@ class ParamsBuilder
      *
      * @param array $imageArguments
      * @param int $scopeId
+     * @param ThemeInterface $theme
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments, int $scopeId = null): array
+    public function build(array $imageArguments, int $scopeId = null, /*ThemeInterface*/ $theme = null): array
     {
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
@@ -81,7 +83,7 @@ class ParamsBuilder
             'image_width' => $imageArguments['width'] ?? null,
         ];
 
-        $overwritten = $this->overwriteDefaultValues($imageArguments);
+        $overwritten = $this->overwriteDefaultValues($imageArguments, $theme);
         $watermark = isset($miscParams['image_type']) ? $this->getWatermark($miscParams['image_type'], $scopeId) : [];
 
         return array_merge($miscParams, $overwritten, $watermark);
@@ -91,11 +93,12 @@ class ParamsBuilder
      * Overwrite default values
      *
      * @param array $imageArguments
+     * @param ThemeInterface $theme
      * @return array
      */
-    private function overwriteDefaultValues(array $imageArguments): array
+    private function overwriteDefaultValues(array $imageArguments, /*ThemeInterface*/ $theme = null): array
     {
-        $frame = $imageArguments['frame'] ?? $this->hasDefaultFrame();
+        $frame = $imageArguments['frame'] ?? $this->hasDefaultFrame($theme);
         $constrain = $imageArguments['constrain'] ?? $this->defaultConstrainOnly;
         $aspectRatio = $imageArguments['aspect_ratio'] ?? $this->defaultKeepAspectRatio;
         $transparency = $imageArguments['transparency'] ?? $this->defaultKeepTransparency;
@@ -165,12 +168,18 @@ class ParamsBuilder
 
     /**
      * Get frame from product_image_white_borders
+     * 
+     * @param ThemeInterface $theme
      *
      * @return bool
      */
-    private function hasDefaultFrame(): bool
+    private function hasDefaultFrame(/*ThemeInterface*/ $theme = null): bool
     {
-        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+        $viewConfigParams = ['area' => \Magento\Framework\App\Area::AREA_FRONTEND];
+        if ($theme) {
+            $viewConfigParams['themeModel'] = $theme;
+        }
+        return (bool) $this->viewConfig->getViewConfig($viewConfigParams)
             ->getVarValue('Magento_Catalog', 'product_image_white_borders');
     }
 }
