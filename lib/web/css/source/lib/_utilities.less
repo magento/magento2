@@ -22,6 +22,16 @@
     @fontValue: @_value;
 }
 
+.lib-sticky(
+    @_z-index: @z-index-1 - 1,
+    @_top: 0
+) {
+    position: -webkit-sticky;
+    position: sticky;
+    top: @_top;
+    z-index: @_z-index;
+}
+
 .lib-visibility-hidden() {
     height: 0;
     visibility: hidden;
