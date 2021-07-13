@@ -2577,10 +2577,6 @@
                         "lib/internal/LinLibertineFont"
                     ],
                     [
-                        "lib/web/FormData.js",
-                        "lib/web/FormData.js"
-                    ],
-                    [
                         "lib/web/MutationObserver.js",
                         "lib/web/MutationObserver.js"
                     ],
