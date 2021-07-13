@@ -86,7 +86,7 @@ class RequestSecureToken extends \Magento\Framework\App\Action\Action implements
         /** @var Quote $quote */
         $quote = $this->sessionManager->getQuote();
 
-        if (!$quote || !$quote instanceof Quote) {
+        if (!$quote || !$quote instanceof Quote || $quote->getItemsCount() <= 0) {
             return $this->getErrorResponse();
         }
 
