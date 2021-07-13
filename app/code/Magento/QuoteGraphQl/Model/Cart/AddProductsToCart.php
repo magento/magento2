@@ -54,19 +54,4 @@ class AddProductsToCart
         }
         $this->cartRepository->save($cart);
     }
-
-    /**
-     * Refresh cart collection cache
-     *
-     * @param Quote $cart
-     */
-    private function refreshCartCache(Quote $cart) : void
-    {
-        $items = [];
-        $collection = $cart->getItemsCollection(false);
-        foreach ($collection as $item) {
-            $items[] = $item;
-        }
-        $cart->setItems($items);
-    }
 }
