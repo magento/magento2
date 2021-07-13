@@ -333,6 +333,7 @@ type CategoryProducts @doc(description: "The category products object returned i
 input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.") {
     category_id: FilterEqualTypeInput @deprecated(reason: "Use the `category_uid` argument instead.") @doc(description: "Deprecated: use `category_uid` to filter product by category id.")
     category_uid: FilterEqualTypeInput @doc(description: "Filter product by the unique ID for a `CategoryInterface` object.")
+    category_url_path: FilterEqualTypeInput @doc(description: "Filter product by category URL path.")
 }
 
 input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
