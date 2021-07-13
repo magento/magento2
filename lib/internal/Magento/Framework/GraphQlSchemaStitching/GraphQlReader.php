@@ -86,23 +86,119 @@ class GraphQlReader implements ReaderInterface
         }
 
         /**
+         * Gather as many schema together to be parsed in one go for performance
+         * Collect any duplicate types in an array to retry after the initial large parse
+         *
          * Compatible with @see GraphQlReader::parseTypes
          */
+        $typesToRedo = [];
         $knownTypes = [];
-        foreach ($schemaFiles as $filePath => $partialSchemaContent) {
+        foreach ($schemaFiles as $partialSchemaContent) {
             $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
 
-            // Keep declarations from current partial schema, add missing declarations from all previously read schemas
-            $knownTypes = $partialSchemaTypes + $knownTypes;
-            $schemaContent = implode("\n", $knownTypes);
+            /**
+             * TODO fix this
+             * There is a bug in parseTypes where the union type is also containing the information for the type below
+             * in this case that meant that we were missing the type directly below CompanyStructureEntity
+             *
+             * This means that we cannot find CompanyStructureItem later in getTypesToUse
+             *
+             * Manually split them out in a proof of concept hack, while we review the regex
+             */
+            if (isset($partialSchemaTypes['CompanyStructureEntity'])) {
+                if (strpos($partialSchemaTypes['CompanyStructureEntity'], 'type CompanyStructureItem') !== false) {
+                    $lines = explode(PHP_EOL . PHP_EOL, $partialSchemaTypes['CompanyStructureEntity']);
+                    if (isset($lines[0], $lines[1]) && count($lines) === 2) {
+                        $partialSchemaTypes['CompanyStructureEntity'] = $lines[0];
+                        $partialSchemaTypes['CompanyStructureItem'] = $lines[1];
+                    }
+                    unset($lines);
+                }
+            }
+
+            // Filter out duplicated ones and save them into a list to be retried
+            $tmpTypes = $knownTypes;
+            foreach ($partialSchemaTypes as $intendedKey => $partialSchemaType) {
+                if (isset($tmpTypes[$intendedKey])) {
+                    if (!isset($typesToRedo[$intendedKey])) {
+                        $typesToRedo[$intendedKey] = [];
+                    }
+                    $typesToRedo[$intendedKey][] = $partialSchemaType;
+                    continue;
+                }
+                $tmpTypes[$intendedKey] = $partialSchemaType;
+            }
+            $knownTypes = $tmpTypes;
+        }
+
+        /**
+         * Read this large batch of data, this builds most of the $results array
+         */
+        $schemaContent = implode("\n", $knownTypes);
+        $results = $this->readPartialTypes($schemaContent);
+
+        /**
+         * Go over the list of types to be retried and batch them up into as few batches as possible
+         */
+        $typesToRedoBatches = [];
+        foreach ($typesToRedo as $type => $batches) {
+            foreach ($batches as $id => $data) {
+                if (!isset($typesToRedoBatches[$id])) {
+                    $typesToRedoBatches[$id] = [];
+                }
+                $typesToRedoBatches[$id][$type] = $data;
+            }
+        }
+
+        /**
+         * Process each remaining batch with the minimal amount of additional schema data for performance
+         */
+        foreach ($typesToRedoBatches as $typesToRedoBatch) {
+            $typesToUse =  $this->getTypesToUse($typesToRedoBatch, $knownTypes);
+            $knownTypes = $typesToUse + $knownTypes;
+            $schemaContent = implode("\n", $typesToUse);
 
             $partialResults = $this->readPartialTypes($schemaContent);
             $results = array_replace_recursive($results, $partialResults);
-            $results = $this->addModuleNameToTypes($results, $filePath);
         }
 
         $results = $this->copyInterfaceFieldsToConcreteTypes($results);
         return $results;
+    }
+
+
+    /**
+     * Get the minimum amount of additional types so that performance is improved
+     *
+     * The use of a strpos check here is a bit odd in the context of feeding data into an AST but for the performance
+     * gains and to prevent downtime it is necessary
+     *
+     * @link https://github.com/webonyx/graphql-php/issues/244
+     * @link https://github.com/webonyx/graphql-php/issues/244#issuecomment-383912418
+     *
+     * @param array $typesToRedoBatch
+     * @param array $types
+     * @return array
+     */
+    private function getTypesToUse($typesToRedoBatch, $types)
+    {
+        $totalKnownSymbolsCount = count($typesToRedoBatch) + count($types);
+
+        $typesToUse = $typesToRedoBatch;
+        for ($i=0; $i < $totalKnownSymbolsCount; $i++) {
+            $changesMade = false;
+            $schemaContent = implode("\n", $typesToUse);
+            foreach ($types as $type => $schema) {
+                if ((!isset($typesToUse[$type]) && strpos($schemaContent, $type) !== false)) {
+                    $typesToUse[$type] = $schema;
+                    $changesMade = true;
+                }
+            }
+            if (!$changesMade) {
+                break;
+            }
+        }
+        return $typesToUse;
     }
 
     /**
@@ -261,6 +357,17 @@ class GraphQlReader implements ReaderInterface
         $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
         $spacePattern = '([\s\t\n\r]+)';
 
+        // TODO review this workaround
+        // Replace enums before types, there is a bug in which some enums are caught by the type regex
+        // If we process them first they will have their placeholder inserted appropriately without the :String suffix
+        // This means they will not be caught by the following preg_replace
+        //add placeholder in empty enums
+        $graphQlSchemaContent = preg_replace(
+            "/{$enumKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
+            "\$1\$2\$3\$4\$5{\n{$placeholderField}\n}",
+            $graphQlSchemaContent
+        );
+
         //add placeholder in empty types
         $graphQlSchemaContent = preg_replace(
             "/{$typesKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
@@ -268,12 +375,6 @@ class GraphQlReader implements ReaderInterface
             $graphQlSchemaContent
         );
 
-        //add placeholder in empty enums
-        $graphQlSchemaContent = preg_replace(
-            "/{$enumKindsPattern}{$spacePattern}{$typeNamePattern}{$spacePattern}{$typeDefinitionPattern}/im",
-            "\$1\$2\$3\$4\$5{\n{$placeholderField}\n}",
-            $graphQlSchemaContent
-        );
         return $graphQlSchemaContent;
     }
 
@@ -297,50 +398,5 @@ class GraphQlReader implements ReaderInterface
             }
         }
         return $partialResults;
-    }
-
-    /**
-     * Get a module name by file path
-     *
-     * @param string $file
-     * @return string
-     */
-    private static function getModuleNameForRelevantFile(string $file): string
-    {
-        if (!isset(self::$componentRegistrar)) {
-            self::$componentRegistrar = new ComponentRegistrar();
-        }
-        $foundModuleName = '';
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-            if (strpos($file, $moduleDir . '/') !== false) {
-                $foundModuleName = str_replace('_', '\\', $moduleName);
-                break;
-            }
-        }
-
-        return $foundModuleName;
-    }
-
-    /**
-     * Add a module name to types
-     *
-     * @param array $source
-     * @param string $filePath
-     * @return array
-     */
-    private function addModuleNameToTypes(array $source, string $filePath): array
-    {
-        foreach ($source as $typeName => $typeDefinition) {
-            if (!isset($typeDefinition['module'])) {
-                $hasTypeResolver = (bool)($typeDefinition['typeResolver'] ?? false);
-                $hasImplements = (bool)($typeDefinition['implements'] ?? false);
-                $typeDefinition = (bool)($typeDefinition['type'] ?? false);
-                if ((($typeDefinition === InterfaceType::GRAPHQL_INTERFACE && $hasTypeResolver) || $hasImplements)) {
-                    $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
-                }
-            }
-        }
-
-        return $source;
     }
 }
