@@ -48,7 +48,7 @@
         <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage">
             <argument name="CMSBlockPage" value="$createBlock$"/>
         </actionGroup>
-        <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
+        <click selector="{{TinyMCESection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForInitialPageLoad" />
         <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderNewCreateButton}}" stepKey="waitForNewFolderButton"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
