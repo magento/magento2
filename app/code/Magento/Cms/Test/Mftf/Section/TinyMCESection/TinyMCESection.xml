@@ -10,25 +10,25 @@
     <section name="TinyMCESection">
         <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
-        <element name="TinyMCE" type="text" selector=".mce-branding"/>
+        <element name="TinyMCE" type="text" selector=".tox-tinymce"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
         <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']" timeout="30"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
-        <element name="InsertImageIcon" type="button" selector=".mce-i-image" timeout="30"/>
-        <element name="Style" type="button" selector=".mce-txt"/>
-        <element name="Bold" type="button" selector=".mce-i-bold"/>
-        <element name="Italic" type="button" selector=".mce-i-italic"/>
-        <element name="Underline" type="button" selector=".mce-i-underline"/>
-        <element name="AlignLeft" type="button" selector=".mce-i-alignleft"/>
-        <element name="AlignCenter" type="button" selector=".mce-i-aligncenter"/>
-        <element name="AlignRight" type="button" selector=".mce-i-alignright"/>
-        <element name="Bullet" type="button" selector=".mce-i-bullist"/>
-        <element name="Numlist" type="button" selector=".mce-i-numlist"/>
-        <element name="InsertLink" type="button" selector=".mce-i-link"/>
-        <element name="InsertTable" type="button" selector=".mce-i-table"/>
-        <element name="SpecialCharacter" type="button" selector=".mce-i-charmap"/>
+        <element name="InsertImageIcon" type="button" selector="//button[contains(@title,'image')]" timeout="30"/>
+        <element name="Style" type="button" selector="//button[contains(@title,'Formats')]"/>
+        <element name="Bold" type="button" selector="//button[contains(@title,'Bold')]"/>
+        <element name="Italic" type="button" selector="//button[contains(@title,'Italic')]"/>
+        <element name="Underline" type="button" selector="//button[contains(@title,'Underline')]"/>
+        <element name="AlignLeft" type="button" selector="//button[contains(@title,'left')]"/>
+        <element name="AlignCenter" type="button" selector="//button[contains(@title,'center')]"/>
+        <element name="AlignRight" type="button" selector="//button[contains(@title,'right')]"/>
+        <element name="Bullet" type="button" selector="//div[contains(@title,'Bullet')]"/>
+        <element name="Numlist" type="button" selector="//div[contains(@title,'Numbered')]"/>
+        <element name="InsertLink" type="button" selector="//button[contains(@title,'link')]"/>
+        <element name="InsertTable" type="button" selector="//button[contains(@title,'Table')]"/>
+        <element name="SpecialCharacter" type="button" selector="//button[contains(@title,'Special')]"/>
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
         <element name="EditorContent" type="input" selector="#tinymce"/>
         <element name="Content" type="textarea" selector="textarea"/>
