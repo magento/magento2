@@ -390,11 +390,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->setCustomerId(null);
             $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
             if ($quote->getCustomerFirstname() === null && $quote->getCustomerLastname() === null) {
+                $quote->setCustomerPrefix($quote->getBillingAddress()->getPrefix());
                 $quote->setCustomerFirstname($quote->getBillingAddress()->getFirstname());
+                $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
                 $quote->setCustomerLastname($quote->getBillingAddress()->getLastname());
-                if ($quote->getBillingAddress()->getMiddlename() === null) {
-                    $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
-                }
+                $quote->setCustomerSuffix($quote->getBillingAddress()->getSuffix());
             }
             $quote->setCustomerIsGuest(true);
             $groupId = $quote->getCustomer()->getGroupId() ?: GroupInterface::NOT_LOGGED_IN_ID;
