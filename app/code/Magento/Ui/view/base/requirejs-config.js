@@ -49,11 +49,4 @@ if (typeof window !== 'undefined' && window.document) {
     if (typeof MutationObserver === 'undefined') {
         config.deps.push('MutationObserver');
     }
-
-    /**
-     * Polyfill FormData object for old browsers that don't have full support for it.
-     */
-    if (typeof FormData === 'undefined' || typeof FormData.prototype.get === 'undefined') {
-        config.deps.push('FormData');
-    }
 }
