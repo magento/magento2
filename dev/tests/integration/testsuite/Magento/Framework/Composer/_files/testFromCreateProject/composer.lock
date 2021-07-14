@@ -2673,10 +2673,6 @@
                         "lib/web/requirejs"
                     ],
                     [
-                        "lib/web/scriptaculous",
-                        "lib/web/scriptaculous"
-                    ],
-                    [
                         "lib/web/spacer.gif",
                         "lib/web/spacer.gif"
                     ],

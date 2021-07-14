@@ -548,10 +548,6 @@
                         "lib/web/blank.html"
                     ],
                     [
-                        "lib/web/scriptaculous",
-                        "lib/web/scriptaculous"
-                    ],
-                    [
                         "lib/web/ko",
                         "lib/web/ko"
                     ],
