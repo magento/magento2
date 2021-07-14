@@ -5,17 +5,14 @@
 
 define([
     'jquery',
-    'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
-    'Magento_Ui/js/modal/alert',
-    'Magento_Ui/js/modal/confirm',
     'underscore',
     'jquery-ui-modules/widget',
     'mage/decorate',
     'mage/collapsible',
     'mage/cookies',
     'jquery-ui-modules/effect-fade'
-], function ($, authenticationPopup, customerData, alert, confirm, _) {
+], function ($, customerData, _) {
     'use strict';
 
     $.widget('mage.sidebar', {
@@ -73,7 +70,9 @@ define([
                         element.prop('disabled', true);
                         location.href = this.options.url.loginUrl;
                     } else {
-                        authenticationPopup.showModal();
+                        require(['Magento_Customer/js/model/authentication-popup'], function (authenticationPopup) {
+                            authenticationPopup.showModal();
+                        });
                     }
 
                     return false;
@@ -87,19 +86,21 @@ define([
              */
             events['click ' + this.options.button.remove] =  function (event) {
                 event.stopPropagation();
-                confirm({
-                    content: self.options.confirmMessage,
-                    actions: {
-                        /** @inheritdoc */
-                        confirm: function () {
-                            self._removeItem($(event.currentTarget));
-                        },
+                require(['Magento_Ui/js/modal/confirm'], function (confirm) {
+                    confirm({
+                        content: self.options.confirmMessage,
+                        actions: {
+                            /** @inheritdoc */
+                            confirm: function () {
+                                self._removeItem($(event.currentTarget));
+                            },
 
-                        /** @inheritdoc */
-                        always: function (e) {
-                            e.stopImmediatePropagation();
+                            /** @inheritdoc */
+                            always: function (e) {
+                                e.stopImmediatePropagation();
+                            }
                         }
-                    }
+                    });
                 });
             };
 
@@ -306,8 +307,10 @@ define([
                         msg = response['error_message'];
 
                         if (msg) {
-                            alert({
-                                content: msg
+                            require(['Magento_Ui/js/modal/alert'], function (alert) {
+                                alert({
+                                    content: msg
+                                });
                             });
                         }
                     }

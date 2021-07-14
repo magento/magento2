@@ -8,9 +8,8 @@ define([
     'uiRegistry',
     'mage/translate',
     '../template/renderer',
-    'jquery',
-    '../../logger/console-logger'
-], function (ko, registry, $t, renderer, $, consoleLogger) {
+    'jquery'
+], function (ko, registry, $t, renderer, $) {
     'use strict';
 
     /**
@@ -58,23 +57,28 @@ define([
         update: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
             var component = valueAccessor(),
                 promise = $.Deferred(),
-                apply = applyComponents.bind(this, el, bindingContext, promise),
-                loggerUtils = consoleLogger.utils;
+                apply = applyComponents.bind(this, el, bindingContext, promise);
 
             if (typeof component === 'string') {
-                loggerUtils.asyncLog(
-                    promise,
-                    {
-                        data: {
-                            component: component
-                        },
-                        messages: loggerUtils.createMessages(
-                            'requestingComponent',
-                            'requestingComponentIsLoaded',
-                            'requestingComponentIsFailed'
-                        )
-                    }
-                );
+                require([
+                    'Magento_Ui/js/lib/logger/console-logger'
+                ], function (consoleLogger) {
+                    var loggerUtils = consoleLogger.utils;
+
+                    loggerUtils.asyncLog(
+                        promise,
+                        {
+                            data: {
+                                component: component
+                            },
+                            messages: loggerUtils.createMessages(
+                                'requestingComponent',
+                                'requestingComponentIsLoaded',
+                                'requestingComponentIsFailed'
+                            )
+                        }
+                    );
+                });
 
                 registry.get(component, apply);
             } else if (typeof component === 'function') {

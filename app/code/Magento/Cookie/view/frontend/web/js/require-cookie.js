@@ -8,11 +8,10 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/alert',
     'jquery-ui-modules/widget',
     'mage/mage',
     'mage/translate'
-], function ($, alert) {
+], function ($) {
     'use strict';
 
     $.widget('mage.requireCookie', {
@@ -59,8 +58,10 @@ define([
             if (this.options.isRedirectCmsPage) {
                 window.location = this.options.noCookieUrl;
             } else {
-                alert({
-                    content: $.mage.__('Cookies are disabled in your browser.')
+                require(['Magento_Ui/js/modal/alert'], function (alert) {
+                    alert({
+                        content: $.mage.__('Cookies are disabled in your browser.')
+                    });
                 });
             }
         }
