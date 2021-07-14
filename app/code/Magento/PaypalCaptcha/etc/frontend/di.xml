@@ -13,4 +13,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Captcha\Block\Captcha\Checkout\DisableCaptchaProcessor">
+        <plugin name="disable_paypal_captcha" type="Magento\PaypalCaptcha\Plugin\DisableCaptcha"/>
+    </type>
 </config>

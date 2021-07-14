@@ -34,6 +34,20 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Block\Account\AuthenticationPopup">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="captcha" xsi:type="object">Magento\Captcha\Block\Captcha\Customer\DisableCaptchaProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="captcha" xsi:type="object">Magento\Captcha\Block\Captcha\Checkout\DisableCaptchaProcessor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Api\OrderManagementInterface">
         <plugin name="reset_payment_attempts_after_order_is_placed_plugin" type="Magento\Captcha\Plugin\ResetPaymentAttemptsAfterOrderIsPlacedPlugin"/>
     </type>

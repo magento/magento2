@@ -32,4 +32,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Captcha\Block\Captcha\Checkout\DisableCaptchaProcessor">
+        <plugin name="disable_discount_captcha" type="Magento\SalesRule\Plugin\DisableCaptcha"/>
+    </type>
 </config>

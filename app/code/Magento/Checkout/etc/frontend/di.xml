@@ -100,6 +100,9 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
     </type>
+    <type name="Magento\Captcha\Block\Captcha\Checkout\DisableCaptchaProcessor">
+        <plugin name="disable_place_order_captcha" type="Magento\Checkout\Plugin\DisableCaptcha"/>
+    </type>
     <type name="Magento\Captcha\CustomerData\Captcha">
         <arguments>
             <argument name="formIds" xsi:type="array">
