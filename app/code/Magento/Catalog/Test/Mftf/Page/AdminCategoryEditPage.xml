@@ -16,6 +16,7 @@
         <section name="AdminCategorySEOSection"/>
         <section name="AdminCategoryProductsSection"/>
         <section name="AdminCategoryProductsGridSection"/>
+        <section name="AdminCategoryProductsGridFilterSection"/>
         <section name="AdminCategoryModalSection"/>
         <section name="AdminCategoryMessagesSection"/>
         <section name="AdminCategoryContentSection"/>
