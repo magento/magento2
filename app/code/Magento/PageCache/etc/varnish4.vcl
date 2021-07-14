@@ -159,7 +159,7 @@ sub vcl_backend_response {
 
     # cache only successfully responses and 404s
     if (beresp.status != 200 && beresp.status != 404) {
-        set beresp.ttl = 0s;
+        set beresp.ttl = 120s;
         set beresp.uncacheable = true;
         return (deliver);
     } elsif (beresp.http.Cache-Control ~ "private") {
