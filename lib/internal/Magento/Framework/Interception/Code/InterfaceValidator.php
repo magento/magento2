@@ -172,7 +172,10 @@ class InterfaceValidator
     protected function getParametersType(ReflectionParameter $parameter)
     {
         $parameterClass = $this->getParameterClass($parameter);
-        return $parameterClass ? '\\' . $parameterClass->getName() : ($parameter->isArray() ? 'array' : null);
+        $parameterType = $parameter->getType();
+        return $parameterClass ?
+            '\\' . $parameterClass->getName() :
+            ($parameterType && $parameterType->getName() === 'array' ? 'array' : null);
     }
 
     /**

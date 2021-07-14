@@ -21,13 +21,13 @@ Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a 
 
 ## Magento System Requirements
 
-[Magento System Requirements](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html).
+* [Magento System Requirements](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html)
 
 ## Install Magento
 
-* [Installation Guide](https://devdocs.magento.com/guides/v2.4/install-gde/bk-install-guide.html).
+* [Installation Guide](https://devdocs.magento.com/guides/v2.4/install-gde/bk-install-guide.html)
 
-## Learn More About GraphQL in Magento 2
+## Learn About GraphQL in Magento 2
 
 * [GraphQL Developer Guide](https://devdocs.magento.com/guides/v2.4/graphql/index.html)
 
@@ -37,12 +37,14 @@ Contributions can take the form of new components or features, changes to existi
 
 To learn about how to contribute, click [here][1].
 
-To learn about issues, click [here][2]. To open an issue, click [here][3].
+To learn about issues, click [here][2].
+
+To open an issue, click [here][3].
 
 To suggest documentation improvements, click [here][4].
 
-[1]: https://devdocs.magento.com/guides/v2.4/contributor-guide/contributing.html
-[2]: https://devdocs.magento.com/guides/v2.4/contributor-guide/contributing.html#report
+[1]: https://devdocs.magento.com/contributor-guide/contributing.html
+[2]: https://devdocs.magento.com/contributor-guide/contributing.html#report
 [3]: https://github.com/magento/magento2/issues
 [4]: https://devdocs.magento.com
 
@@ -61,7 +63,7 @@ Magento is thankful for any contribution that can improve our codebase, document
 ### Labels Applied by the Magento Team
 
 We apply labels to public Pull Requests and Issues to help other participants retrieve additional information about current progress, component assignments, Magento release lines, and much more.
-Please review the [Code Contributions guide](https://devdocs.magento.com/guides/v2.4/contributor-guide/contributing.html#labels) for detailed information on labels used in Magento 2 repositories.
+Please review the [Code Contributions guide](https://devdocs.magento.com/contributor-guide/contributing.html#labels) for detailed information on labels used in Magento 2 repositories.
 
 ## Reporting Security Issues
 
@@ -85,6 +87,6 @@ To connect with Magento and the Community, join us on the [Magento Community Eng
 
 We have channels for each project. These channels are recommended for new members:
 
-* [general](https://magentocommeng.slack.com/messages/C4YS78WE6): Open chat for introductions and Magento 2 questions
-* [github](https://magentocommeng.slack.com/messages/C7KB93M32): Support for GitHub issues, pull requests, and processes
-* [public-backlog](https://magentocommeng.slack.com/messages/CCV3J3RV5): Discussions of the Magento 2 backlog
+* [general](https://magentocommeng.slack.com/archives/C4YS78WE6): Open chat for introductions and Magento 2 questions
+* [github](https://magentocommeng.slack.com/archives/C7KB93M32): Support for GitHub issues, pull requests, and processes
+* [public-backlog](https://magentocommeng.slack.com/archives/CCV3J3RV5): Discussions of the Magento 2 backlog
