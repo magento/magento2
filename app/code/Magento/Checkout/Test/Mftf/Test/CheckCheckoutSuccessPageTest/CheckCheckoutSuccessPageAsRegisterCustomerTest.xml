@@ -50,7 +50,7 @@
             <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront">
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToSimpleProductPage">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCatalogPageLoad"/>
@@ -72,7 +72,7 @@
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeMyOrderPage"/>
        
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToProductOnStorefront2">
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToSimpleProductPage2">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCatalogPageLoad2"/>
