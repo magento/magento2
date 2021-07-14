@@ -16,6 +16,20 @@
                     <argument name="default_dir" xsi:type="string">ASC</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                 </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="adminhtml.tax.rate.set.grid.massaction" as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">tax_calculation_rate_id</argument>
+                        <argument name="form_field_name" xsi:type="string">tax_rate_ids</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="Delete" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Delete items</item>
+                                <item name="url" xsi:type="string">tax/rate/massDelete</item>
+                                <item name="confirm" xsi:type="string" translate="true">Delete selected items?</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
                 <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.catalog.product.set.grid.columnSet" as="grid.columnSet">
                     <arguments>
                         <argument name="id" xsi:type="string">tax_rate_grid</argument>
