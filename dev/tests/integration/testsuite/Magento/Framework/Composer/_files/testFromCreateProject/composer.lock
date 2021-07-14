@@ -2581,10 +2581,6 @@
                         "lib/web/FormData.js"
                     ],
                     [
-                        "lib/web/MutationObserver.js",
-                        "lib/web/MutationObserver.js"
-                    ],
-                    [
                         "lib/web/blank.html",
                         "lib/web/blank.html"
                     ],
