@@ -11,6 +11,7 @@
 @minicart__padding-horizontal: @indent__base;
 
 @minicart-qty__height: 24px;
+@minicart-update-cart-item__transition: opacity .3s;
 
 //
 //  Common
@@ -354,6 +355,15 @@
             .lib-font-size(11);
             margin-left: 5px;
             vertical-align: top;
+            pointer-events: none;
+            opacity: 0;
+            .lib-css(transition, @minicart-update-cart-item__transition);
+
+            &.show {
+                display: inline-block;
+                opacity: 1;
+                pointer-events: initial;
+            }
         }
 
         .subtitle {
