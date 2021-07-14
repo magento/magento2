@@ -172,6 +172,62 @@ class TransportBuilderTest extends TestCase
     }
 
     /**
+     * @dataProvider getTransportDataProvider
+     * @param int $templateType
+     * @param string $bodyText
+     * @param string $templateNamespace
+     * @return void
+     */
+    public function testGetTransportWithAttachment($templateType, $bodyText, $templateNamespace)
+    {
+
+        $this->builder->setTemplateModel($templateNamespace);
+
+        $vars = ['reason' => 'Reason', 'customer' => 'Customer'];
+        $options = ['area' => 'frontend', 'store' => 1];
+        $attachmentAbsolutePath = dirname(dirname(__DIR__)) . '/_files/mail/template/attachment/sample.pdf';
+
+        $this->builder->addAttachment(file_get_contents($attachmentAbsolutePath), 'document.pdf', null);
+
+        /** @var MimePartInterface|MockObject $mimePartMock */
+        $mimePartMock = $this->getMockForAbstractClass(MimePartInterface::class);
+
+        $this->mimePartFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($mimePartMock);
+
+        /** @var EmailMessageInterface|MockObject $emailMessage */
+        $emailMessage = $this->getMockForAbstractClass(EmailMessageInterface::class);
+
+        $this->emailMessageInterfaceFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($emailMessage);
+
+        $template = $this->getMockForAbstractClass(TemplateInterface::class);
+        $template->expects($this->once())->method('setVars')->with($vars)->willReturnSelf();
+        $template->expects($this->once())->method('setOptions')->with($options)->willReturnSelf();
+        $template->expects($this->once())->method('getSubject')->willReturn('Email Subject');
+        $template->expects($this->once())->method('getType')->willReturn($templateType);
+        $template->expects($this->once())->method('processTemplate')->willReturn($bodyText);
+
+        $this->templateFactoryMock->expects($this->once())
+            ->method('get')
+            ->with('identifier', $templateNamespace)
+            ->willReturn($template);
+
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+
+        $this->mailTransportFactoryMock->expects($this->at(0))
+            ->method('create')
+            ->willReturn($transport);
+
+        $this->builder->setTemplateIdentifier('identifier')->setTemplateVars($vars)->setTemplateOptions($options);
+
+        $result = $this->builder->getTransport();
+        $this->assertInstanceOf(TransportInterface::class, $result);
+    }
+
+    /**
      * Test get transport with exception
      */
     public function testGetTransportWithException()

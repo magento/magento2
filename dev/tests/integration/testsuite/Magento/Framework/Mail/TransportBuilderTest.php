@@ -76,6 +76,10 @@ class TransportBuilderTest extends TestCase
         $options = ['area' => 'frontend', 'store' => 1];
         $this->builder->setTemplateIdentifier($templateId)->setTemplateVars($vars)->setTemplateOptions($options);
 
+        $sampleAttachmentFixturePath = __DIR__ . '/_files/sample.pdf';
+
+        $this->builder->addAttachment(file_get_contents($sampleAttachmentFixturePath), 'attachment1.pdf');
+
         $this->builder->addTo($email);
 
         /** @var EmailMessage $emailMessage */

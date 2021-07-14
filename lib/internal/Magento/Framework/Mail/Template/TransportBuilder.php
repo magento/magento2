@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail\Template;
 
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
@@ -102,6 +104,11 @@ class TransportBuilder
      * @var TransportInterfaceFactory
      */
     protected $mailTransportFactory;
+
+    /**
+     * @var array
+     */
+    protected $attachments = [];
 
     /**
      * Param that used for storing all message data until it will be used
@@ -343,6 +350,29 @@ class TransportBuilder
     }
 
     /**
+     * @param string $content
+     * @param string $fileName
+     * @param string|null $fileType
+     *
+     * @return $this
+     * @throws InvalidArgumentException
+     */
+    public function addAttachment(string $content, string $fileName, ?string $fileType = Mime::TYPE_OCTETSTREAM)
+    {
+        $attachmentPart = new Part();
+
+        $attachmentPart->setContent($content)
+            ->setType($fileType)
+            ->setFileName($fileName)
+            ->setDisposition(Mime::DISPOSITION_ATTACHMENT)
+            ->setEncoding(Mime::ENCODING_BASE64);
+
+        $this->attachments[] = $attachmentPart;
+
+        return $this;
+    }
+
+    /**
      * Reset object state
      *
      * @return $this
@@ -353,6 +383,8 @@ class TransportBuilder
         $this->templateIdentifier = null;
         $this->templateVars = null;
         $this->templateOptions = null;
+        $this->attachments = [];
+
         return $this;
     }
 
@@ -401,9 +433,12 @@ class TransportBuilder
                 'type' => $partType
             ]
         );
+
+        $parts = count($this->attachments) ? array_merge([$mimePart], $this->attachments) : [$mimePart];
+
         $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
-            ['parts' => [$mimePart]]
+            ['parts' => $parts]
         );
 
         $this->messageData['subject'] = html_entity_decode(
