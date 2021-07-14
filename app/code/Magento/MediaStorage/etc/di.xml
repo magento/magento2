@@ -6,6 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\StaticResource">
+        <arguments>
+            <argument name="response" xsi:type="object" shared="false">Magento\MediaStorage\Model\File\Storage\Response</argument>
+        </arguments>
+    </type>
     <type name="Magento\MediaStorage\Helper\File\Storage">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\MediaStorage\Model\File\Storage\Proxy</argument>

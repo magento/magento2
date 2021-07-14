@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <type name="Magento\Framework\App\FrontController">
         <plugin name="requestPreprocessor" type="Magento\Store\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
     </type>

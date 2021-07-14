@@ -7,9 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
-    <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
-    <preference for="Magento\Framework\Crontab\CrontabManagerInterface" type="Magento\Framework\Crontab\CrontabManager" />
-    <preference for="Magento\Framework\Crontab\TasksProviderInterface" type="Magento\Framework\Crontab\TasksProvider" />
+    <preference for="Magento\Cron\Model\DeadlockRetrierInterface" type="Magento\Cron\Model\DeadlockRetrier" />
     <type name="Magento\Config\Model\Config\Structure\Converter">
         <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
     </type>
@@ -49,27 +47,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\AreaList">
-        <arguments>
-            <argument name="areas" xsi:type="array">
-                <item name="crontab" xsi:type="null" />
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Crontab\CrontabManagerInterface">
-        <arguments>
-            <argument name="shell" xsi:type="object">Magento\Framework\App\Shell</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Crontab\TasksProviderInterface">
-        <arguments>
-            <argument name="tasks" xsi:type="array">
-                <item name="cronMagento" xsi:type="array">
-                    <item name="command" xsi:type="string">{magentoRoot}bin/magento cron:run | grep -v "Ran jobs by schedule" >> {magentoLog}magento.cron.log</item>
-                    <item name="optional" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <preference for="Magento\Cron\Model\DeadlockRetrierInterface" type="Magento\Cron\Model\DeadlockRetrier" />
 </config>

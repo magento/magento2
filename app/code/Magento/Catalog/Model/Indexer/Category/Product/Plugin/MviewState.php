@@ -38,7 +38,7 @@ class MviewState
         \Magento\Framework\Mview\View\StateInterface $state,
         \Magento\Framework\Mview\View\ChangelogInterface $changelog
     ) {
-        $this->state = $state;
+        $this->state = $state;// TODO should be replaced by a factory
         $this->changelog = $changelog;
     }
 

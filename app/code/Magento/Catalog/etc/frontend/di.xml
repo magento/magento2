@@ -115,7 +115,7 @@
         <plugin name="catalog_app_action_dispatch_controller_context_plugin"
                 type="Magento\Catalog\Plugin\Framework\App\Action\ContextPlugin" />
     </type>
-    <type name="\Magento\PageCache\Model\PageCacheTagsPreprocessorComposite">
+    <type name="Magento\PageCache\Model\PageCacheTagsPreprocessorComposite">
         <arguments>
             <argument name="preprocessors" xsi:type="array">
                 <item name="catalog_product_view" xsi:type="array">
