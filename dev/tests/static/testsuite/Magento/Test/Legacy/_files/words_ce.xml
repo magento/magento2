@@ -23,6 +23,7 @@
         <word>secure_base_url}}skin/</word>
         <word>secure_base_url}}media/</word>
         <word>head.js</word>
+        <word>tinymce4</word>
         <!-- typos -->
         <word>overriden</word>
         <word>retrive</word>
@@ -72,6 +73,17 @@
         <item>
             <path>app/design/adminhtml/Magento/backend/Magento_Rma/web/css/source/_module.less</path>
             <word>rma</word>
+        </item>
+        <item>
+            <component type="module" name="Magento_Config" />
+            <path>Setup/Patch/Data/UnsetTinymce3.php</path>
+            <path>Setup/Patch/Data/RemoveTinymceConfig.php</path>
+            <word>tinymce4</word>
+        </item>
+        <item>
+            <component type="module" name="Magento_Config" />
+            <path>Setup/Patch/Data/RemoveTinymceConfig.php</path>
+            <word>tinymce4</word>
         </item>
     </whitelist>
 </config>
