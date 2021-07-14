@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDatabaseMediaStorageTest">
+        <annotations>
+            <features value="MediaStorage"/>
+            <stories value="Database media storage"/>
+            <title value="Storefront database media storage test"/>
+            <description
+                value="Verify product image correctly resized if database media storage is enabled"/>
+            <severity value="CRITICAL"/>
+            <group value="MediaStorage"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{DatabaseSystemMediaStorage.path}} {{DatabaseSystemMediaStorage.value}}"
+                        stepKey="enableDatabaseMediaStorage"/>
+            <magentoCLI
+                command="config:set {{DefaultSetupSystemMediaDatabase.path}} {{DefaultSetupSystemMediaDatabase.value}}"
+                stepKey="setDefaultMediaDatabase"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <magentoCLI
+                command="config:set {{FilesystemSystemMediaStorage.path}} {{FilesystemSystemMediaStorage.value}}"
+                stepKey="disableDatabaseMediaStorage"/>
+        </after>
+
+        <!-- Add an Image to Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+
+        <!-- Go to the admin grid and see the uploaded image -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex3"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSeeProductThumbnailInGridActionGroup" stepKey="seeProductThumbnailInGrid">
+            <argument name="pattern" value=".png"/>
+        </actionGroup>
+
+        <!-- Go to the category page and see the uploaded image -->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSeeProductImageOnCategoryPageActionGroup" stepKey="seeProductImageInCategoryPage">
+            <argument name="pattern" value=".png"/>
+        </actionGroup>
+
+        <!-- Go to the product page and see the uploaded image -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToFirstProductPageSecondTime">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductImageStorefrontProductPage2ActionGroup" stepKey="seeProductImageInProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+    </test>
+</tests>
