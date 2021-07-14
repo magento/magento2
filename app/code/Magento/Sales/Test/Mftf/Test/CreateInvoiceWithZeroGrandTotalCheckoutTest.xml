@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateInvoiceWithZeroGrandTotalCheckoutTest">
+        <annotations>
+            <stories value="Create Invoice for Offline Payment Methods"/>
+            <title value="Create invoice with zero grandTotal checkout test"/>
+            <description value="Create invoice with with zero grandTotal checkout"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-*"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">10</field>
+            </createData>
+            <!-- Create sales rule discount 100% with coupon -->
+            <createData entity="SalesRuleSpecificCouponWithHundredPercentDiscount" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
+            <!-- Catalog Prices and Apply Discount On Prices switched to Including Tax -->
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 1"  stepKey="setCatalogPriceConfigToIncludingTax"/>
+            <magentoCLI command="config:set tax/calculation/discount_tax 1"  stepKey="setApplyDiscountOnPricesConfigToIncludingTax"/>
+            <!--Create tax rate for US-CA-*-->
+            <createData entity="defaultTaxRate" stepKey="taxRate"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Create tax rule-->
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$taxRate$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="taxRate" stepKey="deleteTaxRate"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Catalog Prices and Apply Discount On Prices switched to Excluding Tax -->
+            <magentoCLI command="config:set tax/calculation/price_includes_tax 0"  stepKey="setCatalogPriceConfigToExcludingTax"/>
+            <magentoCLI command="config:set tax/calculation/discount_tax 0"  stepKey="setApplyDiscountOnPricesConfigToExcludingTax"/>
+        </after>
+        <!-- Create order -->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminApplyCouponToOrderActionGroup" stepKey="applyCoupon">
+            <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="orderId" value="$getOrderId"/>
+        </actionGroup>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="openFilteredOrder"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceTab"/>
+        <!-- Check that invoice item row total and order grand total are equal zero -->
+        <see selector="{{AdminInvoiceTotalSection.itemTotalPrice}}" userInput="$0.00" stepKey="seeCorrectItemRowTotal"/>
+        <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$0.00" stepKey="seeCorrectOrderGrandTotal"/>
+    </test>
+</tests>
