@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Review\Model\Review\Config as ReviewsConfig;
 use Magento\ReviewGraphQl\Model\DataProvider\AggregatedReviewsDataProvider;
 use Magento\ReviewGraphQl\Model\DataProvider\ProductReviewsDataProvider;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Product reviews resolver, used by GraphQL endpoints to retrieve product's reviews
@@ -91,12 +92,16 @@ class Reviews implements ResolverInterface
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
 
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+
         /** @var Product $product */
         $product = $value['model'];
         $reviewsCollection = $this->productReviewsDataProvider->getData(
             (int) $product->getId(),
             $args['currentPage'],
-            $args['pageSize']
+            $args['pageSize'],
+            (int) $store->getId()
         );
 
         return $this->aggregatedReviewsDataProvider->getData($reviewsCollection);
