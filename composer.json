@@ -65,6 +65,7 @@
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
+        "nikic/php-parser": "~4.4.0",
         "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~2.10.0",
@@ -76,9 +77,9 @@
         "symfony/process": "~4.4.0",
         "tedivm/jshrink": "~1.4.0",
         "tubalmartin/cssmin": "4.1.1",
+        "web-token/jwt-framework": "^v2.2.7",
         "webonyx/graphql-php": "^0.13.8",
-        "wikimedia/less.php": "^3.0.0",
-        "web-token/jwt-framework": "^v2.2.7"
+        "wikimedia/less.php": "^3.0.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.4",
