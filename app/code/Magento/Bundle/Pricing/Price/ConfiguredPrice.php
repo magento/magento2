@@ -48,6 +48,7 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @var ConfiguredPriceSelection
      */
     private $configuredPriceSelection;
+
     /**
      * @var DiscountCalculator
      */
