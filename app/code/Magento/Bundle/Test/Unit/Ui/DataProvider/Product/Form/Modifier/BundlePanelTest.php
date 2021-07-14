@@ -24,6 +24,11 @@ use PHPUnit\Framework\TestCase;
 class BundlePanelTest extends TestCase
 {
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var UrlInterface|MockObject
      */
     private $urlBuilder;

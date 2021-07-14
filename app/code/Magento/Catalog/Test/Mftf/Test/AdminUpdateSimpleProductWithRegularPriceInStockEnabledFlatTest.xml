@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
             <skip>
                 <issueId value="DEPRECATED">Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead</issueId>
-            </skip> 
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -108,7 +108,7 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductEnabledFlat.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer see updated simple product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{simpleProductEnabledFlat.name}}" stepKey="seeSimpleProductNameOnCategoryPage"/>
 

@@ -298,7 +298,7 @@ class Price
 
         $custGroup = $this->_getCustomerGroupId($product);
         if ($qty) {
-            $prevQty = 1;
+            $prevQty = 0;
             $prevPrice = $product->getPrice();
             $prevGroup = $allGroupsId;
 

@@ -11,14 +11,14 @@
                   css="getAdjustmentCssClasses($row())">
                 <span if="label && hasSpecialPrice($row())"
                       class="price-label"
-                      text="label"/>
+                      text="label"></span>
 
                 <span class="price-wrapper"
                       css="priceWrapperCssClasses"
                       attr="priceWrapperAttr"
                       data-price-amount=""
                       data-price-type=""
-                      html="getRegularPrice($row())"/>
+                      html="getRegularPriceUnsanitizedHtml($row())"></span>
 
                 <if args="!hasSpecialPrice($row())">
                     <each args="data: getAdjustments(), as: '$adj'">
