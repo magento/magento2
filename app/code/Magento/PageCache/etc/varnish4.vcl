@@ -119,26 +119,18 @@ sub vcl_recv {
 sub vcl_hash {
     if (req.http.cookie ~ "X-Magento-Vary=") {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
+    } else {
+        hash_data("");
     }
 
     if (req.url ~ "/graphql") {
-        call process_graphql_headers;
+        hash_data(req.http.Store);
+        hash_data(req.http.Content-Currency);
     }
 
     # To make sure http users don't see ssl warning
-    if (req.http./* {{ ssl_offloaded_header }} */) {
-        hash_data(req.http./* {{ ssl_offloaded_header }} */);
-    }
+    hash_data(req.http./* {{ ssl_offloaded_header }} */);
     /* {{ design_exceptions_code }} */
-}
-
-sub process_graphql_headers {
-    if (req.http.Store) {
-        hash_data(req.http.Store);
-    }
-    if (req.http.Content-Currency) {
-        hash_data(req.http.Content-Currency);
-    }
 }
 
 sub vcl_backend_response {
