@@ -5,65 +5,94 @@
  */
 namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Collection\Synchronized;
 
+use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
+use Magento\AdminNotification\Model\System\MessageFactory;
+use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
+use Magento\AsynchronousOperations\Model\Operation\Details;
+use Magento\AsynchronousOperations\Model\StatusMapper;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Bulk\BulkStatusInterface;
+use Magento\Framework\Bulk\BulkSummaryInterface;
+use Magento\Framework\Bulk\GetBulksByUserAndTypeInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Notification\MessageInterface;
+
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Plugin
 {
+    private const BULK_LOGGING_ACL = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
+
     /**
-     * @var \Magento\AdminNotification\Model\System\MessageFactory
+     * @var MessageFactory
      */
     private $messageFactory;
 
     /**
-     * @var \Magento\Framework\Bulk\BulkStatusInterface
+     * @var BulkStatusInterface
      */
     private $bulkStatus;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
+     * @var UserContextInterface
      */
     private $userContext;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\Operation\Details
+     * @var Details
      */
     private $operationDetails;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\BulkNotificationManagement
+     * @var BulkNotificationManagement
      */
     private $bulkNotificationManagement;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
-     */
-    private $authorization;
-
-    /**
-     * @var \Magento\AsynchronousOperations\Model\StatusMapper
+     * @var StatusMapper
      */
     private $statusMapper;
 
     /**
-     * Plugin constructor.
-     *
-     * @param \Magento\AdminNotification\Model\System\MessageFactory $messageFactory
-     * @param \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus
-     * @param \Magento\AsynchronousOperations\Model\BulkNotificationManagement $bulkNotificationManagement
-     * @param \Magento\Authorization\Model\UserContextInterface $userContext
-     * @param \Magento\AsynchronousOperations\Model\Operation\Details $operationDetails
-     * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\AsynchronousOperations\Model\StatusMapper $statusMapper
+     * @var AuthorizationInterface|mixed|null
+     */
+    private $authorization;
+
+    /**
+     * @var Encryptor
+     */
+    private $encryptor;
+
+    /**
+     * @var GetBulksByUserAndTypeInterface|null
+     */
+    private $getBulksByUserAndType;
+
+    /**
+     * @param MessageFactory $messageFactory
+     * @param BulkStatusInterface $bulkStatus
+     * @param BulkNotificationManagement $bulkNotificationManagement
+     * @param UserContextInterface $userContext
+     * @param Details $operationDetails
+     * @param AuthorizationInterface $authorization
+     * @param StatusMapper $statusMapper
+     * @param Encryptor|null $encryptor
+     * @param GetBulksByUserAndTypeInterface|null $getBulksByUserAndType
      */
     public function __construct(
-        \Magento\AdminNotification\Model\System\MessageFactory $messageFactory,
-        \Magento\Framework\Bulk\BulkStatusInterface $bulkStatus,
-        \Magento\AsynchronousOperations\Model\BulkNotificationManagement $bulkNotificationManagement,
-        \Magento\Authorization\Model\UserContextInterface $userContext,
-        \Magento\AsynchronousOperations\Model\Operation\Details $operationDetails,
-        \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\AsynchronousOperations\Model\StatusMapper $statusMapper
+        MessageFactory $messageFactory,
+        BulkStatusInterface $bulkStatus,
+        BulkNotificationManagement $bulkNotificationManagement,
+        UserContextInterface $userContext,
+        Details $operationDetails,
+        AuthorizationInterface $authorization,
+        StatusMapper $statusMapper,
+        ?Encryptor $encryptor = null,
+        ?GetBulksByUserAndTypeInterface $getBulksByUserAndType = null
     ) {
         $this->messageFactory = $messageFactory;
         $this->bulkStatus = $bulkStatus;
@@ -72,25 +101,27 @@ class Plugin
         $this->bulkNotificationManagement = $bulkNotificationManagement;
         $this->authorization = $authorization;
         $this->statusMapper = $statusMapper;
+        $this->encryptor = $encryptor ?: ObjectManager::getInstance()->get(Encryptor::class);
+        $this->getBulksByUserAndType = $getBulksByUserAndType
+            ?: ObjectManager::getInstance()->get(GetBulksByUserAndTypeInterface::class);
     }
 
     /**
      * Adding bulk related messages to notification area
      *
-     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $collection
+     * @param Synchronized $collection
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterToArray(
-        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $collection,
-        $result
-    ) {
-        if (!$this->authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')) {
+    public function afterToArray(Synchronized $collection, $result)
+    {
+        if (!$this->isAllowed()) {
             return $result;
         }
-        $userId = $this->userContext->getUserId();
-        $userBulks = $this->bulkStatus->getBulksByUser($userId);
+        $userId = (int) $this->userContext->getUserId();
+        $userType = (int) $this->userContext->getUserType();
+        $userBulks = $this->getBulksByUserAndType->execute($userId, $userType);
         $acknowledgedBulks = $this->getAcknowledgedBulksUuid(
             $this->bulkNotificationManagement->getAcknowledgedBulksByUser($userId)
         );
@@ -101,13 +132,13 @@ class Plugin
                 $details = $this->operationDetails->getDetails($bulkUuid);
                 $text = $this->getText($details);
                 $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
-                if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
+                if ($bulkStatus === BulkSummaryInterface::IN_PROGRESS) {
                     $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
                 }
                 $data = [
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
-                        'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
+                        'severity' => MessageInterface::SEVERITY_MAJOR,
                         // md5() here is not for cryptographic use.
                         // phpcs:ignore Magento2.Security.InsecureFunction
                         'identity' => md5('bulk' . $bulkUuid),
@@ -125,6 +156,7 @@ class Plugin
             $bulkMessages = array_slice($bulkMessages, 0, 5);
             $result['items'] = array_merge($bulkMessages, $result['items']);
         }
+
         return $result;
     }
 
@@ -169,5 +201,15 @@ class Plugin
             $acknowledgedBulksArray[] = $bulk->getBulkId();
         }
         return $acknowledgedBulksArray;
+    }
+
+    /**
+     * Check if it allowed to see bulk operations.
+     *
+     * @return bool
+     */
+    private function isAllowed(): bool
+    {
+        return $this->authorization->isAllowed(self::BULK_LOGGING_ACL);
     }
 }

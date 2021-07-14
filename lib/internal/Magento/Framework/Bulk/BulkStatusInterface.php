@@ -38,6 +38,7 @@ interface BulkStatusInterface
      * @param int $userId
      * @return BulkSummaryInterface[]
      * @since 103.0.0
+     * @deprecated see \Magento\Framework\Bulk\GetBulksByUserAndTypeInterface
      */
     public function getBulksByUser($userId);
 

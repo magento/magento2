@@ -19,6 +19,8 @@ use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
+use Magento\Framework\Bulk\GetBulksByUserAndTypeInterface;
+use Magento\Framework\Encryption\Encryptor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -78,10 +80,18 @@ class PluginTest extends TestCase
     private $statusMapper;
 
     /**
-     * @var string
+     * @var GetBulksByUserAndTypeInterface|MockObject
      */
-    private $resourceName = 'Magento_Logging::system_magento_logging_bulk_operations';
+    private $getBulksByUserAndTypeMock;
 
+    /**
+     * @var Encryptor|MockObject
+     */
+    private $encryptor;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->messagefactoryMock = $this->createPartialMock(
@@ -90,13 +100,16 @@ class PluginTest extends TestCase
         );
         $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
 
+        $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
         $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
         $this->operationsDetailsMock = $this->createMock(Details::class);
         $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $this->messageMock = $this->createMock(Message::class);
         $this->collectionMock = $this->createMock(Synchronized::class);
-        $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
         $this->statusMapper = $this->createMock(StatusMapper::class);
+        $this->encryptor = $this->createMock(Encryptor::class);
+        $this->getBulksByUserAndTypeMock = $this->createMock(GetBulksByUserAndTypeInterface::class);
+
         $this->plugin = new Plugin(
             $this->messagefactoryMock,
             $this->bulkStatusMock,
@@ -104,17 +117,23 @@ class PluginTest extends TestCase
             $this->userContextMock,
             $this->operationsDetailsMock,
             $this->authorizationMock,
-            $this->statusMapper
+            $this->statusMapper,
+            $this->encryptor,
+            $this->getBulksByUserAndTypeMock,
         );
     }
 
-    public function testAfterToArrayIfNotAllowed()
+    /**
+     * After toArray when not allowed
+     *
+     * @return void
+     */
+    public function testAfterToArrayIfNotAllowed(): void
     {
         $result = [];
         $this->authorizationMock
             ->expects($this->once())
             ->method('isAllowed')
-            ->with($this->resourceName)
             ->willReturn(false);
         $this->assertEquals($result, $this->plugin->afterToArray($this->collectionMock, $result));
     }
@@ -122,8 +141,9 @@ class PluginTest extends TestCase
     /**
      * @param array $operationDetails
      * @dataProvider afterToDataProvider
+     * @return void
      */
-    public function testAfterTo($operationDetails)
+    public function testAfterTo(array $operationDetails): void
     {
         $bulkMock = $this->getMockBuilder(BulkSummary::class)
             ->addMethods(['getStatus'])
@@ -143,30 +163,39 @@ class PluginTest extends TestCase
             ->method('getDetails')
             ->with($bulkUuid)
             ->willReturn($operationDetails);
-        $bulkMock->expects($this->once())->method('getDescription')->willReturn('Bulk Description');
-        $this->messagefactoryMock->expects($this->once())->method('create')->willReturn($this->messageMock);
-        $this->messageMock->expects($this->once())->method('toArray')->willReturn($bulkArray);
+        $bulkMock->expects($this->once())
+            ->method('getDescription')
+            ->willReturn('Bulk Description');
+        $this->messagefactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->messageMock);
+        $this->messageMock->expects($this->once())
+            ->method('toArray')
+            ->willReturn($bulkArray);
         $this->authorizationMock
             ->expects($this->once())
             ->method('isAllowed')
-            ->with($this->resourceName)
             ->willReturn(true);
-        $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($userId);
+        $this->userContextMock->expects($this->once())
+            ->method('getUserId')
+            ->willReturn($userId);
         $this->bulkNotificationMock
             ->expects($this->once())
             ->method('getAcknowledgedBulksByUser')
             ->with($userId)
             ->willReturn([]);
-        $this->statusMapper->expects($this->once())->method('operationStatusToBulkSummaryStatus');
-        $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
+        $this->getBulksByUserAndTypeMock->expects($this->once())
+            ->method('execute')
+            ->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
+
         $this->assertEquals(2, $result2['totalRecords']);
     }
 
     /**
      * @return array
      */
-    public function afterToDataProvider()
+    public function afterToDataProvider(): array
     {
         return [
             [

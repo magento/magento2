@@ -6,44 +6,36 @@
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Notification;
 
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
-use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Notification Dismiss Controller
  */
-class Dismiss extends Action
+class Dismiss extends Action implements HttpGetActionInterface
 {
+    public const ADMIN_RESOURCE = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
+
     /**
      * @var BulkNotificationManagement
      */
     private $notificationManagement;
 
     /**
-     * Class constructor.
-     *
      * @param Context $context
      * @param BulkNotificationManagement $notificationManagement
      */
-    public function __construct(
-        Context $context,
-        BulkNotificationManagement $notificationManagement
-    ) {
+    public function __construct(Context $context, BulkNotificationManagement $notificationManagement)
+    {
         parent::__construct($context);
         $this->notificationManagement = $notificationManagement;
     }
 
     /**
-     * @inheritDoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations');
-    }
-
-    /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -54,7 +46,7 @@ class Dismiss extends Action
 
         $isAcknowledged = $this->notificationManagement->acknowledgeBulks($bulkUuids);
 
-        /** @var \Magento\Framework\Controller\Result\Json $result */
+        /** @var Json $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         if (!$isAcknowledged) {
             $result->setHttpResponseCode(400);
