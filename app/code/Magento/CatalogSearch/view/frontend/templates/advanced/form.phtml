@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Escaper;
+
 /**
  * Catalog advanced search form
  *
  * @var $block \Magento\CatalogSearch\Block\Advanced\Form
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
  */
 ?>
 
@@ -91,6 +94,9 @@ $catalogSearchHelper = $block->getData('catalogSearchHelper'); ?>
                                        for="<?= $block->escapeHtmlAttr($_code) ?>_to">
                                     <?= $block->escapeHtml($block->getCurrency($_attribute)) ?>
                                 </label>
+                                <input type="hidden"
+                                       name="<?= $escaper->escapeHtmlAttr($_code)?>[currency]"
+                                       value="<?= $escaper->escapeHtml($block->getCurrency($_attribute)) ?>">
                             </div>
                         </div>
                     </div>
