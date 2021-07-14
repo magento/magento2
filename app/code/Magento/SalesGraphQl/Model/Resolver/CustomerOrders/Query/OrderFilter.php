@@ -65,22 +65,15 @@ class OrderFilter
      *
      * @param array $args
      * @param int $userId
-     * @param int $storeId
      * @return FilterGroup[]
      */
     public function createFilterGroups(
         array $args,
-        int $userId,
-        int $storeId
+        int $userId
     ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
             [$this->filterBuilder->setField('customer_id')->setValue($userId)->setConditionType('eq')->create()]
-        );
-        $filterGroups[] = $this->filterGroupBuilder->create();
-
-        $this->filterGroupBuilder->setFilters(
-            [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
