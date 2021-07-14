@@ -121,7 +121,8 @@ class Recurring implements InstallSchemaInterface
 
             $indexer = $this->indexerFactory->create()->load($indexerId);
             if ($indexer->isScheduled()) {
-                $indexer->getView()->unsubscribe()->subscribe();
+                $indexer->setScheduled(false);
+                $indexer->setScheduled(true);
             }
         }
     }

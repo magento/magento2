@@ -425,6 +425,12 @@ class IndexerTest extends TestCase
         $this->viewMock->expects($this->once())->method('load')->willReturnSelf();
         $this->viewMock->expects($this->once())->method($method)->willReturn(true);
         $stateMock->expects($this->once())->method('save')->willReturnSelf();
+        if (!$scheduled) {
+            $stateMock->expects($this->once())
+                ->method('setStatus')
+                ->with(StateInterface::STATUS_INVALID)
+                ->willReturnSelf();
+        }
         $this->model->setScheduled($scheduled);
     }
 

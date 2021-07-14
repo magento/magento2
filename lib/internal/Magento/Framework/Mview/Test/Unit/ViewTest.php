@@ -260,7 +260,11 @@ class ViewTest extends TestCase
         $this->stateMock->expects($this->once())
             ->method('setMode')
             ->with(StateInterface::MODE_DISABLED)->willReturnSelf();
-        $this->changelogMock->expects($this->never())
+        $this->stateMock->expects($this->once())
+            ->method('setStatus')
+            ->with(StateInterface::STATUS_IDLE)
+            ->willReturnSelf();
+        $this->changelogMock->expects($this->once())
             ->method('drop');
         $subscriptionMock = $this->createPartialMock(Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))->method('remove');
@@ -287,6 +291,8 @@ class ViewTest extends TestCase
             ->method('setVersionId');
         $this->stateMock->expects($this->never())
             ->method('setMode');
+        $this->stateMock->expects($this->never())
+            ->method('setStatus');
         $this->changelogMock->expects($this->never())
             ->method('drop');
         $this->subscriptionFactoryMock->expects($this->never())

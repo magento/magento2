@@ -232,8 +232,21 @@ class View extends DataObject implements ViewInterface
                 $this->initSubscriptionInstance($subscriptionConfig)->remove();
             }
 
+            try {
+                // Remove changelog table
+                $this->getChangelog()->drop();
+                // Reset version_id
+                $this->getState()->setVersionId(0);
+            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            } catch (ChangelogTableNotExistsException $e) {
+                // Silently ignore this error
+            }
+
             // Update view state
-            $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
+            $this->getState()
+                ->setMode(View\StateInterface::MODE_DISABLED)
+                ->setStatus(View\StateInterface::STATUS_IDLE)
+                ->save();
         }
 
         return $this;
