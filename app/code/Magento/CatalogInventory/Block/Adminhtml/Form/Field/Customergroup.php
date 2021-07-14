@@ -90,15 +90,6 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
     }
 
     /**
-     * @param string $value
-     * @return $this
-     */
-    public function setInputName($value)
-    {
-        return $this->setName($value);
-    }
-
-    /**
      * Render block HTML
      *
      * @return string
