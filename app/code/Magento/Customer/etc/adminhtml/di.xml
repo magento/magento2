@@ -6,13 +6,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\Customer\Model\Customer" type="Magento\Customer\Model\Backend\Customer" />
+    <preference for="Magento\Customer\Model\Customer" type="Magento\Customer\Model\Backend\Customer"/>
     <type name="Magento\Customer\Model\ResourceModel\Customer\Collection">
         <arguments>
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Backend\Model\Session" />
+    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Backend\Model\Session"/>
     <type name="Magento\Ui\Model\Export\MetadataProvider">
         <arguments>
             <argument name="data" xsi:type="array">

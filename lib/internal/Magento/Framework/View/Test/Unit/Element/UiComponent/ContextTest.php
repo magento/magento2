@@ -8,6 +8,7 @@ declare(strict_types=1);
 /**
  * Test for view Messages model
  */
+
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
 use Magento\Framework\App\Request\Http;
@@ -27,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariableName)
  */
 class ContextTest extends TestCase
 {
@@ -49,9 +51,11 @@ class ContextTest extends TestCase
     {
         $pageLayout = $this->getMockBuilder(LayoutInterface::class)
             ->getMock();
-        $request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createMock(Http::class);
+        $request->expects($this->once())
+            ->method('getHeader')
+            ->with('Accept')
+            ->willReturn(false);
         $buttonProviderFactory =
             $this->getMockBuilder(ButtonProviderFactory::class)
                 ->disableOriginalConstructor()
@@ -84,15 +88,15 @@ class ContextTest extends TestCase
         $this->context = $objectManagerHelper->getObject(
             Context::class,
             [
-                'pageLayout'            => $pageLayout,
-                'request'               => $request,
+                'pageLayout' => $pageLayout,
+                'request' => $request,
                 'buttonProviderFactory' => $buttonProviderFactory,
-                'actionPoolFactory'     => $actionPoolFactory,
-                'contentTypeFactory'    => $contentTypeFactory,
-                'urlBuilder'            => $urlBuilder,
-                'processor'             => $processor,
-                'uiComponentFactory'    => $uiComponentFactory,
-                'authorization'         => $this->authorization,
+                'actionPoolFactory' => $actionPoolFactory,
+                'contentTypeFactory' => $contentTypeFactory,
+                'urlBuilder' => $urlBuilder,
+                'processor' => $processor,
+                'uiComponentFactory' => $uiComponentFactory,
+                'authorization' => $this->authorization,
             ]
         );
     }

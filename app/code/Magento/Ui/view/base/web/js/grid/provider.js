@@ -21,6 +21,7 @@ define([
 
     return Element.extend({
         defaults: {
+            initialized: false,
             firstLoad: true,
             lastError: false,
             storageConfig: {
@@ -31,7 +32,8 @@ define([
             },
             listens: {
                 params: 'onParamsChange',
-                requestConfig: 'updateRequestConfig'
+                requestConfig: 'updateRequestConfig',
+                lastError: 'showAlert'
             },
             ignoreTmpls: {
                 data: true
@@ -49,13 +51,32 @@ define([
 
             this._super()
                 .initStorage()
-                .clearData();
+                // Invoke showAlert if error on page load
+                .showAlert(this.lastError);
 
-            // Load data when there will
-            // be no more pending assets.
-            resolver(this.reload, this);
+            if (this.firstLoad) {
+                this.clearData();
+                resolver(this.reload, this);
+            } else {
+                this.processData(this.data);
+                resolver(this.triggerReloaded, this);
+            }
 
             return this;
+        },
+
+        /**
+         * Trigger reloaded event on first load with predefined data
+         */
+        triggerReloaded: function () {
+            var diff;
+
+            // Invoke subscribers for predefined data
+            diff = utils.compare({}, this.data, 'data');
+            this._notifyChanges(diff);
+
+            this.initialized = true;
+            this.trigger('reloaded');
         },
 
         /**
@@ -136,7 +157,7 @@ define([
         onParamsChange: function () {
             // It's necessary to make a reload only
             // after the initial loading has been made.
-            if (!this.firstLoad) {
+            if (this.initialized) {
                 this.reload();
             }
         },
@@ -151,11 +172,7 @@ define([
 
             this.set('lastError', true);
 
-            this.firstLoad = false;
-
-            alert({
-                content: $t('Something went wrong.')
-            });
+            this.initialized = true;
         },
 
         /**
@@ -164,7 +181,7 @@ define([
          * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
-            this.firstLoad = false;
+            this.initialized = true;
 
             this.set('lastError', false);
 
@@ -180,6 +197,19 @@ define([
         updateRequestConfig: function (requestConfig) {
             if (this.storage()) {
                 _.extend(this.storage().requestConfig, requestConfig);
+            }
+        },
+
+        /**
+         * Show alert notification
+         *
+         * @param {Boolean} isError
+         */
+        showAlert: function (isError) {
+            if (isError) {
+                alert({
+                    content: $t('Something went wrong.')
+                });
             }
         }
     });

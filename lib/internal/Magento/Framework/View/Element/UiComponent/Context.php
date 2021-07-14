@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\App\ObjectManager;
@@ -24,6 +26,7 @@ use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
  * Request context for UI components to utilize.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongVariableName)
  */
 class Context implements ContextInterface
 {
@@ -354,12 +357,14 @@ class Context implements ContextInterface
         $this->acceptType = 'html';
 
         $rawAcceptType = $this->request->getHeader('Accept');
-        if (strpos($rawAcceptType, 'json') !== false) {
-            $this->acceptType = 'json';
-        } elseif (strpos($rawAcceptType, 'html') !== false) {
-            $this->acceptType = 'html';
-        } elseif (strpos($rawAcceptType, 'xml') !== false) {
-            $this->acceptType = 'xml';
+        if ($rawAcceptType !== false) {
+            if (strpos($rawAcceptType, 'json') !== false) {
+                $this->acceptType = 'json';
+            } elseif (strpos($rawAcceptType, 'html') !== false) {
+                $this->acceptType = 'html';
+            } elseif (strpos($rawAcceptType, 'xml') !== false) {
+                $this->acceptType = 'xml';
+            }
         }
     }
 
@@ -386,7 +391,7 @@ class Context implements ContextInterface
      * @param UiComponentInterface $component
      * @return void
      */
-    protected function prepareDataSource(array & $data, UiComponentInterface $component)
+    protected function prepareDataSource(array &$data, UiComponentInterface $component)
     {
         $childComponents = $component->getChildComponents();
         if (!empty($childComponents)) {

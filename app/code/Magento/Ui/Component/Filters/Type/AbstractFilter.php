@@ -3,18 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Component\Filters\Type;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\View\Element\BookmarkContextInterface;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 
 /**
  * Abstract class AbstractFilter
  * @api
  * @since 100.0.2
+ * phpcs:disable Magento2.Classes.AbstractApi
  */
 abstract class AbstractFilter extends AbstractComponent
 {
@@ -25,6 +31,9 @@ abstract class AbstractFilter extends AbstractComponent
 
     /**
      * Filter variable name
+     *
+     * @deprecated Use ContextInterface for retrieve filters
+     * @see ContextInterface
      */
     const FILTER_VAR = 'filters';
 
@@ -51,12 +60,15 @@ abstract class AbstractFilter extends AbstractComponent
     protected $filterModifier;
 
     /**
+     * AbstractFilter constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
      * @param array $components
      * @param array $data
+     * @param BookmarkContextProviderInterface|null $bookmarkContextProvider
      */
     public function __construct(
         ContextInterface $context,
@@ -64,13 +76,18 @@ abstract class AbstractFilter extends AbstractComponent
         FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
         array $components = [],
-        array $data = []
+        array $data = [],
+        BookmarkContextProviderInterface $bookmarkContextProvider = null
     ) {
         $this->uiComponentFactory = $uiComponentFactory;
         $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
-        $this->filterData = $this->getContext()->getFiltersParams();
         $this->filterModifier = $filterModifier;
+
+        $bookmarkContextProvider = $bookmarkContextProvider ?: ObjectManager::getInstance()
+            ->get(BookmarkContextProviderInterface::class);
+        $bookmarkContext = $bookmarkContextProvider->getByUiContext($context);
+        $this->filterData = $bookmarkContext->getFilterData();
     }
 
     /**
@@ -84,7 +101,9 @@ abstract class AbstractFilter extends AbstractComponent
     }
 
     /**
-     * {@inheritdoc}
+     * Prepare filter component
+     *
+     * @inheridoc
      */
     public function prepare()
     {

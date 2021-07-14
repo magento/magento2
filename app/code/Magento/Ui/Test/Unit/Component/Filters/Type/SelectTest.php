@@ -10,20 +10,22 @@ namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
+use Magento\Ui\View\Element\BookmarkContextInterface;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SelectTest extends TestCase
 {
     /**
-     * @var ContextInterface|MockObject
+     * @var UiContext|MockObject
      */
     protected $contextMock;
 
@@ -43,12 +45,22 @@ class SelectTest extends TestCase
     protected $filterModifierMock;
 
     /**
+     * @var BookmarkContextInterface|MockObject
+     */
+    private $bookmarkContextMock;
+
+    /**
+     * @var BookmarkContextProviderInterface|MockObject
+     */
+    private $bookmarkContextProviderMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
+            UiContext::class,
             [],
             '',
             false
@@ -62,6 +74,16 @@ class SelectTest extends TestCase
             FilterModifier::class,
             ['applyFilterModifier']
         );
+
+        $this->bookmarkContextProviderMock = $this->getMockForAbstractClass(
+            BookmarkContextProviderInterface::class
+        );
+        $this->bookmarkContextMock = $this->getMockForAbstractClass(
+            BookmarkContextInterface::class
+        );
+        $this->bookmarkContextProviderMock->expects($this->once())
+            ->method('getByUiContext')
+            ->willReturn($this->bookmarkContextMock);
     }
 
     /**
@@ -72,13 +94,17 @@ class SelectTest extends TestCase
     public function testGetComponentName()
     {
         $this->contextMock->expects($this->never())->method('getProcessor');
+        $this->bookmarkContextMock->expects($this->once())
+            ->method('getFilterData');
         $date = new Select(
             $this->contextMock,
             $this->uiComponentFactory,
             $this->filterBuilderMock,
             $this->filterModifierMock,
             null,
-            []
+            [],
+            [],
+            $this->bookmarkContextProviderMock
         );
 
         $this->assertSame(Select::NAME, $date->getComponentName());
@@ -118,9 +144,6 @@ class SelectTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('addComponentDefinition')
             ->with(Select::NAME, ['extends' => Select::NAME]);
-        $this->contextMock->expects($this->any())
-            ->method('getFiltersParams')
-            ->willReturn($filterData);
         /** @var DataProviderInterface $dataProvider */
         $dataProvider = $this->getMockForAbstractClass(
             DataProviderInterface::class,
@@ -131,6 +154,14 @@ class SelectTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($dataProvider);
+
+        $this->bookmarkContextMock->expects($this->once())
+            ->method('getFilterData')
+            ->willReturn($filterData);
+        $this->contextMock->expects($this->any())
+            ->method('getRequestParam')
+            ->with(UiContext::FILTER_VAR)
+            ->willReturn($filterData);
 
         if ($expectedCondition !== null) {
             $filterMock = $this->createMock(Filter::class);
@@ -173,7 +204,8 @@ class SelectTest extends TestCase
             $this->filterModifierMock,
             $selectOptions,
             [],
-            $data
+            $data,
+            $this->bookmarkContextProviderMock
         );
 
         $date->prepare();

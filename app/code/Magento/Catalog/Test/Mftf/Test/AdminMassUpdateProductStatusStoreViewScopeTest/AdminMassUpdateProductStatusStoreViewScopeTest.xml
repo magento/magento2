@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassUpdateProductStatusStoreViewScopeTest">
         <annotations>
             <features value="Catalog"/>
@@ -137,5 +137,5 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault2"/>
         <see userInput="We can't find any items matching these search criteria." selector="{{StorefrontCatalogSearchAdvancedResultMainSection.message}}" stepKey="seeInDefault2"/>
-   </test>
+    </test>
 </tests>

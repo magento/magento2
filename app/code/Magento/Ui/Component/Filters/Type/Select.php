@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Filters\Type;
 
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\Select as ElementSelect;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\View\Element\BookmarkContextProviderInterface;
 
 /**
  * @api
@@ -36,29 +40,40 @@ class Select extends AbstractFilter
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
      * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
      * @param array $data
+     * @param BookmarkContextProviderInterface|null $bookmarkContextProvider
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
         OptionSourceInterface $optionsProvider = null,
         array $components = [],
-        array $data = []
+        array $data = [],
+        BookmarkContextProviderInterface $bookmarkContextProvider = null
     ) {
         $this->optionsProvider = $optionsProvider;
-        parent::__construct($context, $uiComponentFactory, $filterBuilder, $filterModifier, $components, $data);
+        parent::__construct(
+            $context,
+            $uiComponentFactory,
+            $filterBuilder,
+            $filterModifier,
+            $components,
+            $data,
+            $bookmarkContextProvider
+        );
     }
 
     /**
      * Prepare component configuration
      *
      * @return void
+     * @throws LocalizedException
      */
     public function prepare()
     {

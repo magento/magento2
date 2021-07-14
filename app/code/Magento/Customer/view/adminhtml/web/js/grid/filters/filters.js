@@ -10,10 +10,8 @@ define([
 
     return Filters.extend({
         defaults: {
-            chipsConfig: {
-                name: '${ $.name }_chips',
-                provider: '${ $.chipsConfig.name }',
-                component: 'Magento_Customer/js/grid/filters/chips'
+            statefull: {
+                applied: false
             }
         }
     });

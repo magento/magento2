@@ -66,7 +66,7 @@ define([
                     return;
                 }
 
-                this.show(this.masonry().rows()[newValue]);
+                this.show(this.masonry().rows[newValue]);
             }.bind(this));
 
             return this;
@@ -96,12 +96,12 @@ define([
         next: function (record) {
             var recordToShow;
 
-            if (record._rowIndex + 1 === this.masonry().rows().length) {
+            if (record._rowIndex + 1 === this.masonry().rows.length) {
                 return;
             }
 
             recordToShow = this.getRecord(record._rowIndex + 1);
-            recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
+
             this.show(recordToShow);
         },
 
@@ -118,7 +118,6 @@ define([
             }
             recordToShow = this.getRecord(record._rowIndex - 1);
 
-            recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
         },
 
@@ -130,7 +129,7 @@ define([
          * @return {Object}
          */
         getRecord: function (recordIndex) {
-            return this.masonry().rows()[recordIndex];
+            return this.masonry().rows[recordIndex];
         },
 
         /**
