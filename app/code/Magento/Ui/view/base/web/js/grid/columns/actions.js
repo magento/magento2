@@ -11,9 +11,8 @@ define([
     'mageUtils',
     'uiRegistry',
     './column',
-    'Magento_Ui/js/modal/confirm',
     'mage/dataPost'
-], function (_, utils, registry, Column, confirm, dataPost) {
+], function (_, utils, registry, Column, dataPost) {
     'use strict';
 
     return Column.extend({
@@ -288,12 +287,14 @@ define([
         _confirm: function (action, callback) {
             var confirmData = action.confirm;
 
-            confirm({
-                title: confirmData.title,
-                content: confirmData.message,
-                actions: {
-                    confirm: callback
-                }
+            require(['Magento_Ui/js/modal/confirm'], function (confirm) {
+                confirm({
+                    title: confirmData.title,
+                    content: confirmData.message,
+                    actions: {
+                        confirm: callback
+                    }
+                });
             });
         },
 
