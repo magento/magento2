@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Image;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Product\Image;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Builds parameters array used to build Image Asset
@@ -68,12 +70,13 @@ class ParamsBuilder
      * Build image params
      *
      * @param array $imageArguments
-     * @param int $scopeId
+     * @param int|null $scopeId
+     * @param ThemeInterface|null $theme
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function build(array $imageArguments, int $scopeId = null): array
+    public function build(array $imageArguments, int $scopeId = null, ThemeInterface $theme = null): array
     {
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
@@ -81,7 +84,7 @@ class ParamsBuilder
             'image_width' => $imageArguments['width'] ?? null,
         ];
 
-        $overwritten = $this->overwriteDefaultValues($imageArguments);
+        $overwritten = $this->overwriteDefaultValues($imageArguments, $theme);
         $watermark = isset($miscParams['image_type']) ? $this->getWatermark($miscParams['image_type'], $scopeId) : [];
 
         return array_merge($miscParams, $overwritten, $watermark);
@@ -91,26 +94,27 @@ class ParamsBuilder
      * Overwrite default values
      *
      * @param array $imageArguments
+     * @param ThemeInterface|null $theme
      * @return array
      */
-    private function overwriteDefaultValues(array $imageArguments): array
+    private function overwriteDefaultValues(array $imageArguments, ThemeInterface $theme = null): array
     {
-        $frame = $imageArguments['frame'] ?? $this->hasDefaultFrame();
+        $frame = $imageArguments['frame'] ?? $this->hasDefaultFrame($theme);
         $constrain = $imageArguments['constrain'] ?? $this->defaultConstrainOnly;
         $aspectRatio = $imageArguments['aspect_ratio'] ?? $this->defaultKeepAspectRatio;
         $transparency = $imageArguments['transparency'] ?? $this->defaultKeepTransparency;
         $background = $imageArguments['background'] ?? $this->defaultBackground;
         $angle = $imageArguments['angle'] ?? $this->defaultAngle;
-        $quality = (int) $this->scopeConfig->getValue(Image::XML_PATH_JPEG_QUALITY);
+        $quality = (int)$this->scopeConfig->getValue(Image::XML_PATH_JPEG_QUALITY);
 
         return [
-            'background' => (array) $background,
+            'background' => (array)$background,
             'angle' => $angle,
             'quality' => $quality,
-            'keep_aspect_ratio' => (bool) $aspectRatio,
-            'keep_frame' => (bool) $frame,
-            'keep_transparency' => (bool) $transparency,
-            'constrain_only' => (bool) $constrain,
+            'keep_aspect_ratio' => (bool)$aspectRatio,
+            'keep_frame' => (bool)$frame,
+            'keep_transparency' => (bool)$transparency,
+            'constrain_only' => (bool)$constrain,
         ];
     }
 
@@ -132,7 +136,7 @@ class ParamsBuilder
         if ($file) {
             $size = explode(
                 'x',
-                (string) $this->scopeConfig->getValue(
+                (string)$this->scopeConfig->getValue(
                     "design/watermark/{$type}_size",
                     ScopeInterface::SCOPE_STORE,
                     $scopeId
@@ -166,11 +170,17 @@ class ParamsBuilder
     /**
      * Get frame from product_image_white_borders
      *
+     * @param ThemeInterface|null $theme
+     *
      * @return bool
      */
-    private function hasDefaultFrame(): bool
+    private function hasDefaultFrame(ThemeInterface $theme = null): bool
     {
-        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+        $viewConfigParams = ['area' => Area::AREA_FRONTEND];
+        if ($theme) {
+            $viewConfigParams['themeModel'] = $theme;
+        }
+        return (bool)$this->viewConfig->getViewConfig($viewConfigParams)
             ->getVarValue('Magento_Catalog', 'product_image_white_borders');
     }
 }

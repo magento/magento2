@@ -20,6 +20,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Image;
 use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Service\ImageResize;
 use Magento\Store\Api\Data\StoreInterface;
@@ -125,6 +126,11 @@ class ImageResizeTest extends TestCase
     private $storeManager;
 
     /**
+     * @var ThemeInterface|MockObject
+     */
+    private $themeMock;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -147,6 +153,11 @@ class ImageResizeTest extends TestCase
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->databaseMock = $this->createMock(Database::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+
+        $this->themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->themeMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(0);
 
         $this->mediaDirectoryMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -278,7 +289,7 @@ class ImageResizeTest extends TestCase
             ->method('saveFile')
             ->with($this->testfilepath);
 
-        $generator = $this->service->resizeFromThemes(['test-theme']);
+        $generator = $this->service->resizeFromThemes([$this->themeMock]);
         while ($generator->valid()) {
             $resizeInfo = $generator->key();
             $this->assertEquals('image.jpg', $resizeInfo['filename']);
@@ -319,7 +330,7 @@ class ImageResizeTest extends TestCase
             ->with($this->testfilepath)
             ->willReturn(true);
 
-        $generator = $this->service->resizeFromThemes(['test-theme']);
+        $generator = $this->service->resizeFromThemes([$this->themeMock]);
         while ($generator->valid()) {
             $resizeInfo = $generator->key();
             $this->assertEquals('Unsupported image format.', $resizeInfo['error']);
@@ -351,9 +362,7 @@ class ImageResizeTest extends TestCase
 
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
-            ->willReturn(
-                [ new DataObject(['id' => '0']) ]
-            );
+            ->willReturn([$this->themeMock]);
         $this->themeCustomizationConfigMock->expects($this->any())
             ->method('getStoresByThemes')
             ->willReturn(
@@ -380,11 +389,12 @@ class ImageResizeTest extends TestCase
             ->method('isFile')
             ->willReturn(true);
 
+        $this->themeMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(0);
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
-            ->willReturn(
-                [ new DataObject(['id' => '0']) ]
-            );
+            ->willReturn([$this->themeMock]);
         $this->themeCustomizationConfigMock->expects($this->any())
             ->method('getStoresByThemes')
             ->willReturn(
@@ -413,12 +423,9 @@ class ImageResizeTest extends TestCase
                 $this->returnValue(false),
                 $this->returnValue(true)
             );
-
         $this->themeCollectionMock->expects($this->any())
             ->method('loadRegisteredThemes')
-            ->willReturn(
-                [ new DataObject(['id' => '0']) ]
-            );
+            ->willReturn([$this->themeMock]);
         $this->themeCustomizationConfigMock->expects($this->any())
             ->method('getStoresByThemes')
             ->willReturn(
