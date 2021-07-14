@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductFormAdvancedPricingUpdateTierPriceActionGroup" extends="AdminProductFormAdvancedPricingAddTierPriceActionGroup">
+        <annotations>
+            <description>Update the latest tier price on Advanced Pricing dialog on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string" defaultValue="All Websites [USD]"/>
+            <argument name="customerGroup" type="string" defaultValue="ALL GROUPS"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+            <argument name="priceType" type="string" defaultValue="Fixed"/>
+            <argument name="amount" type="string" defaultValue="10"/>
+        </arguments>
+
+        <remove keyForRemoval="waitForGroupPriceAddButtonAppears"/>
+        <remove keyForRemoval="clickCustomerGroupPriceAddButton"/>
+
+    </actionGroup>
+</actionGroups>
