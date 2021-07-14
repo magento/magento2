@@ -20,7 +20,9 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+            </actionGroup>
             <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
