@@ -1,0 +1,91 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$option = $block->getOption();
+$optionConfig = $block->getOptionConfig();
+$attributeLabelId = $escaper->escapeHtmlAttr($block->getAttributeLabelId());
+$classes = $block->getClasses();
+
+$optionHtml = '';
+$optionId = $escaper->escapeHtmlAttr($option['id']);
+$optionType = $escaper->escapeHtmlAttr((int)$optionConfig['type']);
+$optionIndex = $escaper->escapeHtmlAttr($block->getIndex());
+$optionLabel = $escaper->escapeHtml($optionConfig['label'] ?? '');
+$sizeConfig = $block->getSizeConfig();
+
+$optionWidth = 110;
+$optionHeight = 90;
+
+if (isset($sizeConfig['swatchThumb'])) {
+    $optionWidth = $escaper->escapeHtmlAttr($sizeConfig['swatchThumb']['width']);
+    $optionHeight = $escaper->escapeHtmlAttr($sizeConfig['swatchThumb']['height']);
+}
+
+$optionAttributes = 'id="' . $attributeLabelId . '-item-' . $optionId . '"' .
+    ' index="' . $optionIndex . '"' .
+    ' aria-checked="false"' .
+    ' aria-describedby="' . $attributeLabelId . '"' .
+    ' tabindex="0"' .
+    ' option-type="' . $optionType . '"' .
+    ' data-option-type="' . $optionType . '"' .
+    ' option-id="' . $optionId . '"' .
+    ' data-option-id="' . $optionId . '"' .
+    ' option-label="' . $optionLabel . '"' .
+    ' data-option-label="' . $optionLabel . '"' .
+    ' aria-label="' . $optionLabel . '"' .
+    ' role="option"' .
+    ' thumb-width="' . $optionWidth . '"' .
+    ' data-thumb-width="' . $optionWidth . '"' .
+    ' thumb-height="' . $optionHeight . '"' .
+    ' data-thumb-height="' . $optionHeight . '"';
+
+$optionThumb = $escaper->escapeHtmlAttr($optionConfig['thumb'] ?? '');
+if ($optionThumb) {
+    $optionAttributes .= ' data-option-tooltip-thumb="' . $optionThumb . '"';
+}
+
+$optionValue = $escaper->escapeHtmlAttr($optionConfig['value'] ?? '');
+if ($optionValue) {
+    $optionAttributes .= ' data-option-tooltip-value="' . $optionValue . '"';
+}
+
+if (empty($option['products'])) {
+    $optionAttributes .= ' data-option-empty="true"';
+}
+
+$optionHtml = '<div class="' . $escaper->escapeHtmlAttr($classes['option']);
+switch ($optionType) {
+    case 0:
+        // Text
+        $optionHtml .= ' text" ' . $optionAttributes . '>' . ($optionValue ?: $optionLabel);
+        break;
+    case 1:
+        // Color
+        $optionHtml .= ' color" ' . $optionAttributes . ' style="background-color: ' . $optionValue . ';">';
+        break;
+    case 2:
+        // Image
+        $optionSwatchImageWidth = 30;
+        $optionSwatchImageHeight = 20;
+        if (isset($sizeConfig['swatchImage'])) {
+            $optionSwatchImageWidth = $sizeConfig['swatchImage']['width'];
+            $optionSwatchImageHeight = $sizeConfig['swatchImage']['height'];
+        }
+        $optionHtml .= ' image" ' . $optionAttributes . ' style="background-image: url(' . $optionValue . ');"' .
+            ' width="' . $optionSwatchImageWidth . '" height="' . $optionSwatchImageHeight . '">';
+        break;
+    case 3:
+        // Clear
+        $optionHtml .= '" ' . $optionAttributes . '>';
+        break;
+    default:
+        $optionHtml .= '" ' . $optionAttributes . '>' . $optionLabel;
+        break;
+}
+/* @noEscape */ echo $optionHtml . '</div>';

@@ -1,0 +1,103 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block*/
+/** @var \Magento\Framework\Escaper $escaper */
+$config = $block->getConfig();
+$swatchConfig = $block->getSwatchConfig();
+$sizeConfig = $block->getSizeConfig();
+$classes = $block->getClasses();
+?>
+
+<?php foreach ($config['attributes'] as $attributeId => $attribute): ?>
+    <?php
+    $attributeCode = $attribute['code'];
+    $attributeLabel = $attribute['label'];
+    $attributeLabelId = "option-label-$attributeCode-$attributeId";
+    $attributeLabelClass = $classes['attribute_label'];
+    $attributeSelectedClass = $classes['attribute_selected_option'];
+
+    if (!$block->getEnableControlLabel()) {
+        $attributeLabelClass .= ' visually-hidden';
+        $attributeSelectedClass .= ' visually-hidden';
+    }
+    ?>
+    <div
+        class="<?= $escaper->escapeHtmlAttr($classes['attribute'] . ' ' . $attributeCode) ?>"
+        data-attribute-code="<?= $escaper->escapeHtmlAttr($attributeCode) ?>"
+        data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+        attribute-code="<?= $escaper->escapeHtmlAttr($attributeCode) ?>"
+        attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+    >
+        <span
+            id="<?= $escaper->escapeHtmlAttr($attributeLabelId) ?>"
+            class="<?= $escaper->escapeHtmlAttr($attributeLabelClass) ?>"
+        ><?= $escaper->escapeHtml($attributeLabel) ?></span>
+        <span class="<?= $escaper->escapeHtmlAttr($attributeSelectedClass) ?>"></span>
+        <div
+            aria-activedescendant=""
+            tabindex="0"
+            aria-invalid="false"
+            aria-required="true"
+            role="listbox"
+            aria-labelledby="<?= $escaper->escapeHtmlAttr($attributeLabelId) ?>"
+            class="<?= $escaper->escapeHtmlAttr($classes['attribute_options_wrapper']) ?>"
+        >
+            <?php
+            if (isset($swatchConfig[$attributeId])) {
+                $attributeConfig = $swatchConfig[$attributeId];
+                $displayedOptions = 0;
+
+                $swatchOption = $block
+                    ->getChildBlock('swatch_option')
+                    ->setSizeConfig($sizeConfig)
+                    ->setAttributeLabelId($attributeLabelId)
+                    ->setClasses($classes);
+
+                foreach ($attribute['options'] as $optionIndex => $option) {
+                    $optionId = $option['id'];
+                    $optionConfig = $attributeConfig[$optionId] ?? null;
+
+                    if (!$optionConfig) {
+                        continue;
+                    }
+
+                    if ($block->getMoreButtonLimit() === $displayedOptions++) {
+                        $moreButtonClass = $classes['more_button'];
+                        $moreButtonText = $block->getMoreButtonText();
+                        echo '<a href="#" class="' . $escaper->escapeHtmlAttr($moreButtonClass) .'"><span>' .
+                            $escaper->escapeHtml($moreButtonText) . '</span></a>';
+                    }
+
+                    echo $swatchOption->setOption($option)
+                        ->setOptionConfig($optionConfig)
+                        ->setIndex($optionIndex)
+                        ->toHtml();
+                }
+            } else {
+                if (!$block->getOnlySwatches()) {
+                    echo $block->getChildBlock('swatch_select')
+                        ->setData('attribute', $attribute)
+                        ->setChooseText($block->getChooseText())
+                        ->setClasses($classes)
+                        ->toHtml();
+                }
+            }
+            ?>
+        </div>
+        <input
+            class="<?= $escaper->escapeHtmlAttr($classes['attribute_input']) ?> super-attribute-select"
+            name="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
+            value=""
+            type="text"
+            data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
+            data-validate="{required: true, messages: {required: '<?= $escaper->escapeHtmlAttr(__('Please select %1', $attributeLabel)) ?>'}}"
+            aria-required="true"
+            aria-invalid="false"
+        />
+    </div>
+<?php endforeach; ?>

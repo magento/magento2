@@ -5,22 +5,49 @@
  */
 ?>
 <?php
-/** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */
+/** @var \Magento\Swatches\Block\Product\Renderer\Configurable $block */
 /** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */
-$configurableViewModel = $block->getConfigurableViewModel()
-?>
-<div class="swatch-opt" data-role="swatch-options"></div>
+/** @var \Magento\Framework\Escaper $escaper */
+$configurableViewModel = $block->getConfigurableViewModel();
 
+$config = json_decode($block->getJsonConfig(), true);
+$swatchConfig = json_decode($block->getJsonSwatchConfig(), true);
+$sizeConfig = json_decode($block->getJsonSwatchSizeConfig(), true);
+$classes = $block->getClasses();
+$chooseText = $block->getChooseText();
+$getShowTooltip = $configurableViewModel ? $configurableViewModel->getShowSwatchTooltip() : 1;
+$gallerySwitchingStrategy = $block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct');
+?>
+<div class="swatch-opt" data-role="swatch-options">
+    <?= $block->getChildBlock('swatch_attributes')
+        ->setConfig($config)
+        ->setSwatchConfig($swatchConfig)
+        ->setSizeConfig($sizeConfig)
+        ->setClasses($classes)
+        ->setChooseText($chooseText)
+        ->toHtml();
+    ?>
+</div>
 <script type="text/x-magento-init">
     {
         "[data-role=swatch-options]": {
             "Magento_Swatches/js/swatch-renderer": {
-                "jsonConfig": <?= /* @noEscape */ $swatchOptions = $block->getJsonConfig() ?>,
-                "jsonSwatchConfig": <?= /* @noEscape */ $swatchOptions = $block->getJsonSwatchConfig() ?>,
-                "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
-                "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct')) ?: 'replace'; ?>",
-                "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>,
-                "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
+                "jsonConfig": <?= /* @noEscape */ json_encode($config) ?>,
+                "jsonSwatchConfig": <?= /* @noEscape */ json_encode($swatchConfig) ?>,
+                "mediaCallback": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
+                "gallerySwitchStrategy": "<?= $escaper->escapeJs($gallerySwitchingStrategy) ?: 'replace' ?>",
+                "showTooltip": <?= $escaper->escapeJs($getShowTooltip) ?>,
+                "chooseText": "<?= $escaper->escapeJs($chooseText) ?>",
+                "classes": {
+                    "attributeClass": "<?= $escaper->escapeJs($classes['attribute']) ?>",
+                    "attributeSelectedOptionLabelClass":
+                        "<?= $escaper->escapeJs($classes['attribute_selected_option']) ?>",
+                    "attributeOptionsWrapper": "<?= $escaper->escapeJs($classes['attribute_options_wrapper']) ?>",
+                    "attributeInput": "<?= $escaper->escapeJs($classes['attribute_input']) ?>",
+                    "optionClass": "<?= $escaper->escapeJs($classes['option']) ?>",
+                    "selectClass": "<?= $escaper->escapeJs($classes['select']) ?>",
+                    "moreButton": "<?= $escaper->escapeJs($classes['more_button']) ?>"
+                }
             }
         },
         "*" : {
