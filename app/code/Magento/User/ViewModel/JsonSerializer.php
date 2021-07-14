@@ -8,21 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\User\ViewModel;
 
-/**
- * JsonSerializer
- */
+use Magento\Framework\Serialize\Serializer\JsonHexTag;
+
 class JsonSerializer implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
-
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var JsonHexTag
      */
     private $serializer;
 
     /**
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param JsonHexTag $serializer
      */
-    public function __construct(\Magento\Framework\Serialize\Serializer\Json $serializer)
+    public function __construct(JsonHexTag $serializer)
     {
         $this->serializer = $serializer;
     }
