@@ -29,6 +29,13 @@ class Swagger extends \Magento\Framework\DataObject
     public function __construct()
     {
         $data = [
+            "securityDefinitions" => [
+                "api_key" => [
+                    "type" => "apiKey",
+                    "name" => "api_key",
+                    "in" => "header"
+                ]
+            ],
             'swagger' => self::SWAGGER_VERSION,
             'info' => [
                 'version' => '',
