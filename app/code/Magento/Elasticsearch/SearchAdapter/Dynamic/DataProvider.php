@@ -7,6 +7,8 @@ namespace Magento\Elasticsearch\SearchAdapter\Dynamic;
 
 use Magento\Elasticsearch\SearchAdapter\QueryAwareInterface;
 use Magento\Elasticsearch\SearchAdapter\QueryContainer;
+use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Elastic search data provider
@@ -84,6 +86,11 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     private $queryContainer;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
      * @param \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface $fieldMapper
      * @param \Magento\Catalog\Model\Layer\Filter\Price\Range $range
@@ -94,7 +101,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @param string $indexerId
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param QueryContainer|null $queryContainer
-     *
+     * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -107,7 +114,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
         $indexerId,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        QueryContainer $queryContainer = null
+        QueryContainer $queryContainer = null,
+        LoggerInterface $logger = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -119,6 +127,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $this->indexerId = $indexerId;
         $this->scopeResolver = $scopeResolver;
         $this->queryContainer = $queryContainer;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -154,16 +163,19 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
             ],
         ];
 
-        $queryResult = $this->connectionManager->getConnection()
-            ->query($query);
-
-        if (isset($queryResult['aggregations']['prices'])) {
-            $aggregations = [
-                'count' => $queryResult['aggregations']['prices']['count'],
-                'max' => $queryResult['aggregations']['prices']['max'],
-                'min' => $queryResult['aggregations']['prices']['min'],
-                'std' => $queryResult['aggregations']['prices']['std_deviation'],
-            ];
+        try {
+            $queryResult = $this->connectionManager->getConnection()
+                ->query($query);
+            if (isset($queryResult['aggregations']['prices'])) {
+                $aggregations = [
+                    'count' => $queryResult['aggregations']['prices']['count'],
+                    'max' => $queryResult['aggregations']['prices']['max'],
+                    'min' => $queryResult['aggregations']['prices']['min'],
+                    'std' => $queryResult['aggregations']['prices']['std_deviation'],
+                ];
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
         }
 
         return $aggregations;
@@ -202,8 +214,6 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $range,
         \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
     ) {
-        $result = [];
-
         $query = $this->getBasicSearchQuery($entityStorage);
 
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
@@ -217,11 +227,16 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
             ],
         ];
 
-        $queryResult = $this->connectionManager->getConnection()
-            ->query($query);
-        foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
-            $key = (int)($bucket['key'] / $range + 1);
-            $result[$key] = $bucket['doc_count'];
+        $result = [];
+        try {
+            $queryResult = $this->connectionManager->getConnection()
+                ->query($query);
+            foreach ($queryResult['aggregations']['prices']['buckets'] as $bucket) {
+                $key = (int)($bucket['key'] / $range + 1);
+                $result[$key] = $bucket['doc_count'];
+            }
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
         }
 
         return $result;

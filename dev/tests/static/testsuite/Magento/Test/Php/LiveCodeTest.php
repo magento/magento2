@@ -359,10 +359,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $result = $copyPasteDetector->run([BP]);
 
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
+        $output = file_exists($reportFile) ? file_get_contents($reportFile) : '';
 
         $this->assertTrue(
             $result,

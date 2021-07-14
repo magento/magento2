@@ -13,10 +13,16 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\OptionProvider;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class for product url rewrites tests
@@ -272,6 +278,77 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
             $item->getData('store_id') == $secondStoreId
                 ? $this->assertEquals($urlKeySecondStore . $this->suffix, $item->getRequestPath())
                 : $this->assertEquals($urlKeyFirstStore . $this->suffix, $item->getRequestPath());
+        }
+    }
+
+    /**
+     * Check if redirects are generated correctly while product urls are changed during import process.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testImportProductRewrites()
+    {
+        $data = [
+            ['sku' => 'simple1', 'request_path' => 'simple-product1', 'target_path' => 'product-1-updated'],
+            ['sku' => 'simple2', 'request_path' => 'simple-product2', 'target_path' => 'product-2-updated'],
+            ['sku' => 'simple3', 'request_path' => 'simple-product3', 'target_path' => 'product-3-updated'],
+        ];
+
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $productImport = $this->objectManager->create(
+            Product::class,
+            ['logger' => $logger]
+        );
+        $filesystem = $this->objectManager->get(Filesystem::class);
+
+        foreach ($data as $datum) {
+            $this->assertEquals(
+                $datum['request_path'],
+                $this->productRepository->get($datum['sku'], false, null, true)->getUrlKey()
+            );
+        }
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => __DIR__ . '/../_files/products_to_import_with_rewrites.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $productImport->setParameters(
+            ['behavior' => Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+        $this->assertTrue($errors->getErrorsCount() === 0);
+        $productImport->importData();
+
+        foreach ($data as $datum) {
+            $product = $this->productRepository->get($datum['sku'], false, null, true);
+            $this->assertEquals(
+                $datum['target_path'],
+                $product->getUrlKey()
+            );
+
+            $productUrlRewriteCollection = $this->getEntityRewriteCollection($product->getId());
+            $rewriteExists = false;
+            foreach ($productUrlRewriteCollection as $item) {
+                if (
+                    $item->getTargetPath() === $datum['target_path'] . $this->suffix &&
+                    $item->getRequestPath() === $datum['request_path'] . $this->suffix
+                ) {
+                    $rewriteExists = true;
+                    break;
+                }
+
+            }
+
+            $this->assertTrue($rewriteExists);
         }
     }
 

@@ -21,7 +21,7 @@
             <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <after>
             <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
@@ -37,8 +37,8 @@
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="clickExpandContent"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
