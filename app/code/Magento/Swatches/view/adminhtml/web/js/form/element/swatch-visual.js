@@ -184,11 +184,11 @@ define([
                         display: 'none'
                     }).appendTo($('body'));
 
-                    this.iframe = $('<iframe />', {
+                    this.iframe = $('<iframe></iframe>', {
                         name: 'upload_iframe_' + elementName
                     }).appendTo(this.wrapper);
 
-                    this.form = $('<form />', {
+                    this.form = $('<form></form>', {
                         name: 'swatch_form_image_upload_' + elementName,
                         target: 'upload_iframe_' + elementName,
                         method: 'post',
