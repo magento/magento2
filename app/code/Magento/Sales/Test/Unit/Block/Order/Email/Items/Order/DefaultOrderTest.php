@@ -74,14 +74,14 @@ class DefaultOrderTest extends TestCase
             ->getMock();
     }
 
-    public function testGetItemPrice()
+    public function testGetItemPriceHtml()
     {
         $html = '$34.28';
 
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
-            ->with('item_price')
-            ->willReturn($this->priceRenderBlock);
+            ->with('item_unit_price')
+            ->will($this->returnValue($this->priceRenderBlock));
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -89,8 +89,8 @@ class DefaultOrderTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->willReturn($html);
+            ->will($this->returnValue($html));
 
-        $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
+        $this->assertEquals($html, $this->block->getItemPriceHtml($this->itemMock));
     }
 }

@@ -9,6 +9,7 @@
     <body>
         <referenceBlock name="items">
             <block class="Magento\Sales\Block\Order\Email\Items\DefaultItems" name="item_price" template="Magento_Sales::email/items/price/row.phtml"/>
+            <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" name="item_unit_price" template="Magento_Sales::items/price/unit.phtml"/>
         </referenceBlock>
     </body>
 </page>

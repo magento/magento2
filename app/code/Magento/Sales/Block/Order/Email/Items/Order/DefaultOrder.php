@@ -104,4 +104,18 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
         $block->setItem($item);
         return $block->toHtml();
     }
+
+    /**
+     * Return item unit price html
+     *
+     * @param OrderItem|null $item
+     * @return string
+     */
+    public function getItemPriceHtml(?OrderItem $item = null): string
+    {
+        $block = $this->getLayout()->getBlock('item_unit_price');
+        $block->setItem($item ?: $this->getItem());
+
+        return $block->toHtml();
+    }
 }
