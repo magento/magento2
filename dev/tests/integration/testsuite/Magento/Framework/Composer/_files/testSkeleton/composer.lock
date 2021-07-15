@@ -2649,10 +2649,6 @@
                         "lib/web/matchMedia.js"
                     ],
                     [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
-                    ],
-                    [
                         "lib/web/moment-timezone-with-data.js",
                         "lib/web/moment-timezone-with-data.js"
                     ],
