@@ -6,7 +6,8 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
+        "magento/framework": "*",
+        "magento/module-csp": "*"
     },
     "type": "magento2-module",
     "license": [
