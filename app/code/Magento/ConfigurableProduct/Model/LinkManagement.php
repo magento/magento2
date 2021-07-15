@@ -88,7 +88,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
 
         $childrenList = [];
         /** @var \Magento\Catalog\Model\Product $child */
-        foreach ($productTypeInstance->getUsedProducts($product) as $child) {
+        foreach ($productTypeInstance->getUsedProductsStockFilter($product) as $child) {
             $attributes = [];
             foreach ($child->getAttributes() as $attribute) {
                 $attrCode = $attribute->getAttributeCode();

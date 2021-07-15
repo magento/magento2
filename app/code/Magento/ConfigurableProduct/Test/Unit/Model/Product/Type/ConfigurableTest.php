@@ -386,7 +386,8 @@ class ConfigurableTest extends TestCase
             ->method('getData')
             ->willReturnMap(
                 [
-                    ['_cache_instance_used_product_attributes', null, []]
+                    ['_cache_instance_products', null, []],
+                    ['_cache_instance_used_product_attributes', null, []],
                 ]
             );
         $this->catalogConfig->expects($this->any())->method('getProductAttributes')->willReturn([]);
@@ -399,7 +400,7 @@ class ConfigurableTest extends TestCase
         $productCollection->expects($this->once())->method('getItems')->willReturn([$productCollectionItem]);
 
         $this->productCollectionFactory->expects($this->any())->method('create')->willReturn($productCollection);
-        $this->model->getUsedProducts($product);
+        $this->model->getUsedProductsStockFilter($product);
     }
 
     /**

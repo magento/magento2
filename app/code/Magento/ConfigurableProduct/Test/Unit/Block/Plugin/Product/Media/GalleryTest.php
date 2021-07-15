@@ -49,7 +49,7 @@ class GalleryTest extends TestCase
         $galleryMock->expects(($this->any()))->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $productMock->expects($this->once())->method('getTypeInstance')->willReturn($configurableTypeMock);
-        $configurableTypeMock->expects($this->once())->method('getUsedProducts')->with($productMock)
+        $configurableTypeMock->expects($this->once())->method('getUsedProductsStockFilter')->with($productMock)
             ->willReturn([$variationProductMock]);
         $variationProductMock->expects($this->once())->method('getId')->willReturn($variationProductId);
         $variationProductMock->expects($this->once())->method('getMediaGalleryImages')->willReturn($dataCollection);

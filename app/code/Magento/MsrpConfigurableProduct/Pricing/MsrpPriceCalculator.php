@@ -32,7 +32,7 @@ class MsrpPriceCalculator implements MsrpPriceCalculatorInterface
         $configurableProduct = $product->getTypeInstance();
         $msrp = 0;
         $prices = [];
-        foreach ($configurableProduct->getUsedProducts($product) as $item) {
+        foreach ($configurableProduct->getUsedProductsStockFilter($product) as $item) {
             if ($item->getMsrp() !== null) {
                 $prices[] = $item->getMsrp();
             }

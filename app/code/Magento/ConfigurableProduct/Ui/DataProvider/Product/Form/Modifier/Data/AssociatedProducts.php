@@ -409,7 +409,7 @@ class AssociatedProducts
         $ids = $this->locator->getProduct()->getAssociatedProductIds();
         if ($ids === null) {
             // form data overrides any relations stored in database
-            return $this->configurableType->getUsedProducts($product);
+            return $this->configurableType->getUsedProductsStockFilter($product);
         }
         $products = [];
         foreach ($ids as $productId) {

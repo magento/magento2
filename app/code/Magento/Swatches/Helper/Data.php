@@ -193,7 +193,7 @@ class Data
     private function loadFirstVariation($attributeCode, ModelProduct $configurableProduct, array $requiredAttributes)
     {
         if ($this->isProductHasSwatch($configurableProduct)) {
-            $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
+            $usedProducts = $configurableProduct->getTypeInstance()->getUsedProductsStockFilter($configurableProduct);
 
             foreach ($usedProducts as $simpleProduct) {
                 if (!array_diff_assoc($requiredAttributes, $simpleProduct->getData())

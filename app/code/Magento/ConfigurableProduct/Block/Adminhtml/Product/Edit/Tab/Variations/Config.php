@@ -140,7 +140,7 @@ class Config extends Widget implements TabInterface
     public function isHasVariations()
     {
         return $this->getProduct()->getTypeId() === Configurable::TYPE_CODE
-            && $this->configurableType->getUsedProducts($this->getProduct());
+            && $this->configurableType->getUsedProductsStockFilter($this->getProduct());
     }
 
     /**

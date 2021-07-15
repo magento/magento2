@@ -219,7 +219,7 @@ class ConfigurableTest extends TestCase
 
         $simpleProducts = [$product1, $product2];
         $configurableType = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
-        $configurableType->expects($this->atLeastOnce())->method('getUsedProducts')->with($this->product, null)
+        $configurableType->expects($this->atLeastOnce())->method('getUsedProductsStockFilter')->with($this->product, null)
             ->willReturn($simpleProducts);
         $this->product->expects($this->any())->method('getTypeInstance')->willReturn($configurableType);
 

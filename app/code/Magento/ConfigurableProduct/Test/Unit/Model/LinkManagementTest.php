@@ -114,7 +114,7 @@ class LinkManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productTypeInstance->expects($this->any())->method('getUsedProducts')
+        $productTypeInstance->expects($this->any())->method('getUsedProductsStockFilter')
             ->with($product)->willReturn([$childProduct]);
 
         $this->productRepository->expects($this->any())

@@ -474,7 +474,7 @@ class ConfigurableTest extends TestCase
             ->with($productMock)
             ->willReturn($storeMock);
         $productTypeMock->expects($this->any())
-            ->method('getUsedProducts')
+            ->method('getUsedProductsStockFilter')
             ->with($productMock)
             ->willReturn([$productMock]);
 
