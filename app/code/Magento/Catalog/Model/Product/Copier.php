@@ -11,7 +11,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
