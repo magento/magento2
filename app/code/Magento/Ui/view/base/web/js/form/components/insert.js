@@ -12,10 +12,9 @@ define([
     'mage/translate',
     'mageUtils',
     'underscore',
-    'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/view/utils/bindings',
     'Magento_Ui/js/lib/view/utils/async'
-], function (Element, $, $t, utils, _, alert) {
+], function (Element, $, $t, utils, _) {
     'use strict';
 
     return Element.extend({
@@ -264,8 +263,10 @@ define([
                 return;
             }
 
-            alert({
-                content: $t('Something went wrong.')
+            require(['Magento_Ui/js/modal/alert'], function (alert) {
+                alert({
+                    content: $t('Something went wrong.')
+                });
             });
         },
 
