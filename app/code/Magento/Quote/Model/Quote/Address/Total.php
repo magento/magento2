@@ -5,16 +5,21 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
+use Magento\Framework\DataObject;
+
 /**
- * Class Total
+ * Total for quote address
  *
  * @method string getCode()
  *
  * @api
  * @since 100.0.2
  */
-class Total extends \Magento\Framework\DataObject
+class Total extends DataObject
 {
+    private const VIRTUAL_AMOUNT = 'virtual_amount';
+    private const BASE_VIRTUAL_AMOUNT = 'base_virtual_amount';
+
     /**
      * @var array
      */
@@ -65,6 +70,52 @@ class Total extends \Magento\Framework\DataObject
         $this->setData($code, $amount);
 
         return $this;
+    }
+
+    /**
+     * Set virtual amount
+     *
+     * @param float $amount
+     * @return self
+     */
+    public function setVirtualAmount(float $amount): self
+    {
+        $this->setData(self::VIRTUAL_AMOUNT, round($amount, 4));
+
+        return $this;
+    }
+
+    /**
+     * Returns virtual amount
+     *
+     * @return float|null
+     */
+    public function getVirtualAmount(): ?float
+    {
+        return $this->getData(self::VIRTUAL_AMOUNT);
+    }
+
+    /**
+     * Set virtual amount in base store currency
+     *
+     * @param float $amount
+     * @return self
+     */
+    public function setBaseVirtualAmount(float $amount): self
+    {
+        $this->setData(self::BASE_VIRTUAL_AMOUNT, round($amount, 4));
+
+        return $this;
+    }
+
+    /**
+     * Returns virtual amount in base store currency
+     *
+     * @return float|null
+     */
+    public function getBaseVirtualAmount(): ?float
+    {
+        return $this->getData(self::BASE_VIRTUAL_AMOUNT);
     }
 
     /**
