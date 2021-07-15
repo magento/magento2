@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\GraphQl\Query\Fields;
 use Magento\Quote\Model\Quote\Config as QuoteConfig;
 
+/**
+ * Class for extending product attributes for quote.
+ */
 class ProductAttributesExtender
 {
     /**
@@ -37,6 +39,8 @@ class ProductAttributesExtender
     }
 
     /**
+     * Add requested product attributes.
+     *
      * @param QuoteConfig $subject
      * @param array $result
      * @return array
@@ -46,11 +50,11 @@ class ProductAttributesExtender
     {
         $attributeCollection = $this->attributeCollectionFactory->create()
             ->removeAllFieldsFromSelect()
-            ->addFieldToSelect(AttributeInterface::ATTRIBUTE_CODE)
+            ->addFieldToSelect('attribute_code')
             ->setCodeFilter($this->fields->getFieldsUsedInQuery())
             ->load();
-        $attributes = $attributeCollection->getColumnValues(AttributeInterface::ATTRIBUTE_CODE);
+        $attributes = $attributeCollection->getColumnValues('attribute_code');
 
-        return array_merge($result, $attributes);
+        return array_unique(array_merge($result, $attributes));
     }
 }
