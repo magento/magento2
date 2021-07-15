@@ -22,6 +22,7 @@
         <fillField selector="{{AdminEditRoleInfoSection.roleName}}" userInput="{{User.name}}" stepKey="fillRoleName"/>
         <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterPassword"/>
         <click selector="{{AdminEditRoleInfoSection.roleResourcesTab}}" stepKey="clickRoleResourcesTab"/>
+        <waitForElementVisible selector="{{AdminEditRoleResourcesSection.roleScopes}}"  stepKey="waitForScopeSelection"/>
         <selectOption selector="{{AdminEditRoleResourcesSection.resourceAccess}}" userInput="0" stepKey="selectResourceAccessCustom"/>
         <waitForElementVisible stepKey="waitForElementVisible" selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}" time="30"/>
         <click stepKey="clickContentBlockCheckbox" selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"/>

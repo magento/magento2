@@ -20,7 +20,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create restricted role-->
-            <actionGroup ref="AdminCreateRoleActionGroup" stepKey="createUserRole">
+            <actionGroup ref="AdminCreateRoleWithoutScopeSelectionActionGroup" stepKey="createUserRole">
                 <argument name="restrictedRole" value="Delivery Methods Section"/>
                 <argument name="User" value="adminRole"/>
             </actionGroup>
