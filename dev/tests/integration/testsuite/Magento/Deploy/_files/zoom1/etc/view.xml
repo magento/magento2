@@ -53,7 +53,6 @@
         <item type="directory">Lib::lib</item>
         <item type="directory">Lib::extjs</item>
         <item type="directory">Lib::prototype</item>
-        <item type="directory">Lib::scriptaculous</item>
         <item type="directory">Lib::less</item>
         <item type="directory">Lib::mage/adminhtml</item>
         <item type="directory">Lib::mage/backend</item>

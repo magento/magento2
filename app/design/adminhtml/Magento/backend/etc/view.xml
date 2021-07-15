@@ -62,7 +62,6 @@
         <item type="directory">Lib::css</item>
         <item type="directory">Lib::lib</item>
         <item type="directory">Lib::prototype</item>
-        <item type="directory">Lib::scriptaculous</item>
         <item type="directory">Lib::extjs</item>
         <item type="directory">Lib::less</item>
         <item type="directory">Lib::fotorama</item>
