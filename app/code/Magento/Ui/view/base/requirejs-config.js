@@ -37,13 +37,6 @@ var config = {
  */
 if (typeof window !== 'undefined' && window.document) {
     /**
-     * Polyfill MutationObserver only for the browsers that do not support it.
-     */
-    if (typeof MutationObserver === 'undefined') {
-        config.deps.push('MutationObserver');
-    }
-
-    /**
      * Polyfill FormData object for old browsers that don't have full support for it.
      */
     if (typeof FormData === 'undefined' || typeof FormData.prototype.get === 'undefined') {
