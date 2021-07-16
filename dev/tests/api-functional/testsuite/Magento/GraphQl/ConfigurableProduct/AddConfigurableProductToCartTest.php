@@ -119,6 +119,10 @@ mutation {
             value_label
             value_id
           }
+          configured_variant {
+            sku
+            varchar_attribute
+          }
         }
       }
     }
