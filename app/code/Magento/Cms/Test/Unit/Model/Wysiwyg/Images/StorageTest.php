@@ -142,10 +142,10 @@ class StorageTest extends TestCase
     private $fileMock;
 
     private $allowedImageExtensions = [
-        'jpg' => 'image/jpg',
+        'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'png' => 'image/png',
-        'gif' => 'image/png',
+        'gif' => 'image/gif',
     ];
 
     /**
