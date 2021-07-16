@@ -45,9 +45,9 @@ class ProductResolver implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('Missing key "model" in Wishlist Item value data'));
         }
-        /** @var Product $product */
-        $product = $value['model'];
+        /** @var Item $wishlistItem */
+        $wishlistItem = $value['model'];
 
-        return $this->productDataProvider->getProductDataById((int) $product->getId());
+        return $this->productDataProvider->getProductDataById((int) $wishlistItem->getProductId());
     }
 }
