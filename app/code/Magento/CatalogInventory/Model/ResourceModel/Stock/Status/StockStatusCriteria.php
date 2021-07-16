@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
 use Magento\Framework\Data\AbstractCriteria;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteriaMapper;
 
 /**
  * Class StockStatusCriteria
  */
-class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogInventory\Api\StockStatusCriteriaInterface
+class StockStatusCriteria extends AbstractCriteria implements StockStatusCriteriaInterface
 {
     /**
      * @param string $mapper
@@ -50,7 +50,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     /**
      * @inheritdoc
      */
-    public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria)
+    public function addCriteria(StockStatusCriteriaInterface $criteria)
     {
         $this->data[self::PART_CRITERIA_LIST]['list'][] = $criteria;
     }

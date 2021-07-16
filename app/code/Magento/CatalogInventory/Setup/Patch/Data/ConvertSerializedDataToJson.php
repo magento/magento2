@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogInventory\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\Select\QueryModifierFactory;

@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 
+use Magento\CatalogInventory\Api\StockItemCriteriaInterface;
 use Magento\Framework\Data\AbstractCriteria;
-use Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteriaMapper;
 
 /**
  * Class StockItemCriteria
  */
-class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInventory\Api\StockItemCriteriaInterface
+class StockItemCriteria extends AbstractCriteria implements StockItemCriteriaInterface
 {
     /**
      * @param string $mapper
@@ -80,10 +80,10 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     /**
      * Add Criteria object
      *
-     * @param \Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria
+     * @param StockItemCriteriaInterface $criteria
      * @return bool
      */
-    public function addCriteria(\Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria)
+    public function addCriteria(StockItemCriteriaInterface $criteria)
     {
         $this->data[self::PART_CRITERIA_LIST]['list'][] = $criteria;
         return true;
