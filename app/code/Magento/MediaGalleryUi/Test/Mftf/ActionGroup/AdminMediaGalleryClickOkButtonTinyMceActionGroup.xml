@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryClickOkButtonTinyMceActionGroup">
         <annotations>
-            <description>Click ok button on upload image tinyMce4 popup.</description>
+            <description>Click ok button on upload image tinyMce popup.</description>
         </annotations>
 
         <waitForElementVisible selector="{{MediaGallerySection.OkBtn}}" stepKey="waitForOkBtn"/>
