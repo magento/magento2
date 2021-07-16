@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "493418cd144927561b32e05b09e1f1d1",
+    "content-hash": "3ea1e48e039b372e597bc5b60370ef77",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -211,20 +211,20 @@
         },
         {
             "name": "colinmollenhour/cache-backend-redis",
-            "version": "1.11.0",
+            "version": "1.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
-                "reference": "389fb68de15660e39b055d149d31f3708b5d6cbc"
+                "reference": "0b042d26b8c2aa093485bdc4bb03a0113a03778d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/389fb68de15660e39b055d149d31f3708b5d6cbc",
-                "reference": "389fb68de15660e39b055d149d31f3708b5d6cbc",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/0b042d26b8c2aa093485bdc4bb03a0113a03778d",
+                "reference": "0b042d26b8c2aa093485bdc4bb03a0113a03778d",
                 "shasum": ""
             },
             "require": {
-                "magento-hackathon/magento-composer-installer": "*"
+                "colinmollenhour/credis": "*"
             },
             "type": "magento-module",
             "autoload": {
@@ -243,20 +243,24 @@
             ],
             "description": "Zend_Cache backend using Redis with full support for tags.",
             "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
-            "time": "2019-03-03T04:04:49+00:00"
+            "support": {
+                "issues": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/issues",
+                "source": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis/tree/1.14.2"
+            },
+            "time": "2021-03-02T18:36:21+00:00"
         },
         {
             "name": "colinmollenhour/credis",
-            "version": "1.11.1",
+            "version": "v1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/colinmollenhour/credis.git",
-                "reference": "bd1da4698ab1918477f9e71e5ff0062b9a345008"
+                "reference": "c27faa11724229986335c23f4b6d0f1d8d6547fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/bd1da4698ab1918477f9e71e5ff0062b9a345008",
-                "reference": "bd1da4698ab1918477f9e71e5ff0062b9a345008",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/c27faa11724229986335c23f4b6d0f1d8d6547fb",
+                "reference": "c27faa11724229986335c23f4b6d0f1d8d6547fb",
                 "shasum": ""
             },
             "require": {
@@ -283,7 +287,11 @@
             ],
             "description": "Credis is a lightweight interface to the Redis key-value store which wraps the phpredis library when available for better performance.",
             "homepage": "https://github.com/colinmollenhour/credis",
-            "time": "2019-11-26T18:09:45+00:00"
+            "support": {
+                "issues": "https://github.com/colinmollenhour/credis/issues",
+                "source": "https://github.com/colinmollenhour/credis/tree/v1.12.1"
+            },
+            "time": "2020-11-06T16:09:14+00:00"
         },
         {
             "name": "colinmollenhour/php-redis-session-abstract",
@@ -11295,5 +11303,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }
