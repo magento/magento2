@@ -879,7 +879,6 @@ define([
             }
         ],
         'validate-emails': [
-            // TODO: logic is same in lib/web/mage/validation.js. Should we uniform?
             function (value) {
                 var validRegexp, emails, i;
 
