@@ -107,12 +107,13 @@ define([
                 changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);//eslint-disable-line
             }
 
-            if (changes) {
-                priceBox.trigger('updatePrice', changes);
+            if(checkIsValidateQty(bundleOption.data('qtyField'))) {
+                if (changes) {
+                    priceBox.trigger('updatePrice', changes);
+                }
+                this._displayTierPriceBlock(bundleOption);
+                this.updateProductSummary();
             }
-
-            this._displayTierPriceBlock(bundleOption);
-            this.updateProductSummary();
         },
 
         /**
@@ -131,12 +132,7 @@ define([
                     .options[field.data('optionId')]
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
-
-                if (field.val() >= field.data('validate')['validate-item-quantity'].minAllowed &&
-                    field.val() <= field.data('validate')['validate-item-quantity'].maxAllowed
-                ) {
-                    optionInstance.trigger('change');
-                }
+                optionInstance.trigger('change');
             }
         },
 
@@ -375,6 +371,16 @@ define([
         }
 
         return changes;
+    }
+
+    function checkIsValidateQty(qtyElem) {
+        var isValid = 0;
+        if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed &&
+            qtyElem.val() <= qtyElem.data('validate')['validate-item-quantity'].maxAllowed
+        ) {
+            isValid = 1;
+        }
+        return isValid;
     }
 
     /**
