@@ -34,13 +34,13 @@
             </argument>
             <argument name="extensions" xsi:type="array">
                 <item name="allowed" xsi:type="array">
-                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpg" xsi:type="string">image/jpeg</item>
                     <item name="jpeg" xsi:type="string">image/jpeg</item>
                     <item name="png" xsi:type="string">image/png</item>
                     <item name="gif" xsi:type="string">image/gif</item>
                 </item>
                 <item name="image_allowed" xsi:type="array">
-                    <item name="jpg" xsi:type="string">image/jpg</item>
+                    <item name="jpg" xsi:type="string">image/jpeg</item>
                     <item name="jpeg" xsi:type="string">image/jpeg</item>
                     <item name="png" xsi:type="string">image/png</item>
                     <item name="gif" xsi:type="string">image/gif</item>
