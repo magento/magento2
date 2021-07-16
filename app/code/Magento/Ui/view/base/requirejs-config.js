@@ -31,22 +31,3 @@ var config = {
         }
     }
 };
-
-/**
- * Adds polyfills only for browser contexts which prevents bundlers from including them.
- */
-if (typeof window !== 'undefined' && window.document) {
-    /**
-     * Polyfill Map and WeakMap for older browsers that do not support them.
-     */
-    if (typeof Map === 'undefined' || typeof WeakMap === 'undefined') {
-        config.deps.push('es6-collections');
-    }
-
-    /**
-     * Polyfill MutationObserver only for the browsers that do not support it.
-     */
-    if (typeof MutationObserver === 'undefined') {
-        config.deps.push('MutationObserver');
-    }
-}
