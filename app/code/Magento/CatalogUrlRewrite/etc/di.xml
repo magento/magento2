@@ -70,4 +70,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <plugin name="set_default_and_store_urls_to_copied_product"
+                type="Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product\SetUrlsToCopiedProduct"/>
+    </type>
 </config>
