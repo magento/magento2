@@ -31,6 +31,15 @@
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
+        <xs:attribute name="importance">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="low" />
+                    <xs:enumeration value="high" />
+                    <xs:enumeration value="auto" />   
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="metaType">
@@ -49,6 +58,15 @@
         <xs:attribute name="charset" type="xs:string"/>
         <xs:attribute name="type" type="xs:string"/>
         <xs:attribute name="src_type" type="xs:string"/>
+        <xs:attribute name="importance">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="low" />
+                    <xs:enumeration value="high" />
+                    <xs:enumeration value="auto" />   
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="headAttributeType">
