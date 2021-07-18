@@ -59,9 +59,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
      * @param PriceCurrencyInterface $priceCurrency
-     * @param ItemInterface $item
+     * @param ItemInterface|null $item
      * @param JsonSerializer|null $serializer
      * @param ConfiguredPriceSelection|null $configuredPriceSelection
+     * @param DiscountCalculator|null $discountCalculator
      */
     public function __construct(
         Product $saleableItem,
