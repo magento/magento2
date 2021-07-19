@@ -28,7 +28,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openEditBundleProduct">
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
