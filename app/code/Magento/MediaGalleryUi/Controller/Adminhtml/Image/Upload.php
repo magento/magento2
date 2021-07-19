@@ -16,7 +16,6 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryUi\Model\UploadImage;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Filter\Input\MaliciousCode;
 
 /**
  * Controller responsible to upload the media gallery content
@@ -42,11 +41,6 @@ class Upload extends Action implements HttpPostActionInterface
     private $logger;
 
     /**
-     * @var MaliciousCode
-     */
-    private $filter;
-
-    /**
      * @param Context $context
      * @param UploadImage $upload
      * @param LoggerInterface $logger
@@ -59,7 +53,6 @@ class Upload extends Action implements HttpPostActionInterface
         parent::__construct($context);
         $this->uploadImage = $upload;
         $this->logger = $logger;
-        $this->filter = new MaliciousCode();
     }
 
     /**
@@ -69,9 +62,24 @@ class Upload extends Action implements HttpPostActionInterface
     {
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
-        $param_path = $this->getRequest()->getParam('target_folder');
+        $targetFolder = $this->getRequest()->getParam('target_folder');
 
-        if (!$param_path) {
+        $type = $this->getRequest()->getParam('type');
+        $isAjax = $this->getRequest()->getParam('isAjax');
+
+        if (isset($isAjax) && isset($type)) {
+            if ( !$isAjax || $type != "image") {
+                $responseContent = [
+                    'success' => false,
+                    'message' => __('Please check valid type & ajax param'),
+                ];
+                $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
+                $resultJson->setData($responseContent);
+                return $resultJson;
+            }
+        }
+
+        if (!$targetFolder) {
             $responseContent = [
                 'success' => false,
                 'message' => __('The target_folder parameter is required.'),
@@ -81,63 +89,30 @@ class Upload extends Action implements HttpPostActionInterface
             return $resultJson;
         }
 
-        $customExpression = ['/[.]{1}/'];
-        $this->filter->setExpressions($customExpression);
-        $targetFolder = $this->filter->filter($param_path);
-
-        if ($this->canonicalizePath($targetFolder,null) == 0) {
-            $responseCode = self::HTTP_BAD_REQUEST;
+        try {
+            $this->uploadImage->execute($targetFolder, $type);
+            $responseCode = self::HTTP_OK;
+            $responseContent = [
+                'success' => true,
+                'message' => __('The image was uploaded successfully.'),
+            ];
+        } catch (LocalizedException $exception) {
+            $responseCode = self::HTTP_OK;
+            $responseContent = [
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ];
+        } catch (Exception $exception) {
+            $this->logger->critical($exception);
+            $responseCode = self::HTTP_OK;
             $responseContent = [
                 'success' => false,
                 'message' => __('Could not upload image.'),
             ];
-        } else {
-            $type = $this->getRequest()->getParam('type');
-
-            try {
-                $this->uploadImage->execute($targetFolder, $type);
-                $responseCode = self::HTTP_OK;
-                $responseContent = [
-                    'success' => true,
-                    'message' => __('The image was uploaded successfully.'),
-                ];
-            } catch (LocalizedException $exception) {
-                $responseCode = self::HTTP_OK;
-                $responseContent = [
-                    'success' => false,
-                    'message' => $exception->getMessage(),
-                ];
-            } catch (Exception $exception) {
-                $this->logger->critical($exception);
-                $responseCode = self::HTTP_OK;
-                $responseContent = [
-                    'success' => false,
-                    'message' => __('Could not upload image.'),
-                ];
-            }
         }
 
         $resultJson->setHttpResponseCode($responseCode);
         $resultJson->setData($responseContent);
         return $resultJson;
-    }
-
-    function canonicalizePath($path, $cwd=null): int
-    {
-        if (substr($path, 0, 1) === "/") {
-            $filename = $path;
-        } else {
-            $root      = is_null($cwd) ? getcwd() : $cwd;
-            $filename  = sprintf("%s/%s", $root, $path);
-        }
-
-        $dirname   = dirname($filename);
-        $canonical = realpath($dirname);
-
-        if ($canonical === false || $canonical === "/") {
-            return 0;
-        } else {
-            return 1;
-        }
     }
 }
