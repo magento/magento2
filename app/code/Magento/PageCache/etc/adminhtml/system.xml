@@ -43,7 +43,7 @@
                     </field>
                     <field id="backend_errormsgfile" type="text" translate="label comment" sortOrder="26" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Customized 503 Error Message File Location</label>
-                        <comment>Specify Varnish customized 503 error message path for config file generation. If field is empty default value( {magento-root-path}/pub/varnish/error503.html ) will be saved.</comment>
+                        <comment>Specify Varnish customized 503 error message path for config file generation. If field is empty default value( {magento-root-path}/pub/varnish/errors/503.html ) will be saved.</comment>
                         <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
                         <depends>
                             <field id="caching_application">1</field>

@@ -158,7 +158,7 @@ class Config
         );
 
         if (empty(trim($errorMsgFile))) {
-            $errorMsgFile = $this->directoryList->getPath('pub').'/varnish/error503.html';
+            $errorMsgFile = $this->directoryList->getPath('pub').'/varnish/errors/503.html';
         }
         return $errorMsgFile;
     }

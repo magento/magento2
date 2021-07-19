@@ -107,7 +107,7 @@ class ConfigTest extends TestCase
                     Config::XML_VARNISH_PAGECACHE_BACKEND_ERROR_FILE,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
-                    '/var/html/magento/pub/varnish/error503.html'
+                    '/var/html/magento/pub/varnish/errors/503.html'
                 ],
                 [
                     Config::XML_VARNISH_PAGECACHE_ACCESS_LIST,
@@ -158,7 +158,7 @@ class ConfigTest extends TestCase
         $expectedParams = [
             'backendHost' => 'example.com',
             'backendPort' => '8080',
-            'errorMsgFile' => '/var/html/magento/pub/varnish/error503.html',
+            'errorMsgFile' => '/var/html/magento/pub/varnish/errors/503.html',
             'accessList' =>  explode(',', '127.0.0.1, 192.168.0.1,127.0.0.2'),
             'designExceptions' => [['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']],
             'sslOffloadedHeader' => 'X_Forwarded_Proto: https',
@@ -171,7 +171,7 @@ class ConfigTest extends TestCase
                 $vclTemplateLocator,
                 'example.com',
                 '8080',
-                '/var/html/magento/pub/varnish/error503.html',
+                '/var/html/magento/pub/varnish/errors/503.html',
                 explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
                 120,
                 'X_Forwarded_Proto: https',
