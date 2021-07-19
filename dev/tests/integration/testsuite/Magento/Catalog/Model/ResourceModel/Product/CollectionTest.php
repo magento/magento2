@@ -206,26 +206,23 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
-     * @dataProvider addAttributeToSortDataProvider
+     * @dataProvider addIsSaleableAttributeToSortDataProvider
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_non_saleable_product.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
-    public function testAddAttributeToSort(string $productSku, string $order)
+    public function testAddIsSaleableAttributeToSort(string $productSku, string $order)
     {
-        /** @var Collection $productCollection */
         $this->collection->addAttributeToSort('is_saleable', $order);
-        self::assertEquals(2, $this->collection->count());
-        self::assertSame($productSku, $this->collection->getFirstItem()->getSku());
+        $this->assertEquals(2, $this->collection->count());
+        $this->assertEquals($productSku, $this->collection->getFirstItem()->getSku());
     }
 
     /**
-     * Provide test data for testAddAttributeToSort().
-     *
      * @return array
      */
-    public function addAttributeToSortDataProvider()
+    public function addIsSaleableAttributeToSortDataProvider(): array
     {
         return [
             [
@@ -234,6 +231,42 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'product_sku' => 'simple_not_saleable',
+                'order' => Collection::SORT_ORDER_ASC,
+            ]
+        ];
+    }
+
+    /**
+     * Test addAttributeToSort() with attribute 'price' works properly on frontend.
+     *
+     * @dataProvider addPriceAttributeToSortDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_equal_zero.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     */
+    public function testAddPriceAttributeToSort(string $productSku, string $order)
+    {
+        $this->processor->getIndexer()->reindexAll();
+        $this->collection->setStoreId(1);
+        $this->collection->addAttributeToSort('price', $order);
+        $this->assertEquals(2, $this->collection->count());
+        $this->assertEquals($productSku, $this->collection->getFirstItem()->getSku());
+    }
+
+    /**
+     * @return array
+     */
+    public function addPriceAttributeToSortDataProvider(): array
+    {
+        return [
+            [
+                'product_sku' => 'simple',
+                'order' => Collection::SORT_ORDER_DESC,
+            ],
+            [
+                'product_sku' => 'simple-2',
                 'order' => Collection::SORT_ORDER_ASC,
             ]
         ];

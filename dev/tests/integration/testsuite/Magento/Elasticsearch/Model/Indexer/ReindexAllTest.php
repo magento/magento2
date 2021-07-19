@@ -174,15 +174,28 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest_configurable
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @dataProvider searchSpecificProductDataProvider
+     * @param string $searchName
+     * @param string $sku
+     * @param int $expectedCount
      */
-    public function testSearchSpecificProduct()
+    public function testSearchSpecificProduct(string $searchName, string $sku, int $expectedCount)
     {
         $this->reindexAll();
-        $result = $this->searchByName('12345');
-        self::assertCount(1, $result);
+        $result = $this->searchByName($searchName);
+        self::assertCount($expectedCount, $result);
 
-        $specificProduct = $this->productRepository->get('configurable_12345');
+        $specificProduct = $this->productRepository->get($sku);
         self::assertEquals($specificProduct->getId(), $result[0]['_id']);
+    }
+
+    public function searchSpecificProductDataProvider(): array
+    {
+        return [
+            'search by numeric name' => ['12345', 'configurable_12345', 1],
+            'search by name with diacritics' => ['Cùstöm Dèsign', 'custom-design-simple-product', 1],
+        ];
     }
 
     /**
