@@ -5,10 +5,13 @@
  */
 namespace Magento\Framework\Amqp;
 
+use Closure;
+use Exception;
 use Magento\Framework\MessageQueue\ConnectionLostException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
+use Magento\Framework\Phrase;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Psr\Log\LoggerInterface;
@@ -73,11 +76,11 @@ class Queue implements QueueInterface
         /** @var AMQPMessage $message */
         try {
             $message = $channel->basic_get($this->queueName);
-        } catch (AMQPProtocolConnectionException $e) {
+        } catch (AMQPTimeoutException $exception) {
             throw new ConnectionLostException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
             );
         }
 
@@ -107,11 +110,11 @@ class Queue implements QueueInterface
         // @codingStandardsIgnoreStart
         try {
             $channel->basic_ack($properties['delivery_tag']);
-        } catch (AMQPProtocolConnectionException $e) {
+        } catch (Exception $exception) {
             throw new ConnectionLostException(
-                $e->getMessage(),
-                $e->getCode(),
-                $e
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
             );
         }
         // @codingStandardsIgnoreEnd
@@ -135,7 +138,7 @@ class Queue implements QueueInterface
             // @codingStandardsIgnoreEnd
             $envelope = $this->envelopeFactory->create(['body' => $message->body, 'properties' => $properties]);
 
-            if ($callback instanceof \Closure) {
+            if ($callback instanceof Closure) {
                 $callback($envelope);
             } else {
                 call_user_func($callback, $envelope);
@@ -165,7 +168,7 @@ class Queue implements QueueInterface
         // @codingStandardsIgnoreEnd
         if ($rejectionMessage !== null) {
             $this->logger->critical(
-                new \Magento\Framework\Phrase('Message has been rejected: %message', ['message' => $rejectionMessage])
+                new Phrase('Message has been rejected: %message', ['message' => $rejectionMessage])
             );
         }
     }
