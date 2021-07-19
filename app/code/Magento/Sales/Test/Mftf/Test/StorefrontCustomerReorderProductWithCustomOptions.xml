@@ -28,6 +28,107 @@
             <!-- Create Simple Product     -->
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
 
+            <!-- Search default simple product in the grid -->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+            <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+                <argument name="product" value="$$initialSimpleProduct$$"/>
+            </actionGroup>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
+
+            <!-- Open custom option panel -->
+            <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+            <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+
+            <!-- Add First Drop Down Custom Options -->
+            <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomDropDownOptionFirst">
+                <argument name="customOptionTitle" value="OptionDropDown1"/>
+                <argument name="customOptionType" value="Drop-down"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddTitleAndPriceValueToCustomOptionActionGroup" stepKey="addTitleAndPriceValueToCustomDropDownOptionFirst">
+                <argument name="optionValue" value="ProductOptionValueDropdown1"/>
+            </actionGroup>
+
+            <!-- Add Custom file option  -->
+            <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addFileOption">
+                <argument name="option" value="ProductOptionFile"/>
+            </actionGroup>
+
+            <!-- Add Second Drop Down Custom Options -->
+            <!-- As per issue both drop-down are fixed valued so used again ProductOptionValueDropdown1 DataEntity -->
+            <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomDropDownOptionSecond">
+                <argument name="customOptionTitle" value="{{ProductOptionDropDown2.title}}"/>
+                <argument name="customOptionType" value="Drop-down"/>
+            </actionGroup>
+            <actionGroup ref="AdminAddTitleAndPriceValueToCustomOptionActionGroup" stepKey="addTitleAndPriceValueToCustomDropDownOptionSecond">
+                <argument name="optionValue" value="ProductOptionValueDropdown2"/>
+            </actionGroup>
+
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+            <!-- Create Customer  -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Login to storefront as Customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+
+            <!-- Place Order as Customer -->
+            <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+                <argument name="productUrl" value="$$initialSimpleProduct.custom_attributes[url_key]$$"/>
+            </actionGroup>
+
+            <!--Select Option From First DropDown option -->
+            <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+                <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+                <argument name="optionLabel" value="{{ProductOptionValueDropdown1.title}}"/>
+            </actionGroup>
+
+            <!-- Attach file option-->
+            <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
+
+
+            <!--Select Option From Second DropDown option -->
+            <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectSecondOption">
+                <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+                <argument name="optionLabel" value="{{ProductOptionValueDropdown1.title}}"/>
+            </actionGroup>
+
+            <!-- Add Product to Card      -->
+            <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$initialSimpleProduct$$"/>
+                <argument name="productCount" value="1"/>
+            </actionGroup>
+
+            <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+            <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
+            <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+            <!-- Log out from storefront as Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
+
+            <!-- Again Login As Admin  -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForSubmitShipment"/>
+
+            <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openCreatedOrder">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+            </actionGroup>
+
+            <!-- Open order -->
+            <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderForCreatingShipment">
+                <argument name="orderId" value="{$grabOrderNumber}"/>
+            </actionGroup>
+            <!--Create Shipment for the order-->
+            <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="startCreateShipment"/>
+            <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
+            <!--Open created shipment-->
+            <actionGroup ref="AdminOpenShipmentFromOrderPageActionGroup" stepKey="openShipmentFromOrder"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+
         </before>
 
         <after>
@@ -35,61 +136,30 @@
             <deleteData stepKey="deleteDefaultCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="initialSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
         </after>
 
-        <!-- Search default simple product in the grid -->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
-            <argument name="product" value="$$initialSimpleProduct$$"/>
+        <!-- Login to storefront as Customer for Reorder-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginForReorder">
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
-        <!-- Create simple product with customizable option -->
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton1"/>
-        <waitForPageLoad stepKey="waitForDataToLoad"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="{{simpleProductCustomizableOptionOne.title}}" stepKey="fillOptionTitle"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('1')}}" stepKey="selectOptionTypeDropDown"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('1', simpleProductCustomizableOptionOne.type)}}" stepKey="selectOptionFieldFromDropDown"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBox"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_title}}" stepKey="fillOptionTitleForCustomizableOption"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_price}}" stepKey="fillOptionPrice"/>
-        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionOne.title,'0')}}" userInput="{{simpleProductCustomizableOptionOne.option_1_price_type}}" stepKey="selectOptionPriceType"/>
+        <!-- Go to My Account > My Orders page -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersLoad4"/>
 
-        <!-- Add Second File Options    -->
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection2"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton2"/>
-        <waitForPageLoad stepKey="waitForDataToLoad2"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('1')}}" userInput="{{simpleProductCustomizableOptionTwo.title}}" stepKey="fillOptionTitle2"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('2')}}" stepKey="selectOptionTypeDropDown2"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('2', simpleProductCustomizableOptionTwo.type)}}" stepKey="selectOptionFieldFromDropDown2"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('1')}}" stepKey="checkRequiredCheckBox2"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton2"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_price}}" stepKey="fillOptionPrice2"/>
-        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_price_type}}" stepKey="selectOptionPriceType2"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_file_extension}}" stepKey="fillOptionFileExtension2"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_image_size_x}}" stepKey="fillOptionImageSizeX2"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionTwo.title,'0')}}" userInput="{{simpleProductCustomizableOptionTwo.option_2_image_size_y}}" stepKey="fillOptionImageSizeY"/>
+        <!-- Click 'View Order' link on order from preconditions -->
+        <click selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabOrderNumber})}}" stepKey="clickOrderView"/>
+        <waitForPageLoad stepKey="waitForOrderPageLoad5"/>
 
-        <!-- Add third Options        -->
-        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection3"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOptionButton3"/>
-        <waitForPageLoad stepKey="waitForDataToLoad3"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('2')}}" userInput="{{simpleProductCustomizableOptionThree.title}}" stepKey="fillOptionTitle3"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeDropDown('3')}}" stepKey="selectOptionTypeDropDown3"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeItem('3', simpleProductCustomizableOptionThree.type)}}" stepKey="selectOptionFieldFromDropDown3"/>
-        <checkOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('2')}}" stepKey="checkRequiredCheckBox3"/>
-        <click selector="{{AdminProductCustomizableOptionsSection.addValue}}" stepKey="clickAddValueButton3"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_title}}" stepKey="fillOptionTitleForCustomizableOption3"/>
-        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_price}}" stepKey="fillOptionPrice3"/>
-        <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(simpleProductCustomizableOptionThree.title,'0')}}" userInput="{{simpleProductCustomizableOptionThree.option_3_price_type}}" stepKey="selectOptionPriceType3"/>
+        <!-- Make reorder -->
+        <actionGroup ref="StorefrontCustomerReorderActionGroup" stepKey="makeReorder">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
 
 
-        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!--Verify customer see success message-->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
