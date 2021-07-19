@@ -33,7 +33,6 @@ var config = {
         }
     },
     deps: [
-        'jquery/jquery.mobile.custom',
         'mage/common',
         'mage/dataPost',
         'mage/bootstrap'

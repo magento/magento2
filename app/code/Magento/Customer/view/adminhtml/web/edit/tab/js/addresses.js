@@ -369,7 +369,7 @@ define([
                 regionValue = this.options.regionElement.attr('value');
 
                 $.each(data, function (idx, item) {
-                    var regionOption = $('<option />').val(item.value).text(item.label);
+                    var regionOption = $('<option></option>').val(item.value).text(item.label);
 
                     if (regionValue && regionValue == item.label) { //eslint-disable-line eqeqeq
                         regionOption.attr('selected', 'selected');
