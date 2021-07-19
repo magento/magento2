@@ -31,15 +31,3 @@ var config = {
         }
     }
 };
-
-/**
- * Adds polyfills only for browser contexts which prevents bundlers from including them.
- */
-if (typeof window !== 'undefined' && window.document) {
-    /**
-     * Polyfill FormData object for old browsers that don't have full support for it.
-     */
-    if (typeof FormData === 'undefined' || typeof FormData.prototype.get === 'undefined') {
-        config.deps.push('FormData');
-    }
-}
