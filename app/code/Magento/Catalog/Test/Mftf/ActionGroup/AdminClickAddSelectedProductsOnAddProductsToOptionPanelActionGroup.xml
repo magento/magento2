@@ -13,6 +13,6 @@
             <description>Clicks the "Add Selected Products" button on the "Add Products To Option" Panel </description>
         </annotations>
 
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 </actionGroups>

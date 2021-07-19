@@ -41,6 +41,7 @@
         
         <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems"/>
         <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption3"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions"/>
         <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillOptionTitle">
@@ -89,6 +90,7 @@
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="GoToProductPage">
             <argument name="productUrlKey" value="{{BundleProduct.urlKey}}"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForAbilityToAddOptions"/>
 
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonToCustomize"/>
@@ -102,6 +104,7 @@
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="clickOnBundleProductToEdit"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
         <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption"/>   
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptionsToAppear"/>
         <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillNewestOptionTitle">
@@ -154,6 +157,7 @@
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoadAgain"/>
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="LookingForAbilityToAddBothOptions"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonAgainToCustomize"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBothCustomizationDropDown"/>
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption2}}" stepKey="seeBundleItems"/>
     </test>
