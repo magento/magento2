@@ -239,7 +239,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
             ->where('TABLE_SCHEMA = ?', $dbName)
             ->where('TABLE_TYPE = ?', self::MYSQL_TABLE_TYPE);
 
-        if ($tablePrefix = $this->resourceConnection->getTablePrefix()) {
+        $tablePrefix = $this->resourceConnection->getTablePrefix();
+        if ($tablePrefix) {
             $stmt->where('TABLE_NAME LIKE ?', $this->dbHelper->addLikeEscape(
                 $tablePrefix,
                 ['position' => 'start']
