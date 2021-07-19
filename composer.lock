@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ea1e48e039b372e597bc5b60370ef77",
+    "content-hash": "b6fd3e50450ab46569b56ebf685a10c1",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3051,20 +3051,20 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9"
+                "reference": "59a67efe96a11d9d00ae20694c48c20770c4e904"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/fcc66f535d631788f2ba160ff547357086d9b2c9",
-                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9",
+                "url": "https://api.github.com/repos/magento/composer/zipball/59a67efe96a11d9d00ae20694c48c20770c4e904",
+                "reference": "59a67efe96a11d9d00ae20694c48c20770c4e904",
                 "shasum": ""
             },
             "require": {
-                "composer/composer": "^1.9",
+                "composer/composer": "^1.9 || ^2.0",
                 "php": "~7.3.0||~7.4.0",
                 "symfony/console": "~4.4.0"
             },
@@ -3083,7 +3083,11 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2020-06-15T17:52:31+00:00"
+            "support": {
+                "issues": "https://github.com/magento/composer/issues",
+                "source": "https://github.com/magento/composer/tree/1.7.0"
+            },
+            "time": "2021-03-29T21:33:27+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
