@@ -54,6 +54,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
     use Magento\Setup\Model\SearchConfig;
+    use Magento\RemoteStorage\Setup\ConfigOptionsList as FileStorageValidator;
 
     /**
      * @SuppressWarnings(PHPMD.TooManyFields)
@@ -108,11 +109,6 @@ namespace Magento\Setup\Test\Unit\Model {
         private $moduleLoader;
 
         /**
-         * @var DirectoryList|MockObject
-         */
-        private $directoryList;
-
-        /**
          * @var AdminAccountFactory|MockObject
          */
         private $adminFactory;
@@ -123,12 +119,7 @@ namespace Magento\Setup\Test\Unit\Model {
         private $logger;
 
         /**
-         * @var Random|MockObject
-         */
-        private $random;
-
-        /**
-         * @var MockObject
+         * @var AdapterInterface|MockObject
          */
         private $connection;
 
@@ -188,7 +179,7 @@ namespace Magento\Setup\Test\Unit\Model {
         private $phpReadinessCheck;
 
         /**
-         * @var \Magento\Framework\Setup\DeclarationInstaller|MockObject
+         * @var DeclarationInstaller|MockObject
          */
         private $declarationInstallerMock;
 
@@ -365,6 +356,11 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->with(Area::AREA_GLOBAL);
             $registry = $this->createMock(Registry::class);
             $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
+
+            $fileStorageValidatorMock = $this->getMockBuilder(FileStorageValidator::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
             $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
             $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects($this->any())
@@ -397,7 +393,8 @@ namespace Magento\Setup\Test\Unit\Model {
                     [Manager::class, $cacheManager],
                     [DeclarationInstaller::class, $this->declarationInstallerMock],
                     [Registry::class, $registry],
-                    [SearchConfig::class, $searchConfigMock]
+                    [SearchConfig::class, $searchConfigMock],
+                    [FileStorageValidator::class, $fileStorageValidatorMock],
                 ]);
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
@@ -452,6 +449,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
+                        ['Validating file storage configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
@@ -503,6 +501,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
+                        ['Validating file storage configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
