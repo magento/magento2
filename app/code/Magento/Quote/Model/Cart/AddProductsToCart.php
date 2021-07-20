@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -16,7 +16,6 @@ use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Unified approach to add products to the Shopping Cart.
@@ -48,14 +47,9 @@ class AddProductsToCart
     ];
 
     /**
-     * @var CollectionFactory
+     * @var ProductRepositoryInterface
      */
-    private $productCollectionFactory;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+    private $productRepository;
 
     /**
      * @var array
@@ -78,21 +72,18 @@ class AddProductsToCart
     private $requestBuilder;
 
     /**
-     * @param CollectionFactory $productCollectionFactory
-     * @param StoreManagerInterface $storeManager
+     * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
      */
     public function __construct(
-        CollectionFactory $productCollectionFactory,
-        StoreManagerInterface $storeManager,
+        ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         BuyRequestBuilder $requestBuilder
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
-        $this->storeManager = $storeManager;
+        $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
@@ -149,13 +140,18 @@ class AddProductsToCart
             return;
         }
 
-        $store = $this->storeManager->getStore($cart->getStoreId());
-        $productCollection = $this->productCollectionFactory->create()
-            ->addAttributeToFilter('sku', $sku)
-            ->addWebsiteFilter([$store->getWebsiteId()])
-            ->load();
-        $product = $productCollection->getFirstItem();
-        if (!$product->getId()) {
+        try {
+            $product = $this->productRepository->get($sku, false, null, true);
+        } catch (NoSuchEntityException $e) {
+            $this->addError(
+                __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                $cartItemPosition
+            );
+
+            return;
+        }
+
+        if (!in_array($cart->getStoreId(), $product->getStoreIds())) {
             $this->addError(
                 __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
                 $cartItemPosition
