@@ -22,9 +22,9 @@ define([
         priceBoxSelector: '.price-box',
         optionHandlers: {},
         optionTemplate: '<%- data.label %>' +
-        '<% if (data.finalPrice.value) { %>' +
-        ' +<%- data.finalPrice.formatted %>' +
-        '<% } %>',
+            '<% if (data.finalPrice.value) { %>' +
+            ' +<%- data.finalPrice.formatted %>' +
+            '<% } %>',
         controlContainer: 'dd', // should be eliminated
         priceFormat: {},
         isFixedPrice: false,
@@ -107,10 +107,11 @@ define([
                 changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);//eslint-disable-line
             }
 
-            if(checkIsValidateQty(bundleOption.data('qtyField'))) {
+            if (checkIsValidateQty(bundleOption)) {
                 if (changes) {
                     priceBox.trigger('updatePrice', changes);
                 }
+
                 this._displayTierPriceBlock(bundleOption);
                 this.updateProductSummary();
             }
@@ -132,7 +133,9 @@ define([
                     .options[field.data('optionId')]
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
-                optionInstance.trigger('change');
+                if (checkIsValidateQty(optionInstance)) {
+                    optionInstance.trigger('change');
+                }
             }
         },
 
@@ -373,13 +376,25 @@ define([
         return changes;
     }
 
-    function checkIsValidateQty(qtyElem) {
-        var isValid = 0;
-        if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed &&
-            qtyElem.val() <= qtyElem.data('validate')['validate-item-quantity'].maxAllowed
-        ) {
+    /**
+     * Check the quantity field if negative value occurs.
+     *
+     * @param bundleOption
+     */
+    function checkIsValidateQty(bundleOption)
+    {
+        let isValid = 0,
+            qtyElem = bundleOption.data('qtyField');
+        if (bundleOption.prop('type') === 'radio' || bundleOption.prop('type') === 'select-one') {
+            if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed
+                && qtyElem.val() <= qtyElem.data('validate')['validate-item-quantity'].maxAllowed
+            ) {
+                isValid = 1;
+            }
+        } else {
             isValid = 1;
         }
+
         return isValid;
     }
 
