@@ -133,6 +133,7 @@ define([
                     .options[field.data('optionId')]
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
+
                 if (checkIsValidateQty(optionInstance)) {
                     optionInstance.trigger('change');
                 }
@@ -383,7 +384,7 @@ define([
      */
     function checkIsValidateQty(bundleOption)
     {
-        let isValid = 0,
+        var isValid = 0,
             qtyElem = bundleOption.data('qtyField');
         if (bundleOption.prop('type') === 'radio' || bundleOption.prop('type') === 'select-one') {
             if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed
