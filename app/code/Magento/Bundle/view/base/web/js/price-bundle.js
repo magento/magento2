@@ -107,6 +107,7 @@ define([
                 changes = defaultGetOptionValue(bundleOption, this.options.optionConfig);//eslint-disable-line
             }
 
+            // eslint-disable-next-line no-use-before-define
             if (checkIsValidateQty(bundleOption)) {
                 if (changes) {
                     priceBox.trigger('updatePrice', changes);
@@ -134,6 +135,7 @@ define([
                     .selections[field.data('optionValueId')];
                 optionConfig.qty = field.val();
 
+                // eslint-disable-next-line no-use-before-define
                 if (checkIsValidateQty(optionInstance)) {
                     optionInstance.trigger('change');
                 }
@@ -380,15 +382,16 @@ define([
     /**
      * Check the quantity field if negative value occurs.
      *
-     * @param bundleOption
+     * @param {Object} bundleOption
      */
-    function checkIsValidateQty(bundleOption)
-    {
+    function checkIsValidateQty(bundleOption) {
         var isValid = 0,
-            qtyElem = bundleOption.data('qtyField');
-        if (bundleOption.prop('type') === 'radio' || bundleOption.prop('type') === 'select-one') {
-            if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed
-                && qtyElem.val() <= qtyElem.data('validate')['validate-item-quantity'].maxAllowed
+            qtyElem = bundleOption.data('qtyField'),
+            bundleOptionType = bundleOption.prop('type');
+
+        if (bundleOptionType === 'radio' || bundleOptionType === 'select-one') {
+            if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed &&
+                qtyElem.val() <= qtyElem.data('validate')['validate-item-quantity'].maxAllowed
             ) {
                 isValid = 1;
             }
