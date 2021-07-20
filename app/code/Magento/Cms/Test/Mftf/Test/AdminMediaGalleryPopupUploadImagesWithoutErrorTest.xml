@@ -43,20 +43,20 @@
         <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImage">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
-        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
-        <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtnSecondTime"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtnFirstTime"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtnSecondTime"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!--Switch to content frame and click on image-->
         <comment userInput="Switch to content frame and click on image" stepKey="commentSwitchToIframe"/>
-        <switchToIFrame selector="{{BlockContentSection.contentIframe}}" stepKey="switchToContentFrame"/>
-        <click selector="{{BlockContentSection.image}}" stepKey="clickImage"/>
+        <switchToIFrame selector="{{TinyMCESection.EditAreaIframe}}" stepKey="switchToContentFrame"/>
+        <click selector="{{TinyMCESection.IframeContent}} {{BlockContentSection.image}}" stepKey="clickImage"/>
         <switchToIFrame stepKey="switchBack"/>
         <!--Add image second time and assert-->
         <comment userInput="Add image second time and assert" stepKey="commentAddImageAndAssert"/>
         <actionGroup ref="AdminAddImageToCMSBlockContent" stepKey="addImageSecondTime">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
-        <switchToIFrame selector="{{BlockContentSection.contentIframe}}" stepKey="switchToContentFrameSecondTime"/>
-        <seeElement selector="{{BlockContentSection.image}}" stepKey="seeImageElement"/>
+        <switchToIFrame selector="{{TinyMCESection.EditAreaIframe}}" stepKey="switchToContentFrameSecondTime"/>
+        <seeElement selector="{{TinyMCESection.IframeContent}} {{BlockContentSection.image}}" stepKey="seeImageElement"/>
     </test>
 </tests>
