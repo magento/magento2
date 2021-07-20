@@ -18,8 +18,7 @@ use Magento\ImportExport\Model\Import\Source\Csv;
 /**
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
- * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -31,8 +30,6 @@ class ProductUrlKeyTest extends ProductTestBase
      * To reach the goal we need to not send the name column, as the url key is generated from it.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeysAndName()
     {
@@ -67,7 +64,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @magentoAppIsolation enabled
      * @dataProvider validateUrlKeysDataProvider
      * @param $importFile string
      * @param $expectedErrors array
@@ -136,8 +132,6 @@ class ProductUrlKeyTest extends ProductTestBase
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      */
     public function testValidateUrlKeysMultipleStores()
     {
@@ -164,8 +158,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testExistingProductWithUrlKeys()
     {
@@ -207,8 +199,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_wrong_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testAddUpdateProductWithInvalidUrlKeys() : void
     {
@@ -250,8 +240,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithoutChangingUrlKeys()
     {
@@ -279,8 +267,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testImportWithoutUrlKeys()
     {
@@ -319,8 +305,6 @@ class ProductUrlKeyTest extends ProductTestBase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_with_non_latin_url_key.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
