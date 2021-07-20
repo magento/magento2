@@ -220,7 +220,8 @@ class ProductRepositoryTest extends TestCase
                     'getStoreId',
                     'getMediaGalleryEntries',
                     'getExtensionAttributes',
-                    'getCategoryIds'
+                    'getCategoryIds',
+                    'getAttributes'
                 ]
             )
             ->disableOriginalConstructor()
@@ -243,7 +244,8 @@ class ProductRepositoryTest extends TestCase
                     'save',
                     'getMediaGalleryEntries',
                     'getExtensionAttributes',
-                    'getCategoryIds'
+                    'getCategoryIds',
+                    'getAttributes'
                 ]
             )
             ->disableOriginalConstructor()
@@ -852,6 +854,9 @@ class ProductRepositoryTest extends TestCase
     public function testGetList()
     {
         $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock->expects($this->once())
+            ->method('getFilterGroups')
+            ->willReturn([]);
         $collectionMock = $this->createMock(Collection::class);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->product->method('getSku')->willReturn('simple');
