@@ -8,11 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="CliEnableTinyMCE4ActionGroup">
-        <annotations>
-            <description>Enable Tiny MCE 4 by CLI command config:set</description>
-        </annotations>
-
-        <magentoCLI command="config:set {{EnableTinyMCE4.path}} {{EnableTinyMCE4.value}}" stepKey="enableTinyMCE4"/>
+    <actionGroup name="AdminCreateTaxRuleWithTwoTaxRatesActionGroup" extends="AdminCreateTaxRuleActionGroup">
+        <arguments>
+            <argument name="taxRate2"/>
+        </arguments>
+        <click selector="{{AdminTaxRulesSection.selectTaxRate(taxRate2.code)}}" stepKey="selectTaxRate2" after="selectTaxRate"/>
     </actionGroup>
 </actionGroups>
