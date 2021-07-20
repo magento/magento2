@@ -61,8 +61,7 @@ class Engine extends \Magento\Framework\App\Config\Value
         parent::beforeSave();
         $value = (string)$this->getValue();
         if (empty($value)) {
-            $searchEngine = $this->engineResolver->getCurrentSearchEngine();
-            $this->setValue($searchEngine);
+            $this->setValue($this->engineResolver->getCurrentSearchEngine());
         }
         return $this;
     }
