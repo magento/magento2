@@ -49,7 +49,7 @@ class LoginAsCustomerButtonDataProviderPlugin
     public function afterGetData(DataProvider $subject, array $result, int $customerId): array
     {
         if (isset($result['on_click']) &&
-            !($this->isAssistanceEnabled->execute($customerId) && $this->isCustomerEnabled->execute($customerId))) {
+            !($this->isCustomerEnabled->execute($customerId) && $this->isAssistanceEnabled->execute($customerId))) {
             $result['on_click'] = 'window.lacNotAllowedPopup()';
         }
 
