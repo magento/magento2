@@ -97,6 +97,26 @@ class DataObjectHelper
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
+        if ($dataObject instanceof ExtensibleDataInterface
+            && !empty($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])
+        ) {
+            foreach ($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $customAttribute) {
+                $dataObject->setCustomAttribute(
+                    $customAttribute[AttributeInterface::ATTRIBUTE_CODE],
+                    $customAttribute[AttributeInterface::VALUE]
+                );
+            }
+            unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
+        }
+        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel) {
+            $simpleData = array_filter($data, function ($e) { return is_scalar($e) || is_null($e); });
+            $dataObject->addData($simpleData);
+            $data = array_filter(array_diff_key($data, $simpleData));
+            if (\count($data) === 0) {
+                return $this;
+            }
+        }
+
         $dataObjectMethods = get_class_methods(get_class($dataObject));
         foreach ($data as $key => $value) {
             /* First, verify is there any setter for the key on the Service Data Object */
@@ -105,18 +125,7 @@ class DataObjectHelper
                 'set' . $camelCaseKey,
                 'setIs' . $camelCaseKey,
             ];
-            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES
-                && ($dataObject instanceof ExtensibleDataInterface)
-                && is_array($data[$key])
-                && !empty($data[$key])
-            ) {
-                foreach ($data[$key] as $customAttribute) {
-                    $dataObject->setCustomAttribute(
-                        $customAttribute[AttributeInterface::ATTRIBUTE_CODE],
-                        $customAttribute[AttributeInterface::VALUE]
-                    );
-                }
-            } elseif ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
+            if ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
                 $methodName = array_values($methodNames)[0];
                 if (!is_array($value)) {
                     if ($methodName === 'setExtensionAttributes' && $value === null) {
