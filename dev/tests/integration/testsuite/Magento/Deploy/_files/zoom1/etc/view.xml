@@ -22,13 +22,9 @@
         <item type="file">Lib::mage/dropdown_old.js</item>
         <item type="file">Lib::mage/list.js</item>
         <item type="file">Lib::mage/loader_old.js</item>
-        <item type="file">Lib::mage/webapi.js</item>
-        <item type="file">Lib::mage/zoom.js</item>
-        <item type="file">Lib::mage/translate-inline-vde.js</item>
         <item type="file">Lib::mage/requirejs/mixins.js</item>
         <item type="file">Lib::mage/requirejs/static.js</item>
         <item type="file">Magento_Customer::js/zxcvbn.js</item>
-        <item type="file">Magento_Catalog::js/zoom.js</item>
         <item type="file">Magento_Ui::js/lib/step-wizard.js</item>
         <item type="file">Magento_Ui::js/form/element/ui-select.js</item>
         <item type="file">Magento_Ui::js/form/element/file-uploader.js</item>
