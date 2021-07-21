@@ -12,9 +12,9 @@
         <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
         <element name="TinyMCE" type="text" selector=".tox-tinymce"/>
         <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
-        <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']" timeout="30"/>
+        <element name="InsertWidgetIcon" type="button" selector="button[aria-label='Insert Widget']" timeout="30"/>
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
-        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
+        <element name="InsertVariableIcon" type="button" selector="button[aria-label='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
         <element name="InsertImageIcon" type="button" selector="//button[contains(@title,'image')]" timeout="30"/>
         <element name="Style" type="button" selector="//button[contains(@title,'Formats')]"/>
