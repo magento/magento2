@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReorderAsGuestCustomerTest">
+        <annotations>
+            <stories value="Reorder"/>
+            <title value="Make reorder as guest on Frontend1"/>
+            <description value="Make reorder as guest on Frontend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-34465"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData> 
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="LogoutAsAdmin"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCart.return$)}}" stepKey="getOrderId"/>
+
+        <actionGroup ref="StorefrontOpenOrdersAndReturnsPageActionGroup" stepKey="goToOrdersAndReturnsPage"/>
+        <actionGroup ref="StorefrontFillOrdersAndReturnsFormTypeZipActionGroup" stepKey="fillOrder">
+            <argument name="orderNumber" value="$getOrderId"/>
+            <argument name="customer" value="Simple_USTX_Customer"/>
+            <argument name="address" value="BillingAddressTX"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickContinueOnOrdersAndReturnsPageActionGroup" stepKey="clickContinue"/>
+        <actionGroup ref="StorefrontClickReorderOnGuestOrderViewPageActionGroup" stepKey="clickReorder"/>
+
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct.name$$)}}" stepKey="seeProductInCart"/>
+    </test>
+</tests>

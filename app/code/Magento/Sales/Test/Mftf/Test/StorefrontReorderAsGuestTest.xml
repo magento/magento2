@@ -7,14 +7,17 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontReorderAsGuestTest">
+    <test name="StorefrontReorderAsGuestTest" deprecated="Use StorefrontReorderAsGuestCustomerTest instead">
         <annotations>
             <stories value="Reorder"/>
-            <title value="Make reorder as guest on Frontend"/>
+            <title value="DEPRECATED. Make reorder as guest on Frontend"/>
             <description value="Make reorder as guest on Frontend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34465"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontReorderAsGuestCustomerTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <!--Create simple product.-->
@@ -23,34 +26,21 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create Customer Account -->
-             <createData entity="Simple_US_Customer" stepKey="createCustomer"/> 
-            
-            <createData entity="GuestCart" stepKey="createGuestCart"/>
-                <createData entity="SimpleCartItem" stepKey="addCartItem">
-                <requiredEntity createDataKey="createGuestCart"/>
-                <requiredEntity createDataKey="createSimpleProduct"/>
-            </createData>
-            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
-                <requiredEntity createDataKey="createGuestCart"/>
-            </createData>
-            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
-                <requiredEntity createDataKey="createGuestCart"/>
-            </updateData>
-           
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-            <!-- <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/> -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Order a product -->
-        <!-- <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToPDP"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToPDP"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
@@ -68,22 +58,15 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="getOrderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
             <actualResult type="const">$getOrderId</actualResult>
-        </assertNotEmpty> -->
+        </assertNotEmpty>
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
         <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
         <waitForPageLoad stepKey="waiForStorefrontPage"/>
 
-    
-
-        <getData entity="GetOrderIdByIncrementId" stepKey="getOrderId">
-            <requiredEntity createDataKey="createGuestCart"/>
-        </getData>
-
         <!-- Fill the form with correspondent Order data -->
         <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
-            <!-- <argument name="orderNumber" value="{$createGuestCart.return$}"/> -->
-            <argument name="orderNumber" value="{$getOrderId.return$}"/>
+            <argument name="orderNumber" value="{$getOrderId}"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
