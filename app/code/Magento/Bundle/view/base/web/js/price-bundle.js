@@ -108,7 +108,7 @@ define([
             }
 
             // eslint-disable-next-line no-use-before-define
-            if (checkIsValidateQty(bundleOption)) {
+            if (isValidQty(bundleOption)) {
                 if (changes) {
                     priceBox.trigger('updatePrice', changes);
                 }
@@ -136,7 +136,7 @@ define([
                 optionConfig.qty = field.val();
 
                 // eslint-disable-next-line no-use-before-define
-                if (checkIsValidateQty(optionInstance)) {
+                if (isValidQty(optionInstance)) {
                     optionInstance.trigger('change');
                 }
             }
@@ -384,19 +384,17 @@ define([
      *
      * @param {Object} bundleOption
      */
-    function checkIsValidateQty(bundleOption) {
-        var isValid = 0,
+    function isValidQty(bundleOption) {
+        var isValid = true,
             qtyElem = bundleOption.data('qtyField'),
-            bundleOptionType = bundleOption.prop('type');
+            bundleOptionType = bundleOption.prop('type'),
+            qtyValidator = typeof qtyElem.data('validate') === 'object' ?
+                qtyElem.data('validate')['validate-item-quantity'] : '';
 
-        if (bundleOptionType === 'radio' || bundleOptionType === 'select-one') {
-            if (qtyElem.val() >= qtyElem.data('validate')['validate-item-quantity'].minAllowed &&
-                qtyElem.val() <= qtyElem.data('validate')['validate-item-quantity'].maxAllowed
-            ) {
-                isValid = 1;
-            }
-        } else {
-            isValid = 1;
+        if (['radio', 'select-one'].includes(bundleOptionType) &&
+            (qtyElem.val() < qtyValidator.minAllowed || qtyElem.val() > qtyValidator.maxAllowed)
+        ) {
+            isValid = false;
         }
 
         return isValid;
