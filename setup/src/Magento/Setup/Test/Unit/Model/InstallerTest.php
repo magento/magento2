@@ -53,7 +53,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
     use Magento\Setup\Model\SearchConfig;
-    use Magento\RemoteStorage\Setup\ConfigOptionsList as FileStorageValidator;
+    use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteFileStorageValidator;
 
     /**
      * @SuppressWarnings(PHPMD.TooManyFields)
@@ -353,7 +353,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $registry = $this->createMock(Registry::class);
             $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
 
-            $fileStorageValidatorMock = $this->getMockBuilder(FileStorageValidator::class)
+            $remoteFileStorageValidatorMock = $this->getMockBuilder(RemoteFileStorageValidator::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -390,7 +390,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     [DeclarationInstaller::class, $this->declarationInstallerMock],
                     [Registry::class, $registry],
                     [SearchConfig::class, $searchConfigMock],
-                    [FileStorageValidator::class, $fileStorageValidatorMock],
+                    [RemoteFileStorageValidator::class, $remoteFileStorageValidatorMock],
                 ]);
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
@@ -445,7 +445,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
-                        ['Validating file storage configuration...'],
+                        ['Validating remote file storage configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
@@ -497,7 +497,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
-                        ['Validating file storage configuration...'],
+                        ['Validating remote file storage configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],

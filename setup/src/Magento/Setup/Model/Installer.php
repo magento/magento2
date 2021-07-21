@@ -55,7 +55,7 @@ use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
-use Magento\RemoteStorage\Setup\ConfigOptionsList as FileStorageValidator;
+use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteFileStorageValidator;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -357,7 +357,11 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
-        $script[] = ['Validating file storage configuration...', 'validateFileStorageConfiguration', [$request]];
+        $script[] = [
+            'Validating remote file storage configuration...',
+            'validateRemoteFileStorageConfiguration',
+            [$request]
+        ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -1208,10 +1212,10 @@ class Installer
      * @throws ValidationException
      * @throws Exception
      */
-    public function validateFileStorageConfiguration(array $data)
+    public function validateRemoteFileStorageConfiguration(array $data)
     {
-        $fileStorageValidator = $this->objectManagerProvider->get()->get(FileStorageValidator::class);
-        $validationErrors = $fileStorageValidator->validate($data, $this->deploymentConfig);
+        $remoteFileStorageValidator = $this->objectManagerProvider->get()->get(RemoteFileStorageValidator::class);
+        $validationErrors = $remoteFileStorageValidator->validate($data, $this->deploymentConfig);
 
         if (!empty($validationErrors)) {
             throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
