@@ -388,10 +388,12 @@ define([
         var isValid = true,
             qtyElem = bundleOption.data('qtyField'),
             bundleOptionType = bundleOption.prop('type'),
-            qtyValidator = typeof qtyElem.data('validate') === 'object' ?
-                qtyElem.data('validate')['validate-item-quantity'] : '';
+            qtyValidator = qtyElem.data('validate') &&
+                typeof qtyElem.data('validate')['validate-item-quantity'] === 'object' ?
+                qtyElem.data('validate')['validate-item-quantity'] : null;
 
         if (['radio', 'select-one'].includes(bundleOptionType) &&
+            qtyValidator &&
             (qtyElem.val() < qtyValidator.minAllowed || qtyElem.val() > qtyValidator.maxAllowed)
         ) {
             isValid = false;
