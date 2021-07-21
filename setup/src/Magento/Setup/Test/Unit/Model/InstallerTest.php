@@ -25,7 +25,6 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Filesystem;
     use Magento\Framework\Filesystem\Directory\WriteInterface;
     use Magento\Framework\Filesystem\DriverPool;
-    use Magento\Framework\Math\Random;
     use Magento\Framework\Model\ResourceModel\Db\Context;
     use Magento\Framework\Module\ModuleList\Loader;
     use Magento\Framework\Module\ModuleListInterface;
@@ -231,11 +230,8 @@ namespace Magento\Setup\Test\Unit\Model {
                 ['Foo_One', 'Bar_Two']
             );
             $this->moduleLoader = $this->createMock(Loader::class);
-            $this->directoryList =
-                $this->createMock(DirectoryList::class);
             $this->adminFactory = $this->createMock(AdminAccountFactory::class);
             $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-            $this->random = $this->createMock(Random::class);
             $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
             $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
             $this->filesystem = $this->createMock(Filesystem::class);
