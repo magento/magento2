@@ -11,12 +11,12 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
-use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
+use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
 
 /**
  * @inheritdoc
  */
-class AddUserInfoToContext implements ContextParametersProcessorInterface
+class AddUserInfoToContext implements UserContextParametersProcessorInterface
 {
     /**
      * @var UserContextInterface
@@ -46,6 +46,14 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
         $this->userContext = $userContext;
         $this->session = $session;
         $this->customerRepository = $customerRepository;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUserContext(UserContextInterface $userContext): void
+    {
+        $this->userContext = $userContext;
     }
 
     /**
