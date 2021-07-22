@@ -134,7 +134,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_simple.php
      */
     public function testValidateUrlKeysMultipleStores()
     {
