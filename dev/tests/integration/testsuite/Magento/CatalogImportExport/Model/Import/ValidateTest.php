@@ -138,6 +138,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateUrlKeysMultipleStores()
     {
+        $this->markTestSkipped('Blocked by AC-373');
         $filesystem = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem::class
         );
