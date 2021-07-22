@@ -523,6 +523,7 @@ class UtilityTest extends TestCase
 
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
         $this->assertEquals($this->utility, $this->utility->deltaRoundingFix($discountData, $this->item));
+
     }
 
     public function testResetRoundingDeltas()
