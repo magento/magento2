@@ -22,19 +22,26 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
-            <!-- Enable Bank Transfer payment -->
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
-
-            <!--Set default flat rate shipping method settings-->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
 
-            <!--Create simple customer-->
             <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
 
-            <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">10.00</field>
             </createData>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="simpleCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="simpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+        
         </before>
         <after>
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
@@ -43,39 +50,33 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!--Create new customer order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
-            <argument name="customer" value="$$simpleCustomer$$"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToNewOrderWithExistingCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSimpleProductToTheOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFlatRateShippingMethod"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPaymentOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="checkBankTransferOption"/>
+
+        <updateData createDataKey="createCustomerCart" entity="BankTransferPaymentMethod" stepKey="submitOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
         </actionGroup>
 
-        <!--Add Simple product to order-->
-        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
-            <argument name="product" value="$$simpleProduct$$"/>
-        </actionGroup>
-
-        <!--Select FlatRate shipping method-->
-        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-
-        <!-- Select bank Transfer payment method -->
-        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
-        <conditionalClick selector="{{AdminOrderFormPaymentSection.bankTransferOption}}" dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true" stepKey="checkBankTransferOption"/>
-        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
-
-        <!-- Verify order information -->
-        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
-
-        <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
 
-        <!--Log in to Storefront as Customer  -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
-        <!-- Assert OrderId and status in frontend order grid -->
-        <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
-        <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <getData entity="GetOrderData" stepKey="getOrderData">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </getData>
+
+        <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="clickOnMyOrders"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderDetailsToLoadn"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$createCustomerCart.increment_id$', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
     </test>
 </tests>

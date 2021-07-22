@@ -19,4 +19,8 @@
     <entity name="CashOnDeliveryPaymentMethod" type="payment_method">
         <data key="method">cashondelivery</data>
     </entity>
+
+    <entity name="BankTransferPaymentMethod" type="payment_method">
+        <data key="method">banktransfer</data>
+    </entity>
 </entities>
