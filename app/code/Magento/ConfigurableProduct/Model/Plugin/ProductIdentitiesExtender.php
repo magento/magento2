@@ -51,7 +51,7 @@ class ProductIdentitiesExtender
      */
     public function afterGetIdentities(Product $subject, array $identities): array
     {
-        if ($subject->getTypeId() !== ConfigurableType::TYPE_CODE) {
+        if ($subject->getTypeId() === ConfigurableType::TYPE_CODE) {
             return $identities;
         }
         $parentProductsIdentities = [];
