@@ -58,7 +58,7 @@ class Builder implements BuilderInterface
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
                         'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat'],
+                            ['lowercase', 'keyword_repeat', 'asciifolding'],
                             array_keys($filter)
                         ),
                         'char_filter' => array_keys($charFilter)
@@ -67,16 +67,14 @@ class Builder implements BuilderInterface
                     'prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
-                        'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat']
-                        ),
+                        'filter' => ['lowercase', 'keyword_repeat', 'asciifolding'],
                         'char_filter' => array_keys($charFilter)
                     ],
                     'sku' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
                         'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat'],
+                            ['lowercase', 'keyword_repeat', 'asciifolding'],
                             array_keys($filter)
                         ),
                     ],
@@ -84,9 +82,7 @@ class Builder implements BuilderInterface
                     'sku_prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
-                        'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat']
-                        ),
+                        'filter' => ['lowercase', 'keyword_repeat', 'asciifolding']
                     ]
                 ],
                 'tokenizer' => $tokenizer,

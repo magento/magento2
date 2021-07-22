@@ -145,4 +145,10 @@
         <data key="label">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
         <data key="value">ABCDEFGHJKMnpqrstuvwxyz23456789</data>
     </entity>
+    <entity name="StorefrontCaptchaOnApplyingCouponCodeFormsConfigData">
+        <data key="path">customer/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Applying coupon code</data>
+        <data key="value">sales_rule_coupon_request</data>
+    </entity>
 </entities>
