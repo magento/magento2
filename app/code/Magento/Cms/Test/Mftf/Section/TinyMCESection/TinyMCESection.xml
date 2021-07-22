@@ -16,26 +16,26 @@
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="InsertVariableIcon" type="button" selector="button[aria-label='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
-        <element name="InsertImageIcon" type="button" selector="//button[contains(@title,'image')]" timeout="30"/>
+        <element name="InsertImageIcon" type="button" selector="button[title='Insert/edit image']" timeout="30"/>
         <element name="MoreIcon" type="button" selector="//button[contains(@title,'More')]" timeout="30"/>
         <element name="Style" type="button" selector="//button[contains(@title,'Formats')]"/>
-        <element name="Bold" type="button" selector="//button[contains(@title,'Bold')]"/>
-        <element name="Italic" type="button" selector="//button[contains(@title,'Italic')]"/>
-        <element name="Underline" type="button" selector="//button[contains(@title,'Underline')]"/>
-        <element name="AlignLeft" type="button" selector="//button[contains(@title,'left')]"/>
-        <element name="AlignCenter" type="button" selector="//button[contains(@title,'center')]"/>
-        <element name="AlignRight" type="button" selector="//button[contains(@title,'right')]"/>
-        <element name="Bullet" type="button" selector="//div[contains(@title,'Bullet')]"/>
-        <element name="Numlist" type="button" selector="//div[contains(@title,'Numbered')]"/>
-        <element name="InsertLink" type="button" selector="//button[contains(@title,'link')]"/>
-        <element name="InsertTable" type="button" selector="//button[contains(@title,'Table')]"/>
-        <element name="SpecialCharacter" type="button" selector="//button[contains(@title,'Special')]"/>
+        <element name="Bold" type="button" selector="/button[title='Bold']"/>
+        <element name="Italic" type="button" selector="button[title='Italic']"/>
+        <element name="Underline" type="button" selector="button[title='Underline']"/>
+        <element name="AlignLeft" type="button" selector="button[title='Align left']"/>
+        <element name="AlignCenter" type="button" selector="button[title='Align Center']"/>
+        <element name="AlignRight" type="button" selector="button[title='Align Right']"/>
+        <element name="Bullet" type="button" selector="button[title='Bullet list']"/>
+        <element name="Numlist" type="button" selector="button[title='Numbered list']"/>
+        <element name="InsertLink" type="button" selector="button[title='Insert/edit link']"/>
+        <element name="InsertTable" type="button" selector="button[title='Table']"/>
+        <element name="SpecialCharacter" type="button" selector="button[title='Special character']"/>
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
         <element name="EditorContent" type="input" selector="#tinymce"/>
         <element name="Content" type="textarea" selector="textarea"/>
         <element name="ShowHideBtn" type="button" selector=".scalable.action-show-hide"/>
-        <element name="EditArea" type="text" selector=".mce-edit-area"/>
-        <element name="EditAreaIframe" type="iframe" selector=".mce-edit-area iframe"/>
+        <element name="EditArea" type="text" selector=".tox-edit-area"/>
+        <element name="EditAreaIframe" type="iframe" selector=".tox-edit-area iframe"/>
         <element name="IframeContent" type="block" selector=".mce-content-body"/>
         <element name="imageSource" type="text" selector="//img[contains(@src,'{{var1}}')]" parameterized="true"/>
         <element name="ImageAlt" type="text" selector="//img[contains(@alt,'{{var1}}')]" parameterized="true"/>
