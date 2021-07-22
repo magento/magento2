@@ -76,7 +76,7 @@ class Queue implements QueueInterface
         /** @var AMQPMessage $message */
         try {
             $message = $channel->basic_get($this->queueName);
-        } catch (AMQPTimeoutException $exception) {
+        } catch (Exception $exception) {
             throw new ConnectionLostException(
                 $exception->getMessage(),
                 $exception->getCode(),
