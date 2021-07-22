@@ -43,18 +43,10 @@ class QuoteConfigProductAttributes
      */
     public function afterGetProductAttributes(Config $subject, array $attributeKeys): array
     {
-        return array_merge($attributeKeys, $this->getActiveAttributeCodes());
-    }
-
-    /**
-     * @return array
-     */
-    private function getActiveAttributeCodes(): array
-    {
         if ($this->activeAttributeCodes === null) {
             $this->activeAttributeCodes = array_column($this->ruleResource->getActiveAttributes(), 'attribute_code');
         }
 
-        return $this->activeAttributeCodes;
+        return array_merge($attributeKeys, $this->activeAttributeCodes);
     }
 }
