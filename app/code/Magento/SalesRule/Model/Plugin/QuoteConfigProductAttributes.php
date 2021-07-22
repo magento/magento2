@@ -22,7 +22,7 @@ class QuoteConfigProductAttributes
     /**
      * @var array|null
      */
-    private $activeAttributes;
+    private $activeAttributeCodes;
 
     /**
      * @param RuleResource $ruleResource
@@ -43,24 +43,18 @@ class QuoteConfigProductAttributes
      */
     public function afterGetProductAttributes(Config $subject, array $attributeKeys): array
     {
-        $attributes = $this->getActiveAttributes();
-
-        foreach ($attributes as $attribute) {
-            $attributeKeys[] = $attribute['attribute_code'];
-        }
-
-        return $attributeKeys;
+        return array_merge($attributeKeys, $this->getActiveAttributeCodes());
     }
 
     /**
      * @return array
      */
-    private function getActiveAttributes(): array
+    private function getActiveAttributeCodes(): array
     {
-        if ($this->activeAttributes === null) {
-            $this->activeAttributes = $this->ruleResource->getActiveAttributes();
+        if ($this->activeAttributeCodes === null) {
+            $this->activeAttributeCodes = array_column($this->ruleResource->getActiveAttributes(), 'attribute_code');
         }
 
-        return $this->activeAttributes;
+        return $this->activeAttributeCodes;
     }
 }
