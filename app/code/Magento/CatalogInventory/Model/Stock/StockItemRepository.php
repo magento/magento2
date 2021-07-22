@@ -25,7 +25,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -99,6 +98,8 @@ class StockItemRepository implements StockItemRepositoryInterface
     protected $productCollectionFactory;
 
     /**
+     * Constructor
+     *
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockStateProviderInterface $stockStateProvider
      * @param StockItemResource $resource
@@ -110,8 +111,7 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param TimezoneInterface $localeDate
      * @param Processor $indexProcessor
      * @param DateTime $dateTime
-     * @param CollectionFactory|null $productCollectionFactory
-     * @param PsrLogger|null $psrLogger
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|null $collectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -126,8 +126,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         TimezoneInterface $localeDate,
         Processor $indexProcessor,
         DateTime $dateTime,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory = null,
-        PsrLogger $psrLogger = null
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory = null
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockStateProvider = $stockStateProvider;
@@ -142,8 +141,6 @@ class StockItemRepository implements StockItemRepositoryInterface
         $this->dateTime = $dateTime;
         $this->productCollectionFactory = $productCollectionFactory ?: ObjectManager::getInstance()
             ->get(CollectionFactory::class);
-        $this->psrLogger = $psrLogger ?: ObjectManager::getInstance()
-            ->get(PsrLogger::class);
     }
 
     /**
@@ -187,7 +184,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
             $this->resource->save($stockItem);
         } catch (\Exception $exception) {
-            $this->psrLogger->error($exception->getMessage());
             throw new CouldNotSaveException(__('The stock item was unable to be saved. Please try again.'), $exception);
         }
         return $stockItem;
