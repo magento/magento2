@@ -14,8 +14,6 @@ use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Queue
- *
  * @api
  * @since 103.0.0
  */
@@ -42,23 +40,33 @@ class Queue implements QueueInterface
     private $logger;
 
     /**
+     * The prefetch value is used to specify how many messages that are being sent to the consumer at the same time.
+     * @see https://www.rabbitmq.com/consumer-prefetch.html
+     * @var int
+     */
+    private $prefetchCount;
+
+    /**
      * Initialize dependencies.
      *
      * @param Config $amqpConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param string $queueName
      * @param LoggerInterface $logger
+     * @param int $prefetchCount
      */
     public function __construct(
         Config $amqpConfig,
         EnvelopeFactory $envelopeFactory,
         $queueName,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        $prefetchCount = 100
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->queueName = $queueName;
         $this->envelopeFactory = $envelopeFactory;
         $this->logger = $logger;
+        $this->prefetchCount = (int)$prefetchCount;
     }
 
     /**
@@ -144,6 +152,7 @@ class Queue implements QueueInterface
 
         $channel = $this->amqpConfig->getChannel();
         // @codingStandardsIgnoreStart
+        $channel->basic_qos(0, $this->prefetchCount, false);
         $channel->basic_consume($this->queueName, '', false, false, false, false, $callbackConverter);
         // @codingStandardsIgnoreEnd
         while (count($channel->callbacks)) {
