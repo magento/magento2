@@ -42,7 +42,7 @@ class ProductIdentitiesExtender
      */
     public function afterGetIdentities(CatalogProduct $product, array $identities): array
     {
-        if ($product->getTypeId() !== BundleType::TYPE_CODE) {
+        if ($product->getTypeId() === BundleType::TYPE_CODE) {
             return $identities;
         }
         foreach ($this->getChildrenIds($product->getEntityId()) as $childIds) {
