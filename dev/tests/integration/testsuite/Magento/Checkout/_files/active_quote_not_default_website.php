@@ -4,6 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores.php');
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $storeRepository = $objectManager->get(\Magento\Store\Api\StoreRepositoryInterface::class);
