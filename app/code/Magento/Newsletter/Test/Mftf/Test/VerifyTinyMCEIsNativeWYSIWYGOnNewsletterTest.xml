@@ -30,7 +30,6 @@
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
         <conditionalClick selector="#toggletext" dependentSelector=".tox-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
         <waitForPageLoad stepKey="waitForTinyMce"/>
-        <click selector="{{TinyMCESection.MoreIcon}}" stepKey="expandMenuBar"/>
         <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
         <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>

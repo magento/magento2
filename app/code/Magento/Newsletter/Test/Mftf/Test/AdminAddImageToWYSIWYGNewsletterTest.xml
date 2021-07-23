@@ -31,7 +31,6 @@
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
         <conditionalClick selector="{{TinyMCESection.ShowHideBtn}}" dependentSelector="{{TinyMCESection.TinyMCE}}" visible="false" stepKey="toggleEditorIfHidden"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
-        <click selector="{{TinyMCESection.MoreIcon}}" stepKey="expandMenuBar"/>
         <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>

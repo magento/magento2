@@ -16,9 +16,9 @@
         <element name="lastImageOrImageCopy" type="text" selector="(//div[contains(@class,'media-gallery-modal')]//img[contains(@alt, '{{arg1}}.{{arg2}}')]|//img[contains(@alt,'{{arg1}}_') and contains(@alt,'.{{arg2}}')])[last()]" parameterized="true"/>
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open"/>
-        <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last"/>
+        <element name="ImageDescription" type="input" selector="//label[text()='Alternative description']/parent::div//input"/>
         <element name="ImageDescriptionTinyMCE" type="input" selector="#alt" />
-        <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first"/>
+        <element name="Height" type="input" selector="//label[text()='Height']/parent::div//input"/>
         <element name="UploadImage" type="file" selector=".fileupload"/>
         <element name="OkBtn" type="button" selector=".tox-dialog__footer button[title='Save']"/>
         <element name="insertBtn" type="button" selector="#insert"/>
