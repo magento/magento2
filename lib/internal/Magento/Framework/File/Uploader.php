@@ -30,6 +30,8 @@ use Psr\Log\LoggerInterface;
  */
 class Uploader
 {
+    const MAX_LENGTH = 90;
+
     /**
      * Uploaded file handle (copy of $_FILES[] element)
      *
@@ -491,12 +493,14 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
         $fileInfo = pathinfo($fileName);
+        $fileName = preg_replace('/[^a-z0-9_\\-]+/i', '_', $fileInfo['filename']);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
         // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 90;
+        $maxFilenameLength = self::MAX_LENGTH;
+
+        $fileName = $fileName.'.'.$fileInfo['extension'];
 
         if (strlen($fileInfo['basename']) > $maxFilenameLength) {
             throw new \LengthException(
