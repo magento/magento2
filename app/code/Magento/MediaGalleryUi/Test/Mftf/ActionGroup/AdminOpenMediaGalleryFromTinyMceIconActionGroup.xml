@@ -14,6 +14,7 @@
 
         <conditionalClick selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.uploadButton}}" visible="false" stepKey="clickExpandContent"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
+        <scrollTo  selector="{{TinyMCESection.TinyMCE}}" stepKey="scrollToTinyMCE"/>
         <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse"/>

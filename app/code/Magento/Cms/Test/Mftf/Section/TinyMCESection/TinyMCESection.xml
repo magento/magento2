@@ -22,7 +22,7 @@
         <element name="Italic" type="button" selector="button[title='Italic']"/>
         <element name="Underline" type="button" selector="button[title='Underline']"/>
         <element name="AlignLeft" type="button" selector="button[title='Align left']"/>
-        <element name="AlignCenter" type="button" selector="button[title='Align Center']"/>
+        <element name="AlignCenter" type="button" selector="button[title='Align center']"/>
         <element name="AlignRight" type="button" selector="button[title='Align Right']"/>
         <element name="Bullet" type="button" selector="button[title='Bullet list']"/>
         <element name="Numlist" type="button" selector="button[title='Numbered list']"/>
