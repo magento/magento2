@@ -36,6 +36,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
+    use Magento\Framework\Validation\ValidationException;
     use Magento\Setup\Controller\ResponseTypeInterface;
     use Magento\Setup\Model\AdminAccount;
     use Magento\Setup\Model\AdminAccountFactory;
@@ -418,6 +419,143 @@ namespace Magento\Setup\Test\Unit\Model {
                     ['Magento installation complete.'],
                     ['Magento Admin URI: /']
                 );
+
+            $this->object->install($request);
+        }
+
+        /**
+         * Test installation with invalid remote storage configuration raises ValidationException
+         *
+         * @throws \Magento\Framework\Exception\FileSystemException
+         * @throws \Magento\Framework\Exception\LocalizedException
+         * @throws \Magento\Framework\Exception\RuntimeException
+         */
+        public function testInstallWithInvalidRemoteStorageConfiguration()
+        {
+            $request = $this->request;
+
+            $logMessages = [
+                ['Starting Magento installation:'],
+                ['File permissions check...'],
+                ['Required extensions check...'],
+                ['Enabling Maintenance Mode...'],
+                ['Installing deployment configuration...'],
+                ['Installing database schema:'],
+                ['Schema creation/updates:'],
+                ['Module \'Foo_One\':'],
+                ['Module \'Bar_Two\':'],
+                ['Schema post-updates:'],
+                ['Module \'Foo_One\':'],
+                ['Module \'Bar_Two\':'],
+                ['Installing search configuration...'],
+                ['Validating remote file storage configuration...'],
+            ];
+
+            $this->config->expects(static::atLeastOnce())
+                ->method('get')
+                ->willReturnMap(
+                    [
+                        [ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
+                        [ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, null, true],
+                        ['modules/Magento_User', null, '1']
+                    ]
+                );
+            $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+
+            $this->declarationInstallerMock->expects(static::once())->method('installSchema');
+            $this->moduleLoader->expects(static::exactly(2))->method('load')->willReturn($allModules);
+            $setup = $this->createMock(Setup::class);
+            $table = $this->createMock(Table::class);
+            $connection = $this->getMockBuilder(AdapterInterface::class)
+                ->setMethods(['getSchemaListener', 'newTable', 'getTables'])
+                ->getMockForAbstractClass();
+            $connection->expects(static::any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
+            $connection->expects(static::once())->method('getTables')->willReturn([]);
+            $setup->expects(static::any())->method('getConnection')->willReturn($connection);
+            $table->expects(static::any())->method('addColumn')->willReturn($table);
+            $table->expects(static::any())->method('setComment')->willReturn($table);
+            $table->expects(static::any())->method('addIndex')->willReturn($table);
+            $connection->expects(static::any())->method('newTable')->willReturn($table);
+
+            $resource = $this->createMock(ResourceConnection::class);
+            $resource->expects(static::any())->method('getConnection')->willReturn($connection);
+
+            $this->contextMock->expects(static::exactly(2))->method('getResources')->willReturn($resource);
+
+            $dataSetup = $this->createMock(DataSetup::class);
+            $dataSetup->expects(static::never())->method('getConnection');
+
+            $cacheManager = $this->createMock(Manager::class);
+            $cacheManager->expects(static::never())->method('getAvailableTypes');
+
+            $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+                ->disableOriginalConstructor()
+                ->disableArgumentCloning()
+                ->getMock();
+            $registry = $this->createMock(Registry::class);
+            $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
+
+            $remoteFileStorageValidatorMock = $this->getMockBuilder(RemoteFileStorageValidator::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $remoteFileStorageValidatorMock
+                ->expects(static::once())
+                ->method('validate')
+                ->with($request, $this->config)
+                ->willReturn(['Invalid Remote File Storage!']);
+
+            $this->expectException(ValidationException::class);
+
+            $this->setupFactory->expects(static::once())->method('create')->with($resource)->willReturn($setup);
+
+            $this->objectManager->expects(static::any())
+                ->method('create')
+                ->willReturnMap([
+                    [Manager::class, [], $cacheManager],
+                    [\Magento\Framework\App\State::class, [], $appState],
+                    [
+                        PatchApplierFactory::class,
+                        ['objectManager' => $this->objectManager],
+                        $this->patchApplierFactoryMock
+                    ],
+                ]);
+            $this->patchApplierMock->expects(static::exactly(2))->method('applySchemaPatch')->willReturnMap(
+                [
+                    ['Bar_Two'],
+                    ['Foo_One'],
+                ]
+            );
+            $this->objectManager->expects(static::any())
+                ->method('get')
+                ->willReturnMap([
+                    [\Magento\Framework\App\State::class, $appState],
+                    [Manager::class, $cacheManager],
+                    [DeclarationInstaller::class, $this->declarationInstallerMock],
+                    [Registry::class, $registry],
+                    [SearchConfig::class, $searchConfigMock],
+                    [RemoteFileStorageValidator::class, $remoteFileStorageValidatorMock],
+                ]);
+
+            $this->sampleDataState->expects(static::never())->method('hasError');
+
+            $this->phpReadinessCheck->expects(static::once())->method('checkPhpExtensions')->willReturn(
+                ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]
+            );
+
+            $this->filePermissions->expects(static::exactly(2))
+                ->method('getMissingWritablePathsForInstallation')
+                ->willReturn([]);
+
+            call_user_func_array(
+                [
+                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
+                    'withConsecutive'
+                ],
+                $logMessages
+            );
+
+            $this->logger->expects(static::never())->method('logSuccess');
 
             $this->object->install($request);
         }
