@@ -13,7 +13,7 @@
             <title value="Make reorder as customer on frontend"/>
             <description value="Make reorder as customer on Frontend with simple product custom options"/>
             <severity value="CRITICAL"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-42899"/>
             <useCaseId value="MC-41981" />
             <group value="sales"/>
         </annotations>
