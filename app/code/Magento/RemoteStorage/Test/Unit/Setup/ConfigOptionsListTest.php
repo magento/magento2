@@ -125,7 +125,7 @@ class ConfigOptionsListTest extends TestCase
             'Local File Storage After Deployment Config Exists' => [
                 [], true, [],
             ],
-            'Remote File Storage Before Deployment Config Exists' => [
+            'Remote Storage Before Deployment Config Exists' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-region' => 'us-east-1',
@@ -134,7 +134,7 @@ class ConfigOptionsListTest extends TestCase
                 false,
                 [],
             ],
-            'Remote File Storage Missing Region' => [
+            'Remote Storage Missing Region' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-bucket' => 'bucket1',
@@ -144,7 +144,7 @@ class ConfigOptionsListTest extends TestCase
                     'Region is required',
                 ],
             ],
-            'Remote File Storage Missing Bucket' => [
+            'Remote Storage Missing Bucket' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-region' => 'us-east-1',
@@ -154,7 +154,7 @@ class ConfigOptionsListTest extends TestCase
                     'Bucket is required',
                 ],
             ],
-            'Remote File Storage Missing Region and Bucket' => [
+            'Remote Storage Missing Region and Bucket' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                 ],
@@ -164,7 +164,7 @@ class ConfigOptionsListTest extends TestCase
                     'Bucket is required',
                 ],
             ],
-            'Valid Remote File Storage Config with Successful Test Connection' => [
+            'Valid Remote Storage Config with Successful Test Connection' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-region' => 'us-east-1',
@@ -174,7 +174,7 @@ class ConfigOptionsListTest extends TestCase
                 true,
                 [],
             ],
-            'Valid Remote File Storage With Unsuccessful Test Connection' => [
+            'Valid Remote Storage With Unsuccessful Test Connection' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-region' => 'us-east-1',

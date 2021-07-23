@@ -55,7 +55,7 @@ use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
-use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteFileStorageValidator;
+use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -358,8 +358,8 @@ class Installer
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
         $script[] = [
-            'Validating remote file storage configuration...',
-            'validateRemoteFileStorageConfiguration',
+            'Validating remote storage configuration...',
+            'validateRemoteStorageConfiguration',
             [$request]
         ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
@@ -1204,18 +1204,18 @@ class Installer
     }
 
     /**
-     * Validate file storage on install.  Since it is a deployment-based configuration, the config is already present,
-     * but this function confirms it can connect (in the case of Remote Storage) after Object Manager
+     * Validate remote storage on install.  Since it is a deployment-based configuration, the config is already present,
+     * but this function confirms it can connect after Object Manager
      * has all necessary dependencies loaded to do so.
      *
      * @param array $data
      * @throws ValidationException
      * @throws Exception
      */
-    public function validateRemoteFileStorageConfiguration(array $data)
+    public function validateRemoteStorageConfiguration(array $data)
     {
-        $remoteFileStorageValidator = $this->objectManagerProvider->get()->get(RemoteFileStorageValidator::class);
-        $validationErrors = $remoteFileStorageValidator->validate($data, $this->deploymentConfig);
+        $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
 
         if (!empty($validationErrors)) {
             throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));

@@ -54,7 +54,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
     use Magento\Setup\Model\SearchConfig;
-    use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteFileStorageValidator;
+    use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
 
     /**
      * @SuppressWarnings(PHPMD.TooManyFields)
@@ -354,7 +354,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $registry = $this->createMock(Registry::class);
             $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
 
-            $remoteFileStorageValidatorMock = $this->getMockBuilder(RemoteFileStorageValidator::class)
+            $remoteStorageValidatorMock = $this->getMockBuilder(RemoteStorageValidator::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -391,7 +391,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     [DeclarationInstaller::class, $this->declarationInstallerMock],
                     [Registry::class, $registry],
                     [SearchConfig::class, $searchConfigMock],
-                    [RemoteFileStorageValidator::class, $remoteFileStorageValidatorMock],
+                    [RemoteStorageValidator::class, $remoteStorageValidatorMock],
                 ]);
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
@@ -448,7 +448,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ['Module \'Foo_One\':'],
                 ['Module \'Bar_Two\':'],
                 ['Installing search configuration...'],
-                ['Validating remote file storage configuration...'],
+                ['Validating remote storage configuration...'],
             ];
 
             $this->config->expects(static::atLeastOnce())
@@ -495,15 +495,15 @@ namespace Magento\Setup\Test\Unit\Model {
             $registry = $this->createMock(Registry::class);
             $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
 
-            $remoteFileStorageValidatorMock = $this->getMockBuilder(RemoteFileStorageValidator::class)
+            $remoteStorageValidatorMock = $this->getMockBuilder(RemoteStorageValidator::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
-            $remoteFileStorageValidatorMock
+            $remoteStorageValidatorMock
                 ->expects(static::once())
                 ->method('validate')
                 ->with($request, $this->config)
-                ->willReturn(['Invalid Remote File Storage!']);
+                ->willReturn(['Invalid Remote Storage!']);
 
             $this->expectException(ValidationException::class);
 
@@ -534,7 +534,7 @@ namespace Magento\Setup\Test\Unit\Model {
                     [DeclarationInstaller::class, $this->declarationInstallerMock],
                     [Registry::class, $registry],
                     [SearchConfig::class, $searchConfigMock],
-                    [RemoteFileStorageValidator::class, $remoteFileStorageValidatorMock],
+                    [RemoteStorageValidator::class, $remoteStorageValidatorMock],
                 ]);
 
             $this->sampleDataState->expects(static::never())->method('hasError');
@@ -583,7 +583,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
-                        ['Validating remote file storage configuration...'],
+                        ['Validating remote storage configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
@@ -635,7 +635,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Installing search configuration...'],
-                        ['Validating remote file storage configuration...'],
+                        ['Validating remote storage configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
