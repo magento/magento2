@@ -475,7 +475,7 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setTotalSegments($totals = []);
-    
+
     /**
      * Retrieve existing extension attributes object or create a new one.
      *

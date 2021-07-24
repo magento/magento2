@@ -62,7 +62,7 @@
         <click selector="{{CheckoutCartSummarySection.shippingMethodElementId('freeshipping', 'freeshipping')}}" stepKey="selectShippingMethod"/>
         <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToProceedToCheckout" />
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
-        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
         <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
     </test>
 </tests>
