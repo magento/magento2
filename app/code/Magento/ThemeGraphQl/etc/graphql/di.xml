@@ -30,4 +30,16 @@
     <type name="Magento\Framework\Data\Collection">
         <plugin name="currentPageDetection" disabled="true"/>
     </type>
+    <virtualType name="graphQlLogo" type="Magento\Theme\Block\Html\Header\Logo">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="logoPathResolver" xsi:type="object">Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolver</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ThemeGraphQl\Model\Resolver\HeaderLogoSrcResolver">
+        <arguments>
+            <argument name="logoBlock" xsi:type="object">graphQlLogo</argument>
+        </arguments>
+    </type>
 </config>

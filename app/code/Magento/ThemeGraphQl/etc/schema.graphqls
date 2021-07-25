@@ -16,4 +16,6 @@ type StoreConfig @doc(description: "The type contains information about a store 
     logo_alt : String @doc(description: "Logo Image Alt")
     absolute_footer : String @doc(description: "Footer Miscellaneous HTML")
     copyright : String @doc(description: "Copyright")
+    head_shortcut_icon_absolute : String @doc(description: "Favicon Icon with an absolute url") @resolver(class: "Magento\\ThemeGraphQl\\Model\\Resolver\\HeadShortcutIconResolver")
+    header_logo_src_absolute : String @doc(description: "Logo Image with an absolute url") @resolver(class: "Magento\\ThemeGraphQl\\Model\\Resolver\\HeaderLogoSrcResolver")
 }
