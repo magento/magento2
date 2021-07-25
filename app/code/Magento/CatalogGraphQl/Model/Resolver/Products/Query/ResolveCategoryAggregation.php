@@ -79,7 +79,6 @@ class ResolveCategoryAggregation
      *
      * @param array $categoryFilter
      * @param Bucket[] $bucketList
-     *
      * @return Aggregation
      */
     public function getResolvedCategoryAggregation(array $categoryFilter, array $bucketList): Aggregation
@@ -92,7 +91,6 @@ class ResolveCategoryAggregation
         if (!$searchableCategoryValue || empty($values)) {
             return $this->aggregationFactory->create([self::BUCKETS => $bucketList]);
         }
-
         $resolvedBucketList = $bucketList;
 
         try {
@@ -110,33 +108,29 @@ class ResolveCategoryAggregation
         } catch (NoSuchEntityException $e) {
             return $this->aggregationFactory->create([self::BUCKETS => $bucketList]);
         }
-
         $resolvedCategoryBucket = $this->bucketFactory->create(
             [
                 'name' => self::CATEGORY_BUCKET,
                 'values' => $resolvedValues
             ]
         );
-
         $resolvedBucketList[self::CATEGORY_BUCKET] = $resolvedCategoryBucket;
 
         return $this->aggregationFactory->create([self::BUCKETS => $resolvedBucketList]);
     }
 
     /**
-     * Check is valid searchable category children.
+     * Check is valid searchable category children, and return all aggregations with updated categories list.
      *
      * @param int $searchableCategoryId
      * @param AggregationValueInterface[] $aggregationValues
-     *
      * @return AggregationValueInterface[]
-     *
      * @throws NoSuchEntityException
      */
     private function getValidCategories(int $searchableCategoryId, array $aggregationValues): array
     {
-        $stareId = (int) $this->storeManager->getStore()->getId();
-        $searchableCategory = $this->categoryRepository->get($searchableCategoryId, $stareId);
+        $storeId = (int) $this->storeManager->getStore()->getId();
+        $searchableCategory = $this->categoryRepository->get($searchableCategoryId, $storeId);
         $childrenList = $searchableCategory->getChildrenCategories();
         $resolvedList = [];
         $validChildIdList = [];
@@ -152,8 +146,8 @@ class ResolveCategoryAggregation
         foreach ($aggregationValues as $bucketValue) {
             $childCategoryId = (int) $bucketValue->getValue();
 
-            if (!in_array($childCategoryId, $validChildIdList) ||
-                in_array($childCategoryId, $this->resolvedChildrenIds)
+            if (!in_array($childCategoryId, $validChildIdList)
+                || in_array($childCategoryId, $this->resolvedChildrenIds)
             ) {
                 continue;
             }

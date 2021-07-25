@@ -91,7 +91,8 @@ class Search implements ProductQueryInterface
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->resolveCategoryAggregation = $resolveCategoryAggregation;
+        $this->resolveCategoryAggregation = $resolveCategoryAggregation ?: ObjectManager::getInstance()
+            ->get(ResolveCategoryAggregation::class);
         $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
             ->get(ArgumentsProcessorInterface::class);
     }
@@ -102,9 +103,7 @@ class Search implements ProductQueryInterface
      * @param array $args
      * @param ResolveInfo $info
      * @param ContextInterface $context
-     *
      * @return SearchResult
-     *
      * @throws GraphQlInputException
      */
     public function getResult(
@@ -169,9 +168,7 @@ class Search implements ProductQueryInterface
      *
      * @param array $args
      * @param ResolveInfo $info
-     *
      * @return SearchCriteriaInterface
-     *
      * @throws GraphQlInputException
      */
     private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
