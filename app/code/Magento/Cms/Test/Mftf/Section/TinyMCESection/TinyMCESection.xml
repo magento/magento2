@@ -24,8 +24,8 @@
         <element name="AlignLeft" type="button" selector="button[title='Align left']"/>
         <element name="AlignCenter" type="button" selector="button[title='Align center']"/>
         <element name="AlignRight" type="button" selector="button[title='Align right']"/>
-        <element name="Bullet" type="button" selector="button[title='Bullet list']"/>
-        <element name="Numlist" type="button" selector="button[title='Numbered list']"/>
+        <element name="Bullet" type="button" selector="div[title='Bullet list']"/>
+        <element name="Numlist" type="button" selector="div[title='Numbered list']"/>
         <element name="InsertLink" type="button" selector="button[title='Insert/edit link']"/>
         <element name="InsertTable" type="button" selector="button[title='Table']"/>
         <element name="SpecialCharacter" type="button" selector="button[title='Special character']"/>
