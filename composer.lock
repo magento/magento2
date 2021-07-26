@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e47903591656f8dcb3291432387e4e98",
+    "content-hash": "81d5b34cad54e3beca3f7f98e0bd4e4d",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -9787,16 +9787,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-develop",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "b6555a1babdc7cc3b4a8e0ac972b4a6da77b6068"
+                "reference": "d0350979b7c02ca5329d61d1cce2760d14170e90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b6555a1babdc7cc3b4a8e0ac972b4a6da77b6068",
-                "reference": "b6555a1babdc7cc3b4a8e0ac972b4a6da77b6068",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/d0350979b7c02ca5329d61d1cce2760d14170e90",
+                "reference": "d0350979b7c02ca5329d61d1cce2760d14170e90",
                 "shasum": ""
             },
             "require": {
@@ -9815,7 +9815,7 @@
                 "ext-json": "*",
                 "ext-openssl": "*",
                 "hoa/console": "~3.0",
-                "monolog/monolog": "^2.2",
+                "monolog/monolog": "^2.3",
                 "mustache/mustache": "~2.5",
                 "nikic/php-parser": "^4.4",
                 "php": "^7.3",
@@ -9839,7 +9839,6 @@
                 "sebastian/phpcpd": "~6.0.0",
                 "squizlabs/php_codesniffer": "~3.5.4"
             },
-            "default-branch": true,
             "bin": [
                 "bin/mftf"
             ],
@@ -9871,9 +9870,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.5.1"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.6.0"
             },
-            "time": "2021-05-05T15:01:30+00:00"
+            "time": "2021-07-23T16:10:15+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -12969,9 +12968,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "magento/magento2-functional-testing-framework": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
