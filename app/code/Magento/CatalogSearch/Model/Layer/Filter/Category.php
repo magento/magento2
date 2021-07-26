@@ -86,7 +86,7 @@ class Category extends AbstractFilter
             if ($childrenCategoryIds) {
                 $this->getLayer()->getProductCollection()
                     ->addFieldToFilter(
-                        'children_category_ids',
+                        'category_ids_to_aggregate',
                         $childrenCategoryIds
                     );
             }

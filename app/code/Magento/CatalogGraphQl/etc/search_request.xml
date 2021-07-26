@@ -55,7 +55,7 @@
                     <metric type="count"/>
                 </metrics>
                 <parameters>
-                    <parameter name="include" value="$children_category_ids$"/>
+                    <parameter name="include" value="$category_ids_to_aggregate$"/>
                 </parameters>
             </bucket>
         </aggregations>
