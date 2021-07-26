@@ -9,10 +9,10 @@ namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\CustomerGraphQl\Model\Customer\DeleteCustomer as DeleteCustomerModel;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
@@ -48,7 +48,7 @@ class DeleteCustomer implements ResolverInterface
     ) {
         $this->getCustomer = $getCustomer;
         $this->deleteCustomer = $deleteCustomer;
-        $this->registry =$registry;
+        $this->registry = $registry;
     }
 
     /**

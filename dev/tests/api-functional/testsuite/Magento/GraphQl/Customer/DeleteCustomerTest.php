@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
- * Delete custom tests
+ * Delete customer tests
  */
 class DeleteCustomerTest extends GraphQlAbstract
 {
@@ -27,7 +27,6 @@ class DeleteCustomerTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        parent::setUp();
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
     }
 
@@ -62,7 +61,9 @@ class DeleteCustomerTest extends GraphQlAbstract
     public function testDeleteCustomerIfAccountIsLocked(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later');
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later'
+        );
         $this->graphQlMutation($this->getMutation(), [], '', $this->getHeaderMap());
     }
 
