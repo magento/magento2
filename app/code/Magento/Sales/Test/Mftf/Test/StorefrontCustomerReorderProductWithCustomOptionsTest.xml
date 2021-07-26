@@ -31,8 +31,8 @@
 
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <deleteData stepKey="deleteDefaultCategory" createDataKey="initialCategoryEntity"/>
-            <deleteData stepKey="deleteSimpleProduct" createDataKey="initialSimpleProduct"/>
+            <deleteData createDataKey="initialCategoryEntity"  stepKey="deleteDefaultCategory"/>
+            <deleteData createDataKey="initialSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
