@@ -9,6 +9,7 @@ define([
     'jquery',
     'chartJs',
     'jquery-ui-modules/widget',
+    'chartjs/chartjs-adapter-moment',
     'moment'
 ], function ($, Chart) {
     'use strict';
@@ -74,7 +75,7 @@ define([
             $(this.element).toggle(response.data.length > 0);
             $(this.element).next('.dashboard-diagram-nodata').toggle(response.data.length === 0);
 
-            this.chart.options.scales.xAxes[0].time.unit = this.options.periodUnits[this.period] ?
+            this.chart.options.scales.xAxis.time.unit = this.options.periodUnits[this.period] ?
                 this.options.periodUnits[this.period] : 'hour';
             this.chart.data.datasets[0].data = response.data;
             this.chart.data.datasets[0].label = response.label;
@@ -89,6 +90,8 @@ define([
                 type: 'bar',
                 data: {
                     datasets: [{
+                        yAxisID: 'yAxis',
+                        xAxisID: 'xAxis',
                         data: [],
                         backgroundColor: '#f1d4b3',
                         borderColor: '#eb5202',
@@ -101,20 +104,19 @@ define([
                         position: 'bottom'
                     },
                     scales: {
-                        xAxes: [{
+                        xAxis: {
                             offset: true,
                             type: 'time',
                             ticks: {
-                                autoSkip: true,
                                 source: 'data'
                             }
-                        }],
-                        yAxes: [{
+                        },
+                        yAxis: {
                             ticks: {
                                 beginAtZero: true,
                                 precision: this.options.precision
                             }
-                        }]
+                        }
                     }
                 }
             };
