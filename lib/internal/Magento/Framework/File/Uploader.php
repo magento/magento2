@@ -810,7 +810,7 @@ class Uploader
         $fileInfo = pathinfo($destinationFile);
         $index = 1;
         while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
-            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . ($index++) . '.' . $fileInfo['extension'];
         }
 
         return $fileInfo['basename'];
