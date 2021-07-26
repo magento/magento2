@@ -19,7 +19,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class GenerateCustomerTokenTest extends GraphQlAbstract
 {
-
     /**
      * @var Logger
      */
@@ -192,9 +191,9 @@ MUTATION;
     protected function tearDown(): void
     {
         if ($this->logger->get(1)->getLastLoginAt()) {
-            /** @var AdapterInterface $connection */
             /** @var ResourceConnection $resource */
             $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+            /** @var AdapterInterface $connection */
             $connection = $resource->getConnection(ResourceConnection::DEFAULT_CONNECTION);
             $connection->delete(
                 $resource->getTableName('customer_log'),
