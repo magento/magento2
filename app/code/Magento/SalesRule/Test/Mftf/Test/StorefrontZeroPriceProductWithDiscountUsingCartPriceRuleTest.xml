@@ -19,24 +19,24 @@
             <group value="SalesRule"/>
         </annotations>
         <before>
-            <!-- log in -->
+            <!-- Log in -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!--Create 2 simple products-->
+            <!-- Create 2 simple products -->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
                 <field key="price">33.50</field>
             </createData>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2">
                 <field key="price">0.00</field>
             </createData>
-            <!--Create the sales rule-->
+            <!-- Create the sales rule -->
             <createData entity="SalesRuleSpecificCouponAndByPercent25" stepKey="createSalesRule"/>
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
                 <requiredEntity createDataKey="createSalesRule"/>
             </createData>
         </before>
         <after>
-            <deleteData createDataKey="simpleProduct1" stepKey="DeleteSimpleProduct1" />
-            <deleteData createDataKey="simpleProduct2" stepKey="DeleteSimpleProduct2" />
+            <deleteData createDataKey="simpleProduct1" stepKey="DeleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="DeleteSimpleProduct2"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -61,7 +61,7 @@
             <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
         </actionGroup>
 
-        <!-- Assert Discount amount in storefront-->
+        <!-- Assert Discount amount in storefront -->
         <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
             <argument name="discount" value="8.38"/>
         </actionGroup>
@@ -84,7 +84,7 @@
             <argument name="entityId" value="$grabOrderNumber"/>
         </actionGroup>
 
-        <!-- Assert Discount amount in admin-->
+        <!-- Assert Discount amount in admin -->
         <see selector="{{AdminOrderItemsOrderedSection.itemDiscountAmountByProductName($simpleProduct1.name$)}}" userInput="$8.38" stepKey="seeProduct1DiscountAmount"/>
         <see selector="{{AdminOrderItemsOrderedSection.itemDiscountAmountByProductName($simpleProduct2.name$)}}" userInput="$0.00" stepKey="seeProduct2DiscountAmount"/>
         <see selector="{{AdminOrderTotalSection.discount}}" userInput="-$8.38" stepKey="seeDiscountAmount"/>
