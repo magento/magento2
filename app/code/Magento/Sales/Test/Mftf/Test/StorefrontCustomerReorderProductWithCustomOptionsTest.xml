@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <!-- Login As Admin  -->
+            <!-- Login As Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -55,7 +55,7 @@
             <argument name="optionValue" value="ProductOptionValueDropdown1"/>
         </actionGroup>
 
-        <!-- Add Custom file option  -->
+        <!-- Add Custom file option -->
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addFileOption">
             <argument name="option" value="ProductOptionFile"/>
         </actionGroup>
@@ -84,22 +84,22 @@
             <argument name="productUrl" value="$$initialSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
 
-        <!--Select Option From First DropDown option -->
+        <!-- Select Option From First DropDown option -->
         <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
             <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
             <argument name="optionLabel" value="{{ProductOptionValueDropdown1.title}}"/>
         </actionGroup>
 
-        <!-- Attach file option-->
+        <!-- Attach file option -->
         <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
 
-        <!--Select Option From Second DropDown option -->
+        <!-- Select Option From Second DropDown option -->
         <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectSecondOption">
             <argument name="attributeLabel" value="{{ProductOptionDropDownWithLongValuesTitle.title}}"/>
             <argument name="optionLabel" value="{{ProductOptionValueDropdown2.title}}"/>
         </actionGroup>
 
-        <!-- Add Product to Card      -->
+        <!-- Add Product to Card -->
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$initialSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
@@ -112,20 +112,20 @@
         <!-- Log out from storefront as Customer -->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
 
-        <!-- Again Login As Admin  -->
+        <!-- Again Login As Admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForSubmitShipment"/>
 
         <!-- Open order -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderForCreatingShipment">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <!--Create Shipment for the order-->
+        <!-- Create Shipment for the order -->
         <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="startCreateShipment"/>
         <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
 
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
-        <!-- Login to storefront as Customer for Reorder-->
+        <!-- Login to storefront as Customer for Reorder -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginForReorder">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
