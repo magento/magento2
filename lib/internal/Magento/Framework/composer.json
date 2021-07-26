@@ -20,6 +20,7 @@
         "ext-intl": "*",
         "ext-openssl": "*",
         "ext-simplexml": "*",
+        "ext-sodium": "*",
         "ext-xsl": "*",
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
