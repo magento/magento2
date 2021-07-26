@@ -28,17 +28,14 @@
         </annotations>
 
         <before>
-            <!-- Enable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="addDownloadableDomain"/>
+            <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
         </before>
 
         <after>
             <helper class="\Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
                 <argument name="path">import_export/export</argument>
             </helper>
-
-            <!-- Disable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logout"/>
+            <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
         </after>
 
         <!-- Validate Export File on S3 -->
