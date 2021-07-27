@@ -2577,10 +2577,6 @@
                         "lib/internal/LinLibertineFont"
                     ],
                     [
-                        "lib/web/FormData.js",
-                        "lib/web/FormData.js"
-                    ],
-                    [
                         "lib/web/blank.html",
                         "lib/web/blank.html"
                     ],
@@ -2643,10 +2639,6 @@
                     [
                         "lib/web/matchMedia.js",
                         "lib/web/matchMedia.js"
-                    ],
-                    [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
                     ],
                     [
                         "lib/web/moment-timezone-with-data.js",
