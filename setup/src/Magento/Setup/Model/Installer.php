@@ -392,7 +392,8 @@ class Installer
             list($message, $method, $params) = $item;
             $this->log->log($message);
             try {
-                $this->$method(...$params);
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array([$this, $method], $params);
             } catch (RuntimeException $e) {
                 $this->revertRemoteStorageConfiguration();
                 throw $e;
