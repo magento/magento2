@@ -391,8 +391,12 @@ class Installer
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
             $this->log->log($message);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            call_user_func_array([$this, $method], $params);
+            try {
+                $this->$method(...$params);
+            } catch (RuntimeException $e) {
+                $this->revertRemoteStorageConfiguration();
+                throw $e;
+            }
             $this->logProgress();
         }
         $this->log->logSuccess('Magento installation complete.');
@@ -1218,6 +1222,7 @@ class Installer
         $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
 
         if (!empty($validationErrors)) {
+            $this->revertRemoteStorageConfiguration();
             throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
         }
     }
@@ -1786,5 +1791,20 @@ class Installer
         }
 
         return $disabledCaches;
+    }
+
+    /**
+     * Revert remote storage configuration back to local file driver
+     */
+    private function revertRemoteStorageConfiguration()
+    {
+        if (!$this->deploymentConfigWriter->checkIfWritable()) {
+            return;
+        }
+
+        $remoteStorageData = new ConfigData(ConfigFilePool::APP_ENV);
+        $remoteStorageData->set('remote_storage', ['driver' => 'file']);
+        $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
+        $this->deploymentConfigWriter->saveConfig($configData, true);
     }
 }
