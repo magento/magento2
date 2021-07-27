@@ -16,7 +16,7 @@
         <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
         <element name="InsertVariableIcon" type="button" selector="button[aria-label='Insert Variable']"/>
         <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
-        <element name="InsertImageIcon" type="button" selector="(//button[contains(@title,'image')])[1]" timeout="30"/>
+        <element name="InsertImageIcon" type="button" selector="button[title='Insert/edit image']" timeout="30"/>
         <element name="Style" type="button" selector="button[title='Formats']"/>
         <element name="Bold" type="button" selector="button[title='Bold']"/>
         <element name="Italic" type="button" selector="button[title='Italic']"/>
