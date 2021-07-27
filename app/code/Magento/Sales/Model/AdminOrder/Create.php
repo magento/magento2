@@ -2199,7 +2199,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if (!is_array($address)) {
             return $this;
         }
-
         $customerAddressId = $address['customer_address_id'] ?? null;
         if($customerAddressId){
             $quote = $this->getQuote();
