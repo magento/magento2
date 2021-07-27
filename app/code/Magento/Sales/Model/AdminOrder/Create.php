@@ -258,6 +258,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $customAttributeList;
 
     /**
+     * Constructor
+     *
+     * @var \Magento\Customer\Model\address\Mapper
+     */
+    protected $addressMapper;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -290,6 +297,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param ExtensibleDataObjectConverter|null $dataObjectConverter
      * @param StoreManagerInterface $storeManager
      * @param CustomAttributeListInterface|null $customAttributeList
+     * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -324,7 +332,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ExtensibleDataObjectConverter $dataObjectConverter = null,
         StoreManagerInterface $storeManager = null,
-        CustomAttributeListInterface $customAttributeList = null
+        CustomAttributeListInterface $customAttributeList = null,
+        \Magento\Customer\Model\Address\Mapper $addressMapper
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -361,6 +370,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customAttributeList = $customAttributeList ?: ObjectManager::getInstance()
             ->get(CustomAttributeListInterface::class);
+        $this->addressMapper = $addressMapper;
     }
 
     /**
@@ -1455,6 +1465,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function setShippingAddress($address)
     {
         if (is_array($address)) {
+            $address = $this->evaluateAgainstSavedStreetAddress($address);
+
             $shippingAddress = $this->_objectManager->create(
                 \Magento\Quote\Model\Quote\Address::class
             )->setData(
@@ -1526,6 +1538,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if (!is_array($address)) {
             return $this;
         }
+
+        $address = $this->evaluateAgainstSavedStreetAddress($address);
 
         $billingAddress = $this->_objectManager->create(Address::class)
             ->setData($address)
@@ -2170,5 +2184,47 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         }
 
         return $shippingData == $billingData;
+    }
+
+    /**
+     * If the current street address on form differ with the auto populated street address (saved in customer address book)
+     * then it should be treated new and the validation rules will only evaluate the current street address by setting up
+     * `customer_address_id` to NULL for $address array.
+     *
+     * @param array $address
+     * @return array|null
+     */
+    private function evaluateAgainstSavedStreetAddress(array $address)
+    {
+        if (!is_array($address)) {
+            return $this;
+        }
+
+        $customerAddressId = $address['customer_address_id'] ?? null;
+        if($customerAddressId){
+            $quote = $this->getQuote();
+            // Currently filled street address
+            $quoteBillingAddress = $quote->getBillingAddress()->getStreet();
+            // Customer's saved address from address book
+            $customerAddressBook = $quote->getCustomer()->getAddresses();
+
+            if(is_array($customerAddressBook) && !empty($customerAddressBook)){
+                foreach ($customerAddressBook as $customerAddress) {
+                    // initial populated address details from address book
+                    $customerAddressBookId = $this->addressMapper->toFlatArray($customerAddress)['id'];
+                    $customerAddressBookStreet = $this->addressMapper->toFlatArray($customerAddress)['street'];
+
+                    if($customerAddressBookId == $customerAddressId){
+                        // compare new address with the initially populated line by line
+                        if($quoteBillingAddress !== $customerAddressBookStreet){
+                            // the new street address completely override saved street address
+                            $address['customer_address_id'] = null;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return $address;
     }
 }
