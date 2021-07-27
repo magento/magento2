@@ -3,10 +3,6 @@
         'no-restricted-syntax': [
             'error',
             {
-                message: "addCommand is removed. Update code to be compatible with tinymce5",
-                selector: "CallExpression[callee.object.name='editor'][callee.property.name='addCommand']"
-            },
-            {
                 message: "addButton is removed. Update code to be compatible with tinymce5",
                 selector: "CallExpression[callee.object.name='editor'][callee.property.name='addButton']"
             },
