@@ -49,7 +49,7 @@ class IsSubscribed implements ResolverInterface
         /** @var CustomerInterface $customer */
         $customer = $value['model'];
         $customerId = (int)$customer->getId();
-        $websiteId = (int)$customer->getWebsiteId();
+        $websiteId = (int)$context->getExtensionAttributes()->getStore()->getWebsiteId();
         $status = $this->subscriberFactory->create()->loadByCustomer($customerId, $websiteId)->isSubscribed();
 
         return (bool)$status;
