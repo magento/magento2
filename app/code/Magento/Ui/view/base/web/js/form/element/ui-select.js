@@ -953,7 +953,7 @@ define([
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
-                    this.cacheUiSelect.blur();
+                    this.cacheUiSelect.trigger('blur');
                     this.filterOptionsFocus(true);
                     this.cleanHoveredElement();
 

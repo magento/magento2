@@ -13,18 +13,18 @@
                 attr: {id: ++ko.uid},
                 event: { change: togglePage },
                 css: { '_indeterminate': indetermine },
-                enable: totalRecords">
-        <label attr="for: ko.uid"/>
+                enable: totalRecords"/>
+        <label attr="for: ko.uid"></label>
         <button class="action-multicheck-toggle" data-toggle="dropdown"
             data-bind="css: { '_active': $collapsible.opened },
                        enable: totalRecords,
                        toggleCollapsible">
-            <span translate="'Options'"/>
+            <span translate="'Options'"></span>
         </button>
         <ul class="action-menu" each="actions" closeCollapsible="">
             <li data-bind="click: $parent[value].bind($parent),
                            visible: $parent.isActionRelevant(value)">
-                <span class="action-menu-item" text="label"/>
+                <span class="action-menu-item" text="label"></span>
             </li>
         </ul>
     </div>

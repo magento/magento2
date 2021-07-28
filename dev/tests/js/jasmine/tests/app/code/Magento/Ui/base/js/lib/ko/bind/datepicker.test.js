@@ -51,7 +51,7 @@ define([
             momentFormat = utils.convertToMomentFormat(inputFormat);
             todayDate = moment().format(momentFormat);
 
-            element.datepicker('setTimezoneDate').blur().trigger('change');
+            element.datepicker('setTimezoneDate').trigger('blur').trigger('change');
             result = moment(observable()).format(momentFormat);
 
             expect(todayDate).toEqual(result);
@@ -71,7 +71,7 @@ define([
         });
 
         it('clear picked date\'s value after clear observable value', function () {
-            element.datepicker('setTimezoneDate').blur().trigger('change');
+            element.datepicker('setTimezoneDate').trigger('blur').trigger('change');
             observable('');
 
             jasmine.clock().tick(100);
