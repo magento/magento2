@@ -22,7 +22,7 @@
                         <argument name="form_field_name" xsi:type="string">tax_rate_ids</argument>
                         <argument name="use_select_all" xsi:type="string">1</argument>
                         <argument name="options" xsi:type="array">
-                            <item name="Delete" xsi:type="array">
+                            <item name="delete" xsi:type="array">
                                 <item name="label" xsi:type="string" translate="true">Delete items</item>
                                 <item name="url" xsi:type="string">tax/rate/massDelete</item>
                                 <item name="confirm" xsi:type="string" translate="true">Delete selected items?</item>

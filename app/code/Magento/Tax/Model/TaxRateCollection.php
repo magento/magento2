@@ -71,7 +71,11 @@ class TaxRateCollection extends AbstractServiceCollection
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve field values from all items
+     *
+     * @param string $colName
+     *
+     * @return array
      */
     public function getColumnValues($colName)
     {
