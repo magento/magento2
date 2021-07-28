@@ -493,14 +493,13 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
+        $fileName = preg_replace('/[^a-z0-9_\\-]+/i', '_', $fileName);
+        $fileName = preg_replace('~\_(?!.*\_)~', '.', $fileName);
         $fileInfo = pathinfo($fileName);
-        $fileName = preg_replace('/[^a-z0-9_\\-]+/i', '_', $fileInfo['filename']);
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
         // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = self::MAX_LENGTH;
-
-        $fileName = $fileName.'.'.$fileInfo['extension'];
+        $maxFilenameLength = 90;
 
         if (strlen($fileInfo['basename']) > $maxFilenameLength) {
             throw new \LengthException(
