@@ -427,6 +427,110 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
+         * @return array
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+         */
+        public function installDataProvider()
+        {
+            return [
+                [
+                    'request' => $this->request,
+                    'logMessages' => [
+                        ['Starting Magento installation:'],
+                        ['File permissions check...'],
+                        ['Required extensions check...'],
+                        ['Enabling Maintenance Mode...'],
+                        ['Installing deployment configuration...'],
+                        ['Installing database schema:'],
+                        ['Schema creation/updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Schema post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Installing search configuration...'],
+                        ['Validating remote storage configuration...'],
+                        ['Installing user configuration...'],
+                        ['Enabling caches:'],
+                        ['Current status:'],
+                        ['foo: 1'],
+                        ['bar: 1'],
+                        ['Installing data...'],
+                        ['Data install/update:'],
+                        ['Disabling caches:'],
+                        ['Current status:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Data post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Enabling caches:'],
+                        ['Current status:'],
+                        ['Caches clearing:'],
+                        ['Cache cleared successfully'],
+                        ['Disabling Maintenance Mode:'],
+                        ['Post installation file permissions check...'],
+                        ['Write installation date...'],
+                        ['Sample Data is installed with errors. See log file for details']
+                    ],
+                ],
+                [
+                    'request' => [
+                        ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
+                        ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
+                        ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
+                        ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
+                        ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
+                        AdminAccount::KEY_USER => 'admin',
+                        AdminAccount::KEY_PASSWORD => '123',
+                        AdminAccount::KEY_EMAIL => 'admin@example.com',
+                        AdminAccount::KEY_FIRST_NAME => 'John',
+                        AdminAccount::KEY_LAST_NAME => 'Doe',
+                    ],
+                    'logMessages' => [
+                        ['Starting Magento installation:'],
+                        ['File permissions check...'],
+                        ['Required extensions check...'],
+                        ['Enabling Maintenance Mode...'],
+                        ['Installing deployment configuration...'],
+                        ['Installing database schema:'],
+                        ['Schema creation/updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Schema post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Installing search configuration...'],
+                        ['Validating remote storage configuration...'],
+                        ['Installing user configuration...'],
+                        ['Enabling caches:'],
+                        ['Current status:'],
+                        ['foo: 1'],
+                        ['bar: 1'],
+                        ['Installing data...'],
+                        ['Data install/update:'],
+                        ['Disabling caches:'],
+                        ['Current status:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Data post-updates:'],
+                        ['Module \'Foo_One\':'],
+                        ['Module \'Bar_Two\':'],
+                        ['Enabling caches:'],
+                        ['Current status:'],
+                        ['Installing admin user...'],
+                        ['Caches clearing:'],
+                        ['Cache cleared successfully'],
+                        ['Disabling Maintenance Mode:'],
+                        ['Post installation file permissions check...'],
+                        ['Write installation date...'],
+                        ['Sample Data is installed with errors. See log file for details']
+                    ],
+                ],
+            ];
+        }
+
+        /**
          * Test installation with invalid remote storage configuration raises ValidationException via validation
          * and reverts configuration back to local file driver
          *
@@ -597,6 +701,17 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
+         * @return array
+         */
+        public function installWithInvalidRemoteStorageConfigurationDataProvider()
+        {
+            return [
+                [true],
+                [false]
+            ];
+        }
+
+        /**
          * Test installation with invalid remote storage configuration is able to be caught earlier than
          * the queued validation step if necessary, and that configuration is reverted back to local file driver.
          *
@@ -720,121 +835,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->logger->expects(static::never())->method('logSuccess');
 
             $this->object->install($request);
-        }
-
-        /**
-         * @return array
-         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-         */
-        public function installDataProvider()
-        {
-            return [
-                [
-                    'request' => $this->request,
-                    'logMessages' => [
-                        ['Starting Magento installation:'],
-                        ['File permissions check...'],
-                        ['Required extensions check...'],
-                        ['Enabling Maintenance Mode...'],
-                        ['Installing deployment configuration...'],
-                        ['Installing database schema:'],
-                        ['Schema creation/updates:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Installing search configuration...'],
-                        ['Validating remote storage configuration...'],
-                        ['Installing user configuration...'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
-                        ['foo: 1'],
-                        ['bar: 1'],
-                        ['Installing data...'],
-                        ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['Current status:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
-                        ['Caches clearing:'],
-                        ['Cache cleared successfully'],
-                        ['Disabling Maintenance Mode:'],
-                        ['Post installation file permissions check...'],
-                        ['Write installation date...'],
-                        ['Sample Data is installed with errors. See log file for details']
-                    ],
-                ],
-                [
-                    'request' => [
-                        ConfigOptionsListConstants::INPUT_KEY_DB_HOST => '127.0.0.1',
-                        ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
-                        ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
-                        ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
-                        ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
-                        AdminAccount::KEY_USER => 'admin',
-                        AdminAccount::KEY_PASSWORD => '123',
-                        AdminAccount::KEY_EMAIL => 'admin@example.com',
-                        AdminAccount::KEY_FIRST_NAME => 'John',
-                        AdminAccount::KEY_LAST_NAME => 'Doe',
-                    ],
-                    'logMessages' => [
-                        ['Starting Magento installation:'],
-                        ['File permissions check...'],
-                        ['Required extensions check...'],
-                        ['Enabling Maintenance Mode...'],
-                        ['Installing deployment configuration...'],
-                        ['Installing database schema:'],
-                        ['Schema creation/updates:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Schema post-updates:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Installing search configuration...'],
-                        ['Validating remote storage configuration...'],
-                        ['Installing user configuration...'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
-                        ['foo: 1'],
-                        ['bar: 1'],
-                        ['Installing data...'],
-                        ['Data install/update:'],
-                        ['Disabling caches:'],
-                        ['Current status:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Data post-updates:'],
-                        ['Module \'Foo_One\':'],
-                        ['Module \'Bar_Two\':'],
-                        ['Enabling caches:'],
-                        ['Current status:'],
-                        ['Installing admin user...'],
-                        ['Caches clearing:'],
-                        ['Cache cleared successfully'],
-                        ['Disabling Maintenance Mode:'],
-                        ['Post installation file permissions check...'],
-                        ['Write installation date...'],
-                        ['Sample Data is installed with errors. See log file for details']
-                    ],
-                ],
-            ];
-        }
-
-        /**
-         * @return array
-         */
-        public function installWithInvalidRemoteStorageConfigurationDataProvider()
-        {
-            return [
-                [true],
-                [false]
-            ];
         }
 
         /**
