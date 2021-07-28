@@ -22,6 +22,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Config\File\ConfigFilePool;
     use Magento\Framework\DB\Adapter\AdapterInterface;
     use Magento\Framework\DB\Ddl\Table;
+    use Magento\Framework\Exception\RuntimeException;
     use Magento\Framework\Filesystem;
     use Magento\Framework\Filesystem\Directory\WriteInterface;
     use Magento\Framework\Filesystem\DriverPool;
@@ -358,6 +359,8 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->disableOriginalConstructor()
                 ->getMock();
 
+            $this->configWriter->expects(static::never())->method('checkIfWritable');
+
             $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
             $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects($this->any())
@@ -424,13 +427,16 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
-         * Test installation with invalid remote storage configuration raises ValidationException
+         * Test installation with invalid remote storage configuration raises ValidationException via validation
+         * and reverts configuration back to local file driver
          *
+         * @param bool $isDeploymentConfigWritable
+         * @dataProvider installWithInvalidRemoteStorageConfigurationDataProvider
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
          */
-        public function testInstallWithInvalidRemoteStorageConfiguration()
+        public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
             $request = $this->request;
 
@@ -507,6 +513,36 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->expectException(ValidationException::class);
 
+            $this->configWriter
+                ->expects(static::once())
+                ->method('checkIfWritable')
+                ->willReturn($isDeploymentConfigWritable);
+
+            $remoteStorageReversionArguments = [
+                [
+                    ConfigFilePool::APP_ENV => [
+                        'remote_storage' => [
+                            'driver' => 'file'
+                        ]
+                    ]
+                ],
+                true
+            ];
+
+            if ($isDeploymentConfigWritable) { // assert remote storage reversion is attempted
+                $this->configWriter
+                    ->expects(static::at(2))
+                    ->method('saveConfig')
+                    ->with(...$remoteStorageReversionArguments);
+            } else { // assert remote storage reversion is never attempted
+                $this->configWriter
+                    ->expects(static::any())
+                    ->method('saveConfig')
+                    ->willReturnCallback(function (array $data, $override) use ($remoteStorageReversionArguments) {
+                        $this->assertNotEquals($remoteStorageReversionArguments, [$data, $override]);
+                    });
+            }
+
             $this->setupFactory->expects(static::once())->method('create')->with($resource)->willReturn($setup);
 
             $this->objectManager->expects(static::any())
@@ -535,6 +571,132 @@ namespace Magento\Setup\Test\Unit\Model {
                     [Registry::class, $registry],
                     [SearchConfig::class, $searchConfigMock],
                     [RemoteStorageValidator::class, $remoteStorageValidatorMock],
+                ]);
+
+            $this->sampleDataState->expects(static::never())->method('hasError');
+
+            $this->phpReadinessCheck->expects(static::once())->method('checkPhpExtensions')->willReturn(
+                ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]
+            );
+
+            $this->filePermissions->expects(static::exactly(2))
+                ->method('getMissingWritablePathsForInstallation')
+                ->willReturn([]);
+
+            call_user_func_array(
+                [
+                    $this->logger->expects(static::exactly(count($logMessages)))->method('log'),
+                    'withConsecutive'
+                ],
+                $logMessages
+            );
+
+            $this->logger->expects(static::never())->method('logSuccess');
+
+            $this->object->install($request);
+        }
+
+        /**
+         * Test installation with invalid remote storage configuration is able to be caught earlier than
+         * the queued validation step if necessary, and that configuration is reverted back to local file driver.
+         *
+         * @throws \Magento\Framework\Exception\FileSystemException
+         * @throws \Magento\Framework\Exception\LocalizedException
+         * @throws \Magento\Framework\Exception\RuntimeException
+         */
+        public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyRuntimeException()
+        {
+            $request = $this->request;
+
+            $logMessages = [
+                ['Starting Magento installation:'],
+                ['File permissions check...'],
+                ['Required extensions check...'],
+                ['Enabling Maintenance Mode...'],
+                ['Installing deployment configuration...'],
+                ['Installing database schema:'],
+                ['Schema creation/updates:'],
+            ];
+
+            $this->config->expects(static::atLeastOnce())
+                ->method('get')
+                ->willReturnMap(
+                    [
+                        [ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
+                        [ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, null, true],
+                        ['modules/Magento_User', null, '1']
+                    ]
+                );
+            $allModules = ['Foo_One' => [], 'Bar_Two' => []];
+
+            $this->declarationInstallerMock
+                ->expects(static::once())
+                ->method('installSchema')
+                ->willThrowException(new RuntimeException(__('Remote driver is not available.')));
+
+            $this->expectException(RuntimeException::class);
+
+            $this->moduleLoader->expects(static::exactly(2))->method('load')->willReturn($allModules);
+            $setup = $this->createMock(Setup::class);
+            $table = $this->createMock(Table::class);
+            $connection = $this->getMockBuilder(AdapterInterface::class)
+                ->setMethods(['getSchemaListener', 'newTable', 'getTables'])
+                ->getMockForAbstractClass();
+            $connection->expects(static::any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
+            $connection->expects(static::once())->method('getTables')->willReturn([]);
+            $setup->expects(static::any())->method('getConnection')->willReturn($connection);
+            $table->expects(static::any())->method('addColumn')->willReturn($table);
+            $table->expects(static::any())->method('setComment')->willReturn($table);
+            $table->expects(static::any())->method('addIndex')->willReturn($table);
+            $connection->expects(static::any())->method('newTable')->willReturn($table);
+
+            $resource = $this->createMock(ResourceConnection::class);
+            $this->contextMock->expects(static::once())->method('getResources')->willReturn($resource);
+
+            $dataSetup = $this->createMock(DataSetup::class);
+            $dataSetup->expects(static::never())->method('getConnection');
+
+            $cacheManager = $this->createMock(Manager::class);
+            $cacheManager->expects(static::never())->method('getAvailableTypes');
+
+            $registry = $this->createMock(Registry::class);
+
+            $remoteStorageValidatorMock = $this->getMockBuilder(RemoteStorageValidator::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $remoteStorageValidatorMock
+                ->expects(static::never())
+                ->method('validate');
+
+            $this->configWriter
+                ->expects(static::once())
+                ->method('checkIfWritable')
+                ->willReturn(true);
+
+            $remoteStorageReversionArguments = [
+                [
+                    ConfigFilePool::APP_ENV => [
+                        'remote_storage' => [
+                            'driver' => 'file'
+                        ]
+                    ]
+                ],
+                true
+            ];
+
+            $this->configWriter
+                ->expects(static::at(2))
+                ->method('saveConfig')
+                ->with(...$remoteStorageReversionArguments);
+
+            $this->setupFactory->expects(static::once())->method('create')->with($resource)->willReturn($setup);
+
+            $this->objectManager->expects(static::any())
+                ->method('get')
+                ->willReturnMap([
+                    [DeclarationInstaller::class, $this->declarationInstallerMock],
+                    [Registry::class, $registry],
                 ]);
 
             $this->sampleDataState->expects(static::never())->method('hasError');
@@ -661,6 +823,17 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                 ],
+            ];
+        }
+
+        /**
+         * @return array
+         */
+        public function installWithInvalidRemoteStorageConfigurationDataProvider()
+        {
+            return [
+                [true],
+                [false]
             ];
         }
 
