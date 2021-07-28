@@ -75,23 +75,11 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $cleanTime = $object->getCleanTime();
         $connection = $this->getConnection();
         $timeLimit = $this->dateTime->formatDate($this->date->gmtTimestamp() - $cleanTime);
-        while (true) {
-            $select = $connection->select()->from(
-                ['visitor_table' => $this->getTable('customer_visitor')],
-                ['visitor_id' => 'visitor_table.visitor_id']
-            )->where(
-                'visitor_table.last_visit_at < ?',
-                $timeLimit
-            )->limit(
-                100
-            );
-            $visitorIds = $connection->fetchCol($select);
-            if (!$visitorIds) {
-                break;
-            }
-            $condition = ['visitor_id IN (?)' => $visitorIds];
-            $connection->delete($this->getTable('customer_visitor'), $condition);
-        }
+        
+        $connection->delete(
+            $this->getTable('customer_visitor'),
+            ['last_visit_at < ?' => $timeLimit]
+        );
 
         return $this;
     }
