@@ -463,7 +463,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         if (!($this->isPathAllowed($path) || preg_match($this->getAllowedTargetDirPattern(), $path))) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We cannot create folder %1 under %2', $name, $this->_getRelativePathToRoot($path))
+                __('We cannot create the folder under the selected directory.')
             );
         }
 
@@ -516,7 +516,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         if (!$this->isPathAllowed($path)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We cannot delete directory %1.', $this->_getRelativePathToRoot($path))
+                __('We cannot delete the selected directory.')
             );
         }
 
@@ -597,7 +597,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         if (!($this->isPathAllowed($targetPath) || preg_match($this->getAllowedTargetDirPattern(), $targetPath))) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('We can\'t upload the file to current folder right now. Please try another folder.')
+                __('We can\'t upload the file to the current folder right now. Please try another folder.')
             );
         }
         /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
