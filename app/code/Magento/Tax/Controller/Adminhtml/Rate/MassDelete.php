@@ -63,7 +63,7 @@ class MassDelete extends Action implements HttpPostActionInterface
         $taxRateDeleteError = 0;
         foreach ($this->getTaxRatesIds() as $rateId) {
             try {
-                $this->taxRepository->deleteById((int) $rateId);
+                $this->taxRepository->deleteById((int)$rateId);
                 $taxRateDeleted++;
             } catch (Exception $e) {
                 $this->logger->error($e->getMessage());
@@ -96,7 +96,7 @@ class MassDelete extends Action implements HttpPostActionInterface
      */
     private function getTaxRatesIds(): array
     {
-        $taxRatesIds = $this->getRequest()->getParam('tax_rate_ids') ?: [];
+        $taxRatesIds = $this->getRequest()->getParam('tax_rate_ids', []);
 
         $taxRatesIds = is_array($taxRatesIds) ? $taxRatesIds : explode(',', $taxRatesIds);
 
