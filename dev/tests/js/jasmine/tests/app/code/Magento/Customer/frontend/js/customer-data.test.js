@@ -3,7 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global _ */
 /* eslint max-nested-callbacks: 0 */
 /* jscs:disable jsDoc*/
 
@@ -46,6 +45,27 @@ define([
             ]
         };
 
+    var _;
+
+    beforeEach(function (done) {
+        injector.require([
+            'underscore',
+            'Magento_Customer/js/customer-data'
+        ], function (underscore, Constr) {
+            _ = underscore;
+            obj = Constr;
+            done();
+        });
+    });
+
+    afterEach(function () {
+        try {
+            injector.clean();
+            injector.remove();
+        } catch (e) {
+        }
+    });
+
     function init(config) {
         var defaultConfig = {
             sectionLoadUrl: 'http://localhost/customer/section/load/',
@@ -63,7 +83,7 @@ define([
             sectionDataIds = {};
 
         _.each(sections, function (sectionData, sectionName) {
-            sectionDataIds[sectionName] = sectionData['data_id'];
+            sectionDataIds[sectionName] = sectionData.data_id;
 
             if (typeof sectionData.content !== 'undefined') {
                 mageCacheStorage[sectionName] = sectionData;
@@ -89,34 +109,22 @@ define([
         );
     }
 
-    function clearLocalStorage() {
-        $.cookieStorage.set('section_data_ids', {});
-
-        if (window.localStorage) {
-            window.localStorage.clear();
-        }
-    }
-
     describe('Magento_Customer/js/customer-data', function () {
+        function clearLocalStorage() {
+            $.cookieStorage.set('section_data_ids', {});
 
-        var _;
+            if (window.localStorage) {
+                window.localStorage.clear();
+            }
+        }
 
         beforeAll(function () {
             clearLocalStorage();
         });
 
-        beforeEach(function (done) {
+        beforeEach(function () {
             originalGetJSON = $.getJSON;
             sectionConfig['Magento_Customer/js/section-config'](sectionConfigSettings);
-
-            injector.require([
-                'underscore',
-                'Magento_Customer/js/customer-data'
-            ], function (underscore, Constr) {
-                _ = underscore;
-                obj = Constr;
-                done();
-            });
         });
 
         afterEach(function () {
@@ -401,16 +409,13 @@ define([
                             }
                         };
                     };
-
                     expect(parameters).toEqual(jasmine.objectContaining({
                         sections: 'section'
                     }));
-
                     return deferred.promise();
                 });
 
                 result = obj.reload(['section'], true);
-
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
                         section: {}
@@ -422,7 +427,6 @@ define([
                 var result;
 
                 spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['cart,customer,messages']);
-
                 $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
@@ -448,7 +452,6 @@ define([
                 });
 
                 result = obj.reload(['cart', 'customer', 'messages'], true);
-
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
                         cart: {},
@@ -457,7 +460,7 @@ define([
                     }
                 }));
             });
-            //
+
             it('Check it returns all sections when passed wildcard string', function () {
                 var result;
 
@@ -486,7 +489,6 @@ define([
                 });
 
                 result = obj.reload('*', true);
-
                 expect($.getJSON).toHaveBeenCalled();
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {

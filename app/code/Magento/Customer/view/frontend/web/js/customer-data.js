@@ -98,8 +98,8 @@ define([
             sectionNames = sectionConfig.filterClientSideSections(sectionNames);
             parameters = _.isArray(sectionNames) && sectionNames.indexOf('*') < 0 ? {
                 sections: sectionNames.join(',')
-            } : [];
-            parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
+            } : {};
+            parameters.force_new_section_timestamp = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
                 throw new Error(jqXHR);
@@ -120,7 +120,7 @@ define([
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) { //eslint-disable-line eqeqeq
+                    if (name !== sectionName) {
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -179,7 +179,7 @@ define([
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
             _.each(sections, function (sectionData, sectionName) {
-                sectionId = sectionData['data_id'];
+                sectionId = sectionData.data_id;
                 sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
@@ -255,7 +255,7 @@ define([
             _.each(options.expirableSectionNames, function (sectionName) {
                 sectionData = storage.get(sectionName);
 
-                if (typeof sectionData === 'object' && sectionData['data_id'] + sectionLifetime <= currentTimestamp) {
+                if (typeof sectionData === 'object' && sectionData.data_id + sectionLifetime <= currentTimestamp) {
                     expiredSectionNames.push(sectionName);
                 }
             });
@@ -266,7 +266,7 @@ define([
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
-                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                    cookieSectionTimestamp !== sectionData.data_id
                 ) {
                     expiredSectionNames.push(sectionName);
                 }
