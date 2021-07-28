@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem as BaseFilesystem;
 use Magento\RemoteStorage\Driver\DriverPool;
 use Magento\RemoteStorage\Model\Config;
+use Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory as RemoteStorageWriteFactory;
 
 /**
  * Filesystem implementation for remote storage.
@@ -34,6 +36,11 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
     private $driverPool;
 
     /**
+     * @var RemoteStorageWriteFactory
+     */
+    private $remoteStorageWriteFactory;
+
+    /**
      * @param BaseFilesystem\DirectoryList $directoryList
      * @param ReadFactory $readFactory
      * @param WriteFactory $writeFactory
@@ -47,11 +54,15 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
         WriteFactory $writeFactory,
         Config $config,
         DriverPool $driverPool,
-        array $directoryCodes = []
+        array $directoryCodes = [],
+        RemoteStorageWriteFactory $remoteStorageWriteFactory = null
     ) {
         $this->isEnabled = $config->isEnabled();
         $this->driverPool = $driverPool;
         $this->directoryCodes = $directoryCodes;
+        $this->remoteStorageWriteFactory = $remoteStorageWriteFactory ?: ObjectManager::getInstance()->get(
+            RemoteStorageWriteFactory::class
+        );
 
         parent::__construct($directoryList, $readFactory, $writeFactory);
     }
@@ -93,9 +104,14 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
 
             if (!array_key_exists($code, $this->writeInstances)) {
                 $uri = $this->getUri($directoryCode) ?: '';
-                $this->writeInstances[$code] = $this->writeFactory->create(
+                $remoteDirectoryWrite = $this->writeFactory->create(
                     $this->driverPool->getDriver()->getAbsolutePath('', $uri),
                     $driverCode
+                );
+                $localDirectoryWrite = parent::getDirectoryWrite($directoryCode);
+                $this->writeInstances[$code] = $this->remoteStorageWriteFactory->create(
+                    $remoteDirectoryWrite,
+                    $localDirectoryWrite
                 );
             }
 
