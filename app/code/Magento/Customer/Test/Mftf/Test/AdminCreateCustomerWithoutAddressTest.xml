@@ -19,6 +19,9 @@
         </annotations>
 
         <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterTest">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
