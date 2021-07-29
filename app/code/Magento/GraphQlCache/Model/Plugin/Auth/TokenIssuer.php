@@ -5,17 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlCache\Model\Plugin\Integration\Api;
+namespace Magento\GraphQlCache\Model\Plugin\Auth;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\Integration\Api\UserTokenIssuerInterface;
+use Magento\Integration\Model\CustomUserContext;
 
 /**
- * Load the shared UserContext with data for the user used to generate the token
+ * Load the shared UserContext with data for the new user after a token is generated
  */
-class UserTokenIssuer
+class TokenIssuer
 {
     /**
      * @var ContextFactoryInterface
@@ -36,7 +36,7 @@ class UserTokenIssuer
      * @param UserTokenIssuerInterface $issuer
      * @param string $result
      * @param UserContextInterface $userContext
-     * @return ResponseInterface
+     * @return string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
