@@ -56,6 +56,7 @@ use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
 use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
+use ReflectionException;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -1219,7 +1220,12 @@ class Installer
      */
     public function validateRemoteStorageConfiguration(array $data)
     {
-        $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        try {
+            $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        } catch (ReflectionException $e) { // RemoteStorage module is not enabled; return early
+            return;
+        }
+
         $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
 
         if (!empty($validationErrors)) {
