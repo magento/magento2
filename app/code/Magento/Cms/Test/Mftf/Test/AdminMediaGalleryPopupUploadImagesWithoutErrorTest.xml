@@ -21,7 +21,7 @@
         <before>
             <!--Enable WYSIWYG options-->
             <comment userInput="Enable WYSIWYG options" stepKey="commentEnableWYSIWYG"/>
-            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYGEditor"/>
             <magentoCLI command="config:set cms/wysiwyg/editor 'TinyMCE 4'" stepKey="setValueWYSIWYGEditor"/>
             <!--Create block-->
             <comment userInput="Create block" stepKey="commentCreateBlock"/>
