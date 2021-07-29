@@ -260,9 +260,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     /**
      * Constructor
      *
-     * @var \Magento\Customer\Model\address\Mapper
+     * @var \Magento\Customer\Model\Address\Mapper
      */
-    protected $addressMapper;
+    private $addressMapper;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -333,7 +333,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         ExtensibleDataObjectConverter $dataObjectConverter = null,
         StoreManagerInterface $storeManager = null,
         CustomAttributeListInterface $customAttributeList = null,
-        \Magento\Customer\Model\Address\Mapper $addressMapper
+        \Magento\Customer\Model\Address\Mapper $addressMapper = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -370,7 +370,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customAttributeList = $customAttributeList ?: ObjectManager::getInstance()
             ->get(CustomAttributeListInterface::class);
-        $this->addressMapper = $addressMapper;
+        $this->addressMapper = $addressMapper ?: ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\Address\Mapper::class);
     }
 
     /**
