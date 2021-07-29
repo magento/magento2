@@ -81,9 +81,10 @@ class Rows
 
             foreach ($this->storeManager->getStores() as $store) {
                 $indexTable = $this->getIndexTable((int) $store->getId(), $useTempTable);
-                $productIds = array_merge($productIds, $this->getProductIdsFromIndex($indexTable, $entityIds));
+                $productIds[] = $this->getProductIdsFromIndex($indexTable, $entityIds);
             }
 
+            $productIds = array_merge([], ...$productIds);
             if (!empty($productIds)) {
                 $indexer->reindexList(array_unique($productIds));
             }
