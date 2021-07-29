@@ -39,14 +39,17 @@ define([
                 data: {
                     filename: record['encoded_id'],
                     'store_id': config.storeId,
-                    'as_is': targetElement.is('textarea') ? 1 : 0,
-                    'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
+                    'as_is': typeof targetElement !== 'function' && targetElement.is('textarea') ? 1 : 0,
+                    'force_static_path': typeof targetElement !== 'function' && targetElement.data('force_static_path') ? 1 : 0,
                     'form_key': FORM_KEY
                 },
                 context: this,
                 showLoader: true
             }).done($.proxy(function (data) {
-                if (targetElement.is('textarea')) {
+                if(typeof targetElement === 'function') {
+                    targetElement(data.content);
+                }
+                else if (targetElement.is('textarea')) {
                     this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();
                     $(targetElement).trigger('change');
@@ -58,7 +61,10 @@ define([
                 }
             }, this));
             window.MediabrowserUtility.closeDialog();
-            targetElement.focus();
+            if (typeof targetElement !== 'function') {
+                targetElement.focus();
+                $(targetElement).trigger('change');
+            }
         },
 
         /**
@@ -100,9 +106,7 @@ define([
          * return {Object|null}
          */
         getMediaBrowserOpener: function (targetElementId) {
-            if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId) && !_.isUndefined(tinyMceEditors) &&
-                !tinyMceEditors.get(targetElementId).getMediaBrowserOpener().closed
-            ) {
+            if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId) && !_.isUndefined(tinyMceEditors)) {
                 return tinyMceEditors.get(targetElementId).getMediaBrowserOpener();
             }
 
@@ -116,13 +120,9 @@ define([
          * @returns {*|n.fn.init|jQuery|HTMLElement}
          */
         getTargetElement: function (targetElementId) {
-            var opener;
 
             if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId)) {
-                opener = this.getMediaBrowserOpener(targetElementId) || window;
-                targetElementId = tinyMceEditors.get(targetElementId).getMediaBrowserTargetElementId();
-
-                return $(opener.document.getElementById(targetElementId));
+                return this.getMediaBrowserOpener(targetElementId) || window;
             }
 
             return $('#' + targetElementId);
