@@ -28,6 +28,8 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * Tests setting the billing address on the cart by providing address input information.
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -53,26 +55,11 @@ mutation {
           country_code: "US"
           telephone: "88776655"
          }
-         same_as_shipping: true
       }
     }
   ) {
     cart {
       billing_address {
-        firstname
-        lastname
-        company
-        street
-        city
-        postcode
-        telephone
-        country {
-          code
-          label
-        }
-        __typename
-      }
-      shipping_addresses {
         firstname
         lastname
         company
@@ -97,20 +84,17 @@ QUERY;
         self::assertArrayHasKey('billing_address', $cartResponse);
         $billingAddressResponse = $cartResponse['billing_address'];
         $this->assertNewAddressFields($billingAddressResponse);
-        self::assertArrayHasKey('shipping_addresses', $cartResponse);
-        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewAddressFields($billingAddressResponse);
-        $this->assertNewAddressFields($shippingAddressResponse, 'ShippingCartAddress');
     }
 
     /**
-     * Test case for deprecated `use_for_shipping` param.
+     * Tests that the "use_for_shipping" option sets the provided billing address for shipping as well.
      *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testSetNewBillingAddressWithUseForShippingParameter()
+    public function testSetNewBillingAddressWithUseForShipping()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -181,6 +165,8 @@ QUERY;
     }
 
     /**
+     * Tests that a guest cannot set the billing address on a logged-in customer's cart.
+     *
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -225,6 +211,8 @@ QUERY;
     }
 
     /**
+     * Tests that a guest cannot use a logged-in customer's saved address as the billing address on their own cart.
+     *
      * _security
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -260,6 +248,7 @@ QUERY;
     }
 
     /**
+     * Tests that a guest cannot set the billing address on a cart that does not exist.
      */
     public function testSetBillingAddressOnNonExistentCart()
     {
@@ -299,91 +288,13 @@ QUERY;
     }
 
     /**
+     * Tests that an error is thrown when the street information exceeds the maximum number of allowed lines.
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testSetNewBillingAddressWithoutCustomerAddressIdAndAddress()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query = <<<QUERY
-mutation {
-  setBillingAddressOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      billing_address: {
-        same_as_shipping: true
-      }
-    }
-  ) {
-    cart {
-      billing_address {
-        city
-      }
-    }
-  }
-}
-QUERY;
-
-        self::expectExceptionMessage(
-            'The billing address must contain either "customer_address_id" or "address".'
-        );
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_multishipping_with_two_shipping_addresses.php
-     */
-    public function testSetNewBillingAddressWithSameAsShippingAndMultishipping()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-
-        $query = <<<QUERY
-mutation {
-  setBillingAddressOnCart(
-    input: {
-      cart_id: "$maskedQuoteId"
-      billing_address: {
-        address: {
-          firstname: "test firstname"
-          lastname: "test lastname"
-          company: "test company"
-          street: ["test street 1", "test street 2"]
-          city: "test city"
-          region: "AL"
-          postcode: "887766"
-          country_code: "US"
-          telephone: "88776655"
-        }
-        same_as_shipping: true
-      }
-    }
-  ) {
-    cart {
-      billing_address {
-        city
-      }
-    }
-  }
-}
-QUERY;
-
-        self::expectExceptionMessage(
-            'Using the "same_as_shipping" option with multishipping is not possible.'
-        );
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     */
-    public function testSetNewBillingAddressRedundantStreetLine()
+    public function testSetBillingAddressRedundantStreetLine()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -421,6 +332,8 @@ QUERY;
     }
 
     /**
+     * Tests that setting a new billing address succeeds with a lower case "country_code".
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -478,13 +391,208 @@ QUERY;
     }
 
     /**
-     * Verify the all the whitelisted fields for a New Address Object
+     * Tests that an error is thrown when a billing address is not provided.
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressWithoutProvidingAddress()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        use_for_shipping: true
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
+    }
+  }
+}
+QUERY;
+
+        self::expectExceptionMessage(
+            'The billing address must contain either "customer_address_id", "address", or "same_as_shipping".'
+        );
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Tests that the "same_as_shipping" option uses the cart's existing shipping address for the billing address.
+     *
+     * Ignores any address input as well as the "use_for_shipping" option when "same_as_shipping" is true.
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testSetBillingAddressWithSameAsShipping()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+        use_for_shipping: true
+        address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AL"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+        }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+
+        // Assert billing address has been set according to the cart's shipping address
+        self::assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        $this->assertNewAddressFieldsFromShippingAddress($billingAddressResponse);
+
+        // Assert the shipping address is unchanged
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewAddressFieldsFromShippingAddress($shippingAddressResponse, 'ShippingCartAddress');
+    }
+
+    /**
+     * Tests that the "same_as_shipping" option cannot be used when a shipping address has not been set on the cart.
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressWithSameAsShippingWithoutShippingAddressOnCart()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
+    }
+  }
+}
+QUERY;
+        self::expectExceptionMessage(
+            'Could not use the "same_as_shipping" option, because the shipping address has not been set.'
+        );
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Tests that the "same_as_shipping" option cannot be used when multi-shipping is applied.
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_multishipping_with_two_shipping_addresses.php
+     */
+    public function testSetBillingAddressWithSameAsShippingAndMultishipping()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        city
+      }
+    }
+  }
+}
+QUERY;
+
+        self::expectExceptionMessage(
+            'Could not use the "same_as_shipping" option, because multiple shipping addresses have been set.'
+        );
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Verify all the whitelisted fields for a New Address Object
      *
      * @param array $addressResponse
      * @param string $addressType
      */
-    private function assertNewAddressFields(array $addressResponse, string $addressType = 'BillingCartAddress'): void
-    {
+    private function assertNewAddressFields(
+        array $addressResponse,
+        string $addressType = 'BillingCartAddress'
+    ): void {
         $assertionMap = [
             ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
             ['response_field' => 'lastname', 'expected_value' => 'test lastname'],
@@ -493,6 +601,33 @@ QUERY;
             ['response_field' => 'city', 'expected_value' => 'test city'],
             ['response_field' => 'postcode', 'expected_value' => '887766'],
             ['response_field' => 'telephone', 'expected_value' => '88776655'],
+            ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => '__typename', 'expected_value' => $addressType]
+        ];
+
+        $this->assertResponseFields($addressResponse, $assertionMap);
+    }
+
+    /**
+     * Verify that the fields for the specified quote address match the shipping address from the fixture.
+     *
+     * Useful for verifying scenarios with the "same_as_shipping" option.
+     *
+     * @param array $addressResponse
+     * @param string $addressType
+     */
+    private function assertNewAddressFieldsFromShippingAddress(
+        array $addressResponse,
+        string $addressType = 'BillingCartAddress'
+    ): void {
+        $assertionMap = [
+            ['response_field' => 'firstname', 'expected_value' => 'John'],
+            ['response_field' => 'lastname', 'expected_value' => 'Smith'],
+            ['response_field' => 'company', 'expected_value' => 'CompanyName'],
+            ['response_field' => 'street', 'expected_value' => [0 => 'Green str, 67']],
+            ['response_field' => 'city', 'expected_value' => 'CityM'],
+            ['response_field' => 'postcode', 'expected_value' => '75477'],
+            ['response_field' => 'telephone', 'expected_value' => 3468676],
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
             ['response_field' => '__typename', 'expected_value' => $addressType]
         ];
