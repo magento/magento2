@@ -688,8 +688,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                             try {
                                 $formattedOptions[$option['option_id']] =
                                     $this->serializer->unserialize($option['option_value']);
+                                continue;
                             } catch (\InvalidArgumentException $exception) {
-                                //do nothing
+                                //log the exception as warning
+                                $this->_logger->warning($exception);
                             }
                         }
                         $formattedOptions[$option['option_id']] =

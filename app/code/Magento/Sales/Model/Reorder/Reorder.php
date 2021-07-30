@@ -94,9 +94,9 @@ class Reorder
     private $guestCartResolver;
 
     /**
-     * @var
+     * @var SerializerInterface
      */
-    private $jsonSerializer;
+    private $serializer;
 
     /**
      * @param OrderFactory $orderFactory
@@ -124,7 +124,7 @@ class Reorder
         $this->customerCartProvider = $customerCartProvider;
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->jsonSerializer = $serializer;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -365,10 +365,11 @@ class Reorder
         foreach ($options as $option) {
             if (array_key_exists($option['option_id'], $info['options'])) {
                 try {
-                    $value = $this->jsonSerializer->unserialize($option['option_value']);
+                    $value = $this->serializer->unserialize($option['option_value']);
                     $info['options'][$option['option_id']] = $value;
                 } catch (\InvalidArgumentException $exception) {
-                    //do nothing
+                    //log the exception as warning
+                    $this->_logger->warning($exception);
                 }
             }
         }
