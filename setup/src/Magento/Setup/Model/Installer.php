@@ -46,6 +46,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\PageCache\Model\Cache\Type as PageCache;
+use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Exception;
@@ -395,7 +396,7 @@ class Installer
             try {
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array([$this, $method], $params);
-            } catch (\Exception $e) {
+            } catch (RuntimeException | DriverException $e) {
                 $this->revertRemoteStorageConfiguration();
                 throw $e;
             }
