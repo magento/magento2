@@ -63,7 +63,7 @@ class ProductIdentitiesExtender
     private function getChildrenIds($entityId): array
     {
         if (!isset($this->cacheChildrenIds[$entityId])) {
-            $this->cacheChildrenIds[$entityId] = $this->type->getChildrenIds($entityId, false);
+            $this->cacheChildrenIds[$entityId] = $this->type->getChildrenIds($entityId);
         }
 
         return $this->cacheChildrenIds[$entityId];
