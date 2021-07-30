@@ -38,6 +38,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
     use Magento\Framework\Validation\ValidationException;
+    use Magento\RemoteStorage\Driver\DriverException;
     use Magento\Setup\Controller\ResponseTypeInterface;
     use Magento\Setup\Model\AdminAccount;
     use Magento\Setup\Model\AdminAccountFactory;
@@ -889,11 +890,12 @@ namespace Magento\Setup\Test\Unit\Model {
          * Test installation with invalid remote storage configuration is able to be caught earlier than
          * the queued validation step if necessary, and that configuration is reverted back to local file driver.
          *
+         * @dataProvider installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
          */
-        public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyRuntimeException()
+        public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
             $request = $this->request;
 
@@ -921,9 +923,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->declarationInstallerMock
                 ->expects(static::once())
                 ->method('installSchema')
-                ->willThrowException(new RuntimeException(__('Remote driver is not available.')));
+                ->willThrowException($exception);
 
-            $this->expectException(RuntimeException::class);
+            $this->expectException(get_class($exception));
 
             $this->moduleLoader->expects(static::exactly(2))->method('load')->willReturn($allModules);
             $setup = $this->createMock(Setup::class);
@@ -1009,6 +1011,14 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->logger->expects(static::never())->method('logSuccess');
 
             $this->object->install($request);
+        }
+
+        public function installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider()
+        {
+            return [
+                [new RuntimeException(__('Remote driver is not available.'))],
+                [new DriverException(__('Bucket and region are required values'))],
+            ];
         }
 
         /**
