@@ -10,7 +10,6 @@ namespace Magento\GraphQlCache\Model\Plugin\Auth;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\Integration\Api\UserTokenIssuerInterface;
-use Magento\Integration\Model\CustomUserContext;
 
 /**
  * Load the shared UserContext with data for the new user after a token is generated
