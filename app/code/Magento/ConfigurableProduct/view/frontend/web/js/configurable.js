@@ -46,7 +46,9 @@ define([
             gallerySwitchStrategy: 'replace',
             tierPriceTemplateSelector: '#tier-prices-template',
             tierPriceBlockSelector: '[data-role="tier-price-block"]',
-            tierPriceTemplate: ''
+            tierPriceTemplate: '',
+            selectorProduct: '.product-info-main',
+            selectorProductPrice: '[data-role=priceBox]'
         },
 
         /**
@@ -578,7 +580,7 @@ define([
             _.each(elements, function (element) {
                 var selected = element.options[element.selectedIndex],
                     config = selected && selected.config,
-                    priceValue = {};
+                    priceValue = this._calculatePrice({});
 
                 if (config && config.allowedProducts.length === 1) {
                     priceValue = this._calculatePrice(config);
@@ -632,12 +634,10 @@ define([
          */
         _calculatePrice: function (config) {
             var displayPrices = $(this.options.priceHolderSelector).priceBox('option').prices,
-                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)];
+                newPrices = this.options.spConfig.optionPrices[_.first(config.allowedProducts)] || {};
 
             _.each(displayPrices, function (price, code) {
-                if (newPrices[code]) {
-                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
-                }
+                displayPrices[code].amount = newPrices[code] ? newPrices[code].amount - displayPrices[code].amount : 0;
             });
 
             return displayPrices;
@@ -676,7 +676,9 @@ define([
          * @private
          */
         _displayRegularPriceBlock: function (optionId) {
-            var shouldBeShown = true;
+            var shouldBeShown = true,
+                $priceBox = this.element.parents(this.options.selectorProduct)
+                    .find(this.options.selectorProductPrice);
 
             _.each(this.options.settings, function (element) {
                 if (element.value === '') {
@@ -696,7 +698,8 @@ define([
             $(document).trigger('updateMsrpPriceBlock',
                 [
                     optionId,
-                    this.options.spConfig.optionPrices
+                    this.options.spConfig.optionPrices,
+                    $priceBox
                 ]
             );
         },

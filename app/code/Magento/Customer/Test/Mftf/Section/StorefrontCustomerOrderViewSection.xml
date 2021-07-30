@@ -20,6 +20,7 @@
         <element name="pager" type="block" selector=".pager"/>
         <element name="createdDate" type="text" selector=".block-order-details-comments .comment-date"/>
         <element name="orderPlacedBy" type="text" selector=".block-order-details-comments .comment-content"/>
+        <element name="orderComment" type="text" selector=".block-order-details-comments .comment-content"/>
         <element name="productName" type="text" selector="//td[@data-th='Product Name']"/>
         <element name="productRows" type="text" selector="#my-orders-table tbody tr"/>
         <element name="productNameByRow" type="text" parameterized="true" selector="#my-orders-table tbody:nth-of-type({{index}}) td.name"/>
