@@ -289,9 +289,9 @@ class Escaper
      * @return string
      * @since 101.0.0
      */
-    public function encodeUrlParam(string $string)
+    public function encodeUrlParam($string)
     {
-        return $this->getEscaper()->escapeUrl($string);
+        return $this->getEscaper()->escapeUrl((string)$string);
     }
 
     /**
@@ -328,9 +328,9 @@ class Escaper
      * @return string
      * @since 101.0.0
      */
-    public function escapeCss(string $string)
+    public function escapeCss($string)
     {
-        return $this->getEscaper()->escapeCss($string);
+        return $this->getEscaper()->escapeCss((string)$string);
     }
 
     /**
