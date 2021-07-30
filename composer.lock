@@ -5164,16 +5164,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.4.27",
+            "version": "v4.4.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "e523c86d2c727b128ce339a72733c9688e002ed3"
+                "reference": "8baf0bbcfddfde7d7225ae8e04705cfd1081cd7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/e523c86d2c727b128ce339a72733c9688e002ed3",
-                "reference": "e523c86d2c727b128ce339a72733c9688e002ed3",
+                "url": "https://api.github.com/repos/symfony/console/zipball/8baf0bbcfddfde7d7225ae8e04705cfd1081cd7b",
+                "reference": "8baf0bbcfddfde7d7225ae8e04705cfd1081cd7b",
                 "shasum": ""
             },
             "require": {
@@ -5234,7 +5234,7 @@
             "description": "Eases the creation of beautiful and testable command line interfaces",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/console/tree/v4.4.27"
+                "source": "https://github.com/symfony/console/tree/v4.4.29"
             },
             "funding": [
                 {
@@ -5250,7 +5250,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-22T08:29:31+00:00"
+            "time": "2021-07-27T19:04:53+00:00"
         },
         {
             "name": "symfony/css-selector",
