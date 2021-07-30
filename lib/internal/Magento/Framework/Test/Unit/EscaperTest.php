@@ -367,14 +367,23 @@ class EscaperTest extends TestCase
     /**
      * @covers \Magento\Framework\Escaper::escapeCss
      *
-     * @param string $data
+     * @param int|string $data
      * @param string $expected
+     * @param string|null $deprecatedType
      * @return void
      *
      * @dataProvider escapeCssDataProvider
      */
-    public function testEscapeCss($data, string $expected): void
+    public function testEscapeCss($data, string $expected, string $deprecatedType = null): void
     {
+        if ($deprecatedType) {
+            $this->expectDeprecation();
+
+            $message = 'Magento\Framework\Escaper::escapeCss needs to be an string, but got '
+                . $deprecatedType . '. In future versions this will throw an error';
+            $this->expectDeprecationMessage($message);
+        }
+
         $this->assertEquals($expected, $this->escaper->escapeCss($data));
     }
 
@@ -387,6 +396,7 @@ class EscaperTest extends TestCase
             [
                 'data'     => 1,
                 'expected' => '1',
+                'deprecatedType' => 'integer'
             ],
             [
                 'data'     => '*%string{foo}%::',
@@ -398,14 +408,23 @@ class EscaperTest extends TestCase
     /**
      * @covers \Magento\Framework\Escaper::encodeUrlParam
      *
-     * @param string $data
+     * @param int|string $data
      * @param string $expected
+     * @param string|null $deprecatedType
      * @return void
      *
      * @dataProvider encodeUrlParamDataProvider
      */
-    public function testEncodeUrlParam($data, string $expected): void
+    public function testEncodeUrlParam($data, string $expected, string $deprecatedType = null): void
     {
+        if($deprecatedType) {
+            $this->expectDeprecation();
+
+            $message = 'Magento\Framework\Escaper::encodeUrlParam needs to be an string, but got '
+                . $deprecatedType . '. In future versions this will throw an error';
+            $this->expectDeprecationMessage($message);
+        }
+
         $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
     }
 
@@ -426,10 +445,12 @@ class EscaperTest extends TestCase
             [
                 'data'     => 1,
                 'expected' => "1",
+                'deprecatedType' => 'integer'
             ],
             [
                 'data'     => null,
                 'expected' => "",
+                'deprecatedType' => 'NULL'
             ]
         ];
     }

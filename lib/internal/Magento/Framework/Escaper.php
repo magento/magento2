@@ -291,6 +291,13 @@ class Escaper
      */
     public function encodeUrlParam($string)
     {
+        if (!is_string($string)) {
+            $message = 'Argument #1 passed to %s needs to be an string, but got %s.'
+                . ' In future versions this will throw an error';
+
+            trigger_error(sprintf($message, __METHOD__, gettype($string)), E_USER_DEPRECATED);
+        }
+
         return $this->getEscaper()->escapeUrl((string)$string);
     }
 
@@ -330,6 +337,13 @@ class Escaper
      */
     public function escapeCss($string)
     {
+        if (!is_string($string)) {
+            $message = 'Argument #1 passed to %s needs to be an string, but got %s.'
+                . ' In future versions this will throw an error';
+
+            trigger_error(sprintf($message, __METHOD__, gettype($string)), E_USER_DEPRECATED);
+        }
+
         return $this->getEscaper()->escapeCss((string)$string);
     }
 
