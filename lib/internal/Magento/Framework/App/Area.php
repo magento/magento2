@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 
 /**
@@ -135,7 +136,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      * @param   string|null $part
      * @return  $this
      */
-    public function load($part = null)
+    public function load($part = null, Product $product = null)
     {
         if ($part === null) {
             $this->_loadPart(self::PART_CONFIG)->_loadPart(self::PART_DESIGN)->_loadPart(self::PART_TRANSLATE);

@@ -43,7 +43,7 @@ class Injectable
                     try {
                         /** @var ParameterReflection $parameter */
                         $dependency = $this->getParameterClass($parameter);
-                        if ($dependency instanceof ClassReflection) {
+                        if ($dependency instanceof ReflectionClass) {
                             $this->dependencies[] = $dependency->getName();
                         }
                     } catch (\ReflectionException $e) {
