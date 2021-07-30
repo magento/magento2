@@ -107,16 +107,18 @@ define([
          * Form validation failed.
          */
         onError: function (response) {
-            var that = this;
+            var that = this,
+                responseData = JSON.parse(response['error_message']);
+
             if (response['error_message']) {
                 try {
-                    var responseData = JSON.parse(response['error_message']);
                     $.each(responseData, function (index, data) {
-                        if (data['itemId'] !== undefined) {
-                            let elm = $('#cart-' + data['itemId'] + '-qty');
+
+                        if (data.itemId !== undefined) {
+                            let elm = $('#cart-' + data.itemId + '-qty');
                             elm.val(elm.attr('data-item-qty'));
                         }
-                        response['error_message'] = data['error'];
+                        response['error_message'] = data.error;
                     });
                 } catch (e) {}
                 alert({
