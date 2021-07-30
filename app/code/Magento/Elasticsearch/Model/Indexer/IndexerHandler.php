@@ -145,9 +145,13 @@ class IndexerHandler implements IndexerInterface
     {
         $categoryIds = [];
         foreach ($docs as $document) {
-            if (!empty($document['category_ids']) && is_array($document['category_ids'])) {
-                foreach ($document['category_ids'] as $id) {
-                    $categoryIds[] = $id;
+            if (!empty($document['category_ids'])) {
+                if (is_array($document['category_ids'])) {
+                    foreach ($document['category_ids'] as $id) {
+                        $categoryIds[] = $id;
+                    }
+                } else {
+                    $categoryIds[] = $document['category_ids'];
                 }
             }
         }
