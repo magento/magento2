@@ -149,6 +149,7 @@ abstract class AbstractEntityUrl implements ResolverInterface
             $this->redirectType = $urlRewrite->getRedirectType();
             while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
                 $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath(), $storeId);
+                $this->redirectType = $urlRewrite->getRedirectType();
             }
         } else {
             $urlRewrite = $this->findUrlFromTargetPath($requestPath, $storeId);
