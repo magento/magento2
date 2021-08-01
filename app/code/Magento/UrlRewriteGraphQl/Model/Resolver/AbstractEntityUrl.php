@@ -73,8 +73,18 @@ abstract class AbstractEntityUrl implements ResolverInterface
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $urlParts = parse_url($args['url']);
         $url = $urlParts['path'] ?? $args['url'];
-        if (substr($url, 0, 1) === '/' && $url !== '/') {
-            $url = ltrim($url, '/');
+        if (
+            $url !== '/'
+            && in_array(
+                '/',
+                [
+                    substr($url, 0, 1), // first url char
+                    substr($url, strlen($url) - 1, strlen($url)), // last url char
+                ],
+                true
+            )
+        ) {
+            $url = trim($url, '/');
         }
         $this->redirectType = 0;
         $customUrl = $this->customUrlLocator->locateUrl($url);
