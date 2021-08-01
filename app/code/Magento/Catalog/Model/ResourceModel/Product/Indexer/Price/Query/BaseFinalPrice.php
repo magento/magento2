@@ -305,7 +305,7 @@ class BaseFinalPrice
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression): \Zend_Db_Expr
     {
         return $this->getConnection()->getCheckSql(
-            sprintf('%s.value = 0', $tableAlias),
+            sprintf('%s.percentage_value IS NOT NULL', $tableAlias),
             sprintf(
                 'ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)',
                 $priceExpression,

@@ -32,7 +32,7 @@
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadCategoryImage">
@@ -42,9 +42,9 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwygToAssertMessage"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwygToAssertMessage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAgain"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridToDefaultViewAgain"/>
         <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
