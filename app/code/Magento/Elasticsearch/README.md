@@ -1,6 +1,8 @@
 #Magento_Elasticsearch module
 
-Magento_Elasticsearch module allows using the Elasticsearch engine for the product searching capabilities.
+Magento_Elasticsearch module allows using the Elasticsearch engine for the product searching capabilities. This module 
+provides logic used by other modules implementing newer versions of Elasticsearch, this module by itself only adds 
+support for Elasticsearch v5.
 
 The module implements Magento_Search library interfaces.
 
