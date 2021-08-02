@@ -574,7 +574,7 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
+        $this->resizeFile(rtrim($targetPath, '/') . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
 
         return $result;
     }
