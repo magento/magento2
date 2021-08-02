@@ -79,22 +79,22 @@ class AssignCustomerToGuestCart implements ResolverInterface
         $guestMaskedCartId = $args['cart_id'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
-        $this->getCartForUser->execute($guestMaskedCartId,null, $storeId);
+        $this->getCartForUser->execute($guestMaskedCartId, null, $storeId);
 
         try {
             $this->guestCartManagementInterface->assignCustomer($guestMaskedCartId, $currentUserId, $storeId);
         } catch (NoSuchEntityException $e) {
-            $message = $e->getMessage();
-            if (str_contains($message, 'No such entity with cartId = ')) {
-                $message = __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $guestMaskedCartId]);
-            } else {
-                $message = __($e->getMessage());
-            }
-            throw new GraphQlNoSuchEntityException($message, $e);
+            throw new GraphQlNoSuchEntityException(
+                __('Could not find a cart with ID "%masked_cart_id"', ['masked_cart_id' => $guestMaskedCartId]),
+                $e
+            );
         } catch (StateException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Unable to assign the customer to the guest cart: %message', ['message' => $e->getMessage()]), $e);
+            throw new GraphQlInputException(
+                __('Unable to assign the customer to the guest cart: %message', ['message' => $e->getMessage()]),
+                $e
+            );
         }
 
         try {
