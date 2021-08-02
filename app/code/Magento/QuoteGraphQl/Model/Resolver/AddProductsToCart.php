@@ -11,6 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Model\Cart\AddProductsToCart as AddProductsToCartService;
 use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
@@ -42,18 +43,26 @@ class AddProductsToCart implements ResolverInterface
     private $itemDataProcessor;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCartService $addProductsToCart
-     * @param  ItemDataProcessorInterface $itemDataProcessor
+     * @param ItemDataProcessorInterface $itemDataProcessor
+     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         AddProductsToCartService $addProductsToCart,
-        ItemDataProcessorInterface $itemDataProcessor
+        ItemDataProcessorInterface $itemDataProcessor,
+        LockManagerInterface $lockManager
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->addProductsToCartService = $addProductsToCart;
         $this->itemDataProcessor = $itemDataProcessor;
+        $this->lockManager = $lockManager;
     }
 
     /**
@@ -72,6 +81,12 @@ class AddProductsToCart implements ResolverInterface
         $maskedCartId = $args['cartId'];
         $cartItemsData = $args['cartItems'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $lockName = 'cart_processing_lock_' . $maskedCartId;
+        while ($this->lockManager->isLocked($lockName)) {
+            // wait till other process working with the same cart complete
+            usleep(rand(100, 600));
+        }
+        $this->lockManager->lock($lockName, 1);
 
         // Shopping Cart validation
         $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
@@ -86,6 +101,7 @@ class AddProductsToCart implements ResolverInterface
 
         /** @var AddProductsToCartOutput $addProductsToCartOutput */
         $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, $cartItems);
+        $this->lockManager->unlock($lockName);
 
         return [
             'cart' => [
