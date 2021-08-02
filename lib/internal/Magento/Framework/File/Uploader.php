@@ -30,8 +30,6 @@ use Psr\Log\LoggerInterface;
  */
 class Uploader
 {
-    const MAX_LENGTH = 90;
-
     /**
      * Uploaded file handle (copy of $_FILES[] element)
      *

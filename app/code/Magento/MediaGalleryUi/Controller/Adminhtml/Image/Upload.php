@@ -63,21 +63,7 @@ class Upload extends Action implements HttpPostActionInterface
         /** @var Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $targetFolder = $this->getRequest()->getParam('target_folder');
-
         $type = $this->getRequest()->getParam('type');
-        $isAjax = $this->getRequest()->getParam('isAjax');
-
-        if (isset($isAjax) && isset($type)) {
-            if ( !$isAjax || $type != "image") {
-                $responseContent = [
-                    'success' => false,
-                    'message' => __('Please check valid type & ajax param'),
-                ];
-                $resultJson->setHttpResponseCode(self::HTTP_BAD_REQUEST);
-                $resultJson->setData($responseContent);
-                return $resultJson;
-            }
-        }
 
         if (!$targetFolder) {
             $responseContent = [
