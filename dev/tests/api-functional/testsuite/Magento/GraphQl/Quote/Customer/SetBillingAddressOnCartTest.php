@@ -1922,6 +1922,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_telephone_not_required_address.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -1947,7 +1948,7 @@ mutation {
           country_code: "US"
           telephone: ""
          }
-         same_as_shipping: true
+         use_for_shipping: true
       }
     }
   ) {
