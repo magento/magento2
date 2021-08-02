@@ -46,6 +46,8 @@ class UpdateQuote
     }
 
     /**
+     * Update the quote trigger_recollect column is 1 when product price is changed through API.
+     *
      * @param TierPriceStorageInterface $subject
      * @param $result
      * @param $prices
