@@ -46,7 +46,8 @@
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="CustomerOrderSortableField" xsi:type="array">
-                    <item name="order_id" xsi:type="string">entity_id</item>
+                    <item name="number" xsi:type="string">increment_id</item>
+                    <item name="created_at" xsi:type="string">created_at</item>
                 </item>
             </argument>
         </arguments>

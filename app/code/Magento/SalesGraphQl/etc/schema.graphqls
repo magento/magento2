@@ -39,7 +39,8 @@ input CustomerOrderSortInput @doc(description: "CustomerOrderSortInput specifies
 }
 
 enum CustomerOrderSortableField @doc(description: "Specifies the field to use for sorting") {
-    ORDER_ID @doc(description: "Sorts customer orders by ID")
+    NUMBER @doc(description: "Sorts customer orders by number")
+    CREATED_AT @doc(description: "Sorts customer orders by created_at field")
 }
 
 type CustomerOrders @doc(description: "The collection of orders that match the conditions defined in the filter") {
