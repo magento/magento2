@@ -30,6 +30,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Class SoapTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SoapTest extends TestCase
@@ -78,6 +80,8 @@ class SoapTest extends TestCase
 
     /**
      * Set up Controller object.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -87,36 +91,36 @@ class SoapTest extends TestCase
 
         $this->_soapServerMock = $this->getMockBuilder(Server::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getApiCharset', 'generateUri', 'handle', 'setWSDL', 'setEncoding', 'setReturnResponse'])
+            ->onlyMethods(['getApiCharset', 'generateUri', 'handle'])
+            ->addMethods(['setWSDL', 'setEncoding', 'setReturnResponse'])
             ->getMock();
         $this->_wsdlGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
         $this->_requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParams', 'getParam', 'getRequestedServices', 'getHttpHost'])
+            ->onlyMethods(['getParams', 'getParam', 'getRequestedServices', 'getHttpHost'])
             ->getMock();
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
         $this->_responseMock = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
-            ->setMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])
+            ->onlyMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])
             ->getMock();
         $this->_errorProcessorMock = $this->getMockBuilder(ErrorProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['maskException'])
+            ->onlyMethods(['maskException'])
             ->getMock();
 
         $this->_appStateMock =  $this->createMock(State::class);
 
-        $localeResolverMock = $this->getMockBuilder(
-            Resolver::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['getLocale']
-            )->getMock();
+        $localeResolverMock = $this->getMockBuilder(Resolver::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getLocale'])
+            ->getMock();
         $localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en');
 
         $this->_responseMock->expects($this->any())->method('clearHeaders')->willReturnSelf();
@@ -159,15 +163,18 @@ class SoapTest extends TestCase
 
     /**
      * Test successful WSDL content generation.
+     *
+     * @return void
      */
-    public function testDispatchWsdl()
+    public function testDispatchWsdl(): void
     {
         $params = [
             Server::REQUEST_PARAM_WSDL => 1,
             Request::REQUEST_PARAM_SERVICES => 'foo',
         ];
         $this->_mockGetParam(Server::REQUEST_PARAM_WSDL, 1);
-        $this->_requestMock->expects($this->once())
+        $this->_requestMock
+            ->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
         $wsdl = 'Some WSDL content';
@@ -177,7 +184,12 @@ class SoapTest extends TestCase
         $this->assertEquals($wsdl, $this->_responseMock->getBody());
     }
 
-    public function testDispatchInvalidWsdlRequest()
+    /**
+     * Test dispatch invalid wsdl request.
+     *
+     * @return void
+     */
+    public function testDispatchInvalidWsdlRequest(): void
     {
         $params = [
             Server::REQUEST_PARAM_WSDL => 1,
@@ -185,16 +197,14 @@ class SoapTest extends TestCase
             'param_2' => 'bar,'
         ];
         $this->_mockGetParam(Server::REQUEST_PARAM_WSDL, 1);
-        $this->_requestMock->expects($this->once())
+        $this->_requestMock
+            ->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
-        $this->_errorProcessorMock->expects(
-            $this->any()
-        )->method(
-            'maskException'
-        )->willReturn(
-            new Exception(__('message'))
-        );
+        $this->_errorProcessorMock
+            ->expects($this->any())
+            ->method('maskException')
+            ->willReturn(new Exception(__('message')));
         $wsdl = 'Some WSDL content';
         $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
         $encoding = "utf-8";
@@ -221,8 +231,10 @@ EXPECTED_MESSAGE;
 
     /**
      * Test successful SOAP action request dispatch.
+     *
+     * @return void
      */
-    public function testDispatchSoapRequest()
+    public function testDispatchSoapRequest(): void
     {
         $this->_soapServerMock->expects($this->once())->method('handle');
         $response = $this->_soapController->dispatch($this->_requestMock);
@@ -231,19 +243,15 @@ EXPECTED_MESSAGE;
 
     /**
      * Test handling exception during dispatch.
+     *
+     * @return void
      */
-    public function testDispatchWithException()
+    public function testDispatchWithException(): void
     {
         $exceptionMessage = 'some error message';
         $exception = new Exception(__($exceptionMessage));
         $this->_soapServerMock->expects($this->any())->method('handle')->will($this->throwException($exception));
-        $this->_errorProcessorMock->expects(
-            $this->any()
-        )->method(
-            'maskException'
-        )->willReturn(
-            $exception
-        );
+        $this->_errorProcessorMock->expects($this->any())->method('maskException')->willReturn($exception);
         $encoding = "utf-8";
         $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
 
@@ -272,17 +280,15 @@ EXPECTED_MESSAGE;
      *
      * @param $param
      * @param $value
+     *
+     * @return void
      */
-    protected function _mockGetParam($param, $value)
+    protected function _mockGetParam($param, $value): void
     {
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-            'getParam'
-        )->with(
-            $param
-        )->willReturn(
-            $value
-        );
+        $this->_requestMock
+            ->expects($this->any())
+            ->method('getParam')
+            ->with($param)
+            ->willReturn($value);
     }
 }

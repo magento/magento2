@@ -12,6 +12,7 @@ namespace Magento\Webapi\Test\Unit\Model\Soap;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Request;
 use Magento\Store\Model\Store;
@@ -24,6 +25,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Class ServerTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ServerTest extends TestCase
@@ -52,46 +55,39 @@ class ServerTest extends TestCase
     /** @var MockObject */
     protected $_scopeConfig;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->getMockBuilder(
-            StoreManager::class
-        )->disableOriginalConstructor()
+        $this->_storeManagerMock = $this->getMockBuilder(StoreManager::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_storeMock = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()
+        $this->_storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->_storeMock->expects(
-            $this->any()
-        )->method(
-            'getBaseUrl'
-        )->willReturn(
-            'http://magento.com/'
-        );
+        $this->_storeMock
+            ->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn('http://magento.com/');
         $this->_storeMock->expects($this->any())->method('getCode')->willReturn('storeCode');
 
-        $this->_storeManagerMock->expects(
-            $this->any()
-        )->method(
-            'getStore'
-        )->willReturn(
-            $this->_storeMock
-        );
+        $this->_storeManagerMock
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->_storeMock);
 
         $areaListMock = $this->createMock(AreaList::class);
         $configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $areaListMock->expects($this->any())->method('getFrontName')->willReturn('soap');
 
-        $this->_requestMock = $this->getMockBuilder(
-            Request::class
-        )->disableOriginalConstructor()
+        $this->_requestMock = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_soapServerFactory = $this->getMockBuilder(
-            ServerFactory::class
-        )->disableOriginalConstructor()
+        $this->_soapServerFactory = $this->getMockBuilder(ServerFactory::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->_typeProcessor = $this->createMock(TypeProcessor::class);
@@ -113,6 +109,9 @@ class ServerTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         unset($this->_soapServer);
@@ -121,13 +120,16 @@ class ServerTest extends TestCase
         unset($this->_storeMock);
         unset($this->_storeManagerMock);
         unset($this->_soapServerFactory);
+
         parent::tearDown();
     }
 
     /**
      * Test getApiCharset method.
+     *
+     * @return void
      */
-    public function testGetApiCharset()
+    public function testGetApiCharset(): void
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn('Windows-1251');
         $this->assertEquals(
@@ -139,8 +141,10 @@ class ServerTest extends TestCase
 
     /**
      * Test getApiCharset method with default encoding.
+     *
+     * @return void
      */
-    public function testGetApiCharsetDefaultEncoding()
+    public function testGetApiCharsetDefaultEncoding(): void
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
         $this->assertEquals(
@@ -152,8 +156,11 @@ class ServerTest extends TestCase
 
     /**
      * Test getEndpointUri method.
+     *
+     * @return void
+     * @throws NoSuchEntityException
      */
-    public function testGetEndpointUri()
+    public function testGetEndpointUri(): void
     {
         $expectedResult = 'http://magento.com/soap/storeCode';
         $actualResult = $this->_soapServer->getEndpointUri();
@@ -161,9 +168,12 @@ class ServerTest extends TestCase
     }
 
     /**
-     * Test generate uri with wsdl param as true
+     * Test generate uri with wsdl param as true.
+     *
+     * @return void
+     * @throws NoSuchEntityException
      */
-    public function testGenerateUriWithWsdlParam()
+    public function testGenerateUriWithWsdlParam(): void
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
         $serviceKey = Server::REQUEST_PARAM_SERVICES;
@@ -174,9 +184,12 @@ class ServerTest extends TestCase
     }
 
     /**
-     * Test generate uri with wsdl param as true
+     * Test generate uri with wsdl param as true.
+     *
+     * @return void
+     * @throws NoSuchEntityException
      */
-    public function testGenerateUriWithNoWsdlParam()
+    public function testGenerateUriWithNoWsdlParam(): void
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
         $serviceKey = Server::REQUEST_PARAM_SERVICES;

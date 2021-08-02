@@ -15,9 +15,10 @@ use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Server;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
- * Test SOAP fault model.
+ * Class FaultTest
  */
 class FaultTest extends TestCase
 {
@@ -31,7 +32,7 @@ class FaultTest extends TestCase
     /** @var Server */
     protected $_soapServerMock;
 
-    /** @var \Magento\Webapi\Model\Soap\Fault */
+    /** @var Fault */
     protected $_soapFault;
 
     /** @var MockObject */
@@ -42,6 +43,9 @@ class FaultTest extends TestCase
      */
     protected $_appStateMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
@@ -84,6 +88,9 @@ class FaultTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         unset($this->_soapFault);
@@ -91,7 +98,12 @@ class FaultTest extends TestCase
         parent::tearDown();
     }
 
-    public function testToXmlDeveloperModeOff()
+    /**
+     * Test to Xml developer mode off.
+     *
+     * @return void
+     */
+    public function testToXmlDeveloperModeOff(): void
     {
         $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('production');
         $wsdlUrl = urlencode(self::WSDL_URL);
@@ -133,7 +145,12 @@ XML;
         );
     }
 
-    public function testToXmlDeveloperModeOn()
+    /**
+     * Test to Xml developer mode on.
+     *
+     * @return void
+     */
+    public function testToXmlDeveloperModeOn(): void
     {
         $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         $actualXml = $this->_soapFault->toXml();
@@ -143,15 +160,22 @@ XML;
     /**
      * Test getSoapFaultMessage method.
      *
+     * @param string $faultReason
+     * @param string $faultCode
+     * @param array|stdClass $additionalParameters
+     * @param string $expectedResult
+     * @param string $assertMessage
+     *
+     * @return void
      * @dataProvider dataProviderForGetSoapFaultMessageTest
      */
     public function testGetSoapFaultMessage(
-        $faultReason,
-        $faultCode,
+        string $faultReason,
+        string $faultCode,
         $additionalParameters,
-        $expectedResult,
-        $assertMessage
-    ) {
+        string $expectedResult,
+        string $assertMessage
+    ): void {
         $actualResult = $this->_soapFault->getSoapFaultMessage($faultReason, $faultCode, $additionalParameters);
         $wsdlUrl = urlencode(self::WSDL_URL);
         $this->assertEquals(
@@ -166,7 +190,7 @@ XML;
      *
      * @return array
      */
-    public function dataProviderForGetSoapFaultMessageTest()
+    public function dataProviderForGetSoapFaultMessageTest(): array
     {
         /** Include file with all expected SOAP fault XMLs. */
         $expectedXmls = include __DIR__ . '/../../_files/soap_fault/soap_fault_expected_xmls.php';
@@ -215,7 +239,12 @@ XML;
         ];
     }
 
-    public function testConstructor()
+    /**
+     * Test constructor.
+     *
+     * @return void
+     */
+    public function testConstructor(): void
     {
         $message = "Soap fault reason.";
         $details = ['param1' => 'value1', 'param2' => 2];
@@ -276,9 +305,10 @@ FAULT_XML;
      * Convert XML to string.
      *
      * @param string $xmlString
+     *
      * @return string
      */
-    protected function _sanitizeXML($xmlString)
+    protected function _sanitizeXML(string $xmlString): string
     {
         $dom = new \DOMDocument('1.0');
         $dom->preserveWhiteSpace = false;

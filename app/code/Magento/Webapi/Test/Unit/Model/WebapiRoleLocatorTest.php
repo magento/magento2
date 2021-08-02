@@ -17,6 +17,8 @@ use Magento\Webapi\Model\WebapiRoleLocator;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Class WebapiRoleLocatorTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class WebapiRoleLocatorTest extends TestCase
@@ -56,6 +58,9 @@ class WebapiRoleLocatorTest extends TestCase
      */
     private $_objectManager;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
@@ -65,38 +70,42 @@ class WebapiRoleLocatorTest extends TestCase
 
         $this->userContext = $this->getMockBuilder(CompositeUserContext::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])
+            ->onlyMethods(['getUserId', 'getUserType'])
             ->getMock();
-        $this->userContext->expects($this->once())
+        $this->userContext
+            ->expects($this->once())
             ->method('getUserId')
             ->willReturn($userId);
-        $this->userContext->expects($this->once())
+        $this->userContext
+            ->expects($this->once())
             ->method('getUserType')
             ->willReturn($userType);
 
-        $this->roleCollectionFactory = $this->getMockBuilder(
-            \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
-
-        $this->roleCollection = $this->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Role\Collection::class)
+        $this->roleCollectionFactory = $this->getMockBuilder(RoleCollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setUserFilter', 'getFirstItem'])
+            ->onlyMethods(['create'])->getMock();
+
+        $this->roleCollection = $this->getMockBuilder(RoleCollection::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setUserFilter', 'getFirstItem'])
             ->getMock();
-        $this->roleCollectionFactory->expects($this->once())
+        $this->roleCollectionFactory
+            ->expects($this->once())
             ->method('create')
             ->willReturn($this->roleCollection);
-        $this->roleCollection->expects($this->once())
+        $this->roleCollection
+            ->expects($this->once())
             ->method('setUserFilter')
             ->with($userId, $userType)
             ->willReturn($this->roleCollection);
 
         $this->role = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
 
-        $this->roleCollection->expects($this->once())
+        $this->roleCollection
+            ->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($this->role);
 
@@ -109,20 +118,32 @@ class WebapiRoleLocatorTest extends TestCase
         );
     }
 
-    public function testNoRoleId()
+    /**
+     * Test no role id.
+     *
+     * @return void
+     */
+    public function testNoRoleId(): void
     {
-        $this->role->expects($this->once())
+        $this->role
+            ->expects($this->once())
             ->method('getId')
             ->willReturn(null);
 
         $this->assertEquals('', $this->locator->getAclRoleId());
     }
 
-    public function testGetAclRoleId()
+    /**
+     * Test get Acl role id.
+     *
+     * @return void
+     */
+    public function testGetAclRoleId(): void
     {
         $roleId = 9;
 
-        $this->role->expects($this->exactly(2))
+        $this->role
+            ->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($roleId);
 

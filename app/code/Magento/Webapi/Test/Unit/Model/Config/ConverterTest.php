@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Config;
 
+use DOMDocument;
 use Magento\Webapi\Model\Config\Converter;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ConverterTest
+ */
 class ConverterTest extends TestCase
 {
     /**
@@ -17,14 +21,22 @@ class ConverterTest extends TestCase
      */
     protected $_model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->_model = new Converter();
     }
 
-    public function testConvert()
+    /**
+     * Test convert.
+     *
+     * @return void
+     */
+    public function testConvert(): void
     {
-        $inputData = new \DOMDocument();
+        $inputData = new DOMDocument();
         $inputData->load(__DIR__ . '/_files/webapi.xml');
         $expectedResult = require __DIR__ . '/_files/webapi.php';
         $this->assertEquals($expectedResult, $this->_model->convert($inputData));

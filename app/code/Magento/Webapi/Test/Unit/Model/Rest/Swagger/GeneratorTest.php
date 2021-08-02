@@ -22,9 +22,12 @@ use Magento\Webapi\Model\Rest\SwaggerFactory;
 use Magento\Webapi\Model\ServiceMetadata;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionProperty;
 
 /**
- * Tests for \Magento\Webapi\Model\Rest\Swagger\Generator
+ * Class GeneratorTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -62,21 +65,21 @@ class GeneratorTest extends TestCase
      */
     private $serializer;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->serviceMetadataMock = $this->getMockBuilder(
-            ServiceMetadata::class
-        )->disableOriginalConstructor()
+        $this->serviceMetadataMock = $this->getMockBuilder(ServiceMetadata::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager = new ObjectManager($this);
 
         $swagger = $this->objectManager->getObject(Swagger::class);
-        $this->swaggerFactoryMock = $this->getMockBuilder(
-            SwaggerFactory::class
-        )->setMethods(
-            ['create']
-        )->disableOriginalConstructor()
+        $this->swaggerFactoryMock = $this->getMockBuilder(SwaggerFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->swaggerFactoryMock->expects($this->any())->method('create')->willReturn($swagger);
 
@@ -89,25 +92,26 @@ class GeneratorTest extends TestCase
         $this->typeProcessorMock = $this->getMockBuilder(TypeProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeProcessorMock->expects($this->any())
+        $this->typeProcessorMock
+            ->expects($this->any())
             ->method('getOperationName')
             ->willReturn(self::OPERATION_NAME);
 
-        $this->customAttributeTypeLocatorMock = $this->getMockBuilder(
-            ServiceTypeListInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods(['getDataTypes'])
+        $this->customAttributeTypeLocatorMock = $this->getMockBuilder(ServiceTypeListInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDataTypes'])
             ->getMockForAbstractClass();
-        $this->customAttributeTypeLocatorMock->expects($this->any())
+        $this->customAttributeTypeLocatorMock
+            ->expects($this->any())
             ->method('getDataTypes')
             ->willReturn(['customAttributeClass']);
 
-        $storeMock = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()
+        $storeMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $storeMock->expects($this->any())
+        $storeMock
+            ->expects($this->any())
             ->method('getCode')
             ->willReturn('store_code');
 
@@ -120,7 +124,8 @@ class GeneratorTest extends TestCase
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializer->expects($this->any())
+        $this->serializer
+            ->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
                 function ($value) {
@@ -143,31 +148,34 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Test generate.
+     *
      * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      * @param string[] $serviceMetadata
      * @param string[] $typeData
      * @param string $schema
+     *
+     * @return void
      * @dataProvider generateDataProvider
      */
-    public function testGenerate($serviceMetadata, $typeData, $schema)
+    public function testGenerate(array $serviceMetadata, array $typeData, string $schema): void
     {
         $service = 'testModule5AllSoapAndRestV2';
         $requestedService = [$service];
 
-        $this->serviceMetadataMock->expects($this->any())
+        $this->serviceMetadataMock
+            ->expects($this->any())
             ->method('getRouteMetadata')
             ->willReturn($serviceMetadata);
-        $this->typeProcessorMock->expects($this->any())
+        $this->typeProcessorMock
+            ->expects($this->any())
             ->method('getTypeData')
             ->willReturnMap($typeData);
 
-        $this->typeProcessorMock->expects($this->any())
+        $this->typeProcessorMock
+            ->expects($this->any())
             ->method('isTypeSimple')
-            ->willReturnMap(
-                [
-                    ['int', true],
-                ]
-            );
+            ->willReturnMap([['int', true]]);
 
         $this->assertEquals(
             $schema,
@@ -181,10 +189,12 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Generate data provider.
+     *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function generateDataProvider()
+    public function generateDataProvider(): array
     {
         return [
             [
@@ -396,17 +406,23 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Test get object schema.
+     *
      * @param string $typeName
+     * @param string $description
      * @param array $result
+     *
+     * @return void
+     * @throws ReflectionException
      * @dataProvider getObjectSchemaDataProvider
      */
-    public function testGetObjectSchema($typeName, $description, $result)
+    public function testGetObjectSchema(string $typeName, string $description, array $result): void
     {
-        $property = new \ReflectionProperty($this->generator, 'definitions');
+        $property = new ReflectionProperty($this->generator, 'definitions');
         $property->setAccessible(true);
         $property->setValue($this->generator, ['customer-data-customer-interface' => []]);
 
-        $method = new \ReflectionMethod($this->generator, 'getObjectSchema');
+        $method = new ReflectionMethod($this->generator, 'getObjectSchema');
         $method->setAccessible(true);
         $actual = $method->invoke($this->generator, $typeName, $description);
 
@@ -414,9 +430,11 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Get object schema data provider.
+     *
      * @return array
      */
-    public function getObjectSchemaDataProvider()
+    public function getObjectSchemaDataProvider(): array
     {
         return [
             [
@@ -451,11 +469,16 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Test generate definition.
+     *
      * @param array $typeData
      * @param array $expected
+     *
+     * @return void
+     * @throws ReflectionException
      * @dataProvider generateDefinitionDataProvider
      */
-    public function testGenerateDefinition($typeData, $expected)
+    public function testGenerateDefinition(array $typeData, array $expected): void
     {
         $getTypeData = function ($type) use ($typeData) {
             return $typeData[$type];
@@ -465,7 +488,7 @@ class GeneratorTest extends TestCase
             ->method('getTypeData')
             ->willReturnCallback($getTypeData);
 
-        $method = new \ReflectionMethod($this->generator, 'generateDefinition');
+        $method = new ReflectionMethod($this->generator, 'generateDefinition');
         $method->setAccessible(true);
         $actual = $method->invoke($this->generator, key($typeData));
 
@@ -476,9 +499,11 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Generate definition data provider.
+     *
      * @return array
      */
-    public function generateDefinitionDataProvider()
+    public function generateDefinitionDataProvider(): array
     {
         return [
             [
@@ -553,9 +578,15 @@ class GeneratorTest extends TestCase
         ];
     }
 
-    public function testGetDefinitionReference()
+    /**
+     * Test get definition reference.
+     *
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testGetDefinitionReference(): void
     {
-        $method = new \ReflectionMethod($this->generator, 'getDefinitionReference');
+        $method = new ReflectionMethod($this->generator, 'getDefinitionReference');
         $method->setAccessible(true);
         $actual = $method->invoke($this->generator, 'CustomerDataAddressInterface');
 

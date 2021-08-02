@@ -13,7 +13,7 @@ use Magento\Webapi\Model\Authorization\GuestUserContext;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Magento\Webapi\Model\Authorization\GuestUserContext
+ * Class GuestUserContextTest
  */
 class GuestUserContextTest extends TestCase
 {
@@ -27,6 +27,9 @@ class GuestUserContextTest extends TestCase
      */
     protected $guestUserContext;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -36,12 +39,22 @@ class GuestUserContextTest extends TestCase
         );
     }
 
-    public function testGetUserId()
+    /**
+     * Test get user id.
+     *
+     * @return void
+     */
+    public function testGetUserId(): void
     {
         $this->assertSame(0, $this->guestUserContext->getUserId());
     }
 
-    public function testGetUserType()
+    /**
+     * Test get user type.
+     *
+     * @return void
+     */
+    public function testGetUserType(): void
     {
         $this->assertEquals(UserContextInterface::USER_TYPE_GUEST, $this->guestUserContext->getUserType());
     }

@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Config;
 
+/**
+ * Class TestServiceForClassReflector
+ */
 class TestServiceForClassReflector
 {
     /**
@@ -18,7 +21,7 @@ class TestServiceForClassReflector
      * @param int $length length of the random string
      * @return string random string
      */
-    public function generateRandomString($length)
+    public function generateRandomString(int $length): string
     {
         return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
     }

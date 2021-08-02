@@ -15,6 +15,9 @@ use Magento\Webapi\Model\Config\Reader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ConfigTest
+ */
 class ConfigTest extends TestCase
 {
     /**
@@ -37,6 +40,9 @@ class ConfigTest extends TestCase
      */
     private $serializerMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -55,15 +61,22 @@ class ConfigTest extends TestCase
         );
     }
 
-    public function testGetServices()
+    /**
+     * Test get services.
+     *
+     * @return void
+     */
+    public function testGetServices(): void
     {
         $data = ['foo' => 'bar'];
         $serializedData = 'serialized data';
-        $this->webapiCacheMock->expects($this->once())
+        $this->webapiCacheMock
+            ->expects($this->once())
             ->method('load')
             ->with(Config::CACHE_ID)
             ->willReturn($serializedData);
-        $this->serializerMock->expects($this->once())
+        $this->serializerMock
+            ->expects($this->once())
             ->method('unserialize')
             ->with($serializedData)
             ->willReturn($data);
@@ -71,24 +84,34 @@ class ConfigTest extends TestCase
         $this->assertEquals($data, $this->config->getServices());
     }
 
-    public function testGetServicesNoCache()
+    /**
+     * Test get services no cache.
+     *
+     * @return void
+     */
+    public function testGetServicesNoCache(): void
     {
         $data = ['foo' => 'bar'];
         $serializedData = 'serialized data';
-        $this->webapiCacheMock->expects($this->once())
+        $this->webapiCacheMock
+            ->expects($this->once())
             ->method('load')
             ->with(Config::CACHE_ID)
             ->willReturn(false);
-        $this->serializerMock->expects($this->never())
+        $this->serializerMock
+            ->expects($this->never())
             ->method('unserialize');
-        $this->configReaderMock->expects($this->once())
+        $this->configReaderMock
+            ->expects($this->once())
             ->method('read')
             ->willReturn($data);
-        $this->serializerMock->expects($this->once())
+        $this->serializerMock
+            ->expects($this->once())
             ->method('serialize')
             ->with($data)
             ->willReturn($serializedData);
-        $this->webapiCacheMock->expects($this->once())
+        $this->webapiCacheMock
+            ->expects($this->once())
             ->method('save')
             ->with(
                 $serializedData,

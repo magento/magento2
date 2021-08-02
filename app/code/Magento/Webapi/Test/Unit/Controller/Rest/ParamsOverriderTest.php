@@ -16,26 +16,34 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test Magento\Webapi\Controller\Rest\ParamsOverrider
+ * Class ParamsOverriderTest
  */
 class ParamsOverriderTest extends TestCase
 {
     /**
-     * @param array $requestData Data from the request
-     * @param array $parameters Data from config about which parameters to override
-     * @param array $expectedOverriddenParams Result of overriding $requestData when applying rules from $parameters
-     * @param int $userId The id of the user invoking the request
-     * @param int $userType The type of user invoking the request
+     * Test override method.
      *
+     * @param array $requestData
+     * @param array $parameters
+     * @param array $expectedOverriddenParams
+     * @param int $userId
+     * @param int $userType
+     *
+     * @return void
      * @dataProvider overrideParamsDataProvider
      */
-    public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams, $userId, $userType)
-    {
+    public function testOverrideParams(
+        array $requestData,
+        array $parameters,
+        array $expectedOverriddenParams,
+        int $userId,
+        int $userType
+    ): void {
         $objectManager = new ObjectManager($this);
 
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
+            ->onlyMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
         $userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
         $userContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
 
@@ -47,9 +55,10 @@ class ParamsOverriderTest extends TestCase
         /** @var MockObject $objectConverter */
         $objectConverter = $this->getMockBuilder(SimpleDataObjectConverter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['convertKeysToCamelCase'])
+            ->onlyMethods(['convertKeysToCamelCase'])
             ->getMock();
-        $objectConverter->expects($this->any())
+        $objectConverter
+            ->expects($this->any())
             ->method('convertKeysToCamelCase')
             ->willReturnCallback(
                 function (array $array) {
@@ -75,9 +84,11 @@ class ParamsOverriderTest extends TestCase
     }
 
     /**
+     * Override params data provider.
+     *
      * @return array
      */
-    public function overrideParamsDataProvider()
+    public function overrideParamsDataProvider(): array
     {
         return [
             'force false, value present' => [

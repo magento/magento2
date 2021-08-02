@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Authorization;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -18,10 +20,23 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class RequestValidatorTest
+ */
 class RequestValidatorTest extends TestCase
 {
+    /**
+     * Service method.
+     *
+     * @var string
+     */
     const SERVICE_METHOD = 'testMethod';
 
+    /**
+     * Service id.
+     *
+     * @var string
+     */
     const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
 
     /**
@@ -30,14 +45,18 @@ class RequestValidatorTest extends TestCase
     private $requestValidator;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|MockObject
+     * @var Request|MockObject
      */
     private $requestMock;
 
-    /** @var StoreManagerInterface|MockObject */
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
     private $storeManagerMock;
 
-    /** @var StoreInterface|MockObject */
+    /**
+     * @var StoreInterface|MockObject
+     */
     private $storeMock;
 
     /**
@@ -50,10 +69,13 @@ class RequestValidatorTest extends TestCase
      */
     private $routeMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Request::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSecure',
                     'getRequestData',
@@ -66,15 +88,16 @@ class RequestValidatorTest extends TestCase
                 ]
             )->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock->expects($this->any())
+        $this->requestMock
+            ->expects($this->any())
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
         $routerMock = $this->getMockBuilder(Router::class)
-            ->setMethods(['match'])
+            ->onlyMethods(['match'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->routeMock = $this->getMockBuilder(Route::class)
-            ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
+            ->onlyMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(Authorization::class)
@@ -106,11 +129,16 @@ class RequestValidatorTest extends TestCase
     }
 
     /**
-     * Test Secure Request and Secure route combinations
+     * Test Secure Request and Secure route combinations.
      *
+     * @param bool $isSecureRoute
+     * @param bool $isSecureRequest
+     *
+     * @return void
+     * @throws AuthorizationException|Exception
      * @dataProvider dataProviderSecureRequestSecureRoute
      */
-    public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
+    public function testSecureRouteAndRequest(bool $isSecureRoute, bool $isSecureRequest): void
     {
         $this->routeMock->expects($this->any())->method('isSecure')->willReturn($isSecureRoute);
         $this->routeMock->expects($this->any())->method('getAclResources')->willReturn(['1']);
@@ -125,16 +153,19 @@ class RequestValidatorTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderSecureRequestSecureRoute()
+    public function dataProviderSecureRequestSecureRoute(): array
     {
         // Each array contains return type for isSecure method of route and request objects.
         return [[true, true], [false, true], [false, false]];
     }
 
     /**
-     * Test insecure request for a secure route
+     * Test insecure request for a secure route.
+     *
+     * @return void
+     * @throws AuthorizationException
      */
-    public function testInSecureRequestOverSecureRoute()
+    public function testInSecureRequestOverSecureRoute(): void
     {
         $this->expectException('Magento\Framework\Webapi\Exception');
         $this->expectExceptionMessage('Operation allowed only in HTTPS');
@@ -146,7 +177,13 @@ class RequestValidatorTest extends TestCase
         $this->requestValidator->validate();
     }
 
-    public function testAuthorizationFailed()
+    /**
+     * Test authorization failed.
+     *
+     * @return void
+     * @throws AuthorizationException|Exception
+     */
+    public function testAuthorizationFailed(): void
     {
         $this->expectException('Magento\Framework\Exception\AuthorizationException');
         $this->expectExceptionMessage('The consumer isn\'t authorized to access 5, 6.');

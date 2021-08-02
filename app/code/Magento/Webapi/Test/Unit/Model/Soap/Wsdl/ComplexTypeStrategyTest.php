@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 
-use Laminas\Soap\Wsdl;
+use DOMDocument;
+use DOMElement;
+use Magento\Webapi\Model\Soap\Wsdl as WsdlModel;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 use PHPUnit\Framework\MockObject\MockObject;
-
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,36 +23,34 @@ class ComplexTypeStrategyTest extends TestCase
     /** @var TypeProcessor|MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl|MockObject */
+    /** @var WsdlModel|MockObject */
     protected $_wsdl;
 
     /** @var ComplexTypeStrategy */
     protected $_strategy;
 
     /**
-     * Set up strategy for test.
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->_typeProcessor = $this->getMockBuilder(
-            TypeProcessor::class
-        )->setMethods(
-            ['getTypeData']
-        )->disableOriginalConstructor()
+        $this->_typeProcessor = $this->getMockBuilder(TypeProcessor::class)
+            ->onlyMethods(['getTypeData'])
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->_wsdl = $this->getMockBuilder(
-            \Magento\Webapi\Model\Soap\Wsdl::class
-        )->setMethods(
-            ['toDomDocument', 'getTypes', 'getSchema']
-        )->disableOriginalConstructor()
+
+        $this->_wsdl = $this->getMockBuilder(WsdlModel::class)
+            ->onlyMethods(['toDomDocument', 'getTypes', 'getSchema'])
+            ->disableOriginalConstructor()
             ->getMock();
+
         $this->_strategy = new ComplexTypeStrategy($this->_typeProcessor);
         $this->_strategy->setContext($this->_wsdl);
         parent::setUp();
     }
 
     /**
-     * Clean up.
+     * @inheritDoc
      */
     protected function tearDown(): void
     {
@@ -64,9 +63,11 @@ class ComplexTypeStrategyTest extends TestCase
 
     /**
      * Test that addComplexType returns type WSDL name
-     * if it has already been processed (registered at includedTypes in WSDL)
+     * if it has already been processed (registered at includedTypes in WSDL).
+     *
+     * @return void
      */
-    public function testCheckTypeName()
+    public function testCheckTypeName(): void
     {
         $testType = 'testComplexTypeName';
         $testTypeWsdlName = 'tns:' . $testType;
@@ -81,31 +82,19 @@ class ComplexTypeStrategyTest extends TestCase
      *
      * @param string $type
      * @param array $data
+     *
+     * @return void
      * @dataProvider addComplexTypeDataProvider
      */
-    public function testAddComplexTypeSimpleParameters($type, $data)
+    public function testAddComplexTypeSimpleParameters(string $type ,array $data): void
     {
         $this->_wsdl->expects($this->any())->method('getTypes')->willReturn([]);
-
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new \DOMDocument());
-
-        $schemaMock = $this->getMockBuilder(\DOMElement::class)
-            ->setConstructorArgs(['a'])
-            ->getMock();
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new DOMDocument());
+        $schemaMock = $this->getMockBuilder(DOMElement::class)->setConstructorArgs(['a'])->getMock();
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
 
-        $this->_typeProcessor->expects(
-            $this->at(0)
-        )->method(
-            'getTypeData'
-        )->with(
-            $type
-        )->willReturn(
-            $data
-        );
-
-        $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
+        $this->assertEquals(WsdlModel::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
     }
 
     /**
@@ -113,7 +102,7 @@ class ComplexTypeStrategyTest extends TestCase
      *
      * @return array
      */
-    public static function addComplexTypeDataProvider()
+    public static function addComplexTypeDataProvider(): array
     {
         return [
             'simple parameters' => [
@@ -201,8 +190,10 @@ class ComplexTypeStrategyTest extends TestCase
 
     /**
      * Test adding complex type with complex parameters and arrays.
+     *
+     * @return void
      */
-    public function testAddComplexTypeComplexParameters()
+    public function testAddComplexTypeComplexParameters(): void
     {
         $type = 'VendorModuleADataStructure';
         $parameterType = 'ComplexType';
@@ -228,51 +219,40 @@ class ComplexTypeStrategyTest extends TestCase
         ];
 
         $this->_wsdl->expects($this->at(0))->method('getTypes')->willReturn([]);
-        $this->_wsdl->expects(
-            $this->any()
-        )->method(
-            'getTypes'
-        )->willReturn(
-            [$type => Wsdl::TYPES_NS . ':' . $type]
-        );
+        $this->_wsdl
+            ->expects($this->any())
+            ->method('getTypes')
+            ->willReturn([$type => WsdlModel::TYPES_NS . ':' . $type]);
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new DOMDocument());
 
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new \DOMDocument());
-        $schemaMock = $this->getMockBuilder(\DOMElement::class)
-            ->setConstructorArgs(['a'])
-            ->getMock();
+        $schemaMock = $this->getMockBuilder(DOMElement::class)->setConstructorArgs(['a'])->getMock();
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
-        $this->_typeProcessor->expects(
-            $this->at(0)
-        )->method(
-            'getTypeData'
-        )->with(
-            $type
-        )->willReturn(
-            $typeData
-        );
-        $this->_typeProcessor->expects(
-            $this->at(1)
-        )->method(
-            'getTypeData'
-        )->with(
-            $parameterType
-        )->willReturn(
-            $parameterData
-        );
+        $this->_typeProcessor->expects($this->at(0))->method('getTypeData')->with($type)->willReturn($typeData);
+        $this->_typeProcessor
+            ->expects($this->at(1))
+            ->method('getTypeData')
+            ->with($parameterType)
+            ->willReturn($parameterData);
 
-        $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
+        $this->assertEquals(WsdlModel::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
     }
 
     /**
-     * Test to verify if annotations are added correctly
+     * Test to verify if annotations are added correctly.
+     *
+     * @return void
      */
-    public function testAddAnnotationToComplexType()
+    public function testAddAnnotationToComplexType(): void
     {
-        $dom = new \DOMDocument();
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn($dom);
+        $dom = new DOMDocument();
+        $this->_wsdl
+            ->expects($this->any())
+            ->method('toDomDocument')
+            ->willReturn($dom);
+
         $annotationDoc = "test doc";
-        $complexType = $dom->createElement(Wsdl::XSD_NS . ':complexType');
+        $complexType = $dom->createElement(WsdlModel::XSD_NS . ':complexType');
         $complexType->setAttribute('name', 'testRequest');
         $this->_strategy->addAnnotation($complexType, $annotationDoc);
         $this->assertEquals(

@@ -13,12 +13,17 @@ use Magento\Framework\Webapi\Exception;
 use Magento\Webapi\Model\Soap\Fault;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ExceptionTest
+ */
 class ExceptionTest extends TestCase
 {
     /**
      * Test Webapi exception construct.
+     *
+     * @return void
      */
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $code = 1111;
         $details = ['key1' => 'value1', 'key2' => 'value2'];
@@ -45,9 +50,12 @@ class ExceptionTest extends TestCase
     /**
      * Test Webapi exception construct with invalid data.
      *
+     * @param $httpCode
+     *
+     * @return void
      * @dataProvider providerForTestConstructInvalidHttpCode
      */
-    public function testConstructInvalidHttpCode($httpCode)
+    public function testConstructInvalidHttpCode($httpCode): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage("The specified HTTP code \"{$httpCode}\" is invalid.");
@@ -56,7 +64,12 @@ class ExceptionTest extends TestCase
         new Exception(__('Message'), 0, $httpCode);
     }
 
-    public function testGetOriginatorSender()
+    /**
+     * Test get originator sender.
+     *
+     * @return void
+     */
+    public function testGetOriginatorSender(): void
     {
         $apiException = new Exception(
             __('Message'),
@@ -71,7 +84,12 @@ class ExceptionTest extends TestCase
         );
     }
 
-    public function testGetOriginatorReceiver()
+    /**
+     * Test get originator receiver.
+     *
+     * @return void
+     */
+    public function testGetOriginatorReceiver(): void
     {
         $apiException = new Exception(
             __('Message'),
@@ -91,7 +109,7 @@ class ExceptionTest extends TestCase
      *
      * @return array
      */
-    public function providerForTestConstructInvalidHttpCode()
+    public function providerForTestConstructInvalidHttpCode(): array
     {
         //Each array contains invalid \Exception code.
         return [[300], [600]];

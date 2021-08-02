@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Controller;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
@@ -16,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for Magento\Webapi\Controller\PathProcessor class.
+ * Class PathProcessorTest
  */
 class PathProcessorTest extends TestCase
 {
@@ -35,6 +36,9 @@ class PathProcessorTest extends TestCase
     /** @var string */
     private $endpointPath = '/V1/path/of/endpoint';
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $store = $this->getMockForAbstractClass(StoreInterface::class);
@@ -56,21 +60,30 @@ class PathProcessorTest extends TestCase
     }
 
     /**
-     * @dataProvider processPathDataProvider
+     * Test all store code.
      *
      * @param string $storeCodeInPath
      * @param string $storeCodeSet
      * @param int $setCurrentStoreCallCtr
+     *
+     * @return void
+     * @throws NoSuchEntityException
+     * @dataProvider processPathDataProvider
      */
-    public function testAllStoreCode($storeCodeInPath, $storeCodeSet, $setCurrentStoreCallCtr = 1)
-    {
+    public function testAllStoreCode(
+        string $storeCodeInPath,
+        string $storeCodeSet,
+        int $setCurrentStoreCallCtr = 1
+    ): void {
         $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty
         $inPath = 'rest' . $storeCodeInPath . $this->endpointPath;
-        $this->storeManagerMock->expects($this->exactly($setCurrentStoreCallCtr))
+        $this->storeManagerMock
+            ->expects($this->exactly($setCurrentStoreCallCtr))
             ->method('setCurrentStore')
             ->with($storeCodeSet);
         if ($setCurrentStoreCallCtr > 0) {
-            $this->localeResolverMock->expects($this->once())
+            $this->localeResolverMock
+                ->expects($this->once())
                 ->method('emulate');
         }
         $result = $this->model->process($inPath);
@@ -78,9 +91,11 @@ class PathProcessorTest extends TestCase
     }
 
     /**
+     * Process path data provider.
+     *
      * @return array
      */
-    public function processPathDataProvider()
+    public function processPathDataProvider(): array
     {
         return [
             'All store code' => ['all', Store::ADMIN_CODE],

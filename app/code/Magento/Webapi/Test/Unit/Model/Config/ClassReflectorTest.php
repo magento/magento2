@@ -13,9 +13,10 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\Config\ClassReflector;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 /**
- * Test for class reflector.
+ * Class ClassReflectorTest
  */
 class ClassReflectorTest extends TestCase
 {
@@ -26,7 +27,7 @@ class ClassReflectorTest extends TestCase
     protected $_classReflector;
 
     /**
-     * Set up helper.
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -34,17 +35,22 @@ class ClassReflectorTest extends TestCase
             ->addMethods(['process'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_typeProcessor->expects(
-            $this->any()
-        )->method(
-            'process'
-        )->willReturnMap(
-            [['string', 'str'], ['int', 'int']]
-        );
+        $this->_typeProcessor
+            ->expects($this->any())
+            ->method('process')
+            ->willReturnMap(
+                [['string', 'str'], ['int', 'int']]
+            );
         $this->_classReflector = new ClassReflector($this->_typeProcessor);
     }
 
-    public function testReflectClassMethods()
+    /**
+     * Test reflect class methods.
+     *
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testReflectClassMethods(): void
     {
         $data = $this->_classReflector->reflectClassMethods(
             TestServiceForClassReflector::class,
@@ -53,7 +59,13 @@ class ClassReflectorTest extends TestCase
         $this->assertEquals(['generateRandomString' => $this->_getSampleReflectionData()], $data);
     }
 
-    public function testExtractMethodData()
+    /**
+     * Test extract method data.
+     *
+     * @return void
+     * @throws ReflectionException
+     */
+    public function testExtractMethodData(): void
     {
         $classReflection = new ClassReflection(
             TestServiceForClassReflector::class
@@ -66,11 +78,11 @@ class ClassReflectorTest extends TestCase
     }
 
     /**
-     * Expected reflection data for TestServiceForClassReflector generateRandomString method
+     * Expected reflection data for TestServiceForClassReflector generateRandomString method.
      *
      * @return array
      */
-    protected function _getSampleReflectionData()
+    protected function _getSampleReflectionData(): array
     {
         return [
             'documentation' => 'Basic random string generator. This line is short description ' .

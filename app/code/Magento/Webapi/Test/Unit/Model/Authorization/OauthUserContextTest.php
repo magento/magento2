@@ -17,7 +17,7 @@ use Magento\Webapi\Model\Authorization\OauthUserContext;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests \Magento\Webapi\Model\Authorization\OauthUserContext
+ * Class OauthUserContextTest
  */
 class OauthUserContextTest extends TestCase
 {
@@ -51,18 +51,21 @@ class OauthUserContextTest extends TestCase
      */
     protected $oauthService;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConsumerId'])
+            ->addMethods(['getConsumerId'])
             ->getMock();
 
         $this->integrationService = $this->getMockBuilder(IntegrationServiceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'findByName',
                     'update',
@@ -73,17 +76,16 @@ class OauthUserContextTest extends TestCase
                     'delete',
                     'getSelectedResources'
                 ]
-            )
-            ->getMockForAbstractClass();
+            )->getMockForAbstractClass();
 
         $this->oauthRequestHelper = $this->getMockBuilder(\Magento\Framework\Oauth\Helper\Request::class)
             ->disableOriginalConstructor()
-            ->setMethods(['prepareRequest', 'getRequestUrl'])
+            ->onlyMethods(['prepareRequest', 'getRequestUrl'])
             ->getMock();
 
         $this->oauthService = $this->getMockBuilder(Oauth::class)
             ->disableOriginalConstructor()
-            ->setMethods(['validateAccessTokenRequest'])
+            ->onlyMethods(['validateAccessTokenRequest'])
             ->getMock();
 
         $this->oauthUserContext = $this->objectManager->getObject(
@@ -97,63 +99,84 @@ class OauthUserContextTest extends TestCase
         );
     }
 
-    public function testGetUserType()
+    /**
+     * Test get user type.
+     *
+     * @return void
+     */
+    public function testGetUserType(): void
     {
         $this->assertEquals(UserContextInterface::USER_TYPE_INTEGRATION, $this->oauthUserContext->getUserType());
     }
 
-    public function testGetUserIdExist()
+    /**
+     * Test get user id exist.
+     *
+     * @return void
+     */
+    public function testGetUserIdExist(): void
     {
         $integrationId = 12345;
-
         $this->setupUserId($integrationId, ['oauth_token' => 'asdcfsdvanskdcalkdsjcfljldk']);
-
         $this->assertEquals($integrationId, $this->oauthUserContext->getUserId());
     }
 
-    public function testGetUserIdDoesNotExist()
+    /**
+     * Test get user id does not exist.
+     *
+     * @return void
+     */
+    public function testGetUserIdDoesNotExist(): void
     {
         $integrationId = null;
-
         $this->setupUserId($integrationId, ['oauth_token' => 'asdcfsdvanskdcalkdsjcfljldk']);
-
         $this->assertEquals($integrationId, $this->oauthUserContext->getUserId());
     }
 
-    public function testGetUserIdNoOauthInformation()
+    /**
+     * Test get user id no oauth information.
+     *
+     * @return void
+     */
+    public function testGetUserIdNoOauthInformation(): void
     {
         $integrationId = 12345;
-
         $this->setupUserId($integrationId, []);
-
         $this->assertNull($this->oauthUserContext->getUserId());
     }
 
     /**
+     * Set up user id.
+     *
      * @param int|null $integrationId
      * @param array $oauthRequest
+     *
      * @return void
      */
-    public function setupUserId($integrationId, $oauthRequest)
+    public function setupUserId(?int $integrationId, array $oauthRequest): void
     {
         $integration = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', '__wakeup'])
+            ->onlyMethods(['getId', '__wakeup'])
             ->getMock();
 
-        $this->integrationService->expects($this->any())
+        $this->integrationService
+            ->expects($this->any())
             ->method('findActiveIntegrationByConsumerId')
             ->willReturn($integration);
 
-        $this->oauthRequestHelper->expects($this->once())
+        $this->oauthRequestHelper
+            ->expects($this->once())
             ->method('prepareRequest')
             ->willReturn($oauthRequest);
 
-        $this->oauthService->expects($this->any())
+        $this->oauthService
+            ->expects($this->any())
             ->method('validateAccessTokenRequest')
             ->willReturn(1);
 
-        $integration->expects($this->any())
+        $integration
+            ->expects($this->any())
             ->method('getId')
             ->willReturn($integrationId);
     }

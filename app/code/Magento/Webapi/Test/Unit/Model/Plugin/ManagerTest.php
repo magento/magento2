@@ -17,6 +17,9 @@ use Magento\Webapi\Model\Plugin\Manager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ManagerTest
+ */
 class ManagerTest extends TestCase
 {
     /**
@@ -50,12 +53,14 @@ class ManagerTest extends TestCase
      */
     protected $integrationConfigMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->integrationServiceMock = $this->getMockBuilder(
-            IntegrationServiceInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods(
+        $this->integrationServiceMock = $this->getMockBuilder(IntegrationServiceInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
                 [
                     'findByName',
                     'update',
@@ -68,10 +73,9 @@ class ManagerTest extends TestCase
                 ]
             )->getMock();
 
-        $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
-            AuthorizationServiceInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods(
+        $this->integrationAuthorizationServiceMock = $this->getMockBuilder(AuthorizationServiceInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
                 [
                     'grantPermissions',
                     'grantAllPermissions',
@@ -83,7 +87,6 @@ class ManagerTest extends TestCase
 
         $this->integrationConfigMock = $this->getMockBuilder(IntegrationConfig::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->apiSetupPlugin = new Manager(
@@ -93,7 +96,12 @@ class ManagerTest extends TestCase
         );
     }
 
-    public function testAfterProcessIntegrationConfigNoIntegrations()
+    /**
+     * Test after process integration config no integrations.
+     *
+     * @return void
+     */
+    public function testAfterProcessIntegrationConfigNoIntegrations(): void
     {
         $this->integrationConfigMock->expects($this->never())->method('getIntegrations');
         $this->integrationServiceMock->expects($this->never())->method('findByName');
@@ -101,10 +109,12 @@ class ManagerTest extends TestCase
     }
 
     /**
+     * Test after process integration config success.
+     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testAfterProcessIntegrationConfigSuccess()
+    public function testAfterProcessIntegrationConfigSuccess(): void
     {
         $testIntegration1Resource = [
             'Magento_Customer::manage',
@@ -113,16 +123,15 @@ class ManagerTest extends TestCase
             'Magento_SalesRule::quote',
         ];
         $testIntegration2Resource = ['Magento_Catalog::product_read'];
-        $this->integrationConfigMock->expects(
-            $this->once()
-        )->method(
-            'getIntegrations'
-        )->willReturn(
-            [
-                'TestIntegration1' => ['resource' => $testIntegration1Resource],
-                'TestIntegration2' => ['resource' => $testIntegration2Resource],
-            ]
-        );
+        $this->integrationConfigMock
+            ->expects($this->once())
+            ->method('getIntegrations')
+            ->willReturn(
+                [
+                    'TestIntegration1' => ['resource' => $testIntegration1Resource],
+                    'TestIntegration2' => ['resource' => $testIntegration2Resource],
+                ]
+            );
         $firstIntegrationId = 1;
         $integrationsData1 = new DataObject(
             [
@@ -142,41 +151,40 @@ class ManagerTest extends TestCase
                 Integration::SETUP_TYPE => 1,
             ]
         );
-        $this->integrationServiceMock->expects(
-            $this->at(0)
-        )->method(
-            'findByName'
-        )->with(
-            'TestIntegration1'
-        )->willReturn(
-            $integrationsData1
-        );
-        $this->integrationServiceMock->expects(
-            $this->at(1)
-        )->method(
-            'findByName'
-        )->with(
-            'TestIntegration2'
-        )->willReturn(
-            $integrationsData2
-        );
+        $this->integrationServiceMock
+            ->expects($this->at(0))
+            ->method('findByName')
+            ->with('TestIntegration1')
+            ->willReturn($integrationsData1);
+        $this->integrationServiceMock
+            ->expects($this->at(1))
+            ->method('findByName')
+            ->with('TestIntegration2')
+            ->willReturn($integrationsData2);
         $this->apiSetupPlugin->afterProcessIntegrationConfig(
             $this->subjectMock,
             ['TestIntegration1', 'TestIntegration2']
         );
     }
 
-    public function testAfterProcessConfigBasedIntegrationsNoIntegrations()
+    /**
+     * Test after process config based integrations no integrations.
+     *
+     * @return void
+     */
+    public function testAfterProcessConfigBasedIntegrationsNoIntegrations(): void
     {
         $this->integrationServiceMock->expects($this->never())->method('findByName');
         $this->apiSetupPlugin->afterProcessConfigBasedIntegrations($this->subjectMock, []);
     }
 
     /**
+     * Test after process config based integrations success.
+     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testAfterProcessConfigBasedIntegrationsSuccess()
+    public function testAfterProcessConfigBasedIntegrationsSuccess(): void
     {
         $firstIntegrationId = 1;
         $integrationsData1 = [
@@ -204,25 +212,17 @@ class ManagerTest extends TestCase
         ];
         $integrationsData2Object = new DataObject($integrationsData2);
 
-        $this->integrationServiceMock->expects(
-            $this->at(0)
-        )->method(
-            'findByName'
-        )->with(
-            'TestIntegration1'
-        )->willReturn(
-            $integrationsData1Object
-        );
+        $this->integrationServiceMock
+            ->expects($this->at(0))
+            ->method('findByName')
+            ->with('TestIntegration1')
+            ->willReturn($integrationsData1Object);
 
-        $this->integrationServiceMock->expects(
-            $this->at(1)
-        )->method(
-            'findByName'
-        )->with(
-            'TestIntegration2'
-        )->willReturn(
-            $integrationsData2Object
-        );
+        $this->integrationServiceMock
+            ->expects($this->at(1))
+            ->method('findByName')
+            ->with('TestIntegration2')
+            ->willReturn($integrationsData2Object);
 
         $this->apiSetupPlugin->afterProcessConfigBasedIntegrations(
             $this->subjectMock,

@@ -9,6 +9,8 @@ namespace Magento\Webapi\Test\Unit\Controller;
 
 use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Oauth\OauthInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -16,6 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Webapi\Rest\Response;
 use Magento\Framework\Webapi\ServiceInputProcessor;
@@ -114,6 +117,9 @@ class RestTest extends TestCase
 
     const SERVICE_ID = Rest::class;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
@@ -121,30 +127,30 @@ class RestTest extends TestCase
         $this->_requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->_responseMock = $this->getResponseMock();
         $routerMock = $this->getMockBuilder(Router::class)
-            ->setMethods(['match'])
+            ->onlyMethods(['match'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_routeMock = $this->getRouteMock();
         $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)
-            ->setMethods([self::SERVICE_METHOD])
+            ->addMethods([self::SERVICE_METHOD])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_oauthServiceMock = $this->getMockBuilder(OauthInterface::class)
-            ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
+            ->onlyMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
         $this->_authorizationMock = $this->getMockBuilder(Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $paramsOverriderMock = $this->getMockBuilder(ParamsOverrider::class)
-            ->setMethods(['overrideParams'])
+            ->addMethods(['overrideParams'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getMethodReturnType'])
+            ->addMethods(['getMethodReturnType'])
             ->getMockForAbstractClass();
 
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
@@ -158,7 +164,7 @@ class RestTest extends TestCase
 
         $this->serviceInputProcessorMock = $this->getMockBuilder(ServiceInputProcessor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['process'])->getMock();
+            ->onlyMethods(['process'])->getMock();
 
         $areaListMock = $this->createMock(AreaList::class);
         $areaMock = $this->getMockForAbstractClass(AreaInterface::class);
@@ -190,7 +196,9 @@ class RestTest extends TestCase
             );
 
         $this->_routeMock->expects($this->any())->method('getServiceClass')->willReturn(self::SERVICE_ID);
-        $this->_routeMock->expects($this->any())->method('getServiceMethod')
+        $this->_routeMock
+            ->expects($this->any())
+            ->method('getServiceMethod')
             ->willReturn(self::SERVICE_METHOD);
 
         $routerMock->expects($this->any())->method('match')->willReturn($this->_routeMock);
@@ -199,7 +207,9 @@ class RestTest extends TestCase
         $this->_responseMock->expects($this->any())->method('prepareResponse')->willReturn([]);
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->willReturn(null);
 
-        $dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
+        $dataObjectProcessorMock
+            ->expects($this->any())
+            ->method('getMethodReturnType')
             ->with(self::SERVICE_ID, self::SERVICE_METHOD)
             ->willReturn('null');
 
@@ -208,16 +218,24 @@ class RestTest extends TestCase
         parent::setUp();
     }
 
-    public function testDispatchSchemaRequest()
+    /**
+     * Test dispatch schema request.
+     *
+     * @return void
+     * @throws AuthorizationException|Exception|InputException
+     */
+    public function testDispatchSchemaRequest(): void
     {
         $params = [
             \Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES => 'foo',
         ];
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getPathInfo')
             ->willReturn(SchemaRequestProcessor::PROCESSOR_PATH);
 
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getParams')
             ->willReturn($params);
 
@@ -228,15 +246,23 @@ class RestTest extends TestCase
         $this->assertEquals($schema, $this->_responseMock->getBody());
     }
 
-    public function testDispatchAllSchemaRequest()
+    /**
+     * Test dispatch all schema request.
+     *
+     * @return void
+     * @throws AuthorizationException|InputException|Exception
+     */
+    public function testDispatchAllSchemaRequest(): void
     {
         $params = [
             \Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES => 'all',
         ];
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getPathInfo')
             ->willReturn(SchemaRequestProcessor::PROCESSOR_PATH);
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
                 [
@@ -247,10 +273,12 @@ class RestTest extends TestCase
                     ],
                 ]
             );
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getParams')
             ->willReturn($params);
-        $this->_requestMock->expects($this->any())
+        $this->_requestMock
+            ->expects($this->any())
             ->method('getRequestedServices')
             ->willReturn('all');
 
@@ -262,6 +290,8 @@ class RestTest extends TestCase
     }
 
     /**
+     * Get request proccessot pool mock.
+     *
      * @return object|RequestProcessorPool
      */
     private function getRequestProccessotPoolMock()
@@ -270,7 +300,7 @@ class RestTest extends TestCase
 
         $this->swaggerGeneratorMock = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate', 'getListOfServices'])
+            ->onlyMethods(['generate', 'getListOfServices'])
             ->getMockForAbstractClass();
 
         $this->schemaRequestProcessor = $objectManager->getObject(
@@ -283,7 +313,7 @@ class RestTest extends TestCase
 
         $this->synchronousRequestProcessor =
             $this->getMockBuilder(SynchronousRequestProcessor::class)
-                ->setMethods(['process'])
+                ->onlyMethods(['process'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -299,29 +329,33 @@ class RestTest extends TestCase
     }
 
     /**
+     * Get route mock.
+     *
      * @return Route|MockObject
      */
     private function getRouteMock()
     {
         return $this->getMockBuilder(Route::class)
-            ->setMethods([
+            ->onlyMethods(
+                [
                 'isSecure',
                 'getServiceMethod',
                 'getServiceClass',
                 'getAclResources',
-                'getParameters',
-            ])
-            ->disableOriginalConstructor()
+                'getParameters']
+            )->disableOriginalConstructor()
             ->getMock();
     }
 
     /**
+     * Get request mock.
+     *
      * @return Request|MockObject
      */
     private function getRequestMock()
     {
         return $this->getMockBuilder(Request::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'isSecure',
                     'getRequestData',
@@ -337,12 +371,14 @@ class RestTest extends TestCase
     }
 
     /**
+     * Get response mock.
+     *
      * @return Response|MockObject
      */
     private function getResponseMock()
     {
         return $this->getMockBuilder(Response::class)
-            ->setMethods(['sendResponse', 'prepareResponse', 'setHeader'])
+            ->onlyMethods(['sendResponse', 'prepareResponse', 'setHeader'])
             ->disableOriginalConstructor()
             ->getMock();
     }

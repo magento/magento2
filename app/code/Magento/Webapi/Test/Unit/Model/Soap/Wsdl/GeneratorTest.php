@@ -24,6 +24,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Class GeneratorTest
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GeneratorTest extends TestCase
@@ -53,17 +55,18 @@ class GeneratorTest extends TestCase
      */
     private $serializer;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->serviceMetadata = $this->getMockBuilder(
-            ServiceMetadata::class
-        )->disableOriginalConstructor()
+        $this->serviceMetadata = $this->getMockBuilder(ServiceMetadata::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $_wsdlMock = $this->getMockBuilder(
-            Wsdl::class
-        )->disableOriginalConstructor()
-            ->setMethods(
+        $_wsdlMock = $this->getMockBuilder(Wsdl::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
                 [
                     'addSchemaTypeSection',
                     'addService',
@@ -79,17 +82,14 @@ class GeneratorTest extends TestCase
                     'toXML',
                 ]
             )->getMock();
-        $this->_wsdlFactoryMock = $this->getMockBuilder(
-            WsdlFactory::class
-        )->setMethods(
-            ['create']
-        )->disableOriginalConstructor()
+        $this->_wsdlFactoryMock = $this->getMockBuilder(WsdlFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->_wsdlFactoryMock->expects($this->any())->method('create')->willReturn($_wsdlMock);
 
-        $this->_cacheMock = $this->getMockBuilder(
-            Webapi::class
-        )->disableOriginalConstructor()
+        $this->_cacheMock = $this->getMockBuilder(Webapi::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->_cacheMock->expects($this->any())->method('load')->willReturn(false);
         $this->_cacheMock->expects($this->any())->method('save')->willReturn(true);
@@ -110,7 +110,8 @@ class GeneratorTest extends TestCase
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializer->expects($this->any())
+        $this->serializer
+            ->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
                 function ($value) {
@@ -118,7 +119,8 @@ class GeneratorTest extends TestCase
                 }
             );
         $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
+        $objectManagerMock
+            ->expects($this->any())
             ->method('get')
             ->willReturnMap([
                 [Json::class, $this->serializer]
@@ -142,67 +144,82 @@ class GeneratorTest extends TestCase
     }
 
     /**
-     * Test getElementComplexTypeName
+     * Test getElementComplexTypeName.
+     *
+     * @return void
      */
-    public function testGetElementComplexTypeName()
+    public function testGetElementComplexTypeName(): void
     {
         $this->assertEquals("Test", $this->_wsdlGenerator->getElementComplexTypeName("test"));
     }
 
     /**
-     * Test getPortTypeName
+     * Test getPortTypeName.
+     *
+     * @return void
      */
-    public function testGetPortTypeName()
+    public function testGetPortTypeName(): void
     {
         $this->assertEquals("testPortType", $this->_wsdlGenerator->getPortTypeName("test"));
     }
 
     /**
-     * Test getBindingName
+     * Test getBindingName.
+     *
+     * @return void
      */
-    public function testGetBindingName()
+    public function testGetBindingName(): void
     {
         $this->assertEquals("testBinding", $this->_wsdlGenerator->getBindingName("test"));
     }
 
     /**
-     * Test getPortName
+     * Test getPortName.
+     *
+     * @return void
      */
-    public function testGetPortName()
+    public function testGetPortName(): void
     {
         $this->assertEquals("testPort", $this->_wsdlGenerator->getPortName("test"));
     }
 
     /**
-     * test getServiceName
+     * Test getServiceName.
+     *
+     * @return void
      */
-    public function testGetServiceName()
+    public function testGetServiceName(): void
     {
         $this->assertEquals("testService", $this->_wsdlGenerator->getServiceName("test"));
     }
 
     /**
      * @test
+     *
+     * @return void
      */
-    public function testGetInputMessageName()
+    public function testGetInputMessageName(): void
     {
         $this->assertEquals("operationNameRequest", $this->_wsdlGenerator->getInputMessageName("operationName"));
     }
 
     /**
      * @test
+     *
+     * @return void
      */
-    public function testGetOutputMessageName()
+    public function testGetOutputMessageName(): void
     {
         $this->assertEquals("operationNameResponse", $this->_wsdlGenerator->getOutputMessageName("operationName"));
     }
 
     /**
-     * Test exception for handle
+     * Test exception for handle.
      *
+     * @return void
      * @covers \Magento\Webapi\Model\AbstractSchemaGenerator::generate()
      */
-    public function testHandleWithException()
+    public function testHandleWithException(): void
     {
         $this->expectException('Magento\Framework\Webapi\Exception');
         $this->expectExceptionMessage('exception message');
@@ -211,10 +228,12 @@ class GeneratorTest extends TestCase
         $requestedService = ['catalogProduct'];
         $serviceMetadata = ['methods' => ['methodName' => ['interface' => 'aInterface', 'resources' => ['anonymous']]]];
 
-        $this->serviceMetadata->expects($this->any())
+        $this->serviceMetadata
+            ->expects($this->any())
             ->method('getServiceMetadata')
             ->willReturn($serviceMetadata);
-        $this->_typeProcessor->expects($this->once())
+        $this->_typeProcessor
+            ->expects($this->once())
             ->method('processInterfaceCallInfo')
             ->willThrowException(new Exception(__($exceptionMsg)));
 

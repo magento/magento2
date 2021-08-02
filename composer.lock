@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81d5b34cad54e3beca3f7f98e0bd4e4d",
+    "content-hash": "a13c5cb1d3cdb0fe34e58b147dea5f0a",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -2856,74 +2856,6 @@
                 }
             ],
             "time": "2021-06-30T15:33:53+00:00"
-        },
-        {
-            "name": "laminas/laminas-soap",
-            "version": "2.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-soap.git",
-                "reference": "11672a79e9074fd8e4e7aedd75849902e7b45e23"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-soap/zipball/11672a79e9074fd8e4e7aedd75849902e7b45e23",
-                "reference": "11672a79e9074fd8e4e7aedd75849902e7b45e23",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-soap": "*",
-                "laminas/laminas-server": "^2.9",
-                "laminas/laminas-stdlib": "^3.3",
-                "laminas/laminas-uri": "^2.8",
-                "laminas/laminas-zendframework-bridge": "^1.1.0",
-                "php": "^7.3 || ~8.0.0"
-            },
-            "replace": {
-                "zendframework/zend-soap": "^2.8.0"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "laminas/laminas-config": "^3.4",
-                "laminas/laminas-http": "^2.14",
-                "phpspec/prophecy-phpunit": "^2.0.1",
-                "phpunit/phpunit": "^9.4.3"
-            },
-            "suggest": {
-                "ext-curl": "Curl is required when .NET compatibility is required",
-                "laminas/laminas-http": "Laminas\\Http component"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Soap\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "soap"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-soap/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-soap/issues",
-                "rss": "https://github.com/laminas/laminas-soap/releases.atom",
-                "source": "https://github.com/laminas/laminas-soap"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2021-02-17T18:59:03+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",

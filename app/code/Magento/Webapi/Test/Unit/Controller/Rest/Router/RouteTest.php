@@ -12,10 +12,12 @@ namespace Magento\Webapi\Test\Unit\Controller\Rest\Router;
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\Router\Route;
-
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class RouteTest
+ */
 class RouteTest extends TestCase
 {
     /**
@@ -28,21 +30,24 @@ class RouteTest extends TestCase
      */
     protected $request;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->setMethods(['getPathInfo'])
+        $this->request = $this->getMockBuilder(Request::class)
+            ->addMethods(['getPathInfo'])
             ->getMockForAbstractClass();
     }
 
     /**
-     * Test setServiceName and getServiceName methods
+     * Test setServiceName and getServiceName methods.
      *
      * @return void
      */
-    public function testResourceName()
+    public function testResourceName(): void
     {
         /** @var Route $model */
         $model = $this->objectManager->getObject(
@@ -60,13 +65,16 @@ class RouteTest extends TestCase
     }
 
     /**
+     * Test match methods.
+     *
      * @param string $route
      * @param string $path
      * @param array|bool $params
+     *
      * @return void
      * @dataProvider dataProviderRoutes
      */
-    public function testRoute($route, $path, $params)
+    public function testRoute(string $route, string $path, $params): void
     {
         /** @var Route $model */
         $model = $this->objectManager->getObject(
@@ -74,7 +82,8 @@ class RouteTest extends TestCase
             ['route' => $route]
         );
 
-        $this->request->expects($this->once())
+        $this->request
+            ->expects($this->once())
             ->method('getPathInfo')
             ->willReturn($path);
 
@@ -85,7 +94,7 @@ class RouteTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRoutes()
+    public function dataProviderRoutes(): array
     {
         return [
             // Success

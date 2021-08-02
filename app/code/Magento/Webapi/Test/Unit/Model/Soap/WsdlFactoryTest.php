@@ -13,6 +13,9 @@ use Magento\Webapi\Model\Soap\WsdlFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class WsdlFactoryTest
+ */
 class WsdlFactoryTest extends TestCase
 {
     /** @var MockObject */
@@ -21,6 +24,9 @@ class WsdlFactoryTest extends TestCase
     /** @var WsdlFactory */
     protected $_soapWsdlFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
@@ -28,6 +34,9 @@ class WsdlFactoryTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         unset($this->_objectManagerMock);
@@ -35,18 +44,22 @@ class WsdlFactoryTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCreate()
+    /**
+     * Test create.
+     *
+     * @return void
+     */
+    public function testCreate(): void
     {
         $wsdlName = 'wsdlName';
         $endpointUrl = 'endpointUrl';
-        $this->_objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            Wsdl::class,
-            ['name' => $wsdlName, 'uri' => $endpointUrl]
-        );
+        $this->_objectManagerMock
+            ->expects($this->once())
+            ->method('create')
+            ->with(
+                Wsdl::class,
+                ['name' => $wsdlName, 'uri' => $endpointUrl]
+            );
         $this->_soapWsdlFactory->create($wsdlName, $endpointUrl);
     }
 }

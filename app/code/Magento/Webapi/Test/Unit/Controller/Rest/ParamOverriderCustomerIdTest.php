@@ -8,10 +8,14 @@ declare(strict_types=1);
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ParamOverriderCustomerIdTest
+ */
 class ParamOverriderCustomerIdTest extends TestCase
 {
     /**
@@ -24,6 +28,9 @@ class ParamOverriderCustomerIdTest extends TestCase
      */
     private $userContext;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->userContext = $this->getMockBuilder(UserContextInterface::class)
@@ -36,23 +43,38 @@ class ParamOverriderCustomerIdTest extends TestCase
         );
     }
 
-    public function testGetOverriddenValueIsCustomer()
+    /**
+     * Test getOverriddenValue method.
+     *
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testGetOverriddenValueIsCustomer(): void
     {
         $retValue = 'retValue';
 
-        $this->userContext->expects($this->once())
+        $this->userContext
+            ->expects($this->once())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
-        $this->userContext->expects($this->once())
+        $this->userContext
+            ->expects($this->once())
             ->method('getUserId')
             ->willReturn($retValue);
 
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
-    public function testGetOverriddenValueIsNotCustomer()
+    /**
+     * Test getOverriddenValue method.
+     *
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testGetOverriddenValueIsNotCustomer(): void
     {
-        $this->userContext->expects($this->once())
+        $this->userContext
+            ->expects($this->once())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
 

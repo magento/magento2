@@ -19,6 +19,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Model\Config as ModelConfig;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class DataObjectProcessorTest
+ */
 class DataObjectProcessorTest extends TestCase
 {
     /**
@@ -31,6 +34,9 @@ class DataObjectProcessorTest extends TestCase
      */
     protected $config;
 
+    /**
+     * @inheritDoc
+     */
     protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
@@ -42,9 +48,11 @@ class DataObjectProcessorTest extends TestCase
             ]
         );
         $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
-        $serializerMock->method('serialize')
+        $serializerMock
+            ->method('serialize')
             ->willReturn('serializedData');
-        $serializerMock->method('unserialize')
+        $serializerMock
+            ->method('unserialize')
             ->willReturn(['unserializedData']);
 
         $objectManager->setBackwardCompatibleProperty(
@@ -63,7 +71,12 @@ class DataObjectProcessorTest extends TestCase
         parent::setUp();
     }
 
-    public function testDataObjectProcessor()
+    /**
+     * Test data object processor.
+     *
+     * @return void
+     */
+    public function testDataObjectProcessor(): void
     {
         $objectManager =  new ObjectManager($this);
         /** @var TestDataObject $testDataObject */
