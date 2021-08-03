@@ -60,4 +60,9 @@
             <field key="method">string</field>
         </object>
     </operation>
+
+    <operation name="GetOrderData" dataType="CustomerCart" type="get" auth="adminOauth" url="/V1/orders/{return}" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+
 </operations>
