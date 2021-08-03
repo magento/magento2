@@ -347,7 +347,7 @@ class Storage extends \Magento\Framework\DataObject
             ->setCollectRecursively(false)
             ->setOrder('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC);
 
-        if (preg_match($this->getAllowedTargetDirPattern(), $path) != 1) {
+        if (!$this->isPathAllowed($path)) {
             $collection->setDirsFilter($this->getAllowedDirMask($path));
         }
 
@@ -461,7 +461,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function createDirectory($name, $path)
     {
-        if (!($this->isPathAllowed($path) || preg_match($this->getAllowedTargetDirPattern(), $path))) {
+        if (!($this->isPathAllowed($path . DIRECTORY_SEPARATOR . $name))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot create the folder under the selected directory.')
             );
@@ -514,7 +514,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function deleteDirectory($path)
     {
-        if (!$this->isPathAllowed($path)) {
+        if (!$this->isPathAllowed(dirname($path))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot delete the selected directory.')
             );
@@ -563,7 +563,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function deleteFile($target)
     {
-        if (!$this->isPathAllowed($target)) {
+        if (!$this->isPathAllowed(dirname($target))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t delete the file right now.')
             );
@@ -595,7 +595,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function uploadFile($targetPath, $type = null)
     {
-        if (!($this->isPathAllowed($targetPath) || preg_match($this->getAllowedTargetDirPattern(), $targetPath))) {
+        if (!($this->isPathAllowed($targetPath))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t upload the file to the current folder right now. Please try another folder.')
             );
@@ -954,7 +954,14 @@ class Storage extends \Magento\Framework\DataObject
      */
     private function isPathAllowed($path): bool
     {
-        return preg_match($this->getAllowedPathPattern(), $path) == 1;
+        $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
+        $storageRootLength = strlen($storageRoot);
+        $mediaSubPathname = substr($path, $storageRootLength) ?: '';
+        if (!$mediaSubPathname) {
+            return false;
+        }
+        $mediaSubPathname = ltrim($mediaSubPathname, DIRECTORY_SEPARATOR);
+        return preg_match($this->getAllowedPathPattern(), $mediaSubPathname) == 1;
     }
 
     /**
@@ -969,42 +976,17 @@ class Storage extends \Magento\Framework\DataObject
                 self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
                 'default'
             );
-            $regExp = '~';
+            $regExp = '/^(';
             $or = '';
             foreach($mediaGalleryImageFolders as $folder) {
-                $folderPattern = str_replace('/', '[/\\\]+', $folder);
-                $regExp .= $or . 'media[/\\\]+' . $folderPattern . '[/\\\]+[a-z0-9\.\-\_]+';
+                $folderPattern = str_replace('/', '[\/]+', $folder);
+                $regExp .= $or . $folderPattern . '\b(?:\/?[^\/]+)*\/?$';
                 $or = '|';
             }
-            $regExp .= '~i';
+            $regExp .= ')/';
             $this->allowedPathPattern = $regExp;
         }
         return $this->allowedPathPattern;
-    }
-
-    /**
-     * Get allowed target dir pattern
-     *
-     * @return string
-     */
-    private function getAllowedTargetDirPattern()
-    {
-        if (null === $this->allowedTargetDirPattern) {
-            $mediaGalleryImageFolders = $this->coreConfig->getValue(
-                self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
-                'default'
-            );
-            $regExp = '~';
-            $or = '';
-            foreach($mediaGalleryImageFolders as $folder) {
-                $folderPattern = str_replace('/', '[/\\\]+', $folder);
-                $regExp .= $or . 'media[/\\\]+' . $folderPattern . '[/\\\]*$';
-                $or = '|';
-            }
-            $regExp .= '~i';
-            $this->allowedTargetDirPattern = $regExp;
-        }
-        return $this->allowedTargetDirPattern;
     }
 
     /**
@@ -1028,7 +1010,7 @@ class Storage extends \Magento\Framework\DataObject
 
             $this->allowedDirs = [];
             foreach ($imageFolders as $folder) {
-                $this->allowedDirs[] = explode('/', $folder);
+                $this->allowedDirs[] = explode(DIRECTORY_SEPARATOR, $folder);
             }
         }
         return $this->allowedDirs;
