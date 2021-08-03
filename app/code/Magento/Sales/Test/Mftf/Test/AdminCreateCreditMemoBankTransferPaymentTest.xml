@@ -17,6 +17,9 @@
             <testCaseId value="MC-15862"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCreateCreditMemoWithBankTransferPaymentTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

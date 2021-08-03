@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoWithBankTransferPaymentTest">
+        <annotations>
+            <stories value="Credit memo entity"/>
+            <title value="Create Credit Memo with Payment=Bank Transfer"/>
+            <description value="Create Credit Memo with Bank Transfer Payment and assert 0 shipping refund"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-15862"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <magentoCLI command="config:set {{enabledBankTransferPaymentOrder.label}} {{enabledBankTransferPaymentOrder.value}}" stepKey="enableBankTransfer"/>
+
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="BankTransferPaymentMethod" stepKey="submitOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{disabledBankTransferPaymentOrder.label}} {{disabledBankTransferPaymentOrder.value}}" stepKey="disableBankTransfer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+
+        <getData entity="GetOrderData" stepKey="getOrderData">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </getData>
+
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="1"/>
+            <argument name="shippingRefund" value="0"/>
+            <argument name="adjustmentRefund" value="5"/>
+            <argument name="adjustmentFee" value="10"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+        
+        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage"/>
+        <dontSeeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="assertNoCreditMemoButton"/>
+
+        <actionGroup ref="AdminClickCreditMemoTabOnOrderViewPageActionGroup" stepKey="clickCreditMemoTab"/>
+        <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
+        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
+			<actualResult type="const">$grabMemoId</actualResult>
+        </assertNotEmpty>
+        <actionGroup ref="AdminClickViewLinkOfLatestMemoOnCreditMemoTabActionGroup" stepKey="clickView"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.subtotal}}" userInput="$560.00" stepKey="seeSubtotal"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentRefund}}" userInput="$5.00" stepKey="seeAdjustmentRefund"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentFee}}" userInput="$10.00" stepKey="seeAdjustmentFee"/>
+        <see selector="{{AdminCreditMemoViewTotalSection.grandTotal}}" userInput="$555.00" stepKey="assertRefundOnCreditMemoTab"/>
+        <see userInput="$$createProduct.name$$" selector="{{AdminCreditMemoViewItemsSection.productName}}" stepKey="seeProductName"/>
+        <see userInput="$$createProduct.price$$" selector="{{AdminCreditMemoViewItemsSection.productPrice}}" stepKey="seePricePerItem"/>
+        <see userInput="1" selector="{{AdminCreditMemoViewItemsSection.productQty}}" stepKey="seeQty"/>
+
+        <actionGroup ref="AdminAssertRefundInRefundsGridActionGroup" stepKey="assertRefund">
+            <argument name="orderId" value="$getOrderData.increment_id$"/>
+            <argument name="memoId" value="{$grabMemoId}"/>
+            <argument name="refundStatus" value="Refunded"/>
+            <argument name="refundedTotal" value="$555.00"/>
+        </actionGroup>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onAccountPage"/>
+        <actionGroup ref="StorefrontClickViewOrderLinkOnMyOrdersPageActionGroup" stepKey="clickViewOrder"/>
+        <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
+        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
+    </test>
+</tests>
