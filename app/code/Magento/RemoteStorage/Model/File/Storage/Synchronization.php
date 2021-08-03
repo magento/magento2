@@ -3,25 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
-namespace Magento\RemoteStorage\Plugin;
+namespace Magento\RemoteStorage\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\RemoteStorage\Driver\DriverPool as RemoteDriverPool;
 use Magento\Framework\Filesystem\DriverPool as LocalDriverPool;
 use Magento\RemoteStorage\Model\Config;
 use Magento\RemoteStorage\Filesystem;
 
 /**
- * Modifies the base URL.
+ * Class Synchronization
  */
-class MediaStorage
+class Synchronization
 {
     /**
      * @var bool
@@ -52,16 +48,13 @@ class MediaStorage
     }
 
     /**
-     * Download remote file
+     * Synchronize file
      *
-     * @param Synchronization $subject
      * @param string $relativeFileName
-     * @return null
-     * @throws FileSystemException
-     * @throws ValidatorException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
+     * @throws \LogicException
      */
-    public function beforeSynchronize(Synchronization $subject, string $relativeFileName): void
+    public function synchronize($relativeFileName)
     {
         if ($this->isEnabled && $this->remoteDirectory->isExist($relativeFileName)) {
             $file = $this->localDirectory->openFile($relativeFileName, 'w');
