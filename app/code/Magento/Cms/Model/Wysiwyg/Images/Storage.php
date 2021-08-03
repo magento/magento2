@@ -173,11 +173,6 @@ class Storage extends \Magento\Framework\DataObject
     private $allowedPathPattern;
 
     /**
-     * @var string
-     */
-    private $allowedTargetDirPattern;
-
-    /**
      * @var array
      */
     private $allowedDirs;
@@ -461,15 +456,15 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function createDirectory($name, $path)
     {
-        if (!($this->isPathAllowed($path . DIRECTORY_SEPARATOR . $name))) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We cannot create the folder under the selected directory.')
-            );
-        }
-
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Please rename the folder using only Latin letters, numbers, underscores and dashes.')
+            );
+        }
+
+        if (!($this->isPathAllowed($path . DIRECTORY_SEPARATOR . $name))) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot create the folder under the selected directory.')
             );
         }
 
@@ -956,7 +951,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
         $storageRootLength = strlen($storageRoot);
-        $mediaSubPathname = substr($path, $storageRootLength) ?: '';
+        $mediaSubPathname = substr($path, $storageRootLength);
         if (!$mediaSubPathname) {
             return false;
         }
