@@ -45,9 +45,8 @@ class SynchronizationFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return Synchronization
      */
-    public function create(array $data = []): Synchronization
+    public function create(array $data = [])
     {
         return $this->objectManager->create($this->instanceName, $data);
     }
