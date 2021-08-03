@@ -23,4 +23,13 @@ interface ItemProviderInterface
      * @since 100.3.0
      */
     public function getItems($storeId);
+
+    /**
+     * Prepare parameters of sitemap items
+     *
+     * @param $item
+     * @param int $storeId
+     * @return array
+     */
+    public function prepareParams($item, $storeId);
 }
