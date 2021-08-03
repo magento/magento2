@@ -17,6 +17,7 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 
 /**
  * Indexer Handler for Elasticsearch engine.
@@ -81,6 +82,11 @@ class IndexerHandler implements IndexerInterface
     private $cacheContext;
 
     /**
+     * @var Processor
+     */
+    private $processor;
+
+    /**
      * IndexerHandler constructor.
      * @param IndexStructureInterface $indexStructure
      * @param ElasticsearchAdapter $adapter
@@ -91,6 +97,7 @@ class IndexerHandler implements IndexerInterface
      * @param int $batchSize
      * @param DeploymentConfig|null $deploymentConfig
      * @param CacheContext|null $cacheContext
+     * @param Processor|null $processor
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -101,7 +108,8 @@ class IndexerHandler implements IndexerInterface
         array $data = [],
         int $batchSize = self::DEFAULT_BATCH_SIZE,
         ?DeploymentConfig $deploymentConfig = null,
-        ?CacheContext $cacheContext = null
+        ?CacheContext $cacheContext = null,
+        ?Processor $processor = null
     ) {
         $this->indexStructure = $indexStructure;
         $this->adapter = $adapter;
@@ -112,6 +120,7 @@ class IndexerHandler implements IndexerInterface
         $this->scopeResolver = $scopeResolver;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
+        $this->processor = $processor ?: ObjectManager::getInstance()->get(Processor::class);
     }
 
     /**
@@ -129,7 +138,9 @@ class IndexerHandler implements IndexerInterface
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $scopeId);
             $this->adapter->addDocs($docs, $scopeId, $this->getIndexerId());
-            $this->updateCacheContext($docs);
+            if ($this->processor->getIndexer()->isScheduled()) {
+                $this->updateCacheContext($docs);
+            }
         }
         $this->adapter->updateAlias($scopeId, $this->getIndexerId());
         return $this;
