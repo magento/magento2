@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\RemoteStorage\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,7 +17,7 @@ use Magento\RemoteStorage\Model\Config;
 use Magento\RemoteStorage\Filesystem;
 
 /**
- * Class Synchronization
+ * Synchronize files from remote to local file system.
  */
 class Synchronization
 {
@@ -43,8 +45,12 @@ class Synchronization
     public function __construct(Config $config, Filesystem $filesystem)
     {
         $this->isEnabled = $config->isEnabled();
-        $this->remoteDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB, RemoteDriverPool::REMOTE);
-        $this->localDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB, LocalDriverPool::FILE);
+        $this->remoteDirectory = $filesystem->getDirectoryWrite(
+            DirectoryList::PUB,
+            RemoteDriverPool::REMOTE);
+        $this->localDirectory = $filesystem->getDirectoryWrite(
+            DirectoryList::PUB, LocalDriverPool::FILE
+        );
     }
 
     /**
