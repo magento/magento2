@@ -462,7 +462,7 @@ class Storage extends \Magento\Framework\DataObject
             );
         }
 
-        if (!($this->isPathAllowed($path . DIRECTORY_SEPARATOR . $name))) {
+        if (!($this->isPathAllowed($path . '/' . $name))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot create the folder under the selected directory.')
             );
@@ -955,7 +955,7 @@ class Storage extends \Magento\Framework\DataObject
         if (!$mediaSubPathname) {
             return false;
         }
-        $mediaSubPathname = ltrim($mediaSubPathname, DIRECTORY_SEPARATOR);
+        $mediaSubPathname = ltrim($mediaSubPathname, '/');
         return preg_match($this->getAllowedPathPattern(), $mediaSubPathname) == 1;
     }
 
@@ -975,7 +975,7 @@ class Storage extends \Magento\Framework\DataObject
             $or = '';
             foreach($mediaGalleryImageFolders as $folder) {
                 $folderPattern = str_replace('/', '[\/]+', $folder);
-                $regExp .= $or . $folderPattern . '\b(?:\/?[^\/]+)*\/?$';
+                $regExp .= $or . $folderPattern . '\b(?!-)(?:\/?[^\/]+)*\/?$';
                 $or = '|';
             }
             $regExp .= ')/';
@@ -1005,7 +1005,7 @@ class Storage extends \Magento\Framework\DataObject
 
             $this->allowedDirs = [];
             foreach ($imageFolders as $folder) {
-                $this->allowedDirs[] = explode(DIRECTORY_SEPARATOR, $folder);
+                $this->allowedDirs[] = explode('/', $folder);
             }
         }
         return $this->allowedDirs;
