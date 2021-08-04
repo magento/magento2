@@ -22,7 +22,7 @@ define([
          * @returns {Boolean}
          */
         insertImage: function (record, config) {
-            var targetElement;
+            var targetElement, forceStaticPath;
 
             if (record === null) {
                 return false;
@@ -34,14 +34,15 @@ define([
                 throw $t('Target element not found for content update');
             }
 
+            forceStaticPath = typeof targetElement !== 'function' && targetElement.data('force_static_path') ? 1 : 0
+
             $.ajax({
                 url: config.onInsertUrl,
                 data: {
                     filename: record['encoded_id'],
                     'store_id': config.storeId,
                     'as_is': typeof targetElement !== 'function' && targetElement.is('textarea') ? 1 : 0,
-                    'force_static_path': typeof targetElement !== 'function' && targetElement.data('force_static_path')
-                        ? 1 : 0,
+                    'force_static_path': forceStaticPath,
                     'form_key': FORM_KEY
                 },
                 context: this,
