@@ -75,6 +75,7 @@ class ShipmentCommentSender extends NotifySender
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
             'order_data' => [
                 'customer_name' => $order->getCustomerName(),
+                'is_not_virtual' => $order->getIsNotVirtual(),
                 'frontend_status_label' => $order->getFrontendStatusLabel()
             ]
         ];

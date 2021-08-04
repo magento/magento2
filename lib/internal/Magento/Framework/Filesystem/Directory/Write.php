@@ -351,14 +351,24 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $content
      * @param string|null $mode
+     * @param bool $lock
      * @return int The number of bytes that were written.
      * @throws FileSystemException|ValidatorException
      */
-    public function writeFile($path, $content, $mode = 'w+')
+    public function writeFile($path, $content, $mode = 'w+', bool $lock = false)
     {
         $this->validatePath($path);
         $file = $this->openFile($path, $mode);
-        $result = $file->write($content);
+        try {
+            if ($lock) {
+                $file->lock();
+            }
+            $result = $file->write($content);
+        } finally {
+            if ($lock) {
+                $file->unlock();
+            }
+        }
         $file->close();
 
         return $result;
