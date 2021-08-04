@@ -496,7 +496,7 @@ class Uploader
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
         // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 200;
+        $maxFilenameLength = 90;
 
         if (strlen($fileInfo['basename']) > $maxFilenameLength) {
             throw new \LengthException(

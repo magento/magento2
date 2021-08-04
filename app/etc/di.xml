@@ -687,6 +687,9 @@
                 <item name="0" xsi:type="string">Magento\Framework\Data\OptionSourceInterface</item>
                 <item name="1" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface</item>
             </argument>
+            <argument name="deniedClassList" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Framework\Model\ResourceModel\AbstractResource</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View">

@@ -45,7 +45,8 @@ class UpdateCustomer
     ): array {
         $customerId = $this->request->getParam('customerId');
 
-        if ($customerId) {
+        $bodyParams = $this->request->getBodyParams();
+        if (!isset($bodyParams['customer']['Id']) && $customerId) {
             $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
         }
 

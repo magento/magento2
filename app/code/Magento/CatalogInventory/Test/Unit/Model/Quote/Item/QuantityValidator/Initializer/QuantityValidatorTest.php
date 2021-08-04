@@ -153,7 +153,7 @@ class QuantityValidatorTest extends TestCase
             ->getMock();
         $this->storeMock = $this->createMock(Store::class);
         $this->quoteItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getProductId', 'getHasError'])
+            ->addMethods(['getProductId', 'getHasError', 'getStockStateResult'])
             ->onlyMethods(
                 [
                     'getQuote',
@@ -517,7 +517,7 @@ class QuantityValidatorTest extends TestCase
         $this->quoteItemMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
-        $this->quoteItemMock->expects($this->once())
+        $this->quoteItemMock->expects($this->any())
             ->method('getQty')
             ->willReturn($qty);
         $this->quoteItemMock->expects($this->any())

@@ -87,10 +87,9 @@
             <argument name="user" value="EditAdminUserWrongCurrentPassword" />
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveLastAttempt" />
-        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeErrorLastAttempt" >
-            <argument name="message" value="Your account is temporarily disabled. Please try again later." />
-        </actionGroup>
-
+        <!-- Confirm that user is logged out after exceeding attempts -->
+        <comment userInput="BIC workaround" stepKey="seeErrorLastAttempt"/>
+        <actionGroup ref="AssertAdminUserOnLoginPageActionGroup" stepKey="assertUserOnLoginPage" />
         <!-- Try to login as admin and check error -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLoginErrorMessage" />

@@ -66,12 +66,9 @@
             <argument name="user" value="NewAdminUserWrongCurrentPassword" />
         </actionGroup>
         <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="clickSaveSixthAttempt" />
-
-        <!-- Check Error that account has been locked -->
-        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLockUserErrorMessage">
-            <argument name="message" value="Your account is temporarily disabled. Please try again later." />
-        </actionGroup>
-
+        <!-- Confirm that user is logged out after exceeding attempts -->
+        <comment userInput="BIC workaround" stepKey="seeLockUserErrorMessage"/>
+        <actionGroup ref="AssertAdminUserOnLoginPageActionGroup" stepKey="assertUserOnLoginPage" />
         <!-- Try to login as admin and check error -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeLoginUserErrorMessage" />
