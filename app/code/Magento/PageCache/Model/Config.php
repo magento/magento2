@@ -116,12 +116,12 @@ class Config
     /**
      * Return currently selected cache type: built in or varnish
      *
-     * @return int|string
+     * @return int
      * @api
      */
     public function getType()
     {
-        return $this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
+        return (int)$this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
     }
 
     /**

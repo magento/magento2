@@ -85,7 +85,7 @@ class LayoutPlugin
     {
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [];
-            $isVarnish = (int)$this->config->getType() === Config::VARNISH;
+            $isVarnish = $this->config->getType() === Config::VARNISH;
 
             foreach ($subject->getAllBlocks() as $block) {
                 if ($block instanceof IdentityInterface) {
