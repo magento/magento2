@@ -62,8 +62,9 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     {
         $billingAddress = $this->addressMock;
         $comment = 'comment_test';
-        $customerName='Test Customer';
-        $frontendStatusLabel='Processing';
+        $customerName = 'Test Customer';
+        $frontendStatusLabel = 'Processing';
+        $isNotVirtual = true;
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
@@ -76,6 +77,9 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
+        $this->orderMock->expects($this->any())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
         $this->orderMock->expects($this->once())
             ->method('getFrontendStatusLabel')
             ->willReturn($frontendStatusLabel);
@@ -92,7 +96,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
                     'formattedBillingAddress' => 1,
                     'order_data' => [
                         'customer_name' => $customerName,
-                        'frontend_status_label' => $frontendStatusLabel
+                        'frontend_status_label' => $frontendStatusLabel,
+                        'is_not_virtual' => $isNotVirtual,
                     ]
                 ]
             );
@@ -105,8 +110,9 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     {
         $billingAddress = $this->addressMock;
         $comment = 'comment_test';
-        $customerName='Test Customer';
-        $frontendStatusLabel='Processing';
+        $customerName = 'Test Customer';
+        $frontendStatusLabel = 'Processing';
+        $isNotVirtual = true;
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
@@ -122,6 +128,9 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
+        $this->orderMock->expects($this->any())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
         $this->orderMock->expects($this->once())
             ->method('getFrontendStatusLabel')
             ->willReturn($frontendStatusLabel);
@@ -138,7 +147,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
                     'formattedBillingAddress' => 1,
                     'order_data' => [
                         'customer_name' => $customerName,
-                        'frontend_status_label' => $frontendStatusLabel
+                        'frontend_status_label' => $frontendStatusLabel,
+                        'is_not_virtual' => $isNotVirtual,
                     ]
                 ]
             );
@@ -152,8 +162,9 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $isVirtualOrder = true;
         $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
-        $customerName='Test Customer';
-        $frontendStatusLabel='Complete';
+        $customerName = 'Test Customer';
+        $frontendStatusLabel = 'Complete';
+        $isNotVirtual = false;
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
@@ -161,6 +172,9 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
             ->willReturn($customerName);
+        $this->orderMock->expects($this->any())
+            ->method('getIsNotVirtual')
+            ->willReturn($isNotVirtual);
         $this->orderMock->expects($this->once())
             ->method('getFrontendStatusLabel')
             ->willReturn($frontendStatusLabel);
@@ -177,7 +191,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
                     'formattedBillingAddress' => 1,
                     'order_data' => [
                         'customer_name' => $customerName,
-                        'frontend_status_label' => $frontendStatusLabel
+                        'frontend_status_label' => $frontendStatusLabel,
+                        'is_not_virtual' => $isNotVirtual
                     ]
 
                 ]

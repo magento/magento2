@@ -50,6 +50,7 @@
 
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
         <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder_GraphQl" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
+        <plugin name="option_select_website_filter" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder"/>
     </type>
 
     <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
@@ -60,6 +61,13 @@
         </arguments>
     </type>
 
+    <type name="Magento\UrlRewriteGraphQl\Model\RoutableInterfaceTypeResolver">
+        <arguments>
+            <argument name="productTypeNameResolvers" xsi:type="array">
+                <item name="configurable_product_type_resolver" xsi:type="object">Magento\ConfigurableProductGraphQl\Model\ConfigurableProductTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver">
         <plugin name="configured_variant" type="Magento\ConfigurableProductGraphQl\Plugin\Product\Configuration\Item\ItemResolver"/>
     </type>
