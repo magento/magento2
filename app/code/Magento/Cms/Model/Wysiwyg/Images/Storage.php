@@ -1020,22 +1020,27 @@ class Storage extends \Magento\Framework\DataObject
     private function getAllowedDirMask(string $path)
     {
         $allowedDirs = $this->getAllowedDirs();
-        $column = 0;
+        // subfolder level under storage root
+        $subfolderLevel = 1;
         $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
         $storageRootLength = strlen($storageRoot);
         $mediaSubPathname = substr($path, $storageRootLength);
+        // Filter out the irrelevant allowed dirs for the path from the $allowedDirs array
         if ($mediaSubPathname) {
-            $pathSegments = explode('/', ltrim($mediaSubPathname, '/'));
+            $pathSegments = explode('/', trim($mediaSubPathname, '/'));
             foreach ($pathSegments as $index => $pathSegment) {
+                // Find indexes of the relevant allowed dirs based on the path segment
                 $subDirKeys = array_keys(array_column($allowedDirs, $index), $pathSegment);
                 $dirs = [];
+                // Rebuild the allowed dirs based on the find indexes
                 foreach ($subDirKeys as $subDirKey) {
                     $dirs[] = $allowedDirs[$subDirKey];
                 }
                 $allowedDirs = $dirs;
-                $column++;
+                $subfolderLevel++;
             }
         }
-        return '/^(' . implode('|', array_unique(array_column($allowedDirs, $column))) . ')$/';
+
+        return '/^(' . implode('|', array_unique(array_column($allowedDirs, $subfolderLevel - 1))) . ')$/';
     }
 }
