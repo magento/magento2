@@ -6,6 +6,7 @@
 
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -15,6 +16,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class DeleteFilesTest extends \PHPUnit\Framework\TestCase
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+
+    /**
+     * @var array
+     */
+    private $origConfigValue;
+
     /**
      * @var \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles
      */
@@ -56,7 +65,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directoryName = 'directory1';
+        $directoryName = 'testDir';
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
@@ -71,6 +80,28 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
         }
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles::class);
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->origConfigValue = $config->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            array_merge($this->origConfigValue, ['testDir']),
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        $directoryName = 'testDir';
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
+        $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            $this->origConfigValue
+        );
     }
 
     /**
