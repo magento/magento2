@@ -34,7 +34,7 @@ define([
                 throw $t('Target element not found for content update');
             }
 
-            forceStaticPath = typeof targetElement !== 'function' && targetElement.data('force_static_path') ? 1 : 0
+            forceStaticPath = typeof targetElement !== 'function' && targetElement.data('force_static_path') ? 1 : 0;
 
             $.ajax({
                 url: config.onInsertUrl,
@@ -62,6 +62,7 @@ define([
                 }
             }, this));
             window.MediabrowserUtility.closeDialog();
+
             if (typeof targetElement !== 'function') {
                 targetElement.focus();
                 $(targetElement).trigger('change');
