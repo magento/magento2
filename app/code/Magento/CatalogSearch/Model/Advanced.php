@@ -368,6 +368,13 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 if (!empty($value['from']) || !empty($value['to'])) {
                     $from = '';
                     $to = '';
+                    if (is_array($value['from'])) {
+                        $value['from'] = $this->getFirstArrayElement($value['from']);
+                    }
+                    if (is_array($value['to'])) {
+                        $value['to'] = $this->getFirstArrayElement($value['to']);
+                    }
+
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);
@@ -432,5 +439,17 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getSearchCriterias()
     {
         return $this->_searchCriterias;
+    }
+
+    /**
+     * Return first value in array
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    private function getFirstArrayElement($value)
+    {
+        return is_array($value) ? $this->getFirstArrayElement(array_shift($value)) : $value;
     }
 }
