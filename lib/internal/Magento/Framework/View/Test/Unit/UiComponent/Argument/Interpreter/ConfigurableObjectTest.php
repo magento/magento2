@@ -60,11 +60,19 @@ class ConfigurableObjectTest extends TestCase
                 'objectManager' => $this->objectManager,
                 'argumentInterpreter' => $this->interpreter,
                 'classWhitelist' => [
+                    // @phpstan-ignore-next-line
                     \Foo\Bar\ClassA::class,
+                    // @phpstan-ignore-next-line
                     \Foo\Bar\InterfaceA::class,
                 ],
                 'classReader' => $this->classReader,
                 'objectManagerConfig' => $this->objectManagerConfig,
+                'deniedClassList' => [
+                    // @phpstan-ignore-next-line
+                    \Foo\Bar\ClassC::class,
+                    // @phpstan-ignore-next-line
+                    \Foo\Bar\InterfaceC::class,
+                ],
             ]
         );
     }
@@ -100,11 +108,9 @@ class ConfigurableObjectTest extends TestCase
         $this->interpreter
             ->method('evaluate')
             ->willReturnCallback(
-                
-                    function (array $arg) {
-                        return $arg['value'];
-                    }
-                
+                function (array $arg) {
+                    return $arg['value'];
+                }
             );
 
         $actualResult = $this->configurableObject->evaluate($data);
@@ -145,11 +151,9 @@ class ConfigurableObjectTest extends TestCase
         $this->interpreter
             ->method('evaluate')
             ->willReturnCallback(
-                
-                    function (array $arg) {
-                        return $arg['value'];
-                    }
-                
+                function (array $arg) {
+                    return $arg['value'];
+                }
             );
 
         $actualResult = $this->configurableObject->evaluate($data);
@@ -179,10 +183,12 @@ class ConfigurableObjectTest extends TestCase
                 [
                     ['MyFooClass', ['Something', 'skipme']],
                     ['Something', ['dontcare', 'SomethingElse']],
+                    // @phpstan-ignore-next-line
                     ['SomethingElse', [\Foo\Bar\ClassA::class, 'unrelated']],
                     ['skipme', []],
                     ['dontcare', []],
                     ['unrelated', []],
+                    // @phpstan-ignore-next-line
                     [\Foo\Bar\ClassA::class, []]
                 ],
                 []
@@ -199,10 +205,12 @@ class ConfigurableObjectTest extends TestCase
                 [
                     ['MyFooClass', ['Something', 'skipme']],
                     ['Something', ['dontcare', 'SomethingElse']],
+                    // @phpstan-ignore-next-line
                     ['SomethingElse', [\Foo\Bar\ClassA::class, 'unrelated']],
                     ['skipme', []],
                     ['dontcare', []],
                     ['unrelated', []],
+                    // @phpstan-ignore-next-line
                     [\Foo\Bar\ClassA::class, []]
                 ],
                 ['myarg' => 'bar']
@@ -219,11 +227,15 @@ class ConfigurableObjectTest extends TestCase
                 [
                     ['MyFooClass', ['Something', 'skipme']],
                     ['Something', ['dontcare', 'SomethingElse']],
+                    // @phpstan-ignore-next-line
                     ['SomethingElse', [\Foo\Bar\ClassA::class, 'unrelated']],
                     ['skipme', []],
                     ['dontcare', []],
+                    // @phpstan-ignore-next-line
                     ['unrelated', [\Foo\Bar\InterfaceA::class]],
+                    // @phpstan-ignore-next-line
                     [\Foo\Bar\ClassA::class, []],
+                    // @phpstan-ignore-next-line
                     [\Foo\Bar\InterfaceA::class, []]
                 ],
                 ['myarg' => 'bar']
@@ -272,6 +284,31 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 \InvalidArgumentException::class,
                 'Class argument is invalid: MyFooClass'
+            ],
+            [
+                [
+                    'argument' => [
+                        'class' => ['value' => 'MyFooClass'],
+                        'myarg' => ['value' => 'bar'],
+                    ],
+                ],
+                'MyFooClass',
+                [
+                    ['MyFooClass', ['Something', 'skipme']],
+                    ['Something', ['dontcare', 'SomethingElse']],
+                    // @phpstan-ignore-next-line
+                    ['SomethingElse', [\Foo\Bar\ClassC::class, 'unrelated']],
+                    ['skipme', []],
+                    ['dontcare', []],
+                    // @phpstan-ignore-next-line
+                    ['unrelated', [\Foo\Bar\InterfaceC::class]],
+                    // @phpstan-ignore-next-line
+                    [\Foo\Bar\ClassC::class, []],
+                    // @phpstan-ignore-next-line
+                    [\Foo\Bar\InterfaceC::class, []],
+                ],
+                \InvalidArgumentException::class,
+                'Class argument is invalid: MyFooClass',
             ],
         ];
     }

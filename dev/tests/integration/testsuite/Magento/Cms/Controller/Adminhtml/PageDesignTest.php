@@ -18,6 +18,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
 
 /**
  * Test the saving CMS pages design via admin area interface.
@@ -62,6 +63,11 @@ class PageDesignTest extends AbstractBackendController
     private $pagesToDelete = [];
 
     /**
+     * @var PostDataProcessor
+     */
+    private $postDataProcessor;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -71,6 +77,7 @@ class PageDesignTest extends AbstractBackendController
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
         $this->scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
+        $this->postDataProcessor = Bootstrap::getObjectManager()->get(PostDataProcessor::class);
     }
 
     /**
@@ -221,5 +228,23 @@ class PageDesignTest extends AbstractBackendController
         $updated = $this->pageRetriever->execute('test_custom_layout_page_1', 0);
         $this->assertEmpty($updated->getCustomLayoutUpdateXml());
         $this->assertEmpty($updated->getLayoutUpdateXml());
+    }
+
+    /**
+     * Test create CMS page with invalid layout update
+     *
+     * @return void
+     */
+    public function testSaveWithCustomLayoutUpdate(): void
+    {
+        $requestData = [
+            PageInterface::IDENTIFIER => 'randomidentified',
+            PageInterface::TITLE => 'page title',
+            PageInterface::CUSTOM_THEME => '1',
+            PageInterface::PAGE_LAYOUT => 'empty',
+            PageInterface::CUSTOM_LAYOUT_UPDATE_XML => '<container />',
+            PageInterface::LAYOUT_UPDATE_XML => '<container />',
+        ];
+        $this->assertFalse($this->postDataProcessor->validate($requestData));
     }
 }

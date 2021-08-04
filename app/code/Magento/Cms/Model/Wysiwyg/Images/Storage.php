@@ -372,6 +372,7 @@ class Storage extends \Magento\Framework\DataObject
                 }
 
                 try {
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $size = getimagesize($item->getFilename());
 
                     if (is_array($size)) {
@@ -428,7 +429,7 @@ class Storage extends \Magento\Framework\DataObject
             );
         }
 
-        $relativePath = $this->_directory->getRelativePath($path);
+        $relativePath = (string)$this->_directory->getRelativePath($path);
         if (!$this->_directory->isDirectory($relativePath) || !$this->_directory->isWritable($relativePath)) {
             $path = $this->_cmsWysiwygImages->getStorageRoot();
         }

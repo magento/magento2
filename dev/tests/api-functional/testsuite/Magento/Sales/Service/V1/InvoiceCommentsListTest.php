@@ -8,7 +8,7 @@ namespace Magento\Sales\Service\V1;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class InvoiceCommentsListTest
+ * Class InvoiceCommentsListTest for Magento sales webapi
  */
 class InvoiceCommentsListTest extends WebapiAbstract
 {

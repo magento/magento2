@@ -77,9 +77,9 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
         $containers = $this->_model->getWidgetSupportedContainers();
         $this->assertIsArray($containers);
-        $this->assertContains('sidebar.main',$containers);
-        $this->assertContains('content',$containers);
-        $this->assertContains('sidebar.additional',$containers);
+        $this->assertContains('sidebar.main', $containers);
+        $this->assertContains('content', $containers);
+        $this->assertContains('sidebar.additional', $containers);
         return $this->_model;
     }
 
@@ -135,7 +135,10 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('<argument name="value" xsi:type="string">fixed</argument>', $result);
         $this->assertStringContainsString('<argument name="name" xsi:type="string">types</argument>', $result);
         $this->assertStringContainsString('<argument name="value" xsi:type="string">type_1,type_2</argument>', $result);
-        $this->assertStringContainsString('<argument name="name" xsi:type="string">conditions_encoded</argument>', $result);
+        $this->assertStringContainsString(
+            '<argument name="name" xsi:type="string">conditions_encoded</argument>',
+            $result
+        );
         $this->assertStringContainsString('`Magento||CatalogWidget||Model||Rule||Condition||Combine`', $result);
         $this->assertStringContainsString('`Magento||CatalogWidget||Model||Rule||Condition||Product`', $result);
     }
@@ -167,5 +170,23 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
               ['block_id' => '2']
           ]
         ];
+    }
+
+    /**
+     * @param Instance $model
+     * @depends testGetWidgetConfigAsArray
+     */
+    public function testGenerateLayoutUpdateXmlWithInvalidParamName(\Magento\Widget\Model\Widget\Instance $model)
+    {
+        $params = [
+            'block_id' => '2',
+            'block_id</argument><argument name="value" xsi:type="string">2</argument></action></block><block'
+            . ' class="Magento\Cms\Block\Widget\Block" name="dfgdfgdfg" template="widget/static_block/default.phtml">'
+            . '<action method="setData"><argument name="name" xsi:type="string">' => 'some_value',
+        ];
+        $this->expectException('\Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Layout update is invalid');
+        $model->setData('widget_parameters', $params);
+        $model->generateLayoutUpdateXml('content');
     }
 }

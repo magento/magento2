@@ -1,24 +1,25 @@
 {
     "name": "magento/module-google-optimizer",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-catalog": "*",
-        "magento/module-cms": "*",
-        "magento/module-google-analytics": "*",
-        "magento/module-store": "*",
-        "magento/module-ui": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.6",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-catalog": "103.0.*",
+        "magento/module-cms": "103.0.*",
+        "magento/module-google-analytics": "100.3.*",
+        "magento/module-store": "101.0.*",
+        "magento/module-ui": "101.1.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -28,3 +29,4 @@
         }
     }
 }
+

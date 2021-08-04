@@ -37,7 +37,7 @@ class File implements ValidatorInterface
     public function validate(AttributeInterface $customAttribute): void
     {
         $attribute = $this->eavConfig->getAttribute(Customer::ENTITY, $customAttribute->getAttributeCode());
-        if ($attribute->getFrontendInput() === 'file') {
+        if ($attribute->getFrontendInput() === 'file' && !empty($customAttribute->getValue())) {
             if (!preg_match(
                 '#^/[a-zA-Z0-9_-]/[a-zA-Z0-9_-]/[a-zA-Z0-9_-]+.[a-z]{3,6}$#',
                 $customAttribute->getValue()
