@@ -29,4 +29,20 @@
         <data key="min_email_text_length_limit">1</data>
         <data key="max_email_text_length_limit">10000</data>
     </entity>
+    <entity name="WishlistEnable">
+        <data key="path">wishlist/general/active</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="WishlistDisable">
+        <data key="path">wishlist/general/active</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="WishlistShowInSidebar">
+        <data key="path">wishlist/general/show_in_sidebar</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="WishlistHideFromSidebar">
+        <data key="path">wishlist/general/show_in_sidebar</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

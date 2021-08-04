@@ -134,6 +134,7 @@ class QuoteManagerTest extends TestCase
                 'setExtensionAttributes',
                 '__wakeup',
                 'setCustomer',
+                'getCustomer'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -343,6 +344,13 @@ class QuoteManagerTest extends TestCase
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->exactly(3))
             ->method('getAddressesCollection')->willReturn($this->abstractCollectionMock);
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock->expects($this->once())
+            ->method('setId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomer')->willReturn($customerMock);
         $this->abstractCollectionMock->expects($this->exactly(3))->method('walk')->with(
             $this->logicalOr(
                 $this->equalTo('setCustomerAddressId'),

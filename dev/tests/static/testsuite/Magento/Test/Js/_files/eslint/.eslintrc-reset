@@ -1,22 +1,24 @@
 {
   // http://eslint.org/docs/rules/
 
-  "ecmaFeatures": {
-    "binaryLiterals": false,                    // enable binary literals
-    "blockBindings": false,                     // enable let and const (aka block bindings)
-    "defaultParams": false,                     // enable default function parameters
-    "forOf": false,                             // enable for-of loops
-    "generators": false,                        // enable generators
-    "objectLiteralComputedProperties": false,   // enable computed object literal property names
-    "objectLiteralDuplicateProperties": false,  // enable duplicate object literal properties in strict mode
-    "objectLiteralShorthandMethods": false,     // enable object literal shorthand methods
-    "objectLiteralShorthandProperties": false,  // enable object literal shorthand properties
-    "octalLiterals": false,                     // enable octal literals
-    "regexUFlag": false,                        // enable the regular expression u flag
-    "regexYFlag": false,                        // enable the regular expression y flag
-    "templateStrings": false,                   // enable template strings
-    "unicodeCodePointEscapes": false,           // enable code point escapes
-    "jsx": false                                // enable JSX
+  "parserOptions": {
+    "ecmaFeatures": {
+      "binaryLiterals": false,                    // enable binary literals
+      "blockBindings": false,                     // enable let and const (aka block bindings)
+      "defaultParams": false,                     // enable default function parameters
+      "forOf": false,                             // enable for-of loops
+      "generators": false,                        // enable generators
+      "objectLiteralComputedProperties": false,   // enable computed object literal property names
+      "objectLiteralDuplicateProperties": false,  // enable duplicate object literal properties in strict mode
+      "objectLiteralShorthandMethods": false,     // enable object literal shorthand methods
+      "objectLiteralShorthandProperties": false,  // enable object literal shorthand properties
+      "octalLiterals": false,                     // enable octal literals
+      "regexUFlag": false,                        // enable the regular expression u flag
+      "regexYFlag": false,                        // enable the regular expression y flag
+      "templateStrings": false,                   // enable template strings
+      "unicodeCodePointEscapes": false,           // enable code point escapes
+      "jsx": false                                // enable JSX
+    },
   },
 
   "env": {
