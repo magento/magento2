@@ -134,6 +134,15 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
             $taxClassId = $group->getTaxClassId() ?: self::DEFAULT_TAX_CLASS_ID;
             $this->_verifyTaxClassModel($taxClassId, $group);
             $groupModel->setTaxClassId($taxClassId);
+
+            $groupDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
+                $group,
+                \Magento\Customer\Api\Data\GroupInterface::class
+            );
+
+            if (!empty($groupDataAttributes['extension_attributes'])) {
+                $groupModel->setDataUsingMethod('extension_attributes', $groupDataAttributes['extension_attributes']);
+            }
         }
 
         try {

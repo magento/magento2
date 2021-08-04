@@ -10,7 +10,7 @@
         <referenceContainer name="header">
             <block name="tracking" as="tracking" template="Magento_AdminAnalytics::tracking.phtml" ifconfig="admin/usage/enabled">
                 <arguments>
-                    <argument name="tracking_url" xsi:type="string">//assets.adobedtm.com/launch-EN30eb7ffa064444f1b8b0368ef38fd3a9.min.js</argument>
+                    <argument name="tracking_url" xsi:type="string">//assets.adobedtm.com/a7d65461e54e/37baabec1b6e/launch-177bc126c8e6.min.js</argument>
                     <argument name="metadata" xsi:type="object">Magento\AdminAnalytics\ViewModel\Metadata</argument>
                 </arguments>
             </block>

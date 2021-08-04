@@ -40,8 +40,8 @@ define([
 
                         $(this).attr('data-bind', html);
                         $(this).html(html);
-                        $(this).after(' <span><a ' + window.notYouLink + '>' + $t('Not you?') + '</a></span>');
                     });
+                    $(welcomeElems).append(' <span><a ' + window.notYouLink + '>' + $t('Not you?') + '</a>');
                 }
             }
         },

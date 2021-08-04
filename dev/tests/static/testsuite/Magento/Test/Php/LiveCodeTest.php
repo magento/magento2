@@ -209,14 +209,14 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Retrieves the lowest PHP version specified in <kbd>composer.json</var> of project.
+     * Retrieves the lowest and highest PHP version specified in <kbd>composer.json</var> of project.
      *
-     * @return string
+     * @return array
      */
-    private function getLowestPhpVersion(): string
+    private function getTargetPhpVersions(): array
     {
         $composerJson = json_decode(file_get_contents(BP . '/composer.json'), true);
-        $phpVersion   = '7.0';
+        $versionsRange = [];
 
         if (isset($composerJson['require']['php'])) {
             $versions = explode('||', $composerJson['require']['php']);
@@ -232,12 +232,17 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             //sort versions
             usort($versions, 'version_compare');
 
-            $lowestVersion = array_shift($versions);
-            $versionParts  = explode('.', $lowestVersion);
-            $phpVersion    = sprintf('%s.%s', $versionParts[0], $versionParts[1] ?? '0');
+            $versionsRange[] = array_shift($versions);
+            if (!empty($versions)) {
+                $versionsRange[] = array_pop($versions);
+            }
+            foreach ($versionsRange as $key => $version) {
+                $versionParts  = explode('.', $versionsRange[$key]);
+                $versionsRange[$key] = sprintf('%s.%s', $versionParts[0], $versionParts[1] ?? '0');
+            }
         }
 
-        return $phpVersion;
+        return $versionsRange;
     }
 
     /**
@@ -354,10 +359,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $result = $copyPasteDetector->run([BP]);
 
-        $output = "";
-        if (file_exists($reportFile)) {
-            $output = file_get_contents($reportFile);
-        }
+        $output = file_exists($reportFile) ? file_get_contents($reportFile) : '';
 
         $this->assertTrue(
             $result,
@@ -408,7 +410,8 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPhpCompatibility()
     {
-        $targetVersion = $this->getLowestPhpVersion();
+        $targetVersions = $this->getTargetPhpVersions();
+        $this->assertNotEmpty($targetVersions, 'No supported versions information in composer.json');
         $reportFile    = self::$reportDir . '/phpcompatibility_report.txt';
         $rulesetDir    = __DIR__ . '/_files/PHPCompatibilityMagento';
 
@@ -417,7 +420,11 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
         }
 
         $codeSniffer = new PhpCompatibility($rulesetDir, $reportFile, new Wrapper());
-        $codeSniffer->setTestVersion($targetVersion);
+        if (count($targetVersions) > 1) {
+            $codeSniffer->setTestVersion($targetVersions[0] . '-' . $targetVersions[1]);
+        } else {
+            $codeSniffer->setTestVersion($targetVersions[0]);
+        }
 
         $result = $codeSniffer->run(
             $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml'])

@@ -116,7 +116,7 @@
 
         <!-- 2. Refresh magento cache -->
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateEnabled">
-            <argument name="tags" value=""/>
+            <argument name="tags" value="translate full_page"/>
         </actionGroup>
 
         <!-- 3. Go to storefront and click on cart button on the top -->
@@ -479,7 +479,7 @@
         <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
         <!-- 8. Clear magento cache -->
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateDisabled">
-            <argument name="tags" value=""/>
+            <argument name="tags" value="translate full_page"/>
         </actionGroup>
 
         <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
