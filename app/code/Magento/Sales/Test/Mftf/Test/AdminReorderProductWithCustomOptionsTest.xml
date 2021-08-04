@@ -129,6 +129,5 @@
         </actionGroup>
         <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" stepKey="adminStartReorder"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="adminSubmitOrder"/>
-
     </test>
 </tests>

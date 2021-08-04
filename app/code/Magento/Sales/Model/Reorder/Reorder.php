@@ -256,7 +256,7 @@ class Reorder
 
         $addProductResult = null;
         try {
-            $addProductResult = $cart->addProduct($product,  $infoBuyRequest);
+            $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
         } catch (\Throwable $e) {
