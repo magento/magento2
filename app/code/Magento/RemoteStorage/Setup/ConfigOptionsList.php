@@ -141,6 +141,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig): array
     {
+        // deployment configuration existence determines readiness of object manager to resolve remote storage drivers
+        $isDeploymentConfigExists = (bool) $deploymentConfig->getConfigData();
+
+        if (!$isDeploymentConfigExists) {
+            return [];
+        }
+
         $driver = $options[self::OPTION_REMOTE_STORAGE_DRIVER] ?? DriverPool::FILE;
 
         if ($driver === DriverPool::FILE) {
