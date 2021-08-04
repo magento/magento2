@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Catalog\Model\Category;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Framework\App\DeploymentConfig;
@@ -17,7 +18,6 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\CacheContext;
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 
 /**
  * Indexer Handler for Elasticsearch engine.
