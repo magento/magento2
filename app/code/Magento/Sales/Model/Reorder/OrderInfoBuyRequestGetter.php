@@ -49,7 +49,7 @@ class OrderInfoBuyRequestGetter
         $info = $orderItem->getProductOptionByCode('info_buyRequest');
         $options = $orderItem->getProductOptionByCode('options');
 
-        if (!empty($options) || is_array($info['options'])) {
+        if (!empty($options) && is_array($info)) {
             foreach ($options as $option) {
                 if (array_key_exists($option['option_id'], $info['options'])) {
                     try {
