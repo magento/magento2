@@ -92,7 +92,7 @@ class IsExcluded implements IsPathExcludedInterface
             $or = '';
             foreach($mediaGalleryImageFolders as $folder) {
                 $folderPattern = str_replace('/', '[\/]+', $folder);
-                $regExp .= $or . $folderPattern . '\b(?:\/?[^\/]+)*\/?$';
+                $regExp .= $or . $folderPattern . '\b(?!-)(?:\/?[^\/]+)*\/?$';
                 $or = '|';
             }
             $regExp .= ')/';
