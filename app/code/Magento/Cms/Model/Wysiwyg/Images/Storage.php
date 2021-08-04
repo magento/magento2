@@ -462,7 +462,7 @@ class Storage extends \Magento\Framework\DataObject
             );
         }
 
-        if (!($this->isPathAllowed($path . '/' . $name))) {
+        if (!($this->isPathAllowed(rtrim($path, '/') . '/' . $name))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot create the folder under the selected directory.')
             );
