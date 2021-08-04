@@ -22,7 +22,7 @@ use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
-use \Magento\Framework\Serialize\SerializerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
@@ -64,7 +64,7 @@ class Reorder
     private $reorderHelper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -94,9 +94,9 @@ class Reorder
     private $guestCartResolver;
 
     /**
-     * @var SerializerInterface
+     * @var OrderInfoBuyRequestGetter
      */
-    private $serializer;
+    private $orderInfoBuyRequestGetter;
 
     /**
      * @param OrderFactory $orderFactory
@@ -104,8 +104,9 @@ class Reorder
      * @param GuestCartResolver $guestCartResolver
      * @param CartRepositoryInterface $cartRepository
      * @param ReorderHelper $reorderHelper
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
+     * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -113,9 +114,9 @@ class Reorder
         GuestCartResolver $guestCartResolver,
         CartRepositoryInterface $cartRepository,
         ReorderHelper $reorderHelper,
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory,
-        \Magento\Framework\Serialize\SerializerInterface $serializer
+        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -124,7 +125,7 @@ class Reorder
         $this->customerCartProvider = $customerCartProvider;
         $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->serializer = $serializer;
+        $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
     }
 
     /**
@@ -251,9 +252,7 @@ class Reorder
      */
     private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): void
     {
-        $infoBuyRequest = $this->getInfoBuyRequest($orderItem);
-        $infoBuyRequest  = new \Magento\Framework\DataObject($infoBuyRequest );
-        $infoBuyRequest->setQty($orderItem->getQtyOrdered());
+        $infoBuyRequest = $this->orderInfoBuyRequestGetter->getInfoBuyRequest($orderItem);
 
         $addProductResult = null;
         try {
@@ -346,35 +345,4 @@ class Reorder
             ? __('Could not add the product with SKU "%1" to the shopping cart: %2', $sku, $message)
             : __('Could not add the product with SKU "%1" to the shopping cart', $sku));
     }
-
-    /**
-     *  Prepare Custom Option for order Item
-     *
-     * @param OrderItemInterface $orderItem
-     * @return array|null
-     */
-    private function getInfoBuyRequest(OrderItemInterface $orderItem): ?array
-    {
-        $info = $orderItem->getProductOptionByCode('info_buyRequest');
-        $options = $orderItem->getProductOptionByCode('options');
-
-        if (empty($options) || !is_array($info['options'])) {
-            return $info;
-        }
-
-        foreach ($options as $option) {
-            if (array_key_exists($option['option_id'], $info['options'])) {
-                try {
-                    $value = $this->serializer->unserialize($option['option_value']);
-                    $info['options'][$option['option_id']] = $value;
-                } catch (\InvalidArgumentException $exception) {
-                    //log the exception as warning
-                    $this->_logger->warning($exception);
-                }
-            }
-        }
-
-        return $info;
-    }
-
 }
