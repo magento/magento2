@@ -35,6 +35,7 @@ class SynchronizationFactory extends \Magento\MediaStorage\Model\File\Storage\Sy
      */
     public function __construct(ObjectManagerInterface $objectManager, Config $config)
     {
+        $this->objectManager = $objectManager;
         $this->config = $config;
         parent::__construct($objectManager);
     }

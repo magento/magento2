@@ -46,15 +46,15 @@ class Synchronization
     {
         $this->isEnabled = $config->isEnabled();
         $this->remoteDirectory = $filesystem->getDirectoryWrite(
-            DirectoryList::PUB, RemoteDriverPool::REMOTE);
+            DirectoryList::PUB, RemoteDriverPool::REMOTE
+        );
         $this->localDirectory = $filesystem->getDirectoryWrite(
             DirectoryList::PUB, LocalDriverPool::FILE
         );
     }
 
     /**
-     * Synchronize file
-     *
+     * Synchronize files from remote to local file system.
      * @param string $relativeFileName
      * @return void
      * @throws \LogicException

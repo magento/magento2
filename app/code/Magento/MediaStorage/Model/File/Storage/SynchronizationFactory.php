@@ -34,9 +34,10 @@ class SynchronizationFactory
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(ObjectManagerInterface $objectManager, string $instanceName =
-    '\\Magento\\MediaStorage\\Model\\File\\Storage\\Synchronization')
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        string $instanceName = '\\Magento\\MediaStorage\\Model\\File\\Storage\\Synchronization'
+    ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
     }
