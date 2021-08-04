@@ -40,16 +40,16 @@ define([
                     filename: record['encoded_id'],
                     'store_id': config.storeId,
                     'as_is': typeof targetElement !== 'function' && targetElement.is('textarea') ? 1 : 0,
-                    'force_static_path': typeof targetElement !== 'function' && targetElement.data('force_static_path') ? 1 : 0,
+                    'force_static_path': typeof targetElement !== 'function' && targetElement.data('force_static_path')
+                        ? 1 : 0,
                     'form_key': FORM_KEY
                 },
                 context: this,
                 showLoader: true
             }).done($.proxy(function (data) {
-                if(typeof targetElement === 'function') {
+                if (typeof targetElement === 'function') {
                     targetElement(data.content);
-                }
-                else if (targetElement.is('textarea')) {
+                } else if (targetElement.is('textarea')) {
                     this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();
                     $(targetElement).trigger('change');
