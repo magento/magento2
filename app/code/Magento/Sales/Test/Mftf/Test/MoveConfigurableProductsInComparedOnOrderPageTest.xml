@@ -156,9 +156,21 @@
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert products in items ordered grid -->
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createFirstConfigProduct.name$$" stepKey="seeFirstProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$123.00" stepKey="seeFirstProductPrice"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('2', 'Product')}}" userInput="$$createSecondConfigProduct.name$$" stepKey="seeSecondProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('2', 'Price')}}" userInput="$123.00" stepKey="seeSecondProductPrice"/>
+        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductName">
+            <argument name="expectedValue" value="$$createFirstConfigProduct.name$$"/>
+        </actionGroup>    
+        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductPrice">
+            <argument name="columnName" value="Price"/>
+            <argument name="expectedValue" value="$123.00"/>
+        </actionGroup>  
+        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductName">
+            <argument name="rowIndex" value="2"/>
+            <argument name="expectedValue" value="$$createSecondConfigProduct.name$$"/>
+        </actionGroup>    
+        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductPrice">
+            <argument name="rowIndex" value="2"/>
+            <argument name="columnName" value="Price"/>
+            <argument name="expectedValue" value="$123.00"/>
+        </actionGroup>  
     </test>
 </tests>
