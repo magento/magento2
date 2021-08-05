@@ -86,8 +86,6 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown(): void
     {
-        $directoryName = 'testDir';
-        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
         $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
         $scopeConfig->setValue(

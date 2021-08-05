@@ -89,8 +89,9 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $directoryName = 'testDir';
-        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/' . $directoryName;
-        $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $this->mediaDirectory->delete(
+            $this->mediaDirectory->getRelativePath($this->imagesHelper->getStorageRoot() . '/' . $directoryName)
+        );
         $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
         $scopeConfig->setValue(
             self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,

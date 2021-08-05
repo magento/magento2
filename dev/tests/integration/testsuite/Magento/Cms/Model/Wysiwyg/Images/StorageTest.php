@@ -29,11 +29,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
 
     /**
-     * @var string
-     */
-    protected static $_baseDir;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -59,33 +54,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     private $origConfigValue;
 
     /**
-     * @inheritdoc
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    // phpcs:disable
-    public static function setUpBeforeClass(): void
-    {
-        self::$_baseDir = Bootstrap::getObjectManager()->get(
-            \Magento\Cms\Helper\Wysiwyg\Images::class
-        )->getCurrentPath() . 'MagentoCmsModelWysiwygImagesStorageTest';
-        if (!file_exists(self::$_baseDir)) {
-            mkdir(self::$_baseDir);
-        }
-        touch(self::$_baseDir . '/1.swf');
-    }
-    // phpcs:enable
+    private $mediaDirectory;
 
     /**
-     * @inheritdoc
+     * @var string
      */
-    // phpcs:ignore
-    public static function tearDownAfterClass(): void
-    {
-        Bootstrap::getObjectManager()->create(
-            File::class
-        )->deleteDirectory(
-            self::$_baseDir
-        );
-    }
+    private $fullDirectoryPath;
+
+    /**
+     * @var \Magento\Cms\Helper\Wysiwyg\Images
+     */
+    private $imagesHelper;
 
     /**
      * @inheritdoc
@@ -94,6 +75,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
+        $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . '/MagentoCmsModelWysiwygImagesStorageTest';
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $config = $this->objectManager->get(ScopeConfigInterface::class);
         $this->origConfigValue = $config->getValue(
             self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
@@ -110,6 +95,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown(): void
     {
+        $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
         $scopeConfig->setValue(
             self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
@@ -133,7 +119,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $modifiableFilePath
         );
         $this->storage->resizeFile($modifiableFilePath);
-        $collection = $this->storage->getFilesCollection(self::$_baseDir, 'image');
+        $collection = $this->storage->getFilesCollection($this->fullDirectoryPath, '/image');
         $this->assertInstanceOf(Collection::class, $collection);
         foreach ($collection as $item) {
             $thumbUrl = parse_url($item->getThumbUrl(), PHP_URL_PATH);
@@ -211,8 +197,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
-        $this->assertTrue(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath);
+        $this->assertTrue(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -273,8 +259,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir, $storageType);
-        $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath, $storageType);
+        $this->assertFalse(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -320,8 +306,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
-        $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath);
+        $this->assertFalse(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 

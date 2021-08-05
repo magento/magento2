@@ -1032,7 +1032,7 @@ class Storage extends \Magento\Framework\DataObject
                 // Find indexes of the relevant allowed dirs based on the path segment
                 $subDirKeys = array_keys(array_column($allowedDirs, $index), $pathSegment);
                 $dirs = [];
-                // Rebuild the allowed dirs based on the find indexes
+                // Rebuild the allowed dirs based on the found indexes
                 foreach ($subDirKeys as $subDirKey) {
                     $dirs[] = $allowedDirs[$subDirKey];
                 }
