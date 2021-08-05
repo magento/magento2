@@ -15,6 +15,9 @@
             <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-16488"/>
+            <skip>
+                <issueId value="MQE-2834" />
+            </skip>
             <group value="checkout"/>
         </annotations>
 
