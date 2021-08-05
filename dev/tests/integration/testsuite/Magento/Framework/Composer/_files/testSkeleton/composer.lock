@@ -2577,24 +2577,12 @@
                         "lib/internal/LinLibertineFont"
                     ],
                     [
-                        "lib/web/FormData.js",
-                        "lib/web/FormData.js"
-                    ],
-                    [
-                        "lib/web/MutationObserver.js",
-                        "lib/web/MutationObserver.js"
-                    ],
-                    [
                         "lib/web/blank.html",
                         "lib/web/blank.html"
                     ],
                     [
                         "lib/web/css",
                         "lib/web/css"
-                    ],
-                    [
-                        "lib/web/es6-collections.js",
-                        "lib/web/es6-collections.js"
                     ],
                     [
                         "lib/web/extjs",
@@ -2651,10 +2639,6 @@
                     [
                         "lib/web/matchMedia.js",
                         "lib/web/matchMedia.js"
-                    ],
-                    [
-                        "lib/web/modernizr",
-                        "lib/web/modernizr"
                     ],
                     [
                         "lib/web/moment-timezone-with-data.js",
