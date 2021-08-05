@@ -52,7 +52,7 @@ class MinifierTest extends TestCase
     protected $filesystemMock;
 
     /**
-     * Initialize testable object
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -93,10 +93,12 @@ class MinifierTest extends TestCase
     }
 
     /**
-     * Covered method getPathToMinified
+     * Covered method getPathToMinified.
+     *
+     * @return void
      * @test
      */
-    public function testGetPathToMinified()
+    public function testGetPathToMinified(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -113,12 +115,13 @@ class MinifierTest extends TestCase
     // @codingStandardsIgnoreStart
 
     /**
-     * Covered method minify and test regular expressions
+     * Covered method minify and test regular expressions.
      * @test
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testMinify()
+    public function testMinify(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -227,10 +230,12 @@ TEXT;
     // @codingStandardsIgnoreEnd
 
     /**
-     * Contain method modify and getPathToModified
+     * Contain method modify and getPathToModified.
+     *
+     * @return void
      * @test
      */
-    public function testGetMinified()
+    public function testGetMinified(): void
     {
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
@@ -242,10 +247,9 @@ TEXT;
             ->willReturn($file);
 
         $this->htmlDirectoryMock
-            ->expects($this->at(1))
             ->method('isExist')
-            ->with($relativeGeneratedPath)
-            ->willReturn(false);
+            ->withConsecutive([$relativeGeneratedPath])
+            ->willReturnOnConsecutiveCalls(false);
 
         $this->htmlDirectoryMock
             ->expects($this->once())

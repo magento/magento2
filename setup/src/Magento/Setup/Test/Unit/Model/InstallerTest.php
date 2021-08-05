@@ -69,7 +69,7 @@ namespace Magento\Setup\Test\Unit\Model {
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
             ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
-            ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
+            ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend'
         ];
 
         /**
@@ -206,7 +206,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
                 ConfigOptionsListConstants::KEY_NAME => 'magento',
                 ConfigOptionsListConstants::KEY_USER => 'magento',
-                ConfigOptionsListConstants::KEY_PASSWORD => '',
+                ConfigOptionsListConstants::KEY_PASSWORD => ''
             ]
         ];
 
@@ -225,6 +225,9 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         private $patchApplierFactoryMock;
 
+        /**
+         * @inheritDoc
+         */
         protected function setUp(): void
         {
             $this->filePermissions = $this->createMock(FilePermissions::class);
@@ -271,9 +274,11 @@ namespace Magento\Setup\Test\Unit\Model {
         }
 
         /**
-         * Instantiates the object with mocks
+         * Instantiates the object with mocks.
+         *
          * @param MockObject|bool $connectionFactory
          * @param MockObject|bool $objectManagerProvider
+         *
          * @return Installer
          */
         private function createObject($connectionFactory = false, $objectManagerProvider = false)
@@ -316,10 +321,12 @@ namespace Magento\Setup\Test\Unit\Model {
         /**
          * @param array $request
          * @param array $logMessages
+         *
+         * @return void
          * @dataProvider installDataProvider
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function testInstall(array $request, array $logMessages)
+        public function testInstall(array $request, array $logMessages): void
         {
             $this->config->expects($this->atLeastOnce())
                 ->method('get')
@@ -337,7 +344,8 @@ namespace Magento\Setup\Test\Unit\Model {
             $setup = $this->createMock(Setup::class);
             $table = $this->createMock(Table::class);
             $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->setMethods(['getSchemaListener', 'newTable', 'getTables'])
+                ->onlyMethods(['newTable', 'getTables'])
+                ->addMethods(['getSchemaListener'])
                 ->getMockForAbstractClass();
             $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
             $connection->expects($this->once())->method('getTables')->willReturn([]);
@@ -433,7 +441,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @return array
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-        public function installDataProvider()
+        public function installDataProvider(): array
         {
             return [
                 [
@@ -474,7 +482,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
                         ['Sample Data is installed with errors. See log file for details']
-                    ],
+                    ]
                 ],
                 [
                     'request' => [
@@ -487,7 +495,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         AdminAccount::KEY_PASSWORD => '123',
                         AdminAccount::KEY_EMAIL => 'admin@example.com',
                         AdminAccount::KEY_FIRST_NAME => 'John',
-                        AdminAccount::KEY_LAST_NAME => 'Doe',
+                        AdminAccount::KEY_LAST_NAME => 'Doe'
                     ],
                     'logMessages' => [
                         ['Starting Magento installation:'],
@@ -526,19 +534,19 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
                         ['Sample Data is installed with errors. See log file for details']
-                    ],
-                ],
+                    ]
+                ]
             ];
         }
 
         /**
          * Test for InstallDataFixtures
          *
-         * @dataProvider testInstallDataFixturesDataProvider
-         *
          * @param bool $keepCache
          * @param array $expectedToEnableCacheTypes
+         *
          * @return void
+         * @dataProvider testInstallDataFixturesDataProvider
          */
         public function testInstallDataFixtures(bool $keepCache, array $expectedToEnableCacheTypes): void
         {
@@ -621,11 +629,14 @@ namespace Magento\Setup\Test\Unit\Model {
                 'do not keep a cache' => [
                     false,
                     ['block_html', 'full_page', 'layout']
-                ],
+                ]
             ];
         }
 
-        public function testCheckInstallationFilePermissions()
+        /**
+        * @return void
+        */
+        public function testCheckInstallationFilePermissions(): void
         {
             $this->filePermissions
                 ->expects($this->once())
@@ -634,7 +645,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->object->checkInstallationFilePermissions();
         }
 
-        public function testCheckInstallationFilePermissionsError()
+        /**
+         * @return void
+         */
+        public function testCheckInstallationFilePermissionsError(): void
         {
             $this->expectException('Exception');
             $this->expectExceptionMessage('Missing write permissions to the following paths:');
@@ -645,7 +659,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->object->checkInstallationFilePermissions();
         }
 
-        public function testCheckExtensions()
+        /**
+         * @return void
+         */
+        public function testCheckExtensions(): void
         {
             $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
                 ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]
@@ -653,7 +670,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->object->checkExtensions();
         }
 
-        public function testCheckExtensionsError()
+        /**
+        * @return void
+        */
+        public function testCheckExtensionsError(): void
         {
             $this->expectException('Exception');
             $this->expectExceptionMessage('Missing following extensions: \'foo\'');
@@ -666,7 +686,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->object->checkExtensions();
         }
 
-        public function testCheckApplicationFilePermissions()
+        /**
+        * @return void
+        */
+        public function testCheckApplicationFilePermissions(): void
         {
             $this->filePermissions
                 ->expects($this->once())
@@ -678,7 +701,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->assertSame(['message' => [$expectedMessage]], $this->object->getInstallInfo());
         }
 
-        public function testUpdateModulesSequence()
+        /**
+        * @return void
+        */
+        public function testUpdateModulesSequence(): void
         {
             $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles')->willReturn(
                 [
@@ -687,28 +713,43 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $installer = $this->prepareForUpdateModulesTests();
 
-            $this->logger->expects($this->at(0))->method('log')->with('Cache types config flushed successfully');
-            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(2))->method('log')->with('File system cleanup:');
-            $this->logger->expects($this->at(3))->method('log')
-                ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
-            $this->logger->expects($this->at(4))->method('log')->with('Updating modules:');
+            $this->logger
+                ->method('log')
+                ->withConsecutive(
+                    ['Cache types config flushed successfully'],
+                    ['Cache cleared successfully'],
+                    ['File system cleanup:'],
+                    ['The directory \'/generation\' doesn\'t exist - skipping cleanup'],
+                    ['Updating modules:']
+                );
+
             $installer->updateModulesSequence(false);
         }
 
-        public function testUpdateModulesSequenceKeepGenerated()
+        /**
+        * @return void
+        */
+        public function testUpdateModulesSequenceKeepGenerated(): void
         {
             $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedClasses');
 
             $installer = $this->prepareForUpdateModulesTests();
 
-            $this->logger->expects($this->at(0))->method('log')->with('Cache types config flushed successfully');
-            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(2))->method('log')->with('Updating modules:');
+            $this->logger
+                ->method('log')
+                ->withConsecutive(
+                    ['Cache types config flushed successfully'],
+                    ['Cache cleared successfully'],
+                    ['Updating modules:']
+                );
+
             $installer->updateModulesSequence(true);
         }
 
-        public function testUninstall()
+        /**
+        * @return void
+        */
+        public function testUninstall(): void
         {
             $this->config->expects($this->once())
                 ->method('get')
@@ -736,11 +777,6 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->willReturnMap([
                     [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
                 ]);
-            $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
-            $this->logger
-                ->expects($this->at(2))
-                ->method('log')
-                ->with('No database connection defined - skipping database cleanup');
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
             $cacheManager->expects($this->once())->method('clean');
@@ -748,24 +784,20 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('get')
                 ->with(Manager::class)
                 ->willReturn($cacheManager);
-            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
+
             $this->logger
-                ->expects($this->at(4))
                 ->method('log')
-                ->with("The directory '/var' doesn't exist - skipping cleanup");
-            $this->logger
-                ->expects($this->at(5))
-                ->method('log')
-                ->with("The directory '/static' doesn't exist - skipping cleanup");
-            $this->logger
-                ->expects($this->at(6))
-                ->method('log')
-                ->with("The file '/config/ConfigOne.php' doesn't exist - skipping cleanup");
-            $this->logger
-                ->expects($this->at(7))
-                ->method('log')
-                ->with("The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup");
+                ->withConsecutive(
+                    ['Starting Magento uninstallation:'],
+                    ['Cache cleared successfully'],
+                    ['No database connection defined - skipping database cleanup'],
+                    ['File system cleanup:'],
+                    ["The directory '/var' doesn't exist - skipping cleanup"],
+                    ["The directory '/static' doesn't exist - skipping cleanup"],
+                    ["The file '/config/ConfigOne.php' doesn't exist - skipping cleanup"],
+                    ["The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup"]
+                );
+
             $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
             $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->willReturn(
                 [
@@ -777,23 +809,33 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->object->uninstall();
         }
 
-        public function testCleanupDb()
+        /**
+        * @return void
+        */
+        public function testCleanupDb(): void
         {
             $this->config->expects($this->once())
                 ->method('get')
                 ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
                 ->willReturn(self::$dbConfig);
-            $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn(
-                '`magento`'
-            );
-            $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
-            $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
+            $this->connection
+                ->method('quoteIdentifier')
+                ->with('magento')
+                ->willReturn('`magento`');
+
+            $this->connection
+                ->method('query')
+                ->withConsecutive(
+                    ['DROP DATABASE IF EXISTS `magento`'],
+                    ['CREATE DATABASE IF NOT EXISTS `magento`'],
+                );
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
             $this->object->cleanupDb();
         }
 
         /**
-         * Prepare mocks for update modules tests and returns the installer to use
+         * Prepare mocks for update modules tests and returns the installer to use.
+         *
          * @return Installer
          */
         private function prepareForUpdateModulesTests()
@@ -801,7 +843,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $allModules = [
                 'Foo_One' => [],
                 'Bar_Two' => [],
-                'New_Module' => [],
+                'New_Module' => []
             ];
 
             $cacheManager = $this->createMock(Manager::class);
