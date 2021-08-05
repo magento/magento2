@@ -40,7 +40,7 @@ class WriteFactory
     }
 
     /**
-     * Create a remote storage writable directory
+     * Create a remote storage write instance
      *
      * @param WriteInterface $remoteDirectoryWrite
      * @param WriteInterface $localDirectoryWrite
