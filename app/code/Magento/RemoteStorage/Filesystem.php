@@ -41,12 +41,17 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
     private $remoteStorageWriteFactory;
 
     /**
+     * Filesystem constructor.
+     *
      * @param BaseFilesystem\DirectoryList $directoryList
      * @param ReadFactory $readFactory
      * @param WriteFactory $writeFactory
      * @param Config $config
      * @param DriverPool $driverPool
      * @param array $directoryCodes
+     * @param RemoteStorageWriteFactory|null $remoteStorageWriteFactory
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(
         BaseFilesystem\DirectoryList $directoryList,
