@@ -421,9 +421,10 @@ class StorageTest extends TestCase
     /**
      * General conditions for testGetDirsCollection tests
      *
-     * @param string $path
-     * @param array $collectionArray
-     * @param array $expectedRemoveKeys
+     * @param $path
+     * @param $callNum
+     * @param $dirsFilter
+     * @throws \Exception
      */
     protected function generalTestGetDirsCollection($path, $callNum, $dirsFilter)
     {
