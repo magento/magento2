@@ -59,7 +59,7 @@
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>    
     
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
             <argument name="expectedValue" value="$$createProduct.name$$"/>
