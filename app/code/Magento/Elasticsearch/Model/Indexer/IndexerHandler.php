@@ -161,7 +161,7 @@ class IndexerHandler implements IndexerInterface
                     foreach ($document['category_ids'] as $id) {
                         $categoryIds[] = $id;
                     }
-                } else {
+                } elseif (is_numeric($document['category_ids'])) {
                     $categoryIds[] = $document['category_ids'];
                 }
             }
