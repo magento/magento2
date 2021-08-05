@@ -10,7 +10,7 @@ namespace Magento\Quote\Model\Product\Plugin;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\Catalog\Api\TierPriceStorageInterface;
-use Magento\Catalog\Api\Data\TierPriceInterface;
+use Magento\Catalog\Api\Data\TierPriceInterfaceFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,9 +29,9 @@ class UpdateQuoteTest extends TestCase
     private $tierPriceStorage;
 
     /**
-     * @var TierPriceInterface
+     * @var TierPriceInterfaceFactory
      */
-    private $tierPrice;
+    private $tierPriceFactory;
 
     /**
      * @inheritdoc
@@ -43,7 +43,7 @@ class UpdateQuoteTest extends TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->getQuoteByReservedOrderId = $objectManager->get(GetQuoteByReservedOrderId::class);
         $this->tierPriceStorage = $objectManager->get(TierPriceStorageInterface::class);
-        $this->tierPrice = $objectManager->get(TierPriceInterface::class);
+        $this->tierPriceFactory = $objectManager->get(TierPriceInterfaceFactory::class);
     }
 
     /**
@@ -62,28 +62,17 @@ class UpdateQuoteTest extends TestCase
         $quoteItem = current($quote->getItems());
         $product = $quoteItem->getProduct();
 
-        $this->tierPrice->setPrice($product->getPrice());
-        $this->tierPrice->setPriceType('fixed');
-        $this->tierPrice->setWebsiteId(0);
-        $this->tierPrice->setSku($product->getSku());
-        $this->tierPrice->setCustomerGroup('ALL GROUPS');
-        $this->tierPrice->setQuantity(1);
-        $this->tierPriceStorage->update([$this->tierPrice]);
+        $tierPrice = $this->tierPriceFactory->create();
+        $tierPrice->setPrice($product->getPrice());
+        $tierPrice->setPriceType('fixed');
+        $tierPrice->setWebsiteId(0);
+        $tierPrice->setSku($product->getSku());
+        $tierPrice->setCustomerGroup('ALL GROUPS');
+        $tierPrice->setQuantity(1);
+        $this->tierPriceStorage->update([$tierPrice]);
 
-        /** @var QuoteResource $quoteResource */
-        $quoteResource = $quote->getResource();
-        /** @var AdapterInterface $connection */
-        $connection = $quoteResource->getConnection();
-        $select = $connection->select()
-            ->from(
-                $quoteResource->getTable('quote'),
-                ['trigger_recollect']
-            )->where(
-                "reserved_order_id = 'test_order_with_simple_product_without_address'"
-            );
-
-        $quoteRow = $connection->fetchRow($select);
-        $this->assertNotEmpty($quoteRow);
-        $this->assertTrue((bool)$quoteRow['trigger_recollect']);
+        $quote = $this->getQuoteByReservedOrderId->execute($quoteId);
+        $this->assertNotEmpty($quote->getTriggerRecollect());
+        $this->assertTrue((bool)$quote->getTriggerRecollect());
     }
 }
