@@ -421,12 +421,12 @@ class StorageTest extends TestCase
     /**
      * General conditions for testGetDirsCollection tests
      *
-     * @param $path
-     * @param $callNum
-     * @param $dirsFilter
+     * @param string $path
+     * @param int $callNum
+     * @param string $dirsFilter
      * @throws \Exception
      */
-    protected function generalTestGetDirsCollection($path, $callNum, $dirsFilter)
+    protected function generalTestGetDirsCollection(string $path, int $callNum, string $dirsFilter)
     {
         /** @var StorageCollection|MockObject $storageCollectionMock */
         $storageCollectionMock = $this->getMockBuilder(\Magento\Cms\Model\Wysiwyg\Images\Storage\Collection::class)
