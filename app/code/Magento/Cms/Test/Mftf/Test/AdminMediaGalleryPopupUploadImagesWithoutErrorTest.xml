@@ -21,7 +21,7 @@
         <before>
             <!--Enable WYSIWYG options-->
             <comment userInput="Enable WYSIWYG options" stepKey="commentEnableWYSIWYG"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYGEditor"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYGEditor"/>
             <magentoCLI command="config:set cms/wysiwyg/editor 'TinyMCE 4'" stepKey="setValueWYSIWYGEditor"/>
             <!--Create block-->
             <comment userInput="Create block" stepKey="commentCreateBlock"/>
@@ -31,7 +31,7 @@
         <after>
             <!--Disable WYSIWYG options-->
             <comment userInput="Disable WYSIWYG options" stepKey="commentDisableWYSIWYG"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createBlock" stepKey="deleteBlock" />
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
