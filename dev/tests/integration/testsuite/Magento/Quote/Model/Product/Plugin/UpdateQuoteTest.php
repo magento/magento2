@@ -50,6 +50,7 @@ class UpdateQuoteTest extends TestCase
      * Test to update the column trigger_recollect is 1 from quote table.
      *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testUpdateQuoteRecollectAfterChangeProductPrice(): void
