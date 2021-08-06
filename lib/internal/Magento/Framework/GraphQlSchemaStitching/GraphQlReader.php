@@ -354,7 +354,7 @@ class GraphQlReader implements ReaderInterface
         $typesKindsPattern = '(type|interface|input|union)';
         $enumKindsPattern = '(enum)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
-        $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
+        $typeDefinitionPattern = '([^\{\}]*)(\{[\s\t\n\r^\}]*\})';
         $spacePattern = '([\s\t\n\r]+)';
 
         //add placeholder in empty types
