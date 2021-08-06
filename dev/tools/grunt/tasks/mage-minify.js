@@ -6,10 +6,7 @@ module.exports = function (grunt) {
     'use strict';
 
     var compressor  = require('node-minify'),
-        _           = require('underscore'),
-        root = typeof self == 'object' && self.self === self && self ||
-            typeof global == 'object' && global.global === global && global || Function('return this')() || {};
-    root._ = _;
+        _           = require('underscore');
 
     /**
      * Helper function used to create config object for compressor.

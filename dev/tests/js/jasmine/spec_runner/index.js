@@ -6,10 +6,7 @@
 'use strict';
 
 var tasks = [],
-    _ = require('underscore'),
-    root = typeof self == 'object' && self.self === self && self ||
-        typeof global == 'object' && global.global === global && global || Function('return this')() || {};
-root._ = _;
+    _ = require('underscore');
 
 function init(grunt, options) {
     var _                   = require('underscore'),
