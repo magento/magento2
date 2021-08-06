@@ -200,7 +200,7 @@ class Login extends Action implements HttpPostActionInterface
         if ($this->config->isStoreManualChoiceEnabled()) {
             $storeId = (int)$this->_request->getParam('store_id');
             if (empty($storeId)) {
-                $messages[] = __('Please select a Store View to login in.');
+                $messages[] = __('Please select a Store to login in.');
                 return $this->prepareJsonResult($messages);
             }
         } elseif ($this->share->isGlobalScope()) {

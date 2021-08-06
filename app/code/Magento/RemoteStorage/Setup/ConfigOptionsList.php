@@ -12,7 +12,6 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
-use Magento\RemoteStorage\Driver\Cache\CacheFactory;
 use Magento\RemoteStorage\Driver\DriverFactoryPool;
 use Magento\RemoteStorage\Driver\DriverPool as RemoteDriverPool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
@@ -142,6 +141,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig): array
     {
+        // deployment configuration existence determines readiness of object manager to resolve remote storage drivers
+        $isDeploymentConfigExists = (bool) $deploymentConfig->getConfigData();
+
+        if (!$isDeploymentConfigExists) {
+            return [];
+        }
+
         $driver = $options[self::OPTION_REMOTE_STORAGE_DRIVER] ?? DriverPool::FILE;
 
         if ($driver === DriverPool::FILE) {
@@ -164,9 +170,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             try {
                 $this->driverFactoryPool->get($driver)->createConfigured(
                     (array)$configData->getData()['remote_storage']['config'],
-                    (string)$options[self::OPTION_REMOTE_STORAGE_PREFIX],
-                    CacheFactory::ADAPTER_MEMORY,
-                    []
+                    (string)$options[self::OPTION_REMOTE_STORAGE_PREFIX]
                 )->test();
             } catch (LocalizedException $exception) {
                 $message = $exception->getMessage();

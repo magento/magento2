@@ -73,6 +73,7 @@ define([
                 ['Magento_Paypal/js/view/payment/method-renderer/paypal-express-abstract'],
                 function (Constr) {
                     paypalExpressAbstract = new Constr({
+                        isChecked: ko.observable(true),
                         provider: 'provName',
                         name: 'test',
                         index: 'test',

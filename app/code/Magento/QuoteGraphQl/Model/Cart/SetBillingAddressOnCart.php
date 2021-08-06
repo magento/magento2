@@ -49,42 +49,46 @@ class SetBillingAddressOnCart
      * @param array $billingAddressInput
      * @return void
      * @throws GraphQlAuthorizationException
-     * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
      */
     public function execute(ContextInterface $context, CartInterface $cart, array $billingAddressInput): void
     {
+        $this->checkForInputExceptions($billingAddressInput);
+
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
+        $useForShipping = $billingAddressInput['use_for_shipping'] ?? false;
+        $sameAsShipping = $billingAddressInput['same_as_shipping'] ?? false;
 
-        if (!$customerAddressId && !isset($billingAddressInput['address']['save_in_address_book']) && $addressInput) {
+        if (!$customerAddressId && $addressInput && !isset($addressInput['save_in_address_book'])) {
             $addressInput['save_in_address_book'] = true;
         }
 
-        // Need to keep this for BC of `use_for_shipping` field
-        $sameAsShipping = isset($billingAddressInput['use_for_shipping'])
-            ? (bool)$billingAddressInput['use_for_shipping'] : false;
-        $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
-            ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
-
-        $this->checkForInputExceptions($billingAddressInput);
-
-        $addresses = $cart->getAllShippingAddresses();
-        if ($sameAsShipping && count($addresses) > 1) {
-            throw new GraphQlInputException(
-                __('Using the "same_as_shipping" option with multishipping is not possible.')
+        if ($sameAsShipping) {
+            $this->validateCanUseShippingForBilling($cart);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnShippingAddress($cart);
+            $useForShipping = false;
+        } elseif ($customerAddressId) {
+            $this->validateCanUseCustomerAddress($context);
+            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
+                (int)$customerAddressId,
+                (int)$context->getUserId()
             );
+        } else {
+            $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         }
 
-        $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
+        if ($useForShipping) {
+            $this->validateCanUseBillingForShipping($cart);
+        }
 
-        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
+        $this->validateBillingAddress($billingAddress);
+        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $useForShipping);
     }
 
     /**
      * Check for the input exceptions
      *
-     * @param array $billingAddressInput
+     * @param array|null $billingAddressInput
      * @throws GraphQlInputException
      */
     private function checkForInputExceptions(
@@ -92,10 +96,11 @@ class SetBillingAddressOnCart
     ) {
         $customerAddressId = $billingAddressInput['customer_address_id'] ?? null;
         $addressInput = $billingAddressInput['address'] ?? null;
+        $sameAsShipping = $billingAddressInput['same_as_shipping'] ?? null;
 
-        if (null === $customerAddressId && null === $addressInput) {
+        if (null === $customerAddressId && null === $addressInput && empty($sameAsShipping)) {
             throw new GraphQlInputException(
-                __('The billing address must contain either "customer_address_id" or "address".')
+                __('The billing address must contain either "customer_address_id", "address", or "same_as_shipping".')
             );
         }
 
@@ -107,41 +112,79 @@ class SetBillingAddressOnCart
     }
 
     /**
-     * Create billing address
+     * Validate that the quote is capable of using the shipping address as the billing address.
      *
-     * @param ContextInterface $context
-     * @param int|null $customerAddressId
-     * @param array $addressInput
-     * @return Address
-     * @throws GraphQlAuthorizationException
+     * @param CartInterface $quote
      * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
      */
-    private function createBillingAddress(
-        ContextInterface $context,
-        ?int $customerAddressId,
-        ?array $addressInput
-    ): Address {
-        if (null === $customerAddressId) {
-            $billingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
-        } else {
-            if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-                throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-            }
+    private function validateCanUseShippingForBilling(CartInterface $quote)
+    {
+        $shippingAddresses = $quote->getAllShippingAddresses();
 
-            $billingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
-                (int)$customerAddressId,
-                (int)$context->getUserId()
+        if (count($shippingAddresses) > 1) {
+            throw new GraphQlInputException(
+                __('Could not use the "same_as_shipping" option, because multiple shipping addresses have been set.')
             );
         }
+
+        if (empty($shippingAddresses) || $shippingAddresses[0]->validate() !== true) {
+            throw new GraphQlInputException(
+                __('Could not use the "same_as_shipping" option, because the shipping address has not been set.')
+            );
+        }
+    }
+
+    /**
+     * Validate that the quote is capable of using the billing address as the shipping address.
+     *
+     * @param CartInterface $quote
+     * @throws GraphQlInputException
+     */
+    private function validateCanUseBillingForShipping(CartInterface $quote)
+    {
+        $shippingAddresses = $quote->getAllShippingAddresses();
+
+        if (count($shippingAddresses) > 1) {
+            throw new GraphQlInputException(
+                __('Could not use the "use_for_shipping" option, because multiple shipping addresses have already been set.')
+            );
+        }
+    }
+
+    /**
+     * Validate that the currently logged-in customer is authorized to use a customer address id as the billing address.
+     *
+     * @param ContextInterface $context
+     * @throws GraphQlAuthorizationException
+     */
+    private function validateCanUseCustomerAddress(ContextInterface $context)
+    {
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
+    }
+
+    /**
+     * Validate the billing address to be set on the cart.
+     *
+     * @param Address $billingAddress
+     * @return Address
+     * @throws GraphQlInputException
+     */
+    private function validateBillingAddress(Address $billingAddress)
+    {
         $errors = $billingAddress->validate();
+
         if (true !== $errors) {
-            $e = new GraphQlInputException(__('Billing address errors'));
+            $e = new GraphQlInputException(__('An error occurred while processing the billing address.'));
+
             foreach ($errors as $error) {
                 $e->addError(new GraphQlInputException($error));
             }
+
             throw $e;
         }
+
         return $billingAddress;
     }
 }
