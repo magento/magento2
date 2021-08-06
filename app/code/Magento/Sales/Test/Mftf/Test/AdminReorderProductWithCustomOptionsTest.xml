@@ -18,7 +18,6 @@
             <group value="sales"/>
         </annotations>
 
-
         <!-- Reorder created order -->
         <actionGroup ref="OpenOrderByIdActionGroup" after="placeReorder" stepKey="adminOpenOrderById">
             <argument name="orderId" value="{$grabOrderNumber}"/>
