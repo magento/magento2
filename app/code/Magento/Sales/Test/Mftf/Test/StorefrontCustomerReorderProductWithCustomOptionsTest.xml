@@ -119,11 +119,10 @@
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderForCreatingShipment">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
+
         <!-- Create Shipment for the order -->
         <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="startCreateShipment"/>
         <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
-
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
         <!-- Login to storefront as Customer for Reorder -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginForReorder">

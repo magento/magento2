@@ -39,7 +39,7 @@ class OrderInfoBuyRequestGetter
     }
 
     /**
-     *  Prepare Custom Option for order Item by unserializing custom options data
+     * Prepare Custom Option for order Item by unserializing custom options data
      *
      * @param OrderItemInterface $orderItem
      * @return DataObject
