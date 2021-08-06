@@ -61,6 +61,8 @@ class UpdateQuoteTest extends TestCase
         $this->assertNotEmpty($quote->getItems());
         $quoteItem = current($quote->getItems());
         $product = $quoteItem->getProduct();
+        $quoteItem->setProductId($product->getRowId());
+        $quote->save();
 
         $tierPrice = $this->tierPriceFactory->create();
         $tierPrice->setPrice($product->getPrice());
