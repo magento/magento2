@@ -37,10 +37,10 @@
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
-            <argument name="name" value="testImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
-            <argument name="name" value="testImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
@@ -66,11 +66,11 @@
         </actionGroup>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterInMediaGalleryGrid"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderToDelete">
-            <argument name="name" value="testImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
         <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
-            <argument name="name" value="testImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </test>
