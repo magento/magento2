@@ -25,7 +25,10 @@
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <wait time="5" stepKey="waitFilterReallyCleared"/>
+            <comment userInput="BIC workaround" stepKey="waitFilterReallyCleared"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
                 <argument name="name" value="assetTestFolder"/>
             </actionGroup>
@@ -35,7 +38,10 @@
             </actionGroup>
         </after>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-        <wait time="5" stepKey="waitFilterReallyCleared"/>
+        <comment userInput="BIC workaround" stepKey="waitFilterReallyCleared"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
             <argument name="name" value="assetTestFolder"/>
