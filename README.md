@@ -90,3 +90,4 @@ We have channels for each project. These channels are recommended for new member
 * [general](https://magentocommeng.slack.com/archives/C4YS78WE6): Open chat for introductions and Magento 2 questions
 * [github](https://magentocommeng.slack.com/archives/C7KB93M32): Support for GitHub issues, pull requests, and processes
 * [public-backlog](https://magentocommeng.slack.com/archives/CCV3J3RV5): Discussions of the Magento 2 backlog
+
