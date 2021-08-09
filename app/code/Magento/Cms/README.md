@@ -6,7 +6,7 @@ The CMS module provides the create, edit, and manage functionality on pages for 
 
 ### Wysiwyg
 
-The Wysiwyg UI component is a customizable and configurable TinyMCE4 editor.
+The Wysiwyg UI component is a customizable and configurable TinyMCE editor.
 
 The default implementation has the following customizations:
 

@@ -20,9 +20,7 @@ var config = {
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
-        'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
-        'MutationObserver': ['es6-collections'],
         'matchMedia': {
             'exports': 'mediaCheck'
         },
