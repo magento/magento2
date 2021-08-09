@@ -401,6 +401,7 @@ define([
                     expect(parameters).toEqual(jasmine.objectContaining({
                         sections: 'section'
                     }));
+
                     return deferred.promise();
                 });
 
