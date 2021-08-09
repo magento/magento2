@@ -83,7 +83,7 @@ define([
             sectionDataIds = {};
 
         _.each(sections, function (sectionData, sectionName) {
-            sectionDataIds[sectionName] = sectionData.data_id;
+            sectionDataIds[sectionName] = sectionData['data_id'];
 
             if (typeof sectionData.content !== 'undefined') {
                 mageCacheStorage[sectionName] = sectionData;
