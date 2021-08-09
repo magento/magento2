@@ -86,6 +86,9 @@
         <!-- Assert Order status in frontend grid -->
         <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
+            <argument name="orderId" value="$orderId"/>
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
     </test>
 </tests>
