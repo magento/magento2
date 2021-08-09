@@ -105,9 +105,8 @@ class UpdateCustomerAccount
         $filteredData = array_diff_key($data, array_flip($this->restrictedKeys));
         $this->dataObjectHelper->populateWithArray($customer, $filteredData, CustomerInterface::class);
         
-        $storeId = $store->getId();
         try {
-            $customer->setStoreId($storeId);
+            $customer->setStoreId($store->getId());
         } catch (NoSuchEntityException $exception) {
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
         }
