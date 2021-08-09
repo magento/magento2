@@ -109,7 +109,7 @@ class InlineUtilTest extends TestCase
                 'script',
                 ['src' => 'http://magento.com/static/some-script.js'],
                 null,
-                '<script src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;some-script.js"/>',
+                '<script src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;some-script.js"></script>',
                 [new FetchPolicy('script-src', false, ['http://magento.com'])]
             ],
             'inline-script' => [
@@ -222,7 +222,7 @@ class InlineUtilTest extends TestCase
                 'iframe',
                 ['src' => 'http://magento.com/some-page'],
                 null,
-                '<iframe src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;some-page"/>',
+                '<iframe src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;some-page"></iframe>',
                 [new FetchPolicy('frame-src', false, ['http://magento.com'])]
             ],
             'remote-track' => [
@@ -243,21 +243,21 @@ class InlineUtilTest extends TestCase
                 'video',
                 ['src' => 'https://magento.com/static/video.mp4'],
                 null,
-                '<video src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;video.mp4"/>',
+                '<video src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;video.mp4"></video>',
                 [new FetchPolicy('media-src', false, ['https://magento.com'])]
             ],
             'remote-audio' => [
                 'audio',
                 ['src' => 'https://magento.com/static/audio.mp3'],
                 null,
-                '<audio src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;audio.mp3"/>',
+                '<audio src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;audio.mp3"></audio>',
                 [new FetchPolicy('media-src', false, ['https://magento.com'])]
             ],
             'remote-object' => [
                 'object',
                 ['data' => 'http://magento.com/static/flash.swf'],
                 null,
-                '<object data="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;flash.swf"/>',
+                '<object data="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;flash.swf"></object>',
                 [new FetchPolicy('object-src', false, ['http://magento.com'])]
             ],
             'remote-embed' => [
@@ -272,7 +272,7 @@ class InlineUtilTest extends TestCase
                 ['code' => 'SomeApplet.class', 'archive' => 'https://magento.com/applet/my-applet.jar'],
                 null,
                 '<applet code="SomeApplet.class" '
-                    . 'archive="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;applet&#x2F;my-applet.jar"/>',
+                    . 'archive="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;applet&#x2F;my-applet.jar"></applet>',
                 [new FetchPolicy('object-src', false, ['https://magento.com'])]
             ]
         ];
@@ -307,7 +307,7 @@ class InlineUtilTest extends TestCase
         $eventListener = $this->secureHtmlRenderer->renderEventListener('onclick', 'alert()');
 
         $this->assertEquals(
-            '<script src="https&#x3A;&#x2F;&#x2F;test.magento.com&#x2F;static&#x2F;script.js"/>',
+            '<script src="https&#x3A;&#x2F;&#x2F;test.magento.com&#x2F;static&#x2F;script.js"></script>',
             $scriptTag
         );
         $this->assertEquals(

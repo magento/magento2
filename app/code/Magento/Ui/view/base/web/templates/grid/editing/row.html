@@ -9,13 +9,13 @@
 
         <td class="data-grid-actions-cell" if="$parent.isActionsColumn($data)">
             <span class="data-grid-row-changed" css="_changed: $parent.hasChanges">
-                <span class="data-grid-row-changed-tooltip" translate="'Record contains unsaved changes.'"/>
+                <span class="data-grid-row-changed-tooltip" translate="'Record contains unsaved changes.'"></span>
             </span>
         </td>
 
         <!-- ko ifnot: $parent.isActionsColumn($data) -->
-            <td if="$col.isEditor" template="$parent.fieldTmpl"/>
-            <td ifnot="$col.isEditor" css="$col.getFieldClass()" template="$col.getBody()"/>
+            <td if="$col.isEditor" template="$parent.fieldTmpl"></td>
+            <td ifnot="$col.isEditor" css="$col.getFieldClass()" template="$col.getBody()"></td>
         <!-- /ko -->
 
     <!-- /ko -->

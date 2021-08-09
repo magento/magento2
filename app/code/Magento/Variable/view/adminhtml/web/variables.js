@@ -175,7 +175,7 @@ define([
                          * @param {String} message
                          */
                         insertMethod: function (message) {
-                            $wrapper = jQuery('<div/>').html(message);
+                            $wrapper = jQuery('<div></div>').html(message);
 
                             jQuery('.modal-header .page-main-actions').after($wrapper);
                         }
