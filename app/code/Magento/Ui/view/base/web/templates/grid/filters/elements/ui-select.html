@@ -63,7 +63,7 @@
              visible="validationLoading"
              if="validationLoading">
             <div class="spinner">
-                <span repeat="8"/>
+                <span repeat="8"></span>
             </div>
         </div>
     </div>
@@ -107,7 +107,7 @@
            visible="loading"
            if="loading">
         <div class="spinner">
-            <span repeat="8"/>
+            <span repeat="8"></span>
         </div>
     </div>
         <!-- ko if: filterOptions -->
@@ -127,7 +127,7 @@
                 valueUpdate: 'afterkeydown',
                 value: filterInputValue,
                 hasFocus: filterOptionsFocus
-                ">
+                "/>
             <label
                     class="admin__action-multiselect-search-label"
                     data-action="advanced-select-search"
@@ -141,7 +141,7 @@
         </div>
         <div ifnot="options().length"
              class="admin__action-multiselect-empty-area">
-            <ul data-bind="html: getEmptyOptionsUnsanitizedHtml()"/>
+            <ul html="getEmptyOptionsUnsanitizedHtml()"></ul>
         </div>
         <!-- /ko -->
         <ul class="admin__action-multiselect-menu-inner _root"

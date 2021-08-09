@@ -9,7 +9,7 @@
     <type name="Magento\Ui\Block\Wysiwyg\ActiveEditor">
         <arguments>
             <argument name="availableAdapterPaths" xsi:type="array">
-                <item name="Magento_TestModuleWysiwygConfig/wysiwyg/tinymce4TestAdapter" xsi:type="string"/>
+                <item name="Magento_TestModuleWysiwygConfig/wysiwyg/tinymceTestAdapter" xsi:type="string"/>
             </argument>
         </arguments>
     </type>

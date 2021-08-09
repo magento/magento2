@@ -17,7 +17,6 @@ use Magento\ImportExport\Model\Import;
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
@@ -25,10 +24,7 @@ use Magento\ImportExport\Model\Import;
 class ProductCategoriesTest extends ProductTestBase
 {
     /**
-     * @magentoAppArea adminhtml
      * @dataProvider categoryTestDataProvider
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testProductCategories($fixture, $separator)
     {
@@ -74,9 +70,6 @@ class ProductCategoriesTest extends ProductTestBase
     }
 
     /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      */
@@ -149,9 +142,7 @@ class ProductCategoriesTest extends ProductTestBase
     }
 
     /**
-     * @magentoAppArea adminhtml
      * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/CatalogImportExport/_files/update_category_duplicates.php
      */
     public function testProductDuplicateCategories()
