@@ -31,6 +31,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_paymentConfig;
 
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $_layoutFactory;
 
     /**
      * Factory for payment method models
@@ -70,6 +74,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Config\Initial $initialConfig
     ) {
         parent::__construct($context);
+        $this->_layoutFactory = $_layoutFactory;
         $this->_methodFactory = $paymentMethodFactory;
         $this->_appEmulation = $appEmulation;
         $this->_paymentConfig = $paymentConfig;
@@ -176,7 +181,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getInfoBlock(InfoInterface $info, LayoutInterface $layout = null)
     {
-        $layout = $layout ?: $layoutFactory->create();
+        $layout = $layout ?: $this->_layoutFactory->create();
         $blockType = $info->getMethodInstance()->getInfoBlockType();
         $block = $layout->createBlock($blockType);
         $block->setInfo($info);
