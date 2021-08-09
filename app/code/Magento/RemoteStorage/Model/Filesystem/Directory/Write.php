@@ -121,7 +121,7 @@ class Write implements WriteInterface
      */
     public function create($path = null)
     {
-        $this->remoteDirectoryWrite->create($path);
+        return $this->remoteDirectoryWrite->create($path);
     }
 
     /**
