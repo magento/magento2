@@ -52,7 +52,7 @@ class FaviconTest extends TestCase
     protected $mediaDir;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

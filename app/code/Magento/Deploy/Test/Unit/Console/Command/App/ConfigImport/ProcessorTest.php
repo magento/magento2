@@ -78,7 +78,7 @@ class ProcessorTest extends TestCase
     private $processor;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

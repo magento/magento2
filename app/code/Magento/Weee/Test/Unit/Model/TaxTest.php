@@ -113,7 +113,7 @@ class TaxTest extends TestCase
     protected $objectManager;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

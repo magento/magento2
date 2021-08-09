@@ -44,7 +44,7 @@ class ThemeUninstallerTest extends TestCase
     private $output;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

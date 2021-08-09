@@ -47,7 +47,7 @@ class CurrencyTest extends TestCase
     const TEST_EXCEPTION_CURRENCY_LOCALE = 'es_ES';
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -36,7 +36,7 @@ class ManagerTest extends TestCase
     private $_outputConfig;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -74,7 +74,7 @@ class SessionTest extends TestCase
     protected $_model;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

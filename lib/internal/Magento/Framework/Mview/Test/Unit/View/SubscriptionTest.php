@@ -69,7 +69,7 @@ class SubscriptionTest extends TestCase
     private $defaultProcessor;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -45,7 +45,7 @@ class GeneratePatchCommandTest extends TestCase
     private $command;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

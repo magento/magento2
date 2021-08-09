@@ -84,7 +84,7 @@ class ItemCarrierTest extends TestCase
     protected $redirectMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

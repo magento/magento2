@@ -33,7 +33,7 @@ class PoolTest extends TestCase
     protected $_frontendInstances = [];
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

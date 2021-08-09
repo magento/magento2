@@ -18,7 +18,7 @@ class LikeQueryModifierTest extends TestCase
     private $objectManager;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

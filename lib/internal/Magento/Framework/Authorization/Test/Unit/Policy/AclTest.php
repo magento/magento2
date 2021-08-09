@@ -31,7 +31,7 @@ class AclTest extends TestCase
     protected $_aclBuilderMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

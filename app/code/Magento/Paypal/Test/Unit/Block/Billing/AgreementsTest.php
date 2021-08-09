@@ -84,7 +84,7 @@ class AgreementsTest extends TestCase
     private $block;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

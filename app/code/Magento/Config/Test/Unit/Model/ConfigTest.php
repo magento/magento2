@@ -106,7 +106,7 @@ class ConfigTest extends TestCase
     private $scopeTypeNormalizer;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

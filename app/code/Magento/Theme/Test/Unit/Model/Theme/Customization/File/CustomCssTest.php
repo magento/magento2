@@ -38,7 +38,7 @@ class CustomCssTest extends TestCase
     protected $object;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

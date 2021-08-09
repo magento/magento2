@@ -147,7 +147,7 @@ class ProcessCronQueueObserverTest extends TestCase
     protected $time = 1501538400;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

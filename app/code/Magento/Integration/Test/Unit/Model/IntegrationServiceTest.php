@@ -52,7 +52,7 @@ class IntegrationServiceTest extends TestCase
     private $_integrationData;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

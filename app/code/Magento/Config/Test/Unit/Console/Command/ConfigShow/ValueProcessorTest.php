@@ -54,7 +54,7 @@ class ValueProcessorTest extends TestCase
     private $valueProcessor;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

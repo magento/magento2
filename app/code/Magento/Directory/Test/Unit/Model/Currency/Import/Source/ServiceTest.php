@@ -25,7 +25,7 @@ class ServiceTest extends TestCase
     protected $_importConfig;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

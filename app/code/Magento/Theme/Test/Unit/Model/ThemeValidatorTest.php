@@ -44,7 +44,7 @@ class ThemeValidatorTest extends TestCase
     protected $configData;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

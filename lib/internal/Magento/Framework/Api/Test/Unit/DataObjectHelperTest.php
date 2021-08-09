@@ -73,7 +73,7 @@ class DataObjectHelperTest extends TestCase
     protected $joinProcessorMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

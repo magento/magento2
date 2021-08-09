@@ -97,7 +97,7 @@ class ConfigTest extends TestCase
     protected $localeMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

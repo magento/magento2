@@ -45,7 +45,7 @@ class ResourceConnectionTest extends TestCase
     private $configMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

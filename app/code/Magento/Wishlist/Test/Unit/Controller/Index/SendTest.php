@@ -124,7 +124,7 @@ class SendTest extends TestCase
     protected $customerSession;
 
     /**
-     * @return void
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

@@ -61,7 +61,7 @@ class InfoTest extends TestCase
     protected $methodInstanceMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

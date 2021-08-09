@@ -23,7 +23,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Index
+ * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexTest extends TestCase
@@ -84,7 +84,7 @@ class IndexTest extends TestCase
     private $registryMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -135,7 +135,7 @@ class IndexTest extends TestCase
     }
 
     /**
-     * @covers Index::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
      *
      * @return void
      */
@@ -175,7 +175,7 @@ class IndexTest extends TestCase
     }
 
     /**
-     * @covers Index::execute
+     * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
      *
      * @return void
      */

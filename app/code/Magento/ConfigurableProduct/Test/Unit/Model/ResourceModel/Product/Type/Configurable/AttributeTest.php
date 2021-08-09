@@ -44,7 +44,7 @@ class AttributeTest extends TestCase
     protected $relation;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -53,7 +53,7 @@ class CountryTest extends TestCase
     private $helper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

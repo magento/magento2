@@ -37,7 +37,7 @@ class XmlConverterCommandTest extends TestCase
     private $xsltProcessorFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

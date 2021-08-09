@@ -30,7 +30,7 @@ class NodeMergingConfigTest extends TestCase
     protected $nodePathMatcher;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

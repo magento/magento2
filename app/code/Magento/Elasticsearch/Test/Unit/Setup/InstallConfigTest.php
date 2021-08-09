@@ -26,7 +26,7 @@ class InstallConfigTest extends TestCase
     private $configWriterMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setup(): void
     {

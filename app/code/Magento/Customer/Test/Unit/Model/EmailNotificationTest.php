@@ -120,7 +120,7 @@ class EmailNotificationTest extends TestCase
     private $emulation;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

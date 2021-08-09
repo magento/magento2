@@ -98,7 +98,7 @@ class DeleteTest extends TestCase
     private $roleModelMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

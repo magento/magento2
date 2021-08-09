@@ -49,7 +49,7 @@ class AggregateTest extends TestCase
     private $_overridingThemeFiles;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

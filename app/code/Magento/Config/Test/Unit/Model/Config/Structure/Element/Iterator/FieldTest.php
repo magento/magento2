@@ -30,7 +30,7 @@ class FieldTest extends TestCase
     protected $_groupMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -52,7 +52,7 @@ class FieldTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

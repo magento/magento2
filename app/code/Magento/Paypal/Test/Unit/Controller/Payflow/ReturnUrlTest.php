@@ -100,7 +100,7 @@ class ReturnUrlTest extends TestCase
     private $paymentFailures;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

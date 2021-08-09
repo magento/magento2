@@ -38,7 +38,7 @@ class PhpScannerTest extends TestCase
     private $log;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

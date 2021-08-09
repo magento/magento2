@@ -33,7 +33,7 @@ class AbstractStorageTest extends TestCase
     protected $storage;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

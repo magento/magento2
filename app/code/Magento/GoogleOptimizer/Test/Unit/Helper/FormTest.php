@@ -38,7 +38,7 @@ class FormTest extends TestCase
     protected $_experimentCodeMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

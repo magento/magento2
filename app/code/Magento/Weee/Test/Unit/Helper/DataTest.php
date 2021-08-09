@@ -66,7 +66,7 @@ class DataTest extends TestCase
     private $serializerMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

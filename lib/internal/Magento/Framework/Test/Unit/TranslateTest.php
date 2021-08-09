@@ -117,7 +117,7 @@ class TranslateTest extends TestCase
     protected $fileDriver;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -52,7 +52,7 @@ class DbStorageTest extends TestCase
     private $storage;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

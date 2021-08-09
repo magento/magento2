@@ -148,7 +148,7 @@ class LayoutTest extends TestCase
     private $serializer;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void

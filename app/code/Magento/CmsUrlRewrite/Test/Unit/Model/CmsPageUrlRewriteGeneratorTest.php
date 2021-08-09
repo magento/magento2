@@ -46,7 +46,7 @@ class CmsPageUrlRewriteGeneratorTest extends TestCase
     private $urlRewriteGenerator;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

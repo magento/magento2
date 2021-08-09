@@ -74,7 +74,7 @@ class HttpTest extends TestCase
     private $cookieLifeTime = 3600;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -117,7 +117,7 @@ class HttpTest extends TestCase
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

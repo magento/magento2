@@ -45,7 +45,7 @@ class TaxTest extends TestCase
     protected $selectMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

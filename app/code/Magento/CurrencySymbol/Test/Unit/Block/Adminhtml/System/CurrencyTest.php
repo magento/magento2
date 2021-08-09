@@ -31,7 +31,7 @@ class CurrencyTest extends TestCase
     protected $objectManagerHelper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -39,7 +39,7 @@ class CurrencyTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

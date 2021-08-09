@@ -76,7 +76,7 @@ class EditTest extends TestCase
     protected $model;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

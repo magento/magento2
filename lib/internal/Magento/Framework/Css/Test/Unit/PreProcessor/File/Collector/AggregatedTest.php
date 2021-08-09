@@ -57,7 +57,7 @@ class AggregatedTest extends TestCase
     protected $loggerMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setup(): void
     {

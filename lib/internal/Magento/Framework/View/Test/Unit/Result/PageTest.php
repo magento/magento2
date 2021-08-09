@@ -86,7 +86,7 @@ class PageTest extends TestCase
     private $entitySpecificHandlesListMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

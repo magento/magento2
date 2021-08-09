@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ProfilerTest extends TestCase
 {
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

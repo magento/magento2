@@ -124,7 +124,7 @@ class ConfirmTest extends TestCase
     protected $redirectResultMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -83,7 +83,7 @@ class RemoveTest extends TestCase
     protected $formKeyValidator;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -112,7 +112,7 @@ class RemoveTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc 
      */
     protected function tearDown(): void
     {

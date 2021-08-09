@@ -38,7 +38,7 @@ class DesignLoaderTest extends TestCase
     protected $appState;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

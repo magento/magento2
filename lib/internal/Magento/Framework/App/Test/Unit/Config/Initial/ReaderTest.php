@@ -61,7 +61,7 @@ class ReaderTest extends TestCase
     protected $domFactoryMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

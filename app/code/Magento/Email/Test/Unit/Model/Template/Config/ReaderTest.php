@@ -55,7 +55,7 @@ class ReaderTest extends TestCase
     protected $_paths;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

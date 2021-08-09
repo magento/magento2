@@ -45,7 +45,7 @@ class LinkTest extends TestCase
     protected $linkRenderer;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

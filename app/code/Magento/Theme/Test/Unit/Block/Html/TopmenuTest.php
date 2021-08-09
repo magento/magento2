@@ -91,7 +91,7 @@ HTML;
     // @codingStandardsIgnoreEnd
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

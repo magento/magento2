@@ -39,7 +39,7 @@ class AbstractAdjustmentTest extends TestCase
     protected $data;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

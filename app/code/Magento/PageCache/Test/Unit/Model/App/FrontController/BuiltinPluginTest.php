@@ -69,7 +69,7 @@ class BuiltinPluginTest extends TestCase
     protected $requestMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

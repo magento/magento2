@@ -27,7 +27,7 @@ class ScopeResolverTest extends TestCase
     protected $_object;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

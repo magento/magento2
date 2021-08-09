@@ -32,7 +32,7 @@ class AbstractFileTest extends TestCase
     protected $_abstractLoaderMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -32,7 +32,7 @@ class BatchSizeManagementTest extends TestCase
     private $loggerMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -56,7 +56,7 @@ class BuilderTest extends TestCase
     private $cleaner;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

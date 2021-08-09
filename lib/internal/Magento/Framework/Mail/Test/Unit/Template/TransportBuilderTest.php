@@ -82,7 +82,7 @@ class TransportBuilderTest extends TestCase
     private $emailMessageInterfaceFactoryMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

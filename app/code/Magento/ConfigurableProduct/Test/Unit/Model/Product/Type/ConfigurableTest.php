@@ -148,7 +148,7 @@ class ConfigurableTest extends TestCase
     private $catalogConfig;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

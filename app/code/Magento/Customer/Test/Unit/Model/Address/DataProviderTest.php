@@ -84,7 +84,7 @@ class DataProviderTest extends TestCase
     private $model;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

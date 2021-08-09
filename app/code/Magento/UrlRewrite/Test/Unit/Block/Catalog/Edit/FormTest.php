@@ -61,7 +61,7 @@ class FormTest extends TestCase
     protected $layout;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

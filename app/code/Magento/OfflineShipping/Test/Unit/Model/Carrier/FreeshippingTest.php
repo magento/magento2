@@ -55,7 +55,7 @@ class FreeshippingTest extends TestCase
     private $helper;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

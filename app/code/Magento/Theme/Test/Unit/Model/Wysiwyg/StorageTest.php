@@ -84,7 +84,7 @@ class StorageTest extends TestCase
     private $filesystemDriver;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -147,7 +147,7 @@ class StorageTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

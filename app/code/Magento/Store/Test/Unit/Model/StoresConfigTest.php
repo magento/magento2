@@ -43,7 +43,7 @@ class StoresConfigTest extends TestCase
     protected $_config;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

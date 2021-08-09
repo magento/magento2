@@ -49,7 +49,7 @@ class ReaderTest extends TestCase
     protected $helper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

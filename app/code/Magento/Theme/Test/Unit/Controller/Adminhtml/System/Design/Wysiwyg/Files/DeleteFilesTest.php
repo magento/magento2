@@ -47,7 +47,7 @@ class DeleteFilesTest extends TestCase
     protected $response;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -61,7 +61,7 @@ class ConfigTest extends TestCase
     protected $model;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -100,7 +100,7 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

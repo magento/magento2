@@ -30,7 +30,7 @@ class XmlScannerTest extends TestCase
     protected $_testFiles = [];
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

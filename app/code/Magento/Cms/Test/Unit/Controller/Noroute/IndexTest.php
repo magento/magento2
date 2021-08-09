@@ -57,7 +57,7 @@ class IndexTest extends TestCase
     protected $resultPageMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

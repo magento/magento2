@@ -80,7 +80,7 @@ class ImporterTest extends TestCase
     private $saveProcessorMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

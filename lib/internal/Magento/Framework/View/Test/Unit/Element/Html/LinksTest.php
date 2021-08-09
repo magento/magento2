@@ -33,7 +33,7 @@ class LinksTest extends TestCase
     protected $context;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

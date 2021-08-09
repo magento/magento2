@@ -49,7 +49,7 @@ class StoreRepositoryTest extends TestCase
     private $appConfigMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

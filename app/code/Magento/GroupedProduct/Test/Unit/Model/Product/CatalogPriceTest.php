@@ -54,7 +54,7 @@ class CatalogPriceTest extends TestCase
     protected $associatedProductMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc 
      */
     protected function setUp(): void
     {

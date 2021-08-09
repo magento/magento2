@@ -38,7 +38,7 @@ class CacheInvalidateTest extends TestCase
     private $cacheInvalidate;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

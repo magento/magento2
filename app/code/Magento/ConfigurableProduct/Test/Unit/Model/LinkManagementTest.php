@@ -65,7 +65,7 @@ class LinkManagementTest extends TestCase
     protected $dataObjectHelperMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

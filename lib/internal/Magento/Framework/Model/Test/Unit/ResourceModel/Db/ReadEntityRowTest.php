@@ -43,7 +43,7 @@ class ReadEntityRowTest extends TestCase
     protected $metadataPool;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

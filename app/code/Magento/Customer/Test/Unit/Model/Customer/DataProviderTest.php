@@ -72,7 +72,7 @@ class DataProviderTest extends TestCase
     private $fileUploaderDataResolver;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

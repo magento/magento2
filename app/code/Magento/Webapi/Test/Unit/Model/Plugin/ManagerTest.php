@@ -51,7 +51,7 @@ class ManagerTest extends TestCase
     protected $integrationConfigMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

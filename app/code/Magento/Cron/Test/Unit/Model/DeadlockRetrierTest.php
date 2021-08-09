@@ -40,7 +40,7 @@ class DeadlockRetrierTest extends TestCase
     private $modelMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

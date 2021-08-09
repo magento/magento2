@@ -46,7 +46,7 @@ class DeleteFolderTest extends TestCase
     protected $storageHelper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

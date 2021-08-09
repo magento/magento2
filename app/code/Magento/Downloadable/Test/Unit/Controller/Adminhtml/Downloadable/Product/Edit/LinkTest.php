@@ -58,7 +58,7 @@ class LinkTest extends TestCase
     protected $downloadHelper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

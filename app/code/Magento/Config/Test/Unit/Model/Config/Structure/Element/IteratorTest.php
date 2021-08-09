@@ -26,7 +26,7 @@ class IteratorTest extends TestCase
     protected $_flyweightMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -38,7 +38,7 @@ class IteratorTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

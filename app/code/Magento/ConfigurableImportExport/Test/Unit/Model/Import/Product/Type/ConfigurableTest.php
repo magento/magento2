@@ -95,7 +95,7 @@ class ConfigurableTest extends AbstractImportTestCase
     protected $productEntityLinkField = 'entity_id';
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

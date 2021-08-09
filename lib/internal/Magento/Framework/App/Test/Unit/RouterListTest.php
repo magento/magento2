@@ -32,7 +32,7 @@ class RouterListTest extends TestCase
     protected $routerList;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -77,7 +77,7 @@ class ConvertToXmlTest extends TestCase
     protected $component;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

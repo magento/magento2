@@ -62,7 +62,7 @@ class PopupTest extends TestCase
     protected $resultLayoutMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc 
      */
     protected function setUp(): void
     {

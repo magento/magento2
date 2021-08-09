@@ -103,7 +103,7 @@ class ElasticsearchTest extends TestCase
     private $arrayManager;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -56,7 +56,7 @@ class InlineEditTest extends TestCase
     protected $controller;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

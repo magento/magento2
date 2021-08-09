@@ -22,7 +22,7 @@ class CompositeTest extends TestCase
     protected $factoryMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

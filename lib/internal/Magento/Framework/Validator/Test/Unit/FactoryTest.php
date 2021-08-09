@@ -62,7 +62,7 @@ class FactoryTest extends TestCase
     private $data = ['/tmp/moduleOne/etc/validation.xml'];
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -98,7 +98,7 @@ class FactoryTest extends TestCase
     /**
      * Restore default translator.
      *
-     * @return void
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

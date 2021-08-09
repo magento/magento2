@@ -81,7 +81,7 @@ class ConsumerTest extends TestCase
     protected $validDataArray;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

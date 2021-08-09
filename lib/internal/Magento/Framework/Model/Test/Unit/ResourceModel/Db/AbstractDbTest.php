@@ -48,7 +48,7 @@ class AbstractDbTest extends TestCase
     protected $relationProcessorMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

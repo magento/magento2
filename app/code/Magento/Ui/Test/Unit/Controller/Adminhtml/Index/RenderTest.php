@@ -121,7 +121,7 @@ class RenderTest extends TestCase
     private $escaperMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

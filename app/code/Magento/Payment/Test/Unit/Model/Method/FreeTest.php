@@ -43,7 +43,7 @@ class FreeTest extends TestCase
     protected $currencyPrice;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

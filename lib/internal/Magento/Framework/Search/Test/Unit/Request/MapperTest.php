@@ -78,7 +78,7 @@ class MapperTest extends TestCase
     private $filterBool;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

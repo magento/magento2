@@ -50,7 +50,7 @@ class StatusTest extends TestCase
     private $object;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -57,7 +57,7 @@ class ConfigModelTest extends TestCase
     private $configOptionsList;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -75,7 +75,7 @@ class ManagerTest extends TestCase
     private $exceptionMessageFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

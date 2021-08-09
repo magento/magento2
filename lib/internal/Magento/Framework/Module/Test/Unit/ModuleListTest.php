@@ -48,7 +48,7 @@ class ModuleListTest extends TestCase
     private $model;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

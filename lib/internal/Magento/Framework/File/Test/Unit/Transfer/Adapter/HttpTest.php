@@ -41,7 +41,7 @@ class HttpTest extends TestCase
     private $mime;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

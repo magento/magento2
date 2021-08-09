@@ -28,7 +28,7 @@ class ConfigTest extends TestCase
     protected $frontendMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

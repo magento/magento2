@@ -79,7 +79,7 @@ class GroupedTest extends AbstractImportTestCase
     protected $entityModel;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

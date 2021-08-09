@@ -159,7 +159,7 @@ class CartTest extends TestCase
     private $cookieMetadataFactoryMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

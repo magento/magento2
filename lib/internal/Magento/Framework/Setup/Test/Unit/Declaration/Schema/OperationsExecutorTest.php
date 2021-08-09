@@ -79,7 +79,7 @@ class OperationsExecutorTest extends TestCase
     private $dropElement;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

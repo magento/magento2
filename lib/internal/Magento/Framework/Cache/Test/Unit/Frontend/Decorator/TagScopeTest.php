@@ -25,7 +25,7 @@ class TagScopeTest extends TestCase
     protected $_frontend;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -34,7 +34,7 @@ class TagScopeTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

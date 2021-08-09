@@ -37,7 +37,7 @@ class CountryValidatorTest extends TestCase
     protected $resultMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

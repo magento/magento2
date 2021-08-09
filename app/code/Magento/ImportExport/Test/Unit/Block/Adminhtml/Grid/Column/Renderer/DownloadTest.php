@@ -42,7 +42,7 @@ class DownloadTest extends TestCase
     private $escaperMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

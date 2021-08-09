@@ -37,7 +37,7 @@ class ComplexTypeStrategyTest extends TestCase
     protected $strategy;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -55,7 +55,7 @@ class ComplexTypeStrategyTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

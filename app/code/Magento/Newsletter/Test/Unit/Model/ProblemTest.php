@@ -65,7 +65,7 @@ class ProblemTest extends TestCase
     private $problemModel;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

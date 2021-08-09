@@ -107,7 +107,7 @@ class DirectiveTest extends TestCase
     private $driverMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

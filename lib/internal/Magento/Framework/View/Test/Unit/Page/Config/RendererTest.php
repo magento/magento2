@@ -94,7 +94,7 @@ class RendererTest extends TestCase
     protected $objectManagerHelper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

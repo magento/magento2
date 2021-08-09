@@ -41,7 +41,7 @@ class CrontabManagerTest extends TestCase
     private $crontabManager;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

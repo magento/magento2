@@ -45,7 +45,7 @@ class ProductVariationsBuilderTest extends TestCase
     protected $product;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

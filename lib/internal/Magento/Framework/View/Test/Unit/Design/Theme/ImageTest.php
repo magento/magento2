@@ -74,7 +74,7 @@ class ImageTest extends TestCase
     protected $imagePathMock;
 
     /**
-     * @inheirtDoc
+     * @return void
      */
     private function setupObjectManagerForCheckImageExist($return): void
     {
@@ -87,6 +87,9 @@ class ImageTest extends TestCase
         AppObjectManager::setInstance($objectManagerMock);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->setupObjectManagerForCheckImageExist(false);
@@ -135,7 +138,7 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {

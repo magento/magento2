@@ -56,7 +56,7 @@ class UpgradeCommandTest extends TestCase
     private $commandTester;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

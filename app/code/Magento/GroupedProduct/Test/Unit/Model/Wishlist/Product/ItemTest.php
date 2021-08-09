@@ -37,7 +37,7 @@ class ItemTest extends TestCase
     protected $subjectMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

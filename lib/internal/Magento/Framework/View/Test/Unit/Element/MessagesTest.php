@@ -53,7 +53,7 @@ class MessagesTest extends TestCase
     private $escaperMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

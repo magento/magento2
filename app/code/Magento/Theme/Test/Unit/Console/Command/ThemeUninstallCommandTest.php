@@ -97,7 +97,7 @@ class ThemeUninstallCommandTest extends TestCase
     private $tester;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

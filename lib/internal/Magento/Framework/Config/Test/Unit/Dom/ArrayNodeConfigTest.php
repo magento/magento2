@@ -30,7 +30,7 @@ class ArrayNodeConfigTest extends TestCase
     protected $nodePathMatcher;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

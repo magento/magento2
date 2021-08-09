@@ -90,7 +90,7 @@ class SourceTest extends TestCase
     private $readFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc 
      */
     protected function setUp(): void
     {

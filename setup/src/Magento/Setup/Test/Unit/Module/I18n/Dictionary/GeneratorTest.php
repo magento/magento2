@@ -52,7 +52,7 @@ class GeneratorTest extends TestCase
     protected $optionsResolverFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

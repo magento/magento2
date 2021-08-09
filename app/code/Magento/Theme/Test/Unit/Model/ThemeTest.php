@@ -77,7 +77,7 @@ class ThemeTest extends TestCase
     private $themeModelFactory;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -123,7 +123,7 @@ class ThemeTest extends TestCase
     }
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function tearDown(): void
     {
@@ -132,7 +132,7 @@ class ThemeTest extends TestCase
 
     /**
      * @return void
-     * @covers Theme::getThemeImage
+     * @covers \Magento\Theme\Model\Theme::getThemeImage
      */
     public function testThemeImageGetter(): void
     {
@@ -146,7 +146,7 @@ class ThemeTest extends TestCase
      *
      * @return void
      * @dataProvider isVirtualDataProvider
-     * @covers Theme::isVirtual
+     * @covers \Magento\Theme\Model\Theme::isVirtual
      */
     public function testIsVirtual($type, $isVirtual): void
     {
@@ -172,7 +172,7 @@ class ThemeTest extends TestCase
      *
      * @return void
      * @dataProvider isPhysicalDataProvider
-     * @covers Theme::isPhysical
+     * @covers \Magento\Theme\Model\Theme::isPhysical
      */
     public function testIsPhysical($type, $isPhysical): void
     {
@@ -198,7 +198,7 @@ class ThemeTest extends TestCase
      *
      * @return void
      * @dataProvider isVisibleDataProvider
-     * @covers Theme::isVisible
+     * @covers \Magento\Theme\Model\Theme::isVisible
      */
     public function testIsVisible($type, $isVisible): void
     {
@@ -226,7 +226,7 @@ class ThemeTest extends TestCase
      *
      * @return void
      * @dataProvider isDeletableDataProvider
-     * @covers Theme::isDeletable
+     * @covers \Magento\Theme\Model\Theme::isDeletable
      */
     public function testIsDeletable($themeType, $isDeletable): void
     {

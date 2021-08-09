@@ -65,7 +65,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     private $storeManagerMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

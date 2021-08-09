@@ -94,7 +94,7 @@ class ContextPluginTest extends TestCase
     protected $contextPlugin;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

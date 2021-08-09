@@ -44,7 +44,7 @@ class HeadTest extends TestCase
     protected $title;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

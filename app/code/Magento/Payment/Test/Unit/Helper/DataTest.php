@@ -53,7 +53,7 @@ class DataTest extends TestCase
     private $appEmulation;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

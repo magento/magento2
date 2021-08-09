@@ -70,7 +70,7 @@ class AbstractSwatchTest extends TestCase
     protected $connectionMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

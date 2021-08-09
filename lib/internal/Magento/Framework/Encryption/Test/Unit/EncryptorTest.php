@@ -44,7 +44,7 @@ class EncryptorTest extends TestCase
     private $keyValidatorMock;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

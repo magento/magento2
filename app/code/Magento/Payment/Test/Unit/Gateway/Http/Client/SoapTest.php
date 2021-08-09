@@ -46,7 +46,7 @@ class SoapTest extends TestCase
     private $gatewayClient;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -79,7 +79,7 @@ class DataProviderWithDefaultAddressesTest extends TestCase
     private $dataProvider;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

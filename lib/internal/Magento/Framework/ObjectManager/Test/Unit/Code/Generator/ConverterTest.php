@@ -51,7 +51,7 @@ class ConverterTest extends TestCase
     private $definedClassesMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -47,7 +47,7 @@ class BookmarkManagementTest extends TestCase
     protected $userContext;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

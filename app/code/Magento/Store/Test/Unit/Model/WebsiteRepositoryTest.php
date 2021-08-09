@@ -41,7 +41,7 @@ class WebsiteRepositoryTest extends TestCase
     private $appConfigMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

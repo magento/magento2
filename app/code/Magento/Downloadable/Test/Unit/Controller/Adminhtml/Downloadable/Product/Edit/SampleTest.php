@@ -59,7 +59,7 @@ class SampleTest extends TestCase
     protected $downloadHelper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

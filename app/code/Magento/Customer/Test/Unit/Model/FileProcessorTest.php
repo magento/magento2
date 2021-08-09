@@ -61,7 +61,7 @@ class FileProcessorTest extends TestCase
     private $mime;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

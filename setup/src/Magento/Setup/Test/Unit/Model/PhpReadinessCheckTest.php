@@ -47,7 +47,7 @@ class PhpReadinessCheckTest extends TestCase
     private $phpReadinessCheck;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

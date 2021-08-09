@@ -31,7 +31,7 @@ class DataTest extends TestCase
     protected $_helper;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

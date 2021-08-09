@@ -74,7 +74,7 @@ class RssTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

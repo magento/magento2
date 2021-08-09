@@ -89,7 +89,7 @@ class UrlTest extends TestCase
     private $hostChecker;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

@@ -38,7 +38,7 @@ class ValueTest extends TestCase
     protected $cacheTypeListMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {

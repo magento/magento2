@@ -48,7 +48,7 @@ class LockValidatorTest extends TestCase
     private $metadataPoolMock;
 
     /**
-     * @inheirtDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
