@@ -49,6 +49,7 @@
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Used in Products"/>

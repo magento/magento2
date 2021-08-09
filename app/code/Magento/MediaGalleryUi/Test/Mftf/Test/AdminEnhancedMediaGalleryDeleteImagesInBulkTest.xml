@@ -26,6 +26,7 @@
                 <argument name="category" value="$$category$$"/>
             </actionGroup>
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
                 <argument name="name" value="category"/>
             </actionGroup>
@@ -40,6 +41,7 @@
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandCategoryFolder">
                 <argument name="FolderName" value="category"/>
             </actionGroup>
