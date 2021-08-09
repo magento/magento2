@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * @covers Directive
+ * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DirectiveTest extends TestCase
@@ -206,7 +206,7 @@ class DirectiveTest extends TestCase
 
     /**
      * @return void
-     * @covers Directive::execute
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecute(): void
     {
@@ -249,7 +249,7 @@ class DirectiveTest extends TestCase
 
     /**
      * @return void
-     * @covers Directive::execute
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecuteException(): void
     {
@@ -331,7 +331,7 @@ class DirectiveTest extends TestCase
      * Test Execute With Deleted Image
      *
      * @return void
-     * @covers Directive::execute
+     * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
     public function testExecuteWithDeletedImage(): void
     {
