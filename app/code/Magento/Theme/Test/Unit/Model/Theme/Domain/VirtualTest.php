@@ -27,8 +27,8 @@ class VirtualTest extends TestCase
      * Test get existing staging theme.
      *
      * @return void
-     * @covers Virtual::__construct
-     * @covers Virtual::getStagingTheme
+     * @covers \Magento\Theme\Model\Theme\Domain\Virtual::__construct
+     * @covers \Magento\Theme\Model\Theme\Domain\Virtual::getStagingTheme
      */
     public function testGetStagingThemeExisting(): void
     {
@@ -59,8 +59,8 @@ class VirtualTest extends TestCase
      * Test creating staging theme.
      *
      * @return void
-     * @covers Virtual::_createStagingTheme
-     * @covers Virtual::getStagingTheme
+     * @covers \Magento\Theme\Model\Theme\Domain\Virtual::_createStagingTheme
+     * @covers \Magento\Theme\Model\Theme\Domain\Virtual::getStagingTheme
      */
     public function testGetStagingThemeNew(): void
     {
@@ -120,7 +120,7 @@ class VirtualTest extends TestCase
      * Test for is assigned method
      *
      * @return void
-     * @covers Virtual::isAssigned
+     * @covers \Magento\Theme\Model\Theme\Domain\Virtual::isAssigned
      */
     public function testIsAssigned(): void
     {
@@ -171,7 +171,7 @@ class VirtualTest extends TestCase
      * @test
      * @return void
      * @dataProvider physicalThemeDataProvider
-     * @covers Virtual::getPhysicalTheme
+     * @covers \Magento\Theme\Model\Theme\Domain\Virtual::getPhysicalTheme
      */
     public function testGetPhysicalTheme($data): void
     {
