@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\RemoteStorage\Plugin;
+namespace Magento\RemoteStorage\Plugin\File\Storage;
 
 use Magento\RemoteStorage\Model\File\Storage\Synchronization;
 use Magento\RemoteStorage\Model\Config;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Helps to synchronize files from remote to local file system
+ * This is a plugin to Magento\MediaStorage\Model\File\Storage\SynchronizationFactory.
  */
-class MediaStorage
+class SynchronizationFactory
 {
      /**
      * Object Manager instance
@@ -41,11 +41,11 @@ class MediaStorage
     }
 
     /**
-     * Create class instance with specified parameters
-     *
+     * Create remote synchronization instance
+     * @param Synchronization $subject
      * @param array $data
      */
-    public function aroundCreate(array $data = [])
+    public function beforeCreate(Synchronization $subject, array $data = [])
     {
         if ($this->config->isEnabled()) {
             return $this->objectManager->create(Synchronization::class, $data);
