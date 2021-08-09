@@ -6,6 +6,7 @@
 namespace Magento\ImportExport\Model\Import;
 
 use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Import adapter model
@@ -18,7 +19,7 @@ class Adapter
      * Adapter factory. Checks for availability, loads and create instance of import adapter object.
      *
      * @param string $type Adapter type ('csv', 'xml' etc.)
-     * @param Write $directory
+     * @param WriteInterface $directory
      * @param string $source
      * @param mixed $options OPTIONAL Adapter constructor options
      *
