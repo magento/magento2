@@ -74,7 +74,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Config\Initial $initialConfig
     ) {
         parent::__construct($context);
-        $this->_layoutFactory = $_layoutFactory;
+        $this->_layoutFactory = $layoutFactory;
         $this->_methodFactory = $paymentMethodFactory;
         $this->_appEmulation = $appEmulation;
         $this->_paymentConfig = $paymentConfig;
