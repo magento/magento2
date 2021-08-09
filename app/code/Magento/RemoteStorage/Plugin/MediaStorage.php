@@ -5,17 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\RemoteStorage\Model\File\Storage;
+namespace Magento\RemoteStorage\Plugin;
 
-use Magento\Framework\ObjectManagerInterface;
+use Magento\RemoteStorage\Model\File\Storage\Synchronization;
 use Magento\RemoteStorage\Model\Config;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Factory class for @see \Magento\RemoteStorage\Model\File\Storage\Synchronization
+ * Helps to synchronize files from remote to local file system
  */
-class SynchronizationFactory extends \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory
+class MediaStorage
 {
-    /**
+     /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
@@ -37,22 +38,17 @@ class SynchronizationFactory extends \Magento\MediaStorage\Model\File\Storage\Sy
     {
         $this->objectManager = $objectManager;
         $this->config = $config;
-        parent::__construct($objectManager);
     }
 
     /**
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\MediaStorage\Model\File\Storage\Synchronization|mixed
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function create(array $data = [])
+    public function aroundCreate(array $data = [])
     {
         if ($this->config->isEnabled()) {
             return $this->objectManager->create(Synchronization::class, $data);
         }
-        return parent::create($data);
     }
 }
