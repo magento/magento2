@@ -42,6 +42,7 @@ class SynchronizationFactory
 
     /**
      * Create remote synchronization instance
+     *
      * @param Synchronization $subject
      * @param array $data
      */
