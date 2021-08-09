@@ -73,7 +73,7 @@ namespace Magento\Setup\Test\Unit\Model {
             ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'magento',
             ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'magento',
             ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
-            ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
+            ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend'
         ];
 
         /**
@@ -200,7 +200,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ConfigOptionsListConstants::KEY_HOST => '127.0.0.1',
                 ConfigOptionsListConstants::KEY_NAME => 'magento',
                 ConfigOptionsListConstants::KEY_USER => 'magento',
-                ConfigOptionsListConstants::KEY_PASSWORD => '',
+                ConfigOptionsListConstants::KEY_PASSWORD => ''
             ]
         ];
 
@@ -219,6 +219,9 @@ namespace Magento\Setup\Test\Unit\Model {
          */
         private $patchApplierFactoryMock;
 
+        /**
+         * @inheritdoc
+         */
         protected function setUp(): void
         {
             $this->filePermissions = $this->createMock(FilePermissions::class);
@@ -368,37 +371,41 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects($this->any())
                 ->method('create')
-                ->willReturnMap([
-                                    [Manager::class, [], $cacheManager],
-                                    [\Magento\Framework\App\State::class, [], $appState],
-                                    [
-                                        PatchApplierFactory::class,
-                                        ['objectManager' => $this->objectManager],
-                                        $this->patchApplierFactoryMock
-                                    ],
-                                ]);
+                ->willReturnMap(
+                    [
+                        [Manager::class, [], $cacheManager],
+                        [\Magento\Framework\App\State::class, [], $appState],
+                        [
+                            PatchApplierFactory::class,
+                            ['objectManager' => $this->objectManager],
+                            $this->patchApplierFactoryMock
+                        ],
+                    ]
+                );
             $this->patchApplierMock->expects($this->exactly(2))->method('applySchemaPatch')->willReturnMap(
                 [
                     ['Bar_Two'],
-                    ['Foo_One'],
+                    ['Foo_One']
                 ]
             );
             $this->patchApplierMock->expects($this->exactly(2))->method('applyDataPatch')->willReturnMap(
                 [
                     ['Bar_Two'],
-                    ['Foo_One'],
+                    ['Foo_One']
                 ]
             );
             $this->objectManager->expects($this->any())
                 ->method('get')
-                ->willReturnMap([
-                                    [\Magento\Framework\App\State::class, $appState],
-                                    [Manager::class, $cacheManager],
-                                    [DeclarationInstaller::class, $this->declarationInstallerMock],
-                                    [Registry::class, $registry],
-                                    [SearchConfig::class, $searchConfigMock],
-                                    [RemoteStorageValidator::class, $remoteStorageValidatorMock],
-                                ]);
+                ->willReturnMap(
+                    [
+                        [\Magento\Framework\App\State::class, $appState],
+                        [Manager::class, $cacheManager],
+                        [DeclarationInstaller::class, $this->declarationInstallerMock],
+                        [Registry::class, $registry],
+                        [SearchConfig::class, $searchConfigMock],
+                        [RemoteStorageValidator::class, $remoteStorageValidatorMock]
+                    ]
+                );
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
             );
@@ -488,7 +495,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         AdminAccount::KEY_PASSWORD => '123',
                         AdminAccount::KEY_EMAIL => 'admin@example.com',
                         AdminAccount::KEY_FIRST_NAME => 'John',
-                        AdminAccount::KEY_LAST_NAME => 'Doe',
+                        AdminAccount::KEY_LAST_NAME => 'Doe'
                     ],
                     'logMessages' => [
                         ['Starting Magento installation:'],
@@ -654,31 +661,35 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->objectManager->expects(static::any())
                 ->method('create')
-                ->willReturnMap([
-                                    [Manager::class, [], $cacheManager],
-                                    [\Magento\Framework\App\State::class, [], $appState],
-                                    [
-                                        PatchApplierFactory::class,
-                                        ['objectManager' => $this->objectManager],
-                                        $this->patchApplierFactoryMock
-                                    ]
-                                ]);
+                ->willReturnMap(
+                    [
+                        [Manager::class, [], $cacheManager],
+                        [\Magento\Framework\App\State::class, [], $appState],
+                        [
+                            PatchApplierFactory::class,
+                            ['objectManager' => $this->objectManager],
+                            $this->patchApplierFactoryMock
+                        ]
+                    ]
+                );
             $this->patchApplierMock->expects(static::exactly(2))->method('applySchemaPatch')->willReturnMap(
                 [
                     ['Bar_Two'],
-                    ['Foo_One'],
+                    ['Foo_One']
                 ]
             );
             $this->objectManager->expects(static::any())
                 ->method('get')
-                ->willReturnMap([
-                                    [\Magento\Framework\App\State::class, $appState],
-                                    [Manager::class, $cacheManager],
-                                    [DeclarationInstaller::class, $this->declarationInstallerMock],
-                                    [Registry::class, $registry],
-                                    [SearchConfig::class, $searchConfigMock],
-                                    [RemoteStorageValidator::class, $remoteStorageValidatorMock]
-                                ]);
+                ->willReturnMap(
+                    [
+                        [\Magento\Framework\App\State::class, $appState],
+                        [Manager::class, $cacheManager],
+                        [DeclarationInstaller::class, $this->declarationInstallerMock],
+                        [Registry::class, $registry],
+                        [SearchConfig::class, $searchConfigMock],
+                        [RemoteStorageValidator::class, $remoteStorageValidatorMock]
+                    ]
+                );
 
             $this->sampleDataState->expects(static::never())->method('hasError');
 
@@ -808,25 +819,27 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->dataSetupFactory->expects(static::atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects(static::any())
                 ->method('create')
-                ->willReturnMap([
-                                    [Manager::class, [], $cacheManager],
-                                    [\Magento\Framework\App\State::class, [], $appState],
-                                    [
-                                        PatchApplierFactory::class,
-                                        ['objectManager' => $this->objectManager],
-                                        $this->patchApplierFactoryMock
-                                    ],
-                                ]);
+                ->willReturnMap(
+                    [
+                        [Manager::class, [], $cacheManager],
+                        [\Magento\Framework\App\State::class, [], $appState],
+                        [
+                            PatchApplierFactory::class,
+                            ['objectManager' => $this->objectManager],
+                            $this->patchApplierFactoryMock
+                        ]
+                    ]
+                );
             $this->patchApplierMock->expects(static::exactly(2))->method('applySchemaPatch')->willReturnMap(
                 [
                     ['Bar_Two'],
-                    ['Foo_One'],
+                    ['Foo_One']
                 ]
             );
             $this->patchApplierMock->expects(static::exactly(2))->method('applyDataPatch')->willReturnMap(
                 [
                     ['Bar_Two'],
-                    ['Foo_One'],
+                    ['Foo_One']
                 ]
             );
 
@@ -836,11 +849,11 @@ namespace Magento\Setup\Test\Unit\Model {
                 3 => [SearchConfig::class, $searchConfigMock],
                 4 => [
                     RemoteStorageValidator::class,
-                    new ReflectionException('Class ' . RemoteStorageValidator::class . ' does not exist'),
+                    new ReflectionException('Class ' . RemoteStorageValidator::class . ' does not exist')
                 ],
                 5 => [\Magento\Framework\App\State::class, $appState],
                 7 => [Registry::class, $registry],
-                11 => [Manager::class, $cacheManager],
+                11 => [Manager::class, $cacheManager]
             ];
             $withArgs = $willReturnArgs = [];
 
@@ -989,10 +1002,12 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->objectManager->expects(static::any())
                 ->method('get')
-                ->willReturnMap([
-                                    [DeclarationInstaller::class, $this->declarationInstallerMock],
-                                    [Registry::class, $registry]
-                                ]);
+                ->willReturnMap(
+                    [
+                        [DeclarationInstaller::class, $this->declarationInstallerMock],
+                        [Registry::class, $registry]
+                    ]
+                );
 
             $this->sampleDataState->expects(static::never())->method('hasError');
 
@@ -1051,14 +1066,16 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $this->objectManager->expects($this->atLeastOnce())
                 ->method('create')
-                ->willReturnMap([
-                                    [Manager::class, [], $cacheManagerMock],
-                                    [
-                                        PatchApplierFactory::class,
-                                        ['objectManager' => $this->objectManager],
-                                        $this->patchApplierFactoryMock
-                                    ],
-                                ]);
+                ->willReturnMap(
+                    [
+                        [Manager::class, [], $cacheManagerMock],
+                        [
+                            PatchApplierFactory::class,
+                            ['objectManager' => $this->objectManager],
+                            $this->patchApplierFactoryMock
+                        ],
+                    ]
+                );
 
             $registryMock = $this->createMock(Registry::class);
             $this->objectManager->expects($this->atLeastOnce())
@@ -1219,10 +1236,12 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('get')
                 ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS)
                 ->willReturn([]);
-            $this->configReader->expects($this->once())->method('getFiles')->willReturn([
-                                                                                            'ConfigOne.php',
-                                                                                            'ConfigTwo.php'
-                                                                                        ]);
+            $this->configReader->expects($this->once())->method('getFiles')->willReturn(
+                [
+                    'ConfigOne.php',
+                    'ConfigTwo.php'
+                ]
+            );
             $configDir = $this->getMockForAbstractClass(
                 WriteInterface::class
             );
@@ -1238,9 +1257,11 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filesystem
                 ->expects($this->any())
                 ->method('getDirectoryWrite')
-                ->willReturnMap([
-                                    [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
-                                ]);
+                ->willReturnMap(
+                    [
+                        [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
+                    ]
+                );
             $cacheManager = $this->createMock(Manager::class);
             $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
             $cacheManager->expects($this->once())->method('clean');
@@ -1307,7 +1328,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $allModules = [
                 'Foo_One' => [],
                 'Bar_Two' => [],
-                'New_Module' => [],
+                'New_Module' => []
             ];
 
             $cacheManager = $this->createMock(Manager::class);
@@ -1315,9 +1336,11 @@ namespace Magento\Setup\Test\Unit\Model {
             $cacheManager->expects($this->once())->method('clean');
             $this->objectManager->expects($this->any())
                 ->method('get')
-                ->willReturnMap([
-                                    [Manager::class, $cacheManager]
-                                ]);
+                ->willReturnMap(
+                    [
+                        [Manager::class, $cacheManager]
+                    ]
+                );
             $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
             $expectedModules = [
