@@ -79,7 +79,7 @@
         <plugin name="remoteMediaStorageSynchronizationFactory" type="Magento\RemoteStorage\Plugin\File\Storage\SynchronizationFactory" />
     </type>
     <type name="Magento\Framework\Data\Collection\Filesystem">
-        <arguments>x
+        <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
@@ -95,7 +95,7 @@
     </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
-    </type>x
+    </type>
     <type name="Magento\Catalog\Model\Category\FileInfo">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
