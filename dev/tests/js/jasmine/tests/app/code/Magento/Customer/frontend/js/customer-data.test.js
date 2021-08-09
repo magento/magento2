@@ -7,12 +7,13 @@
 /* jscs:disable jsDoc*/
 
 define([
+    'underscore',
     'squire',
     'jquery',
     'Magento_Customer/js/section-config',
     'Magento_Customer/js/customer-data',
     'jquery/jquery-storageapi'
-], function (Squire, $, sectionConfig, customerData) {
+], function (_, Squire, $, sectionConfig, customerData) {
     'use strict';
 
     var injector = new Squire(),
@@ -44,27 +45,6 @@ define([
                 'messages'
             ]
         };
-
-    var _;
-
-    beforeEach(function (done) {
-        injector.require([
-            'underscore',
-            'Magento_Customer/js/customer-data'
-        ], function (underscore, Constr) {
-            _ = underscore;
-            obj = Constr;
-            done();
-        });
-    });
-
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-        } catch (e) {
-        }
-    });
 
     function init(config) {
         var defaultConfig = {
@@ -109,22 +89,31 @@ define([
         );
     }
 
-    describe('Magento_Customer/js/customer-data', function () {
-        function clearLocalStorage() {
-            $.cookieStorage.set('section_data_ids', {});
+    function clearLocalStorage() {
+        $.cookieStorage.set('section_data_ids', {});
 
-            if (window.localStorage) {
-                window.localStorage.clear();
-            }
+        if (window.localStorage) {
+            window.localStorage.clear();
         }
+    }
 
+    describe('Magento_Customer/js/customer-data', function () {
         beforeAll(function () {
             clearLocalStorage();
         });
 
-        beforeEach(function () {
+        beforeEach(function (done) {
             originalGetJSON = $.getJSON;
             sectionConfig['Magento_Customer/js/section-config'](sectionConfigSettings);
+
+            injector.require([
+                'underscore',
+                'Magento_Customer/js/customer-data'
+            ], function (underscore, Constr) {
+                _ = underscore;
+                obj = Constr;
+                done();
+            });
         });
 
         afterEach(function () {
