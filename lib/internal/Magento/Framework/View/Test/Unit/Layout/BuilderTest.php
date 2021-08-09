@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers Builder
+ * @covers \Magento\Framework\View\Layout\Builder
  */
 class BuilderTest extends TestCase
 {
@@ -26,7 +26,7 @@ class BuilderTest extends TestCase
     /**
      * @return void
      *
-     * @covers Builder::build()
+     * @covers \Magento\Framework\View\Layout\Builder::build()
      */
     public function testBuild(): void
     {

@@ -150,11 +150,9 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @return void
-     *
      * @return MockObject|Path
      */
-    protected function _getImagePathMock(): \Magento\Theme\Model\Theme\Image\Path
+    protected function _getImagePathMock(): Path
     {
         $imagePathMock = $this->createMock(Path::class);
         $testBaseUrl = 'http://localhost/media_path/';
@@ -193,7 +191,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::__construct
+     * @covers \Magento\Framework\View\Design\Theme\Image::__construct
      */
     public function testConstructor(): void
     {
@@ -203,7 +201,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::createPreviewImage
+     * @covers \Magento\Framework\View\Design\Theme\Image::createPreviewImage
      */
     public function testCreatePreviewImage(): void
     {
@@ -223,7 +221,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::createPreviewImageCopy
+     * @covers \Magento\Framework\View\Design\Theme\Image::createPreviewImageCopy
      */
     public function testCreatePreviewImageCopy(): void
     {
@@ -270,7 +268,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::removePreviewImage
+     * @covers \Magento\Framework\View\Design\Theme\Image::removePreviewImage
      */
     public function testRemovePreviewImage(): void
     {
@@ -283,7 +281,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::removePreviewImage
+     * @covers \Magento\Framework\View\Design\Theme\Image::removePreviewImage
      */
     public function testRemoveEmptyPreviewImage(): void
     {
@@ -296,7 +294,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::uploadPreviewImage
+     * @covers \Magento\Framework\View\Design\Theme\Image::uploadPreviewImage
      */
     public function testUploadPreviewImage(): void
     {
@@ -325,7 +323,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::getPreviewImageUrl
+     * @covers \Magento\Framework\View\Design\Theme\Image::getPreviewImageUrl
      */
     public function testGetPreviewImageUrl(): void
     {
@@ -342,7 +340,7 @@ class ImageTest extends TestCase
     /**
      * @return void
      *
-     * @covers Image::getPreviewImageUrl
+     * @covers \Magento\Framework\View\Design\Theme\Image::getPreviewImageUrl
      */
     public function testGetDefaultPreviewImageUrl(): void
     {

@@ -90,7 +90,7 @@ class ReaderTest extends TestCase
 
     /**
      * @return void
-     * @covers Reader::read
+     * @covers \Magento\Framework\App\Config\Initial\Reader::read
      */
     public function testReadNoFiles(): void
     {
@@ -105,7 +105,7 @@ class ReaderTest extends TestCase
 
     /**
      * @return void
-     * @covers Reader::read
+     * @covers \Magento\Framework\App\Config\Initial\Reader::read
      */
     public function testReadValidConfig(): void
     {
@@ -152,7 +152,7 @@ class ReaderTest extends TestCase
 
     /**
      * @return void
-     * @covers Reader::read
+     * @covers \Magento\Framework\App\Config\Initial\Reader::read
      */
     public function testReadInvalidConfig(): void
     {

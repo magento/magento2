@@ -350,7 +350,7 @@ class HttpTest extends TestCase
      * Test for the magic method __wakeup
      *
      * @return void
-     * @covers Http::__wakeup
+     * @covers \Magento\Framework\App\Response\Http::__wakeup
      */
     public function testWakeUpWith(): void
     {
