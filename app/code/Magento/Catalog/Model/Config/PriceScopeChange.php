@@ -3,26 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Observer;
 
-use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Event\ObserverInterface;
+namespace Magento\Catalog\Model\Config;
+
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Store\Model\Store;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Store\Model\Store;
 
-/**
- * Observer is responsible for changing scope for all price attributes in system
- * depending on 'Catalog Price Scope' configuration parameter
- */
-class SwitchPriceAttributeScopeOnConfigChange implements ObserverInterface
+class PriceScopeChange
 {
     /**
-     * @var ReinitableConfigInterface
+     * @var SearchCriteriaBuilder
      */
-    private $config;
+    private $searchCriteriaBuilder;
 
     /**
      * @var ProductAttributeRepositoryInterface
@@ -30,40 +24,33 @@ class SwitchPriceAttributeScopeOnConfigChange implements ObserverInterface
     private $productAttributeRepository;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @param ReinitableConfigInterface $config
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        ReinitableConfigInterface $config,
         ProductAttributeRepositoryInterface $productAttributeRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->config = $config;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Change scope for all price attributes according to
-     * 'Catalog Price Scope' configuration parameter value
+     * Updates the price attributes scope
      *
-     * @param EventObserver $observer
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param int $value
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     *
+     * @retrun void
      */
-    public function execute(EventObserver $observer)
+    public function changeScope(int $value)
     {
         $this->searchCriteriaBuilder->addFilter('frontend_input', 'price');
         $criteria = $this->searchCriteriaBuilder->create();
 
-        $scope = $this->config->getValue(Store::XML_PATH_PRICE_SCOPE);
-        $scope = ($scope == Store::PRICE_SCOPE_WEBSITE)
+        $scope = ($value === Store::PRICE_SCOPE_WEBSITE)
             ? ProductAttributeInterface::SCOPE_WEBSITE_TEXT
             : ProductAttributeInterface::SCOPE_GLOBAL_TEXT;
 
