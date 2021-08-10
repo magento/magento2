@@ -93,9 +93,10 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     {
         $annotations = ['method' => ['magentoAppArea' => ['global']]];
         $this->_testCaseMock->expects($this->once())->method('getAnnotations')->willReturn($annotations);
-        $this->_applicationMock->expects($this->at(0))->method('getArea')->willReturn('adminhtml');
         $this->_applicationMock->expects($this->once())->method('reinitialize');
-        $this->_applicationMock->expects($this->at(2))->method('getArea')->willReturn('global');
+        $this->_applicationMock
+            ->method('getArea')
+            ->willReturnOnConsecutiveCalls('adminhtml', 'global');
         $this->_applicationMock->expects($this->never())->method('loadArea');
         $this->_object->startTest($this->_testCaseMock);
     }
