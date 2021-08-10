@@ -12,6 +12,7 @@ use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Wysiwyg Images model.
@@ -249,6 +250,27 @@ class Storage extends \Magento\Framework\DataObject
         $this->mime = $mime ?: ObjectManager::getInstance()->get(\Magento\Framework\File\Mime::class);
         $this->coreConfig = $coreConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         parent::__construct($data);
+        $this->initStorage();
+    }
+
+    /**
+     * Initialize storage by creating wysiwyg image folders
+     *
+     * @return void
+     */
+    private function initStorage(): void
+    {
+        $imageFolders = $this->getAllowedDirs();
+        foreach ($imageFolders as $folderSegments) {
+            $folder = implode('/', $folderSegments);
+            try {
+                $this->_directory->create($folder);
+            } catch (LocalizedException $e) {
+                $this->logger->error(
+                    sprintf("Creating wysiwyg image folder %s caused error: %s", $folder, $e->getMessage())
+                );
+            }
+        }
     }
 
     /**

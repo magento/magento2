@@ -32,7 +32,6 @@
                 <allowed_resources>
                     <media_gallery_image_folders>
                         <wysiwyg_image_folder>wysiwyg</wysiwyg_image_folder>
-                        <category_image_folder>catalog/category</category_image_folder>
                     </media_gallery_image_folders>
                     <preview_folder>.thumbs</preview_folder>
                 </allowed_resources>
