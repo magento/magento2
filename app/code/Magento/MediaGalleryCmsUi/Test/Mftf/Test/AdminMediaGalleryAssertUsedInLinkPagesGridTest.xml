@@ -21,9 +21,11 @@
                 <issueId value="DEPRECATED">Use AdminMediaGalleryAssertUsedInLinkedPagesGridTest instead</issueId>
             </skip>
         </annotations>
+
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
+
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultViewAgain"/>
@@ -35,6 +37,7 @@
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
         </after>
+
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <actionGroup ref="FillOutCustomCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore">
             <argument name="title" value="Unique page title MediaGalleryUi"/>

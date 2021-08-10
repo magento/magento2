@@ -18,6 +18,7 @@
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
+
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
