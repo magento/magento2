@@ -151,6 +151,15 @@ class AddProductsToCart
             return;
         }
 
+        if (!in_array($cart->getStoreId(), $product->getStoreIds())) {
+            $this->addError(
+                __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                $cartItemPosition
+            );
+
+            return;
+        }
+
         try {
             $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
             $this->cartRepository->save($cart);
