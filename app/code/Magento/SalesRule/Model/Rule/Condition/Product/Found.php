@@ -65,10 +65,12 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
         foreach ($model->getAllItems() as $item) {
             $found = $all;
             foreach ($this->getConditions() as $cond) {
-                $validated = $cond->validate($item);
-                if ($all && !$validated || !$all && $validated) {
-                    $found = $validated;
-                    break;
+                foreach ($this->retrieveValidateEntities($cond->getAttributeScope(), $item) as $validateEntity) {
+                    $validated = $cond->validate($validateEntity);
+                    if ($all && !$validated || !$all && $validated) {
+                        $found = $validated;
+                        break;
+                    }
                 }
             }
             if ($found && $true || !$true && $found) {
@@ -83,5 +85,27 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
             return true;
         }
         return false;
+    }
+
+    /**
+     * Retrieve entities for validation by attribute scope
+     *
+     * @param string $attributeScope
+     * @param \Magento\Framework\Model\AbstractModel $entity
+     * @return \Magento\Framework\Model\AbstractModel[]
+     */
+    private function retrieveValidateEntities($attributeScope, \Magento\Framework\Model\AbstractModel $entity)
+    {
+        if ($attributeScope === 'parent') {
+            $parentItem = $entity->getParentItem();
+            $validateEntities = $parentItem ? [$parentItem] : [$entity];
+        } elseif ($attributeScope === 'children') {
+            $validateEntities = $entity->getChildren() ?: [$entity];
+        } else {
+            $validateEntities = $entity->getChildren() ?: [];
+            $validateEntities[] = $entity;
+        }
+
+        return $validateEntities;
     }
 }
