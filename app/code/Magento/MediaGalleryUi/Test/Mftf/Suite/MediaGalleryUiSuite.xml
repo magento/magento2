@@ -10,16 +10,22 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="MediaGalleryUiSuite">
         <before>
-            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
             <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="enableEnhancedMediaGallery"/>
             <magentoCLI command="config:set {{MediaGalleryRenditionsDataEnabled.path}} {{MediaGalleryRenditionsDataEnabled.value}}" stepKey="enableMediaGalleryRenditions"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+
+            <!-- Create Media Gallery Directories for `catalog/category` and `wysiwyg` -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromCategoryImage"/>
+            <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MediaGalleryRenditionsDataDisabled.path}} {{MediaGalleryRenditionsDataDisabled.value}}" stepKey="disableMediaGalleryRenditions"/>
             <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="disableEnhancedMediaGallery"/>
-            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </after>
         <include>
             <group name="media_gallery_ui"/>

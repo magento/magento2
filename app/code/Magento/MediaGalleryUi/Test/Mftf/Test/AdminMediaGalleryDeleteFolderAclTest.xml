@@ -24,6 +24,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminBefore"/>
         </before>
         <after>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
             <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
             <waitForPageLoad stepKey="waitForRolesGridLoad" />
@@ -36,7 +37,6 @@
                 <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </after>
 
         <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
