@@ -20,11 +20,13 @@
         </annotations>
 
         <before>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <comment userInput="BIC workaround" stepKey="deleteAllMediaGalleryImages"/>
         </before>
 
         <after>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGalleryGridFilters"/>
             <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">

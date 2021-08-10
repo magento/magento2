@@ -28,7 +28,7 @@
 
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <comment userInput="BIC workaround" stepKey="disableWYSIWYG"/>
             <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>

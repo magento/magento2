@@ -20,6 +20,7 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminBefore"/>
         </before>
         <after>
@@ -35,6 +36,7 @@
                 <argument name="userName" value="{{admin2.username}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </after>
 
         <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
