@@ -267,7 +267,7 @@ class Storage extends \Magento\Framework\DataObject
                 $this->_directory->create($folder);
             } catch (LocalizedException $e) {
                 $this->logger->error(
-                    sprintf("Creating wysiwyg image folder %s caused error: %s", $folder, $e->getMessage())
+                    sprintf("Creating media gallery image folder %s caused error: %s", $folder, $e->getMessage())
                 );
             }
         }
