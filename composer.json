@@ -67,7 +67,7 @@
         "php-amqplib/php-amqplib": "~3.0.0",
         "phpseclib/mcrypt_compat": "1.0.8",
         "phpseclib/phpseclib": "2.0.*",
-        "phpspec/prophecy-phpunit": "^2.0",
+        "phpspec/prophecy-phpunit": "^2.0.1",
         "ramsey/uuid": "~4.1.0",
         "symfony/console": "~4.4.0",
         "symfony/event-dispatcher": "~4.4.0",
