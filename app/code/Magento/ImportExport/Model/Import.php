@@ -709,8 +709,8 @@ class Import extends AbstractModel
                 if (!$indexer->isScheduled()) {
                     $indexer->invalidate();
                 }
-                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\InvalidArgumentException $e) {
+                $this->_logger->error($e);
             }
         }
 

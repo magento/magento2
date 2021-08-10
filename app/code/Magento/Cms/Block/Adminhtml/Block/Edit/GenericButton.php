@@ -7,6 +7,7 @@ namespace Magento\Cms\Block\Adminhtml\Block\Edit;
 
 use Magento\Backend\Block\Widget\Context;
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -25,15 +26,23 @@ class GenericButton
     protected $blockRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param Context $context
      * @param BlockRepositoryInterface $blockRepository
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
-        BlockRepositoryInterface $blockRepository
+        BlockRepositoryInterface $blockRepository,
+        LoggerInterface $logger
     ) {
         $this->context = $context;
         $this->blockRepository = $blockRepository;
+        $this->logger = $logger;
     }
 
     /**
@@ -48,6 +57,7 @@ class GenericButton
                 $this->context->getRequest()->getParam('block_id')
             )->getId();
         } catch (NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
         return null;
     }

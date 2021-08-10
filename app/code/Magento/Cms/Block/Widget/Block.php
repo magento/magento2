@@ -12,6 +12,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Cms\Model\Block as CmsBlock;
 use Magento\Widget\Block\BlockInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Cms Static Block Widget
@@ -45,20 +46,28 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
     private $block;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Cms\Model\Template\FilterProvider $filterProvider
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
+     * @param LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Cms\Model\Template\FilterProvider $filterProvider,
         \Magento\Cms\Model\BlockFactory $blockFactory,
+        LoggerInterface $logger,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_filterProvider = $filterProvider;
         $this->_blockFactory = $blockFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -88,6 +97,7 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
                     $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent())
                 );
             } catch (NoSuchEntityException $e) {
+                $this->logger->error($e);
             }
         }
         unset(self::$_widgetUsageMap[$blockHash]);
@@ -133,6 +143,7 @@ class Block extends \Magento\Framework\View\Element\Template implements BlockInt
 
                 return $block;
             } catch (NoSuchEntityException $e) {
+                $this->logger->error($e);
             }
         }
 

@@ -7,6 +7,7 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Directory\Model\Currency;
+use Psr\Log\LoggerInterface;
 
 /**
  * Adminhtml customer cart items grid block
@@ -46,12 +47,18 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $quoteFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @param LoggerInterface $logger
      * @param array $data
      */
     public function __construct(
@@ -61,12 +68,14 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
+        LoggerInterface $logger,
         array $data = []
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->quoteRepository = $quoteRepository;
         $this->quoteFactory = $quoteFactory;
+        $this->logger = $logger;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -176,6 +185,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
                 try {
                     $this->quote = $this->quoteRepository->getForCustomer($currentCustomerId, $storeIds);
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                    $this->logger->error($e);
                 }
             }
         }

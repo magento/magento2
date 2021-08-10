@@ -16,6 +16,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
 use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * This class is replacement of \Magento\Cms\Block\Block, that accepts only `string` identifier of CMS Block
@@ -45,9 +46,15 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
     private $cmsBlock;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param GetBlockByIdentifierInterface $blockByIdentifier
      * @param StoreManagerInterface $storeManager
      * @param FilterProvider $filterProvider
+     * @param LoggerInterface $logger
      * @param Context $context
      * @param array $data
      */
@@ -55,6 +62,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
         GetBlockByIdentifierInterface $blockByIdentifier,
         StoreManagerInterface $storeManager,
         FilterProvider $filterProvider,
+        LoggerInterface $logger,
         Context $context,
         array $data = []
     ) {
@@ -62,6 +70,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
         $this->blockByIdentifier = $blockByIdentifier;
         $this->storeManager = $storeManager;
         $this->filterProvider = $filterProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -166,8 +175,8 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
             if ($cmsBlock instanceof IdentityInterface) {
                 $identities = array_merge($identities, $cmsBlock->getIdentities());
             }
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $e) {
+            $this->logger->error($e);
         }
 
         return $identities;
