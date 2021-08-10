@@ -200,7 +200,9 @@ class BulkManagement implements BulkManagementInterface
                 $affectedOperations = 0;
             }
 
-            $this->publishOperations($retriablyFailedOperations);
+            if ($affectedOperations) {
+                $this->publishOperations($retriablyFailedOperations);
+            }
         }
 
         return $affectedOperations;
