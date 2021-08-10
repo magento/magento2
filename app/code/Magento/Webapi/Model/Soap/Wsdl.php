@@ -5,21 +5,16 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
-use DOMElement;
+use Magento\Webapi\Model\Laminas\Soap\Wsdl as LaminasWsdl;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 
 /**
  * Magento-specific WSDL builder.
  */
-class Wsdl extends \Laminas\Soap\Wsdl
+class Wsdl extends LaminasWsdl
 {
     /**
-     * Save URI for targetNamespace generation.
-     *
-     * @param string $name
-     * @param string|\Laminas\Uri\Uri $uri
-     * @param ComplexTypeStrategy $strategy
-     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
+     * @inheritdoc
      */
     public function __construct($name, $uri, ComplexTypeStrategy $strategy)
     {
@@ -27,18 +22,12 @@ class Wsdl extends \Laminas\Soap\Wsdl
     }
 
     /**
-     * Add an operation to port type.
-     *
-     * @param DOMElement $portType
-     * @param string $name Operation name
-     * @param string|bool $input Input Message
-     * @param string|bool $output Output Message
-     * @param string|bool|array $fault Message name OR array('message' => ..., 'name' => ...)
-     * @return object The new operation's XML_Tree_Node
+     * @inheritdoc
      */
     public function addPortOperation($portType, $name, $input = false, $output = false, $fault = false)
     {
         $operation = parent::addPortOperation($portType, $name, $input, $output, false);
+
         if (is_array($fault)) {
             $isMessageValid = isset(
                 $fault['message']
@@ -56,6 +45,7 @@ class Wsdl extends \Laminas\Soap\Wsdl
                 $operation->appendChild($node);
             }
         }
+
         return $operation;
     }
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://framework.zend.com/my_script.php"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap-enc="http://schemas.xmlsoap.org/soap/encoding/" name="Zend_Soap_Server_TestClass"
+             targetNamespace="http://framework.zend.com/my_script.php">
+    <portType name="ZendTest.Soap.Server.TestClassPort">
+        <operation name="testFunc">
+            <input message="tns:testFuncRequest"/>
+            <output message="tns:testFuncResponse"/>
+        </operation>
+        <operation name="testFunc2">
+            <input message="tns:testFunc2Request"/>
+            <output message="tns:testFunc2Response"/>
+        </operation>
+        <operation name="testFunc3">
+            <input message="tns:testFunc3Request"/>
+            <output message="tns:testFunc3Response"/>
+        </operation>
+        <operation name="testFunc4">
+            <input message="tns:testFunc4Request"/>
+            <output message="tns:testFunc4Response"/>
+        </operation>
+    </portType>
+    <binding name="ZendTest.Soap.Server.TestClassBinding" type="tns:ZendTest.Soap.Server.TestClassPort">
+        <soap:operation soapAction="http://framework.zend.com/my_script.php#testFunc4"/>
+        <soap:operation soapAction="http://framework.zend.com/my_script.php#testFunc3"/>
+        <soap:operation soapAction="http://framework.zend.com/my_script.php#testFunc2"/>
+        <soap:operation soapAction="http://framework.zend.com/my_script.php#testFunc"/>
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="testFunc">
+            <input>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="testFunc2">
+            <input>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="testFunc3">
+            <input>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="testFunc4">
+            <input>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="ZendTest.Soap.Server.TestClassService">
+        <port name="ZendTest.Soap.Server.TestClassPort" binding="tns:ZendTest.Soap.Server.TestClassBinding">
+            <soap:address location="http://framework.zend.com/my_script.php"/>
+        </port>
+    </service>
+    <message name="testFuncRequest"/>
+    <message name="testFuncResponse">
+        <part name="testFuncReturn" type="xsd:string"/>
+    </message>
+    <message name="testFunc2Request">
+        <part name="who" type="xsd:string"/>
+    </message>
+    <message name="testFunc2Response">
+        <part name="testFunc2Return" type="xsd:string"/>
+    </message>
+    <message name="testFunc3Request">
+        <part name="who" type="xsd:string"/>
+        <part name="when" type="xsd:int"/>
+    </message>
+    <message name="testFunc3Response">
+        <part name="testFunc3Return" type="xsd:string"/>
+    </message>
+    <message name="testFunc4Request"/>
+    <message name="testFunc4Response">
+        <part name="testFunc4Return" type="xsd:string"/>
+    </message>
+</definitions>

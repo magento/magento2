@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Soap\Wsdl;
 
-use Laminas\Soap\Wsdl;
+use DOMDocument;
+use Magento\Webapi\Model\Laminas\Soap\Wsdl;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,39 +20,42 @@ use PHPUnit\Framework\TestCase;
  */
 class ComplexTypeStrategyTest extends TestCase
 {
-    /** @var TypeProcessor|MockObject */
+    /**
+     * @var TypeProcessor|MockObject
+     */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl|MockObject */
+    /**
+     * @var Wsdl|MockObject
+     */
     protected $_wsdl;
 
-    /** @var ComplexTypeStrategy */
+    /**
+     * @var ComplexTypeStrategy
+     */
     protected $_strategy;
 
     /**
-     * Set up strategy for test.
+     * @inheirtDoc
      */
     protected function setUp(): void
     {
-        $this->_typeProcessor = $this->getMockBuilder(
-            TypeProcessor::class
-        )->setMethods(
-            ['getTypeData']
-        )->disableOriginalConstructor()
+        $this->_typeProcessor = $this->getMockBuilder(TypeProcessor::class)
+            ->onlyMethods(['getTypeData'])
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->_wsdl = $this->getMockBuilder(
-            \Magento\Webapi\Model\Soap\Wsdl::class
-        )->setMethods(
-            ['toDomDocument', 'getTypes', 'getSchema']
-        )->disableOriginalConstructor()
+        $this->_wsdl = $this->getMockBuilder(\Magento\Webapi\Model\Soap\Wsdl::class)
+            ->onlyMethods(['toDomDocument', 'getTypes', 'getSchema'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->_strategy = new ComplexTypeStrategy($this->_typeProcessor);
         $this->_strategy->setContext($this->_wsdl);
+
         parent::setUp();
     }
 
     /**
-     * Clean up.
+     * @inheirtDoc
      */
     protected function tearDown(): void
     {
@@ -64,9 +68,11 @@ class ComplexTypeStrategyTest extends TestCase
 
     /**
      * Test that addComplexType returns type WSDL name
-     * if it has already been processed (registered at includedTypes in WSDL)
+     * if it has already been processed (registered at includedTypes in WSDL).
+     *
+     * @return void
      */
-    public function testCheckTypeName()
+    public function testCheckTypeName(): void
     {
         $testType = 'testComplexTypeName';
         $testTypeWsdlName = 'tns:' . $testType;
@@ -87,7 +93,7 @@ class ComplexTypeStrategyTest extends TestCase
     {
         $this->_wsdl->expects($this->any())->method('getTypes')->willReturn([]);
 
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new \DOMDocument());
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new DOMDocument());
 
         $schemaMock = $this->getMockBuilder(\DOMElement::class)
             ->setConstructorArgs(['a'])
@@ -113,7 +119,7 @@ class ComplexTypeStrategyTest extends TestCase
      *
      * @return array
      */
-    public static function addComplexTypeDataProvider()
+    public static function addComplexTypeDataProvider(): array
     {
         return [
             'simple parameters' => [
@@ -124,20 +130,20 @@ class ComplexTypeStrategyTest extends TestCase
                         'string_param' => [
                             'type' => 'string',
                             'required' => true,
-                            'documentation' => 'Required string param.',
+                            'documentation' => 'Required string param.'
                         ],
                         'int_param' => [
                             'type' => 'int',
                             'required' => true,
-                            'documentation' => 'Required int param.',
+                            'documentation' => 'Required int param.'
                         ],
                         'bool_param' => [
                             'type' => 'boolean',
                             'required' => false,
-                            'documentation' => 'Optional complex type param.{annotation:test}',
-                        ],
+                            'documentation' => 'Optional complex type param.{annotation:test}'
+                        ]
                     ]
-                ],
+                ]
             ],
             'type with call info' => [
                 'VendorModuleADataStructure',
@@ -147,14 +153,14 @@ class ComplexTypeStrategyTest extends TestCase
                         'string_param' => [
                             'type' => 'string',
                             'required' => false,
-                            'documentation' => '{callInfo:VendorModuleACreate:requiredInput:conditionally}',
-                        ],
+                            'documentation' => '{callInfo:VendorModuleACreate:requiredInput:conditionally}'
+                        ]
                     ],
                     'callInfo' => [
                         'requiredInput' => ['yes' => ['calls' => ['VendorModuleACreate']]],
-                        'returned' => ['always' => ['calls' => ['VendorModuleAGet']]],
+                        'returned' => ['always' => ['calls' => ['VendorModuleAGet']]]
                     ]
-                ],
+                ]
             ],
             'parameter with call info' => [
                 'VendorModuleADataStructure',
@@ -165,10 +171,10 @@ class ComplexTypeStrategyTest extends TestCase
                             'type' => 'string',
                             'required' => false,
                             'documentation' => '{callInfo:VendorModuleACreate:requiredInput:conditionally}' .
-                            '{callInfo:allCallsExcept(VendorModuleAGet):returned:always}',
-                        ],
+                            '{callInfo:allCallsExcept(VendorModuleAGet):returned:always}'
+                        ]
                     ]
-                ],
+                ]
             ],
             'parameter with see link' => [
                 'VendorModuleADataStructure',
@@ -178,10 +184,10 @@ class ComplexTypeStrategyTest extends TestCase
                         'string_param' => [
                             'type' => 'string',
                             'required' => false,
-                            'documentation' => '{seeLink:http://google.com/:title:for}',
-                        ],
+                            'documentation' => '{seeLink:http://google.com/:title:for}'
+                        ]
                     ]
-                ],
+                ]
             ],
             'parameter with doc instructions' => [
                 'VendorModuleADataStructure',
@@ -191,18 +197,20 @@ class ComplexTypeStrategyTest extends TestCase
                         'string_param' => [
                             'type' => 'string',
                             'required' => false,
-                            'documentation' => '{docInstructions:output:noDoc}',
-                        ],
+                            'documentation' => '{docInstructions:output:noDoc}'
+                        ]
                     ]
-                ],
+                ]
             ]
         ];
     }
 
     /**
      * Test adding complex type with complex parameters and arrays.
+     *
+     * @return void
      */
-    public function testAddComplexTypeComplexParameters()
+    public function testAddComplexTypeComplexParameters(): void
     {
         $type = 'VendorModuleADataStructure';
         $parameterType = 'ComplexType';
@@ -212,9 +220,9 @@ class ComplexTypeStrategyTest extends TestCase
                 'complex_param' => [
                     'type' => $parameterType,
                     'required' => true,
-                    'documentation' => 'complex type param.',
-                ],
-            ],
+                    'documentation' => 'complex type param.'
+                ]
+            ]
         ];
         $parameterData = [
             'documentation' => 'test',
@@ -222,54 +230,40 @@ class ComplexTypeStrategyTest extends TestCase
                 'string_param' => [
                     'type' => 'ComplexTypeB[]',
                     'required' => true,
-                    'documentation' => 'string param.',
-                ],
-            ],
+                    'documentation' => 'string param.'
+                ]
+            ]
         ];
 
         $this->_wsdl->expects($this->at(0))->method('getTypes')->willReturn([]);
-        $this->_wsdl->expects(
-            $this->any()
-        )->method(
-            'getTypes'
-        )->willReturn(
-            [$type => Wsdl::TYPES_NS . ':' . $type]
-        );
+        $this->_wsdl->expects($this->any())
+            ->method('getTypes')
+            ->willReturn([$type => Wsdl::TYPES_NS . ':' . $type]);
 
-        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new \DOMDocument());
+        $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn(new DOMDocument());
         $schemaMock = $this->getMockBuilder(\DOMElement::class)
             ->setConstructorArgs(['a'])
             ->getMock();
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->willReturn($schemaMock);
-        $this->_typeProcessor->expects(
-            $this->at(0)
-        )->method(
-            'getTypeData'
-        )->with(
-            $type
-        )->willReturn(
-            $typeData
-        );
-        $this->_typeProcessor->expects(
-            $this->at(1)
-        )->method(
-            'getTypeData'
-        )->with(
-            $parameterType
-        )->willReturn(
-            $parameterData
+        $this->_typeProcessor
+            ->method('getTypeData')
+            ->withConsecutive([$type], [$parameterType])
+            ->willReturnOnConsecutiveCalls(
+            $typeData, $parameterData
         );
 
         $this->assertEquals(Wsdl::TYPES_NS . ':' . $type, $this->_strategy->addComplexType($type));
     }
 
     /**
-     * Test to verify if annotations are added correctly
+     * Test to verify if annotations are added correctly.
+     *
+     * @return void
      */
-    public function testAddAnnotationToComplexType()
+    public function testAddAnnotationToComplexType(): void
     {
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $this->_wsdl->expects($this->any())->method('toDomDocument')->willReturn($dom);
         $annotationDoc = "test doc";
         $complexType = $dom->createElement(Wsdl::XSD_NS . ':complexType');
