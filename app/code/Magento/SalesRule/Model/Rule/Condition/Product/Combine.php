@@ -143,7 +143,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\Framework\Model\AbstractModel[]
      */
-    private function retrieveValidateEntities($attributeScope, \Magento\Framework\Model\AbstractModel $entity)
+    protected function retrieveValidateEntities($attributeScope, \Magento\Framework\Model\AbstractModel $entity)
     {
         if ($attributeScope === 'parent') {
             $parentItem = $entity->getParentItem();
