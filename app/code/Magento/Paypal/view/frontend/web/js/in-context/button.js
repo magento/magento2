@@ -24,6 +24,13 @@ define([
             this.renderPayPalButtons(element);
             this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
 
+            if (cart().isGuestCheckoutAllowed === undefined) {
+                cart.subscribe(function (updatedCart) {
+                    this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+                    return updatedCart;
+                }.bind(this));
+            }
+
             return this;
         },
 
