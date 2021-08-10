@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\RemoteStorage\Plugin\File\Storage;
 
 use Magento\RemoteStorage\Model\File\Storage\Synchronization;
-use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory as mediaSynchronizationFactory;
+use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory as MediaSynchronizationFactory;
 use Magento\RemoteStorage\Model\Config;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -44,17 +44,20 @@ class SynchronizationFactory
     /**
      * Create remote synchronization instance
      *
-     * @param mediaSynchronizationFactory $subject
+     * @param MediaSynchronizationFactory $subject
+     * @param callable $proceed
      * @param array $data
      * @return mixed
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeCreate(mediaSynchronizationFactory $subject, array $data = [])
+    public function aroundCreate(MediaSynchronizationFactory $subject, callable $proceed, array $data = [])
     {
+        $result = $proceed($data);
         if ($this->config->isEnabled()) {
             return $this->objectManager->create(Synchronization::class, $data);
         }
+        return $result;
     }
 }
