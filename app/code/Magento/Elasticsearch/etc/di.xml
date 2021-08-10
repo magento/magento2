@@ -564,4 +564,9 @@
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="updateElasticsearchIndexerMapping" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute"/>
     </type>
+    <type name="Magento\Elasticsearch\Model\Indexer\IndexerHandler">
+        <arguments>
+            <argument name="cacheContext" xsi:type="object">Magento\Framework\Indexer\CacheContext\Proxy</argument>
+        </arguments>
+    </type>
 </config>
