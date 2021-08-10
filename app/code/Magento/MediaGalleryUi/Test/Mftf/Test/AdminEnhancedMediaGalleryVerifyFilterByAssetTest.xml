@@ -21,14 +21,14 @@
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <comment userInput="BIC workaround" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
         </before>
 
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <comment userInput="BIC workaround" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
