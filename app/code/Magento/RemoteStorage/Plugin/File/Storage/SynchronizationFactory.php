@@ -54,10 +54,9 @@ class SynchronizationFactory
      */
     public function aroundCreate(MediaSynchronizationFactory $subject, callable $proceed, array $data = [])
     {
-        $result = $proceed($data);
         if ($this->config->isEnabled()) {
             return $this->objectManager->create(Synchronization::class, $data);
         }
-        return $result;
+        return $proceed($data);
     }
 }
