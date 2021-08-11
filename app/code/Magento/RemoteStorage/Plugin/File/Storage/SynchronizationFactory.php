@@ -42,7 +42,8 @@ class SynchronizationFactory
     }
 
     /**
-     * Create remote synchronization instance
+     * Create remote synchronization instance if remote storage is enabled.
+     * Otherwise, defer creation to MediaSynchronizationFactory
      *
      * @param MediaSynchronizationFactory $subject
      * @param callable $proceed
