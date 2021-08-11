@@ -28,9 +28,9 @@
        <click selector="{{AdminNewWidgetSection.removeLastLayoutUpdate}}" stepKey="clickRemoveLastLayoutUpdate"/>
        <seeNumberOfElements userInput="1" selector="{{AdminNewWidgetSection.layoutUpdate}}" stepKey="seeOneLayoutUpdate"/>
        <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
-       <waitForAjaxLoad stepKey="waitForLoad"/>
+       <waitForPageLoad stepKey="waitForLoad"/>
        <selectOption selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
-       <waitForAjaxLoad stepKey="waitForPageLoad"/>
+       <waitForPageLoad stepKey="waitForPageLoad"/>
        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
        <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
    </actionGroup>
