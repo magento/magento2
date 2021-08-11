@@ -119,6 +119,10 @@ mutation {
             value_label
             value_id
           }
+          configured_variant {
+            sku
+            varchar_attribute
+          }
         }
       }
     }
@@ -130,14 +134,12 @@ QUERY;
 
         $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
         self::assertCount(2, $cartItems);
-
-        foreach ($cartItems as $cartItem) {
-            if ($cartItem['configurable_options'][0]['value_id'] === $valueIdOne) {
-                self::assertEquals($quantityOne, $cartItem['quantity']);
-            } else {
-                self::assertEquals($quantityTwo, $cartItem['quantity']);
-            }
-        }
+        $firstCartItem = $cartItems[0];
+        self::assertEquals($quantityOne, $firstCartItem['quantity']);
+        self::assertEquals('varchar10', $firstCartItem['configured_variant']['varchar_attribute']);
+        $secondCartItem = $cartItems[1];
+        self::assertEquals($quantityTwo, $secondCartItem['quantity']);
+        self::assertEquals('varchar20', $secondCartItem['configured_variant']['varchar_attribute']);
     }
 
     /**
