@@ -260,9 +260,11 @@ class Storage extends \Magento\Framework\DataObject
      */
     private function initStorage(): void
     {
-        $imageFolders = $this->getAllowedDirs();
-        foreach ($imageFolders as $folderSegments) {
-            $folder = implode('/', $folderSegments);
+        $imageFolders = $this->coreConfig->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
+        foreach ($imageFolders as $folder) {
             try {
                 $this->_directory->create($folder);
             } catch (LocalizedException $e) {
