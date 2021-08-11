@@ -13,9 +13,9 @@
             <description>Save custom view media gallery</description>
         </annotations>
         <arguments>
-            <argument name="viewName" type="string" defaultValue="Test View"/>
+            <argument name="viewName" type="string" defaultValue="{{NewGridView.name}}"/>
         </arguments>
-        
+
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
         <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="saveView"/>
         <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{viewName}}" stepKey="inputViewName"/>

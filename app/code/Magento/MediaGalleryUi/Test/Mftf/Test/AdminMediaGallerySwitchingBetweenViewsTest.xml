@@ -23,10 +23,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminEnhancedMediaGalleryDeleteGridViewActionGroup" stepKey="deleteView">
-                <argument name="viewToDelete" value="New View"/>
+                <argument name="viewToDelete" value="{{NewGridView.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderForDelete"/>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
@@ -48,7 +47,7 @@
         </actionGroup>
         <comment userInput="BIC workaround" stepKey="waitForFolderContents"/>
         <actionGroup ref="AdminEnhancedMediaGallerySaveCustomViewActionGroup" stepKey="saveCustomView">
-            <argument name="viewName" value="New View"/>
+            <argument name="viewName" value="{{NewGridView.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
@@ -57,13 +56,13 @@
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters2"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView">
-            <argument name="selectView" value="Default View"/>
+            <argument name="selectView" value="{{DefaultGridView.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertFolderIsChangedActionGroup" stepKey="assertFolderIsChanged">
             <argument name="newSelectedFolder" value="category" />
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="switchBackToNewView">
-            <argument name="selectView" value="New View"/>
+            <argument name="selectView" value="{{NewGridView.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryAssertActiveFiltersActionGroup" stepKey="assertFilterApplied">
             <argument name="resultValue" value="{{AdminMediaGalleryFolderData.name}}"/>
