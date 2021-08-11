@@ -11,7 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Config
- * Toggles Inventory check via Config option
+ * Check if inventory check on quote items load is enabled
  * @package Magento\Quote\Model
  */
 class Config

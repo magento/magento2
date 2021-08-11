@@ -9,7 +9,7 @@
     <default>
         <cataloginventory>
             <options>
-                <enable_inventory_check>0</enable_inventory_check>
+                <enable_inventory_check>1</enable_inventory_check>
             </options>
         </cataloginventory>
     </default>
