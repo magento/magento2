@@ -6,7 +6,6 @@
 namespace Magento\RemoteStorage\Model\Filesystem\Directory;
 
 use Magento\Framework\Filesystem\Directory\PathValidator;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Directory\WriteFactory as BaseWriteFactory;
 use Magento\RemoteStorage\Driver\DriverPool;
 use Magento\Framework\ObjectManagerInterface;
@@ -46,15 +45,7 @@ class WriteFactory extends BaseWriteFactory
     }
 
     /**
-     * Create a remote storage write instance
-     *
-     * @param string $path
-     * @param string $driverCode
-     * @param string|null $createPermissions
-     * @return \Magento\Framework\Filesystem\Directory\Write
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
-     * @throws \Magento\RemoteStorage\Driver\DriverException
+     * @inheritDoc
      */
     public function create($path, $driverCode = DriverPool::REMOTE, $createPermissions = null)
     {

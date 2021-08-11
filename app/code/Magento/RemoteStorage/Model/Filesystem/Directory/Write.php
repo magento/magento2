@@ -25,13 +25,15 @@ class Write extends \Magento\Framework\Filesystem\Directory\Write
     private $localDirectoryWrite;
 
     /**
-     * Constructor
+     * Write constructor.
      *
      * @param \Magento\Framework\Filesystem\File\WriteFactory $fileFactory
      * @param DriverInterface $driver
      * @param string $path
-     * @param int $createPermissions
+     * @param Filesystem $filesystem
+     * @param int|null $createPermissions
      * @param PathValidatorInterface|null $pathValidator
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Filesystem\File\WriteFactory $fileFactory,
