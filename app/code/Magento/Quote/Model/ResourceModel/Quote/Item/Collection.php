@@ -291,7 +291,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             }
             if (!$item->isDeleted()) {
                 $item->setQtyOptions($qtyOptions)->setProduct($product);
-                if (!$this->config->isDisabled()) {
+                if ($this->config->isEnabled()) {
                     $item->checkData();
                 }
             }

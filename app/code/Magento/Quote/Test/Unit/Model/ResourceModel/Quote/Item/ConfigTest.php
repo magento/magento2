@@ -36,9 +36,27 @@ class ConfigTest extends TestCase
     /**
      * @return void
      */
+    public function testIsEnabled()
+    {
+        $this->assertEquals(true, $this->config->isEnabled());
+    }
+
+    /**
+     * @return void
+     */
     public function testIsDisabled()
     {
-        $this->configMock->expects($this->once())->method('getValue');
-        $this->config->isDisabled();
+        $this->setUpForDisabled();
+        $this->assertEquals(false, $this->config->isEnabled());
+    }
+
+    /**
+     * @return void
+     */
+    private function setUpForDisabled()
+    {
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock->method('getValue')->willReturn('0');
+        $this->config = new Config($this->configMock);
     }
 }

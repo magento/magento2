@@ -11,11 +11,12 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Class Config
+ * Toggles Inventory check via Config option
  * @package Magento\Quote\Model
  */
 class Config
 {
-    const XML_PATH_DISABLED = 'cataloginventory/item_options/disabled';
+    const XML_PATH_INVENTORY_CHECK_ENABLED = 'cataloginventory/options/enable_inventory_check';
 
     /** @var ScopeConfigInterface */
     private $config;
@@ -33,8 +34,8 @@ class Config
      * Check if Inventory check is disabled
      * @return bool
      */
-    public function isDisabled(): bool
+    public function isEnabled(): bool
     {
-        return (bool)$this->config->getValue(self::XML_PATH_DISABLED);
+        return (bool)$this->config->getValue(self::XML_PATH_INVENTORY_CHECK_ENABLED);
     }
 }

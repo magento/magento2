@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <cataloginventory>
-            <item_options>
-                <disabled>0</disabled>
-            </item_options>
+            <options>
+                <enable_inventory_check>0</enable_inventory_check>
+            </options>
         </cataloginventory>
     </default>
 </config>
