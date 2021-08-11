@@ -5,15 +5,16 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\ResourceModel\EngineInterface;
 use Magento\CatalogSearch\Model\ResourceModel\EngineProvider;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -21,7 +22,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Zend_Db;
 
@@ -139,6 +139,11 @@ class DataProvider
     private $antiGapMultiplier;
 
     /**
+     * @var GetSearchableProductsSelect|mixed
+     */
+    private $selectSearchableProducts;
+
+    /**
      * @param ResourceConnection $resource
      * @param Type $catalogProductType
      * @param Config $eavConfig
@@ -148,6 +153,8 @@ class DataProvider
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
      * @param int $antiGapMultiplier
+     * @param GetSearchableProductsSelect|null $getSearchableProductsSelect
+     * @throws Exception
      */
     public function __construct(
         ResourceConnection $resource,
@@ -158,7 +165,8 @@ class DataProvider
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
         MetadataPool $metadataPool,
-        int $antiGapMultiplier = 5
+        int $antiGapMultiplier = 5,
+        GetSearchableProductsSelect $getSearchableProductsSelect = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -170,6 +178,7 @@ class DataProvider
         $this->engine = $engineProvider->get();
         $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
         $this->antiGapMultiplier = $antiGapMultiplier;
+        $this->selectSearchableProducts = $getSearchableProductsSelect ?: ObjectManager::getInstance()->get(GetSearchableProductsSelect::class);
     }
 
     /**
@@ -201,8 +210,7 @@ class DataProvider
         $lastProductId = 0,
         $batch = 100
     ) {
-
-        $select = $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch);
+        $select = $this->selectSearchableProducts->execute((int)$storeId, $staticFields, $productIds, $lastProductId, $batch);
         if ($productIds === null) {
             $select->where(
                 'e.entity_id < ?',
@@ -213,104 +221,11 @@ class DataProvider
         if ($productIds === null && !$products) {
             // try to search without limit entity_id by batch size for cover case with a big gap between entity ids
             $products = $this->connection->fetchAll(
-                $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)
+                $this->selectSearchableProducts->execute((int)$storeId, $staticFields, $productIds, $lastProductId, $batch)
             );
         }
 
         return $products;
-    }
-
-    /**
-     * Get Select object for searchable products
-     *
-     * @param int $storeId
-     * @param array $staticFields
-     * @param array|int $productIds
-     * @param int $lastProductId
-     * @param int $batch
-     * @return Select
-     */
-    private function getSelectForSearchableProducts(
-        $storeId,
-        array $staticFields,
-        $productIds,
-        $lastProductId,
-        $batch
-    ) {
-        $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
-        $lastProductId = (int)$lastProductId;
-
-        $select = $this->connection->select()
-            ->useStraightJoin(true)
-            ->from(
-                ['e' => $this->getTable('catalog_product_entity')],
-                array_merge(['entity_id', 'type_id'], $staticFields)
-            )
-            ->join(
-                ['website' => $this->getTable('catalog_product_website')],
-                $this->connection->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
-                []
-            );
-
-        $this->joinAttribute($select, 'visibility', $storeId, $this->engine->getAllowedVisibility());
-        $this->joinAttribute($select, 'status', $storeId, [Status::STATUS_ENABLED]);
-
-        if ($productIds !== null) {
-            $select->where('e.entity_id IN (?)', $productIds, Zend_Db::INT_TYPE);
-        }
-        $select->where('e.entity_id > ?', $lastProductId);
-        $select->order('e.entity_id');
-        $select->limit($batch);
-
-        return $select;
-    }
-
-    /**
-     * Join attribute to searchable product for filtration
-     *
-     * @param Select $select
-     * @param string $attributeCode
-     * @param int $storeId
-     * @param array $whereValue
-     */
-    private function joinAttribute(Select $select, $attributeCode, $storeId, array $whereValue)
-    {
-        $linkField = $this->metadata->getLinkField();
-        $attribute = $this->getSearchableAttribute($attributeCode);
-        $attributeTable = $this->getTable('catalog_product_entity_' . $attribute->getBackendType());
-        $defaultAlias = $attributeCode . '_default';
-        $storeAlias = $attributeCode . '_store';
-
-        $whereCondition = $this->connection->getCheckSql(
-            $storeAlias . '.value_id > 0',
-            $storeAlias . '.value',
-            $defaultAlias . '.value'
-        );
-
-        $select->join(
-            [$defaultAlias => $attributeTable],
-            $this->connection->quoteInto(
-                $defaultAlias . '.' . $linkField . '= e.' . $linkField . ' AND ' . $defaultAlias . '.attribute_id = ?',
-                $attribute->getAttributeId()
-            ) . $this->connection->quoteInto(
-                ' AND ' . $defaultAlias . '.store_id = ?',
-                Store::DEFAULT_STORE_ID
-            ),
-            []
-        )->joinLeft(
-            [$storeAlias => $attributeTable],
-            $this->connection->quoteInto(
-                $storeAlias . '.' . $linkField . '= e.' . $linkField . ' AND ' . $storeAlias . '.attribute_id = ?',
-                $attribute->getAttributeId()
-            ) . $this->connection->quoteInto(
-                ' AND ' . $storeAlias . '.store_id = ?',
-                $storeId
-            ),
-            []
-        )->where(
-            $whereCondition . ' IN (?)',
-            $whereValue
-        );
     }
 
     /**
