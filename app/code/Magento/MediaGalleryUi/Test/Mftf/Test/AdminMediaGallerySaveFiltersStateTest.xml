@@ -35,12 +35,10 @@
         <actionGroup ref="AdminEnhancedMediaGalleryAssertActiveFiltersActionGroup" stepKey="assertFilterApplied">
             <argument name="resultValue" value="Uploaded Locally"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView">
-            <argument name="selectView" value="Default View"/>
-        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryAssertNoActiveFiltersAppliedActionGroup" stepKey="assertNoActiveFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryDeleteGridViewActionGroup" stepKey="deleteView">
-            <argument name="viewToDelete" value="Test View"/>
+            <argument name="viewToDelete" value="{{NewGridView.name}}"/>
         </actionGroup>
     </test>
 </tests>

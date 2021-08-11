@@ -34,9 +34,6 @@
             <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
-                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
-            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

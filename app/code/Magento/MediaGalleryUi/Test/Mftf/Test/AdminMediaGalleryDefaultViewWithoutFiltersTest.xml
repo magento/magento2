@@ -35,9 +35,7 @@
 
         <!-- Open media gallery folder -->
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView">
-            <argument name="selectView" value="Default View"/>
-        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView"/>
 
         <!-- Asset folder is empty -->
         <actionGroup ref="AdminEnhancedMediaGalleryAssertNoActiveFiltersAppliedActionGroup" stepKey="assertEmptyFolder"/>
