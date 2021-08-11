@@ -253,6 +253,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
 
         /** @var \Magento\Newsletter\Model\Subscriber $item */
         foreach ($collection->getItems() as $item) {
+            $item->setData('unsubscriptionLink', $item->getUnsubscriptionLink());
             $transport = $this->_transportBuilder->setTemplateOptions(
                 ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId()]
             )->setTemplateVars(
