@@ -45,6 +45,7 @@ class Aggregations implements ResolverInterface
      * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
      * @param LayerBuilder $layerBuilder
      * @param PriceCurrency $priceCurrency
+     * @param IncludeSubcategoriesOnly $includeSubcategoriesOnly
      */
     public function __construct(
         \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,

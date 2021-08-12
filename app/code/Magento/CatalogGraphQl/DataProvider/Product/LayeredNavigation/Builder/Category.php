@@ -74,6 +74,7 @@ class Category implements LayerBuilderInterface
      * @param RootCategoryProvider $rootCategoryProvider
      * @param ResourceConnection $resourceConnection
      * @param LayerFormatter $layerFormatter
+     * @param IncludeSubcategoriesOnly $includeSubcategoriesOnly
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
