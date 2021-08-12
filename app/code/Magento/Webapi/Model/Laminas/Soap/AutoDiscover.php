@@ -107,24 +107,28 @@ class AutoDiscover
         if (null !== $strategy) {
             $this->setComplexTypeStrategy($strategy);
         }
+
         if (null !== $endpointUri) {
             $this->setUri($endpointUri);
         }
+
         if (null !== $wsdlClass) {
             $this->setWsdlClass($wsdlClass);
         }
+
         $this->setClassMap($classMap);
     }
 
     /**
      * Set the discovery strategy for method type and other information.
      *
-     * @param  DiscoveryStrategy $discoveryStrategy
+     * @param DiscoveryStrategy $discoveryStrategy
      * @return self
      */
     public function setDiscoveryStrategy(DiscoveryStrategy $discoveryStrategy)
     {
         $this->discoveryStrategy = $discoveryStrategy;
+
         return $this;
     }
 
@@ -166,6 +170,7 @@ class AutoDiscover
         }
 
         $this->classMap = $classMap;
+
         return $this;
     }
 
@@ -182,11 +187,13 @@ class AutoDiscover
 
         // first character must be letter or underscore {@see http://www.w3.org/TR/wsdl#_document-n}
         $i = preg_match('/^[a-z\_]/ims', $serviceName, $matches);
+
         if ($i != 1) {
             throw new InvalidArgumentException('Service Name must start with letter or _');
         }
 
         $this->serviceName = $serviceName;
+
         return $this;
     }
 
@@ -205,6 +212,7 @@ class AutoDiscover
                 throw new RuntimeException('No service name given. Call AutoDiscover::setServiceName().');
             }
         }
+
         return $this->serviceName;
     }
 
@@ -231,6 +239,7 @@ class AutoDiscover
         }
 
         $this->uri = $uri;
+
         return $this;
     }
 
@@ -247,9 +256,11 @@ class AutoDiscover
                 'Missing uri. You have to explicitly configure the Endpoint Uri by calling AutoDiscover::setUri().'
             );
         }
+
         if (is_string($this->uri)) {
             $this->uri = Uri\UriFactory::factory($this->uri);
         }
+
         return $this->uri;
     }
 
@@ -264,11 +275,12 @@ class AutoDiscover
     {
         if (! is_string($wsdlClass) && ! is_subclass_of($wsdlClass, '\Magento\Webapi\Model\Laminas\Soap\Wsdl')) {
             throw new InvalidArgumentException(
-                'No \Magento\Webapi\Model\Laminas\Soap\Wsdl subclass given to \Magento\Webapi\Model\Laminas\Soap\AutoDiscover::setWsdlClass as string.'
+                'No ' . Wsdl::class . ' subclass given to '. AutoDiscover::class . '::setWsdlClass as string.'
             );
         }
 
         $this->wsdlClass = $wsdlClass;
+
         return $this;
     }
 
@@ -297,7 +309,9 @@ class AutoDiscover
         if (! isset($operationStyle['use'])) {
             throw new InvalidArgumentException('Key "use" is required in Operation soap:body style.');
         }
+
         $this->operationBodyStyle = $operationStyle;
+
         return $this;
     }
 
@@ -314,9 +328,11 @@ class AutoDiscover
         if (isset($bindingStyle['style'])) {
             $this->bindingStyle['style'] = $bindingStyle['style'];
         }
+
         if (isset($bindingStyle['transport'])) {
             $this->bindingStyle['transport'] = $bindingStyle['transport'];
         }
+
         return $this;
     }
 
@@ -329,6 +345,7 @@ class AutoDiscover
     public function setComplexTypeStrategy(ComplexTypeStrategy $strategy)
     {
         $this->strategy = $strategy;
+
         return $this;
     }
 
@@ -341,6 +358,7 @@ class AutoDiscover
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -370,6 +388,7 @@ class AutoDiscover
                 'Argument to \Magento\Webapi\Model\Laminas\Soap\AutoDiscover::addFunction should be string or array of strings.'
             );
         }
+
         return $this;
     }
 
@@ -391,32 +410,29 @@ class AutoDiscover
     protected function generateFunctions()
     {
         $methods = [];
+
         foreach (array_unique($this->functions) as $func) {
             $methods[] = $this->reflection->reflectFunction($func);
         }
+
         return $this->generateWsdl($methods);
     }
 
     /**
      * Generate the WSDL for a set of reflection method instances.
      *
-     * @param  array $reflectionMethods
+     * @param array $reflectionMethods
      * @return Wsdl
      */
     protected function generateWsdl(array $reflectionMethods)
     {
         $uri = $this->getUri();
-
         $serviceName = $this->getServiceName();
-
         $wsdl = new $this->wsdlClass($serviceName, $uri, $this->strategy, $this->classMap);
-
         // The wsdl:types element must precede all other elements (WS-I Basic Profile 1.1 R2023)
         $wsdl->addSchemaTypeSection();
-
         $port = $wsdl->addPortType($serviceName . 'Port');
         $binding = $wsdl->addBinding($serviceName . 'Binding', Wsdl::TYPES_NS . ':' . $serviceName . 'Port');
-
         $wsdl->addSoapBinding($binding, $this->bindingStyle['style'], $this->bindingStyle['transport']);
         $wsdl->addService(
             $serviceName . 'Service',
@@ -436,9 +452,9 @@ class AutoDiscover
      * Add a function to the WSDL document.
      *
      * @param  $function Reflection\AbstractFunction function to add
-     * @param  $wsdl     Wsdl WSDL document
-     * @param  $port     DOMElement wsdl:portType
-     * @param  $binding  DOMElement wsdl:binding
+     * @param  $wsdl Wsdl WSDL document
+     * @param  $port DOMElement wsdl:portType
+     * @param  $binding DOMElement wsdl:binding
      * @throws InvalidArgumentException
      */
     protected function addFunctionToWsdl($function, $wsdl, $port, $binding)
@@ -448,13 +464,16 @@ class AutoDiscover
         // We only support one prototype: the one with the maximum number of arguments
         $prototype = null;
         $maxNumArgumentsOfPrototype = -1;
+
         foreach ($function->getPrototypes() as $tmpPrototype) {
             $numParams = count($tmpPrototype->getParameters());
+
             if ($numParams > $maxNumArgumentsOfPrototype) {
                 $maxNumArgumentsOfPrototype = $numParams;
                 $prototype = $tmpPrototype;
             }
         }
+
         if ($prototype === null) {
             throw new InvalidArgumentException(sprintf(
                 'No prototypes could be found for the "%s" function',
@@ -469,11 +488,13 @@ class AutoDiscover
         if ($this->bindingStyle['style'] == 'document') {
             // Document style: wrap all parameters in a sequence element
             $sequence = [];
+
             foreach ($prototype->getParameters() as $param) {
                 $sequenceElement = [
                     'name' => $param->getName(),
                     'type' => $wsdl->getType($this->discoveryStrategy->getFunctionParameterType($param))
                 ];
+
                 if ($param->isOptional()) {
                     $sequenceElement['nillable'] = 'true';
                 }
@@ -495,16 +516,18 @@ class AutoDiscover
                 ];
             }
         }
-        $wsdl->addMessage($functionName . 'In', $args);
 
+        $wsdl->addMessage($functionName . 'In', $args);
         $isOneWayMessage = $this->discoveryStrategy->isFunctionOneWay($function, $prototype);
 
         if ($isOneWayMessage == false) {
             // Add the output message (return value)
             $args = [];
+
             if ($this->bindingStyle['style'] == 'document') {
                 // Document style: wrap the return value in a sequence element
                 $sequence = [];
+
                 if ($prototype->getReturnType() != "void") {
                     $sequence[] = [
                         'name' => $functionName . 'Result',

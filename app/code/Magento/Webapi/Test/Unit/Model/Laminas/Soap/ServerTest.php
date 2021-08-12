@@ -26,8 +26,14 @@ class ServerTest extends TestCase
 {
     public function setUp(): void
     {
-        if (! extension_loaded('soap')) {
+        if (!extension_loaded('soap')) {
             $this->markTestSkipped('SOAP Extension is not loaded');
+        }
+
+        $testFunctionFile = __DIR__ . '/TestAsset/test-functions.php';
+
+        if (file_exists($testFunctionFile)) {
+            include_once $testFunctionFile;
         }
     }
 
@@ -257,20 +263,23 @@ class ServerTest extends TestCase
 
     public function testAddFunction()
     {
-        $this->markTestSkipped();
         $server = new Server();
 
         // Correct function should pass
-        $server->addFunction('\LaminasTest\Soap\TestAsset\TestFunc');
+        $server->addFunction('\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc');
 
         // Array of correct functions should pass
-        $functions = ['\LaminasTest\Soap\TestAsset\TestFunc2',
-            '\LaminasTest\Soap\TestAsset\TestFunc3',
-            '\LaminasTest\Soap\TestAsset\TestFunc4'];
+        $functions = [
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc2',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc3',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc4'];
         $server->addFunction($functions);
 
         $this->assertEquals(
-            array_merge(['\LaminasTest\Soap\TestAsset\TestFunc'], $functions),
+            array_merge(
+                ['\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc'],
+                $functions
+            ),
             $server->getFunctions()
         );
     }
@@ -298,9 +307,9 @@ class ServerTest extends TestCase
         $server = new Server();
 
         $functions = [
-            '\TestAsset\TestFunc5',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc5',
             'bogus_function',
-            '\TestAsset\TestFunc6'
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc6'
         ];
 
         $this->expectException(InvalidArgumentException::class);
@@ -416,28 +425,30 @@ class ServerTest extends TestCase
 
     public function testGetFunctions()
     {
-        $this->markTestSkipped();
         $server = new Server();
 
-        $server->addFunction('\LaminasTest\Soap\TestAsset\TestFunc');
+        $server->addFunction('\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc');
 
-        $functions  = ['\LaminasTest\Soap\TestAsset\TestFunc2',
-            '\LaminasTest\Soap\TestAsset\TestFunc3',
-            '\LaminasTest\Soap\TestAsset\TestFunc4'];
+        $functions  = [
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc2',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc3',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc4'
+        ];
         $server->addFunction($functions);
 
-        $functions  = ['\LaminasTest\Soap\TestAsset\TestFunc3',
-            '\LaminasTest\Soap\TestAsset\TestFunc5',
-            '\LaminasTest\Soap\TestAsset\TestFunc6'];
+        $functions  = [
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc3',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc5',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc6'];
         $server->addFunction($functions);
 
         $allAddedFunctions = [
-            '\LaminasTest\Soap\TestAsset\TestFunc',
-            '\LaminasTest\Soap\TestAsset\TestFunc2',
-            '\LaminasTest\Soap\TestAsset\TestFunc3',
-            '\LaminasTest\Soap\TestAsset\TestFunc4',
-            '\LaminasTest\Soap\TestAsset\TestFunc5',
-            '\LaminasTest\Soap\TestAsset\TestFunc6'
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc2',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc3',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc4',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc5',
+            '\Magento\Webapi\Test\Unit\Model\Laminas\Soap\TestAsset\TestFunctions\TestFunc6'
         ];
         $this->assertEquals($allAddedFunctions, $server->getFunctions());
     }
