@@ -285,7 +285,7 @@ class ConfigurableTest extends TestCase
             ->with('_cache_instance_used_product_attribute_ids')
             ->willReturn(true);
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->addMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
+            ->onlyMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->getMockForAbstractClass();
         $this->entityMetadata->expects($this->any())
             ->method('getLinkField')

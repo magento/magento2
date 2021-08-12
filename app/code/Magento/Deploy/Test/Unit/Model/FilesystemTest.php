@@ -155,8 +155,10 @@ class FilesystemTest extends TestCase
             ->method('writeln')
             ->withConsecutive(
                 ['Starting compilation'],
+                [],
                 ['Compilation complete'],
                 ['Starting deployment of static content'],
+                [],
                 ['Deployment of static content complete']
             );
 

@@ -182,7 +182,7 @@ class LinkManagementTest extends TestCase
             ->getMock();
         $extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->addMethods(
+            ->onlyMethods(
                 [
                     'getConfigurableProductOptions',
                     'setConfigurableProductOptions',
