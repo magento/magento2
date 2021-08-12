@@ -133,6 +133,38 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_parent_anchor.php
+     */
+    public function testCategoryTree()
+    {
+        $rootCategoryId = 2;
+        $query = <<<QUERY
+{
+  category(id: {$rootCategoryId}) {
+      children {
+        id
+        name
+        children {
+          id
+          name
+        }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+        self::assertEquals(
+            'Parent category',
+            $responseDataObject->getData('category/children/0/name')
+        );
+        self::assertEquals(
+            'Child category',
+            $responseDataObject->getData('category/children/0/children/0/name')
+        );
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
