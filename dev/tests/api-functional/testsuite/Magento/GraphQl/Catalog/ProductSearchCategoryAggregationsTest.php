@@ -18,38 +18,28 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     /**
      * Test category_id aggregation on filter by "eq" category ID condition.
      *
-     * @throws Exception
-     *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testAggregationEqCategory()
     {
         $filterValue = '{category_id: {eq: "2"}}';
-        $categoryAggregation = $this->aggregationCategoryTesting($filterValue);
-
+        $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
         $this->assertEquals(4, $categoryAggregation['count']);
-
         $expectedOptions = $this->getCategoryTwoOptions();
-
         $this->assertEquals($expectedOptions, $categoryAggregation['options']);
     }
 
     /**
      * Test category_id aggregation on filter by "in" category ID condition.
      *
-     * @throws Exception
-     *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testAggregationInCategory()
     {
         $filterValue = '{category_id: {in: ["3","2"]}}';
-        $categoryAggregation = $this->aggregationCategoryTesting($filterValue);
-
+        $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
         $this->assertEquals(6, $categoryAggregation['count']);
-
         $expectedOptions = array_merge($this->getCategoryThreeOptions(), $this->getCategoryTwoOptions());
-
         $this->assertEquals($expectedOptions, $categoryAggregation['options']);
     }
 
@@ -57,28 +47,22 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      * @param string $filterValue
      *
      * @return array
-     *
-     * @throws Exception
      */
-    private function aggregationCategoryTesting(string $filterValue): array
+    private function aggregationCategoryTesting(string $filterValue, string $includeSubcategoriesOnly): array
     {
-        $query = $this->getGraphQlQuery($filterValue);
+        $query = $this->getGraphQlQuery($filterValue, $includeSubcategoriesOnly);
         $result = $this->graphQlQuery($query);
-
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('aggregations', $result['products']);
-
         $categoryAggregation = array_filter(
             $result['products']['aggregations'],
             function ($a) {
                 return $a['attribute_code'] == 'category_id';
             }
         );
-
         $this->assertNotEmpty($categoryAggregation);
         $categoryAggregation = reset($categoryAggregation);
         $this->assertEquals('Category', $categoryAggregation['label']);
-
         return $categoryAggregation;
     }
 
@@ -114,28 +98,28 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      * Get graphQl query.
      *
      * @param string $categoryList
-     *
+     * @param string $includeSubcategoriesOnly
      * @return string
      */
-    private function getGraphQlQuery(string $categoryList): string
+    private function getGraphQlQuery(string $categoryList, string $includeSubcategoriesOnly): string
     {
         return <<<QUERY
-        { 
-          products(filter: {$categoryList}) {
-              total_count
-               items { sku }
-            aggregations {
-              attribute_code
-              count
-              label
-              options { 
-                count
-                label
-                value 
-              } 
-            }
-          } 
-        }
-        QUERY;
+{
+  products(filter: {$categoryList}) {
+      total_count
+       items { sku }
+    aggregations (filter: {includeSubcategoriesOnly: {$includeSubcategoriesOnly}}) {
+      attribute_code
+      count
+      label
+      options {
+        count
+        label
+        value
+      }
+    }
+  }
+}
+QUERY;
     }
 }
