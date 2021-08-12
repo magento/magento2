@@ -20,11 +20,12 @@
        <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
        <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
        <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
-       <waitForPageLoad stepKey="waitForPageLoadAfterClickingContinue"/>
+       <waitForPageLoad stepKey="waitForContinue"/>
+       <waitForElementVisible selector="{{AdminNewWidgetSection.widgetTitle}}" stepKey="waitForTitle"/>
        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
-       <waitForPageLoad stepKey="waitForPageLoadAfterClickingAddLayoutUpdate"/>
+       <waitForElementVisible selector="{{AdminNewWidgetSection.selectDisplayOn}}" stepKey="waitForLayoutUpdate"/>
        <comment userInput="BIC workaround" stepKey="clickAddLayoutUpdate2"/>
        <comment userInput="BIC workaround" stepKey="seeTwoLayoutUpdates"/>
        <comment userInput="BIC workaround" stepKey="clickRemoveLastLayoutUpdate"/>
@@ -35,6 +36,6 @@
        <waitForPageLoad stepKey="waitForPageLoad"/>
        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
        <click selector="{{AdminNewWidgetSection.widgetOptions}}" stepKey="clickWidgetOptions"/>
-       <waitForPageLoad stepKey="waitForPageLoadAfterClickingWidgetOptions"/>
+       <waitForPageLoad stepKey="waitForWidgetOptions"/>
    </actionGroup>
 </actionGroups>
