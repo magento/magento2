@@ -85,12 +85,6 @@
         </arguments>
     </type>
 
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search">
-        <arguments>
-            <argument name="resolveCategoryAggregation" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\ResolveCategoryAggregation\Proxy</argument>
-        </arguments>
-    </type>
-
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>
