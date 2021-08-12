@@ -5,6 +5,7 @@
  */
 namespace Magento\Contact\Block;
 
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\Template;
 
 /**
@@ -18,9 +19,11 @@ class ContactForm extends Template
     /**
      * @param Template\Context $context
      * @param array $data
+     * @param ArgumentInterface|null $viewModel
      */
-    public function __construct(Template\Context $context, array $data = [])
+    public function __construct(Template\Context $context, array $data = [], ArgumentInterface $viewModel = null)
     {
+        $data['view_model'] = $viewModel;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
