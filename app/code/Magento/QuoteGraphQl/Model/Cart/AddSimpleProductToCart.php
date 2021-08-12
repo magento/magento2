@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Exception;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -22,9 +21,9 @@ use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 class AddSimpleProductToCart
 {
     /**
-     * @var ProductCollectionFactory
+     * @var ProductRepositoryInterface
      */
-    private $productCollectionFactory;
+    private $productRepository;
 
     /**
      * @var BuyRequestBuilder
@@ -32,14 +31,14 @@ class AddSimpleProductToCart
     private $buyRequestBuilder;
 
     /**
-     * @param ProductCollectionFactory $productCollectionFactory
+     * @param ProductRepositoryInterface $productRepository
      * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
-        ProductCollectionFactory $productCollectionFactory,
-        BuyRequestBuilder        $buyRequestBuilder
+        ProductRepositoryInterface $productRepository,
+        BuyRequestBuilder $buyRequestBuilder
     ) {
-        $this->productCollectionFactory = $productCollectionFactory;
+        $this->productRepository = $productRepository;
         $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
@@ -56,13 +55,12 @@ class AddSimpleProductToCart
         $cartItemData['model'] = $cart;
         $sku = $this->extractSku($cartItemData);
 
-        $productCollection = $this->productCollectionFactory->create()
-            ->addAttributeToFilter(ProductInterface::SKU, $sku)
-            ->addWebsiteFilter([$cart->getStore()->getWebsiteId()])
-            ->load();
-        /** @var ProductInterface $product */
-        $product = $productCollection->getFirstItem();
-        if (!$product->getId()) {
+        try {
+            $product = $this->productRepository->get($sku, false, null, true);
+        } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
+        }
+        if (!in_array($cart->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 
