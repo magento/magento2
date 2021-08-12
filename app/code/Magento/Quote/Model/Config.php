@@ -10,8 +10,7 @@ namespace Magento\Quote\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Class Config
- * Check if inventory check on quote items load is enabled
+ * Config for inventory check on quote items load
  * @package Magento\Quote\Model
  */
 class Config
@@ -31,7 +30,7 @@ class Config
     }
 
     /**
-     * Check if Inventory check is disabled
+     * Check if Inventory check is enabled
      * @return bool
      */
     public function isEnabled(): bool
