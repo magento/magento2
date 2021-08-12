@@ -56,6 +56,11 @@ class Search implements ProductQueryInterface
     private $productsProvider;
 
     /**
+     * @var ResolveCategoryAggregation
+     */
+    private $resolveCategoryAggregation;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -68,6 +73,7 @@ class Search implements ProductQueryInterface
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ArgumentsProcessorInterface|null $argsSelection
+     * @param ResolveCategoryAggregation $resolveCategoryAggregation
      */
     public function __construct(
         SearchInterface $search,
@@ -76,6 +82,7 @@ class Search implements ProductQueryInterface
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        ResolveCategoryAggregation $resolveCategoryAggregation,
         ArgumentsProcessorInterface $argsSelection = null
     ) {
         $this->search = $search;
@@ -84,6 +91,8 @@ class Search implements ProductQueryInterface
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->resolveCategoryAggregation = $resolveCategoryAggregation ?: ObjectManager::getInstance()
+            ->get(ResolveCategoryAggregation::class);
         $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
             ->get(ArgumentsProcessorInterface::class);
     }
@@ -124,6 +133,17 @@ class Search implements ProductQueryInterface
 
         $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
 
+        $aggregations = $itemsResults->getAggregations();
+        $bucketList = $aggregations->getBuckets();
+        $categoryFilter = $args['filter']['category_id'] ?? [];
+
+        if (!empty($categoryFilter) && isset($bucketList[ResolveCategoryAggregation::CATEGORY_BUCKET])) {
+            $aggregations = $this->resolveCategoryAggregation->getResolvedCategoryAggregation(
+                $categoryFilter,
+                $bucketList
+            );
+        }
+
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($searchResults->getItems() as $product) {
@@ -135,7 +155,7 @@ class Search implements ProductQueryInterface
             [
                 'totalCount' => $searchResults->getTotalCount(),
                 'productsSearchResult' => $productArray,
-                'searchAggregation' => $itemsResults->getAggregations(),
+                'searchAggregation' => $aggregations,
                 'pageSize' => $realPageSize,
                 'currentPage' => $realCurrentPage,
                 'totalPages' => $totalPages,
@@ -149,6 +169,7 @@ class Search implements ProductQueryInterface
      * @param array $args
      * @param ResolveInfo $info
      * @return SearchCriteriaInterface
+     * @throws GraphQlInputException
      */
     private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
     {
