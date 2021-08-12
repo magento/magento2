@@ -46,8 +46,9 @@
         </actionGroup>
 
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
-        <wait time="5" stepKey="waitFilterReallyCleared"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <comment userInput="BIC workaround" stepKey="clearFilter"/>
+        <comment userInput="BIC workaround" stepKey="waitFilterReallyCleared"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>

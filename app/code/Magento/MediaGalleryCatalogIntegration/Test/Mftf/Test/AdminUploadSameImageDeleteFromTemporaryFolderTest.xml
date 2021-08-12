@@ -42,6 +42,7 @@
 
         <!-- Open tmp/category folder -->
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandCatalogTmpFolderActionGroup" stepKey="expandTmpFolder"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectByFullPathActionGroup" stepKey="selectCategoryFolder">
             <argument name="path" value="catalog/tmp/category"/>

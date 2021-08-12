@@ -40,7 +40,7 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCategoryImageGalleryGridToDefaultView"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
