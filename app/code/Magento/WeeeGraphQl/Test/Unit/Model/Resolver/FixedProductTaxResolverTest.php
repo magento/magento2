@@ -109,7 +109,9 @@ class FixedProductTaxResolverTest extends TestCase
     }
 
     /**
-     * Verifies that exception is thrown if model is not specified
+     * Verifies that exception is thrown if model is not specified.
+     *
+     * @return void
      */
     public function testShouldThrowException(): void
     {
@@ -124,14 +126,20 @@ class FixedProductTaxResolverTest extends TestCase
     }
 
     /**
-     * Verifies that result is empty if FPT config is disabled
+     * Verifies that result is empty if FPT config is disabled.
+     *
+     * @return void
      */
     public function testShouldReturnEmptyResult(): void
     {
         $store = $this->createMock(StoreInterface::class);
         $cartItem = $this->createMock(CartItemInterface::class);
-        $contextExtensionAttributes = $this->createMock(ContextExtensionInterface::class);
-        $contextExtensionAttributes->method('getStore')
+        $contextExtensionAttributes = $this->getMockBuilder(ContextExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getStore'])
+            ->getMock();
+        $contextExtensionAttributes
+            ->method('getStore')
             ->willreturn($store);
         $this->context->method('getExtensionAttributes')
             ->willReturn($contextExtensionAttributes);
@@ -155,15 +163,20 @@ class FixedProductTaxResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider shouldReturnResultDataProvider
      * @param int $displayType
      * @param array $expected
+     *
+     * @return void
+     * @dataProvider shouldReturnResultDataProvider
      */
     public function testShouldReturnResult(int $displayType, array $expected): void
     {
         $store = $this->createMock(StoreInterface::class);
         $cartItem = $this->createMock(CartItemInterface::class);
-        $contextExtensionAttributes = $this->createMock(ContextExtensionInterface::class);
+        $contextExtensionAttributes = $this->getMockBuilder(ContextExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getStore'])
+            ->getMock();
         $contextExtensionAttributes->method('getStore')
             ->willreturn($store);
         $this->context->method('getExtensionAttributes')

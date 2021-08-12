@@ -10,8 +10,8 @@ namespace Magento\Customer\Test\Unit\Model\Plugin;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Customer\Api\Data\GroupExtensionInterface;
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Data\GroupExcludedWebsite;
 use Magento\Customer\Model\Data\GroupExcludedWebsiteFactory;
 use Magento\Customer\Model\Plugin\SaveCustomerGroupExcludedWebsite;
@@ -80,12 +80,15 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
      */
     private $plugin;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 
         $this->groupExcludedWebsiteFactory = $this->getMockBuilder(GroupExcludedWebsiteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupExcludedWebsiteRepository = $this->getMockForAbstractClass(
@@ -130,6 +133,9 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
         );
     }
 
+    /**
+    * @return void
+    */
     public function testAfterSaveWithoutExtensionAttributes(): void
     {
         $this->groupExtensionInterface->method('getExcludeWebsiteIds')->willReturn(null);
@@ -139,11 +145,13 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderNoExcludedWebsitesChanged
      * @param array $excludedWebsites
      * @param array $websitesToExclude
+     *
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @dataProvider dataProviderNoExcludedWebsitesChanged
      */
     public function testAfterSaveWithNoExcludedWebsitesChanged(array $excludedWebsites, array $websitesToExclude): void
     {
@@ -159,12 +167,14 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderExcludedWebsitesChanged
      * @param array $excludedWebsites
      * @param array $websitesToExclude
      * @param int $times
+     *
+     * @return void
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @dataProvider dataProviderExcludedWebsitesChanged
      */
     public function testAfterSaveWithExcludedWebsitesChanged(
         array $excludedWebsites,
@@ -187,7 +197,7 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
             ->method('setExcludedWebsiteId')->willReturnSelf();
         $this->groupExcludedWebsiteRepository->expects(self::exactly($times))
             ->method('save')
-            ->willReturn($this->groupExcludedWebsiteResourceModel);
+            ->willReturn($this->groupExcludedWebsite);
 
         $this->priceIndexProcessor->expects(self::once())->method('getIndexer')
             ->willReturn($this->priceIndexer);
@@ -197,14 +207,17 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
         $this->plugin->afterSave($this->groupRepositoryInterface, $this->groupInterface, $this->groupInterface);
     }
 
+    /**
+    * @return void
+    */
     private function getAllWebsites(): void
     {
         $websiteMock1 = $this->getMockBuilder(Website::class)
-            ->setMethods(['getWebsiteId'])
+            ->addMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock2 = $this->getMockBuilder(Website::class)
-            ->setMethods(['getWebsiteId'])
+            ->addMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects(self::once())->method('getWebsiteCollection')
