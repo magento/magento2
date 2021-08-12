@@ -16,6 +16,7 @@ use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\IncludeSubcategoriesOnly;
 
 /**
  * @inheritdoc
@@ -63,6 +64,11 @@ class Category implements LayerBuilderInterface
     private $layerFormatter;
 
     /**
+     * @var IncludeSubcategoriesOnly
+     */
+    private $includeSubcategoriesOnly;
+
+    /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
      * @param CategoryAttributesMapper $attributesMapper
      * @param RootCategoryProvider $rootCategoryProvider
@@ -74,13 +80,15 @@ class Category implements LayerBuilderInterface
         CategoryAttributesMapper $attributesMapper,
         RootCategoryProvider $rootCategoryProvider,
         ResourceConnection $resourceConnection,
-        LayerFormatter $layerFormatter
+        LayerFormatter $layerFormatter,
+        IncludeSubcategoriesOnly $includeSubcategoriesOnly
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;
         $this->resourceConnection = $resourceConnection;
         $this->rootCategoryProvider = $rootCategoryProvider;
         $this->layerFormatter = $layerFormatter;
+        $this->includeSubcategoriesOnly = $includeSubcategoriesOnly;
     }
 
     /**
@@ -90,6 +98,7 @@ class Category implements LayerBuilderInterface
      */
     public function build(AggregationInterface $aggregation, ?int $storeId): array
     {
+        $aggregation = $this->includeSubcategoriesOnly->filter($aggregation, $storeId);
         $bucket = $aggregation->getBucket(self::CATEGORY_BUCKET);
         if ($this->isBucketEmpty($bucket)) {
             return [];
