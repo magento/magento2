@@ -19,7 +19,7 @@
         <element name="deleteRule" type="button" selector="#delete" timeout="30"/>
         <element name="ok" type="button" selector="button.action-primary.action-accept" timeout="30"/>
         <element name="additionalSettings" type="button" selector="#details-summarybase_fieldset" timeout="30"/>
-        <element name="additionalSettingsOpened" type="button" selector="#details-summarybase_fieldset[aria-expanded=true]"/>
+        <element name="additionalSettingsOpened" type="button" selector="#detailsbase_fieldset[open]"/>
         <element name="customerTaxClassOption" type="checkbox" selector="//*[@id='tax_customer_class']/..//span[.='{{taxCustomerClass}}']" parameterized="true"/>
         <element name="productTaxClassOption" type="checkbox" selector="//*[@id='tax_product_class']/..//span[.='{{taxProductClass}}']" parameterized="true"/>
         <element name="customerTaxClassSelected" type="checkbox" selector="//*[@id='tax_customer_class']/..//span[.='{{taxCustomerClass}}' and preceding-sibling::input[contains(@class, 'mselect-checked')]]" parameterized="true"/>
