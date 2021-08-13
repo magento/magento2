@@ -100,7 +100,6 @@ class ConfigTest extends TestCase
     {
         $this->_themeMock = null;
         $this->_configData = null;
-        $this->_themeFactoryMock = null;
         $this->_configCacheMock = null;
         $this->_layoutCacheMock = null;
         $this->_model = null;

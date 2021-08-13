@@ -7,6 +7,29 @@
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- These Tax Rates Are Installed by Default with Magento -->
+    <entity name="US_CA_Rate_1" type="taxRate">
+        <data key="id">1</data>
+        <data key="code">US-CA-*-Rate 1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_region">CA</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.2500</data>
+    </entity>
+    <entity name="US_NY_Rate_1" type="taxRate">
+        <data key="id">2</data>
+        <data key="code">US-NY-*-Rate 1</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_region_id">43</data>
+        <data key="tax_region">NY</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.3750</data>
+    </entity>
+
+    <!-- Test Tax Rates -->
     <entity name="SimpleTaxRate" type="taxRate">
         <data key="code" unique="suffix">TaxRate</data>
     </entity>
@@ -17,20 +40,6 @@
         <data key="tax_postcode">*</data>
         <data key="zip_is_range">0</data>
         <data key="rate">10</data>
-    </entity>
-    <entity name="US_CA_Rate_1" type="taxRate">
-        <data key="id">1</data>
-        <data key="code">US-CA-*-Rate 1</data>
-        <data key="tax_country_id">US</data>
-        <data key="tax_postcode">*</data>
-        <data key="rate">8.2500</data>
-    </entity>
-    <entity name="US_NY_Rate_1" type="taxRate">
-        <data key="code">US-NY-*-Rate 1</data>
-        <data key="tax_country_id">US</data>
-        <data key="tax_postcode">*</data>
-        <data key="rate">8.3750</data>
-        <data key="id">2</data>
     </entity>
     <entity name="taxRate_US_NY_8_1" type="taxRate">
         <data key="code" unique="suffix">US-NY-*-</data>

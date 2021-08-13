@@ -105,7 +105,7 @@ class DownloadTest extends AbstractBackendController
             'Incorrect response header "content-type"'
         );
         $this->assertEquals(
-            'attachment; filename="' . $this->fileName . '"',
+            'attachment; filename="export/' . $this->fileName . '"',
             $contentDisposition->getFieldValue(),
             'Incorrect response header "content-disposition"'
         );

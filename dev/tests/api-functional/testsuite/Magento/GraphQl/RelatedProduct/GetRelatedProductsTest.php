@@ -25,13 +25,12 @@ class GetRelatedProductsTest extends GraphQlAbstract
 {
     products(filter: {sku: {eq: "{$productSku}"}})
     {
-        items {            
+        items {
             related_products
             {
                 sku
                 name
                 url_key
-                created_at
             }
         }
     }
@@ -60,13 +59,12 @@ QUERY;
 {
     products(filter: {sku: {eq: "{$productSku}"}})
     {
-        items {            
+        items {
             related_products
             {
                 sku
                 name
                 url_key
-                created_at
             }
         }
     }
@@ -94,13 +92,12 @@ QUERY;
 {
     products(filter: {sku: {eq: "{$productSku}"}})
     {
-        items {            
+        items {
             crosssell_products
             {
                 sku
                 name
                 url_key
-                created_at
             }
         }
     }
@@ -119,11 +116,9 @@ QUERY;
         self::assertArrayHasKey('sku', $crossSellProduct);
         self::assertArrayHasKey('name', $crossSellProduct);
         self::assertArrayHasKey('url_key', $crossSellProduct);
-        self::assertArrayHasKey('created_at', $crossSellProduct);
         self::assertEquals($crossSellProduct['sku'], 'simple');
         self::assertEquals($crossSellProduct['name'], 'Simple Cross Sell');
         self::assertEquals($crossSellProduct['url_key'], 'simple-cross-sell');
-        self::assertNotEmpty($crossSellProduct['created_at']);
     }
 
     /**
@@ -137,13 +132,12 @@ QUERY;
 {
     products(filter: {sku: {eq: "{$productSku}"}})
     {
-        items {            
+        items {
             upsell_products
             {
                 sku
                 name
                 url_key
-                created_at
             }
         }
     }
@@ -162,11 +156,9 @@ QUERY;
         self::assertArrayHasKey('sku', $upSellProduct);
         self::assertArrayHasKey('name', $upSellProduct);
         self::assertArrayHasKey('url_key', $upSellProduct);
-        self::assertArrayHasKey('created_at', $upSellProduct);
         self::assertEquals($upSellProduct['sku'], 'simple');
         self::assertEquals($upSellProduct['name'], 'Simple Up Sell');
         self::assertEquals($upSellProduct['url_key'], 'simple-up-sell');
-        self::assertNotEmpty($upSellProduct['created_at']);
     }
 
     /**
@@ -190,14 +182,48 @@ QUERY;
             self::assertArrayHasKey('sku', $product);
             self::assertArrayHasKey('name', $product);
             self::assertArrayHasKey('url_key', $product);
-            self::assertArrayHasKey('created_at', $product);
 
             self::assertArrayHasKey($product['sku'], $expectedData);
             $productExpectedData = $expectedData[$product['sku']];
 
             self::assertEquals($product['name'], $productExpectedData['name']);
             self::assertEquals($product['url_key'], $productExpectedData['url_key']);
-            self::assertNotEmpty($product['created_at']);
         }
+    }
+
+    /**
+     * Test query with disabled linked product in the default store
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related_disabled_in_store.php
+     *
+     * @return void
+     */
+    public function testQueryDisableRelatedProductInStore(): void
+    {
+        $productSku = 'simple_with_related';
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items {
+            related_products
+            {
+                sku
+                name
+                url_key
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query, [], '', ['Store' => 'default']);
+
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertCount(1, $response['products']['items']);
+        self::assertArrayHasKey(0, $response['products']['items']);
+        self::assertArrayHasKey('related_products', $response['products']['items'][0]);
+        $relatedProducts = $response['products']['items'][0]['related_products'];
+        self::assertCount(0, $relatedProducts);
     }
 }

@@ -916,7 +916,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         $this->_productLimitationFilters['website_ids'] = $websites;
-        $this->_applyProductLimitations();
+
+        if ($this->getStoreId() == Store::DEFAULT_STORE_ID) {
+            $this->_productLimitationJoinWebsite();
+        } else {
+            $this->_applyProductLimitations();
+        }
 
         return $this;
     }
@@ -1762,9 +1767,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsingPriceIndex()) {
-                $this->getSelect()->order(
-                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$dir}")
-                );
+                $this->getSelect()->order("price_index.min_price {$dir}");
                 return $this;
             }
         }
