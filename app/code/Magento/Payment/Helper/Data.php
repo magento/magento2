@@ -42,7 +42,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * LayoutFactory
      * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $_layoutFactory;
+    private $_layoutFactory;
 
     /**
      * Factory for payment method models
