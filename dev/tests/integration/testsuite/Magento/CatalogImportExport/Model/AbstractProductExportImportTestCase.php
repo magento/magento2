@@ -345,7 +345,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
                 'name' => '_itemsPerPage'
             ]);
             $itemsPerPageProperty->setAccessible(true);
-            $itemsPerPageProperty->setValue($exportProduct, 1);
+            $itemsPerPageProperty->setValue($exportProduct, 2);
         }
 
         $csvfile = $csvfile ?? $this->exportProducts($exportProduct);
