@@ -32,6 +32,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_paymentConfig;
 
     /**
+     * Layout
+     * @deprecated
+     * @var \Magento\Framework\View\LayoutInterface
+     */
+    protected $_layout;
+
+    /**
+     * LayoutFactory
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $_layoutFactory;
