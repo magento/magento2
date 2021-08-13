@@ -89,11 +89,7 @@ class ImageResizeAfterProductSave implements ObserverInterface
 
         if (!(bool) $product->getId()) {
             foreach ($product->getMediaGalleryImages() as $image) {
-                if ($this->imageResizeSchedulerFlag) {
-                    $this->imageResizeScheduler->schedule($image->getFile());
-                } else {
-                    $this->imageResize->resizeFromImageName($image->getFile());
-                }
+                $this->resizeImage($image->getFile());
             }
         } else {
             $new = $product->getData('media_gallery');
@@ -102,12 +98,22 @@ class ImageResizeAfterProductSave implements ObserverInterface
             $mediaOriginalGallery = !empty($original['images']) ? array_column($original['images'], 'file') : [];
 
             foreach (array_diff($mediaGallery, $mediaOriginalGallery) as $image) {
-                if ($this->imageResizeSchedulerFlag) {
-                    $this->imageResizeScheduler->schedule($image);
-                } else {
-                    $this->imageResize->resizeFromImageName($image);
-                }
+                $this->resizeImage($image);
             }
+        }
+    }
+
+    /**
+     * Resize image in synchronous or asynchronous way
+     *
+     * @param string $image
+     */
+    private function resizeImage(string $image): void
+    {
+        if ($this->imageResizeSchedulerFlag) {
+            $this->imageResizeScheduler->schedule($image);
+        } else {
+            $this->imageResize->resizeFromImageName($image);
         }
     }
 }
