@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Link;
@@ -120,7 +119,7 @@ class UpdateHandlerTest extends TestCase
     }
 
     /**
-     * Update links for non downloadable product
+     * Update links for non downloadable product.
      *
      * @return void
      */
@@ -157,7 +156,7 @@ class UpdateHandlerTest extends TestCase
         $mockBuilder = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->addMethods(['getDownloadableProductLinks']);
+            $mockBuilder->onlyMethods(['getDownloadableProductLinks']);
         } catch (RuntimeException $e) {
             // ProductExtension already generated.
         }

@@ -45,6 +45,7 @@ class DisableMultishippingTest extends TestCase
      * Test 'execute' method if 'MultiShipping' mode is enabled.
      *
      * @param bool $hasShippingAssignments
+     *
      * @return void
      * @dataProvider executeWithMultishippingModeEnabledDataProvider
      */
@@ -121,7 +122,7 @@ class DisableMultishippingTest extends TestCase
         $mockBuilder = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
+            $mockBuilder->onlyMethods(['getShippingAssignments', 'setShippingAssignments']);
         } catch (RuntimeException $e) {
             // CartExtension already generated.
         }
