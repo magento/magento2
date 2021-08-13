@@ -480,9 +480,7 @@
                     "linkorb/jsmin-php": "lib/internal/JSMin",
                     "components/jquery": [
                         "lib/web/jquery.js",
-                        "lib/web/jquery/jquery.min.js",
-                        "lib/web/jquery/jquery-migrate.js",
-                        "lib/web/jquery/jquery-migrate.min.js"
+                        "lib/web/jquery/jquery.min.js"
                     ],
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": [
