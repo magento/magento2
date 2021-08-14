@@ -1,0 +1,17 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    submitContactForm (input: SubmitContactFormInput): SubmitContactFormOutput! @resolver(class: "Magento\\ContactGraphQl\\Model\\Resolver\\SubmitContactForm")
+}
+
+input SubmitContactFormInput @doc(description: "Contact form input data") {
+    name: String! @doc(description: "Name")
+    email: String! @doc(description: "Email Address")
+    telephone: String @doc(description: "Phone Number")
+    comment: String! @doc(description: "Comment")
+}
+
+type SubmitContactFormOutput @doc(description: "Contact form response output") {
+    success: Boolean! @doc(description: "Indicates whether the request was a success")
+}
