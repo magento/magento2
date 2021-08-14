@@ -10,9 +10,11 @@ namespace Magento\Contact\Controller\Index;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\MailInterface;
+use Magento\Contact\Model\MailParamsValidator;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
@@ -21,19 +23,24 @@ use Magento\Framework\DataObject;
 class Post extends \Magento\Contact\Controller\Index implements HttpPostActionInterface
 {
     /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var MailInterface
      */
     private $mail;
+
+    /**
+     * @var MailParamsValidator
+     */
+    private $paramsValidator;
+
+    /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
 
     /**
      * @var LoggerInterface
@@ -44,19 +51,24 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
      * @param Context $context
      * @param ConfigInterface $contactsConfig
      * @param MailInterface $mail
+     * @param MailParamsValidator $paramsValidator
+     * @param DataObjectFactory $dataObjectFactory
      * @param DataPersistorInterface $dataPersistor
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         Context $context,
         ConfigInterface $contactsConfig,
         MailInterface $mail,
+        MailParamsValidator $paramsValidator,
+        DataObjectFactory $dataObjectFactory,
         DataPersistorInterface $dataPersistor,
         LoggerInterface $logger = null
     ) {
         parent::__construct($context, $contactsConfig);
-        $this->context = $context;
         $this->mail = $mail;
+        $this->paramsValidator = $paramsValidator;
+        $this->dataObjectFactory = $dataObjectFactory;
         $this->dataPersistor = $dataPersistor;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
@@ -66,13 +78,12 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
      *
      * @return Redirect
      */
-    public function execute()
+    public function execute(): Redirect
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->resultRedirectFactory->create()->setPath('*/*/');
-        }
         try {
-            $this->sendEmail($this->validatedParams());
+            $params = $this->dataObjectFactory->create(['data' => $this->getRequest()->getParams()]);
+            $this->validatedParams($params);
+            $this->sendEmail($params);
             $this->messageManager->addSuccessMessage(
                 __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
             );
@@ -91,37 +102,28 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     }
 
     /**
-     * @param array $post Post data from contact form
+     * @param DataObject $params Post data from contact form transformed into a Data Object
      * @return void
      */
-    private function sendEmail($post)
+    private function sendEmail(DataObject $params): void
     {
         $this->mail->send(
-            $post['email'],
-            ['data' => new DataObject($post)]
+            $params->getData('email'),
+            ['data' => $params]
         );
     }
 
     /**
-     * @return array
+     * @param DataObject $params
      * @throws \Exception
      */
-    private function validatedParams()
+    private function validatedParams(DataObject $params): void
     {
-        $request = $this->getRequest();
-        if (trim($request->getParam('name')) === '') {
-            throw new LocalizedException(__('Enter the Name and try again.'));
-        }
-        if (trim($request->getParam('comment')) === '') {
-            throw new LocalizedException(__('Enter the comment and try again.'));
-        }
-        if (false === \strpos($request->getParam('email'), '@')) {
-            throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
-        }
-        if (trim($request->getParam('hideit')) !== '') {
+        $this->paramsValidator->validate($params);
+
+        // Validation relevant only for non-headless storefronts
+        if (trim($params->getData('hideit')) !== '') {
             throw new \Exception();
         }
-
-        return $request->getParams();
     }
 }
