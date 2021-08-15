@@ -31,14 +31,14 @@ class DeploymentConfig
      *
      * @var array
      */
-    private $data;
+    private $data = [];
 
     /**
      * Flattened data
      *
      * @var array
      */
-    private $flatData;
+    private $flatData = [];
 
     /**
      * Injected configuration data
@@ -72,6 +72,12 @@ class DeploymentConfig
      */
     public function get(string $key = null, $defaultValue = null)
     {
+        if ($key === null) {
+            if (empty($this->flatData)) {
+                $this->reloadData();
+            }
+            return $this->flatData;
+        }
         $result = $this->getByKey($key);
         if ($result === null) {
             $this->reloadData();
@@ -90,6 +96,12 @@ class DeploymentConfig
      */
     public function getConfigData(string $key = null)
     {
+        if ($key === null) {
+            if (empty($this->data)) {
+                $this->reloadData();
+            }
+            return $this->data;
+        }
         $result = $this->getConfigDataByKey($key);
         if ($result === null) {
             $this->reloadData();
@@ -130,8 +142,8 @@ class DeploymentConfig
      */
     public function resetData(): void
     {
-        $this->data = null;
-        $this->flatData = null;
+        $this->data = [];
+        $this->flatData = [];
     }
 
     /**
@@ -197,7 +209,7 @@ class DeploymentConfig
         if ($key === null) {
             return $this->flatData ?: null;
         }
-        if (is_array($this->flatData) && array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
+        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';
         }
 
@@ -210,9 +222,6 @@ class DeploymentConfig
      */
     private function getConfigDataByKey(?string $key)
     {
-        if ($key === null) {
-            return $this->data;
-        }
         return $this->data[$key] ?? null;
     }
 }
