@@ -22,7 +22,7 @@ define([
         }).done(function (data) {
             $('#product-review-container').html(data).trigger('contentUpdated');
             $('[data-role="product-review"] .pages a').each(function (index, element) {
-                $(element).click(function (event) { //eslint-disable-line max-nested-callbacks
+                $(element).on('click', function (event) { //eslint-disable-line max-nested-callbacks
                     processReviews($(element).attr('href'), true);
                     event.preventDefault();
                 });
@@ -49,7 +49,7 @@ define([
         }
 
         $(function () {
-            $('.product-info-main .reviews-actions a').click(function (event) {
+            $('.product-info-main .reviews-actions a').on('click', function (event) {
                 var anchor, addReviewBlock;
 
                 event.preventDefault();

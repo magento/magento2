@@ -332,15 +332,15 @@ abstract class EntityAbstract
 
         /** @var string|null $typeName */
         $typeName = null;
-
-        if ($parameter->isArray()) {
+        $parameterType = $parameter->getType();
+        if ($parameterType->getName() === 'array') {
             $typeName = 'array';
         } elseif ($parameterClass = $this->getParameterClass($parameter)) {
             $typeName = $this->_getFullyQualifiedClassName($parameterClass->getName());
-        } elseif ($parameter->isCallable()) {
+        } elseif ($parameterType->getName() === 'callable') {
             $typeName = 'callable';
         } else {
-            $typeName = $parameter->getType()->getName();
+            $typeName = $parameterType->getName();
         }
 
         if ($parameter->allowsNull()) {
