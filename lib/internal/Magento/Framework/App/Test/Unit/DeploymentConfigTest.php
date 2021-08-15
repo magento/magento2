@@ -149,7 +149,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->readerMock->expects($this->once())->method('load')->willReturn(['Test']);
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());
@@ -191,7 +191,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testResetData(): void
     {
-        $this->readerMock->expects($this->once())->method('load')->willReturn(self::$fixture);
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
         $this->assertSame(self::$flattenedFixture, $this->deploymentConfig->get());
         $this->deploymentConfig->resetData();
         // second time to ensure loader will be invoked only once after reset
@@ -208,7 +208,6 @@ class DeploymentConfigTest extends TestCase
     {
         $this->readerMock->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
         $this->assertFalse($this->deploymentConfig->isDbAvailable());
-        $this->deploymentConfig->resetData();
         $this->assertTrue($this->deploymentConfig->isDbAvailable());
     }
 
