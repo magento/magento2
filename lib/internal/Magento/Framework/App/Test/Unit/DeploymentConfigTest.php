@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
@@ -20,12 +22,12 @@ class DeploymentConfigTest extends TestCase
      */
     private static $fixture
         = [
-            'configData1'   => 'scalar_value',
-            'configData2'   => [
+            'configData1' => 'scalar_value',
+            'configData2' => [
                 'foo' => 1,
                 'bar' => ['baz' => 2],
             ],
-            'configData3'   => null,
+            'configData3' => null,
             'test_override' => 'original',
         ];
 
@@ -34,16 +36,16 @@ class DeploymentConfigTest extends TestCase
      */
     private static $flattenedFixture
         = [
-            'configData1'         => 'scalar_value',
-            'configData2'         => [
+            'configData1' => 'scalar_value',
+            'configData2' => [
                 'foo' => 1,
                 'bar' => ['baz' => 2],
             ],
-            'configData2/foo'     => 1,
-            'configData2/bar'     => ['baz' => 2],
+            'configData2/foo' => 1,
+            'configData2/bar' => ['baz' => 2],
             'configData2/bar/baz' => 2,
-            'configData3'         => null,
-            'test_override'       => 'overridden',
+            'configData3' => null,
+            'test_override' => 'overridden',
         ];
 
     /**
@@ -69,32 +71,30 @@ class DeploymentConfigTest extends TestCase
     /**
      * @var MockObject
      */
-    private $reader;
+    private $readerMock;
 
     public static function setUpBeforeClass(): void
     {
-        self::$fixtureConfig       = require __DIR__ . '/_files/config.php';
+        self::$fixtureConfig = require __DIR__ . '/_files/config.php';
         self::$fixtureConfigMerged = require __DIR__ . '/_files/other/local_developer_merged.php';
     }
 
     protected function setUp(): void
     {
-        $this->reader                  = $this->createMock(Reader::class);
-        $this->_deploymentConfig       = new DeploymentConfig(
-            $this->reader,
+        $this->readerMock = $this->createMock(Reader::class);
+        $this->_deploymentConfig = new DeploymentConfig(
+            $this->readerMock,
             ['test_override' => 'overridden']
         );
         $this->_deploymentConfigMerged = new DeploymentConfig(
-            $this->reader,
+            $this->readerMock,
             require __DIR__ . '/_files/other/local_developer.php'
         );
     }
 
     public function testGetters(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(self::$fixture);
-        $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
-        // second time to ensure loader will be invoked only once
+        $this->readerMock->expects($this->any())->method('load')->willReturn(self::$fixture);
         $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
         $this->assertSame('scalar_value', $this->_deploymentConfig->getConfigData('configData1'));
         $this->assertSame(self::$fixture['configData2'], $this->_deploymentConfig->getConfigData('configData2'));
@@ -107,19 +107,19 @@ class DeploymentConfigTest extends TestCase
 
     public function testIsAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(
+        $this->readerMock->expects($this->once())->method('load')->willReturn(
             [
                 ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE => 1,
             ]
         );
-        $object = new DeploymentConfig($this->reader);
+        $object = new DeploymentConfig($this->readerMock);
         $this->assertTrue($object->isAvailable());
     }
 
     public function testNotAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn([]);
-        $object = new DeploymentConfig($this->reader);
+        $this->readerMock->expects($this->once())->method('load')->willReturn([]);
+        $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
     }
 
@@ -128,8 +128,8 @@ class DeploymentConfigTest extends TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['Test']);
-        $object = new DeploymentConfig($this->reader);
+        $this->readerMock->expects($this->once())->method('load')->willReturn(['Test']);
+        $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());
     }
@@ -142,8 +142,8 @@ class DeploymentConfigTest extends TestCase
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Key collision');
-        $this->reader->expects($this->once())->method('load')->willReturn($data);
-        $object = new DeploymentConfig($this->reader);
+        $this->readerMock->expects($this->once())->method('load')->willReturn($data);
+        $object = new DeploymentConfig($this->readerMock);
         $object->get();
     }
 
@@ -163,7 +163,7 @@ class DeploymentConfigTest extends TestCase
 
     public function testResetData(): void
     {
-        $this->reader->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
         $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
         $this->_deploymentConfig->resetData();
         // second time to ensure loader will be invoked only once after reset
@@ -173,9 +173,17 @@ class DeploymentConfigTest extends TestCase
 
     public function testIsDbAvailable(): void
     {
-        $this->reader->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
         $this->assertFalse($this->_deploymentConfig->isDbAvailable());
         $this->_deploymentConfig->resetData();
         $this->assertTrue($this->_deploymentConfig->isDbAvailable());
+    }
+
+    public function testReloadDataOnMissingConfig(): void
+    {
+        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
+        $defaultValue = 'some_default_value';
+        $result = $this->_deploymentConfig->get('missing/key', $defaultValue);
+        $this->assertEquals($defaultValue, $result);
     }
 }

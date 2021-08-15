@@ -73,15 +73,13 @@ class DeploymentConfig
     public function get($key = null, $defaultValue = null)
     {
         $this->load();
-        if ($key === null) {
-            return $this->flatData;
+        $result = $this->getByKey($key);
+        if ($result === null) {
+            $this->resetData();
+            $this->load();
+            $result = $this->getByKey($key);
         }
-
-        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
-            return '';
-        }
-
-        return $this->flatData[$key] ?? $defaultValue;
+        return $result ?? $defaultValue;
     }
 
     /**
@@ -171,7 +169,7 @@ class DeploymentConfig
      * @return array
      * @throws RuntimeException
      */
-    private function flattenParams(array $params, $path = null, array &$flattenResult = null) : array
+    private function flattenParams(array $params, $path = null, array &$flattenResult = null): array
     {
         if (null === $flattenResult) {
             $flattenResult = [];
@@ -194,5 +192,22 @@ class DeploymentConfig
         }
 
         return $flattenResult;
+    }
+
+    /**
+     * @param string|null $key
+     * @return array|mixed|string
+     */
+    protected function getByKey($key)
+    {
+        if ($key === null) {
+            return $this->flatData;
+        }
+
+        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
+            return '';
+        }
+
+        return $this->flatData[$key] ?? null;
     }
 }
