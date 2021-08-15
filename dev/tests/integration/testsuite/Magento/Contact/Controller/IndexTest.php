@@ -9,9 +9,9 @@ namespace Magento\Contact\Controller;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
- * Contact post controller test
+ * Contact index controller test
  */
-class PostTest extends \Magento\TestFramework\TestCase\AbstractController
+class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * Test contacting.

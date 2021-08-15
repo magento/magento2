@@ -70,6 +70,11 @@ class PostTest extends TestCase
     private $mailMock;
 
     /**
+     * @var \Magento\Framework\DataObjectFactory|MockObject
+     */
+    private $dataObjectFactory;
+
+    /**
      * test setup
      */
     protected function setUp(): void
@@ -117,12 +122,15 @@ class PostTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->redirectResultFactoryMock);
 
+        $this->dataObjectFactory = $this->createMock(\Magento\Framework\DataObjectFactory::class);
+
         $this->controller = (new ObjectManagerHelper($this))->getObject(
             Post::class,
             [
                 'context' => $contextMock,
                 'mail' => $this->mailMock,
-                'dataPersistor' => $this->dataPersistorMock
+                'dataPersistor' => $this->dataPersistorMock,
+                'dataObjectFactory' => $this->dataObjectFactory
             ]
         );
     }
@@ -133,6 +141,7 @@ class PostTest extends TestCase
     public function testExecuteEmptyPost(): void
     {
         $this->stubRequestPostData([]);
+        $this->stubRequestDataObject([]);
         $this->assertSame($this->redirectResultMock, $this->controller->execute());
     }
 
@@ -145,6 +154,7 @@ class PostTest extends TestCase
     public function testExecutePostValidation($postData, $exceptionExpected): void
     {
         $this->stubRequestPostData($postData);
+        $this->stubRequestDataObject($postData);
 
         if ($exceptionExpected) {
             $this->messageManagerMock->expects($this->once())
@@ -189,6 +199,7 @@ class PostTest extends TestCase
             ->with('contact_us');
 
         $this->stubRequestPostData($postStub);
+        $this->stubRequestDataObject($postStub);
 
         $this->controller->execute();
     }
@@ -198,12 +209,8 @@ class PostTest extends TestCase
      *
      * @param array $post
      */
-    private function stubRequestPostData($post): void
+    private function stubRequestPostData(array $post): void
     {
-        $this->requestStub
-            ->expects($this->once())
-            ->method('isPost')
-            ->willReturn(!empty($post));
         $this->requestStub->method('getPostValue')->willReturn($post);
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(
@@ -211,5 +218,18 @@ class PostTest extends TestCase
                 return $post[$key];
             }
         );
+    }
+
+    /**
+     * Populate DataObject with request post data
+     *
+     * @param array $post
+     */
+    private function stubRequestDataObject(array $post): void
+    {
+        $this->dataObjectFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn(new \Magento\Framework\DataObject($post));
     }
 }
