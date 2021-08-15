@@ -38,7 +38,7 @@ class DeploymentConfig
      *
      * @var array
      */
-    private $flatData;
+    private $flatData = [];
 
     /**
      * Injected configuration data
@@ -72,7 +72,6 @@ class DeploymentConfig
      */
     public function get($key = null, $defaultValue = null)
     {
-        $this->load();
         $result = $this->getByKey($key);
         if ($result === null) {
             $this->resetData();
@@ -201,9 +200,8 @@ class DeploymentConfig
     protected function getByKey($key)
     {
         if ($key === null) {
-            return $this->flatData;
+            return $this->flatData ?: null;
         }
-
         if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';
         }

@@ -163,7 +163,7 @@ class DeploymentConfigTest extends TestCase
 
     public function testResetData(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
+        $this->readerMock->expects($this->once())->method('load')->willReturn(self::$fixture);
         $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
         $this->_deploymentConfig->resetData();
         // second time to ensure loader will be invoked only once after reset
@@ -179,9 +179,9 @@ class DeploymentConfigTest extends TestCase
         $this->assertTrue($this->_deploymentConfig->isDbAvailable());
     }
 
-    public function testReloadDataOnMissingConfig(): void
+    public function testResetDataOnMissingConfig(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
+        $this->readerMock->expects($this->once())->method('load')->willReturn(self::$fixture);
         $defaultValue = 'some_default_value';
         $result = $this->_deploymentConfig->get('missing/key', $defaultValue);
         $this->assertEquals($defaultValue, $result);
