@@ -99,7 +99,7 @@ class DeployPackage
             function () use ($package, $options, $skipLogging) {
                 // emulate application locale needed for correct file path resolving
                 $this->localeResolver->setLocale($package->getLocale());
-                return $this->deployEmulated($package, $options, $skipLogging);
+                $this->deployEmulated($package, $options, $skipLogging);
             }
         );
         $package->setState(Package::STATE_COMPLETED);
@@ -151,7 +151,7 @@ class DeployPackage
             $processor->process($package, $options);
         }
 
-        return !(bool)$this->errorsCount;
+        return true;
     }
 
     /**
@@ -204,14 +204,14 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
-        && $file->getOrigPackage() !== $package
-        && (
-            $file->getArea() !== $package->getArea()
-            || $file->getTheme() !== $package->getTheme()
-            || $file->getLocale() !== $package->getLocale()
-        )
-        && $file->getOrigPackage() === $parentPackage
-        && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+            && $file->getOrigPackage() !== $package
+            && (
+                $file->getArea() !== $package->getArea()
+                || $file->getTheme() !== $package->getTheme()
+                || $file->getLocale() !== $package->getLocale()
+            )
+            && $file->getOrigPackage() === $parentPackage
+            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
     }
 
     /**
