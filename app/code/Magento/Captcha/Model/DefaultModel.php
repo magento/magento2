@@ -9,6 +9,7 @@ namespace Magento\Captcha\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Captcha\Helper\Data;
+use Magento\Captcha\Model\Laminas\Captcha\Image;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Math\Random;
 
@@ -20,7 +21,7 @@ use Magento\Framework\Math\Random;
  * @api
  * @since 100.0.2
  */
-class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
+class DefaultModel extends Image implements CaptchaInterface
 {
     /**
      * Key in session for captcha code
@@ -53,7 +54,7 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
     /**
      * Override default value to prevent a captcha cut off
      * @var int
-     * @see \Laminas\Captcha\Image::$fsize
+     * @see \Magento\Captcha\Model\Laminas\Captcha\Image::$fsize
      * @since 100.2.0
      */
     protected $fsize = 22;
