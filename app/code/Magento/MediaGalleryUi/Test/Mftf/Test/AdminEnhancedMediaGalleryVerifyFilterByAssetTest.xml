@@ -41,7 +41,7 @@
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
 
             <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters2"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters2"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
@@ -72,7 +72,7 @@
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFiltersAgain"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFiltersAgain"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Asset"/>

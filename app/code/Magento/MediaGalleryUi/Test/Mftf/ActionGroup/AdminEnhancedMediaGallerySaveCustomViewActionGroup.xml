@@ -17,8 +17,11 @@
         </arguments>
 
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
+        <waitForElementVisible selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="waitForSaveViewButton"/>
         <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="saveView"/>
+        <waitForElementVisible selector="{{AdminGridDefaultViewControls.viewName}}" stepKey="waitForViewNameInput"/>
         <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{viewName}}" stepKey="inputViewName"/>
         <pressKey selector="{{AdminGridDefaultViewControls.viewName}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
+        <waitForElementNotVisible selector="{{AdminGridDefaultViewControls.viewName}}" stepKey="waitForViewNameInputGone"/>
       </actionGroup>
 </actionGroups>

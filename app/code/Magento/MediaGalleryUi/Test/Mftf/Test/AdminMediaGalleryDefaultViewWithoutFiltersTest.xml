@@ -29,6 +29,7 @@
 
         <!-- Open category page -->
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">
             <argument name="categoryName" value="$category.name$"/>
         </actionGroup>
