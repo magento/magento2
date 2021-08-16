@@ -13,6 +13,7 @@
                 <field id="enable_inventory_check" translate="label" type="select" sortOrder="60" showInDefault="1" canRestore="1">
                     <label> Enable Inventory Check On Cart Load</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>If you disable inventory check, some product out of stock scenarios may fail</comment>
                 </field>
             </group>
         </section>
