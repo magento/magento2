@@ -16,7 +16,7 @@
             <argument name="image"/>
         </arguments>
         <waitForPageLoad stepKey="waitForPageFullyLoaded"/>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" stepKey="waitForUploadButton"/>
+        <waitForElement selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" stepKey="waitForUploadButton"/>
         <attachFile selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" userInput="{{image.value}}" stepKey="uploadImage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
