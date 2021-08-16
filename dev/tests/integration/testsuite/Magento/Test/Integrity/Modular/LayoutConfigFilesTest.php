@@ -14,7 +14,7 @@ class LayoutConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/elements.xsd');
