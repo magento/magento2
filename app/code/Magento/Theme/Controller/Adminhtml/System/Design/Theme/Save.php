@@ -54,7 +54,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                 $theme->addData(
                     $this->extractMutableData($themeData)
                 );
-                if (isset($extractedInfo['preview']['delete'])) {
+                if (isset($themeData['preview']['delete'])) {
                     $theme->getThemeImage()->removePreviewImage();
                 }
                 $theme->getThemeImage()->uploadPreviewImage('preview');
