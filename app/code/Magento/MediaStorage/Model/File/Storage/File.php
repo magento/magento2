@@ -291,9 +291,8 @@ class File
             && isset($file['content'])
             && !empty($file['content'])
         ) {
-            $filename = isset(
-                $file['directory']
-            ) && !empty($file['directory']) ? $file['directory'] . '/' . $file['filename'] : $file['filename'];
+            $directory = !empty($file['directory'] ?? '') ? $file['directory'] . '/' : '';
+            $filename = $directory . $file['filename'];
 
             try {
                 return $this->_fileUtility->saveFile($filename, $file['content'], $overwrite);

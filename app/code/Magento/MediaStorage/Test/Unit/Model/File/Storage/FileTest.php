@@ -22,80 +22,80 @@ class FileTest extends TestCase
     /**
      * @var File
      */
-    protected $_file;
+    private $file;
 
     /**
      * @var Media
      */
-    protected $_loggerMock;
+    private $loggerMock;
 
     /**
      * @var Database
      */
-    protected $_storageHelperMock;
+    private $storageHelperMock;
 
     /**
      * @var DateTime
      */
-    protected $_mediaHelperMock;
+    private $mediaHelperMock;
 
     /**
      * @var \Magento\MediaStorage\Model\ResourceModel\File\Storage\File
      */
-    protected $_fileUtilityMock;
+    private $fileUtilityMock;
 
     protected function setUp(): void
     {
-        $this->_loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->_storageHelperMock = $this->createMock(Database::class);
-        $this->_mediaHelperMock = $this->createMock(Media::class);
-        $this->_fileUtilityMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->storageHelperMock = $this->createMock(Database::class);
+        $this->mediaHelperMock = $this->createMock(Media::class);
+        $this->fileUtilityMock = $this->createMock(\Magento\MediaStorage\Model\ResourceModel\File\Storage\File::class);
 
-        $this->_file = new File(
-            $this->_loggerMock,
-            $this->_storageHelperMock,
-            $this->_mediaHelperMock,
-            $this->_fileUtilityMock
+        $this->file = new File(
+            $this->loggerMock,
+            $this->storageHelperMock,
+            $this->mediaHelperMock,
+            $this->fileUtilityMock
         );
     }
 
     protected function tearDown(): void
     {
-        unset($this->_file);
+        unset($this->file);
     }
 
     public function testSaveFileWithWrongFileFormat(): void
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Wrong file info format');
-        $this->_file->saveFile([]);
+        $this->file->saveFile([]);
     }
 
-    public function testSaveFileUnsuccessfullyWithMissingDirectory()
+    public function testSaveFileUnsuccessfullyWithMissingDirectory(): void
     {
-        $this->_fileUtilityMock
+        $this->fileUtilityMock
             ->expects($this->once())
             ->method('saveFile')
             ->willThrowException(new Exception());
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Unable to save file "filename.ext" at "filename.ext"');
-        $this->_file->saveFile([
+        $this->file->saveFile([
             'filename' => 'filename.ext',
             'content' => 'content',
         ]);
     }
 
-    public function testSaveFileUnsuccessfullyWithoutMissingDirectory()
+    public function testSaveFileUnsuccessfullyWithoutMissingDirectory(): void
     {
-        $this->_fileUtilityMock
+        $this->fileUtilityMock
             ->expects($this->once())
             ->method('saveFile')
             ->willThrowException(new Exception());
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Unable to save file "filename.ext" at "directory/filename.ext"');
-        $this->_file->saveFile([
+        $this->file->saveFile([
             'directory' => 'directory',
             'filename' => 'filename.ext',
             'content' => 'content',
