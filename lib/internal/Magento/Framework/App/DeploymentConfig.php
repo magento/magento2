@@ -55,7 +55,7 @@ class DeploymentConfig
      * @param DeploymentConfig\Reader $reader
      * @param array $overrideData
      */
-    public function __construct(DeploymentConfig\Reader $reader, array $overrideData = [])
+    public function __construct(DeploymentConfig\Reader $reader, $overrideData = [])
     {
         $this->reader = $reader;
         $this->overrideData = $overrideData;
@@ -64,13 +64,13 @@ class DeploymentConfig
     /**
      * Gets data from flattened data
      *
-     * @param string|null $key
+     * @param string $key
      * @param mixed $defaultValue
      * @return mixed|null
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function get(string $key = null, $defaultValue = null)
+    public function get($key = null, $defaultValue = null)
     {
         if ($key === null) {
             if (empty($this->flatData)) {
@@ -94,7 +94,7 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function getConfigData(string $key = null)
+    public function getConfigData($key = null)
     {
         if ($key === null) {
             if (empty($this->data)) {
@@ -117,7 +117,7 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function isAvailable(): bool
+    public function isAvailable()
     {
         return $this->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE) !== null;
     }
@@ -130,7 +130,7 @@ class DeploymentConfig
      * @throws RuntimeException
      * @since 100.1.3
      */
-    public function isDbAvailable(): bool
+    public function isDbAvailable()
     {
         return $this->getConfigData('db') !== null;
     }
@@ -140,7 +140,7 @@ class DeploymentConfig
      *
      * @return void
      */
-    public function resetData(): void
+    public function resetData()
     {
         $this->data = [];
         $this->flatData = [];
