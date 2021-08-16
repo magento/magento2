@@ -46,6 +46,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\PageCache\Model\Cache\Type as PageCache;
+use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Exception;
@@ -55,6 +56,8 @@ use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
+use ReflectionException;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -356,6 +359,11 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
+        $script[] = [
+            'Validating remote storage configuration...',
+            'validateRemoteStorageConfiguration',
+            [$request]
+        ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -385,8 +393,13 @@ class Installer
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
             $this->log->log($message);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            call_user_func_array([$this, $method], $params);
+            try {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array([$this, $method], $params);
+            } catch (RuntimeException | DriverException $e) {
+                $this->revertRemoteStorageConfiguration();
+                throw $e;
+            }
             $this->logProgress();
         }
         $this->log->logSuccess('Magento installation complete.');
@@ -1198,6 +1211,31 @@ class Installer
     }
 
     /**
+     * Validate remote storage on install.  Since it is a deployment-based configuration, the config is already present,
+     * but this function confirms it can connect after Object Manager
+     * has all necessary dependencies loaded to do so.
+     *
+     * @param array $data
+     * @throws ValidationException
+     * @throws Exception
+     */
+    public function validateRemoteStorageConfiguration(array $data)
+    {
+        try {
+            $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        } catch (ReflectionException $e) { // RemoteStorage module is not available; return early
+            return;
+        }
+
+        $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
+
+        if (!empty($validationErrors)) {
+            $this->revertRemoteStorageConfiguration();
+            throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
+        }
+    }
+
+    /**
      * Create data handler
      *
      * @param string $className
@@ -1761,5 +1799,20 @@ class Installer
         }
 
         return $disabledCaches;
+    }
+
+    /**
+     * Revert remote storage configuration back to local file driver
+     */
+    private function revertRemoteStorageConfiguration()
+    {
+        if (!$this->deploymentConfigWriter->checkIfWritable()) {
+            return;
+        }
+
+        $remoteStorageData = new ConfigData(ConfigFilePool::APP_ENV);
+        $remoteStorageData->set('remote_storage', ['driver' => 'file']);
+        $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
+        $this->deploymentConfigWriter->saveConfig($configData, true);
     }
 }

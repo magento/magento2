@@ -216,8 +216,8 @@ class Media implements AppInterface
      */
     private function createLocalCopy(): void
     {
-        $this->syncFactory->create(['directory' => $this->directoryPub])
-            ->synchronize($this->relativeFileName);
+        $synchronizer = $this->syncFactory->create(['directory' => $this->directoryPub]);
+        $synchronizer->synchronize($this->relativeFileName);
 
         if ($this->directoryPub->isReadable($this->relativeFileName)) {
             return;
@@ -225,6 +225,9 @@ class Media implements AppInterface
 
         if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
             $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+            if (!$this->directoryPub->isReadable($this->relativeFileName)) {
+                $synchronizer->synchronize($this->relativeFileName);
+            }
         }
     }
 
