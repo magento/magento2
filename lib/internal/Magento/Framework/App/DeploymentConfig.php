@@ -206,9 +206,6 @@ class DeploymentConfig
      */
     private function getByKey(?string $key)
     {
-        if ($key === null) {
-            return $this->flatData ?: null;
-        }
         if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';
         }
