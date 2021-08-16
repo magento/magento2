@@ -24,9 +24,8 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     {
         $filterValue = '{category_id: {eq: "2"}}';
         $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
-        $this->assertEquals(4, $categoryAggregation['count']);
         $expectedOptions = $this->getCategoryTwoOptions();
-        $this->assertEquals($expectedOptions, $categoryAggregation['options']);
+        $this->assertEquals($expectedOptions, $categoryAggregation);
     }
 
     /**
@@ -38,9 +37,8 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     {
         $filterValue = '{category_id: {in: ["3","2"]}}';
         $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
-        $this->assertEquals(6, $categoryAggregation['count']);
-        $expectedOptions = array_merge($this->getCategoryThreeOptions(), $this->getCategoryTwoOptions());
-        $this->assertEquals($expectedOptions, $categoryAggregation['options']);
+        $expectedOptions = $this->getCategoryThreeOptions() + $this->getCategoryTwoOptions();
+        $this->assertEquals($expectedOptions, $categoryAggregation);
     }
 
     /**
@@ -63,7 +61,13 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
         $this->assertNotEmpty($categoryAggregation);
         $categoryAggregation = reset($categoryAggregation);
         $this->assertEquals('Category', $categoryAggregation['label']);
-        return $categoryAggregation;
+        $categoryAggregationIdsLabel = [];
+        foreach ($categoryAggregation['options'] as $option) {
+            $this->assertNotEmpty($option['value']);
+            $this->assertNotEmpty($option['label']);
+            $categoryAggregationIdsLabel[(int)$option['value']] = $option['label'];
+        }
+        return $categoryAggregationIdsLabel;
     }
 
     /**
@@ -74,10 +78,10 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     private function getCategoryTwoOptions(): array
     {
         return [
-            ['label' => 'Category 1', 'value'=> '3', 'count' => '3'],
-            ['label' => 'Movable Position 2', 'value'=> '10', 'count' => '1'],
-            ['label' => 'Movable Position 3', 'value'=> '11', 'count' => '1'],
-            ['label' => 'Category 12', 'value'=> '12', 'count' => '1']
+            3 => 'Category 1',
+            10 => 'Movable Position 2',
+            11 => 'Movable Position 3',
+            12 => 'Category 12'
         ];
     }
 
@@ -89,8 +93,8 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     private function getCategoryThreeOptions(): array
     {
         return [
-            ['label' => 'Category 1.1', 'value'=> '4', 'count' => '2'],
-            ['label' => 'Category 1.2', 'value'=> '13', 'count' => '2']
+            4 => 'Category 1.1',
+            13 => 'Category 1.2'
         ];
     }
 

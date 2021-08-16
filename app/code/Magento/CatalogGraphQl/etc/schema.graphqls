@@ -320,7 +320,7 @@ type Products @doc(description: "The Products object is the top-level object ret
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
     total_count: Int @doc(description: "The number of products that are marked as visible. By default, in complex products, parent products are visible, but their child products are not.")
     filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.") @deprecated(reason: "Use aggregations instead")
-    aggregations (filter: AggregationsFilterInput): [Aggregation] @doc(description: "Layered navigation aggregations.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
+    aggregations (filter: AggregationsFilterInput): [Aggregation] @doc(description: "Layered navigation aggregations with filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
 }
 
