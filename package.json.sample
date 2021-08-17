@@ -38,6 +38,6 @@
     "squirejs": "~0.2.1",
     "strip-json-comments": "~2.0.1",
     "time-grunt": "~1.4.0",
-    "underscore": "~1.8.0"
+    "underscore": "^1.13.1"
   }
 }
