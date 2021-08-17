@@ -36,6 +36,8 @@ use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use Psr\Log\LoggerInterface;
+use Magento\Store\Model\Information as StoreInformation;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Core Email Template Filter Model
@@ -201,6 +203,11 @@ class Filter extends Template
      */
     private $pubDirectoryRead;
 
+    /**
+     * @var StoreInformation
+     */
+    private $storeInformation;
+
 
     /**
      * Filter constructor.
@@ -222,6 +229,7 @@ class Filter extends Template
      * @param CssInliner $cssInliner
      * @param array $variables
      * @param array $directiveProcessors
+     * @param StoreInformation|null $storeInformation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -242,7 +250,8 @@ class Filter extends Template
         Filesystem $pubDirectory,
         CssInliner $cssInliner,
         $variables = [],
-        array $directiveProcessors = []
+        array $directiveProcessors = [],
+        ?StoreInformation $storeInformation = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -259,6 +268,8 @@ class Filter extends Template
         $this->cssProcessor = $cssProcessor;
         $this->pubDirectory = $pubDirectory;
         $this->configVariables = $configVariables;
+        $this->storeInformation = $storeInformation ?:
+            ObjectManager::getInstance()->get(StoreInformation::class);
         parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
@@ -825,18 +836,29 @@ class Filter extends Template
      *
      * @param string[] $construction
      * @return string
+     * @throws NoSuchEntityException
      */
     public function configDirective($construction)
     {
         $configValue = '';
         $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
+        $store = $this->_storeManager->getStore($storeId);
+        $storeInformationObj = $this->storeInformation
+            ->getStoreInformationObject($store);
         if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
+            if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
+                $configValue = $storeInformationObj->getData('country');
+            } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
+                $configValue = $storeInformationObj->getData('region')?
+                    $storeInformationObj->getData('region'):
+                    $configValue;
+            }
         }
         return $configValue;
     }
