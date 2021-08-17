@@ -572,8 +572,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $quote = $this->getQuote();
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
-            $quote->getBillingAddress()->setCustomerAddressId(
-                $quote->getShippingAddress()->getCustomerAddressId()
+            $quote->getShippingAddress()->setCustomerAddressId(
+                $quote->getBillingAddress()->getCustomerAddressId()
             );
             $this->setShippingAsBilling(1);
         }
@@ -1466,7 +1466,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function setShippingAddress($address)
     {
         if (is_array($address)) {
-            $address = $this->evaluateAgainstSavedStreetAddress($address);
 
             $shippingAddress = $this->_objectManager->create(
                 \Magento\Quote\Model\Quote\Address::class
@@ -1540,7 +1539,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             return $this;
         }
 
-        $address = $this->evaluateAgainstSavedStreetAddress($address);
+        /**
+         * A new quote has been generated everytime, so for storing current form data from default
+         * customer address `customer_address_id` need to be set to `null`
+         */
+        $address['customer_address_id'] = null;
 
         $billingAddress = $this->_objectManager->create(Address::class)
             ->setData($address)
@@ -2180,51 +2183,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $billingData['address_type'],
             $billingData['entity_id']
         );
-        if (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
+        // Billing & Shipping customer_address_id should be equal, if rest of the common address fields are equal
+        if(!empty($billingData['customer_address_id']) && empty($shippingData['customer_address_id'])){
+            $shippingData['customer_address_id'] = $billingData['customer_address_id'];
+        } elseif (empty($billingData['customer_address_id']) && !empty($shippingData['customer_address_id'])){
+            $billingData['customer_address_id'] = $shippingData['customer_address_id'];
+        } elseif (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
             unset($shippingData['customer_address_id']);
         }
 
         return $shippingData == $billingData;
-    }
-
-    /**
-     * If the current street address on form differ with the auto populated street address (saved in customer address book)
-     * then it should be treated new and the validation rules will only evaluate the current street address by setting up
-     * `customer_address_id` to NULL for $address array.
-     *
-     * @param array $address
-     * @return array|null
-     */
-    private function evaluateAgainstSavedStreetAddress(array $address)
-    {
-        if (!is_array($address)) {
-            return $this;
-        }
-        $customerAddressId = $address['customer_address_id'] ?? null;
-        if($customerAddressId){
-            $quote = $this->getQuote();
-            // Currently filled street address
-            $quoteBillingAddress = $quote->getBillingAddress()->getStreet();
-            // Customer's saved address from address book
-            $customerAddressBook = $quote->getCustomer()->getAddresses();
-
-            if(is_array($customerAddressBook) && !empty($customerAddressBook)){
-                foreach ($customerAddressBook as $customerAddress) {
-                    // initial populated address details from address book
-                    $customerAddressBookId = $this->addressMapper->toFlatArray($customerAddress)['id'];
-                    $customerAddressBookStreet = $this->addressMapper->toFlatArray($customerAddress)['street'];
-
-                    if($customerAddressBookId == $customerAddressId){
-                        // compare new address with the initially populated line by line
-                        if($quoteBillingAddress !== $customerAddressBookStreet){
-                            // the new street address completely override saved street address
-                            $address['customer_address_id'] = null;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        return $address;
     }
 }
