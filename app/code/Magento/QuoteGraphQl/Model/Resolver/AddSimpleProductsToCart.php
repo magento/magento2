@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\AddProductsToCart;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
  * Add simple products to cart GraphQl resolver
@@ -31,15 +32,23 @@ class AddSimpleProductsToCart implements ResolverInterface
     private $addProductsToCart;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCart $addProductsToCart
+     * @param LockManagerInterface $lockManager
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        AddProductsToCart $addProductsToCart
+        AddProductsToCart $addProductsToCart,
+        LockManagerInterface $lockManager
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->addProductsToCart = $addProductsToCart;
+        $this->lockManager = $lockManager;
     }
 
     /**
@@ -58,12 +67,20 @@ class AddSimpleProductsToCart implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "cart_items" is missing'));
         }
         $cartItems = $args['input']['cart_items'];
-
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+
+        $lockName = 'cart_processing_lock_' . $maskedCartId;
+        while ($this->lockManager->isLocked($lockName)) {
+            // wait till other process working with the same cart complete
+            usleep(rand(100, 600));
+        }
+        $this->lockManager->lock($lockName, 1);
+
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         $this->addProductsToCart->execute($cart, $cartItems);
-
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
+
+        $this->lockManager->unlock($lockName);
         return [
             'cart' => [
                 'model' => $cart,

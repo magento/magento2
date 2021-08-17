@@ -828,9 +828,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if (!$this->hasStoreIds()) {
             $storeIds = [];
             if ($websiteIds = $this->getWebsiteIds()) {
-                if (!$this->isObjectNew() && $this->_storeManager->isSingleStoreMode()) {
-                    $websiteIds = array_keys($websiteIds);
-                }
                 foreach ($websiteIds as $websiteId) {
                     $websiteStores = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
                     $storeIds[] = $websiteStores;
@@ -877,15 +874,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function beforeSave()
     {
-        $this->setTypeHasOptions(false);
-        $this->setTypeHasRequiredOptions(false);
-        $this->setHasOptions(false);
-        $this->setRequiredOptions(false);
+        if ($this->getData('has_options') === null) {
+            $this->setHasOptions(false);
+        }
+        if ($this->getData('required_options') === null) {
+            $this->setRequiredOptions(false);
+        }
 
         $this->getTypeInstance()->beforeSave($this);
 
-        $hasOptions = false;
-        $hasRequiredOptions = false;
+        $hasOptions = $this->getData('has_options') === "1";
+        $hasRequiredOptions = $this->getData('required_options') === "1";
 
         /**
          * $this->_canAffectOptions - set by type instance only

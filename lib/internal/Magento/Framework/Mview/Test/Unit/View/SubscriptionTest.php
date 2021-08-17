@@ -207,7 +207,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
             ->willReturn($changelogMock);
 
@@ -243,20 +243,23 @@ class SubscriptionTest extends TestCase
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
             ->willReturn('other_id');
-        $otherViewMock->expects($this->exactly(1))
+        $otherViewMock->expects($this->exactly(4))
             ->method('getSubscriptions')
-            ->willReturn([['name' => $this->tableName], ['name' => 'otherTableName']]);
-        $otherViewMock->expects($this->exactly(3))
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
 
         $this->viewMock->expects($this->any())
             ->method('getId')
             ->willReturn('this_id');
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
 
-        $this->viewCollectionMock->expects($this->exactly(1))
+        $this->viewCollectionMock->expects($this->once())
             ->method('getViewsByStateMode')
             ->with(StateInterface::MODE_ENABLED)
             ->willReturn([$this->viewMock, $otherViewMock]);
@@ -268,6 +271,16 @@ class SubscriptionTest extends TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
+
+        $this->viewMock->expects($this->exactly(3))
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+
         $this->model->create();
     }
 
@@ -319,21 +332,24 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $otherViewMock->expects($this->exactly(1))
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn('other_id');
-        $otherViewMock->expects($this->exactly(1))
-            ->method('getSubscriptions')
-            ->willReturn([['name' => $this->tableName], ['name' => 'otherTableName']]);
-        $otherViewMock->expects($this->exactly(3))
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
 
-        $this->viewMock->expects($this->any())
+        $this->viewMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn('this_id');
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
+        $otherViewMock->expects($this->atLeastOnce())
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
@@ -411,6 +427,18 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
+        $this->viewMock->expects($this->once())
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'cataloginventory_stock_item' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+        $this->viewMock->expects($this->atLeastOnce())
+            ->method('getChangeLog')
+            ->willReturn($otherChangelogMock);
+
         $model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -425,7 +453,7 @@ class SubscriptionTest extends TestCase
 
         $method = new \ReflectionMethod($model, 'buildStatement');
         $method->setAccessible(true);
-        $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $otherChangelogMock);
+        $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
 
         $this->assertStringNotContainsString($ignoredColumnName, $statement);
         $this->assertStringContainsString($notIgnoredColumnName, $statement);
