@@ -81,6 +81,7 @@
                 <addField>true</addField>
                 <filter>text</filter>
                 <label translate="true">Name</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
             </settings>
         </column>
         <column name="type_id" component="Magento_Ui/js/grid/columns/select" sortOrder="40">

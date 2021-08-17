@@ -91,6 +91,7 @@
                 <addField>true</addField>
                 <filter>text</filter>
                 <label translate="true">Name</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
             </settings>
         </column>
         <column name="attribute_set_id" component="Magento_Ui/js/grid/columns/select" sortOrder="40">
@@ -142,5 +143,11 @@
                 <label translate="true">Price</label>
             </settings>
         </column>
+        <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions" sortOrder="200">
+            <settings>
+                <indexField>entity_id</indexField>
+                <label translate="true">Action</label>
+            </settings>
+        </actionsColumn>
     </columns>
 </listing>

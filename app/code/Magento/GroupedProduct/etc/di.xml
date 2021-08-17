@@ -128,4 +128,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider">
+        <arguments>
+            <argument name="modifiersPool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Name\Modifier\Pool</argument>
+        </arguments>
+    </type>
 </config>

@@ -48,6 +48,11 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     private $metadataPool;
 
     /**
+     * @var PoolInterface
+     */
+    private $modifiersPool;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -95,6 +100,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
         $this->productOptionValueModel = $productOptionValueModel;
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
             ->get(MetadataPool::class);
+        $this->modifiersPool = $modifiersPool ?: ObjectManager::getInstance()->get(PoolInterface::class);
     }
 
     /**
@@ -144,9 +150,15 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
 
         $items = $this->getCollection()->toArray();
 
-        return [
+        $data = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => array_values($items),
         ];
+
+        /** @var ModifierInterface $modifier */
+        foreach ($this->modifiersPool->getModifiersInstances() as $modifier) {
+            $data = $modifier->modifyData($data);
+        }
+        return $data;
     }
 }
