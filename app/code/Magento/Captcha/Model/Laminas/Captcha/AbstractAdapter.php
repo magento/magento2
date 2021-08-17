@@ -12,7 +12,6 @@ use Magento\Captcha\Api\Data\AdapterInterface;
 use Magento\Captcha\Model\Laminas\Captcha\Exception\InvalidArgumentException;
 use Traversable;
 
-
 /**
  * Base class for Captcha adapters
  *
