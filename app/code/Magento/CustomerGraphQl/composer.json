@@ -12,7 +12,9 @@
         "magento/module-integration": "*",
         "magento/module-store": "*",
         "magento/framework": "*",
-        "magento/module-directory": "*"
+        "magento/module-directory": "*",
+        "magento/module-tax": "*",
+        "magento/module-graph-ql-cache": "*"
     },
     "license": [
         "OSL-3.0",
