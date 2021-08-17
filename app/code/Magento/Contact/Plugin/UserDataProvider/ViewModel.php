@@ -9,6 +9,7 @@ namespace Magento\Contact\Plugin\UserDataProvider;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Sets the view model
@@ -29,14 +30,14 @@ class ViewModel
     }
 
     /**
-     * Sets the view model
+     * Sets the view model before rendering to HTML
      *
-     * @param DataObject $dataObject
+     * @param DataObject|BlockInterface $block
      * @return null
      */
-    public function beforeToHtml(DataObject $dataObject)
+    public function beforeToHtml(DataObject $block)
     {
-        $dataObject->setData('view_model', $this->argument);
+        $block->setData('view_model', $this->argument);
         return null;
     }
 }
