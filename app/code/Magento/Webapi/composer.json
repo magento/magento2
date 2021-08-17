@@ -10,7 +10,10 @@
         "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-integration": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "laminas/laminas-server": "^2.9",
+        "laminas/laminas-stdlib": "^3.3",
+        "laminas/laminas-uri": "^2.8"
     },
     "suggest": {
         "magento/module-user": "*",

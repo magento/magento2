@@ -19,7 +19,7 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * @covers DefaultComplexType
+ * @covers \Magento\Webapi\Model\Laminas\Soap\ComplexTypeStrategy\DefaultComplexType
  *
  */
 class DefaultComplexTypeTest extends WsdlTestHelper

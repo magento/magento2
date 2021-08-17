@@ -227,7 +227,7 @@ class AutoDiscover
     {
         if (! is_string($uri) && ! ($uri instanceof Uri\Uri)) {
             throw new InvalidArgumentException(
-                'Argument to \Magento\Webapi\Model\Laminas\Soap\AutoDiscover::setUri should be string or \Laminas\Uri\Uri instance.'
+                'Argument to ' . AutoDiscover::class . '::setUri should be string or \Laminas\Uri\Uri instance.'
             );
         }
 
@@ -380,12 +380,12 @@ class AutoDiscover
                 $this->functions[] = $function;
             } else {
                 throw new InvalidArgumentException(
-                    'Argument to \Magento\Webapi\Model\Laminas\Soap\AutoDiscover::addFunction should be a valid function name.'
+                    'Argument to ' . AutoDiscover::class . '::addFunction should be a valid function name.'
                 );
             }
         } else {
             throw new InvalidArgumentException(
-                'Argument to \Magento\Webapi\Model\Laminas\Soap\AutoDiscover::addFunction should be string or array of strings.'
+                'Argument to ' . AutoDiscover::class . '::addFunction should be string or array of strings.'
             );
         }
 

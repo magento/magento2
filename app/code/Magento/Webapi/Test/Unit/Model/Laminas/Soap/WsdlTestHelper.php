@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @see       https://github.com/laminas/laminas-soap for the canonical source repository
  * @copyright https://github.com/laminas/laminas-soap/blob/master/COPYRIGHT.md

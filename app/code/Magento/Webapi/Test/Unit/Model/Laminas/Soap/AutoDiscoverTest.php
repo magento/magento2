@@ -1238,7 +1238,7 @@ class AutoDiscoverTest extends TestCase
 
         $this->expectException(SoapInvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Argument to \Magento\Webapi\Model\Laminas\Soap\AutoDiscover::setUri should be string or \Laminas\Uri\Uri instance.'
+            'Argument to ' . AutoDiscover::class . '::setUri should be string or \Laminas\Uri\Uri instance.'
         );
         $server->setUri(["bogus"]);
     }
