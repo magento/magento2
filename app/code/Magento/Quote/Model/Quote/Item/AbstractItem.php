@@ -318,16 +318,16 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     }
 
     /**
-     * Set and Validate Item Qty
+     * Checking item data
      *
-     * @return void
+     * @return $this
      */
-    public function setQuantity()
+    public function checkData()
     {
         $this->setHasError(false);
         $this->clearMessage();
-
         $qty = $this->_getData('qty');
+
         try {
             $this->setQty($qty);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -337,16 +337,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
             $this->setHasError(true);
             $this->setMessage(__('Item qty declaration error'));
         }
-    }
 
-    /**
-     * Checking item data
-     *
-     * @return $this
-     */
-    public function checkData()
-    {
-        $this->setQuantity();
         try {
             $this->getProduct()->getTypeInstance()->checkProductBuyState($this->getProduct());
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
