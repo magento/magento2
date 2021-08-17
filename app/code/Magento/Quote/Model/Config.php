@@ -35,6 +35,7 @@ class Config
      */
     public function isEnabled(): bool
     {
-        return (bool)$this->config->getValue(self::XML_PATH_INVENTORY_CHECK_ENABLED);
+        #return (bool)$this->config->getValue(self::XML_PATH_INVENTORY_CHECK_ENABLED);
+        return false;
     }
 }
