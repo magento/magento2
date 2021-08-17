@@ -58,6 +58,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $theme;
 
     /**
+     * @var \Magento\Framework\View\DesignInterface
+     */
+    private $design;
+
+    /**
      * @var \Magento\Framework\Url\ScopeInterface
      */
     private $scope;
@@ -214,6 +219,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         SerializerInterface $serializer = null,
         ?int $cacheLifetime = null
     ) {
+        $this->design = $design;
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
         $this->fileSource = $fileSource;
@@ -477,6 +483,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         }
 
         $this->addHandle($handles);
+        $this->theme = $this->design->getDesignTheme();
 
         $cacheId = $this->getCacheId() . '_' . self::PAGE_LAYOUT_CACHE_SUFFIX;
         $result = $this->_loadCache($cacheId);
