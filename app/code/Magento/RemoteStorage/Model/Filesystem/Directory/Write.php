@@ -40,7 +40,7 @@ class Write extends \Magento\Framework\Filesystem\Directory\Write
         DriverInterface $driver,
         $path,
         Filesystem $filesystem,
-        $createPermissions = null,
+        ?int $createPermissions = null,
         ?PathValidatorInterface $pathValidator = null
     ) {
         parent::__construct($fileFactory, $driver, $path, $createPermissions, $pathValidator);
