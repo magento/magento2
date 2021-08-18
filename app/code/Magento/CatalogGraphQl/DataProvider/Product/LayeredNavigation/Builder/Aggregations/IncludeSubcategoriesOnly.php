@@ -23,12 +23,12 @@ class IncludeSubcategoriesOnly
     /**
      * @var string
      */
-    private $categoryBucket = 'category_bucket';
+    private const CATEGORY_BUCKET = 'category_bucket';
 
     /**
      * @var string
      */
-    private $bucketsName = 'buckets';
+    private const BUCKETS_NAME = 'buckets';
 
     /**
      * @var AggregationFactory
@@ -95,7 +95,7 @@ class IncludeSubcategoriesOnly
             return $aggregation;
         }
         $buckets = $aggregation->getBuckets();
-        $categoryBucket = $buckets[$this->categoryBucket] ?? null;
+        $categoryBucket = $buckets[self::CATEGORY_BUCKET] ?? null;
         if ($categoryBucket === null || empty($categoryBucket->getValues())) {
             return $aggregation;
         }
@@ -107,12 +107,12 @@ class IncludeSubcategoriesOnly
         );
         $categoryBucketResolved = $this->bucketFactory->create(
             [
-                'name' => $this->categoryBucket,
+                'name' => self::CATEGORY_BUCKET,
                 'values' => $bucketValuesFiltered
             ]
         );
-        $buckets[$this->categoryBucket] = $categoryBucketResolved;
-        return $this->aggregationFactory->create([$this->bucketsName => $buckets]);
+        $buckets[self::CATEGORY_BUCKET] = $categoryBucketResolved;
+        return $this->aggregationFactory->create([self::BUCKETS_NAME => $buckets]);
     }
 
     /**
