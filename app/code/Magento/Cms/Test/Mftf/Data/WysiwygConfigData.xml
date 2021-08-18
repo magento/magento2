@@ -16,16 +16,12 @@
     <entity name="WysiwygDisabledByDefault">
         <data key="path">cms/wysiwyg/enabled</data>
         <data key="scope_id">0</data>
-        <data key="value">hidden</data>
+        <data key="value">disabled</data>
     </entity>
-    <entity name="WysiwygTinyMCE3Enable" deprecated="Use WysiwygTinyMCE4Enable instead">
+    <entity name="EnableTinyMCE">
         <data key="path">cms/wysiwyg/editor</data>
         <data key="scope_id">0</data>
-        <data key="value">Magento_Tinymce3/tinymce3Adapter</data>
-    </entity>
-    <entity name="WysiwygTinyMCE4Enable">
-        <data key="path">cms/wysiwyg/editor</data>
-        <data key="scope_id">0</data>
-        <data key="value">mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</data>
+        <data key="label">Yes</data>
+        <data key="value">mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter</data>
     </entity>
 </entities>

@@ -78,6 +78,11 @@ class TransparentTest extends TestCase
      */
     private $order;
 
+    /**
+     * @var OrderPaymentExtensionInterface|MockObject
+     */
+    private $paymentExtensionAttributes;
+
     protected function setUp(): void
     {
         $this->initPayment();
@@ -95,6 +100,55 @@ class TransparentTest extends TestCase
                     'scopeConfig' => $this->getScopeConfig(),
                 ]
             );
+    }
+
+    /**
+     * Check correct parent transaction ID for Payflow delayed capture.
+     *
+     * @dataProvider captureCorrectIdDataProvider
+     * @param string $parentTransactionId
+     * @throws InvalidTransitionException
+     * @throws LocalizedException
+     */
+    public function testCaptureCorrectId(string $parentTransactionId)
+    {
+        if (empty($parentTransactionId)) {
+            $setParentTransactionIdCalls =  1;
+            $setAdditionalInformationCalls = 1;
+            $getGatewayTokenCalls = 2;
+        } else {
+            $setParentTransactionIdCalls =  0;
+            $setAdditionalInformationCalls = 0;
+            $getGatewayTokenCalls = 0;
+        }
+
+        $gatewayToken = 'gateway_token';
+        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
+        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
+        $this->payment->expects($this->exactly($setAdditionalInformationCalls))->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
+        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')->withConsecutive(
+            ['result_code'],
+            [Payflowpro::PNREF],
+            [Payflowpro::PNREF],
+            [Payflowpro::PNREF],
+        )->willReturn(0, '', Payflowpro::PNREF, Payflowpro::PNREF);
+        $this->paymentExtensionAttributes->expects($this->once())->method('getVaultPaymentToken')->willReturn($this->paymentToken);
+        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))->method('getGatewayToken')->willReturn($gatewayToken);
+
+        $this->subject->capture($this->payment, 100);
+    }
+
+    /**
+     * Data provider for testCaptureCorrectId.
+     *
+     * @return array
+     */
+    public function captureCorrectIdDataProvider(): array
+    {
+        return [
+            'No Transaction ID' => [''],
+            'With Transaction ID' => ['1'],
+        ];
     }
 
     /**
@@ -295,7 +349,7 @@ class TransparentTest extends TestCase
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentExtensionAttributes  = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
+        $this->paymentExtensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
             ->setMethods(
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
@@ -305,7 +359,7 @@ class TransparentTest extends TestCase
         $this->payment->method('setIsTransactionClosed')->willReturnSelf();
         $this->payment->method('getCcExpYear')->willReturn('2019');
         $this->payment->method('getCcExpMonth')->willReturn('05');
-        $this->payment->method('getExtensionAttributes')->willReturn($paymentExtensionAttributes);
+        $this->payment->method('getExtensionAttributes')->willReturn($this->paymentExtensionAttributes);
 
         return $this->payment;
     }

@@ -116,7 +116,7 @@ class Write extends Read implements WriteInterface
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteNewPath = $targetDirectory->getAbsolutePath($newPath);
-        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->driver);
+        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->getDriver());
     }
 
     /**
@@ -344,12 +344,26 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $content
      * @param string|null $mode
+     * @param bool $lock
      * @return int The number of bytes that were written.
      * @throws FileSystemException|ValidatorException
      */
-    public function writeFile($path, $content, $mode = 'w+')
+    public function writeFile($path, $content, $mode = 'w+', bool $lock = false)
     {
-        return $this->openFile($path, $mode)->write($content);
+        $file = $this->openFile($path, $mode);
+        try {
+            if ($lock) {
+                $file->lock();
+            }
+            $result = $file->write($content);
+        } finally {
+            if ($lock) {
+                $file->unlock();
+            }
+        }
+        $file->close();
+
+        return $result;
     }
 
     /**

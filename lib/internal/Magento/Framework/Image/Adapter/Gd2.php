@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Phrase;
+
 /**
  * Gd2 adapter.
  *
@@ -56,10 +59,15 @@ class Gd2 extends AbstractAdapter
      *
      * @param string $filename
      * @return void
-     * @throws \OverflowException
+     * @throws \OverflowException|FileSystemException
      */
     public function open($filename)
     {
+        if (!file_exists($filename)) {
+            throw new FileSystemException(
+                new Phrase('File "%1" does not exist.', [$this->_fileName])
+            );
+        }
         if (!$filename || filesize($filename) === 0 || !$this->validateURLScheme($filename)) {
             throw new \InvalidArgumentException('Wrong file');
         }
@@ -436,8 +444,6 @@ class Gd2 extends AbstractAdapter
      * @param int $opacity
      * @param bool $tile
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -452,53 +458,53 @@ class Gd2 extends AbstractAdapter
 
         $merged = false;
 
+        $watermark = $this->createWatermarkBasedOnPosition($watermark, $positionX, $positionY, $merged, $tile);
+
+        imagedestroy($watermark);
+        $this->refreshImageDimensions();
+    }
+
+    /**
+     * Create watermark based on it's image position.
+     *
+     * @param resource $watermark
+     * @param int $positionX
+     * @param int $positionY
+     * @param bool $merged
+     * @param bool $tile
+     * @return false|resource
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function createWatermarkBasedOnPosition(
+        $watermark,
+        int $positionX,
+        int $positionY,
+        bool $merged,
+        bool $tile
+    ) {
         if ($this->getWatermarkWidth() &&
             $this->getWatermarkHeight() &&
             $this->getWatermarkPosition() != self::POSITION_STRETCH
         ) {
-            $newWatermark = imagecreatetruecolor($this->getWatermarkWidth(), $this->getWatermarkHeight());
-            imagealphablending($newWatermark, false);
-            $col = imagecolorallocate($newWatermark, 255, 255, 255);
-            imagecolortransparent($newWatermark, $col);
-            imagefilledrectangle($newWatermark, 0, 0, $this->getWatermarkWidth(), $this->getWatermarkHeight(), $col);
-            imagesavealpha($newWatermark, true);
-            imagecopyresampled(
-                $newWatermark,
-                $watermark,
-                0,
-                0,
-                0,
-                0,
-                $this->getWatermarkWidth(),
-                $this->getWatermarkHeight(),
-                imagesx($watermark),
-                imagesy($watermark)
-            );
-            $watermark = $newWatermark;
+            $watermark = $this->createWaterMark($watermark, $this->getWatermarkWidth(), $this->getWatermarkHeight());
+        }
+
+        /**
+         * Fixes issue with watermark with transparent background and an image that is not truecolor (e.g GIF).
+         * blending mode is allowed for truecolor images only.
+         * @see imagealphablending()
+         */
+        if (!imageistruecolor($this->_imageHandler)) {
+            $newImage = $this->createTruecolorImageCopy();
+            $this->imageDestroy();
+            $this->_imageHandler = $newImage;
         }
 
         if ($this->getWatermarkPosition() == self::POSITION_TILE) {
             $tile = true;
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
-            $newWatermark = imagecreatetruecolor($this->_imageSrcWidth, $this->_imageSrcHeight);
-            imagealphablending($newWatermark, false);
-            $col = imagecolorallocate($newWatermark, 255, 255, 255);
-            imagecolortransparent($newWatermark, $col);
-            imagefilledrectangle($newWatermark, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight, $col);
-            imagesavealpha($newWatermark, true);
-            imagecopyresampled(
-                $newWatermark,
-                $watermark,
-                0,
-                0,
-                0,
-                0,
-                $this->_imageSrcWidth,
-                $this->_imageSrcHeight,
-                imagesx($watermark),
-                imagesy($watermark)
-            );
-            $watermark = $newWatermark;
+            $watermark = $this->createWaterMark($watermark, $this->_imageSrcWidth, $this->_imageSrcHeight);
         } elseif ($this->getWatermarkPosition() == self::POSITION_CENTER) {
             $positionX = $this->_imageSrcWidth / 2 - imagesx($watermark) / 2;
             $positionY = $this->_imageSrcHeight / 2 - imagesy($watermark) / 2;
@@ -602,8 +608,39 @@ class Gd2 extends AbstractAdapter
             }
         }
 
-        imagedestroy($watermark);
-        $this->refreshImageDimensions();
+        return $watermark;
+    }
+
+    /**
+     * Create watermark.
+     *
+     * @param resource $watermark
+     * @param string $width
+     * @param string $height
+     * @return false|resource
+     */
+    private function createWaterMark($watermark, string $width, string $height)
+    {
+        $newWatermark = imagecreatetruecolor($width, $height);
+        imagealphablending($newWatermark, false);
+        $col = imagecolorallocate($newWatermark, 255, 255, 255);
+        imagecolortransparent($newWatermark, $col);
+        imagefilledrectangle($newWatermark, 0, 0, $width, $height, $col);
+        imagesavealpha($newWatermark, true);
+        imagecopyresampled(
+            $newWatermark,
+            $watermark,
+            0,
+            0,
+            0,
+            0,
+            $width,
+            $height,
+            imagesx($watermark),
+            imagesy($watermark)
+        );
+
+        return $newWatermark;
     }
 
     /**
@@ -845,6 +882,9 @@ class Gd2 extends AbstractAdapter
         $pct
     ) {
         if ($pct >= 100) {
+            if (false === imagealphablending($dst_im, true)) {
+                return false;
+            }
             return imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
         }
 
@@ -892,5 +932,25 @@ class Gd2 extends AbstractAdapter
         imagedestroy($tmpImg);
 
         return $result;
+    }
+
+    /**
+     * Create truecolor image copy of current image
+     *
+     * @return resource
+     */
+    private function createTruecolorImageCopy()
+    {
+        $this->_getTransparency($this->_imageHandler, $this->_fileType, $isAlpha);
+
+        $newImage = imagecreatetruecolor($this->_imageSrcWidth, $this->_imageSrcHeight);
+
+        if ($isAlpha) {
+            $this->_saveAlpha($newImage);
+        }
+
+        imagecopy($newImage, $this->_imageHandler, 0, 0, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight);
+
+        return $newImage;
     }
 }

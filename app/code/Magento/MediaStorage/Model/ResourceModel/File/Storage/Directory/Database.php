@@ -7,6 +7,8 @@ namespace Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory;
 
 /**
  * Class Database
+ *
+ * @deprecated Database Media Storage is deprecated
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {

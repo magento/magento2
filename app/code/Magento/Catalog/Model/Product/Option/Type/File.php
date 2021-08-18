@@ -6,10 +6,11 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
+use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
 
@@ -92,6 +93,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     private $filesystem;
 
     /**
+     * @var ProductHelper
+     */
+    private $productHelper;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory
@@ -103,6 +109,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $data
      * @param Filesystem $filesystem
      * @param Json|null $serializer
+     * @param ProductHelper|null $productHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -116,7 +123,8 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         \Magento\Framework\Escaper $escaper,
         array $data = [],
         Filesystem $filesystem = null,
-        Json $serializer = null
+        Json $serializer = null,
+        ProductHelper $productHelper = null
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_urlBuilder = $urlBuilder;
@@ -129,6 +137,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->validatorInfo = $validatorInfo;
         $this->validatorFile = $validatorFile;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->productHelper = $productHelper ?: ObjectManager::getInstance()->get(ProductHelper::class);
         parent::__construct($checkoutSession, $scopeConfig, $data);
     }
 
@@ -223,12 +232,21 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $this->setIsValid(true);
         $option = $this->getOption();
 
+        if (isset($values['files_prefix'])) {
+            $processingParams = ['files_prefix' => $values['files_prefix']];
+            $processingParams = array_merge($this->_getProcessingParams()->getData(), $processingParams);
+            $this->productHelper->addParamsToBuyRequest($this->getRequest(), $processingParams);
+        }
+
         /*
          * Check whether we receive uploaded file or restore file by: reorder/edit configuration or
          * previous configuration with no newly uploaded file
          */
         $fileInfo = null;
-        if (isset($values[$option->getId()]) && is_array($values[$option->getId()])) {
+        if (isset($values[$option->getId()])) {
+            if (is_string($values[$option->getId()])) {
+                $values[$option->getId()] = explode(',', $values[$option->getId()]);
+            }
             // Legacy style, file info comes in array with option id index
             $fileInfo = $values[$option->getId()];
         } else {

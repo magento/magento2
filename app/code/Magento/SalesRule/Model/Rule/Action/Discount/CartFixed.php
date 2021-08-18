@@ -111,7 +111,7 @@ class CartFixed extends AbstractDiscount
                             $address,
                             $baseRuleTotals
                         ) : $baseRuleTotals;
-                $availableDiscountAmount = $this->cartFixedDiscountHelper
+                $maximumItemDiscount = $this->cartFixedDiscountHelper
                     ->getDiscountAmount(
                         $ruleDiscount,
                         $qty,
@@ -119,8 +119,8 @@ class CartFixed extends AbstractDiscount
                         $baseRuleTotals,
                         $discountType
                     );
-                $quoteAmount = $this->priceCurrency->convert($availableDiscountAmount, $store);
-                $baseDiscountAmount = min($baseItemPrice * $qty, $availableDiscountAmount);
+                $quoteAmount = $this->priceCurrency->convert($maximumItemDiscount, $store);
+                $baseDiscountAmount = min($baseItemPrice * $qty, $maximumItemDiscount);
                 $this->deltaPriceRound->reset($discountType);
             } else {
                 $baseRuleTotals = $shippingMethod ?
