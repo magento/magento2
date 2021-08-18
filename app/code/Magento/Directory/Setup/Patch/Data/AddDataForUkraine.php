@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Add Argentina States
+ * Add Ukraine Regions
  */
 class AddDataForUkraine implements DataPatchInterface
 {
@@ -28,7 +28,7 @@ class AddDataForUkraine implements DataPatchInterface
     private $dataInstallerFactory;
 
     /**
-     * AddDataForArgentina constructor.
+     * AddDataForUkraine constructor.
      *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param DataInstallerFactory $dataInstallerFactory
@@ -50,18 +50,18 @@ class AddDataForUkraine implements DataPatchInterface
         $dataInstaller = $this->dataInstallerFactory->create();
         $dataInstaller->addCountryRegions(
             $this->moduleDataSetup->getConnection(),
-            $this->getDataForArgentina()
+            $this->getDataForUkraine()
         );
 
         return $this;
     }
 
     /**
-     * Argentina states data.
+     * Ukraine regions data.
      *
      * @return array
      */
-    private function getDataForArgentina()
+    private function getDataForUkraine()
     {
         return [
             ['UA', 'UA-71', 'Cherkaska oblast'],
