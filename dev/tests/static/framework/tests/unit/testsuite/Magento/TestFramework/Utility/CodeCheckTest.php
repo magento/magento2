@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Utility\File;
-
-use Magento\TestFramework\Utility\CodeCheck;
+namespace Magento\TestFramework\Utility;
 
 class CodeCheckTest extends \PHPUnit\Framework\TestCase
 {
