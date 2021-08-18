@@ -55,12 +55,14 @@ class StoreProcessor implements HttpHeaderProcessorInterface
      * @param string $headerValue
      * @return void
      */
-    public function processHeaderValue(string $headerValue) : void
+    public function processHeaderValue(string $headerValue): void
     {
         if (!empty($headerValue)) {
             $storeCode = ltrim(rtrim($headerValue));
-            $this->storeManager->setCurrentStore($storeCode);
-            $this->updateContext($storeCode);
+            if ($this->isStoreValid($storeCode)) {
+                $this->storeManager->setCurrentStore($storeCode);
+                $this->updateContext($storeCode);
+            }
         } elseif (!$this->isAlreadySet()) {
             $storeCode = $this->storeCookieManager->getStoreCodeFromCookie()
                 ?: $this->storeManager->getDefaultStoreView()->getCode();
@@ -94,5 +96,20 @@ class StoreProcessor implements HttpHeaderProcessorInterface
         $storeKey = StoreManagerInterface::CONTEXT_STORE;
 
         return $this->httpContext->getValue($storeKey) !== null;
+    }
+    
+    /**
+     * Check if provided store code exist
+     *
+     * @param string $storeCode
+     * @return bool
+     */
+    private function isStoreValid(string $storeCode): bool
+    {
+        $stores = $this->storeManager->getStores(true, true);
+        if (isset($stores[$storeCode])) {
+            return true;
+        }
+        return false;
     }
 }
