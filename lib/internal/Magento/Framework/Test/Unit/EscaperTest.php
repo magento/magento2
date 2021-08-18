@@ -365,6 +365,76 @@ class EscaperTest extends TestCase
     }
 
     /**
+     * @covers \Magento\Framework\Escaper::escapeCss
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeCssDataProvider
+     */
+    public function testEscapeCss($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->escapeCss($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeCssDataProvider(): array
+    {
+        return [
+            [
+                'data'     => 1,
+                'expected' => '1',
+            ],
+            [
+                'data'     => '*%string{foo}%::',
+                'expected' => '\2A \25 string\7B foo\7D \25 \3A \3A ',
+            ]
+        ];
+    }
+
+    /**
+     * @covers \Magento\Framework\Escaper::encodeUrlParam
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider encodeUrlParamDataProvider
+     */
+    public function testEncodeUrlParam($data, string $expected): void
+    {
+        $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function encodeUrlParamDataProvider(): array
+    {
+        return [
+            [
+                'data'     => "a3==",
+                'expected' => "a3%3D%3D",
+            ],
+            [
+                'data'     => "example string",
+                'expected' => "example%20string",
+            ],
+            [
+                'data'     => 1,
+                'expected' => "1",
+            ],
+            [
+                'data'     => null,
+                'expected' => "",
+            ]
+        ];
+    }
+
+    /**
      * @return array
      */
     public function escapeUrlDataProvider(): array
