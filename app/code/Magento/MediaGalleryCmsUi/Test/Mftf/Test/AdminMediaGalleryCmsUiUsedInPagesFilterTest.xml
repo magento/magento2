@@ -33,11 +33,6 @@
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
-            <comment userInput="BIC workaround" stepKey="enableMassActionToDeleteImages"/>
-            <comment userInput="BIC workaround" stepKey="selectFirstImageToDelete"/>
-            <comment userInput="BIC workaround" stepKey="clickDeleteSelectedButton"/>
-            <comment userInput="BIC workaround" stepKey="deleteImages"/>
-
             <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters2"/>
             <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="findCreatedCmsPage">

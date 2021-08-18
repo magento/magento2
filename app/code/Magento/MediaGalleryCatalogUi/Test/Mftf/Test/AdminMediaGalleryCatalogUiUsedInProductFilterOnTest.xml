@@ -37,7 +37,6 @@
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
                 <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
             <comment userInput="BIC workaround" stepKey="openViewImageDetailsToAssertEmptyUsedIn"/>
             <comment userInput="BIC workaround" stepKey="assertThereIsNoUsedInSection"/>
             <comment userInput="BIC workaround" stepKey="closeDetails"/>
@@ -45,6 +44,7 @@
             <comment userInput="BIC workaround" stepKey="selectFirstImageToDelete"/>
             <comment userInput="BIC workaround" stepKey="clickDeleteSelectedButton"/>
             <comment userInput="BIC workaround" stepKey="deleteImages"/>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
             <comment userInput="BIC workaround" stepKey="clearFiltersAfterDeleteImages"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
