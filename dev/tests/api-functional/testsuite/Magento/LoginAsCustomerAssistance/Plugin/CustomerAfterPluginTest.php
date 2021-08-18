@@ -55,8 +55,11 @@ class CustomerAfterPluginTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->dataObjectProcessor = $objectManager->create(DataObjectProcessor::class);
-        $this->customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
         $this->customerRegistry = $objectManager->create(CustomerRegistry::class);
+        $this->customerRepository = $objectManager->create(
+            CustomerRepositoryInterface::class,
+            ['customerRegistry' => $this->customerRegistry]
+        );
         $this->isAssistanceEnabled = $objectManager->create(GetLoginAsCustomerAssistanceAllowed::class);
     }
 
