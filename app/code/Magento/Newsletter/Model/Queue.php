@@ -251,7 +251,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             ]
         );
 
-        /** @var \Magento\Newsletter\Model\Subscriber $item */
+        if ($this->getQueueStatus() != self::STATUS_SENDING && count($collection->getItems()) > 0) {
+            $this->startQueue();
+        }
+
+        /** @var Subscriber $item */
         foreach ($collection->getItems() as $item) {
             $transport = $this->_transportBuilder->setTemplateOptions(
                 ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId()]
@@ -280,6 +284,19 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         if (count($collection->getItems()) < $count - 1 || count($collection->getItems()) == 0) {
             $this->_finishQueue();
         }
+        return $this;
+    }
+
+    /**
+     * Start queue: set status SENDING for queue
+     *
+     * @return $this
+     */
+    private function startQueue()
+    {
+        $this->setQueueStatus(self::STATUS_SENDING);
+        $this->save();
+
         return $this;
     }
 
