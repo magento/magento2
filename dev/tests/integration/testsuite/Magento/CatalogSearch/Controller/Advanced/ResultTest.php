@@ -135,6 +135,85 @@ class ResultTest extends AbstractController
     }
 
     /**
+     * Advanced search with array in price parameters
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     * @dataProvider searchParamsWithArrayDataProvider
+     *
+     * @param array $searchParams
+     * @return void
+     */
+    public function testExecuteWithArrayInParams(array $searchParams): void
+    {
+        $this->getRequest()->setQuery(
+            $this->_objectManager->create(
+                Parameters::class,
+                [
+                    'values' => $searchParams
+                ]
+            )
+        );
+        $this->dispatch('catalogsearch/advanced/result');
+        $this->assertEquals(200, $this->getResponse()->getStatusCode());
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertStringContainsString(
+            'We can\'t find any items matching these search criteria',
+            $responseBody
+        );
+    }
+
+    /**
+     * Data provider with arrays in param values
+     *
+     * @return array
+     */
+    public function searchParamsWithArrayDataProvider(): array
+    {
+        return [
+            'search_with_empty_arrays' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => [
+                            1
+                        ],
+                        'to' => 1,
+                    ]
+                ]
+            ],
+            'search_with_params_in_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => ['0' => 1],
+                        'to' => [1],
+                    ]
+                ]
+            ],
+            'search_with_params_in_array_in_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        ['from' => ['0' => 1]],
+                        ['to' => 1],
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Data provider with strings for quick search.
      *
      * @return array

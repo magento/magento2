@@ -210,6 +210,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->addSearchCriteria($attribute, $preparedSearchValue);
 
             if ($attribute->getAttributeCode() == 'price') {
+                foreach ($value as $key => $element) {
+                    if (is_array($element)) {
+                        $value[$key] = null;
+                    }
+                }
+
                 $rate = 1;
                 $store = $this->_storeManager->getStore();
                 $currency = $store->getCurrentCurrencyCode();
@@ -351,13 +357,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
-     *
      * @param EntityAttribute $attribute
      * @param mixed $value
+     *
      * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
+     * @todo: Move this code to block
+     *
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
@@ -368,12 +376,13 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 if (!empty($value['from']) || !empty($value['to'])) {
                     $from = '';
                     $to = '';
-                    if (is_array($value['from'])) {
-                        $value['from'] = $this->getFirstArrayElement($value['from']);
+
+                    foreach ($value as $key => $element) {
+                        if (is_array($element)) {
+                            $value[$key] = null;
+                        }
                     }
-                    if (is_array($value['to'])) {
-                        $value['to'] = $this->getFirstArrayElement($value['to']);
-                    }
+
 
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
@@ -439,17 +448,5 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getSearchCriterias()
     {
         return $this->_searchCriterias;
-    }
-
-    /**
-     * Return first value in array
-     *
-     * @param $value
-     *
-     * @return mixed
-     */
-    private function getFirstArrayElement($value)
-    {
-        return is_array($value) ? $this->getFirstArrayElement(array_shift($value)) : $value;
     }
 }
