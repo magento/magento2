@@ -245,7 +245,8 @@ define([
                 type,
                 name,
                 data,
-                resetShipping = false;
+                resetShipping = false,
+                resetBilling = false;
 
             if (!matchRes) {
                 return;
@@ -264,14 +265,29 @@ define([
             if (type === 'billing' && this.shippingAsBilling) {
                 this.syncAddressField(this.shippingAddressContainer, field.name, field);
                 resetShipping = true;
+                resetBilling = true;
             }
 
             if (type === 'shipping' && !this.shippingAsBilling) {
                 resetShipping = true;
             }
 
+            if (type === 'billing' && !this.shippingAsBilling) {
+                resetBilling = true;
+            }
+
             if (resetShipping) {
                 data['reset_shipping'] = true;
+
+                if(name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                    this.clearSelected('order-shipping_address_customer_address_id');
+                }
+            }
+
+            if (resetBilling) {
+                if(name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                    this.clearSelected('order-billing_address_customer_address_id');
+                }
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
@@ -280,6 +296,11 @@ define([
             if (name === 'customer_address_id') {
                 data['order[' + type + '_address][customer_address_id]'] =
                     $('order-' + type + '_address_customer_address_id').value;
+
+                if(this.shippingAsBilling) {
+                    document.getElementById('order-shipping_address_customer_address_id').value =
+                        $('order-' + type + '_address_customer_address_id').value;
+                }
             }
 
             if (name === 'country_id' && this.selectAddressEvent === false) {
@@ -295,6 +316,23 @@ define([
 
                 if (name === 'country_id' || name === 'customer_address_id') {
                     this.loadArea(['shipping_method', 'billing_method', 'totals', 'items'], true, data);
+                }
+            }
+        },
+
+        /**
+         * Deselect customer address selected value.
+         *
+         * @param {String} id - field ID
+         */
+        clearSelected: function(id){
+            let element = document.getElementById(id);
+            if(typeof element !== 'undefined' && element !== null) {
+                if(element.value){
+                    let elem = element.options;
+                    for(let i = 0; i < elem.length; i++){
+                        elem[i].selected = false;
+                    }
                 }
             }
         },

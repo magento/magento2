@@ -258,13 +258,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $customAttributeList;
 
     /**
-     * Constructor
-     *
-     * @var \Magento\Customer\Model\Address\Mapper
-     */
-    private $addressMapper;
-
-    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -297,7 +290,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param ExtensibleDataObjectConverter|null $dataObjectConverter
      * @param StoreManagerInterface $storeManager
      * @param CustomAttributeListInterface|null $customAttributeList
-     * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -332,8 +324,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ExtensibleDataObjectConverter $dataObjectConverter = null,
         StoreManagerInterface $storeManager = null,
-        CustomAttributeListInterface $customAttributeList = null,
-        \Magento\Customer\Model\Address\Mapper $addressMapper = null
+        CustomAttributeListInterface $customAttributeList = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -370,8 +361,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->customAttributeList = $customAttributeList ?: ObjectManager::getInstance()
             ->get(CustomAttributeListInterface::class);
-        $this->addressMapper = $addressMapper ?: ObjectManager::getInstance()
-            ->get(\Magento\Customer\Model\Address\Mapper::class);
     }
 
     /**
@@ -1466,7 +1455,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function setShippingAddress($address)
     {
         if (is_array($address)) {
-
             $shippingAddress = $this->_objectManager->create(
                 \Magento\Quote\Model\Quote\Address::class
             )->setData(
@@ -1538,12 +1526,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         if (!is_array($address)) {
             return $this;
         }
-
-        /**
-         * A new quote has been generated everytime, so for storing current form data from default
-         * customer address `customer_address_id` need to be set to `null`
-         */
-        $address['customer_address_id'] = null;
 
         $billingAddress = $this->_objectManager->create(Address::class)
             ->setData($address)
