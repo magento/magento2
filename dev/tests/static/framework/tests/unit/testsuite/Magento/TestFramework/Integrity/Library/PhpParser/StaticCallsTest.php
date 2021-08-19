@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Integrity\Library\PhpParser;
-
-use Magento\TestFramework\Integrity\Library\PhpParser\StaticCalls;
+namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
 /**
  */
@@ -46,27 +44,27 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->tokens->expects($this->any())->method('getPreviousToken')->willReturnCallback(
-            
+
                 function ($k) use ($tokens) {
                     return $tokens[$k - 1];
                 }
-            
+
         );
 
         $this->tokens->expects($this->any())->method('getTokenCodeByKey')->willReturnCallback(
-            
+
                 function ($k) use ($tokens) {
                     return $tokens[$k][0];
                 }
-            
+
         );
 
         $this->tokens->expects($this->any())->method('getTokenValueByKey')->willReturnCallback(
-            
+
                 function ($k) use ($tokens) {
                     return $tokens[$k][1];
                 }
-            
+
         );
 
         $throws = new StaticCalls($this->tokens);
