@@ -138,7 +138,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             $name = $parameter->attributes->getNamedItem('name')->nodeValue;
             $forceNode = $parameter->attributes->getNamedItem('force');
-            $force = filter_var($forceNode ? $forceNode->nodeValue : false, FILTER_VALIDATE_BOOLEAN);
+            $force = $forceNode ? filter_var($forceNode->nodeValue, FILTER_VALIDATE_BOOLEAN) : false;
             $value = $parameter->nodeValue;
             $data[$name] = [
                 self::KEY_FORCE => $force,
