@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework;
 
+use DomainException;
+
 /**
  * Provides access to the application for the tests
  *
@@ -50,6 +52,8 @@ class WebApiApplication extends Application
             }
             $this->_shell->execute($installCmd, $installArgs);
         }
+
+        $this->runPostInstallCommands();
     }
 
     /**
