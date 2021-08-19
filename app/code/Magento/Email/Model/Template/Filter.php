@@ -208,7 +208,6 @@ class Filter extends Template
      */
     private $storeInformation;
 
-
     /**
      * Filter constructor.
      * @param StringUtils $string
@@ -873,7 +872,7 @@ class Filter extends Template
     {
         return in_array(
             $variable,
-            array_column($this->configVariables->getData(), 'value')
+            $this->configVariables->getAvailableVars()
         );
     }
 
@@ -934,7 +933,7 @@ class Filter extends Template
             return '/*' . PHP_EOL . $exception->getMessage() . PHP_EOL . '*/';
         }
 
-        if (empty($css)){
+        if (empty($css)) {
             return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
 
