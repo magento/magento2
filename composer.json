@@ -63,7 +63,7 @@
         "magento/composer": "1.7.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
-        "monolog/monolog": "^1.17",
+        "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",
         "phpseclib/mcrypt_compat": "1.0.8",
@@ -81,7 +81,7 @@
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.4",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-        "friendsofphp/php-cs-fixer": "~2.18.1",
+        "friendsofphp/php-cs-fixer": "~3.0.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "^3.0",
