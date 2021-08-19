@@ -469,7 +469,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl option directly
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
     protected function curlOption($name, $value)
@@ -503,7 +503,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
      * Set curl option
      *
      * @param string $name
-     * @param string $value
+     * @param mixed $value
      * @return void
      */
     public function setOption($name, $value)
