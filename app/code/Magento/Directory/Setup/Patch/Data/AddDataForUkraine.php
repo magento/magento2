@@ -61,7 +61,7 @@ class AddDataForUkraine implements DataPatchInterface
      *
      * @return array
      */
-    private function getDataForUkraine()
+    private function getDataForUkraine(): array
     {
         return [
             ['UA', 'UA-71', 'Cherkaska oblast'],
