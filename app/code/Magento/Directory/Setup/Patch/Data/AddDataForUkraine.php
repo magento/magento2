@@ -28,8 +28,6 @@ class AddDataForUkraine implements DataPatchInterface
     private $dataInstallerFactory;
 
     /**
-     * AddDataForUkraine constructor.
-     *
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param DataInstallerFactory $dataInstallerFactory
      */
