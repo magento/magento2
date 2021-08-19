@@ -293,8 +293,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
                 $item->setQtyOptions($qtyOptions)->setProduct($product);
                 if ($this->config->isEnabled()) {
                     $item->checkData();
-                } else {
-                    $item->setQty((int)$item->getQty());
                 }
 
             }
