@@ -564,7 +564,7 @@ class QuantityValidatorTest extends TestCase
         $this->quoteItemMock->expects($this->any())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
-        $this->quoteItemMock->expects($this->once())
+        $this->quoteItemMock->expects($this->any())
             ->method('getQty')
             ->willReturn($qty);
         $this->quoteItemMock->expects($this->any())

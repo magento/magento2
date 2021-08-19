@@ -25,6 +25,11 @@ class ConfigurableObject implements InterpreterInterface
     private $classWhitelist = [];
 
     /**
+     * @var array
+     */
+    private $deniedClassList = [];
+
+    /**
      * @var ObjectManagerInterface
      */
     protected $objectManager;
@@ -52,17 +57,20 @@ class ConfigurableObject implements InterpreterInterface
      * @param array $classWhitelist
      * @param ClassReader|null $classReader
      * @param ConfigInterface|null $objectManagerConfig
+     * @param array $deniedClassList
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         InterpreterInterface $argumentInterpreter,
         array $classWhitelist = [],
         ClassReader $classReader = null,
-        ConfigInterface $objectManagerConfig = null
+        ConfigInterface $objectManagerConfig = null,
+        array $deniedClassList = []
     ) {
         $this->objectManager = $objectManager;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->classWhitelist = $classWhitelist;
+        $this->deniedClassList = $deniedClassList;
         $this->classReader = $classReader ?? $objectManager->get(ClassReader::class);
         $this->objectManagerConfig = $objectManagerConfig ?? $objectManager->get(ConfigInterface::class);
     }
@@ -72,6 +80,7 @@ class ConfigurableObject implements InterpreterInterface
      */
     public function evaluate(array $data)
     {
+        $type = null;
         if (isset($data['value'])) {
             $className = $data['value'];
             $arguments = [];
@@ -104,6 +113,21 @@ class ConfigurableObject implements InterpreterInterface
             }
         }
 
+        if ($type === null) {
+            $type = $this->objectManagerConfig->getInstanceType(
+                $this->objectManagerConfig->getPreference($className)
+            );
+            $classParents = array_merge([$type], $this->getParents($type));
+        }
+
+        $deniedIntersection = array_intersect($classParents, $this->deniedClassList);
+
+        if (!empty($deniedIntersection)) {
+            throw new \InvalidArgumentException(
+                sprintf('Class argument is invalid: %s', $className)
+            );
+        }
+
         return $this->objectManager->create($className, $arguments);
     }
 
@@ -115,7 +139,7 @@ class ConfigurableObject implements InterpreterInterface
      */
     private function getParents(string $type)
     {
-        $classParents = $this->classReader->getParents($type);
+        $classParents = $this->classReader->getParents($type) ?? [];
         foreach ($classParents as $parent) {
             if (empty($parent)) {
                 continue;
