@@ -26,7 +26,7 @@
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.9 || ^2.0",
         "guzzlehttp/guzzle": "^6.3.3",
-        "laminas/laminas-code": "^3.5.1",
+        "laminas/laminas-code": "~4.4.2",
         "laminas/laminas-http": "^2.6.0",
         "laminas/laminas-mail": "^2.9.0",
         "laminas/laminas-mime": "^2.8.0",

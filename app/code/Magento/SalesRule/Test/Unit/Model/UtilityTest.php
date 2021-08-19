@@ -503,6 +503,7 @@ class UtilityTest extends TestCase
         $discountAmount = 10.003;
         $baseDiscountAmount = 12.465;
         $percent = 15;
+        $rowTotal = 100;
         $roundedDiscount = round($discountAmount, 2);
         $roundedBaseDiscount = round($baseDiscountAmount, 2);
         $delta = $discountAmount - $roundedDiscount;
@@ -531,6 +532,7 @@ class UtilityTest extends TestCase
             ->willReturn($store);
 
         $this->item->setDiscountPercent($percent);
+        $this->item->setRowTotal($rowTotal);
 
         $discountData = $this->createMock(Data::class);
 
