@@ -15,7 +15,7 @@
     </type>
     <type name="Magento\Contact\Plugin\UserDataProvider\ViewModel">
         <arguments>
-            <argument name="argument" xsi:type="object">Magento\Contact\ViewModel\UserDataProvider</argument>
+            <argument name="viewModel" xsi:type="object">Magento\Contact\ViewModel\UserDataProvider</argument>
         </arguments>
     </type>
     <type name="Magento\Contact\Block\ContactForm">

@@ -17,16 +17,21 @@ use Magento\Framework\View\Element\BlockInterface;
 class ViewModel
 {
     /**
-     * @var ArgumentInterface
+     * Key `view_model`
      */
-    private $argument;
+    private const VIEW_MODEL = 'view_model';
 
     /**
-     * @param ArgumentInterface $argument
+     * @var ArgumentInterface
      */
-    public function __construct(ArgumentInterface $argument)
+    private $viewModel;
+
+    /**
+     * @param ArgumentInterface $viewModel
+     */
+    public function __construct(ArgumentInterface $viewModel)
     {
-        $this->argument = $argument;
+        $this->viewModel = $viewModel;
     }
 
     /**
@@ -37,7 +42,10 @@ class ViewModel
      */
     public function beforeToHtml(DataObject $block)
     {
-        $block->setData('view_model', $this->argument);
+        if (!$block->hasData(self::VIEW_MODEL)) {
+            $block->setData(self::VIEW_MODEL, $this->viewModel);
+        }
+
         return null;
     }
 }
