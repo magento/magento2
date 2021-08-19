@@ -6,6 +6,12 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/bohdan-harniuk/magento2-functional-testing-framework.git"
+        }
+    ],
     "config": {
         "preferred-install": "dist",
         "sort-packages": true
@@ -84,7 +90,7 @@
         "friendsofphp/php-cs-fixer": "~3.0.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^3.0",
+        "magento/magento2-functional-testing-framework": "dev-improvement/MFTF-33780-string-to-number-comparison-refactoring",
         "pdepend/pdepend": "~2.10.0",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "^2.9.1",

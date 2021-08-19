@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35b745645c685e44f50cf40d33295f3e",
+    "content-hash": "bbdbd8469dbbd1186ca3ed3368395ce1",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -8004,16 +8004,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.21",
+            "version": "4.1.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "c25f20d842a7e3fa0a8e6abf0828f102c914d419"
+                "reference": "9777ec3690ceedc4bce2ed13af7af4ca4ee3088f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/c25f20d842a7e3fa0a8e6abf0828f102c914d419",
-                "reference": "c25f20d842a7e3fa0a8e6abf0828f102c914d419",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/9777ec3690ceedc4bce2ed13af7af4ca4ee3088f",
+                "reference": "9777ec3690ceedc4bce2ed13af7af4ca4ee3088f",
                 "shasum": ""
             },
             "require": {
@@ -8024,7 +8024,7 @@
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "guzzlehttp/psr7": "~1.4",
+                "guzzlehttp/psr7": "^1.4 | ^2.0",
                 "php": ">=5.6.0 <9.0",
                 "symfony/console": ">=2.7 <6.0",
                 "symfony/css-selector": ">=2.7 <6.0",
@@ -8087,7 +8087,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/4.1.21"
+                "source": "https://github.com/Codeception/Codeception/tree/4.1.22"
             },
             "funding": [
                 {
@@ -8095,7 +8095,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-05-28T17:43:39+00:00"
+            "time": "2021-08-06T17:15:34+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -8254,16 +8254,16 @@
         },
         {
             "name": "codeception/module-webdriver",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-webdriver.git",
-                "reference": "ebbe729c630415e8caf6b0087e457906f0c6c0c6"
+                "reference": "fdf7051a8ba7b69f1f5bb1a85e2d7eab84775a3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/ebbe729c630415e8caf6b0087e457906f0c6c0c6",
-                "reference": "ebbe729c630415e8caf6b0087e457906f0c6c0c6",
+                "url": "https://api.github.com/repos/Codeception/module-webdriver/zipball/fdf7051a8ba7b69f1f5bb1a85e2d7eab84775a3e",
+                "reference": "fdf7051a8ba7b69f1f5bb1a85e2d7eab84775a3e",
                 "shasum": ""
             },
             "require": {
@@ -8304,9 +8304,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/module-webdriver/issues",
-                "source": "https://github.com/Codeception/module-webdriver/tree/1.2.1"
+                "source": "https://github.com/Codeception/module-webdriver/tree/1.2.2"
             },
-            "time": "2021-04-23T17:30:57+00:00"
+            "time": "2021-08-19T11:04:22+00:00"
         },
         {
             "name": "codeception/phpunit-wrapper",
@@ -9770,16 +9770,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.6.0",
+            "version": "dev-improvement/MFTF-33780-string-to-number-comparison-refactoring",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "d0350979b7c02ca5329d61d1cce2760d14170e90"
+                "url": "https://github.com/bohdan-harniuk/magento2-functional-testing-framework.git",
+                "reference": "738b490af5e048eb7cb7ab447e9e712ea0690719"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/d0350979b7c02ca5329d61d1cce2760d14170e90",
-                "reference": "d0350979b7c02ca5329d61d1cce2760d14170e90",
+                "url": "https://api.github.com/repos/bohdan-harniuk/magento2-functional-testing-framework/zipball/738b490af5e048eb7cb7ab447e9e712ea0690719",
+                "reference": "738b490af5e048eb7cb7ab447e9e712ea0690719",
                 "shasum": ""
             },
             "require": {
@@ -9801,7 +9801,7 @@
                 "monolog/monolog": "^2.3",
                 "mustache/mustache": "~2.5",
                 "nikic/php-parser": "^4.4",
-                "php": "^7.3",
+                "php": ">7.3",
                 "php-webdriver/webdriver": "^1.9.0",
                 "spomky-labs/otphp": "^10.0",
                 "symfony/console": "^4.4",
@@ -9815,12 +9815,11 @@
             "require-dev": {
                 "brainmaestro/composer-git-hooks": "^2.3.1",
                 "codacy/coverage": "^1.4",
-                "codeception/aspect-mock": "^3.0",
                 "php-coveralls/php-coveralls": "^1.0||^2.2",
                 "phpmd/phpmd": "^2.8.0",
                 "phpunit/phpunit": "^9.0",
                 "sebastian/phpcpd": "~6.0.0",
-                "squizlabs/php_codesniffer": "~3.5.4"
+                "squizlabs/php_codesniffer": "~3.6.0"
             },
             "bin": [
                 "bin/mftf"
@@ -9840,7 +9839,19 @@
                     "MFTF\\": "dev/tests/functional/tests/MFTF"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "tests\\": "dev/tests"
+                }
+            },
+            "scripts": {
+                "tests": [
+                    "bin/phpunit-checks"
+                ],
+                "static": [
+                    "bin/static-checks"
+                ]
+            },
             "license": [
                 "AGPL-3.0"
             ],
@@ -9852,10 +9863,9 @@
                 "testing"
             ],
             "support": {
-                "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.6.0"
+                "source": "https://github.com/bohdan-harniuk/magento2-functional-testing-framework/tree/improvement/MFTF-33780-string-to-number-comparison-refactoring"
             },
-            "time": "2021-07-23T16:10:15+00:00"
+            "time": "2021-08-19T21:13:37+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -12578,16 +12588,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.3.3",
+            "version": "v5.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "485c83a2fb5893e2ff21bf4bfc7fdf48b4967229"
+                "reference": "4500fe63dc9c6ffc32d3b1cb0448c329f9c814b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/485c83a2fb5893e2ff21bf4bfc7fdf48b4967229",
-                "reference": "485c83a2fb5893e2ff21bf4bfc7fdf48b4967229",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/4500fe63dc9c6ffc32d3b1cb0448c329f9c814b7",
+                "reference": "4500fe63dc9c6ffc32d3b1cb0448c329f9c814b7",
                 "shasum": ""
             },
             "require": {
@@ -12633,7 +12643,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.3.3"
+                "source": "https://github.com/symfony/yaml/tree/v5.3.6"
             },
             "funding": [
                 {
@@ -12649,7 +12659,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-24T08:13:00+00:00"
+            "time": "2021-07-29T06:20:01+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -12879,7 +12889,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "magento/magento2-functional-testing-framework": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
