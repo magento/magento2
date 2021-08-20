@@ -116,6 +116,8 @@ class ProductSearch
             $this->getSortOrderArray($searchCriteriaForCollection)
         )->apply();
 
+        $collection->setFlag('search_resut_applied', true);
+
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInSiteIds());
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
         $collection->load();
