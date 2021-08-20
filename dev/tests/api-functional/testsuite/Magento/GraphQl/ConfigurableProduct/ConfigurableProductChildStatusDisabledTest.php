@@ -30,7 +30,7 @@ class ConfigurableProductChildStatusDisabledTest extends GraphQlAbstract
             $response['products']['items'][0]['variants']
         );
         $this->assertNotContainsEquals(
-            ['product' => ['sku' => $disabledChildSku, 'stock_status' => 'IN_STOCK']],
+            ['product' => ['sku' => $disabledChildSku, 'stock_status' => 'OUT_OF_STOCK']],
             $response['products']['items'][0]['variants']
         );
     }
