@@ -34,10 +34,15 @@ class CollectionTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
         $backupData->expects($this->any())->method('getExtensions')->willReturn([]);
-
+        $driver = $this->getMockBuilder(
+            Filesystem\DriverInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $directoryWrite->expects($this->any())->method('create')->with('backups');
-        $directoryWrite->expects($this->any())->method('getAbsolutePath')->with('backups');
+        $directoryWrite->expects($this->any())->method('getAbsolutePath')->willReturn('');
+        $directoryWrite->expects($this->at(3))->method('getAbsolutePath')->with('backups');
         $directoryWrite->expects($this->any())->method('isDirectory')->willReturn(true);
+        $directoryWrite->expects($this->any())->method('getDriver')->willReturn($driver);
         $targetDirectory = $this->getMockBuilder(TargetDirectory::class)
             ->disableOriginalConstructor()
             ->getMock();
