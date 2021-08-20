@@ -5,6 +5,8 @@
  */
 namespace Magento\RemoteStorage\Model\Filesystem\Directory;
 
+use Magento\Framework\Filesystem\Directory\CompositePathValidator;
+use Magento\Framework\Filesystem\Directory\DenyListPathValidator;
 use Magento\Framework\Filesystem\Directory\PathValidator;
 use Magento\Framework\Filesystem\Directory\WriteFactory as BaseWriteFactory;
 use Magento\RemoteStorage\Driver\DriverPool;
@@ -54,6 +56,13 @@ class WriteFactory extends BaseWriteFactory
             $factory = new \Magento\Framework\Filesystem\File\WriteFactory(
                 $this->driverPool
             );
+
+            $validators = [
+                'pathValidator' => new PathValidator($driver),
+                'denyListPathValidator' => new DenyListPathValidator($driver)
+            ];
+
+            $pathValidator = new CompositePathValidator($validators);
             return $this->objectManager->create(
                 Write::class,
                 [
@@ -61,7 +70,7 @@ class WriteFactory extends BaseWriteFactory
                     'driver' => $driver,
                     'path' => $path,
                     'createPermissions' => $createPermissions,
-                    'pathValidator' => new PathValidator($driver),
+                    'pathValidator' => $pathValidator
                 ]
             );
         } else {

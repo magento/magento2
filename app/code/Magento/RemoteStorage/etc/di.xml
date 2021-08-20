@@ -20,12 +20,16 @@
             <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\Filesystem\Directory\ReadFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </type>
     <type name="Magento\RemoteStorage\Filesystem">
         <arguments>
             <argument name="writeFactory" xsi:type="object">
                 Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory
             </argument>
-            <argument name="readFactory" xsi:type="object">remoteReadFactory</argument>
         </arguments>
     </type>
     <virtualType name="customRemoteFilesystem" type="Magento\RemoteStorage\Filesystem">
