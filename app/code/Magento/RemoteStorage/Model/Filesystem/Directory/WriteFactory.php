@@ -9,6 +9,7 @@ use Magento\Framework\Filesystem\Directory\CompositePathValidator;
 use Magento\Framework\Filesystem\Directory\DenyListPathValidator;
 use Magento\Framework\Filesystem\Directory\PathValidator;
 use Magento\Framework\Filesystem\Directory\WriteFactory as BaseWriteFactory;
+use Magento\Framework\Filesystem\DriverPool as BaseDriverPool;
 use Magento\RemoteStorage\Driver\DriverPool;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -27,7 +28,7 @@ class WriteFactory extends BaseWriteFactory
     /**
      * Pool of filesystem drivers
      *
-     * @var DriverPool
+     * @var BaseDriverPool
      */
     private $driverPool;
 
@@ -35,11 +36,11 @@ class WriteFactory extends BaseWriteFactory
      * WriteFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
-     * @param DriverPool $driverPool
+     * @param BaseDriverPool $driverPool
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        DriverPool $driverPool
+        BaseDriverPool $driverPool
     ) {
         $this->objectManager = $objectManager;
         $this->driverPool = $driverPool;
