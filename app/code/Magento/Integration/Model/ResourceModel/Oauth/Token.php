@@ -6,6 +6,9 @@
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * OAuth token resource model
@@ -25,19 +28,28 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $date;
 
     /**
+     * @var Encryptor
+     */
+    private $encryptor;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param string $connectionName
+     * @param Encryptor $encryptor
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        $connectionName = null
+        $connectionName = null,
+        $encryptor =  null
+
     ) {
         $this->_dateTime = $dateTime;
         $this->date = $date;
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(Encryptor::class);
         parent::__construct($context, $connectionName);
     }
 
@@ -194,5 +206,30 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where('customer_id = ?', $customerId)
             ->where('user_type = ?', UserContextInterface::USER_TYPE_CUSTOMER);
         return $connection->fetchRow($select);
+    }
+
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
+            $existingSecret = $object->getSecret();
+
+            if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+                $object->setSecret($this->encryptor->encrypt($existingSecret));
+            }
+        }
+            return parent::_beforeSave($object);
+    }
+
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
+            $existingSecret = $object->getSecret();
+
+            if (strlen($existingSecret) > OauthHelper::LENGTH_TOKEN_SECRET) {
+                $object->setSecret($this->encryptor->decrypt($existingSecret));
+            }
+
+        }
+        return parent::_afterLoad($object);
     }
 }
