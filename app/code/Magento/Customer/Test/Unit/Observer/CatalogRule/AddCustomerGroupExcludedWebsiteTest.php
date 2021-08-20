@@ -50,7 +50,7 @@ class AddCustomerGroupExcludedWebsiteTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->ruleExtensionMock = $this->getMockBuilder(RuleExtension::class)
-            ->addMethods(['setExcludeWebsiteIds'])
+            ->onlyMethods(['setExcludeWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->observerMock->expects(self::atLeastOnce())

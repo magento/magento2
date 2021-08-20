@@ -108,7 +108,7 @@ class OrderSaveTest extends TestCase
     {
         $orderExtensionAttributeMock = $this->getMockBuilder(OrderExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->addMethods(
+            ->onlyMethods(
                 [
                     'getAppliedTaxes',
                     'getConvertingFromQuote',
