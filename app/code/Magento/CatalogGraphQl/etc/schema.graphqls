@@ -5,60 +5,60 @@ type Query {
     products (
         search: String @doc(description: "Performs a full-text search using the specified key words."),
         filter: ProductAttributeFilterInput @doc(description: "Identifies which product attributes to search for and return."),
-        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1."),
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): Products
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "Search for products that match the criteria specified in the `search` and `filter` attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
     category (
-     id: Int @doc(description: "Id of the category.")
+     id: Int @doc(description: "The category ID to use as the root of the search.")
     ): CategoryTree
-    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "The category query searches for categories that match the criteria specified in the search and filter attributes.") @deprecated(reason: "Use 'categoryList' query instead of 'category' query") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree") @doc(description: "Search for categories that match the criteria specified in the `search` and `filter` attributes.") @deprecated(reason: "Use the `categoryList` query instead.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryTreeIdentity")
     categoryList(
         filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
-    ): [CategoryTree] @doc(description: "Returns an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
+    ): [CategoryTree] @doc(description: "Return an array of categories based on the specified filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryList") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
     categories (
         filters: CategoryFilterInput @doc(description: "Identifies which Category filter inputs to search for and return.")
-        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional.")
+        pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. The default value is 20.")
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
-    ): CategoryResult @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoriesQuery") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
+    ): CategoryResult @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoriesQuery") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity") @doc(description: "Return a list of categories that match the specified filter.")
 }
 
-type Price @doc(description: "Price is deprecated, replaced by ProductPrice. The Price object defines the price of a product as well as any tax-related adjustments.") {
-    amount: Money @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "The price of a product plus a three-letter currency code.")
-    adjustments: [PriceAdjustment] @deprecated(reason: "Price is deprecated, use ProductPrice.") @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
+type Price @doc(description: "Deprecated. Use `ProductPrice` instead. Defines the price of a product as well as any tax-related adjustments.") {
+    amount: Money @deprecated(reason: "Use `ProductPrice` instead.") @doc(description: "The price of a product plus a three-letter currency code.")
+    adjustments: [PriceAdjustment] @deprecated(reason: "Use `ProductPrice` instead.") @doc(description: "An array that provides information about tax, weee, or weee_tax adjustments.")
 }
 
-type PriceAdjustment @doc(description: "PriceAdjustment is deprecated. Taxes will be included or excluded in the price. The PricedAdjustment object defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
+type PriceAdjustment @doc(description: "Deprecated. Taxes will be included or excluded in the price. Defines the amount of money to apply as an adjustment, the type of adjustment to apply, and whether the item is included or excluded from the adjustment.") {
     amount: Money @doc(description: "The amount of the price adjustment and its currency code.")
-    code: PriceAdjustmentCodesEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the adjustment involves tax, weee, or weee_tax.")
-    description: PriceAdjustmentDescriptionEnum @deprecated(reason: "PriceAdjustment is deprecated.") @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
+    code: PriceAdjustmentCodesEnum @deprecated(reason: "`PriceAdjustment` is deprecated.") @doc(description: "Indicates whether the adjustment involves tax, weee, or weee_tax.")
+    description: PriceAdjustmentDescriptionEnum @deprecated(reason: "`PriceAdjustment` is deprecated.") @doc(description: "Indicates whether the entity described by the code attribute is included or excluded from the adjustment.")
 }
 
-enum PriceAdjustmentCodesEnum @doc(description: "PriceAdjustment.code is deprecated. This enumeration contains values defined in modules other than the Catalog module.") {
+enum PriceAdjustmentCodesEnum @doc(description: "`PriceAdjustment.code` is deprecated. This enumeration contains values defined in modules other than the Catalog module.") {
 }
 
-enum PriceAdjustmentDescriptionEnum @doc(description: "PriceAdjustmentDescriptionEnum is deprecated. This enumeration states whether a price adjustment is included or excluded.") {
+enum PriceAdjustmentDescriptionEnum @doc(description: "`PriceAdjustmentDescriptionEnum` is deprecated. States whether a price adjustment is included or excluded.") {
     INCLUDED
     EXCLUDED
 }
 
-enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
+enum PriceTypeEnum @doc(description: "Defines the price type.") {
     FIXED
     PERCENT
     DYNAMIC
 }
 
-enum CustomizableDateTypeEnum @doc(description: "This enumeration customizable date type.") {
+enum CustomizableDateTypeEnum @doc(description: "Defines the customizable date type.") {
     DATE
     DATE_TIME
     TIME
 }
 
-type ProductPrices @doc(description: "ProductPrices is deprecated, replaced by PriceRange. The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
-    minimalPrice: Price @deprecated(reason: "Use PriceRange.minimum_price.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
-    maximalPrice: Price @deprecated(reason: "Use PriceRange.maximum_price.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
-    regularPrice: Price @deprecated(reason: "Use regular_price from PriceRange.minimum_price or PriceRange.maximum_price.") @doc(description: "The base price of a product.")
+type ProductPrices @doc(description: "Deprecated. Use `PriceRange` instead. Contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
+    minimalPrice: Price @deprecated(reason: "Use `PriceRange.minimum_price`.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the `from` value.")
+    maximalPrice: Price @deprecated(reason: "Use `PriceRange.maximum_price`.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the `to` value.")
+    regularPrice: Price @deprecated(reason: "Use `regular_price` from `PriceRange.minimum_price` or `PriceRange.maximum_price`.") @doc(description: "The base price of a product.")
 }
 
 type PriceRange @doc(description: "Price range for a product. If the product has a single price, the minimum and maximum price will be the same."){
@@ -80,7 +80,7 @@ type ProductDiscount @doc(description: "A discount applied to a product price.")
 type ProductLinks implements ProductLinksInterface @doc(description: "ProductLinks is an implementation of ProductLinksInterface.") {
 }
 
-interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"ProductLinks contains information about linked products, including the link type and product type of each item.") {
+interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductLinkTypeResolverComposite") @doc(description:"Contains information about linked products, including the link type and product type of each item.") {
     sku: String @doc(description: "The identifier of the linked product.")
     link_type: String @doc(description: "One of related, associated, upsell, or crosssell.")
     linked_product_sku: String @doc(description: "The SKU of the linked product.")
@@ -88,7 +88,7 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
     position: Int @doc(description: "The position within the list of product links.")
 }
 
-interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
     id: Int @deprecated(reason: "Use the `uid` field instead.") @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     uid: ID! @doc(description: "The unique ID for a `ProductInterface` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToUid")
     name: String @doc(description: "The product name. Customers use this name to identify the product.")
@@ -97,7 +97,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     short_description: ComplexTextValue @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
     special_price: Float @doc(description: "The discounted price of the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\SpecialPrice")
     special_from_date: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The beginning date that a product has a special price.")
-    special_to_date: String @doc(description: "The end date that a product has a special price.")
+    special_to_date: String @doc(description: "The end date for a product with a special price.")
     attribute_set_id: Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The attribute set assigned to the product.")
     meta_title: String @doc(description: "A string that is displayed in the title bar and tab of the browser and in search results lists.")
     meta_keyword: String @doc(description: "A comma-separated list of keywords that are visible only to search engines.")
@@ -107,17 +107,17 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     thumbnail: ProductImage @doc(description: "The relative path to the product's thumbnail image.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductImage")
     new_from_date: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The beginning date for new product listings, and determines if the product is featured as a new product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
     new_to_date: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The end date for new product listings.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\NewFromTo")
-    tier_price: Float @deprecated(reason: "Use price_tiers for product tier price information.") @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
+    tier_price: Float @deprecated(reason: "Use `price_tiers` for product tier price information.") @doc(description: "The price when tier pricing is in effect and the items purchased threshold has been reached.")
     options_container: String @doc(description: "If the product has multiple options, determines where they appear on the product page.")
     created_at: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Timestamp indicating when the product was created.")
     updated_at: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Timestamp indicating when the product was updated.")
     country_of_manufacture: String @doc(description: "The product's country of origin.")
-    type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.") @deprecated(reason: "Use __typename instead.")
+    type_id: String @doc(description: "One of simple, virtual, bundle, downloadable, grouped, or configurable.") @deprecated(reason: "Use `__typename` instead.")
     websites: [Website] @doc(description: "An array of websites in which the product is available.") @deprecated(reason: "The field should not be used on the storefront.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Websites")
-    product_links: [ProductLinksInterface] @doc(description: "An array of ProductLinks objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\BatchProductLinks")
-    media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use product's `media_gallery` instead") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
-    price: ProductPrices @deprecated(reason: "Use price_range for product price information.") @doc(description: "A ProductPrices object, indicating the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
-    price_range: PriceRange! @doc(description: "A PriceRange object, indicating the range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
+    product_links: [ProductLinksInterface] @doc(description: "An array of `ProductLinks` objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\BatchProductLinks")
+    media_gallery_entries: [MediaGalleryEntry] @deprecated(reason: "Use `media_gallery` instead.") @doc(description: "An array of MediaGalleryEntry objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGalleryEntries")
+    price: ProductPrices @deprecated(reason: "Use `price_range` for product price information.") @doc(description: "Indicates the price of an item.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Price")
+    price_range: PriceRange! @doc(description: "The range of prices for the product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\PriceRange")
     gift_message_available: String @doc(description: "Indicates whether a gift message is available.")
     manufacturer: Int @doc(description: "A number representing the product's manufacturer.")
     categories: [CategoryInterface] @doc(description: "The categories assigned to a product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Categories") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoriesIdentity")
@@ -125,16 +125,16 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     media_gallery: [MediaGalleryInterface] @doc(description: "An array of Media Gallery objects.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
 }
 
-interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "PhysicalProductInterface contains attributes specific to tangible products.") {
+interface PhysicalProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains attributes specific to tangible products.") {
     weight: Float @doc(description: "The weight of the item, in units defined by the store.")
 }
 
-type CustomizableAreaOption implements CustomizableOptionInterface @doc(description: "CustomizableAreaOption contains information about a text area that is defined as part of a customizable option.") {
+type CustomizableAreaOption implements CustomizableOptionInterface @doc(description: "Contains information about a text area that is defined as part of a customizable option.") {
     value: CustomizableAreaValue @doc(description: "An object that defines a text area.")
     product_sku: String @doc(description: "The Stock Keeping Unit of the base product.")
 }
 
-type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the price and sku of a product whose page contains a customized text area.") {
+type CustomizableAreaValue @doc(description: "Defines the price and sku of a product whose page contains a customized text area.") {
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
@@ -142,22 +142,22 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     uid: ID! @doc(description: "The unique ID for a `CustomizableAreaValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
 
-type CategoryTree implements CategoryInterface, RoutableInterface @doc(description: "Category tree implementation") {
-    children: [CategoryTree] @doc(description: "Child categories tree.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
+type CategoryTree implements CategoryInterface, RoutableInterface @doc(description: "Category tree implementation.") {
+    children: [CategoryTree] @doc(description: "A tree of child categories.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
-type CategoryResult @doc(description: "A collection of CategoryTree objects and pagination information.") {
+type CategoryResult @doc(description: "A collection of `CategoryTree` objects and pagination information.") {
     items: [CategoryTree] @doc(description: "A list of categories that match the filter criteria.")
-    page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the `page_info` and `currentPage` values specified in the query.")
     total_count: Int @doc(description: "The total number of categories that match the criteria.")
 }
 
-type CustomizableDateOption implements CustomizableOptionInterface @doc(description: "CustomizableDateOption contains information about a date picker that is defined as part of a customizable option.") {
+type CustomizableDateOption implements CustomizableOptionInterface @doc(description: "Contains information about a date picker that is defined as part of a customizable option.") {
     value: CustomizableDateValue @doc(description: "An object that defines a date field in a customizable option.")
     product_sku: String @doc(description: "The Stock Keeping Unit of the base product.")
 }
 
-type CustomizableDateValue @doc(description: "CustomizableDateValue defines the price and sku of a product whose page contains a customized date picker.") {
+type CustomizableDateValue @doc(description: "Defines the price and sku of a product whose page contains a customized date picker.") {
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     type: CustomizableDateTypeEnum @doc(description: "DATE, DATE_TIME or TIME") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableDateTypeOptionValue")
@@ -165,11 +165,11 @@ type CustomizableDateValue @doc(description: "CustomizableDateValue defines the 
     uid: ID! @doc(description: "The unique ID for a `CustomizableDateValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
 
-type CustomizableDropDownOption implements CustomizableOptionInterface @doc(description: "CustomizableDropDownOption contains information about a drop down menu that is defined as part of a customizable option.") {
+type CustomizableDropDownOption implements CustomizableOptionInterface @doc(description: "Contains information about a drop down menu that is defined as part of a customizable option.") {
     value: [CustomizableDropDownValue] @doc(description: "An array that defines the set of options for a drop down menu.")
 }
 
-type CustomizableDropDownValue @doc(description: "CustomizableDropDownValue defines the price and sku of a product whose page contains a customized drop down menu.") {
+type CustomizableDropDownValue @doc(description: "Defines the price and sku of a product whose page contains a customized drop down menu.") {
     option_type_id: Int @doc(description: "The ID assigned to the value.")
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
@@ -179,11 +179,11 @@ type CustomizableDropDownValue @doc(description: "CustomizableDropDownValue defi
     uid: ID! @doc(description: "The unique ID for a `CustomizableDropDownValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid")
 }
 
-type CustomizableMultipleOption implements CustomizableOptionInterface @doc(description: "CustomizableMultipleOption contains information about a multiselect that is defined as part of a customizable option.") {
+type CustomizableMultipleOption implements CustomizableOptionInterface @doc(description: "Contains information about a multiselect that is defined as part of a customizable option.") {
     value: [CustomizableMultipleValue] @doc(description: "An array that defines the set of options for a multiselect.")
 }
 
-type CustomizableMultipleValue @doc(description: "CustomizableMultipleValue defines the price and sku of a product whose page contains a customized multiselect.") {
+type CustomizableMultipleValue @doc(description: "Defines the price and sku of a product whose page contains a customized multiselect.") {
     option_type_id: Int @doc(description: "The ID assigned to the value.")
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
@@ -193,12 +193,12 @@ type CustomizableMultipleValue @doc(description: "CustomizableMultipleValue defi
     uid: ID! @doc(description: "The unique ID for a `CustomizableMultipleValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid")
 }
 
-type CustomizableFieldOption implements CustomizableOptionInterface @doc(description: "CustomizableFieldOption contains information about a text field that is defined as part of a customizable option.") {
+type CustomizableFieldOption implements CustomizableOptionInterface @doc(description: "Contains information about a text field that is defined as part of a customizable option.") {
     value: CustomizableFieldValue @doc(description: "An object that defines a text field.")
     product_sku: String @doc(description: "The Stock Keeping Unit of the base product.")
 }
 
-type CustomizableFieldValue @doc(description: "CustomizableFieldValue defines the price and sku of a product whose page contains a customized text field.") {
+type CustomizableFieldValue @doc(description: "Defines the price and sku of a product whose page contains a customized text field.") {
     price: Float @doc(description: "The price of the custom value.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
@@ -206,12 +206,12 @@ type CustomizableFieldValue @doc(description: "CustomizableFieldValue defines th
     uid: ID! @doc(description: "The unique ID for a `CustomizableFieldValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
 
-type CustomizableFileOption implements CustomizableOptionInterface @doc(description: "CustomizableFileOption contains information about a file picker that is defined as part of a customizable option.") {
+type CustomizableFileOption implements CustomizableOptionInterface @doc(description: "Contains information about a file picker that is defined as part of a customizable option.") {
     value: CustomizableFileValue @doc(description: "An object that defines a file value.")
     product_sku: String @doc(description: "The Stock Keeping Unit of the base product.")
 }
 
-type CustomizableFileValue @doc(description: "CustomizableFileValue defines the price and sku of a product whose page contains a customized file picker.") {
+type CustomizableFileValue @doc(description: "Defines the price and sku of a product whose page contains a customized file picker.") {
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
@@ -225,17 +225,17 @@ interface MediaGalleryInterface @doc(description: "Contains basic information ab
     url: String @doc(description: "The URL of the product image or video.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery\\Url")
     label: String @doc(description: "The label of the product image or video.")
     position: Int @doc(description: "The media item's position after it has been sorted.")
-    disabled: Boolean @doc(description: "Whether the image is hidden from view.")
+    disabled: Boolean @doc(description: "Indicates whether the image is hidden from view.")
 }
 
-type ProductImage implements MediaGalleryInterface @doc(description: "Product image information. Contains the image URL and label.") {
+type ProductImage implements MediaGalleryInterface @doc(description: "Contains product image information, including the image URL and label.") {
 }
 
 type ProductVideo implements MediaGalleryInterface @doc(description: "Contains information about a product video.") {
-    video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a ProductMediaGalleryEntriesVideoContent object.")
+    video_content: ProductMediaGalleryEntriesVideoContent @doc(description: "Contains a `ProductMediaGalleryEntriesVideoContent` object.")
 }
 
-interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "The CustomizableOptionInterface contains basic information about a customizable option. It can be implemented by several types of configurable options.") {
+interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CustomizableOptionTypeResolver") @doc(description: "Contains basic information about a customizable option. It can be implemented by several types of configurable options.") {
     title: String @doc(description: "The display name for this option.")
     required: Boolean @doc(description: "Indicates whether the option is required.")
     sort_order: Int @doc(description: "The order in which the option is displayed.")
@@ -243,12 +243,12 @@ interface CustomizableOptionInterface @typeResolver(class: "Magento\\CatalogGrap
     uid: ID! @doc(description: "The unique ID for a `CustomizableOptionInterface` object.")
 }
 
-interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "CustomizableProductInterface contains information about customizable product options.") {
+interface CustomizableProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains information about customizable product options.") {
     options: [CustomizableOptionInterface] @doc(description: "An array of options for a customizable product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Options")
 }
 
-interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") @doc(description: "CategoryInterface contains the full set of attributes that can be returned in a category search.") {
-    id: Int @deprecated(reason: "Use the `uid` argument instead.") @doc(description: "An ID that uniquely identifies the category.")
+interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\CategoryInterfaceTypeResolver") @doc(description: "Contains the full set of attributes that can be returned in a category search.") {
+    id: Int @deprecated(reason: "Use the `uid` field instead.") @doc(description: "An ID that uniquely identifies the category.")
     uid: ID! @doc(description: "The unique ID for a `CategoryInterface` object.")
     description: String @doc(description: "An optional description of the category.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CategoryHtmlAttribute")
     name: String @doc(description: "The display name of the category.")
