@@ -226,7 +226,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $existingValuesIds = [];
 
         foreach ($newValues as $newValue) {
-            if (array_key_exists('option_type_id', $newValue)) {
+            if (property_exists($newValue, 'option_type_id')) {
                 $existingValuesIds[] = $newValue['option_type_id'];
             }
         }
