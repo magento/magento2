@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers ViewModelPlugin
+ * Unit test for the ViewModelPlugin class
  */
 class ViewModelTest extends TestCase
 {
