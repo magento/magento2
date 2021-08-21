@@ -237,8 +237,13 @@ class ExternalVideoEntryConverterTest extends TestCase
         $mockBuilder = $this->getMockBuilder(ProductAttributeMediaGalleryEntryExtension::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->onlyMethods(['setVideoContent', 'getVideoContent'])
-                ->addMethods(['getVideoProvider']);
+            $mockBuilder->addMethods(
+                [
+                    'setVideoContent',
+                    'getVideoContent',
+                    'getVideoProvider'
+                ]
+            );
         } catch (RuntimeException $e) {
             // ProductAttributeMediaGalleryEntryExtension already generated and has all necessary methods.
         }

@@ -94,7 +94,7 @@ class ReadHandlerTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setCategoryLinks'])
+            ->addMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with($dtoCategoryLinks);
 
@@ -127,7 +127,7 @@ class ReadHandlerTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setCategoryLinks'])
+            ->addMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with(null);
 

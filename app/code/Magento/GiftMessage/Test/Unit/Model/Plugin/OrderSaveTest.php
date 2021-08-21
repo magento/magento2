@@ -199,7 +199,7 @@ class OrderSaveTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(OrderExtension::class);
         try {
-            $mockBuilder->onlyMethods(['getGiftMessage', 'setGiftMessage']);
+            $mockBuilder->addMethods(['getGiftMessage', 'setGiftMessage']);
         } catch (RuntimeException $e) {
             // OrderExtension already generated.
         }
@@ -216,7 +216,7 @@ class OrderSaveTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(OrderItemExtension::class);
         try {
-            $mockBuilder->onlyMethods(['getGiftMessage', 'setGiftMessage']);
+            $mockBuilder->addMethods(['getGiftMessage', 'setGiftMessage']);
         } catch (RuntimeException $e) {
             // OrderItemExtension already generated.
         }

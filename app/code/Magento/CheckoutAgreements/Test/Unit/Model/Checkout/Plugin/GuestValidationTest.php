@@ -174,7 +174,7 @@ class GuestValidationTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(PaymentExtension::class);
         try {
-            $mockBuilder->onlyMethods(['getAgreementIds']);
+            $mockBuilder->addMethods(['getAgreementIds']);
         } catch (RuntimeException $e) {
             // Payment extension already generated.
         }

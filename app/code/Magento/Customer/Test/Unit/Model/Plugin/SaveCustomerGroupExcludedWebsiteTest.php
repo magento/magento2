@@ -98,7 +98,7 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->groupExtensionMock = $this->getMockBuilder(GroupExtensionInterface::class)
-            ->onlyMethods(['getExcludeWebsiteIds'])
+            ->addMethods(['getExcludeWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

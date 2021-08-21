@@ -250,7 +250,7 @@ class CartItemProcessorTest extends TestCase
     {
         $mockBuilder = $this->getMockBuilder(ProductOptionExtension::class);
         try {
-            $mockBuilder->onlyMethods(['setDownloadableOption']);
+            $mockBuilder->addMethods(['setDownloadableOption']);
         } catch (RuntimeException $e) {
             // ProductOptionExtension already generated.
         }

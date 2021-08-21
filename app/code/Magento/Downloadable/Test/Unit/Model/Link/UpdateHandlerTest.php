@@ -156,7 +156,7 @@ class UpdateHandlerTest extends TestCase
         $mockBuilder = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->onlyMethods(['getDownloadableProductLinks']);
+            $mockBuilder->addMethods(['getDownloadableProductLinks']);
         } catch (RuntimeException $e) {
             // ProductExtension already generated.
         }

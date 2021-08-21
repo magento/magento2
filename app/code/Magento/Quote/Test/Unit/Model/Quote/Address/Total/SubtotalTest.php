@@ -141,7 +141,7 @@ class SubtotalTest extends TestCase
         $product->expects($this->any())->method('getStore')->willReturn($store);
         $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['getStockItem'])
+            ->addMethods(['getStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->atLeastOnce())

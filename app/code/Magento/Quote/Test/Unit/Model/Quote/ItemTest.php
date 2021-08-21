@@ -525,7 +525,7 @@ class ItemTest extends TestCase
             ->method('getStore')
             ->willReturn($store);
         $extensionAttribute = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['getStockItem'])
+            ->addMethods(['getStockItem'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $extensionAttribute->expects($this->atLeastOnce())

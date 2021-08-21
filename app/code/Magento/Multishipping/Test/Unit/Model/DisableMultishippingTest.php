@@ -122,7 +122,7 @@ class DisableMultishippingTest extends TestCase
         $mockBuilder = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->onlyMethods(['getShippingAssignments', 'setShippingAssignments']);
+            $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
         } catch (RuntimeException $e) {
             // CartExtension already generated.
         }

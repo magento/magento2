@@ -430,7 +430,7 @@ class ProductTest extends TestCase
         $this->eavConfig = $this->createMock(Config::class);
 
         $this->productExtAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->onlyMethods(['getStockItem'])
+            ->addMethods(['getStockItem'])
             ->getMockForAbstractClass();
         $this->extensionAttributesFactory
             ->expects($this->any())
@@ -842,7 +842,8 @@ class ProductTest extends TestCase
     {
         $extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getStockItem'])->getMockForAbstractClass();
+            ->addMethods(['getStockItem'])
+            ->getMockForAbstractClass();
         $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

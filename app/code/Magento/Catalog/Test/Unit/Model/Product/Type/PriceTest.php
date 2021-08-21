@@ -310,7 +310,7 @@ class PriceTest extends TestCase
         $mockBuilder = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
             ->disableOriginalConstructor();
         try {
-            $mockBuilder->onlyMethods(['getPercentageValue', 'setPercentageValue', 'setWebsiteId', 'getWebsiteId']);
+            $mockBuilder->addMethods(['getPercentageValue', 'setPercentageValue', 'setWebsiteId', 'getWebsiteId']);
         } catch (RuntimeException $e) {
             // ProductTierPriceExtensionInterface already generated and has all necessary methods.
         }

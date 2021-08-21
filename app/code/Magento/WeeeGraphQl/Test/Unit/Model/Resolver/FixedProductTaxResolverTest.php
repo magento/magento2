@@ -128,7 +128,7 @@ class FixedProductTaxResolverTest extends TestCase
             ->getMock();
 
         $this->contextExtensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->onlyMethods(['getStore'])
+            ->addMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->cartItemMock = $this->createMock(CartItemInterface::class);

@@ -254,7 +254,7 @@ class OrderRepositoryTest extends TestCase
         $mockBuilder = $this->getMockBuilder(OrderExtensionInterface::class)->disableOriginalConstructor();
         try {
             $mockBuilder
-                ->onlyMethods(
+                ->addMethods(
                     [
                         'getShippingAssignments',
                         'setAppliedTaxes',

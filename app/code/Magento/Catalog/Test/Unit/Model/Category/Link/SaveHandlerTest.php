@@ -88,7 +88,7 @@ class SaveHandlerTest extends TestCase
 
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['setCategoryLinks', 'getCategoryLinks'])
+            ->addMethods(['setCategoryLinks', 'getCategoryLinks'])
             ->getMockForAbstractClass();
         $extensionAttributes->expects(static::any())
             ->method('getCategoryLinks')
