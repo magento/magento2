@@ -13,6 +13,7 @@ use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image;
+use Magento\InventorySalesAdminUi\Model\GetSalableQuantityDataBySku;
 
 /**
  * Class Data
@@ -34,13 +35,20 @@ class Data
     private $imageUrlBuilder;
 
     /**
+     * @var UrlBuilder
+     */
+    private $getSalableQuantityDataBySku;
+
+    /**
      * @param ImageHelper $imageHelper
      * @param UrlBuilder $urlBuilder
+     * @param GetSalableQuantityDataBySku $getSalableQuantityDataBySku
      */
-    public function __construct(ImageHelper $imageHelper, UrlBuilder $urlBuilder = null)
+    public function __construct(ImageHelper $imageHelper, UrlBuilder $urlBuilder = null, GetSalableQuantityDataBySku $getSalableQuantityDataBySku)
     {
         $this->imageHelper = $imageHelper;
         $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
+        $this->getSalableQuantityDataBySku = $getSalableQuantityDataBySku;
     }
 
     /**
@@ -90,7 +98,8 @@ class Data
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
                 $attributeValue = $product->getData($productAttribute->getAttributeCode());
-                if ($product->isSalable()) {
+                $salableqty = $this->getSalableQuantityDataBySku->execute($product->getSku());
+                if ($product->isSalable() && (int)$salableqty[0]['qty']) {
                     $options[$productAttributeId][$attributeValue][] = $productId;
                 }
                 $options['index'][$productId][$productAttributeId] = $attributeValue;
