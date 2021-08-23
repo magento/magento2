@@ -112,7 +112,7 @@ class UpgradeCommandTest extends TestCase
             ->method('installDataFixtures');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute($options));
-        $this->assertEquals($expectedString, $this->commandTester->getDisplay());
+        $this->assertStringContainsString($expectedString, $this->commandTester->getDisplay());
     }
 
     /**
