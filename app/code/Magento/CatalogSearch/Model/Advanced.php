@@ -372,17 +372,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         $from = null;
         $to = null;
         if (is_array($value)) {
+            foreach ($value as $key => $element) {
+                if (is_array($element)) {
+                    $value[$key] = null;
+                }
+            }
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
                     $from = '';
                     $to = '';
-
-                    foreach ($value as $key => $element) {
-                        if (is_array($element)) {
-                            $value[$key] = null;
-                        }
-                    }
-
 
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */

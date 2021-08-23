@@ -159,7 +159,7 @@ class ResultTest extends AbstractController
         $this->assertEquals(200, $this->getResponse()->getStatusCode());
         $responseBody = $this->getResponse()->getBody();
         $this->assertStringContainsString(
-            'We can\'t find any items matching these search criteria',
+            'We can&#039;t find any items matching these search criteria.',
             $responseBody
         );
     }
@@ -179,9 +179,7 @@ class ResultTest extends AbstractController
                     'description' => '',
                     'short_description' => '',
                     'price' => [
-                        'from' => [
-                            1
-                        ],
+                        'from' => [],
                         'to' => 1,
                     ]
                 ]
@@ -205,8 +203,8 @@ class ResultTest extends AbstractController
                     'description' => '',
                     'short_description' => '',
                     'price' => [
-                        ['from' => ['0' => 1]],
-                        ['to' => 1],
+                        'from' => ['0' => ['0' => 1]],
+                        'to' => 1,
                     ]
                 ]
             ]
