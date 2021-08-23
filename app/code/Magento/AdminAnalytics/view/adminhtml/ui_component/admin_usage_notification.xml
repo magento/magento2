@@ -49,7 +49,7 @@
             <state>true</state>
             <options>
                 <option name="modalClass" xsi:type="string">admin-usage-notification</option>
-                <option name="title" xsi:type="string" translate="true">Allow admin usage data collection</option>
+                <option name="title" xsi:type="string" translate="true">Allow Adobe to collect usage data to improve user experience and offer in-product guidance</option>
                 <option name="autoOpen" xsi:type="boolean">true</option>
                 <option name="type" xsi:type="string">popup</option>
                 <option name="clickableOverlay" xsi:type="boolean">false</option>
@@ -82,11 +82,7 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string"/>
                         <item name="additionalClasses" xsi:type="string">release-notification-text</item>
-                        <item name="text" xsi:type="string" translate="true"><![CDATA[
-                        <p>Help us improve Magento Admin by allowing us to collect usage data.</p>
-                        <p>All usage data that we collect for this purpose cannot be used to individually identify you and is used only to improve the Magento Admin and related products and services.</p>
-                        <p>You can learn more and opt out at any time by following the instructions in <a href="https://docs.magento.com/m2/ce/user_guide/stores/admin.html" target="_blank" tabindex="0">merchant documentation</a>.</p>
-]]></item>
+                        <item name="text" xsi:type="string" translate="true"><![CDATA[<p>By clicking on <b>Allow</b>, you agree that we may collect anonymous usage data from you to:</p> <ol class="modal-list"> <li>Help us improve the Magento Admin user experience</li> <li>Provide interactive in-product guidance, such as technical support and tips to improve utilization of the product from within the Admin UI. This may include notifications of new features, product support/guidance, onboarding information, tooltips, and more.</li> </ol> <p>All usage data that we collect for this purpose cannot be used to individually identify you and is used only to improve the Magento Admin UI and related products and services.</p> <p>You can learn more and opt-out at any time by following the instructions in <a href="https://docs.magento.com/user-guide/configuration/advanced/admin.html#admin-usage">merchant documentation</a>.</p>]]></item>
                     </item>
                 </argument>
             </container>

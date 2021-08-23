@@ -336,15 +336,23 @@ class ElasticsearchTest extends TestCase
     {
         $this->indexNameResolver->expects($this->any())
             ->method('getIndexName')
-            ->with(1, 'product', [])
-            ->willReturn('indexName_product_1_v');
+            ->willReturnMap([[1, 'product', [1 => null], '_product_1_v0']]);
 
         $this->client->expects($this->atLeastOnce())
             ->method('indexExists')
-            ->willReturn(true);
-        $this->client->expects($this->once())
+            ->willReturnMap(
+                [
+                    ['_product_1_v1', true],
+                    ['_product_1_v2', true],
+                    ['_product_1_v3', false],
+                ]
+            );
+        $this->client->expects($this->exactly(2))
             ->method('deleteIndex')
-            ->with('_product_1_v1');
+            ->willReturnMap([
+                ['_product_1_v1'],
+                ['_product_1_v2'],
+            ]);
         $this->assertSame(
             $this->model,
             $this->model->cleanIndex(1, 'product')

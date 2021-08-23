@@ -318,7 +318,7 @@ class EmailSenderTest extends TestCase
                     'is_not_virtual' => $orderData['is_not_virtual'],
                     'email_customer_note' => $orderData['email_customer_note'],
                     'frontend_status_label' => $orderData['frontend_status_label']
-                ]
+                ],
             ];
             $transport = new DataObject($transport);
 

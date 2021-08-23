@@ -332,12 +332,12 @@ define([
                 },
 
                 /**
-                 * @param {Object} el
+                 * @param {jQuery} el
                  * @this {swatchProductAttributes}
                  */
                 _enable: function (el) {
                     if (!el.attr('readonly')) {
-                        el.removeAttr('disabled');
+                        el.prop('disabled', false);
                     }
                 },
 
@@ -431,10 +431,10 @@ define([
                 tableBody = $(),
                 activePanel = $();
 
-            $('#frontend_input').bind('change', function () {
+            $('#frontend_input').on('change', function () {
                 swatchProductAttributes.bindAttributeInputType();
             });
-            $('#is_filterable').bind('change', function () {
+            $('#is_filterable').on('change', function () {
                 swatchProductAttributes.switchIsFilterable();
             });
 
