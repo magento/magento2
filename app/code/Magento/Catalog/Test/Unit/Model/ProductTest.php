@@ -1113,6 +1113,21 @@ class ProductTest extends TestCase
         $this->assertTrue($this->model->getRequiredOptions());
     }
 
+    /**
+     * Test for save method with provided options settled via magic method
+     */
+    public function testSaveWithProvidedRequiredOptionsValue()
+    {
+        $this->model->setHasOptions("1");
+        $this->model->setRequiredOptions("1");
+        $this->model->setData("options", null);
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+        $this->assertTrue($this->model->getHasOptions());
+        $this->assertTrue($this->model->getRequiredOptions());
+    }
+
     public function testGetIsSalableSimple()
     {
         $typeInstanceMock =

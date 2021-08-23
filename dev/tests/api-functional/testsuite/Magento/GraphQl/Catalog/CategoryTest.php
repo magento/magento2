@@ -111,7 +111,7 @@ QUERY;
             $responseDataObject->getData('category/url_key')
         );
         self::assertEquals(
-            [],
+            null,
             $responseDataObject->getData('category/children/0/available_sort_by')
         );
         self::assertEquals(
@@ -217,7 +217,7 @@ QUERY;
             $responseDataObject->getData('category/url_key')
         );
         self::assertEquals(
-            [],
+            null,
             $responseDataObject->getData('category/children/0/available_sort_by')
         );
         self::assertEquals(
