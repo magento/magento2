@@ -11,11 +11,11 @@ use Magento\Directory\Setup\DataInstaller;
 use Magento\Directory\Setup\DataInstallerFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 /**
  * Add Costa Rica States/Regions
  */
-class AddDataForCostaRica implements DataPatchInterface
+class AddDataForCostaRica implements DataPatchInterface,PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -89,5 +89,9 @@ class AddDataForCostaRica implements DataPatchInterface
     public function getAliases()
     {
         return [];
+    }
+    public static function getVersion()
+    {
+      return '2.4.2';
     }
 }
