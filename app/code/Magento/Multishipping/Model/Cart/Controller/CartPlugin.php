@@ -72,7 +72,8 @@ class CartPlugin
     {
         /** @var Quote $quote */
         $quote = $this->checkoutSession->getQuote();
-        if ($quote->isMultipleShippingAddresses() || $this->isDisableMultishippingRequired($request, $quote)) {
+        $isMultipleShippingAddressesPresent = $quote->isMultipleShippingAddresses();
+        if ($isMultipleShippingAddressesPresent || $this->isDisableMultishippingRequired($request, $quote)) {
             $this->disableMultishipping->execute($quote);
             foreach ($quote->getAllShippingAddresses() as $address) {
                 $quote->removeAddress($address->getId());
@@ -83,6 +84,9 @@ class CartPlugin
             if ($defaultShipping) {
                 $defaultCustomerAddress = $this->addressRepository->getById($defaultShipping);
                 $shippingAddress->importCustomerAddressData($defaultCustomerAddress);
+            }
+            if ($isMultipleShippingAddressesPresent) {
+                $this->checkoutSession->setMultiShippingAddressesFlag(true);
             }
             $this->cartRepository->save($quote);
         } elseif ($this->disableMultishipping->execute($quote) && $this->isVirtualItemInQuote($quote)) {
