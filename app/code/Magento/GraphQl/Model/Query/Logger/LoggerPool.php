@@ -11,7 +11,7 @@ use InvalidArgumentException;
 /**
  * GraphQl logger pool
  */
-class LoggerPool
+class LoggerPool implements LoggerInterface
 {
     /**
      * @var LoggerInterface[]
@@ -44,21 +44,8 @@ class LoggerPool
     public function execute(
         array $queryDetails
     ) {
-        foreach ($this->loggers as $loggerClass) {
-            $logger = $this->loggerFactory->create(
-                $loggerClass,
-                [
-                    'queryDetails' => $queryDetails,
-                ]
-            );
-            if (!$logger instanceof LoggerInterface) {
-                throw new InvalidArgumentException(__(
-                    'Type %1 is not an instance of %2',
-                    get_class($logger),
-                    LoggerInterface::class
-                ));
-            }
-            $logger->execute();
+        foreach ($this->loggers as $logger) {
+            $logger->execute($queryDetails);
         }
     }
 

@@ -15,6 +15,7 @@
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
     <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
+    <preference for="Magento\GraphQl\Model\Query\Logger\LoggerInterface" type="Magento\GraphQl\Model\Query\Logger\LoggerPool"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">

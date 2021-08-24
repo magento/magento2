@@ -15,11 +15,6 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 class NewRelic implements LoggerInterface
 {
     /**
-     * @var array
-     */
-    private $queryDetails;
-
-    /**
      * @var Config
      */
     private $config;
@@ -30,16 +25,13 @@ class NewRelic implements LoggerInterface
     private $newRelicWrapper;
 
     /**
-     * @param array $queryDetails
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      */
     public function __construct(
-        array $queryDetails,
         Config $config,
         NewRelicWrapper $newRelicWrapper
     ) {
-        $this->queryDetails = $queryDetails;
         $this->config = $config;
         $this->newRelicWrapper = $newRelicWrapper;
     }
@@ -47,18 +39,18 @@ class NewRelic implements LoggerInterface
     /**
      * @inheritdoc
      */
-    public function execute()
+    public function execute(array $queryDetails)
     {
         if (!$this->config->isNewRelicEnabled()) {
             return;
         }
 
-        foreach ($this->queryDetails as $key => $value) {
+        foreach ($queryDetails as $key => $value) {
             $this->newRelicWrapper->addCustomParameter($key, $value);
         }
 
-        $transactionName = $this->queryDetails[LoggerInterface::QUERY_NAMES] ?: '';
-        if (strpos($this->queryDetails[LoggerInterface::QUERY_NAMES], ',') > 0) {
+        $transactionName = $queryDetails[LoggerInterface::QUERY_NAMES] ?: '';
+        if (strpos($queryDetails[LoggerInterface::QUERY_NAMES], ',') > 0) {
             $transactionName = 'multipleQueries';
         }
         $this->newRelicWrapper->setTransactionName('GraphQL-' . $transactionName);

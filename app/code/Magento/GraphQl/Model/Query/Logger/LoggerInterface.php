@@ -28,7 +28,8 @@ interface LoggerInterface
     /**
      * Execute logger
      *
+     * @param array $queryDetails
      * @return void
      */
-    public function execute();
+    public function execute(array $queryDetails);
 }
