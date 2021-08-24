@@ -900,8 +900,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $shippingAddressAsBilling = 1;
         $invalidAddressData = array_merge($this->getValidAddressData(), ['street' => [0 => 'White', 1 => 'Lane']]);
 
-        // Optionally, to bypass default customer address validation, just set `customer_address_id` to `null` in billingAddress.
-        $address = array_merge($invalidAddressData, ['save_in_address_book' => '1', 'customer_address_id' => 1]);
+        // Any change in default customer address should be treated as new address by setting up `customer_address_id` to `null`
+        // in billing and shipping addresses.
+        $address = array_merge($invalidAddressData, ['save_in_address_book' => '1', 'customer_address_id' => null]);
         $orderData = [
             'currency' => 'USD',
             'billing_address' => $address,
