@@ -87,15 +87,14 @@
         </actionGroup>
 
         <!-- Go to the created product page and add it to the cart -->
-        <amOnPage url="$$virtualProduct1.sku$$.html" stepKey="goToVirtualProductPage"/>
+        <amOnPage url="$$virtualProduct1.custom_attributes[url_key]$$.html" stepKey="goToVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForVirtualProductPage"/>
         <click stepKey="addVirtualProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
         <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForShippingSection"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxNY.state}}"/>

@@ -35,6 +35,6 @@
         </actionGroup>
 
         <!--Checking content storefront-->
-        <amOnPage url="{{DownloadableProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{DownloadableProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

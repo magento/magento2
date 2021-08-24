@@ -107,13 +107,10 @@
         <!-- Display out of stock product -->
         <actionGroup ref="DisplayOutOfStockProductActionGroup" stepKey="displayOutOfStockProduct"/>
 
-        <!-- Flash cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert configurable product is not present in category -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
 

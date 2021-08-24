@@ -56,6 +56,7 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
         $template->setTemplateType($queue->getNewsletterType());
         $template->setTemplateText($queue->getNewsletterText());
         $template->setTemplateStyles($queue->getNewsletterStyles());
+        $template->setData('is_legacy', false);
 
         return $this;
     }

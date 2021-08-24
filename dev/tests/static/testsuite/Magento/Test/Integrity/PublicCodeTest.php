@@ -6,6 +6,9 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
 
 /**
  * Tests @api annotated code integrity
@@ -42,13 +45,9 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             );
             $whiteListItems = [];
             foreach (glob($whiteListFiles) as $fileName) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $whiteListItems = array_merge(
-                    $whiteListItems,
-                    file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                );
+                $whiteListItems[] = file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             }
-            $this->blockWhitelist = $whiteListItems;
+            $this->blockWhitelist = array_merge([], ...$whiteListItems);
         }
         return $this->blockWhitelist;
     }
@@ -281,7 +280,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
                 && !$parameter->getType()->isBuiltin()
                 && !$this->isGenerated($parameter->getType()->getName())
             ) {
-                $parameterClass = $parameter->getClass();
+                $parameterClass = $this->getParameterClass($parameter);
                 /*
                  * We don't want to check integrity of @api coverage of classes
                  * that belong to different vendors, because it is too complicated.
@@ -290,7 +289,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
                  *  we don't want to fail test, because Zend is considered public by default,
                  *  and we don't care if Zend classes are @api-annotated
                  */
-                if (!$parameterClass->isInternal()
+                if ($parameterClass && !$parameterClass->isInternal()
                     && $this->areClassesFromSameVendor($parameterClass->getName(), $class)
                     && !$this->isPublished($parameterClass)
                 ) {
@@ -299,5 +298,21 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
         return $nonPublishedClasses;
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 }

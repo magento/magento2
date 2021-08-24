@@ -162,7 +162,7 @@ Description,Description
 "See our Shipping Policy","See our Shipping Policy"
 "Shipping Settings Section","Shipping Settings Section"
 "Shipping Policy Parameters Section","Shipping Policy Parameters Section"
-"Shipping Methods Section","Shipping Methods Section"
+"Delivery Methods Section","Delivery Methods Section"
 "Shipping Settings","Shipping Settings"
 Origin,Origin
 Country,Country
@@ -177,3 +177,4 @@ City,City
 "Shipping Methods","Shipping Methods"
 "Track your order","Track your order"
 "Track All Shipments","Track All Shipments"
+"This shipment no longer exists.","This shipment no longer exists."

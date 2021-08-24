@@ -174,7 +174,14 @@ class ElasticsearchTest extends TestCase
             ->method('getAllAttributesTypes')
             ->willReturn(
                 [
-                    'name' => 'string',
+                    'name' => [
+                        'type' => 'string',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => "keyword",
+                            ],
+                        ],
+                    ],
                 ]
             );
         $this->clientConfig->expects($this->any())
@@ -329,15 +336,23 @@ class ElasticsearchTest extends TestCase
     {
         $this->indexNameResolver->expects($this->any())
             ->method('getIndexName')
-            ->with(1, 'product', [])
-            ->willReturn('indexName_product_1_v');
+            ->willReturnMap([[1, 'product', [1 => null], '_product_1_v0']]);
 
         $this->client->expects($this->atLeastOnce())
             ->method('indexExists')
-            ->willReturn(true);
-        $this->client->expects($this->once())
+            ->willReturnMap(
+                [
+                    ['_product_1_v1', true],
+                    ['_product_1_v2', true],
+                    ['_product_1_v3', false],
+                ]
+            );
+        $this->client->expects($this->exactly(2))
             ->method('deleteIndex')
-            ->with('_product_1_v1');
+            ->willReturnMap([
+                ['_product_1_v1'],
+                ['_product_1_v2'],
+            ]);
         $this->assertSame(
             $this->model,
             $this->model->cleanIndex(1, 'product')
@@ -562,6 +577,28 @@ class ElasticsearchTest extends TestCase
             ->with([$attributeCode => ['type' => 'text']], $indexName, 'product');
 
         $this->model->updateIndexMapping($storeId, $mappedIndexerId, $attributeCode);
+    }
+
+    /**
+     * Test for get mapping total fields limit
+     *
+     * @return void
+     */
+    public function testGetMappingTotalFieldsLimit(): void
+    {
+        $settings = [
+            'index' => [
+                    'mapping' => [
+                        'total_fields' => [
+                            'limit'  => 1002
+                        ]
+                    ]
+            ]
+        ];
+        $this->client->expects($this->at(1))
+            ->method('createIndex')
+            ->with(null, ['settings' => $settings]);
+        $this->model->cleanIndex(1, 'product');
     }
 
     /**

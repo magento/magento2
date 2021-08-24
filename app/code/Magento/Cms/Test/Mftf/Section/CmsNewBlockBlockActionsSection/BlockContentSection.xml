@@ -8,8 +8,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="BlockContentSection">
-        <element name="TextArea" type="input" selector="#cms_block_form_content"/>
-        <element name="image" type="file" selector="#tinymce img"/>
-        <element name="contentIframe" type="iframe" selector="cms_block_form_content_ifr"/>
+        <element name="image" type="file" selector="img"/>
     </section>
 </sections>

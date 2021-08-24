@@ -158,6 +158,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected function initTypeModels()
     {
         $productTypes = $this->_exportConfig->getEntityTypes(CatalogProduct::ENTITY);
+        $disabledAttrs = [];
+        $indexValueAttributes = [];
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -174,13 +176,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             }
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_disabledAttrs = array_merge($this->_disabledAttrs, $model->getDisabledAttrs());
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_indexValueAttributes = array_merge(
-                    $this->_indexValueAttributes,
-                    $model->getIndexValueAttributes()
-                );
+                $disabledAttrs[] = $model->getDisabledAttrs();
+                $indexValueAttributes[] = $model->getIndexValueAttributes();
             }
         }
         if (!$this->_productTypeModels) {
@@ -188,7 +185,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 __('There are no product types available for export')
             );
         }
-        $this->_disabledAttrs = array_unique($this->_disabledAttrs);
+        $this->_disabledAttrs = array_unique(array_merge([], $this->_disabledAttrs, ...$disabledAttrs));
+        $this->_indexValueAttributes = array_unique(
+            array_merge([], $this->_indexValueAttributes, ...$indexValueAttributes)
+        );
         return $this;
     }
 
@@ -486,7 +486,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             )
             ->where(
                 'ap.' . $productEntityLinkField . ' IN (?)',
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
 
         if ($priceFromFilter !== null) {
@@ -518,6 +519,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
+        $selectFields = [];
+        $exportData = false;
         if ($table == ImportAdvancedPricing::TABLE_TIER_PRICE) {
             $selectFields = [
                 ImportAdvancedPricing::COL_SKU => 'cpe.sku',

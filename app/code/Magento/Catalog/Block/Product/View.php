@@ -177,25 +177,34 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     {
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->getProduct();
-
-        if (!$this->hasOptions()) {
-            $config = [
-                'productId' => $product->getId(),
-                'priceFormat' => $this->_localeFormat->getPriceFormat()
-            ];
-            return $this->_jsonEncoder->encode($config);
-        }
-
         $tierPrices = [];
         $priceInfo = $product->getPriceInfo();
         $tierPricesList = $priceInfo->getPrice('tier_price')->getTierPriceList();
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $tierPrice['price']->getValue() * 1;
+            $tierPriceData = [
+                'qty' => $tierPrice['price_qty'],
+                'price' => $tierPrice['website_price'],
+            ];
+            $tierPrices[] = $tierPriceData;
         }
+
+        if (!$this->hasOptions()) {
+            $config = [
+                'productId' => $product->getId(),
+                'priceFormat' => $this->_localeFormat->getPriceFormat(),
+                'tierPrices' => $tierPrices
+            ];
+            return $this->_jsonEncoder->encode($config);
+        }
+
         $config = [
             'productId'   => (int)$product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'prices'      => [
+                'baseOldPrice' => [
+                    'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount() * 1,
+                    'adjustments' => []
+                ],
                 'oldPrice'   => [
                     'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getValue() * 1,
                     'adjustments' => []

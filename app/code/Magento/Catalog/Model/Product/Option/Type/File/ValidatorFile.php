@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Math\Random;
-use Magento\Framework\App\ObjectManager;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * Validator class. Represents logic for validation file given from product option
@@ -173,15 +175,11 @@ class ValidatorFile extends Validator
         $userValue = [];
 
         if ($upload->isUploaded($file) && $upload->isValid($file)) {
-            $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($fileInfo['name']);
-            $dispersion = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
-
-            $filePath = $dispersion;
-
             $tmpDirectory = $this->filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
-            $fileHash = md5($tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
             $fileRandomName = $this->random->getRandomString(32);
-            $filePath .= '/' .$fileRandomName;
+            $fileName = Uploader::getCorrectFileName($fileRandomName);
+            $dispersion = Uploader::getDispersionPath($fileName);
+            $filePath = $dispersion . '/' . $fileName;
             $fileFullPath = $this->mediaDirectory->getAbsolutePath($this->quotePath . $filePath);
 
             $upload->addFilter(new \Zend_Filter_File_Rename(['target' => $fileFullPath, 'overwrite' => true]));
@@ -215,6 +213,8 @@ class ValidatorFile extends Validator
                     $_height = $imageSize[1];
                 }
             }
+
+            $fileHash = hash('sha256', $tmpDirectory->readFile($tmpDirectory->getRelativePath($fileInfo['tmp_name'])));
 
             $userValue = [
                 'type' => $fileInfo['type'],
@@ -255,8 +255,12 @@ class ValidatorFile extends Validator
 
         // Directory listing and hotlink secure
         $path = $this->path . '/.htaccess';
-        if (!$this->mediaDirectory->isFile($path)) {
-            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        $driver = $this->mediaDirectory->getDriver();
+        $absolutePath = $driver->getAbsolutePath($this->mediaDirectory->getAbsolutePath(), $path);
+        if (!$driver->isFile($absolutePath)) {
+            $resource = $driver->fileOpen($absolutePath, 'w+');
+            $driver->fileWrite($resource, "Order deny,allow\nDeny from all");
+            $driver->fileClose($resource);
         }
     }
 

@@ -8,7 +8,8 @@ define([
     'uiComponent',
     'Magento_MediaGalleryUi/js/action/deleteImageWithDetailConfirmation',
     'Magento_MediaGalleryUi/js/grid/columns/image/insertImageAction',
-    'mage/translate'
+    'mage/translate',
+    'Magento_Ui/js/lib/view/utils/async'
 ], function ($, _, Component, deleteImageWithDetailConfirmation, image, $t) {
     'use strict';
 
@@ -17,20 +18,24 @@ define([
             template: 'Magento_MediaGalleryUi/grid/columns/image/actions',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             mediaGalleryEditDetailsName: 'mediaGalleryEditDetails',
+            allowedActions: [],
             actionsList: [
                 {
                     name: 'image-details',
                     title: $t('View Details'),
+                    classes: 'action-menu-item',
                     handler: 'viewImageDetails'
                 },
                 {
                     name: 'edit',
                     title: $t('Edit'),
+                    classes: 'action-menu-item',
                     handler: 'editImageDetails'
                 },
                 {
                     name: 'delete',
                     title: $t('Delete'),
+                    classes: 'action-menu-item media-gallery-delete-assets',
                     handler: 'deleteImageAction'
                 }
             ],
@@ -50,6 +55,16 @@ define([
             this._super();
             this.initEvents();
 
+            this.actionsList = this.actionsList.filter(function (item) {
+                return this.allowedActions.includes(item.name);
+            }.bind(this));
+
+            if (!this.allowedActions.includes('delete')) {
+                $.async('.media-gallery-delete-assets', function () {
+                    $('.media-gallery-delete-assets').off('click').addClass('action-disabled');
+                });
+            }
+
             return this;
         },
 
@@ -57,7 +72,7 @@ define([
          * Initialize image action events
          */
         initEvents: function () {
-            $(this.imageModel().addSelectedBtnSelector).click(function () {
+            $(this.imageModel().addSelectedBtnSelector).on('click', function () {
                 image.insertImage(
                     this.imageModel().getSelected(),
                     {
@@ -66,7 +81,7 @@ define([
                     }
                 );
             }.bind(this));
-            $(this.imageModel().deleteSelectedBtnSelector).click(function () {
+            $(this.imageModel().deleteSelectedBtnSelector).on('click', function () {
                 this.deleteImageAction(this.imageModel().selected());
             }.bind(this));
 

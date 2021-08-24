@@ -137,6 +137,7 @@ class EmailSenderTest extends TestCase
         $this->storeMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);
+
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -152,7 +153,7 @@ class EmailSenderTest extends TestCase
 
         $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setSendEmail', 'setEmailSent'])
+            ->setMethods(['setSendEmail', 'setEmailSent', 'getId'])
             ->getMock();
 
         $this->commentMock = $this->getMockBuilder(InvoiceCommentCreationInterface::class)
@@ -170,6 +171,7 @@ class EmailSenderTest extends TestCase
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($this->addressMock);
+
         $this->orderMock->expects($this->any())
             ->method('getShippingAddress')
             ->willReturn($this->addressMock);
@@ -272,16 +274,29 @@ class EmailSenderTest extends TestCase
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
+        $this->orderMock->method('getCustomerName')->willReturn('Customer name');
+        $this->orderMock->method('getIsNotVirtual')->willReturn(true);
+        $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
+        $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
+
         if (!$configValue || $forceSyncMode) {
             $transport = [
                 'order' => $this->orderMock,
+                'order_id' => 1,
                 'invoice' => $this->invoiceMock,
+                'invoice_id' => 1,
                 'comment' => $isComment ? 'Comment text' : '',
                 'billing' => $this->addressMock,
                 'payment_html' => 'Payment Info Block',
                 'store' => $this->storeMock,
                 'formattedShippingAddress' => 'Formatted address',
                 'formattedBillingAddress' => 'Formatted address',
+                'order_data' => [
+                    'customer_name' => 'Customer name',
+                    'is_not_virtual' => true,
+                    'email_customer_note' => null,
+                    'frontend_status_label' => 'Pending',
+                ],
             ];
             $transport = new DataObject($transport);
 
@@ -303,6 +318,14 @@ class EmailSenderTest extends TestCase
             $this->identityContainerMock->expects($this->exactly(2))
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
+
+            $this->orderMock->expects($this->once())
+                ->method('getId')
+                ->willReturn(1);
+
+            $this->invoiceMock->expects($this->once())
+                ->method('getId')
+                ->willReturn(1);
 
             if ($emailSendingResult) {
                 $this->identityContainerMock->expects($this->once())

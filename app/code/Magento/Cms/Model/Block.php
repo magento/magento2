@@ -6,8 +6,17 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * CMS block model
@@ -41,6 +50,41 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     protected $_eventPrefix = 'cms_block';
 
     /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
+    /**
+     * @var CompositeUrlKey
+     */
+    private $compositeUrlValidator;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     * @param WYSIWYGValidatorInterface|null $wysiwygValidator
+     * @param CompositeUrlKey|null $compositeUrlValidator
+     */
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null,
+        CompositeUrlKey $compositeUrlValidator = null
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->wysiwygValidator = $wysiwygValidator
+            ?? ObjectManager::getInstance()->get(WYSIWYGValidatorInterface::class);
+        $this->compositeUrlValidator = $compositeUrlValidator
+            ?? ObjectManager::getInstance()->get(CompositeUrlKey::class);
+    }
+
+    /**
      * Construct.
      *
      * @return void
@@ -63,12 +107,32 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         }
 
         $needle = 'block_id="' . $this->getId() . '"';
-        if (false == strstr($this->getContent(), (string) $needle)) {
-            return parent::beforeSave();
+        if (strstr($this->getContent(), (string) $needle) !== false) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Make sure that static block content does not reference the block itself.')
+            );
         }
-        throw new \Magento\Framework\Exception\LocalizedException(
-            __('Make sure that static block content does not reference the block itself.')
-        );
+
+        $errors = $this->compositeUrlValidator->validate($this->getIdentifier());
+        if (!empty($errors)) {
+            throw new LocalizedException($errors[0]);
+        }
+
+        parent::beforeSave();
+
+        //Validating HTML content.
+        if ($this->getContent() && $this->getContent() !== $this->getOrigData(self::CONTENT)) {
+            try {
+                $this->wysiwygValidator->validate($this->getContent());
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Content field contains restricted HTML elements. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
+
+        return $this;
     }
 
     /**

@@ -94,7 +94,7 @@ class GalleryTest extends TestCase
         $data = [
             [
                 'media_type' => 'external-video',
-                'video_url' => 'http://magento.ce/pub/media/catalog/product/9/b/9br6ujuthnc.jpg',
+                'video_url' => 'http://magento.ce/media/catalog/product/9/b/9br6ujuthnc.jpg',
                 'is_base' => true,
             ],
             [

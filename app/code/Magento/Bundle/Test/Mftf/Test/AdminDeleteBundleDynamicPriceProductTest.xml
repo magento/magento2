@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteBundleDynamicPriceProductTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Delete products"/>
+            <title value="Delete Bundle Dynamic Product"/>
+            <description value="Admin should be able to delete a bundle dynamic product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-26056"/>
+            <group value="mtf_migrated"/>
+            <group value="bundle"/>
+        </annotations>
+        <before>
+            <!-- Create category and simple product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+
+            <!-- Create bundle product -->
+            <createData entity="ApiBundleProductPriceViewRange" stepKey="createDynamicBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createDynamicBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="createNewBundleLink">
+                <requiredEntity createDataKey="createDynamicBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <!-- TODO: Remove this action when MC-37719 will be fixed -->
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
+            <argument name="sku" value="$createDynamicBundleProduct.sku$"/>
+        </actionGroup>
+        <!-- Verify product on Product Page -->
+        <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoopsMessage"/>
+        <!-- Search for the product by sku -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku">
+            <argument name="query" value="$createDynamicBundleProduct.sku$"/>
+        </actionGroup>
+         <!-- Should not see bundle product -->
+        <dontSee userInput="$createDynamicBundleProduct.sku$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPage"/>
+        <!-- Should not see any products in category -->
+        <dontSee userInput="$createDynamicBundleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
+        <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>
+    </test>
+</tests>
