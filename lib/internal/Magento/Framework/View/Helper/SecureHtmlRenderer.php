@@ -158,7 +158,7 @@ class SecureHtmlRenderer
                 $exploded[1] = join('', array_slice($exploded, 1));
             }
             $styleValue = str_replace('\'', '\\\'', trim($exploded[1]));
-            $stylesAssignments .= "$elementVariable.style.$styleAttribute = '$styleValue';\n";
+            $stylesAssignments .= "element.style.$styleAttribute = '$styleValue';\n";
         }
 
         $script = <<<script
