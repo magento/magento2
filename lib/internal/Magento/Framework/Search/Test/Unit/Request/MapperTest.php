@@ -250,7 +250,7 @@ class MapperTest extends TestCase
                     Filter::class,
                     [
                         'name' => $queryRoot['name'],
-                        'boost' => isset($queryRoot['boost']) ?? 1,
+                        'boost' => $queryRoot['boost'] ?? 1,
                         'reference' => $this->queryMatch,
                         'referenceType' => Filter::REFERENCE_QUERY
                     ]
@@ -320,7 +320,7 @@ class MapperTest extends TestCase
                     BoolExpression::class,
                     [
                         'name' => $rootQueries['name'],
-                        'boost' => isset($rootQueries['boost']) ?? 1,
+                        'boost' => $rootQueries['boost'] ?? 1,
                         'someClause' => ['someQueryMatch' => $this->queryMatch]
                     ]
                 ]
