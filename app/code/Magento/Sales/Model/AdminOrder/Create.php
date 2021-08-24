@@ -2165,12 +2165,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $billingData['address_type'],
             $billingData['entity_id']
         );
-        // Billing & Shipping customer_address_id should be equal, if rest of the common address fields are equal
-        if(!empty($billingData['customer_address_id']) && empty($shippingData['customer_address_id'])){
-            $shippingData['customer_address_id'] = $billingData['customer_address_id'];
-        } elseif (empty($billingData['customer_address_id']) && !empty($shippingData['customer_address_id'])){
-            $billingData['customer_address_id'] = $shippingData['customer_address_id'];
-        } elseif (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
+        if (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
             unset($shippingData['customer_address_id']);
         }
 

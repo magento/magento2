@@ -246,7 +246,7 @@ define([
                 name,
                 data,
                 resetShipping = false,
-                resetBilling = false;
+                resetSelectedBillingAddress = false;
 
             if (!matchRes) {
                 return;
@@ -265,7 +265,7 @@ define([
             if (type === 'billing' && this.shippingAsBilling) {
                 this.syncAddressField(this.shippingAddressContainer, field.name, field);
                 resetShipping = true;
-                resetBilling = true;
+                resetSelectedBillingAddress = true;
             }
 
             if (type === 'shipping' && !this.shippingAsBilling) {
@@ -273,7 +273,7 @@ define([
             }
 
             if (type === 'billing' && !this.shippingAsBilling) {
-                resetBilling = true;
+                resetSelectedBillingAddress = true;
             }
 
             if (resetShipping) {
@@ -284,7 +284,7 @@ define([
                 }
             }
 
-            if (resetBilling) {
+            if (resetSelectedBillingAddress) {
                 if(name !== 'customer_address_id' && this.selectAddressEvent === false) {
                     this.clearSelected('order-billing_address_customer_address_id');
                 }
@@ -297,9 +297,10 @@ define([
                 data['order[' + type + '_address][customer_address_id]'] =
                     $('order-' + type + '_address_customer_address_id').value;
 
+                // Clear previously selected shipping address id in order to treat it as new from frontend
+                // dropdown(Select from existing customer addresses) change event
                 if(this.shippingAsBilling) {
-                    document.getElementById('order-shipping_address_customer_address_id').value =
-                        $('order-' + type + '_address_customer_address_id').value;
+                    this.clearSelected('order-shipping_address_customer_address_id');
                 }
             }
 
@@ -326,11 +327,11 @@ define([
          * @param {String} id - field ID
          */
         clearSelected: function(id){
-            let element = document.getElementById(id);
+            var element = $(id);
             if(typeof element !== 'undefined' && element !== null) {
                 if(element.value){
-                    let elem = element.options;
-                    for(let i = 0; i < elem.length; i++){
+                    var elem = element.options;
+                    for(var i = 0; i < elem.length; i++){
                         elem[i].selected = false;
                     }
                 }
@@ -456,6 +457,9 @@ define([
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
+            // set customer_address_id to null for shipping address in order to treat it as new from backend
+            // Checkbox(Same As Billing Address) uncheck event
+            data['order[shipping_address][customer_address_id]'] = null;
             this.loadArea(areasToLoad, true, data);
         },
 
