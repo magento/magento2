@@ -140,12 +140,12 @@ class ResultTest extends AbstractController
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @dataProvider searchParamsWithArrayDataProvider
+     * @dataProvider searchParamsInArrayDataProvider
      *
      * @param array $searchParams
      * @return void
      */
-    public function testExecuteWithArrayInParams(array $searchParams): void
+    public function testExecuteWithArrayInParam(array $searchParams): void
     {
         $this->getRequest()->setQuery(
             $this->_objectManager->create(
@@ -165,14 +165,14 @@ class ResultTest extends AbstractController
     }
 
     /**
-     * Data provider with arrays in param values
+     * Data provider with array in params values
      *
      * @return array
      */
-    public function searchParamsWithArrayDataProvider(): array
+    public function searchParamsInArrayDataProvider(): array
     {
         return [
-            'search_with_empty_arrays' => [
+            'search_with_from_param_is_array' => [
                 [
                     'name' => '',
                     'sku' => '',
@@ -181,6 +181,18 @@ class ResultTest extends AbstractController
                     'price' => [
                         'from' => [],
                         'to' => 1,
+                    ]
+                ]
+            ],
+            'search_with_to_param_is_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => 0,
+                        'to' => [],
                     ]
                 ]
             ],

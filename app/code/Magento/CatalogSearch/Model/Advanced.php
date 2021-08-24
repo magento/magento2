@@ -212,7 +212,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if ($attribute->getAttributeCode() == 'price') {
                 foreach ($value as $key => $element) {
                     if (is_array($element)) {
-                        $value[$key] = null;
+                        $value[$key] = 0;
                     }
                 }
 
@@ -374,7 +374,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         if (is_array($value)) {
             foreach ($value as $key => $element) {
                 if (is_array($element)) {
-                    $value[$key] = null;
+                    $value[$key] = '';
                 }
             }
             if (isset($value['from']) && isset($value['to'])) {
