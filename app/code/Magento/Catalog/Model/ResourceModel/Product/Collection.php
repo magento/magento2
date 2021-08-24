@@ -2091,14 +2091,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $filters = $this->_productLimitationFilters;
         $categories = $this->getChildrenCategories((int)$filters['category_id']);
 
-        $conditions = [
-            'cat_pro.product_id=e.entity_id',
-            $this->getConnection()->quoteInto(
-                'cat_pro.category_id IN (?)',
-                $categories
-            ),
-        ];
-        $joinCond = join(' AND ', $conditions);
+        $categoryProductSelect = $this->getConnection()->select();
+        $categoryProductSelect->from("catalog_category_product");
+        $categoryProductSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $categoryProductSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $categoryProductSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $categoryProductSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $categoryProductSelect->columns([
+            "product_id"   => "product_id",
+            "min_position" => new \Zend_Db_Expr("MIN(position)")
+        ]);
+        $categoryProductSelect->where("category_id IN (?)", $categories);
+        $categoryProductSelect->group("product_id");
+
+        $joinCond = "cat_pro.product_id = e.entity_id";
 
         $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
         if (isset($fromPart['cat_pro'])) {
@@ -2106,12 +2112,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
         } else {
             $this->getSelect()->join(
-                ['cat_pro' => $this->getTable('catalog_category_product')],
+                ['cat_pro' => $categoryProductSelect],
                 $joinCond,
-                ['cat_index_position' => 'position']
+                ['cat_index_position' => 'min_position']
             );
         }
-        $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'position'];
+        $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'min_position'];
 
         return $this;
     }
