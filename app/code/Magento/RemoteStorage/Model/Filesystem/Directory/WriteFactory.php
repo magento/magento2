@@ -50,8 +50,12 @@ class WriteFactory extends BaseWriteFactory
     /**
      * @inheritDoc
      */
-    public function create($path, $driverCode = DriverPool::REMOTE, $createPermissions = null)
-    {
+    public function create(
+        $path,
+        $driverCode = DriverPool::REMOTE,
+        $createPermissions = null,
+        $directoryCode = null
+    ) {
         if ($driverCode == DriverPool::REMOTE) {
             $driver = $this->driverPool->getDriver($driverCode);
             $factory = new \Magento\Framework\Filesystem\File\WriteFactory(
@@ -71,7 +75,8 @@ class WriteFactory extends BaseWriteFactory
                     'driver' => $driver,
                     'path' => $path,
                     'createPermissions' => $createPermissions,
-                    'pathValidator' => $pathValidator
+                    'pathValidator' => $pathValidator,
+                    'directoryCode' => $directoryCode
                 ]
             );
         } else {

@@ -33,6 +33,7 @@ class Write extends \Magento\Framework\Filesystem\Directory\Write
      * @param Filesystem $filesystem
      * @param int|null $createPermissions
      * @param PathValidatorInterface|null $pathValidator
+     * @param string $directoryCode
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -41,11 +42,12 @@ class Write extends \Magento\Framework\Filesystem\Directory\Write
         $path,
         Filesystem $filesystem,
         ?int $createPermissions = null,
-        ?PathValidatorInterface $pathValidator = null
+        ?PathValidatorInterface $pathValidator = null,
+        ?string $directoryCode = DirectoryList::PUB
     ) {
         parent::__construct($fileFactory, $driver, $path, $createPermissions, $pathValidator);
         $this->localDirectoryWrite = $filesystem->getDirectoryWrite(
-            DirectoryList::PUB,
+            $directoryCode,
             DriverPool::FILE
         );
     }
