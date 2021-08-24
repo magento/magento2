@@ -64,7 +64,7 @@ class ExtractDataFromCategoryTree
                 if (empty($tree)) {
                     $tree = $currentLevelTree;
                 }
-                $tree = $this->mergeCategoriesTrees($currentLevelTree, $tree);
+                $tree = $this->mergeCategoriesTrees($tree, $currentLevelTree);
             }
         }
 

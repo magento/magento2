@@ -1329,6 +1329,13 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testFillUploaderObject($isRead, $isWrite, $message)
     {
+        $dir = $this->createMock(WriteInterface::class);
+        $dir->method('getAbsolutePath')
+            ->willReturn('pub/media');
+        $this->_filesystem->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($dir);
+
         $fileUploaderMock = $this
             ->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
@@ -1354,6 +1361,7 @@ class ProductTest extends AbstractImportTestCase
                 [
                     ['import', 'import'],
                     ['catalog/product', 'catalog/product'],
+                    ['pub/media', 'pub/media'],
                 ]
             );
 
