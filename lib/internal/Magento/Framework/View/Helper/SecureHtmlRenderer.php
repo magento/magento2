@@ -161,12 +161,17 @@ class SecureHtmlRenderer
             $stylesAssignments .= "$elementVariable.style.$styleAttribute = '$styleValue';\n";
         }
 
-        return $this->renderTag(
-            'script',
-            ['type' => 'text/javascript'],
-            "var $elementVariable = document.querySelector('$selector');\n"
-            . "if ($elementVariable) {\n{$stylesAssignments}}",
-            false
-        );
+        $script = <<<script
+            var {$elementVariable}Array = document.querySelectorAll("{$selector}");
+            if({$elementVariable}Array.length !== 'undefined'){
+                {$elementVariable}Array.forEach(function(element) {
+                    if (element) {
+                        {$stylesAssignments}
+                    }
+                });
+            }
+        script;
+
+        return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
     }
 }
