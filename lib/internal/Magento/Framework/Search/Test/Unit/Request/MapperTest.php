@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Request;
 
+use Exception;
 use InvalidArgumentException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\Request\Aggregation\Metric;
 use Magento\Framework\Search\Request\Aggregation\RangeBucket;
@@ -19,7 +21,7 @@ use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Mapper;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\Request\Query\Match;
+use Magento\Framework\Search\Request\Query\MatchQuery;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -43,7 +45,7 @@ class MapperTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Match|MockObject
+     * @var MatchQuery|MockObject
      */
     private $queryMatch;
 
@@ -63,22 +65,17 @@ class MapperTest extends TestCase
     private $filterTerm;
 
     /**
-     * @var Wildcard|MockObject
-     */
-    private $filterWildcard;
-
-    /**
      * @var Range|MockObject
      */
     private $filterRange;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Bool|MockObject
+     * @var BoolExpression|MockObject
      */
     private $filterBool;
 
     /**
-     * @inheritdoc
+     * @ingeritdoc
      */
     protected function setUp(): void
     {
@@ -86,7 +83,7 @@ class MapperTest extends TestCase
 
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->queryMatch = $this->getMockBuilder(Match::class)
+        $this->queryMatch = $this->getMockBuilder(MatchQuery::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -106,11 +103,7 @@ class MapperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterBool = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\BoolExpression::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->filterWildcard = $this->getMockBuilder(Wildcard::class)
+        $this->filterBool = $this->getMockBuilder(BoolExpression::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -125,16 +118,14 @@ class MapperTest extends TestCase
     {
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->once())->method('create')
-            ->with(
-                Match::class,
+            ->with(MatchQuery::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
-                    'boost' => isset($query['boost']) ? $query['boost'] : 1,
+                    'boost' => $query['boost'] ?? 1,
                     'matches' => $query['match'],
                 ]
-            )
-            ->willReturn($this->queryMatch);
+            )->willReturn($this->queryMatch);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -156,7 +147,7 @@ class MapperTest extends TestCase
      */
     public function testGetQueryNotUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_MATCH,
@@ -176,12 +167,12 @@ class MapperTest extends TestCase
         $query = $queries['someQuery'];
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                Match::class,
+                MatchQuery::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
-                    'boost' => isset($query['boost']) ? $query['boost'] : 1,
-                    'matches' => $query['match']
+                    'boost' => $query['boost'] ?? 1,
+                    'matches' => $query['match'],
                 ]
             )
             ->willReturn($this->queryMatch);
@@ -206,7 +197,7 @@ class MapperTest extends TestCase
      */
     public function testGetQueryUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -247,7 +238,7 @@ class MapperTest extends TestCase
             ->method('create')
             ->withConsecutive(
                 [
-                    Match::class,
+                    MatchQuery::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
@@ -259,7 +250,7 @@ class MapperTest extends TestCase
                     Filter::class,
                     [
                         'name' => $queryRoot['name'],
-                        'boost' => isset($queryRoot['boost']) ? $queryRoot['boost'] : 1,
+                        'boost' => isset($queryRoot['boost']) ?? 1,
                         'reference' => $this->queryMatch,
                         'referenceType' => Filter::REFERENCE_QUERY
                     ]
@@ -284,7 +275,7 @@ class MapperTest extends TestCase
 
     public function testGetQueryFilterReferenceException(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Reference is not provided');
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -317,7 +308,7 @@ class MapperTest extends TestCase
             ->method('create')
             ->withConsecutive(
                 [
-                    Match::class,
+                    MatchQuery::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
@@ -329,7 +320,7 @@ class MapperTest extends TestCase
                     BoolExpression::class,
                     [
                         'name' => $rootQueries['name'],
-                        'boost' => isset($rootQueries['boost']) ? $rootQueries['boost'] : 1,
+                        'boost' => isset($rootQueries['boost']) ?? 1,
                         'someClause' => ['someQueryMatch' => $this->queryMatch]
                     ]
                 ]
@@ -382,7 +373,7 @@ class MapperTest extends TestCase
      */
     public function testGetQueryException(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(Exception::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -683,7 +674,7 @@ class MapperTest extends TestCase
      */
     public function testGetFilterNotUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -755,7 +746,7 @@ class MapperTest extends TestCase
      */
     public function testGetFilterUsedStateException(): void
     {
-        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectException(StateException::class);
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
             Mapper::class,
@@ -797,7 +788,7 @@ class MapperTest extends TestCase
      */
     public function testGetFilterInvalidArgumentException(): void
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid filter type');
         $queries = [
             self::ROOT_QUERY => [
@@ -836,7 +827,7 @@ class MapperTest extends TestCase
      */
     public function testGetFilterException(): void
     {
-        $this->expectException('Exception');
+        $this->expectException(Exception::class);
         $queries = [
             self::ROOT_QUERY => [
                 'type' => QueryInterface::TYPE_FILTER,
@@ -1022,7 +1013,7 @@ class MapperTest extends TestCase
         ];
         $metricClass = Metric::class;
         $bucketClass = TermBucket::class;
-        $queryClass = Match::class;
+        $queryClass = MatchQuery::class;
         $queryArguments = [
             'name' => $queries[self::ROOT_QUERY]['name'],
             'value' => $queries[self::ROOT_QUERY]['value'],
@@ -1091,7 +1082,7 @@ class MapperTest extends TestCase
         $metricClass = Metric::class;
         $bucketClass = RangeBucket::class;
         $rangeClass = \Magento\Framework\Search\Request\Aggregation\Range::class;
-        $queryClass = Match::class;
+        $queryClass = MatchQuery::class;
         $queryArguments = [
             'name' => $queries[self::ROOT_QUERY]['name'],
             'value' => $queries[self::ROOT_QUERY]['value'],
