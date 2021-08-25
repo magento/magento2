@@ -18,11 +18,18 @@ define([
         /** @inheritdoc */
         initialize: function (config, element) {
             var cart = customerData.get('cart'),
-                customer = customerData.get('customer');
+                customer = customerData.get('customer'),
+                updateDeclinePayment = function () {
+                    this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+                }.bind(this);
 
             this._super();
             this.renderPayPalButtons(element);
-            this.declinePayment = !customer().firstname && !cart().isGuestCheckoutAllowed;
+
+            updateDeclinePayment();
+
+            cart.subscribe(updateDeclinePayment);
+            customer.subscribe(updateDeclinePayment);
 
             return this;
         },
