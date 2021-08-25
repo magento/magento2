@@ -217,7 +217,7 @@
                     <frame-ancestors>
                         <policy_id>frame-ancestors</policy_id>
                         <self>1</self>
-                        <inline>1</inline>
+                        <inline>0</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </frame-ancestors>
