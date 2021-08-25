@@ -168,8 +168,11 @@ class CategoryTest extends TestCase
 
         $this->target->setRequestVar($requestField);
 
-        $this->request
-            ->method('getParam')
+        $this->category->expects($this->once())
+            ->method('getChildrenCategories')
+            ->willReturn([]);
+
+        $this->request->method('getParam')
             ->withConsecutive([$requestField]);
 
         $result = $this->target->apply($this->request);
@@ -222,6 +225,10 @@ class CategoryTest extends TestCase
         $this->category->expects($this->once())
             ->method('getId')
             ->willReturn($categoryId);
+
+        $this->category->expects($this->once())
+            ->method('getChildrenCategories')
+            ->willReturn([]);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addCategoryFilter')
