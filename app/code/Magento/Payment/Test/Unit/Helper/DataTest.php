@@ -12,6 +12,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Info;
@@ -44,6 +45,11 @@ class DataTest extends TestCase
      */
     private $appEmulation;
 
+    /**
+     * @var LayoutFactory|MockObject
+     */
+    private $layoutFactoryMock;
+
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -53,8 +59,7 @@ class DataTest extends TestCase
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $layoutFactoryMock = $arguments['layoutFactory'];
-        $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
+        $this->layoutFactoryMock = $arguments['layoutFactory'];
 
         $this->methodFactory = $arguments['paymentMethodFactory'];
         $this->appEmulation = $arguments['appEmulation'];
@@ -214,6 +219,7 @@ class DataTest extends TestCase
         $this->layoutMock->expects($this->once())->method('createBlock')
             ->with($blockType)
             ->willReturn($blockMock);
+        $this->layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
         $blockMock->expects($this->once())->method('setInfo')->with($infoMock);
 
         $this->assertSame($blockMock, $this->helper->getInfoBlock($infoMock));
@@ -242,6 +248,7 @@ class DataTest extends TestCase
         $this->layoutMock->expects($this->once())->method('createBlock')
             ->with($blockType)
             ->willReturn($paymentBlockMock);
+        $this->layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
         $paymentBlockMock->expects($this->once())->method('setInfo')->with($infoMock);
         $paymentBlockMock->expects($this->once())->method('setArea')
             ->with(Area::AREA_FRONTEND)
