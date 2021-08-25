@@ -684,6 +684,16 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 foreach ($productOptions['options'] as $option) {
                     if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
                         $product->setSkipCheckRequiredOption(false);
+                        if ($option['option_type'] === 'file') {
+                            try {
+                                $formattedOptions[$option['option_id']] =
+                                    $this->serializer->unserialize($option['option_value']);
+                                continue;
+                            } catch (\InvalidArgumentException $exception) {
+                                //log the exception as warning
+                                $this->_logger->warning($exception);
+                            }
+                        }
                         $formattedOptions[$option['option_id']] =
                             $buyRequest->getDataByKey('options')[$option['option_id']];
                         continue;

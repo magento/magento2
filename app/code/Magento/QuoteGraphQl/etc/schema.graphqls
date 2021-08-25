@@ -118,7 +118,7 @@ input CartAddressInput {
     region_id: Int
     postcode: String
     country_code: String!
-    telephone: String!
+    telephone: String
     save_in_address_book: Boolean @doc(description: "Determines whether to save the address in the customer's address book. The default value is true")
 }
 
@@ -224,7 +224,7 @@ interface CartAddressInterface @typeResolver(class: "\\Magento\\QuoteGraphQl\\Mo
     region: CartAddressRegion
     postcode: String
     country: CartAddressCountry!
-    telephone: String!
+    telephone: String
 }
 
 type ShippingCartAddress implements CartAddressInterface {
