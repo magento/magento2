@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Query;
 
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema;
 
@@ -57,6 +58,7 @@ class QueryProcessor
      * @param array|null $variableValues
      * @param string|null $operationName
      * @return Promise|array
+     * @throws GraphQlInputException
      */
     public function process(
         Schema $schema,
@@ -66,6 +68,7 @@ class QueryProcessor
         string $operationName = null
     ) : array {
         if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();
         }
 
