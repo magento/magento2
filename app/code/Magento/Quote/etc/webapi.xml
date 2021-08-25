@@ -65,7 +65,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="cartId" force="true">%cart_id%</parameter>
+            <parameter name="quote.id" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/order" method="PUT">
@@ -237,7 +237,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="cartId" force="true">%cart_id%</parameter>
+            <parameter name="cartItem.quote_id" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="PUT">
@@ -246,7 +246,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="cartId" force="true">%cart_id%</parameter>
+            <parameter name="cartItem.quote_id" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="DELETE">

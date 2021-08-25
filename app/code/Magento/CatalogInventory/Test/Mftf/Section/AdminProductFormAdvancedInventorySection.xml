@@ -32,5 +32,7 @@
         <element name="minQtyConfigSetting" type="checkbox" selector="//input[@name='product[stock_data][use_config_min_qty]']" timeout="30"/>
         <element name="advancedInventoryModal" type="block" selector=".product_form_product_form_advanced_inventory_modal[data-role=modal]"/>
         <element name="maxiQtyAllowedInCartError" type="text" selector="[name='product[stock_data][max_sale_qty]'] + label.admin__field-error"/>
+        <element name="backorders" type="select" selector="//*[@name='product[stock_data][backorders]']"/>
+        <element name="useConfigSettingsForBackorders" type="checkbox" selector="//input[@name='product[stock_data][use_config_backorders]']"/>
     </section>
 </sections>
