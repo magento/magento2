@@ -29,15 +29,15 @@ type Customer {
 }
 
 type Query {
-    compareList(uid: ID!): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Return products that have been added to the specified compare list.")
+    compareList(uid: ID! @doc(description: "The unique ID of the compare list to be queried.")): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Return products that have been added to the specified compare list.")
 }
 
 type Mutation {
     createCompareList(input: CreateCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CreateCompareList") @doc(description: "Create a new compare list. The compare list is saved for logged in customers.")
-    addProductsToCompareList(input: AddProductsToCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddProductsToCompareList") @doc(description: "Add products to the specified compare list.")
-    removeProductsFromCompareList(input: RemoveProductsFromCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveProductsFromCompareList") @doc(description: "Remove products from the specified compare list.")
-    assignCompareListToCustomer(uid: ID!): AssignCompareListToCustomerOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign the specified compare list to the logged in customer.")
-    deleteCompareList(uid: ID!): DeleteCompareListOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\DeleteCompareList") @doc(description: "Delete the specified compare list.")
+    addProductsToCompareList(input: AddProductsToCompareListInput @doc(description: "An input object that defines which products to add to an existing compare list.")): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddProductsToCompareList") @doc(description: "Add products to the specified compare list.")
+    removeProductsFromCompareList(input: RemoveProductsFromCompareListInput @doc(description: "An input object that defines which products to remove from a compare list.")): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveProductsFromCompareList") @doc(description: "Remove products from the specified compare list.")
+    assignCompareListToCustomer(uid: ID! @doc(description: "The unique ID of the compare list to be assigned.")): AssignCompareListToCustomerOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign the specified compare list to the logged in customer.")
+    deleteCompareList(uid: ID! @doc(description: "The unique ID of the compare list to be deleted.")): DeleteCompareListOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\DeleteCompareList") @doc(description: "Delete the specified compare list.")
 }
 
 input CreateCompareListInput @doc(description: "Contains an array of product IDs to use for creating a compare list.") {

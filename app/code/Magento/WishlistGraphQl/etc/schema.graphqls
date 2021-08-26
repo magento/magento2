@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @deprecated(reason: "Moved under `Customer` `wishlist`") @doc(description: "Return the contents of a customer's wish list.") @cache(cacheable: false)
+    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @deprecated(reason: "Moved under `Customer.wishlist`.") @doc(description: "Return the contents of a customer's wish list.") @cache(cacheable: false)
 }
 
 type Customer {
@@ -57,9 +57,9 @@ type WishlistItem @doc(description: "Contains details about a wish list item.") 
 }
 
 type Mutation {
-    addProductsToWishlist(wishlistId: ID!, wishlistItems: [WishlistItemInput!]!): AddProductsToWishlistOutput @doc(description: "Add one or more products to the specified wish list. This mutation supports all product types.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlist")
-    removeProductsFromWishlist(wishlistId: ID!, wishlistItemsIds: [ID!]!): RemoveProductsFromWishlistOutput @doc(description: "Remove one or more products from the specified wish list.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlist")
-    updateProductsInWishlist(wishlistId: ID!, wishlistItems: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @doc(description: "Update one or more products in the specified wish list.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlist")
+    addProductsToWishlist(wishlistId: ID! @doc(description: "The ID of a wish list."), wishlistItems: [WishlistItemInput!]! @doc(description: "An array of products to add to the wish list.")): AddProductsToWishlistOutput @doc(description: "Add one or more products to the specified wish list. This mutation supports all product types.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlist")
+    removeProductsFromWishlist(wishlistId: ID! @doc(description: "The ID of a wish list."), wishlistItemsIds: [ID!]! @doc(description: "An array of item IDs representing products to be removed.")): RemoveProductsFromWishlistOutput @doc(description: "Remove one or more products from the specified wish list.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlist")
+    updateProductsInWishlist(wishlistId: ID! @doc(description: "The ID of a wish list."), wishlistItems: [WishlistItemUpdateInput!]! @doc(description: "An array of items to be updated.")): UpdateProductsInWishlistOutput  @doc(description: "Update one or more products in the specified wish list.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlist")
     addWishlistItemsToCart(
         wishlistId: ID!, @doc(description: "The unique ID of the wish list")
         wishlistItemIds: [ID!] @doc(description: "An array of IDs representing products to be added to the cart. If no IDs are specified, all items in the wishlist will be added to the cart")
@@ -79,7 +79,7 @@ type WishlistCartUserInputError @doc(description: "Contains details about errors
     wishlistItemId: ID! @doc(description: "The unique ID of the wish list item containing an error.")
 }
 
-enum WishlistCartUserInputErrorType {
+enum WishlistCartUserInputErrorType @doc(description: "A list of possible error types.") {
     PRODUCT_NOT_FOUND
     NOT_SALABLE
     INSUFFICIENT_STOCK
@@ -122,7 +122,7 @@ type WishListUserInputError @doc(description:"An error encountered while perform
     code: WishListUserInputErrorType! @doc(description: "A wish list-specific error code.")
 }
 
-enum WishListUserInputErrorType {
+enum WishListUserInputErrorType @doc(description: "A list of possible error types.") {
     PRODUCT_NOT_FOUND
     UNDEFINED
 }

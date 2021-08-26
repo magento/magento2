@@ -3,7 +3,7 @@
 
 type Mutation {
     generateCustomerTokenAsAdmin(
-        input: GenerateCustomerTokenAsAdminInput!
+        input: GenerateCustomerTokenAsAdminInput! @doc(description: "An input object that defines the customer email address.")
     ): GenerateCustomerTokenAsAdminOutput
     @resolver(class: "Magento\\LoginAsCustomerGraphQl\\Model\\Resolver\\RequestCustomerToken")
     @doc(description: "Request a customer token so that an administrator can perform remote shopping assistance.")
