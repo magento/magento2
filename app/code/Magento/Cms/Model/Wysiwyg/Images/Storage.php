@@ -366,7 +366,7 @@ class Storage extends \Magento\Framework\DataObject
             ->setCollectRecursively(false)
             ->setOrder('basename', \Magento\Framework\Data\Collection\Filesystem::SORT_ORDER_ASC);
 
-        if (!$this->isPathAllowed($path)) {
+        if (!$this->isDirectoryAllowed($path)) {
             $collection->setDirsFilter($this->getAllowedDirMask($path));
         }
 
@@ -486,7 +486,7 @@ class Storage extends \Magento\Framework\DataObject
             );
         }
 
-        if (!($this->isPathAllowed(rtrim($path, '/') . '/' . $name))) {
+        if (!($this->isDirectoryAllowed(rtrim($path, '/') . '/' . $name))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot create the folder under the selected directory.')
             );
@@ -533,7 +533,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function deleteDirectory($path)
     {
-        if (!$this->isPathAllowed(dirname($path))) {
+        if (!$this->isDirectoryAllowed(dirname($path))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot delete the selected directory.')
             );
@@ -582,7 +582,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function deleteFile($target)
     {
-        if (!$this->isPathAllowed(dirname($target))) {
+        if (!$this->isDirectoryAllowed(dirname($target))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t delete the file right now.')
             );
@@ -614,7 +614,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function uploadFile($targetPath, $type = null)
     {
-        if (!($this->isPathAllowed($targetPath))) {
+        if (!($this->isDirectoryAllowed($targetPath))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t upload the file to the current folder right now. Please try another folder.')
             );
@@ -966,16 +966,16 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
-     * Check if path is allowed
+     * Check if directory is allowed
      *
-     * @param string $path Absolute path
+     * @param string $directoryPath Absolute path to a directory
      * @return bool
      */
-    private function isPathAllowed($path): bool
+    private function isDirectoryAllowed($directoryPath): bool
     {
         $storageRoot = $this->_cmsWysiwygImages->getStorageRoot();
         $storageRootLength = strlen($storageRoot);
-        $mediaSubPathname = substr($path, $storageRootLength);
+        $mediaSubPathname = substr($directoryPath, $storageRootLength);
         if (!$mediaSubPathname) {
             return false;
         }
