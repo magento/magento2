@@ -21,7 +21,7 @@ use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Mapper;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\Query\MatchQuer;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -45,7 +45,7 @@ class MapperTest extends TestCase
     private $objectManager;
 
     /**
-     * @var MatchQuery|MockObject
+     * @var MatchQuer|MockObject
      */
     private $queryMatch;
 
@@ -83,7 +83,7 @@ class MapperTest extends TestCase
 
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->queryMatch = $this->getMockBuilder(MatchQuery::class)
+        $this->queryMatch = $this->getMockBuilder(MatchQuer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -118,7 +118,7 @@ class MapperTest extends TestCase
     {
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager->expects($this->once())->method('create')
-            ->with(MatchQuery::class,
+            ->with(MatchQuer::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
@@ -167,7 +167,7 @@ class MapperTest extends TestCase
         $query = $queries['someQuery'];
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                MatchQuery::class,
+                MatchQuer::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
@@ -238,7 +238,7 @@ class MapperTest extends TestCase
             ->method('create')
             ->withConsecutive(
                 [
-                    MatchQuery::class,
+                    MatchQuer::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
@@ -308,7 +308,7 @@ class MapperTest extends TestCase
             ->method('create')
             ->withConsecutive(
                 [
-                    MatchQuery::class,
+                    MatchQuer::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],
@@ -1013,7 +1013,7 @@ class MapperTest extends TestCase
         ];
         $metricClass = Metric::class;
         $bucketClass = TermBucket::class;
-        $queryClass = MatchQuery::class;
+        $queryClass = MatchQuer::class;
         $queryArguments = [
             'name' => $queries[self::ROOT_QUERY]['name'],
             'value' => $queries[self::ROOT_QUERY]['value'],
@@ -1082,7 +1082,7 @@ class MapperTest extends TestCase
         $metricClass = Metric::class;
         $bucketClass = RangeBucket::class;
         $rangeClass = \Magento\Framework\Search\Request\Aggregation\Range::class;
-        $queryClass = MatchQuery::class;
+        $queryClass = MatchQuer::class;
         $queryArguments = [
             'name' => $queries[self::ROOT_QUERY]['name'],
             'value' => $queries[self::ROOT_QUERY]['value'],

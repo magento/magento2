@@ -12,7 +12,7 @@ use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
-use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\Query\MatchQuer;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
 
@@ -100,7 +100,7 @@ class Mapper
     ) {
         switch ($requestQuery->getType()) {
             case RequestQueryInterface::TYPE_MATCH:
-                /** @var MatchQuery $requestQuery */
+                /** @var MatchQuer $requestQuery */
                 $selectQuery = $this->matchQueryBuilder->build(
                     $selectQuery,
                     $requestQuery,

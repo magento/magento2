@@ -20,7 +20,7 @@ use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\Search\Request\Filter\Wildcard;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\Query\MatchQuer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -137,7 +137,7 @@ class Mapper
         switch ($query['type']) {
             case QueryInterface::TYPE_MATCH:
                 $query = $this->objectManager->create(
-                    MatchQuery::class,
+                    MatchQuer::class,
                     [
                         'name' => $query['name'],
                         'value' => $query['value'],

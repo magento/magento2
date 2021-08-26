@@ -4320,7 +4320,7 @@ return [
     ],
     [
         'Magento\Framework\Search\Request\Query\Match',
-        'Magento\Framework\Search\Request\Query\MatchQuery'
+        'Magento\Framework\Search\Request\Query\MatchQuer'
     ],
     [
         'Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder\MatchTest',

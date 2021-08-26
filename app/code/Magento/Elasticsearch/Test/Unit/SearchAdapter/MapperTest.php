@@ -15,7 +15,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBu
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\Query\Filter;
-use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\Query\MatchQuer;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -137,7 +137,7 @@ class MapperTest extends TestCase
             ->setMethods(['getMust', 'getMustNot', 'getType', 'getShould', 'getReferenceType', 'getReference'])
             ->disableOriginalConstructor()
             ->getMock();
-        $matchQuery = $this->getMockBuilder(MatchQuery::class)
+        $matchQuery = $this->getMockBuilder(MatchQuer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $filterQuery = $this->getMockBuilder($filterMock)
@@ -192,7 +192,7 @@ class MapperTest extends TestCase
     {
         return [
             [
-                'matchQuery', MatchQuery::class,
+                'matchQuery', MatchQuer::class,
                 'query', QueryInterface::class,
             ],
             [

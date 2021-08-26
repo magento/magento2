@@ -15,7 +15,7 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
-use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\Query\MatchQuer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -102,7 +102,7 @@ class MatchQueryTest extends TestCase
             $this->mockAttribute($field['field']);
         }
 
-        $requestQuery = new MatchQuery('match', $searchQuery, 1, $fields);
+        $requestQuery = new MatchQuer('match', $searchQuery, 1, $fields);
         $query = $this->matchQueryBuilder->build([], $requestQuery, 'should');
 
         $expectedSelectQuery = [
