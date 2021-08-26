@@ -116,7 +116,7 @@ class Grouped extends AbstractModifier
     /**
      * @var NameHelper
      */
-    protected $nameHelper;
+    private $nameHelper;
 
     /**
      * @param LocatorInterface $locator
@@ -689,7 +689,7 @@ class Grouped extends AbstractModifier
      * @param int $sortOrder
      * @return array
      */
-    protected function getHtmlColumn($dataScope, $fit, Phrase $label, $sortOrder)
+    protected function getHtmlColumn($dataScope, $fit, Phrase $label, $sortOrder) : array
     {
         $column = [
             'arguments' => [

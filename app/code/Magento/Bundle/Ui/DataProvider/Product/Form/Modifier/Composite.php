@@ -49,7 +49,7 @@ class Composite extends AbstractModifier
     /**
      * @var NameHelper
      */
-    protected $nameHelper;
+    private $nameHelper;
 
     /**
      * @param LocatorInterface $locator

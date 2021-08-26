@@ -20,17 +20,17 @@ class AddUrlToName
     /**
      * @var LocatorInterface
      */
-    protected $locator;
+    private $locator;
 
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
 
     /**
      * AddUrlToName constructor.
@@ -61,7 +61,10 @@ class AddUrlToName
 
         $url = $this->urlBuilder->getUrl(
             'catalog/product/edit',
-            ['id' => $linkedProduct->getId(), 'store' => $storeId]
+            [
+                'id' => $linkedProduct->getId(),
+                'store' => $storeId
+            ]
         );
 
         return '<a href="javascript:;" onclick="window.open(\'' . $url . '\', \'_blank\');">'

@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
+/**
+ * Class needed to use modifiersPool without adding it to ProductDataProvider
+ */
 class ConfigurableDataProvider extends ProductDataProvider
 {
     /**

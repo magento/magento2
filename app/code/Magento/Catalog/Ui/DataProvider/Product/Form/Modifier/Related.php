@@ -102,7 +102,7 @@ class Related extends AbstractModifier
     /**
      * @var NameHelper
      */
-    protected $nameHelper;
+    private $nameHelper;
 
     /**
      * @var string
@@ -725,7 +725,7 @@ class Related extends AbstractModifier
      * @param int $sortOrder
      * @return array
      */
-    protected function getHtmlColumn($dataScope, $fit, Phrase $label, $sortOrder)
+    private function getHtmlColumn($dataScope, $fit, Phrase $label, $sortOrder) : array
     {
         $column = [
             'arguments' => [

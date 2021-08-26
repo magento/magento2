@@ -220,7 +220,7 @@ abstract class AbstractDataProvider extends ProductDataProvider
      *
      * @return array
      */
-    public function getData()
+    public function getData() : array
     {
         if (!$this->getCollection()->isLoaded()) {
             $this->getCollection()->load();
