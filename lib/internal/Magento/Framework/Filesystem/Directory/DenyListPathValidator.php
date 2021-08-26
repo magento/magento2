@@ -71,7 +71,7 @@ class DenyListPathValidator implements PathValidatorInterface
 
         foreach ($this->fileDenyList as $file) {
             $baseName = pathinfo($actualPath, PATHINFO_BASENAME);
-            if ('' === $needle || false !== strpos($haystack, $needle) || preg_match('#' . "\." . $file . '#', $fullPath)) {
+            if ('' === $file || false !== strpos($baseName, $file) || preg_match('#' . "\." . $file . '#', $fullPath)) {
                 throw new ValidatorException(
                     new Phrase('"%1" is not a valid file path', [$path])
                 );
