@@ -12,7 +12,7 @@ type Mutation {
     addVirtualProductsToCart(input: AddVirtualProductsToCartInput): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more virtual products to the specified cart. We recommend using `addProductsToCart` instead.")
     applyCouponToCart(input: ApplyCouponToCartInput): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart") @doc(description:"Apply a pre-defined coupon code to the specified cart.")
     removeCouponFromCart(input: RemoveCouponFromCartInput): RemoveCouponFromCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveCouponFromCart") @doc(description:"Remove a previously-applied coupon from the cart. The cart must contain at least one item in order to remove the coupon.")
-    updateCartItems(input: UpdateCartItemsInput): UpdateCartItemsOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\UpdateCartItems") @doc(description:"Remove a previously-applied coupon from the cart. The cart must contain at least one item in order to remove the coupon.")
+    updateCartItems(input: UpdateCartItemsInput): UpdateCartItemsOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\UpdateCartItems") @doc(description:"Modify items in the cart.")
     removeItemFromCart(input: RemoveItemFromCartInput): RemoveItemFromCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\RemoveItemFromCart") @doc(description:"Delete the entire quantity of a specified item from the cart. If you remove all items from the cart, the cart continues to exist.")
     setShippingAddressesOnCart(input: SetShippingAddressesOnCartInput): SetShippingAddressesOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetShippingAddressesOnCart") @doc(description:"Set one or more shipping addresses on a specific cart.")
     setBillingAddressOnCart(input: SetBillingAddressOnCartInput): SetBillingAddressOnCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetBillingAddressOnCart") @doc(description:"Set the billing address on a specific cart.")
@@ -20,8 +20,8 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart") @doc(description:"Apply a payment method to the cart.")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart") @doc(description:"Assign the email address of a guest to the cart.")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder") @doc(description:"Set the cart payment method and convert the cart into an order.")
-    mergeCarts(source_cart_id: String!, destination_cart_id: String): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts") @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.")
-    placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the cart into an order.")
+    mergeCarts(source_cart_id: String!, destination_cart_id: String): Cart! @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
+    placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
     addProductsToCart(cartId: String!, cartItems: [CartItemInput!]!): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
 }
 
@@ -74,7 +74,7 @@ input UpdateCartItemsInput @doc(description: "Modifies the specified items in th
 
 input CartItemUpdateInput @doc(description: "A single item to be updated.") {
     cart_item_id: Int @doc(description: "Deprecated. Use `cart_item_uid` instead.")
-    cart_item_uid: ID @doc(description: "The unique ID for a `CartItemInterface` object")
+    cart_item_uid: ID @doc(description: "The unique ID for a `CartItemInterface` object.")
     quantity: Float @doc(description: "The new quantity of the item.")
     customizable_options: [CustomizableOptionInput!] @doc(description: "An array that defines customizable options for the product.")
 }
@@ -210,7 +210,7 @@ type Cart @doc(description: "Contains the contents and other details about a gue
     billing_address: BillingCartAddress @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress") @doc(description: "The billing address assigned to the cart.")
     available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "An array of available payment methods.")
     selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod") @doc(description: "Indicates which payment method was applied to the cart.")
-    prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices") @doc(description: "Contains pricing details.")
+    prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices") @doc(description: "Pricing details for the quote.")
     total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity") @doc(description: "The total number of items in the cart.")
     is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual") @doc(description: "Indicates whether the cart contains only virtual products.")
 }
@@ -334,7 +334,7 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     uid: ID! @doc(description: "The unique ID for a `CartItemInterface` object.")
     quantity: Float! @doc(description: "The quantity of this item in the cart.")
     prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices") @doc(description: "Contains details about the price of the item, including taxes and discounts.")
-    product: ProductInterface! @doc(description: "Contains details about the item in the cart.")
+    product: ProductInterface! @doc(description: "Details about an item in the cart.")
 }
 
 type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
@@ -345,7 +345,7 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
     price: Money! @doc(description: "The price of the item before any discounts were applied. The price that might include tax, depending on the configured display settings for cart.")
     row_total: Money! @doc(description: "The value of the price multiplied by the quantity of the item.")
-    row_total_including_tax: Money! @doc(description: "The value of row_total plus the tax applied to the item.")
+    row_total_including_tax: Money! @doc(description: "The value of `row_total` plus the tax applied to the item.")
     discounts: [Discount] @doc(description: "An array of discounts to be applied to the cart item.")
     total_item_discount: Money @doc(description: "The total of all discounts applied to the item.")
 }

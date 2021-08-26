@@ -4,14 +4,14 @@
 type StoreConfig {
     required_character_classes_number : String @doc(description: "The number of different character classes (lowercase, uppercase, digits, special characters) required in a password.")
     minimum_password_length : String @doc(description: "The minimum number of characters required for a valid password.")
-    autocomplete_on_storefront : Boolean @doc(description: "Whether to enable autocomplete on login and forgot password forms.")
+    autocomplete_on_storefront : Boolean @doc(description: "Indicates whether to enable autocomplete on login and forgot password forms.")
 }
 
 type Query {
     customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "Return detailed information about a customer account.") @cache(cacheable: false)
     isEmailAvailable (
-        email: String! @doc(description: "Check whether the specified email has already been used to create a customer account.")
-    ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable")
+        email: String! @doc(description: "The email address to check.")
+    ): IsEmailAvailableOutput @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\IsEmailAvailable") @doc(description: "Check whether the specified email has already been used to create a customer account.")
 }
 
 type Mutation {
@@ -19,7 +19,7 @@ type Mutation {
     changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Change the password for the logged-in customer.")
     createCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Use createCustomerV2 instead.")
     createCustomerV2 (input: CustomerCreateInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Create a customer account.")
-    updateCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Deprecated. Use UpdateCustomerV2 instead.")
+    updateCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Use UpdateCustomerV2 instead.")
     updateCustomerV2 (input: CustomerUpdateInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information.")
     revokeCustomerToken: RevokeCustomerTokenOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke the customer token.")
     createCustomerAddress(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomerAddress") @doc(description: "Create a billing or shipping address for a customer or guest.")
@@ -44,7 +44,7 @@ input CustomerAddressInput @doc(description: "Contains details about a billing o
     default_shipping: Boolean @doc(description: "Indicates whether the address is the default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the default billing address.")
     fax: String @doc(description: "The customer's fax number.")
-    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address.")
+    middlename: String @doc(description: "The middle name of the person associated with the billing/shipping address.")
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
@@ -110,7 +110,7 @@ input CustomerUpdateInput @doc(description: "An input object for updating a cust
 }
 
 type CustomerOutput @doc(description: "Contains details about a newly-created or updated customer.") {
-    customer: Customer! @doc(description: "Contains the `Customer` object.")
+    customer: Customer! @doc(description: "Customer details after creating or updating a customer.")
 }
 
 type RevokeCustomerTokenOutput @doc(description: "Contains the result of a request to revoke a customer token.") {
@@ -143,7 +143,7 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     region: CustomerAddressRegion @doc(description: "An object containing the region name, region code, and region ID.")
     region_id: Int @doc(description: "The unique ID for a pre-defined region.")
     country_id: String @doc(description: "The customer's country.") @deprecated(reason: "Use `country_code` instead.")
-    country_code: CountryCodeEnum @doc(description: "The customer's country")
+    country_code: CountryCodeEnum @doc(description: "The customer's country.")
     street: [String] @doc(description: "An array of strings that define the street number and name.")
     company: String @doc(description: "The customer's company.")
     telephone: String @doc(description: "The customer's telephone number.")

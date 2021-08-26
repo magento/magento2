@@ -15,8 +15,8 @@ type ReorderItemsOutput @doc(description:"Contains the cart and any errors after
 }
 
 type CheckoutUserInputError @doc(description:"An error encountered while adding an item to the cart."){
-    message: String! @doc(description: "Localized error message.")
-    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
+    message: String! @doc(description: "A ocalized error message.")
+    path: [String]! @doc(description: "The path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
     code: CheckoutUserInputErrorCodes! @doc(description: "An error code that is specific to Checkout.")
 }
 
@@ -169,8 +169,8 @@ type ShippingDiscount @doc(description:"Defines an individual shipping discount.
 type OrderShipment @doc(description: "Contains order shipment details.") {
     id: ID! @doc(description: "The unique ID for a `OrderShipment` object.")
     number: String! @doc(description: "The sequential credit shipment number.")
-    tracking: [ShipmentTracking] @doc(description: "Contains shipment tracking details.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentTracking")
-    items: [ShipmentItemInterface] @doc(description: "Contains items included in the shipment.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentItems")
+    tracking: [ShipmentTracking] @doc(description: "An array of shipment tracking details.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentTracking")
+    items: [ShipmentItemInterface] @doc(description: "An array of items included in the shipment.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentItems")
     comments: [SalesCommentItem] @doc(description: "Comments added to the shipment.")
 }
 
@@ -217,7 +217,7 @@ interface CreditMemoItemInterface @doc(description: "Credit memo item details.")
     product_name: String @doc(description: "The name of the base product.")
     product_sku: String! @doc(description: "The SKU of the base product.")
     product_sale_price: Money! @doc(description: "The sale price for the base product, including selected options.")
-    discounts: [Discount] @doc(description: "Information about the final discount amount for the base product, including discounts on options.")
+    discounts: [Discount] @doc(description: "Details about the final discount amount for the base product, including discounts on options.")
     quantity_refunded: Float @doc(description: "The number of refunded items.")
 }
 

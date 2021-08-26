@@ -17,8 +17,8 @@ type Customer {
 type WishlistOutput @doc(description: "Deprecated: Use the `Wishlist` type instead.") {
     items: [WishlistItem] @deprecated(reason: "Use the `Wishlist.items` field instead.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "An array of items in the customer's wish list"),
     items_count: Int @deprecated(reason: "Use the `Wishlist.items_count` field instead.") @doc(description: "The number of items in the wish list."),
-    name: String @deprecated(reason: "This field is related to Commerce functionality and is always `null` in Open Source edition.") @doc(description: "When multiple wish lists are enabled, the name the customer assigns to the wishlist."),
-    sharing_code: String @deprecated(reason: "Use the `Wishlist.sharing_code` field instead.") @doc(description: "An encrypted code that Magento uses to link to the wish list."),
+    name: String @deprecated(reason: "This field is related to Commerce functionality and is always `null` in Open Source.") @doc(description: "When multiple wish lists are enabled, the name the customer assigns to the wishlist."),
+    sharing_code: String @deprecated(reason: "Use the `Wishlist.sharing_code` field instead.") @doc(description: "An encrypted code that links to the wish list."),
     updated_at: String @deprecated(reason: "Use the `Wishlist.updated_at` field instead.") @doc(description: "The time of the last modification to the wish list.")
 }
 
