@@ -12,11 +12,12 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Authorization;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Interception\PluginInterface;
 
 /**
  * Perform additional authorization for product operations.
  */
-class ProductAuthorization
+class ProductAuthorization implements PluginInterface
 {
     /**
      * @var Authorization
@@ -39,7 +40,6 @@ class ProductAuthorization
      * @param bool $saveOptions
      * @throws LocalizedException
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         ProductRepositoryInterface $subject,
