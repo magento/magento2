@@ -105,7 +105,7 @@ QUERY;
             $baseCategory['children'][0]['children'][1]['description']
         );
         $this->assertEquals('default-category', $baseCategory['url_key']);
-        $this->assertEquals([], $baseCategory['children'][0]['available_sort_by']);
+        $this->assertEquals(null, $baseCategory['children'][0]['available_sort_by']);
         $this->assertEquals('name', $baseCategory['children'][0]['default_sort_by']);
         $this->assertCount(7, $baseCategory['children']);
         $this->assertCount(2, $baseCategory['children'][0]['children']);
@@ -164,7 +164,7 @@ QUERY;
             $baseCategory['children'][0]['children'][1]['description']
         );
         $this->assertEquals('default-category', $baseCategory['url_key']);
-        $this->assertEquals([], $baseCategory['children'][0]['available_sort_by']);
+        $this->assertEquals(null, $baseCategory['children'][0]['available_sort_by']);
         $this->assertEquals('name', $baseCategory['children'][0]['default_sort_by']);
         $this->assertCount(7, $baseCategory['children']);
         $this->assertCount(2, $baseCategory['children'][0]['children']);

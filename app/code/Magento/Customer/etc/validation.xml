@@ -18,11 +18,17 @@
                     <constraint alias="metadata_data_validator" class="Magento\Customer\Model\Metadata\Validator" />
                 </entity_constraints>
             </rule>
+            <rule name="check_name">
+                <entity_constraints>
+                    <constraint alias="name_validator" class="Magento\Customer\Model\Validator\Name" />
+                </entity_constraints>
+            </rule>
         </rules>
         <groups>
             <group name="save">
                 <uses>
                     <use rule="check_eav"/>
+                    <use rule="check_name"/>
                 </uses>
             </group>
             <group name="form">
