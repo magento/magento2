@@ -33,6 +33,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
@@ -210,6 +211,9 @@ class ProductTest extends AbstractImportTestCase
 
     /** @var DriverFile|MockObject */
     private $driverFile;
+
+    /** @var Select|MockObject */
+    protected $select;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -481,6 +485,13 @@ class ProductTest extends AbstractImportTestCase
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
         $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'where'])
+            ->getMock();
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        //$this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
         return $this;
     }
@@ -1419,6 +1430,62 @@ class ProductTest extends AbstractImportTestCase
             $expectedFileName,
             $actualFileName
         );
+    }
+
+    /**
+     * Check that getProductCategoriesDataSave method will return array with product-category-position relations
+     * where new products positioned before existing
+     *
+     * @param array $categoriesData
+     * @param string $tableName
+     * @param array $result
+     * @dataProvider productCategoriesDataProvider
+     */
+    public function testGetProductCategoriesDataSave(array $categoriesData, string $tableName, array $result)
+    {
+        $this->_connection->expects($this->at(1))->method('fetchOne')->willReturn('0');
+        $this->_connection->expects($this->at(3))->method('fetchOne')->willReturn('-2');
+        $this->skuProcessor->expects($this->at(0))->method('getNewSku')->willReturn(['entity_id' => 2]);
+        $this->skuProcessor->expects($this->at(1))->method('getNewSku')->willReturn(['entity_id' => 5]);
+        $actualResult = $this->invokeMethod(
+            $this->importProduct,
+            'getProductCategoriesDataSave',
+            [$categoriesData, $tableName]
+        );
+        $this->assertEquals($result, $actualResult);
+    }
+
+    /**
+     * Data provider for testGetProductCategoriesDataSave.
+     *
+     * @return array
+     */
+    public function productCategoriesDataProvider()
+    {
+        return [
+            [
+                [
+                    'simple_2' => [3 => true],
+                    'simple_5' => [5 => true]
+                ],
+                'catalog_category_product',
+                [
+                   [2, 5],
+                    [
+                        [
+                            'product_id' => 2,
+                            'category_id' => 3,
+                            'position' => -1
+                        ],
+                        [
+                            'product_id' => 5,
+                            'category_id' => 5,
+                            'position' => -3
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**

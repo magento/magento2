@@ -1350,6 +1350,40 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Get data for updating product-category relations
+     *
+     * @param array $categoriesData
+     * @param string $tableName
+     * @return array
+     */
+    private function getProductCategoriesDataSave(array $categoriesData, string $tableName): array
+    {
+        $delProductId = [];
+        $categoriesIn = [];
+        $minCategoryPosition = [];
+        foreach ($categoriesData as $delSku => $categories) {
+            $productId = $this->skuProcessor->getNewSku($delSku)['entity_id'];
+            $delProductId[] = $productId;
+
+            foreach (array_keys($categories) as $categoryId) {
+                //position new products before existing ones
+                if (!isset($minCategoryPosition[$categoryId])) {
+                    $select = $this->_connection->select()
+                        ->from($tableName, ['position' => new \Zend_Db_Expr('MIN(position)')])
+                        ->where('category_id = ?', $categoryId);
+                    $minCategoryPosition[$categoryId] = (int)$this->_connection->fetchOne($select);
+                }
+                $categoriesIn[] = [
+                    'product_id' => $productId,
+                    'category_id' => $categoryId,
+                    'position' => --$minCategoryPosition[$categoryId]
+                ];
+            }
+        }
+        return [$delProductId, $categoriesIn];
+    }
+
+    /**
      * Save product categories.
      *
      * @param array $categoriesData
@@ -1363,17 +1397,8 @@ class Product extends AbstractEntity
             $tableName = $this->_resourceFactory->create()->getProductCategoryTable();
         }
         if ($categoriesData) {
-            $categoriesIn = [];
-            $delProductId = [];
+            list($delProductId, $categoriesIn) = $this->getProductCategoriesDataSave($categoriesData, $tableName);
 
-            foreach ($categoriesData as $delSku => $categories) {
-                $productId = $this->skuProcessor->getNewSku($delSku)['entity_id'];
-                $delProductId[] = $productId;
-
-                foreach (array_keys($categories) as $categoryId) {
-                    $categoriesIn[] = ['product_id' => $productId, 'category_id' => $categoryId, 'position' => 0];
-                }
-            }
             if (Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
                     $tableName,
