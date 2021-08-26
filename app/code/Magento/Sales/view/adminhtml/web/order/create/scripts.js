@@ -270,23 +270,16 @@ define([
                 resetShipping = true;
             }
 
-            if (type === 'billing' && !this.shippingAsBilling) {
-                resetSelectedBillingAddress = true;
-            }
-
             if (resetShipping) {
                 data['reset_shipping'] = true;
             }
 
-            if (this.selectAddressEvent === false) {
+            if (name !== 'customer_address_id' && this.selectAddressEvent === false) {
                 if (this.shippingAsBilling) {
                     $('order-shipping_address_customer_address_id').value = '';
                 }
-                // customer_address_id can not be set to blank, if changed to other saved addresses from dropdown list
-                // for both billing & shipping while no change made in other address fields
-                if (name !== 'customer_address_id') {
-                    $('order-' + type + '_address_customer_address_id').value = '';
-                }
+
+                $('order-' + type + '_address_customer_address_id').value = '';
             }
 
             data['order[' + type + '_address][customer_address_id]'] = null;
