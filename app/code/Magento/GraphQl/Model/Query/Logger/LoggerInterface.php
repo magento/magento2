@@ -18,7 +18,7 @@ interface LoggerInterface
     const QUERY_NAMES = 'GraphQlQueryNames';
     const STORE_HEADER = 'GraphQlStoreHeader';
     const CURRENCY_HEADER = 'GraphQlCurrencyHeader';
-    const AUTH_HEADER_SET = 'GraphQlAuthHeaderSet';
+    const HAS_AUTH_HEADER = 'GraphQlHasAuthHeader';
     const HTTP_METHOD = 'GraphQlHttpMethod';
     const HAS_MUTATION = 'GraphQlHasMutation';
     const IS_CACHEABLE = 'GraphQlIsCacheable';

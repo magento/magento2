@@ -19,19 +19,11 @@ class LoggerPool implements LoggerInterface
     private $loggers;
 
     /**
-     * @var LoggerInterfaceFactory
-     */
-    private $loggerFactory;
-
-    /**
-     * @param LoggerInterfaceFactory $loggerFactory
      * @param LoggerInterface[] $loggers
      */
     public function __construct(
-        LoggerInterfaceFactory $loggerFactory,
         $loggers = []
     ) {
-        $this->loggerFactory = $loggerFactory;
         $this->loggers = $loggers;
     }
 

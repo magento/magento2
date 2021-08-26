@@ -7,12 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
-use GraphQL\Error\SyntaxError;
-use GraphQL\Language\AST\Node;
-use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\Parser;
-use GraphQL\Language\Source;
-use GraphQL\Language\Visitor;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
@@ -27,8 +21,8 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
+use Magento\GraphQl\Helper\Query\Logger\LogData;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
-use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerPool;
 
 /**
@@ -98,6 +92,11 @@ class GraphQl implements FrontControllerInterface
     private $contextFactory;
 
     /**
+     * @var LogData
+     */
+    private $logDataHelper;
+
+    /**
      * @var LoggerPool
      */
     private $loggerPool;
@@ -114,6 +113,7 @@ class GraphQl implements FrontControllerInterface
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
      * @param ContextFactoryInterface $contextFactory
+     * @param LogData $logDataHelper
      * @param LoggerPool $loggerPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -129,6 +129,7 @@ class GraphQl implements FrontControllerInterface
         JsonFactory $jsonFactory = null,
         HttpResponse $httpResponse = null,
         ContextFactoryInterface $contextFactory = null,
+        LogData $logDataHelper = null,
         LoggerPool $loggerPool = null
     ) {
         $this->response = $response;
@@ -142,6 +143,7 @@ class GraphQl implements FrontControllerInterface
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
+        $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
     }
 
@@ -168,10 +170,11 @@ class GraphQl implements FrontControllerInterface
             // Temporal coupling is required for performance optimization
             $this->queryFields->setQuery($query, $variables);
 
-            // log information about the query
-            $this->logQueryInformation($request, $data);
-
             $schema = $this->schemaGenerator->generate();
+
+            // log information about the query
+            $queryInformation = $this->logDataHelper->getQueryInformation($request, $data, $schema);
+            $this->loggerPool->execute($queryInformation);
 
             $result = $this->queryProcessor->process(
                 $schema,
@@ -213,74 +216,5 @@ class GraphQl implements FrontControllerInterface
         }
 
         return $data;
-    }
-
-    /**
-     * Logs information about the query
-     *
-     * @param RequestInterface $request
-     * @param array $data
-     * @throws SyntaxError
-     */
-    private function logQueryInformation(RequestInterface $request, array $data)
-    {
-        $query = $data['query'] ?? '';
-        $queryInformation = [];
-        $queryInformation[LoggerInterface::HTTP_METHOD] = $request->getMethod();
-        $queryInformation[LoggerInterface::STORE_HEADER] = $request->getHeader('Store', '');
-        $queryInformation[LoggerInterface::CURRENCY_HEADER] = $request->getHeader('Currency', '');
-        $queryInformation[LoggerInterface::AUTH_HEADER_SET] = $request->getHeader('Authorization') ? 'true' : 'false';
-        $queryInformation[LoggerInterface::IS_CACHEABLE] = $request->getHeader('X-Magento-Cache-Id') ? 'true' : 'false';
-        $queryInformation[LoggerInterface::NUMBER_OF_QUERIES] = '';
-        $queryInformation[LoggerInterface::QUERY_NAMES] = $this->getOperationName($data);
-        $queryInformation[LoggerInterface::HAS_MUTATION] = str_contains($query, 'mutation') ? 'true' : 'false';
-        $queryInformation[LoggerInterface::QUERY_COMPLEXITY] = $this->getFieldCount($query);
-        $queryInformation[LoggerInterface::QUERY_LENGTH] = $request->getHeader('Content-Length');
-
-        $this->loggerPool->execute($queryInformation);
-    }
-
-    /**
-     * Get GraphQL query operation name
-     *
-     * @param array $data
-     * @return string
-     */
-    private function getOperationName(array $data): string
-    {
-        if (isset($data['operationName']) && is_string($data['operationName']) && $data['operationName'] !== '') {
-            return $data['operationName'];
-        }
-
-        $fields = $this->queryFields->getFieldsUsedInQuery();
-        return current($fields) ?: 'operationNameNotFound';
-    }
-
-    /**
-     * Gets the field count
-     *
-     * @param string $query
-     * @return int
-     * @throws SyntaxError
-     * @throws \Exception
-     */
-    private function getFieldCount(string $query): int
-    {
-        if (!empty($query)) {
-            $totalFieldCount = 0;
-            $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
-            Visitor::visit(
-                $queryAst,
-                [
-                    'leave' => [
-                        NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
-                            $totalFieldCount++;
-                        }
-                    ]
-                ]
-            );
-            return $totalFieldCount;
-        }
-        return 0;
     }
 }
