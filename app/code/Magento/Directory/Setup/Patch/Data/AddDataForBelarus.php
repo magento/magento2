@@ -76,6 +76,8 @@ class AddDataForBelarus implements DataPatchInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string[]
      */
     public static function getDependencies(): array
     {
@@ -86,6 +88,8 @@ class AddDataForBelarus implements DataPatchInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string[]
      */
     public function getAliases(): array
     {
