@@ -36,30 +36,34 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
      */
     private function removeVariablesUsedInPlugins(AbstractNode $node)
     {
-        if ($node instanceof MethodNode) {
-            /** @var ClassNode $classNode */
-            $classNode = $node->getParentType();
-            if ($this->isPluginClass($classNode->getNamespaceName())) {
-                /**
-                 * Around and After plugins has 2 required params $subject and $proceed or $result
-                 * that should be ignored
-                 */
-                foreach (['around', 'after'] as $pluginMethodPrefix) {
-                    if ($this->isFunctionNameStartingWith($node, $pluginMethodPrefix)) {
-                        $this->removeVariablesByCount($node, 2);
+        if (!$node instanceof MethodNode) {
+            return;
+        }
 
-                        break;
-                    }
-                }
+        /** @var ClassNode $classNode */
+        $classNode = $node->getParentType();
+        if (!$this->isPluginClass($classNode->getNamespaceName())) {
+            return;
+        }
 
-                /**
-                 * Before plugins has 1 required params $subject
-                 * that should be ignored
-                 */
-                if ($this->isFunctionNameStartingWith($node, 'before')) {
-                    $this->removeVariablesByCount($node, 1);
-                }
+        /**
+         * Around and After plugins has 2 required params $subject and $proceed or $result
+         * that should be ignored
+         */
+        foreach (['around', 'after'] as $pluginMethodPrefix) {
+            if ($this->isFunctionNameStartingWith($node, $pluginMethodPrefix)) {
+                $this->removeVariablesByCount($node, 2);
+
+                break;
             }
+        }
+
+        /**
+         * Before plugins has 1 required params $subject
+         * that should be ignored
+         */
+        if ($this->isFunctionNameStartingWith($node, 'before')) {
+            $this->removeVariablesByCount($node, 1);
         }
     }
 
