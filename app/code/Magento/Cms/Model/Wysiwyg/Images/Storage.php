@@ -533,7 +533,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function deleteDirectory($path)
     {
-        if (!$this->isDirectoryAllowed(dirname($path))) {
+        if (!$this->isDirectoryAllowed($this->file->getParentDirectory($path))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We cannot delete the selected directory.')
             );
@@ -582,7 +582,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function deleteFile($target)
     {
-        if (!$this->isDirectoryAllowed(dirname($target))) {
+        if (!$this->isDirectoryAllowed($this->file->getParentDirectory($target))) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t delete the file right now.')
             );
