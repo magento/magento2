@@ -72,8 +72,8 @@ class RegionTest extends TestCase
             ['countryId' => 'SE'],
             ['countryId' => 'GR'],
             ['countryId' => 'DK'],
+            ['countryId' => 'AL'],
             ['countryId' => 'UA'],
-            ['countryId' => 'AL']
         ];
     }
 }
