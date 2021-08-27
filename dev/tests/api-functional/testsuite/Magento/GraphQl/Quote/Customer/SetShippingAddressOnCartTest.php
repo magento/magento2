@@ -1963,4 +1963,85 @@ QUERY;
     {
         $this->testSetNewShippingAddressAndPlaceOrder();
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_telephone_not_required_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetNewShippingAddressWithoutTelephone()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: {
+         address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AZ"
+          postcode: "887766"
+          country_code: "US"
+          telephone: ""
+         }
+      }
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewAddressWithoutTelephone($shippingAddressResponse);
+    }
+
+    /**
+     * Verify the all the whitelisted fields for a New Address Object without telephone
+     *
+     * @param array $addressResponse
+     */
+    private function assertNewAddressWithoutTelephone(
+        array $addressResponse
+    ): void {
+        $assertionMap = [
+            ['response_field' => 'firstname', 'expected_value' => 'test firstname'],
+            ['response_field' => 'lastname', 'expected_value' => 'test lastname'],
+            ['response_field' => 'company', 'expected_value' => 'test company'],
+            ['response_field' => 'street', 'expected_value' => [0 => 'test street 1', 1 => 'test street 2']],
+            ['response_field' => 'city', 'expected_value' => 'test city'],
+            ['response_field' => 'postcode', 'expected_value' => '887766'],
+            ['response_field' => 'telephone', 'expected_value' => ''],
+            ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
+            ['response_field' => '__typename', 'expected_value' => 'ShippingCartAddress']
+        ];
+
+        $this->assertResponseFields($addressResponse, $assertionMap);
+    }
 }
