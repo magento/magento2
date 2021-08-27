@@ -93,6 +93,21 @@
             height: @action__height + .1rem;
             top: auto;
         }
+
+        > .action-close,
+        > .action-close:active {
+            background-color: transparent;
+            margin-right: 3.2rem;
+            padding: .8rem 1.5rem .6rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transform: none;
+
+            &:before {
+                font-size: 1.5rem;
+            }
+        }
     }
 
     //  Multiselect inside control table
@@ -258,6 +273,24 @@
 
         &:active {
             transform: scale(.9);
+        }
+
+        .modal-popup &,
+        .modal-slide & {
+            color: @button__color;
+            padding: 0;
+
+            &:hover {
+                color: darken(@text__color, 20%);
+            }
+
+            &:active {
+                transform: scale(.9);
+            }
+
+            &:before {
+                font-size: 1em;
+            }
         }
     }
 }
