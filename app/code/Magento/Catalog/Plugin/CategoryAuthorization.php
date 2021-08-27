@@ -12,12 +12,11 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category\Authorization;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Interception\PluginInterface;
 
 /**
  * Perform additional authorization for category operations.
  */
-class CategoryAuthorization implements PluginInterface
+class CategoryAuthorization
 {
     /**
      * @var Authorization

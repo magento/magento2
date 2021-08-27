@@ -12,12 +12,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Framework\Interception\PluginInterface;
 
 /**
  * Responsible for deleting images from media gallery after deleting product
  */
-class RemoveImagesFromGalleryAfterRemovingProduct implements PluginInterface
+class RemoveImagesFromGalleryAfterRemovingProduct
 {
     /**
      * @var Gallery

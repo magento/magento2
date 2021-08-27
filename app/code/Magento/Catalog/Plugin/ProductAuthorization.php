@@ -12,12 +12,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Authorization;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Interception\PluginInterface;
 
 /**
  * Perform additional authorization for product operations.
  */
-class ProductAuthorization implements PluginInterface
+class ProductAuthorization
 {
     /**
      * @var Authorization

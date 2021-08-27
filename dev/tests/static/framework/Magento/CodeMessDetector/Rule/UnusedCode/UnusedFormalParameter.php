@@ -40,8 +40,7 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
         if ($node instanceof MethodNode) {
             /** @var ClassNode $classNode */
             $classNode = $node->getParentType();
-            $implementInterfaces = class_implements($classNode->getFullQualifiedName());
-            if (array_key_exists(PluginInterface::class, $implementInterfaces)) {
+            if ($this->isPluginClass($classNode->getNamespaceName())) {
                 /**
                  * Around and After plugins has 2 required params $subject and $proceed or $result
                  * that should be ignored
@@ -102,5 +101,15 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
         foreach ($methodParameters as $methodParameter) {
             unset($this->nodes[$methodParameter->getName()]);
         }
+    }
+
+    /**
+     * Check if namespace contain "Plugin"
+     * @param $class
+     * @return bool
+     */
+    private function isPluginClass($class): bool
+    {
+        return (stripos($class, 'Plugin') !== false);
     }
 }
