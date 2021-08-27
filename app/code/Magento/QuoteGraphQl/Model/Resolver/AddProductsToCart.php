@@ -11,11 +11,11 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Lock\LockManagerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Model\Cart\AddProductsToCart as AddProductsToCartService;
 use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
 use Magento\Quote\Model\Cart\Data\CartItemFactory;
+use Magento\Quote\Model\QuoteMutexInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\Quote\Model\Cart\Data\Error;
 use Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataProcessorInterface;
@@ -43,26 +43,26 @@ class AddProductsToCart implements ResolverInterface
     private $itemDataProcessor;
 
     /**
-     * @var LockManagerInterface
+     * @var QuoteMutexInterface
      */
-    private $lockManager;
+    private $quoteMutex;
 
     /**
      * @param GetCartForUser $getCartForUser
      * @param AddProductsToCartService $addProductsToCart
      * @param ItemDataProcessorInterface $itemDataProcessor
-     * @param LockManagerInterface $lockManager
+     * @param QuoteMutexInterface $quoteMutex
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         AddProductsToCartService $addProductsToCart,
         ItemDataProcessorInterface $itemDataProcessor,
-        LockManagerInterface $lockManager
+        QuoteMutexInterface $quoteMutex
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->addProductsToCartService = $addProductsToCart;
         $this->itemDataProcessor = $itemDataProcessor;
-        $this->lockManager = $lockManager;
+        $this->quoteMutex = $quoteMutex;
     }
 
     /**
@@ -78,19 +78,29 @@ class AddProductsToCart implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "cartItems" is missing'));
         }
 
+        return $this->quoteMutex->execute(
+            [$args['cartId']],
+            \Closure::fromCallable([$this, 'run']),
+            [$context, $args]
+        );
+    }
+
+    /**
+     * Run the resolver.
+     *
+     * @param ContextInterface $context
+     * @param array|null $args
+     * @return array
+     * @throws GraphQlInputException
+     */
+    private function run($context, ?array $args): array
+    {
         $maskedCartId = $args['cartId'];
         $cartItemsData = $args['cartItems'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
-        $lockName = 'cart_processing_lock_' . $maskedCartId;
-        while ($this->lockManager->isLocked($lockName)) {
-            // wait till other process working with the same cart complete
-            usleep(rand(100, 600));
-        }
-        $this->lockManager->lock($lockName, 1);
 
         // Shopping Cart validation
         $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
-
         $cartItems = [];
         foreach ($cartItemsData as $cartItemData) {
             if (!$this->itemIsAllowedToCart($cartItemData, $context)) {
@@ -101,7 +111,6 @@ class AddProductsToCart implements ResolverInterface
 
         /** @var AddProductsToCartOutput $addProductsToCartOutput */
         $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, $cartItems);
-        $this->lockManager->unlock($lockName);
 
         return [
             'cart' => [
