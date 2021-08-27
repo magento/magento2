@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CodeMessDetector\Rule\UnusedCode;
 
-use Magento\Framework\Interception\PluginInterface;
 use PDepend\Source\AST\ASTParameter;
 use PHPMD\AbstractNode;
 use PHPMD\Node\ClassNode;
