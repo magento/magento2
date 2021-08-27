@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Backend\Block\Store;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Store switcher block
  *
@@ -471,9 +473,17 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getCurrentWebsiteName()
     {
-        if ($this->getWebsiteId() !== null) {
+        $websiteId = $this->getWebsiteId();
+        if ($websiteId !== null) {
+            if ($this->hasData('get_data_from_request')) {
+                $requestedWebsite = $this->getRequest()->getParams('website');
+                if (!empty($requestedWebsite)
+                    && array_key_exists('website', $requestedWebsite)) {
+                    $websiteId = $requestedWebsite['website'];
+                }
+            }
             $website = $this->_websiteFactory->create();
-            $website->load($this->getWebsiteId());
+            $website->load($websiteId);
             if ($website->getId()) {
                 return $website->getName();
             }
@@ -504,12 +514,21 @@ class Switcher extends \Magento\Backend\Block\Template
      * Get current store view name
      *
      * @return string
+     * @throws LocalizedException
      */
     public function getCurrentStoreName()
     {
-        if ($this->getStoreId() !== null) {
+        $storeId = $this->getStoreId();
+        if ($storeId !== null) {
+            if ($this->hasData('get_data_from_request')) {
+                $requestedStore = $this->getRequest()->getParams('store');
+                if (!empty($requestedStore)
+                    && array_key_exists('store', $requestedStore)) {
+                    $storeId = $requestedStore['store'];
+                }
+            }
             $store = $this->_storeFactory->create();
-            $store->load($this->getStoreId());
+            $store->load($storeId);
             if ($store->getId()) {
                 return $store->getName();
             }

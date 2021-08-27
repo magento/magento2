@@ -436,7 +436,7 @@ class Storage extends \Magento\Framework\DataObject
             );
         }
 
-        $relativePath = $this->_directory->getRelativePath($path);
+        $relativePath = (string) $this->_directory->getRelativePath($path);
         if (!$this->_directory->isDirectory($relativePath) || !$this->_directory->isWritable($relativePath)) {
             $path = $this->_cmsWysiwygImages->getStorageRoot();
         }
@@ -574,7 +574,7 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
+        $this->resizeFile(rtrim($targetPath, '/') . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
 
         return $result;
     }
