@@ -40,9 +40,11 @@ class AddDataForBelarus implements DataPatchInterface
     }
 
     /**
-     * @inheritdoc
+     * Add country-region data for Belarus.
+     *
+     * @return $this
      */
-    public function apply()
+    public function apply(): DataPatchInterface
     {
         /** @var DataInstaller $dataInstaller */
         $dataInstaller = $this->dataInstallerFactory->create();
@@ -50,6 +52,8 @@ class AddDataForBelarus implements DataPatchInterface
             $this->moduleDataSetup->getConnection(),
             $this->getDataForBelarus()
         );
+
+        return $this;
     }
 
     /**
@@ -71,9 +75,9 @@ class AddDataForBelarus implements DataPatchInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [
             InitializeDirectoryData::class,
@@ -81,9 +85,9 @@ class AddDataForBelarus implements DataPatchInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
