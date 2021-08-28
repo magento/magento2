@@ -7,7 +7,6 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\Result\PageFactory;
 
 abstract class PrintShipment extends \Magento\Framework\App\Action\Action
@@ -28,28 +27,20 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
 
     /**
-     * @var PageFactory
-     */
-    protected $messageManager;
-
-    /**
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
         OrderViewAuthorizationInterface $orderAuthorization,
         \Magento\Framework\Registry $registry,
-        PageFactory $resultPageFactory,
-        ManagerInterface $messageManager
+        PageFactory $resultPageFactory
     ) {
         $this->orderAuthorization = $orderAuthorization;
         $this->_coreRegistry = $registry;
         $this->resultPageFactory = $resultPageFactory;
-        $this->messageManager = $messageManager;
         parent::__construct($context);
     }
 
@@ -65,7 +56,6 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
             try {
                 $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
             }catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->messageManager->addError(__($e->getMessage()));
                 /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {

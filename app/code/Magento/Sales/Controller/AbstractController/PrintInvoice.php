@@ -8,7 +8,6 @@ namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Message\ManagerInterface;
 
 abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
 {
@@ -28,28 +27,20 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
 
     /**
-     * @var PageFactory
-     */
-    protected $messageManager;
-
-    /**
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
-     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
         OrderViewAuthorizationInterface $orderAuthorization,
         \Magento\Framework\Registry $registry,
-        PageFactory $resultPageFactory,
-        ManagerInterface $messageManager
+        PageFactory $resultPageFactory
     ) {
         $this->orderAuthorization = $orderAuthorization;
         $this->_coreRegistry = $registry;
         $this->resultPageFactory = $resultPageFactory;
-        $this->messageManager = $messageManager;
         parent::__construct($context);
     }
 
