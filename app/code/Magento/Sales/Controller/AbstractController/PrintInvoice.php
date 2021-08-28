@@ -8,6 +8,7 @@ namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Message\ManagerInterface;
 
 abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
 {
@@ -27,20 +28,28 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
 
     /**
+     * @var PageFactory
+     */
+    protected $messageManager;
+
+    /**
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
         OrderViewAuthorizationInterface $orderAuthorization,
         \Magento\Framework\Registry $registry,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        ManagerInterface $messageManager
     ) {
         $this->orderAuthorization = $orderAuthorization;
         $this->_coreRegistry = $registry;
         $this->resultPageFactory = $resultPageFactory;
+        $this->messageManager = $messageManager;
         parent::__construct($context);
     }
 
@@ -53,9 +62,21 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     {
         $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {
-            $invoice = $this->_objectManager->create(
-                \Magento\Sales\Api\InvoiceRepositoryInterface::class
-            )->get($invoiceId);
+            try {
+                $invoice = $this->_objectManager->create(
+                    \Magento\Sales\Api\InvoiceRepositoryInterface::class
+                )->get($invoiceId);
+            }catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->messageManager->addError(__($e->getMessage()));
+                /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultRedirectFactory->create();
+                if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
+                    $resultRedirect->setPath('*/*/history');
+                } else {
+                    $resultRedirect->setPath('sales/guest/form');
+                }
+                return $resultRedirect;
+            }
             $order = $invoice->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
