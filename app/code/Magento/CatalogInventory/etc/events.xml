@@ -9,9 +9,6 @@
     <event name="catalog_block_product_status_display">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\DisplayProductStatusInfoObserver"/>
     </event>
-    <event name="catalog_product_is_salable_after">
-        <observer name="is_salable" instance="Magento\CatalogInventory\Observer\ApplyIsSalableToProduct"/>
-    </event>
     <event name="catalog_product_load_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Observer\AddInventoryDataObserver"/>
     </event>
