@@ -7,6 +7,7 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\Result\PageFactory;
 
 abstract class PrintShipment extends \Magento\Framework\App\Action\Action
@@ -27,20 +28,28 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
 
     /**
+     * @var PageFactory
+     */
+    protected $messageManager;
+
+    /**
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
      * @param PageFactory $resultPageFactory
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
         OrderViewAuthorizationInterface $orderAuthorization,
         \Magento\Framework\Registry $registry,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        ManagerInterface $messageManager
     ) {
         $this->orderAuthorization = $orderAuthorization;
         $this->_coreRegistry = $registry;
         $this->resultPageFactory = $resultPageFactory;
+        $this->messageManager = $messageManager;
         parent::__construct($context);
     }
 
@@ -53,7 +62,19 @@ abstract class PrintShipment extends \Magento\Framework\App\Action\Action
     {
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
         if ($shipmentId) {
-            $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
+            try {
+                $shipment = $this->_objectManager->create(\Magento\Sales\Model\Order\Shipment::class)->load($shipmentId);
+            }catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->messageManager->addError(__($e->getMessage()));
+                /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultRedirectFactory->create();
+                if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
+                    $resultRedirect->setPath('*/*/history');
+                } else {
+                    $resultRedirect->setPath('sales/guest/form');
+                }
+                return $resultRedirect;
+            }
             $order = $shipment->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
