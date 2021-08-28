@@ -8,8 +8,7 @@
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="AdminShipmentMainActionsSection">
-        <element name="submitShipment" type="button" selector="button.action-default.save.submit-button" timeout="60"/>
-        <element name="notifyCustomerByEmail" type="checkbox" selector="input#history_notify"/>
+    <section name="AdminCreateOrderCommentsSection">
+        <element name="orderComments" type="input" selector="textarea#order-comment"/>
     </section>
 </sections>
