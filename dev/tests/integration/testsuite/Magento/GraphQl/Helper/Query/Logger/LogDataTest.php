@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Helper\Query\Logger;
 
 use Laminas\Http\Headers;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Query\Fields;
 use Magento\Framework\GraphQl\Schema\SchemaGenerator;
@@ -57,6 +55,8 @@ class LogDataTest extends TestCase
      * @param array $expectedResult
      * @dataProvider getQueryInformationDataProvider
      * @return void
+     *
+     * @magentoAppIsolation enabled
      */
     public function testGetQueryInformation(string $query, array $headers, array $expectedResult): void
     {
@@ -72,18 +72,22 @@ class LogDataTest extends TestCase
         $requestHeaders = $this->objectManager->create(Headers::class)->addHeaders($headers);
         $this->request->setHeaders($requestHeaders);
 
-        $myschemaGenerator = $this->objectManager->get(SchemaGenerator::class);
         $queryFields = $this->objectManager->get(Fields::class);
         $queryFields->setQuery($query);
 
         $queryInformation = $this->logData->getQueryInformation(
             $this->request,
             $postData,
-            $myschemaGenerator->generate());
+            $this->schemaGenerator->generate());
 
         $this->assertEquals($expectedResult, $queryInformation);
     }
 
+    /**
+     * Data provider for testGetQueryInformation
+     *
+     * @return array[]
+     */
     public function getQueryInformationDataProvider()
     {
         return [
@@ -171,10 +175,71 @@ QUERY,
                     LoggerInterface::HAS_AUTH_HEADER => 'true',
                     LoggerInterface::IS_CACHEABLE => 'true',
                     LoggerInterface::QUERY_LENGTH => '123',
-                    LoggerInterface::HAS_MUTATION => 'false',
+                    LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_QUERIES => 1,
                     LoggerInterface::QUERY_NAMES => 'placeOrder',
                     LoggerInterface::QUERY_COMPLEXITY => 3
+                ]
+            ],
+            [ // mutation with no headers
+                'query' => <<<QUERY
+mutation {
+  placeOrder(input: {cart_id: "HFMoieOF8oxQ3pGvjwiDiicwVDMDXW9H"}) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY,
+                'headers' => [],
+                'expectedResult' => [
+                    LoggerInterface::HTTP_METHOD => 'POST',
+                    LoggerInterface::STORE_HEADER => '',
+                    LoggerInterface::CURRENCY_HEADER => '',
+                    LoggerInterface::HAS_AUTH_HEADER => 'false',
+                    LoggerInterface::IS_CACHEABLE => 'false',
+                    LoggerInterface::QUERY_LENGTH => '',
+                    LoggerInterface::HAS_MUTATION => 'true',
+                    LoggerInterface::NUMBER_OF_QUERIES => 1,
+                    LoggerInterface::QUERY_NAMES => 'placeOrder',
+                    LoggerInterface::QUERY_COMPLEXITY => 3
+                ]
+            ],
+            [ // multiple queries
+                'query' => <<<QUERY
+query {
+  products(filter: {sku: {in: ["24-MB01", "24-MB04"]}}) {
+    items {
+      sku
+      name
+    }
+  }
+  cart(cart_id: "1gzRXywHKtQdNKRX7tloDEV6YzCc8WCA") {
+    id
+    items {
+      id
+    }
+  }
+}
+QUERY,
+                'headers' => [
+                    'Store' => 1,
+                    'Currency' => 'USD',
+                    'Authorization' => '1234',
+                    'X-Magento-Cache-Id' => true,
+                    'Content-length' => 123
+                ],
+                'expectedResult' => [
+                    LoggerInterface::HTTP_METHOD => 'POST',
+                    LoggerInterface::STORE_HEADER => 1,
+                    LoggerInterface::CURRENCY_HEADER => 'USD',
+                    LoggerInterface::HAS_AUTH_HEADER => 'true',
+                    LoggerInterface::IS_CACHEABLE => 'true',
+                    LoggerInterface::QUERY_LENGTH => '123',
+                    LoggerInterface::HAS_MUTATION => 'false',
+                    LoggerInterface::NUMBER_OF_QUERIES => 2,
+                    LoggerInterface::QUERY_NAMES => 'cart,products',
+                    LoggerInterface::QUERY_COMPLEXITY => 8
                 ]
             ],
         ];

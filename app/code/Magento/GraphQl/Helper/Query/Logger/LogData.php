@@ -52,7 +52,7 @@ class LogData
 
         $queryNames = array_merge(array_keys($configMutationFields), array_keys($configQueryFields));
         $queryInformation[LoggerInterface::QUERY_NAMES] =
-            count($queryNames) > 0 ? implode(", ", $queryNames) : 'operationNameNotFound';
+            count($queryNames) > 0 ? implode(",", $queryNames) : 'operationNameNotFound';
         $queryInformation[LoggerInterface::QUERY_COMPLEXITY] = $this->getFieldCount($query);
 
         return $queryInformation;
