@@ -3,187 +3,137 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model;
 
+use Exception;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\ValueFactory;
-use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
+use Magento\Sales\Model\Order\Email\Container\NullIdentity;
+use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sales emails sending
  *
  * Performs handling of cron jobs related to sending emails to customers
- * after creation/modification of Order, Invoice, Shipment or Creditmemo.
+ * after creation/modification of Order, Invoice, Shipment or CreditMemo.
  */
 class EmailSenderHandler
 {
-    /**
-     * Email sender model.
-     *
-     * @var \Magento\Sales\Model\Order\Email\Sender
-     */
-    protected $emailSender;
+    /** @var Sender $emailSender */
+    private $emailSender;
 
-    /**
-     * Entity resource model.
-     *
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract
-     */
-    protected $entityResource;
+    /** @var AbstractCollection $entityCollection */
+    private $entityCollection;
 
-    /**
-     * Entity collection model.
-     *
-     * @var AbstractCollection
-     */
-    protected $entityCollection;
+    /** @var ScopeConfigInterface $globalConfig */
+    private $globalConfig;
 
-    /**
-     * Global configuration storage.
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $globalConfig;
+    /** @var DateTime|null $dateTime */
+    private $dateTime;
 
-    /**
-     * @var IdentityInterface
-     */
+    /** @var IdentityInterface|NullIdentity|null $identityContainer  */
     private $identityContainer;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
+    /** @var StoreManagerInterface|null $storeManager */
     private $storeManager;
 
-    /**
-     * Config data factory
-     *
-     * @var ValueFactory
-     */
+    /** @var ValueFactory|null $configValueFactory */
     private $configValueFactory;
 
-    /**
-     * @var string
-     */
-    private $modifyStartFromDate;
+    /** @var string|null $modifyStartFromDate */
+    private $modifyStartFromDate = null;
 
     /**
-     * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
-     * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
+     * @param Sender $emailSender
      * @param AbstractCollection $entityCollection
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
-     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param StoreManagerInterface|null $storeManager
      * @param ValueFactory|null $configValueFactory
      * @param string|null $modifyStartFromDate
+     * @param DateTime|null $dateTime
      */
     public function __construct(
-        \Magento\Sales\Model\Order\Email\Sender $emailSender,
-        \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource,
+        Sender $emailSender,
         AbstractCollection $entityCollection,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
+        ScopeConfigInterface $globalConfig,
         IdentityInterface $identityContainer = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
-        ?string $modifyStartFromDate = null
+        ?string $modifyStartFromDate = null,
+        ?DateTime $dateTime = null
     ) {
         $this->emailSender = $emailSender;
-        $this->entityResource = $entityResource;
         $this->entityCollection = $entityCollection;
         $this->globalConfig = $globalConfig;
-
-        $this->identityContainer = $identityContainer ?: ObjectManager::getInstance()
-            ->get(\Magento\Sales\Model\Order\Email\Container\NullIdentity::class);
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
-
+        $this->identityContainer = $identityContainer ?: ObjectManager::getInstance()->get(NullIdentity::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->configValueFactory = $configValueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
         $this->modifyStartFromDate = $modifyStartFromDate ?: $this->modifyStartFromDate;
+        $this->dateTime = $dateTime ?: ObjectManager::getInstance()->get(DateTime::class);
     }
 
     /**
-     * Handles asynchronous email sending
+     * Handles asynchronous email sending.
+     *
      * @return void
+     * @throws Exception
      */
-    public function sendEmails()
+    public function sendEmails(): void
     {
-        if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
-            $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
-            $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
-            $this->filterCollectionByStartFromDate($this->entityCollection);
-            $this->entityCollection->setPageSize(
-                $this->globalConfig->getValue('sales_email/general/sending_limit')
-            );
+        if (!$this->globalConfig->isSetFlag('sales_email/general/async_sending')) {
+            return;
+        }
 
-            /** @var \Magento\Store\Api\Data\StoreInterface[] $stores */
-            $stores = $this->getStores(clone $this->entityCollection);
+        $this->entityCollection->addFieldToFilter('send_email', ['eq' => true]);
+        $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
+        $this->filterCollectionByStartFromDate($this->entityCollection);
+        $this->entityCollection->setPageSize((int) $this->globalConfig->getValue('sales_email/general/sending_limit'));
 
-            /** @var \Magento\Store\Model\Store $store */
-            foreach ($stores as $store) {
-                $this->identityContainer->setStore($store);
-                if (!$this->identityContainer->isEnabled()) {
-                    continue;
-                }
-                $entityCollection = clone $this->entityCollection;
-                $entityCollection->addFieldToFilter('store_id', $store->getId());
+        foreach ($this->storeManager->getStores() as $store) {
+            $this->identityContainer->setStore($store);
 
-                /** @var \Magento\Sales\Model\AbstractModel $item */
-                foreach ($entityCollection->getItems() as $item) {
-                    if ($this->emailSender->send($item, true)) {
-                        $this->entityResource->saveAttribute(
-                            $item->setEmailSent(true),
-                            'email_sent'
-                        );
-                    }
-                }
+            if (!$this->identityContainer->isEnabled()) {
+                continue;
+            }
+
+            $entityCloneByStoreCollection = clone $this->entityCollection;
+            $entityCloneByStoreCollection->addFieldToFilter('store_id', $store->getId());
+
+            foreach ($entityCloneByStoreCollection->getItems() as $item) {
+                $this->emailSender->send($item, true);
             }
         }
-    }
-
-    /**
-     * Get stores for given entities.
-     *
-     * @param ResourceModel\Collection\AbstractCollection $entityCollection
-     * @return \Magento\Store\Api\Data\StoreInterface[]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getStores(
-        AbstractCollection $entityCollection
-    ): array {
-        $stores = [];
-
-        $entityCollection->addAttributeToSelect('store_id')->getSelect()->group('store_id');
-        /** @var \Magento\Sales\Model\EntityInterface $item */
-        foreach ($entityCollection->getItems() as $item) {
-            /** @var \Magento\Store\Model\StoreManagerInterface $store */
-            $store = $this->storeManager->getStore($item->getStoreId());
-            $stores[$item->getStoreId()] = $store;
-        }
-
-        return $stores;
     }
 
     /**
      * Filter collection by start from date
      *
      * @param AbstractCollection $collection
+     *
      * @return void
      */
     private function filterCollectionByStartFromDate(AbstractCollection $collection): void
     {
-        /** @var $configValue ValueInterface */
         $configValue = $this->configValueFactory->create();
         $configValue->load('sales_email/general/async_sending', 'path');
 
-        if ($configValue->getId()) {
-            $startFromDate = date(
-                'Y-m-d H:i:s',
-                strtotime($configValue->getUpdatedAt() . ' ' . $this->modifyStartFromDate)
-            );
-
-            $collection->addFieldToFilter('created_at', ['from' => $startFromDate]);
+        if (!$configValue->getId()) {
+            return;
         }
+
+        $startFromDate = $this->dateTime->date(
+            'Y-m-d H:i:s',
+            strtotime($configValue->getUpdatedAt() . ' ' . $this->modifyStartFromDate)
+        );
+
+        $collection->addFieldToFilter('created_at', ['gteq' => $startFromDate]);
     }
 }
