@@ -41,6 +41,7 @@
         "laminas/laminas-db": "^2.12.0",
         "laminas/laminas-dependency-plugin": "^2.1.0",
         "laminas/laminas-di": "^3.2.0",
+        "laminas/laminas-escaper": "~2.8.0",
         "laminas/laminas-eventmanager": "^3.0.0",
         "laminas/laminas-feed": "^2.13.0",
         "laminas/laminas-http": "^2.6.0",
