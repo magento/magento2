@@ -7,26 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Controller\Index;
 
-use Laminas\Http\AbstractMessage;
-use Laminas\Http\Response;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Controller\Index\Render;
 use Magento\Ui\Model\UiComponentTypeResolver;
-use PHPUnit\Framework\MockObject\MockObject;
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -41,22 +44,22 @@ class RenderTest extends TestCase
     private $render;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-
-    /**
-     * @var MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var MockObject
+     * @var ResponseInterface|MockObject
      */
     private $responseMock;
 
     /**
-     * @var MockObject
+     * @var RedirectInterface|MockObject
+     */
+    private $redirectMock;
+
+    /**
+     * @var UiComponentFactory|MockObject
      */
     private $uiFactoryMock;
 
@@ -125,7 +128,10 @@ class RenderTest extends TestCase
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
+        $this->responseMock = $this->getMockBuilder(HttpResponse::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -198,18 +204,13 @@ class RenderTest extends TestCase
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-
-        $this->render = $this->objectManagerHelper->getObject(
-            Render::class,
-            [
-                'context' => $this->contextMock,
-                'uiComponentFactory' => $this->uiFactoryMock,
-                'contentTypeResolver' => $this->uiComponentTypeResolverMock,
-                'resultJsonFactory' => $this->resultJsonFactoryMock,
-                'logger' => $this->loggerMock,
-                'escaper' => $this->escaperMock,
-            ]
+        $this->render = new Render(
+            $this->contextMock,
+            $this->uiFactoryMock,
+            $this->uiComponentTypeResolverMock,
+            $this->resultJsonFactoryMock,
+            $this->escaperMock,
+            $this->loggerMock
         );
     }
 
