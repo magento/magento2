@@ -42,6 +42,7 @@
         "symfony/process": "~4.4.0",
         "tedivm/jshrink": "~1.4.0",
         "web-token/jwt-framework": "^v2.2.7",
+        "webonyx/graphql-php": "~14.9.0",
         "wikimedia/less.php": "^3.0.0"
     },
     "archive": {
