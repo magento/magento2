@@ -1388,14 +1388,17 @@ class ProductTest extends AbstractImportTestCase
      *
      * @param string $fileName
      * @param bool $throwException
+     * @param bool $shouldLog
      * @dataProvider uploadMediaFilesDataProvider
      */
-    public function testUploadMediaFiles(string $fileName, bool $throwException)
+    public function testUploadMediaFiles(string $fileName, bool $throwException, bool $shouldLog)
     {
         $exception = new \Exception();
         $expectedFileName = $fileName;
-        if ($throwException) {
+        if ($throwException || $shouldLog) {
             $expectedFileName = '';
+        }
+        if ($shouldLog) {
             $this->_logger->expects($this->once())->method('critical')->with($exception);
         }
         $fileUploaderMock = $this
@@ -1417,6 +1420,22 @@ class ProductTest extends AbstractImportTestCase
             $this->importProduct,
             '_fileUploader',
             $fileUploaderMock
+        );
+        $filesystemMock = $this
+            ->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        if ($throwException) {
+            $filesystemMock
+                ->expects($this->once())
+                ->method('getDirectoryRead')
+                ->with(DirectoryList::MEDIA)
+                ->willReturn($this->_mediaDirectory);
+        }
+        $this->setPropertyValue(
+            $this->importProduct,
+            'filesystem',
+            $filesystemMock
         );
         $actualFileName = $this->invokeMethod(
             $this->importProduct,
@@ -1451,8 +1470,9 @@ class ProductTest extends AbstractImportTestCase
     public function uploadMediaFilesDataProvider()
     {
         return [
-            ['test1.jpg', false],
-            ['test2.jpg', true],
+            ['test1.jpg', false, false],
+            ['test2.jpg', true, false],
+            ['test3.jpg', true, true]
         ];
     }
 

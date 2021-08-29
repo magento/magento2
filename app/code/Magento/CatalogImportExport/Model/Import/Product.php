@@ -1750,7 +1750,6 @@ class Product extends AbstractEntity
                         $uploadedFile = $this->findImageByHash($rowExistingImages, $hash);
                         if (!$uploadedFile && !isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles($columnImage);
-                            $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
                             if ($uploadedFile) {
                                 $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
@@ -2230,8 +2229,11 @@ class Product extends AbstractEntity
             $res = $this->_getUploader()->move($fileName, $renameFileOff);
             return $res['file'];
         } catch (\Exception $e) {
-            $this->_logger->critical($e);
-            return '';
+            $systemFile = $this->getSystemFile($fileName);
+            if (!$systemFile) {
+                $this->_logger->critical($e);
+            }
+            return $systemFile;
         }
     }
 
