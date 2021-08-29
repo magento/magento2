@@ -117,6 +117,10 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $quoteTotals->setItemsQty($quote->getItemsQty());
         $quoteTotals->setBaseCurrencyCode($quote->getBaseCurrencyCode());
         $quoteTotals->setQuoteCurrencyCode($quote->getQuoteCurrencyCode());
+        $isMinimumOrderAmount = $quote->validateMinimumAmount();
+        $extensionAttributes = $quoteTotals->getExtensionAttributes();
+        $extensionAttributes->setIsMinimumOrderAmount($isMinimumOrderAmount);
+        $quoteTotals->setExtensionAttributes($extensionAttributes);
         return $quoteTotals;
     }
 }

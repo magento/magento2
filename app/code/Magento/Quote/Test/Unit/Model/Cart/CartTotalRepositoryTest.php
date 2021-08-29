@@ -14,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Quote\Api\Data\TotalSegmentInterface;
+use Magento\Quote\Api\Data\TotalsExtensionInterface;
 use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
 use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Cart\CartTotalRepository;
@@ -108,7 +109,8 @@ class CartTotalRepositoryTest extends TestCase
                     'getBillingAddress',
                     'getAllVisibleItems',
                     'getItemsQty',
-                    'collectTotals'
+                    'collectTotals',
+                    'validateMinimumAmount'
                 ]
             )
             ->disableOriginalConstructor()
@@ -134,6 +136,10 @@ class CartTotalRepositoryTest extends TestCase
         $this->couponServiceMock = $this->createMock(
             CouponManagementInterface::class
         );
+        $this->totalsConverterMock = $this->createMock(
+            TotalsConverter::class
+        );
+
         $this->totalsConverterMock = $this->createMock(
             TotalsConverter::class
         );
@@ -246,6 +252,29 @@ class CartTotalRepositoryTest extends TestCase
             ->method('setQuoteCurrencyCode')
             ->with(self::STUB_CURRENCY_CODE)
             ->willReturnSelf();
+
+        $totalExtensionInterfaceMock = $this->getMockBuilder(TotalsExtensionInterface::class)
+            ->onlyMethods(['setIsMinimumOrderAmount'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $totalsMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($totalExtensionInterfaceMock);
+
+        $totalExtensionInterfaceMock->expects($this->once())
+            ->method('setIsMinimumOrderAmount')
+            ->with(true)
+            ->willReturnSelf();
+
+        $totalsMock->expects($this->once())
+            ->method('setExtensionAttributes')
+            ->with($totalExtensionInterfaceMock)
+            ->willReturnSelf();
+
+        $this->quoteMock->expects($this->once())
+            ->method('validateMinimumAmount')
+            ->willReturn(true);
 
         $this->assertEquals($totalsMock, $this->model->get(self::STUB_CART_ID));
     }

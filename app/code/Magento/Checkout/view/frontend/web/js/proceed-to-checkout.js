@@ -6,8 +6,9 @@
 define([
     'jquery',
     'Magento_Customer/js/model/authentication-popup',
-    'Magento_Customer/js/customer-data'
-], function ($, authenticationPopup, customerData) {
+    'Magento_Customer/js/customer-data',
+    'Magento_Checkout/js/model/quote'
+], function ($, authenticationPopup, customerData, quote) {
     'use strict';
 
     return function (config, element) {
@@ -26,5 +27,16 @@ define([
             location.href = config.checkoutUrl;
         });
 
+        quote.totals.subscribe(function (totals) {
+            if (totals['is_minimum_order_amount']) {
+                $(element).prop('disabled', false);
+                $(element).removeClass('disabled');
+
+                return;
+            }
+
+            $(element).prop('disabled', true);
+            $(element).addClass('disabled');
+        });
     };
 });
