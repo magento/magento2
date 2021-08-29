@@ -27,6 +27,7 @@
         "composer/composer": "^1.9 || ^2.0",
         "guzzlehttp/guzzle": "^6.3.3",
         "laminas/laminas-code": "~4.4.2",
+        "laminas/laminas-escaper": "~2.8.0",
         "laminas/laminas-http": "^2.6.0",
         "laminas/laminas-mail": "^2.9.0",
         "laminas/laminas-mime": "^2.8.0",
@@ -40,8 +41,8 @@
         "symfony/console": "~4.4.0",
         "symfony/process": "~4.4.0",
         "tedivm/jshrink": "~1.4.0",
-        "wikimedia/less.php": "^3.0.0",
-        "web-token/jwt-framework": "^v2.2.7"
+        "web-token/jwt-framework": "^v2.2.7",
+        "wikimedia/less.php": "^3.0.0"
     },
     "archive": {
         "exclude": [
