@@ -23,6 +23,8 @@ use Magento\Store\Api\Data\StoreInterface;
  */
 class PriceRange implements ResolverInterface
 {
+    private const STORE_FILTER_CACHE_KEY = '_cache_instance_store_filter';
+
     /**
      * @var Discount
      */
@@ -93,6 +95,8 @@ class PriceRange implements ResolverInterface
      */
     private function getMinimumProductPrice(SaleableInterface $product, StoreInterface $store): array
     {
+        // add store filter for the product
+        $product->setData(self::STORE_FILTER_CACHE_KEY, $store);
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
