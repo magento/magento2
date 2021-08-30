@@ -3,7 +3,7 @@
 
 type Query {
     products (
-        search: String @doc(description: "One or more strings to use to perform a full-text search."),
+        search: String @doc(description: "One or more keywords to use in a full-text search."),
         filter: ProductAttributeFilterInput @doc(description: "The product attributes to search for and return."),
         pageSize: Int = 20 @doc(description: "The maximum number of results to return at once. The default value is 20."),
         currentPage: Int = 1 @doc(description: "The page of results to return. The default value is 1."),

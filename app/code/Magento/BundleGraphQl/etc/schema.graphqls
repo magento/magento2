@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    addBundleProductsToCart(input: AddBundleProductsToCartInput): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description: "Add one or more bundle products to the specified cart. We recommend using `addProductsToCart` instead.")
+    addBundleProductsToCart(input: AddBundleProductsToCartInput @doc(description: "An input object that defines which bundle products to add to the cart.")): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description: "Add one or more bundle products to the specified cart. We recommend using `addProductsToCart` instead.")
 }
 
 input AddBundleProductsToCartInput @doc(description: "Defines the bundle products to add to the cart.") {
