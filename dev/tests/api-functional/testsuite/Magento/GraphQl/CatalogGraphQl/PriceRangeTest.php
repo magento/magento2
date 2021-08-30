@@ -11,6 +11,7 @@ use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Test class to verify catalog price rule is applied for
@@ -274,6 +275,83 @@ class PriceRangeTest extends GraphQlAbstract
           value
         }
         quantity
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_configurable_in_multiple_websites_with_special_price.php
+     */
+    public function testMinimalPriceForConfigurableProductWithSpecialPrice() : void
+    {
+        $query = $this->getProductsBySkuQuery();
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password')
+        );
+        $this->assertNotEmpty($response['products']);
+        $priceRange = $response['products']['items'][0]['price_range'];
+        $this->assertEquals(10, $priceRange['minimum_price']['regular_price']['value']);
+        $this->assertEquals(10, $priceRange['minimum_price']['final_price']['value']);
+        $this->assertEquals(10, $priceRange['maximum_price']['regular_price']['value']);
+        $this->assertEquals(10, $priceRange['maximum_price']['final_price']['value']);
+    }
+
+    /**
+     * Get a query which user filter for product sku and returns price_range
+     *
+     * @param string $productSku
+     * @return string
+     */
+    private function getProductsBySkuQuery() : string
+    {
+        return <<<QUERY
+query getProductsBySku {
+  products(filter: { sku: { eq: "configurable" } }) {
+    items {
+      sku
+      name
+      price_range {
+        minimum_price {
+          regular_price {
+            value
+            currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+        maximum_price {
+          regular_price {
+            value
+            currency
+          }
+          discount {
+            amount_off
+            percent_off
+          }
+          final_price {
+            value
+            currency
+          }
+        }
+      }
+      ... on ConfigurableProduct {
+        variants {
+          product {
+            sku
+          }
+        }
       }
     }
   }
