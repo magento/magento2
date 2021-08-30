@@ -11,7 +11,6 @@ use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Test class to verify catalog price rule is applied for
