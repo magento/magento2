@@ -64,6 +64,8 @@ class PriceRange implements ResolverInterface
         /** @var Product $product */
         $product = $value['model'];
         $product->unsetData('minimal_price');
+        // add store filter for the product
+        $product->setData(self::STORE_FILTER_CACHE_KEY, $store);
 
         if ($context) {
             $customerGroupId = $context->getExtensionAttributes()->getCustomerGroupId();
@@ -95,8 +97,6 @@ class PriceRange implements ResolverInterface
      */
     private function getMinimumProductPrice(SaleableInterface $product, StoreInterface $store): array
     {
-        // add store filter for the product
-        $product->setData(self::STORE_FILTER_CACHE_KEY, $store);
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
