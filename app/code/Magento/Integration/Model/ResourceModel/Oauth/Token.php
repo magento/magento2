@@ -212,9 +212,8 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
             $existingSecret = $object->getSecret();
-            $entityId = $object->getEntityId();
 
-            if (!$entityId && $existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+            if ($existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
                 $object->setSecret($this->encryptor->encrypt($existingSecret));
             }
         }
