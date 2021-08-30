@@ -51,9 +51,15 @@
         <waitForPageLoad stepKey="wait"/>
         <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
             <argument name="value" value="{{_defaultProduct.name}}"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="amOnConfigurableProductPage">
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
         </actionGroup>
         <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
-        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
-        <see userInput="This is a required field" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsError}}" stepKey="seeError"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonOnProductPageActionGroup" stepKey="clickAddToCart"/>
+        <actionGroup ref="AssertStorefrontRequiredFieldErrorMessageForProductOptionActionGroup" stepKey="seeError"/>
     </test>
 </tests>
