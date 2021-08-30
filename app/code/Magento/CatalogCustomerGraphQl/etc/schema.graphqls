@@ -6,7 +6,7 @@ interface ProductInterface {
     price_tiers: [TierPrice] @doc(description: "An array of `TierPrice` objects.") @resolver(class: "Magento\\CatalogCustomerGraphQl\\Model\\Resolver\\PriceTiers")
 }
 
-type ProductTierPrices @doc(description: "Deprecated. Use `TierPrice` instead. The ProductTierPrices object defines a tier price, which is a quantity discount offered to a specific customer group.") {
+type ProductTierPrices @doc(description: "Deprecated. Use `TierPrice` instead. Defines a tier price, which is a quantity discount offered to a specific customer group.") {
     customer_group_id: String @deprecated(reason: "Not relevant for the storefront.") @doc(description: "The ID of the customer group.")
     qty: Float @deprecated(reason: "Use `TierPrice.quantity` instead.") @doc(description: "The number of items that must be purchased to qualify for tier pricing.")
     value: Float @deprecated(reason: "Use `TierPrice.final_price` instead.") @doc(description: "The price of the fixed price item.")
