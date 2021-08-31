@@ -15,7 +15,7 @@ type ProductTierPrices @doc(description: "Deprecated. Use `TierPrice` instead. D
 }
 
 
-type TierPrice @doc(description: "A price based on the quantity purchased.") {
+type TierPrice @doc(description: "Defines a price based on the quantity purchased.") {
     final_price: Money @doc(description: "The price of the product at this tier.")
     quantity: Float @doc(description: "The minimum number of items that must be purchased to qualify for this price tier.")
     discount: ProductDiscount @doc(description: "The price discount that this tier represents.")
