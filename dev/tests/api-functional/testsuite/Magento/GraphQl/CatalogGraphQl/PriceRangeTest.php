@@ -282,7 +282,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_configurable_in_multiple_websites_with_special_price.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_in_multiple_websites_with_special_price.php
      */
     public function testMinimalPriceForConfigurableProductWithSpecialPrice() : void
     {
