@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontProductNameWithHTMLEntitiesTest">
         <annotations>
             <features value="Catalog"/>
@@ -48,11 +48,6 @@
         </actionGroup>
 
         <!--Open product display page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(productWithHTMLEntityOne.name)}}" stepKey="clickProductToGoProductPage"/>
-        <waitForPageLoad stepKey="waitForProductDisplayPageLoad2"/>
-
-        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName">
-            <argument name="value" value="{{productWithHTMLEntityOne.name}}"/>
         <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickProductToGoProductPage">
             <argument name="productName" value="{{productWithHTMLEntityOne.name}}"/>
         </actionGroup>

@@ -53,7 +53,7 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
-             <!--Create a simple product and give it the attribute with the second option -->
+            <!--Create a simple product and give it the attribute with the second option -->
             <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption2"/>
@@ -93,11 +93,6 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
 
         <!--Verify Product is visible and In Stock -->
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage"/>
-        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront">
-            <argument name="value" value="$$createConfigProduct.name$$"/>
-        </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="seeProductPriceInStoreFront"/>
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
@@ -134,11 +129,6 @@
             <argument name="productName" value="$$createConfigProduct.name$$"/>
         </actionGroup>
         <!--Open Product Store Front Page and Verify Product is Out Of Stock -->
-        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="openProductInStoreFront1"/>
-        <waitForPageLoad stepKey="waitForProductToLoad1"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage1"/>
-        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductNameInStoreFront1">
-            <argument name="value" value="$$createConfigProduct.name$$"/>
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductInStoreFront1">
             <argument name="product" value="$createConfigProduct$"/>
         </actionGroup>
