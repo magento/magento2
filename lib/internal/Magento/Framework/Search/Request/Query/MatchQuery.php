@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Search\Request\Query;
 
 use Magento\Framework\Search\Request\QueryInterface;
 
 /**
  * Match Query
+ *
  * @api
  * @since 100.0.2
  */
-class Match implements QueryInterface
+class MatchQuery implements QueryInterface
 {
     /**
      * Name

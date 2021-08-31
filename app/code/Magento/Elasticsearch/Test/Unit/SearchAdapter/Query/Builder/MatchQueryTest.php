@@ -12,10 +12,10 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
-use Magento\Framework\Search\Request\Query\Match as MatchRequestQuery;
+use Magento\Framework\Search\Request\Query\MatchQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test Match query builder
  */
-class MatchTest extends TestCase
+class MatchQueryTest extends TestCase
 {
     /**
      * @var AttributeProvider|MockObject
@@ -102,7 +102,7 @@ class MatchTest extends TestCase
             $this->mockAttribute($field['field']);
         }
 
-        $requestQuery = new MatchRequestQuery('match', $searchQuery, 1, $fields);
+        $requestQuery = new MatchQuery('match', $searchQuery, 1, $fields);
         $query = $this->matchQueryBuilder->build([], $requestQuery, 'should');
 
         $expectedSelectQuery = [
