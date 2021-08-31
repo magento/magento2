@@ -46,12 +46,14 @@ class Metadata implements ArgumentInterface
      * @param Session $authSession
      * @param State $appState
      * @param ScopeConfigInterface $config
+     * @param string|null $testSvc
      */
     public function __construct(
         ProductMetadataInterface $productMetadata,
         Session $authSession,
         State $appState,
-        ScopeConfigInterface $config
+        ScopeConfigInterface $config,
+        ?string $testSvc = null
     ) {
         $this->productMetadata = $productMetadata;
         $this->authSession = $authSession;
