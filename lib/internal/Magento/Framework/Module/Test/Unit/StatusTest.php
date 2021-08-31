@@ -49,6 +49,9 @@ class StatusTest extends TestCase
      */
     private $object;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->loader = $this->createMock(Loader::class);
@@ -65,7 +68,10 @@ class StatusTest extends TestCase
         );
     }
 
-    public function testCheckConstraintsEnableAllowed()
+    /**
+     * @return void
+     */
+    public function testCheckConstraintsEnableAllowed(): void
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
@@ -81,7 +87,10 @@ class StatusTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-    public function testCheckConstraintsEnableNotAllowed()
+    /**
+     * @return void
+     */
+    public function testCheckConstraintsEnableNotAllowed(): void
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
@@ -90,7 +99,7 @@ class StatusTest extends TestCase
             ->method('checkDependenciesWhenEnableModules')
             ->willReturn([
                 'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
-                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']]
             ]);
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], false);
         $expect = [
@@ -101,12 +110,15 @@ class StatusTest extends TestCase
             'Cannot enable Module_Foo because it conflicts with other modules:',
             "Module_Bar",
             'Cannot enable Module_Bar because it conflicts with other modules:',
-            "Module_Foo",
+            "Module_Foo"
         ];
         $this->assertEquals($expect, $result);
     }
 
-    public function testCheckConstraintsEnableNotAllowedWithPrettyMsg()
+    /**
+     * @return void
+     */
+    public function testCheckConstraintsEnableNotAllowedWithPrettyMsg(): void
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
@@ -115,7 +127,7 @@ class StatusTest extends TestCase
             ->method('checkDependenciesWhenEnableModules')
             ->willReturn([
                 'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
-                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']]
             ]);
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], true);
         $expect = [
@@ -124,12 +136,15 @@ class StatusTest extends TestCase
             'Cannot enable Module_Foo because it conflicts with other modules:',
             "Module_Bar",
             'Cannot enable Module_Bar because it conflicts with other modules:',
-            "Module_Foo",
+            "Module_Foo"
         ];
         $this->assertEquals($expect, $result);
     }
 
-    public function testCheckConstraintsDisableAllowed()
+    /**
+     * @return void
+     */
+    public function testCheckConstraintsDisableAllowed(): void
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
@@ -138,38 +153,42 @@ class StatusTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-    public function testCheckConstraintsDisableNotAllowed()
+    public function testCheckConstraintsDisableNotAllowed(): void
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn([
                 'Module_Foo' => ['Module_Baz' => ['Module_Baz', 'Module_Foo']],
-                'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']]
             ]);
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $expect = [
             'Cannot disable Module_Foo because modules depend on it:',
             "Module_Baz: Module_Baz->Module_Foo",
             'Cannot disable Module_Bar because modules depend on it:',
-            "Module_Baz: Module_Baz->Module_Bar",
+            "Module_Baz: Module_Baz->Module_Bar"
         ];
         $this->assertEquals($expect, $result);
     }
 
-    public function testSetIsEnabled()
+    /**
+     * @return void
+     */
+    public function testSetIsEnabled(): void
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn(false);
-        $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(false);
-        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(false);
+        $this->moduleList
+            ->method('has')
+            ->withConsecutive(['Module_Foo'], ['Module_Bar'], ['Module_Baz'])
+            ->willReturnOnConsecutiveCalls(false, false, false);
         $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1, 'Module_Baz' => 0];
         $this->writer->expects($this->once())->method('saveConfig')
             ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
         $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
     }
 
-    public function testSetIsEnabledUnknown()
+    public function testSetIsEnabledUnknown(): void
     {
         $this->expectException('LogicException');
         $this->expectExceptionMessage('Unknown module(s): \'Module_Baz\'');
@@ -185,14 +204,22 @@ class StatusTest extends TestCase
      * @param bool $thirdEnabled
      * @param bool $isEnabled
      * @param string[] $expected
+     *
+     * @return void
      */
-    public function testGetModulesToChange($firstEnabled, $secondEnabled, $thirdEnabled, $isEnabled, $expected)
-    {
+    public function testGetModulesToChange(
+        $firstEnabled,
+        $secondEnabled,
+        $thirdEnabled,
+        $isEnabled,
+        $expected
+    ): void {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->moduleList->expects($this->at(0))->method('has')->with('Module_Foo')->willReturn($firstEnabled);
-        $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn($secondEnabled);
-        $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn($thirdEnabled);
+        $this->moduleList
+            ->method('has')
+            ->withConsecutive(['Module_Foo'], ['Module_Bar'], ['Module_Baz'])
+            ->willReturnOnConsecutiveCalls($firstEnabled, $secondEnabled, $thirdEnabled);
         $result = $this->object->getModulesToChange($isEnabled, ['Module_Foo', 'Module_Bar', 'Module_Baz']);
         $this->assertEquals($expected, $result);
     }
@@ -200,7 +227,7 @@ class StatusTest extends TestCase
     /**
      * @return array
      */
-    public function getModulesToChangeDataProvider()
+    public function getModulesToChangeDataProvider(): array
     {
         return [
             [true, true, true, true, []],
@@ -211,7 +238,7 @@ class StatusTest extends TestCase
             [true, false, false, false, ['Module_Foo']],
             [false, true, false, false, ['Module_Bar']],
             [false, true, true, false, ['Module_Bar', 'Module_Baz']],
-            [true, true, true, false, ['Module_Foo', 'Module_Bar', 'Module_Baz']],
+            [true, true, true, false, ['Module_Foo', 'Module_Bar', 'Module_Baz']]
         ];
     }
 }
