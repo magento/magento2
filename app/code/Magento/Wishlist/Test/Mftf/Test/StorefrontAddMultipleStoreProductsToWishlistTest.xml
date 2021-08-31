@@ -104,7 +104,9 @@
         <click selector="{{StorefrontFooterSection.storeLink($$storeGroup.group[name]$$)}}" stepKey="selectSecondStoreToSwitchOn"/>
         <!-- Verify that both products are visible in wishlist on both stores -->
         <amOnPage url="{{StorefrontProductPage.url($$secondProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageOnSecondStore"/>
-        <see userInput="$$secondProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertSecondProductNameTitle"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertSecondProductNameTitle">
+            <argument name="value" value="$$secondProduct.name$$"/>
+        </actionGroup>
         <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addSecondProductToWishlist"/>
         <see userInput="$$secondProduct.name$$" selector="{{StorefrontCustomerWishlistSection.productItemNameText}}" stepKey="seeProduct2InWishlistOnSecondStore"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnSecondStore"/>
