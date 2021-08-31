@@ -56,6 +56,9 @@ class ConfigModelTest extends TestCase
      */
     private $configOptionsList;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->collector = $this->createMock(ConfigOptionsListCollector::class);
@@ -75,7 +78,10 @@ class ConfigModelTest extends TestCase
         );
     }
 
-    public function testValidate()
+    /**
+     * @return void
+     */
+    public function testValidate(): void
     {
         $option = $this->createMock(TextConfigOption::class);
         $option->expects($this->exactly(3))->method('getName')->willReturn('Fake');
@@ -96,7 +102,10 @@ class ConfigModelTest extends TestCase
         $this->configModel->validate(['Fake' => null]);
     }
 
-    public function testProcess()
+    /**
+     * @return void
+     */
+    public function testProcess(): void
     {
         $testSet1 = [
             ConfigFilePool::APP_CONFIG => [
@@ -159,13 +168,17 @@ class ConfigModelTest extends TestCase
             ->method('collectOptionsLists')
             ->willReturn($configOptionsList);
 
-        $this->writer->expects($this->at(0))->method('saveConfig')->with($testSetExpected1);
-        $this->writer->expects($this->at(1))->method('saveConfig')->with($testSetExpected2);
+        $this->writer
+            ->method('saveConfig')
+            ->withConsecutive([$testSetExpected1], [$testSetExpected2]);
 
         $this->configModel->process([]);
     }
 
-    public function testProcessException()
+    /**
+     * @return void
+     */
+    public function testProcessException(): void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('In module : Fake_ModuleConfigOption::createConfig');
@@ -183,7 +196,10 @@ class ConfigModelTest extends TestCase
         $this->configModel->process([]);
     }
 
-    public function testWritePermissionErrors()
+    /**
+     * @return void
+     */
+    public function testWritePermissionErrors(): void
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('Missing write permissions to the following paths:');
