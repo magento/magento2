@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Wysiwyg;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive;
 use Magento\Cms\Model\Template\Filter;
@@ -17,7 +18,6 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\Image\AdapterFactory;
@@ -106,6 +106,9 @@ class DirectiveTest extends TestCase
      */
     private $driverMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->actionContextMock = $this->getMockBuilder(Context::class)
@@ -128,9 +131,8 @@ class DirectiveTest extends TestCase
             ->getMock();
         $this->imageAdapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
-                    'getMimeType',
                     'getColorAt',
                     'getImage',
                     'watermark',
@@ -144,10 +146,12 @@ class DirectiveTest extends TestCase
                     'rotate'
                 ]
             )
+            ->addMethods(['getMimeType'])
             ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHeader', 'setBody', 'sendResponse'])
+            ->onlyMethods(['sendResponse'])
+            ->addMethods(['setHeader', 'setBody'])
             ->getMockForAbstractClass();
         $this->wysiwygConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -156,7 +160,7 @@ class DirectiveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->rawFactoryMock = $this->getMockBuilder(RawFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rawMock = $this->getMockBuilder(Raw::class)
@@ -201,9 +205,10 @@ class DirectiveTest extends TestCase
     }
 
     /**
+     * @return void
      * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $mimeType = 'image/jpeg';
         $imageBody = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -243,26 +248,24 @@ class DirectiveTest extends TestCase
     }
 
     /**
+     * @return void
      * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
-    public function testExecuteException()
+    public function testExecuteException(): void
     {
-        $exception = new \Exception('epic fail');
+        $exception = new Exception('epic fail');
         $placeholderPath = 'pub/static/adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
         $mimeType = 'image/png';
         $imageBody = '0123456789abcdefghijklmnopqrstuvwxyz';
         $this->prepareExecuteTest();
 
-        $this->imageAdapterMock->expects($this->at(0))
-            ->method('open')
-            ->with(self::IMAGE_PATH)
-            ->willThrowException($exception);
         $this->wysiwygConfigMock->expects($this->once())
             ->method('getSkinImagePlaceholderPath')
             ->willReturn($placeholderPath);
-        $this->imageAdapterMock->expects($this->at(1))
+        $this->imageAdapterMock
             ->method('open')
-            ->with($placeholderPath);
+            ->withConsecutive([self::IMAGE_PATH])
+            ->willThrowException($exception);
         $this->imageAdapterMock->expects($this->atLeastOnce())
             ->method('getMimeType')
             ->willReturn($mimeType);
@@ -297,7 +300,10 @@ class DirectiveTest extends TestCase
         );
     }
 
-    protected function prepareExecuteTest()
+    /**
+     * @return void
+     */
+    protected function prepareExecuteTest(): void
     {
         $directiveParam = 'e3ttZWRpYSB1cmw9Ind5c2l3eWcvYnVubnkuanBnIn19';
         $directive = '{{media url="wysiwyg/image.jpg"}}';
@@ -324,11 +330,12 @@ class DirectiveTest extends TestCase
     /**
      * Test Execute With Deleted Image
      *
+     * @return void
      * @covers \Magento\Cms\Controller\Adminhtml\Wysiwyg\Directive::execute
      */
-    public function testExecuteWithDeletedImage()
+    public function testExecuteWithDeletedImage(): void
     {
-        $exception = new \Exception('epic fail');
+        $exception = new Exception('epic fail');
         $placeholderPath = 'pub/static/adminhtml/Magento/backend/en_US/Magento_Cms/images/wysiwyg_skin_image.png';
         $this->prepareExecuteTest();
 
