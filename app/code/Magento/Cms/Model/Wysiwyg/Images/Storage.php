@@ -385,6 +385,10 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getFilesCollection($path, $type = null)
     {
+        if (!($this->isDirectoryAllowed($path))) {
+            return $this->getCollection(null);
+        }
+
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             $files = $this->_storageDatabaseFactory->create()->getDirectoryFiles($path);
 
