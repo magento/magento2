@@ -26,6 +26,9 @@ use PHPUnit\Framework\TestCase;
  */
 class DecimalTest extends TestCase
 {
+    /**
+     * @var Item|MockObject
+     */
     private $filterItem;
 
     /**
@@ -43,41 +46,48 @@ class DecimalTest extends TestCase
      */
     private $target;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var  State|MockObject */
+    /**
+     * @var State|MockObject
+     */
     private $state;
 
-    /** @var  ItemFactory|MockObject */
+    /**
+     * @var ItemFactory|MockObject
+     */
     private $filterItemFactory;
 
-    /** @var  Attribute|MockObject */
+    /**
+     * @var Attribute|MockObject
+     */
     private $attribute;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
         $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getState', 'getProductCollection'])
+            ->onlyMethods(['getState', 'getProductCollection'])
             ->getMock();
-        $this->filterItemFactory = $this->getMockBuilder(
-            ItemFactory::class
-        )
+        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->filterItem = $this->getMockBuilder(
-            Item::class
-        )
+        $this->filterItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
+            ->addMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $this->filterItem->expects($this->any())
             ->method($this->anything())->willReturnSelf();
@@ -106,11 +116,11 @@ class DecimalTest extends TestCase
         $filterDecimalFactory =
             $this->getMockBuilder(DecimalFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->addMethods([])
             ->getMock();
         $filterDecimalFactory->expects($this->once())
             ->method('create')
@@ -118,12 +128,13 @@ class DecimalTest extends TestCase
 
         $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
+            ->onlyMethods(['getAttributeCode', 'getFrontend'])
+            ->addMethods(['getIsFilterable'])
             ->getMock();
 
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter'])
+            ->onlyMethods(['addFilter'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
@@ -151,31 +162,22 @@ class DecimalTest extends TestCase
     }
 
     /**
-     * @param $requestValue
-     * @param $idValue
-     * @param $isIdUsed
+     * @param int|null $requestValue
+     * @param int|null|bool $idValue
+     *
+     * @return void
      * @dataProvider applyWithEmptyRequestDataProvider
      */
-    public function testApplyWithEmptyRequest($requestValue, $idValue)
+    public function testApplyWithEmptyRequest(?int $requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
         $idField = 'id';
 
         $this->target->setRequestVar($requestField);
 
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with($requestField)
-            ->willReturnCallback(
-                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                    switch ($field) {
-                        case $requestField:
-                            return $requestValue;
-                        case $idField:
-                            return $idValue;
-                    }
-                }
-            );
+            ->with($requestField);
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -184,25 +186,28 @@ class DecimalTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider()
+    public function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
                 'requestValue' => null,
-                'id' => 0,
+                'id' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false,
+                'id' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null,
+                'id' => null
             ]
         ];
     }
 
-    public function testApply()
+    /**
+    * @return void
+    */
+    public function testApply(): void
     {
         $filter = '10-150';
         $requestVar = 'test_request_var';
@@ -233,6 +238,7 @@ class DecimalTest extends TestCase
      * @param array $facets
      * @param array $expected
      * @dataProvider itemDataDataProvider
+     * @return void
      */
     public function testItemData(array $facets, array $expected): void
     {

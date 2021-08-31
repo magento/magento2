@@ -56,7 +56,7 @@ class UpgradeCommandTest extends TestCase
     private $commandTester;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -94,22 +94,24 @@ class UpgradeCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param array $options
      * @param string $deployMode
      * @param string $expectedString
      * @param array $expectedOptions
+     *
+     * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testExecute($options, $deployMode, $expectedString, $expectedOptions)
+    public function testExecute($options, $deployMode, $expectedString, $expectedOptions): void
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);
-        $this->installerMock->expects($this->at(0))
-            ->method('updateModulesSequence');
         $this->installerMock->expects($this->once())
             ->method('installSchema')
             ->with($expectedOptions);
-        $this->installerMock->expects($this->at(2))
-            ->method('installDataFixtures');
+        $this->installerMock
+            ->method('updateModulesSequence');
+        $this->installerMock
+        ->method('installDataFixtures');
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute($options));
         $this->assertEquals($expectedString, $this->commandTester->getDisplay());
@@ -118,15 +120,15 @@ class UpgradeCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public function executeDataProvider(): array
     {
         return [
             [
                 'options' => [
                     '--magento-init-params' => '',
-                    '--convert-old-scripts' => false,
+                    '--convert-old-scripts' => false
                 ],
-                'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+                'deployMode' => AppState::MODE_PRODUCTION,
                 'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
                     . PHP_EOL,
                 'expectedOptions' => [
@@ -135,16 +137,16 @@ class UpgradeCommandTest extends TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'magento-init-params' => '',
+                    'magento-init-params' => ''
                 ]
             ],
             [
                 'options' => [
                     '--magento-init-params' => '',
                     '--convert-old-scripts' => false,
-                    '--keep-generated' => true,
+                    '--keep-generated' => true
                 ],
-                'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
+                'deployMode' => AppState::MODE_PRODUCTION,
                 'expectedString' => '',
                 'expectedOptions' => [
                     'keep-generated' => true,
@@ -152,12 +154,12 @@ class UpgradeCommandTest extends TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'magento-init-params' => '',
+                    'magento-init-params' => ''
                 ]
             ],
             [
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
-                'deployMode' => \Magento\Framework\App\State::MODE_DEVELOPER,
+                'deployMode' => AppState::MODE_DEVELOPER,
                 'expectedString' => '',
                 'expectedOptions' => [
                     'keep-generated' => false,
@@ -165,12 +167,12 @@ class UpgradeCommandTest extends TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'magento-init-params' => '',
+                    'magento-init-params' => ''
                 ]
             ],
             [
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
-                'deployMode' => \Magento\Framework\App\State::MODE_DEFAULT,
+                'deployMode' => AppState::MODE_DEFAULT,
                 'expectedString' => '',
                 'expectedOptions' => [
                     'keep-generated' => false,
@@ -178,9 +180,9 @@ class UpgradeCommandTest extends TestCase
                     'safe-mode' => false,
                     'data-restore' => false,
                     'dry-run' => false,
-                    'magento-init-params' => '',
+                    'magento-init-params' => ''
                 ]
-            ],
+            ]
         ];
     }
 }
