@@ -87,6 +87,12 @@ $_helper = $block->getData('outputHelper');
                                               data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
                                               action="<?= $escaper->escapeUrl($postParams['action']) ?>"
                                               method="post">
+                                            <?php $optionsData = $block->getData('viewModel')->getOptionsData($_product); ?>
+                                            <?php foreach ($optionsData as $optionItem): ?>
+                                                <input type="hidden"
+                                                       name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
+                                                       value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+                                            <?php endforeach; ?>
                                             <input type="hidden"
                                                    name="product"
                                                    value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
@@ -153,16 +159,14 @@ $_helper = $block->getData('outputHelper');
             <?php endforeach; ?>
         </ol>
     </div>
-    <?= $block->getToolbarHtml() ?>
-    <?php if (!$block->isRedirectToCartEnabled()): ?>
-        <script type="text/x-magento-init">
-        {
-            "[data-role=tocart-form], .form.map.checkout": {
-                "catalogAddToCart": {
-                    "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
-                }
+    <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
+    <script type="text/x-magento-init">
+    {
+        "[data-role=tocart-form], .form.map.checkout": {
+            "catalogAddToCart": {
+                "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
             }
         }
-        </script>
-    <?php endif; ?>
+    }
+    </script>
 <?php endif; ?>

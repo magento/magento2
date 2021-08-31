@@ -393,6 +393,10 @@
         border: @tooltip__border-width solid @tooltip__border-color;
         padding: 10px;
     }
+
+    .cookie-status-message {
+        display: none;
+    }
 }
 
 //
@@ -473,6 +477,17 @@
     .cms-page-view .page-main {
         padding-top: 0;
         position: relative;
+    }
+
+    .page-main {
+        [class^='cms-privacy-policy'] & {
+            padding-top: 41px;
+            position: relative;
+        }
+    }
+
+    .cms-content .data-table {
+        .lib-table-responsive();
     }
 }
 

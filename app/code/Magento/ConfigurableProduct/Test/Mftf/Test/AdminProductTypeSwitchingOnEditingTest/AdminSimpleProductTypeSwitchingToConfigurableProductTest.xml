@@ -61,7 +61,7 @@
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveConfigProductForm"/>
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$createProduct.sku$"/>
         </actionGroup>
@@ -70,7 +70,7 @@
         <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Simple Product',$createProduct.name$-option2)}}" stepKey="seeSimpleProduct2NameInGrid"/>
         <!--Assert configurable product on storefront-->
         <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
         <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickAttributeDropDown"/>

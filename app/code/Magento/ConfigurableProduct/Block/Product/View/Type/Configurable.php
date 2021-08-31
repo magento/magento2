@@ -7,13 +7,16 @@
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Confugurable product view type
@@ -197,7 +200,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Retrieve current store
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
+     * @throws NoSuchEntityException
      */
     public function getCurrentStore()
     {
@@ -238,6 +242,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
+            'salable' => $options['salable'] ?? [],
+            'canDisplayShowOutOfStockStatus' => $options['canDisplayShowOutOfStockStatus'] ?? false
         ];
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {
@@ -287,51 +293,68 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
-            $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
-            $tierPriceModel =  $priceInfo->getPrice('tier_price');
-            $tierPricesList = $tierPriceModel->getTierPriceList();
-            foreach ($tierPricesList as $tierPrice) {
-                $tierPrices[] = [
-                    'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                    'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
-                    'percentage' => $this->localeFormat->getNumber(
-                        $tierPriceModel->getSavePercent($tierPrice['price'])
-                    ),
-                ];
-            }
 
-            $prices[$product->getId()] =
-                [
-                    'baseOldPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount()
-                        ),
-                    ],
-                    'oldPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('regular_price')->getAmount()->getValue()
-                        ),
-                    ],
-                    'basePrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
-                        ),
-                    ],
-                    'finalPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('final_price')->getAmount()->getValue()
-                        ),
-                    ],
-                    'tierPrices' => $tierPrices,
-                    'msrpPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $this->priceCurrency->convertAndRound($product->getMsrp())
-                        ),
-                    ],
-                 ];
+            $prices[$product->getId()] = [
+                'baseOldPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount()
+                    ),
+                ],
+                'oldPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('regular_price')->getAmount()->getValue()
+                    ),
+                ],
+                'basePrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
+                    ),
+                ],
+                'finalPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('final_price')->getAmount()->getValue()
+                    ),
+                ],
+                'tierPrices' => $this->getTierPricesByProduct($product),
+                'msrpPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $this->priceCurrency->convertAndRound($product->getMsrp())
+                    ),
+                ],
+            ];
         }
+
         return $prices;
+    }
+
+    /**
+     * Returns product's tier prices list
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function getTierPricesByProduct(ProductInterface $product): array
+    {
+        $tierPrices = [];
+        $tierPriceModel = $product->getPriceInfo()->getPrice('tier_price');
+        foreach ($tierPriceModel->getTierPriceList() as $tierPrice) {
+            $tierPriceData = [
+                'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
+                'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                'percentage' => $this->localeFormat->getNumber(
+                    $tierPriceModel->getSavePercent($tierPrice['price'])
+                ),
+            ];
+
+            if (isset($tierPrice['excl_tax_price'])) {
+                $excludingTax = $tierPrice['excl_tax_price'];
+                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($excludingTax->getBaseAmount());
+            }
+            $tierPrices[] = $tierPriceData;
+        }
+
+        return $tierPrices;
     }
 
     /**

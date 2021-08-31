@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\Customer\Model\Session;
 
 use Magento\Customer\Api\SessionCleanerInterface;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
+use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory as VisitorCollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Framework\Session\Config;
 use Magento\Framework\Session\SaveHandlerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Deletes all session data which relates to customer, including current session data.
@@ -50,20 +50,43 @@ class SessionCleaner implements SessionCleanerInterface
     private $saveHandler;
 
     /**
-     * @inheritdoc
+     * @var CustomerResourceModel
+     */
+    private $customerResourceModel;
+
+    /**
+     * @var VisitorResourceModel
+     */
+    private $visitorResourceModel;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param DateTimeFactory $dateTimeFactory
+     * @param VisitorCollectionFactory $visitorCollectionFactory
+     * @param SessionManagerInterface $sessionManager
+     * @param SaveHandlerInterface $saveHandler
+     * @param CustomerResourceModel|null $customerResourceModel
+     * @param VisitorResourceModel|null $visitorResourceModel
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         DateTimeFactory $dateTimeFactory,
         VisitorCollectionFactory $visitorCollectionFactory,
         SessionManagerInterface $sessionManager,
-        SaveHandlerInterface $saveHandler
+        SaveHandlerInterface $saveHandler,
+        CustomerResourceModel $customerResourceModel = null,
+        VisitorResourceModel $visitorResourceModel = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->dateTimeFactory = $dateTimeFactory;
         $this->visitorCollectionFactory = $visitorCollectionFactory;
         $this->sessionManager = $sessionManager;
         $this->saveHandler = $saveHandler;
+        $this->customerResourceModel = $customerResourceModel
+            ?: ObjectManager::getInstance()->get(CustomerResourceModel::class);
+
+        $this->visitorResourceModel = $visitorResourceModel
+            ?: ObjectManager::getInstance()->get(VisitorResourceModel::class);
     }
 
     /**
@@ -71,30 +94,13 @@ class SessionCleaner implements SessionCleanerInterface
      */
     public function clearFor(int $customerId): void
     {
-        if ($this->sessionManager->isSessionExists()) {
-            //delete old session and move data to the new session
-            //use this instead of $this->sessionManager->regenerateId because last one doesn't delete old session
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            session_regenerate_id(true);
-        }
-
-        $sessionLifetime = $this->scopeConfig->getValue(
-            Config::XML_PATH_COOKIE_LIFETIME,
-            ScopeInterface::SCOPE_STORE
-        );
         $dateTime = $this->dateTimeFactory->create();
-        $activeSessionsTime = $dateTime->setTimestamp($dateTime->getTimestamp() - $sessionLifetime)
-            ->format(DateTime::DATETIME_PHP_FORMAT);
-        /** @var \Magento\Customer\Model\ResourceModel\Visitor\Collection $visitorCollection */
-        $visitorCollection = $this->visitorCollectionFactory->create();
-        $visitorCollection->addFieldToFilter('customer_id', $customerId);
-        $visitorCollection->addFieldToFilter('last_visit_at', ['from' => $activeSessionsTime]);
-        /** @var \Magento\Customer\Model\Visitor $visitor */
-        foreach ($visitorCollection->getItems() as $visitor) {
-            $sessionId = $visitor->getSessionId();
-            $this->sessionManager->start();
-            $this->saveHandler->destroy($sessionId);
-            $this->sessionManager->writeClose();
+        $timestamp = $dateTime->getTimestamp();
+        $this->customerResourceModel->updateSessionCutOff($customerId, $timestamp);
+        if ($this->sessionManager->getVisitorData() !== null) {
+            $visitorId = $this->sessionManager->getVisitorData()['visitor_id'];
+            $this->visitorResourceModel->updateCreatedAt((int) $visitorId, $timestamp + 1);
         }
     }
 }
+

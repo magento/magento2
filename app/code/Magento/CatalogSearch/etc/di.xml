@@ -14,6 +14,7 @@
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolver"/>
     <preference for="Magento\CatalogSearch\Model\Search\ItemCollectionProviderInterface" type="Magento\CatalogSearch\Model\Search\ItemCollectionProvider"/>
     <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructure" />
+    <preference for="Magento\CatalogSearch\Model\Search\Request\ModifierInterface" type="Magento\CatalogSearch\Model\Search\Request\ModifierComposite" />
     <type name="Magento\Catalog\Model\Indexer\Product\Full">
         <arguments>
             <argument name="indexerList" xsi:type="array">
@@ -65,6 +66,10 @@
                 <item name="products" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\CatalogSearch\Model\Search\Catalog</item>
                     <item name="acl" xsi:type="string">Magento_Catalog::catalog</item>
+                </item>
+                <item name="categories" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogSearch\Model\Search\Category</item>
+                    <item name="acl" xsi:type="string">Magento_Catalog::categories</item>
                 </item>
             </argument>
         </arguments>
@@ -242,6 +247,29 @@
             <argument name="searchEngine" xsi:type="null" />
             <!-- @deprecated parameter temporaryStorageFactory has been deprecated and not in use now -->
             <argument name="temporaryStorageFactory" xsi:type="null" />
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\Request\ModifierComposite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="search" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\SearchModifier</item>
+                <item name="partial_search" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\PartialSearchModifier</item>
+                <item name="match_queries" xsi:type="object">Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Search\Request\MatchQueriesModifier">
+        <arguments>
+            <argument name="queries" xsi:type="array">
+                <item name="partial_search" xsi:type="array">
+                    <item name="name" xsi:type="array">
+                        <item name="analyzer" xsi:type="string">prefix_search</item>
+                    </item>
+                    <item name="sku" xsi:type="array">
+                        <item name="analyzer" xsi:type="string">sku_prefix_search</item>
+                    </item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>

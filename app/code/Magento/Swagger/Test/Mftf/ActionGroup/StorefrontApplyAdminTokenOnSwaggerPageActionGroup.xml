@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontApplyAdminTokenOnSwaggerPageActionGroup">
+        <annotations>
+            <description>Apply Admin Token on Swagger Page</description>
+        </annotations>
+        <arguments>
+            <argument name="token" type="string" defaultValue=""/>
+        </arguments>
+
+        <click selector="{{SwaggerAuthorizeSection.authorizeButtonUnlocked}}" stepKey="clickAuthorizeButton"/>
+        <waitForElementVisible selector="{{SwaggerAuthorizeSection.apiKeyInput}}" stepKey="waitModalPopUp"/>
+        <clearField selector="{{SwaggerAuthorizeSection.apiKeyInput}}" stepKey="clearApiTokenField"/>
+        <fillField selector="{{SwaggerAuthorizeSection.apiKeyInput}}" userInput="{{token}}" stepKey="fillApiTokenInput"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickApplyButton"/>
+        <click selector="{{SwaggerAuthorizeSection.authorizeModalButton}}" stepKey="clickModalAuthorizeButton"/>
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <click selector="{{SwaggerAuthorizeSection.closeModalButton}}" stepKey="clickModalCloseButton"/>
+    </actionGroup>
+</actionGroups>

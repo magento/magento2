@@ -33,10 +33,7 @@
             </actionGroup>
             <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstPriceRule"/>
-            <!-- Perform reindex -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value="catalogrule_rule"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
 
         <after>
@@ -49,14 +46,23 @@
         </after>
 
         <!-- Verify price is not discounted on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoaded"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" userInput="$$createProduct.price$$" stepKey="seeProductPriceOnCategoryPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPageOnFrontend">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageLoaded"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeProductPriceOnCategoryPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productPrice" value="$$createProduct.price$$"/>
+        </actionGroup>
 
         <!-- Verify price is not discounted on the product page -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="openProductPageOnFrontend"/>
-        <waitForPageLoad stepKey="waitForProductPageLoaded"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$createProduct.price$" stepKey="seePriceOnProductPage"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnFrontend">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoaded"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seePriceOnProductPage">
+            <argument name="productPrice" value="$createProduct.price$"/>
+        </actionGroup>
 
         <!-- Verify price is not discounted in the cart -->
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
@@ -64,6 +70,8 @@
         </actionGroup>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPage" />
         <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="waitForSubtotalAppears"/>
-        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$createProduct.price$" stepKey="seeProductPriceOnCartPage"/>
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummarySubtotalActionGroup" stepKey="seeProductPriceOnCartPage">
+            <argument name="orderSubtotal" value="$createProduct.price$"/>
+        </actionGroup>
     </test>
 </tests>

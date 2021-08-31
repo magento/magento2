@@ -580,7 +580,13 @@ define([
          * @private
          */
         _onImageLoaded: function (result, file, oldFile, callback) {
-            var data = JSON.parse(result);
+            var data;
+
+            try {
+                data = JSON.parse(result);
+            } catch (e) {
+                data = result;
+            }
 
             if (this.element.find('#video_url').parent().find('.image-upload-error').length > 0) {
                 this.element.find('.image-upload-error').remove();
@@ -622,7 +628,7 @@ define([
             }).css('display', 'none');
             fu.parent().append(tmpInput);
             fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).success(function (result, textStatus, jqXHR) {
+            fileUploader.fileupload('send', data).done(function (result, textStatus, jqXHR) {
                 tmpInput.remove();
                 callback.call(null, result, textStatus, jqXHR);
             });

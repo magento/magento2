@@ -10,15 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductInTheShoppingCartCouldBeReachedByAdminDuringOrderCreationWithMultiWebsiteConfigTest">
         <annotations>
+            <features value="Sales"/>
             <stories value="Admin create order"/>
             <title value="Product in the shopping cart could be reached by admin during order creation with multi website config"/>
             <description value="Product in the shopping cart could be reached by admin during order creation with multi website config"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-6353"/>
+            <testCaseId value="MC-25877"/>
             <group value="sales"/>
-            <skip>
-                <issueId value="MC-20129"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
@@ -38,7 +36,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
-                <argument name="productId" value="$$createProduct.id$$"/>
+                <argument name="productId" value="$createProduct.id$"/>
             </actionGroup>
             <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
                 <argument name="website" value="{{customWebsite.name}}"/>
@@ -68,7 +66,7 @@
 
         <!--Open product page and add to cart-->
         <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
-            <argument name="product" value="$$createProduct$$"/>
+            <argument name="product" value="$createProduct$"/>
             <argument name="storeView" value="customStore"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
@@ -81,12 +79,12 @@
 
         <!--Assert product in Shopping cart section-->
         <actionGroup ref="AdminAssertProductInShoppingCartSectionActionGroup" stepKey="seeProductInShoppingCart">
-            <argument name="product" value="$$createProduct.name$$"/>
+            <argument name="product" value="$createProduct.name$"/>
         </actionGroup>
 
         <!--Move product to the order from shopping cart-->
         <actionGroup ref="AdminMoveProductToItemsOrderedFromShoppingCartActionGroup" stepKey="addProductToItemsOrderedFromShoppingCart">
-            <argument name="product" value="$$createProduct.name$$"/>
+            <argument name="product" value="$createProduct.name$"/>
         </actionGroup>
 
         <!--Fill customer address information-->

@@ -27,5 +27,10 @@
         <element name="columnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
         <element name="perPage" type="select" selector="#product_attributes_listing.product_attributes_listing.listing_top.listing_paging_sizes"/>
         <element name="attributeName" type="input" selector="//div[text()='{{arg}}']/../preceding-sibling::td//input" parameterized="true"/>
+        <!--Sorting-->
+        <element name="columnByLabel" type="text" parameterized="true" selector="th[data-sort='{{columnName}}']"/>
+        <element name="columnNotSorted" type="text" parameterized="true" selector="th[data-sort='{{columnName}}'].not-sort"/>
+        <element name="columnSortedAscending" type="text" parameterized="true" selector="th[data-sort='{{columnName}}']._ascend"/>
+        <element name="columnSortedDescending" type="text" parameterized="true" selector="th[data-sort='{{columnName}}']._descend"/>
     </section>
 </sections>

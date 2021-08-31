@@ -73,10 +73,9 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
     {
         $blacklist = [];
         foreach (glob($pattern) as $list) {
-            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $blacklist = array_merge($blacklist, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+            $blacklist[] = file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         }
-        return $blacklist;
+        return array_merge([], ...$blacklist);
     }
 
     public function testValidComposerJson()
@@ -150,8 +149,16 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertCodingStyle($contents)
     {
-        $this->assertDoesNotMatchRegularExpression('/" :\s*["{]/', $contents, 'Coding style: there should be no space before colon.');
-        $this->assertDoesNotMatchRegularExpression('/":["{]/', $contents, 'Coding style: a space is necessary after colon.');
+        $this->assertDoesNotMatchRegularExpression(
+            '/" :\s*["{]/',
+            $contents,
+            'Coding style: there should be no space before colon.'
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            '/":["{]/',
+            $contents,
+            'Coding style: a space is necessary after colon.'
+        );
     }
 
     /**
@@ -188,13 +195,19 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-language':
-                $this->assertMatchesRegularExpression('/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/', $json->name);
+                $this->assertMatchesRegularExpression(
+                    '/^magento\/language\-[a-z]{2}_([a-z]{4}_)?[a-z]{2}$/',
+                    $json->name
+                );
                 $this->assertDependsOnFramework($json->require);
                 $this->assertRequireInSync($json);
                 $this->assertNoVersionSpecified($json);
                 break;
             case 'magento2-theme':
-                $this->assertMatchesRegularExpression('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
+                $this->assertMatchesRegularExpression(
+                    '/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/',
+                    $json->name
+                );
                 $this->assertDependsOnPhp($json->require);
                 $this->assertPhpVersionInSync($json->name, $json->require->php);
                 $this->assertDependsOnFramework($json->require);
@@ -253,8 +266,10 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertNoVersionSpecified(\StdClass $json)
     {
-        $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
-        $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
+        if (!in_array($json->name, self::$rootComposerModuleBlacklist)) {
+            $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
+            $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
+        }
     }
 
     /**

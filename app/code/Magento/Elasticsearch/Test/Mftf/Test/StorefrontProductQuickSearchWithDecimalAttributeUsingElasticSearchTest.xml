@@ -54,10 +54,7 @@
             <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
             <!--Delete attribute-->
             <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
-            <!--Reindex and clear cache-->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -80,10 +77,7 @@
             <argument name="product" value="$$product2.sku$$"/>
         </actionGroup>
 
-        <!--Reindex and clear cache-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
             <argument name="tags" value=""/>
         </actionGroup>

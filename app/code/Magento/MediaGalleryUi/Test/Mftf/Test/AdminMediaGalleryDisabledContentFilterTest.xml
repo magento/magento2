@@ -9,9 +9,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMediaGalleryDisabledContentFilterTest">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1825"/>
-            </skip>
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1464"/>
             <title value="User filter asset by disabled content"/>
@@ -23,19 +20,29 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="testImage"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
+            <argument name="name" value="testImage"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -43,7 +50,7 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="disableCategory"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
@@ -57,12 +64,14 @@
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
             <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
-         <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
-            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterInMediaGalleryGrid"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderToDelete">
+            <argument name="name" value="testImage"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
-
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
+            <argument name="name" value="testImage"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </test>
 </tests>

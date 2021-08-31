@@ -56,6 +56,7 @@
             "WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID": true
         },
         "constraint": {
+            "PRIMARY": true,
             "WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID_WIDGET_INSTANCE_PAGE_PAGE_ID": true,
             "WIDGET_INSTANCE_PAGE_LYT_LYT_UPDATE_ID_LYT_UPDATE_LYT_UPDATE_ID": true,
             "WIDGET_INSTANCE_PAGE_LAYOUT_LAYOUT_UPDATE_ID_PAGE_ID": true

@@ -39,8 +39,7 @@
         </after>
 
         <!-- Create a cart price rule for $10 Fixed amount discount -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
@@ -61,9 +60,10 @@
         <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
 
         <!-- Place an order from Storefront as a Guest  -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="hoverOverProduct"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductToAdd"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
@@ -88,8 +88,8 @@
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment3"/>
 
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
@@ -102,8 +102,7 @@
 
         <!-- Create invoice -->
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
 
         <!-- Verify Invoice Totals including subTotal Shipping  Discount and GrandTotal -->
@@ -151,4 +150,3 @@
         </assertEquals>
     </test>
 </tests>
-

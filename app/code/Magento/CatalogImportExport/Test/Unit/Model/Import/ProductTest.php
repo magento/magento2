@@ -39,6 +39,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File as DriverFile;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -207,6 +208,9 @@ class ProductTest extends AbstractImportTestCase
     /** @var  ImageTypeProcessor|MockObject */
     protected $imageTypeProcessor;
 
+    /** @var DriverFile|MockObject */
+    private $driverFile;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -373,6 +377,10 @@ class ProductTest extends AbstractImportTestCase
             ->getMock();
 
         $this->errorAggregator = $this->getErrorAggregatorObject();
+
+        $this->driverFile = $this->getMockBuilder(DriverFile::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->data = [];
 
@@ -1321,6 +1329,13 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testFillUploaderObject($isRead, $isWrite, $message)
     {
+        $dir = $this->createMock(WriteInterface::class);
+        $dir->method('getAbsolutePath')
+            ->willReturn('pub/media');
+        $this->_filesystem->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($dir);
+
         $fileUploaderMock = $this
             ->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
@@ -1337,11 +1352,16 @@ class ProductTest extends AbstractImportTestCase
             ->willReturn($isWrite);
 
         $this->_mediaDirectory
+            ->method('getDriver')
+            ->willReturn($this->driverFile);
+
+        $this->_mediaDirectory
             ->method('getRelativePath')
             ->willReturnMap(
                 [
                     ['import', 'import'],
                     ['catalog/product', 'catalog/product'],
+                    ['pub/media', 'pub/media'],
                 ]
             );
 

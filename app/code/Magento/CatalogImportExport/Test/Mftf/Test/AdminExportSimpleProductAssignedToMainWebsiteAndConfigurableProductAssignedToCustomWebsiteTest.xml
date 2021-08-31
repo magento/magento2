@@ -11,7 +11,7 @@
     <test name="AdminExportSimpleProductAssignedToMainWebsiteAndConfigurableProductAssignedToCustomWebsiteTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
+            <stories value="Export Products"/>
             <title value="Export Simple Product assigned to Main Website and Configurable Product assigned to Custom Website"/>
             <description value="Admin should be able to export Simple Product assigned to Main Website and Configurable Product assigned to Custom Website"/>
             <severity value="CRITICAL"/>
@@ -103,16 +103,19 @@
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
         <!-- Download product -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
         <!-- Delete exported file -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
     </test>
 </tests>

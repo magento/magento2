@@ -109,10 +109,11 @@
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
         <!-- Open Url Rewrite page and verify new Redirect Path, RedirectType and Target Path for the grabbed product Id -->
-        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchPath1">
+        <actionGroup ref="AdminFilterUrlRewriteGridByRequestPathAndStoreViewActionGroup" stepKey="searchPath1">
             <argument name="redirectPath" value="$$createProduct.name$$.html"/>
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
+            <argument name="storeView" value="{{storeViewData.name}}"/>
         </actionGroup>
 
         <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreValueForProductId">
