@@ -316,13 +316,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $directory
      * @param string $filename
-     * @param string $expectedUrl
+     * @param array $expectedUrls
      * @return void
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @dataProvider getThumbnailUrlDataProvider
      */
-    public function testGetThumbnailUrl(string $directory, string $filename, string $expectedUrl): void
+    public function testGetThumbnailUrl(string $directory, string $filename, array $expectedUrls): void
     {
         $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
         $directory = implode('/', array_filter([rtrim($root, '/'), trim($directory, '/')]));
@@ -334,7 +334,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         foreach ($collection as $item) {
             $paths[] = parse_url($item->getThumbUrl(), PHP_URL_PATH);
         }
-        $this->assertEquals([$expectedUrl], $paths);
+        $this->assertEquals($expectedUrls, $paths);
         $this->driver->deleteFile($path);
     }
 
@@ -401,17 +401,27 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             [
                 '/',
                 'image1.png',
-                '/media/.thumbs/image1.png'
+                []
             ],
             [
                 '/cms',
                 'image2.png',
-                '/media/.thumbscms/image2.png'
+                []
             ],
             [
                 '/cms/pages',
                 'image3.png',
-                '/media/.thumbscms/pages/image3.png'
+                []
+            ],
+            [
+                '/MagentoCmsModelWysiwygImagesStorageTest',
+                'image2.png',
+                ['/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/image2.png']
+            ],
+            [
+                '/MagentoCmsModelWysiwygImagesStorageTest/pages',
+                'image3.png',
+                ['/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/pages/image3.png']
             ]
         ];
     }
