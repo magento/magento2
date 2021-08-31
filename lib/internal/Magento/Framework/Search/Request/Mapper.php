@@ -334,7 +334,12 @@ class Mapper
                 case BucketInterface::TYPE_TERM:
                     $bucket = $this->objectManager->create(
                         \Magento\Framework\Search\Request\Aggregation\TermBucket::class,
-                        $arguments
+                        array_merge(
+                            $arguments,
+                            [
+                                'parameters' => array_column($bucketData['parameter'] ?? [], 'value', 'name'),
+                            ],
+                        )
                     );
                     break;
                 case BucketInterface::TYPE_RANGE:
