@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -43,6 +44,9 @@ class ResourceConnectionTest extends TestCase
      */
     private $configMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
@@ -61,11 +65,14 @@ class ResourceConnectionTest extends TestCase
             [
                 'deploymentConfig' => $this->deploymentConfigMock,
                 'connectionFactory' => $this->connectionFactoryMock,
-                'config' => $this->configMock,
+                'config' => $this->configMock
             ]
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetTablePrefixWithInjectedPrefix()
     {
         /** @var ResourceConnection $resourceConnection */
@@ -82,6 +89,9 @@ class ResourceConnectionTest extends TestCase
         self::assertEquals($resourceConnection->getTablePrefix(), 'some_prefix');
     }
 
+    /**
+     * @return void
+     */
     public function testGetTablePrefix()
     {
         $this->deploymentConfigMock->expects($this->once())
@@ -91,6 +101,9 @@ class ResourceConnectionTest extends TestCase
         self::assertEquals('pref_', $this->unit->getTablePrefix());
     }
 
+    /**
+     * @return void
+     */
     public function testGetConnectionByName()
     {
         $this->deploymentConfigMock->expects($this->once())->method('get')
@@ -103,6 +116,9 @@ class ResourceConnectionTest extends TestCase
         self::assertEquals('connection', $this->unit->getConnectionByName('default'));
     }
 
+    /**
+     * @return void
+     */
     public function testGetExistingConnectionByName()
     {
         $unit = $this->objectManager->getObject(
@@ -117,28 +133,33 @@ class ResourceConnectionTest extends TestCase
         self::assertEquals('existing_connection', $unit->getConnectionByName('default'));
     }
 
+    /**
+     * @return void
+     */
     public function testCloseConnection()
     {
         $this->configMock->expects($this->once())->method('getConnectionName')->with('default');
-
         $this->unit->closeConnection('default');
     }
 
+    /**
+     * @return void
+     */
     public function testGetTableNameWithBoolParam()
     {
-        $this->deploymentConfigMock->expects($this->at(0))
+        $this->deploymentConfigMock
             ->method('get')
-            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)
-            ->willReturn('pref_');
-        $this->deploymentConfigMock->expects($this->at(1))->method('get')
-            ->with('db/connection/default')
-            ->willReturn(['config']);
+            ->withConsecutive(
+                [ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX],
+                ['db/connection/default']
+            )
+            ->willReturnOnConsecutiveCalls('pref_', ['config']);
         $this->configMock->expects($this->atLeastOnce())
             ->method('getConnectionName')
             ->with('default')
             ->willReturn('default');
 
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
+        $connection = $this->getMockBuilder(AdapterInterface::class)->getMock();
         $connection->expects($this->once())->method('getTableName')->with('pref_1');
         $this->connectionFactoryMock->expects($this->once())->method('create')
             ->with(['config'])

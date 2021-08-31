@@ -3,26 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 /**
- * Builder for match query.
+ * Builder for match query
  */
-class Match implements QueryInterface
+class MatchQuery implements QueryInterface
 {
     /**
      * Elasticsearch condition for case when query must not appear in the matching documents.
      */
-    const QUERY_CONDITION_MUST_NOT = 'must_not';
+    public const QUERY_CONDITION_MUST_NOT = 'must_not';
 
     /**
      * @var FieldMapperInterface
@@ -43,6 +43,7 @@ class Match implements QueryInterface
      * @var ValueTransformerPool
      */
     private $valueTransformerPool;
+
     /**
      * @var Config
      */
@@ -78,6 +79,7 @@ class Match implements QueryInterface
         $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
         $requestQueryBoost = $requestQuery->getBoost() ?: 1;
         $minimumShouldMatch = $this->config->getElasticsearchConfigData('minimum_should_match');
+
         foreach ($queries as $query) {
             $queryBody = $query['body'];
             $matchKey = array_keys($queryBody)[0];
@@ -95,16 +97,18 @@ class Match implements QueryInterface
     }
 
     /**
-     * Prepare query.
+     * Prepare query
      *
      * @param string $queryValue
      * @param string $conditionType
      * @return array
      */
-    protected function prepareQuery($queryValue, $conditionType)
+    private function prepareQuery(string $queryValue, string $conditionType): array
     {
-        $condition = $conditionType === BoolExpression::QUERY_CONDITION_NOT ?
-            self::QUERY_CONDITION_MUST_NOT : $conditionType;
+        $condition = $conditionType === BoolExpression::QUERY_CONDITION_NOT
+            ? self::QUERY_CONDITION_MUST_NOT
+            : $conditionType;
+
         return [
             'condition' => $condition,
             'value' => $queryValue,
@@ -112,7 +116,7 @@ class Match implements QueryInterface
     }
 
     /**
-     * Creates valid ElasticSearch search conditions from Match queries.
+     * Creates valid ElasticSearch search conditions from Match queries
      *
      * The purpose of this method is to create a structure which represents valid search query
      * for a full-text search.
@@ -125,7 +129,7 @@ class Match implements QueryInterface
      * @param array $queryValue
      * @return array
      */
-    protected function buildQueries(array $matches, array $queryValue)
+    private function buildQueries(array $matches, array $queryValue): array
     {
         $conditions = [];
 
@@ -133,22 +137,23 @@ class Match implements QueryInterface
         $count = 0;
         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
         $condition = ($count) ? 'match_phrase' : 'match';
-
         $transformedTypes = [];
+
         foreach ($matches as $match) {
             $resolvedField = $this->fieldMapper->getFieldName(
                 $match['field'],
                 ['type' => FieldMapperInterface::TYPE_QUERY]
             );
-
             $attributeAdapter = $this->attributeProvider->getByAttributeCode($resolvedField);
             $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
             $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
             $valueTransformerHash = \spl_object_hash($valueTransformer);
+
             if (!isset($transformedTypes[$valueTransformerHash])) {
                 $transformedTypes[$valueTransformerHash] = $valueTransformer->transform($value);
             }
             $transformedValue = $transformedTypes[$valueTransformerHash];
+
             if (null === $transformedValue) {
                 //Value is incompatible with this field type.
                 continue;
@@ -159,6 +164,7 @@ class Match implements QueryInterface
                 'query' => $transformedValue,
                 'boost' => $match['boost'] ?? 1,
             ];
+
             if (isset($match['analyzer'])) {
                 $fields[$resolvedField]['analyzer'] = $match['analyzer'];
             }
