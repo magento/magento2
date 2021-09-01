@@ -11,6 +11,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
+use Magento\Framework\NumberFormatter;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -86,7 +87,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $numberFormatterFactory;
 
     /**
-     * @var \Magento\Framework\NumberFormatter
+     * @var NumberFormatter
      */
     private $numberFormatter;
 
@@ -440,9 +441,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Get NumberFormatter object from cache.
      *
      * @param array $options
-     * @return \Magento\Framework\NumberFormatter
+     * @return NumberFormatter
      */
-    private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
+    private function getNumberFormatter(array $options): NumberFormatter
     {
         $key = 'currency_' . md5($this->localeResolver->getLocale() . $this->serializer->serialize($options));
         if (!isset($this->numberFormatterCache[$key])) {
@@ -473,6 +474,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
             && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
             $this->numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
+            $this->numberFormatter->setPattern(str_replace('¤', '', $this->numberFormatter->getPattern()));
         }
         if (array_key_exists('precision', $options)) {
             $this->numberFormatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $options['precision']);
@@ -495,7 +497,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     public function getOutputFormat()
     {
         $formatted = $this->formatTxt(0);
-        $number = $this->formatTxt(0, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+        $number = str_replace($this->getCurrencySymbol(), '', $formatted);
         return str_replace($this->trimUnicodeDirectionMark($number), '%s', $formatted);
     }
 
@@ -571,12 +573,12 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * This method removes LRM and RLM marks from string
      *
      * @param string $string
-     * @return $this
+     * @return string
      */
-    private function trimUnicodeDirectionMark($string)
+    private function trimUnicodeDirectionMark(string $string): string
     {
         if (preg_match('/^(\x{200E}|\x{200F})/u', $string, $match)) {
-            $string = preg_replace('/^'.$match[1].'/u', '', $string);
+            $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
         return $string;
     }

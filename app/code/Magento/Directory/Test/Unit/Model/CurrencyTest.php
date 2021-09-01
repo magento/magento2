@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\Currency\FilterFactory;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
+use Magento\Framework\NumberFormatter;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -21,55 +23,59 @@ class CurrencyTest extends TestCase
     /**
      * @var Currency
      */
-    protected $currency;
+    private $currency;
 
-    protected $currencyCode = 'USD';
+    /**
+     * @var string
+     */
+    private $currencyCode = 'USD';
 
     /**
      * @var CurrencyInterface|MockObject
      */
-    protected $localeCurrencyMock;
+    private $localeCurrencyMock;
 
     /**
-     * @var LocalResolverInterface
+     * @var LocalResolverInterface|MockObject
      */
-    private $localeResolver;
+    private $localeResolverMock;
 
     /**
-     * @var NumberFormatterFactory
+     * @var NumberFormatterFactory|MockObject
      */
-    private $numberFormatterFactory;
+    private $numberFormatterFactoryMock;
 
     /**
-     * @var Json
+     * @var Json|MockObject
      */
-    private $serializer;
+    private $serializerMock;
+
+    /**
+     * @var \Magento\Framework\Currency|MockObject
+     */
+    private $currencyMock;
 
     protected function setUp(): void
     {
-        $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
-        $currencyFilterFactory = $this->getMockBuilder(\Magento\Directory\Model\Currency\FilterFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->localeResolver = $this->getMockBuilder(LocalResolverInterface::class)
-            ->getMockForAbstractClass();
-        $this->numberFormatterFactory = $this->getMockBuilder(NumberFormatterFactory::class)
+        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
+        $currencyFilterFactoryMock = $this->createMock(FilterFactory::class);
+        $this->localeResolverMock = $this->createMock(LocalResolverInterface::class);
+        $this->numberFormatterFactoryMock = $this->getMockBuilder(NumberFormatterFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->serializer = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->serializerMock = $this->createMock(Json::class);
+        $this->currencyMock = $this->createMock(\Magento\Framework\Currency::class);
 
         $objectManager = new ObjectManager($this);
         $this->currency = $objectManager->getObject(
             Currency::class,
             [
                 'localeCurrency' => $this->localeCurrencyMock,
-                'currencyFilterFactory' => $currencyFilterFactory,
-                'localeResolver' => $this->localeResolver,
-                'numberFormatterFactory' => $this->numberFormatterFactory,
-                'serializer' => $this->serializer,
+                'currencyFilterFactory' => $currencyFilterFactoryMock,
+                'localeResolver' => $this->localeResolverMock,
+                'numberFormatterFactory' => $this->numberFormatterFactoryMock,
+                'serializer' => $this->serializerMock,
                 'data' => [
                     'currency_code' => $this->currencyCode,
                 ]
@@ -81,38 +87,48 @@ class CurrencyTest extends TestCase
     {
         $currencySymbol = '$';
 
-        $currencyMock = $this->getMockBuilder(\Magento\Framework\Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock->expects(self::once())
+        $this->currencyMock->expects(self::once())
             ->method('getSymbol')
             ->willReturn($currencySymbol);
 
         $this->localeCurrencyMock->expects(self::once())
             ->method('getCurrency')
             ->with($this->currencyCode)
-            ->willReturn($currencyMock);
+            ->willReturn($this->currencyMock);
+
         self::assertEquals($currencySymbol, $this->currency->getCurrencySymbol());
     }
 
     /**
      * @dataProvider getOutputFormatDataProvider
-     * @param $expected
-     * @param $locale
+     * @param string $expected
+     * @param string $locale
      */
-    public function testGetOutputFormat($expected, $locale): void
+    public function testGetOutputFormat(string $expected, string $locale): void
     {
-        $this->localeResolver->method('getLocale')->willReturn($locale);
-        $this->numberFormatterFactory
+        $this->localeResolverMock->method('getLocale')->willReturn($locale);
+        $this->numberFormatterFactoryMock
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
-            ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
-        $this->serializer->method('serialize')->willReturnMap(
+            ->willReturn(new NumberFormatter($locale, \NumberFormatter::CURRENCY));
+        $this->serializerMock->method('serialize')->willReturnMap(
             [
                 [[], '[]'],
                 [['display' => 1], '{"display":1}']
             ]
         );
+
+        $currencySymbol = '$';
+
+        $this->currencyMock->expects(self::once())
+            ->method('getSymbol')
+            ->willReturn($currencySymbol);
+
+        $this->localeCurrencyMock->expects(self::once())
+            ->method('getCurrency')
+            ->with($this->currencyCode)
+            ->willReturn($this->currencyMock);
+
         self::assertEquals($expected, $this->currency->getOutputFormat());
     }
 
@@ -148,13 +164,13 @@ class CurrencyTest extends TestCase
         string $locale,
         string $expected
     ): void {
-        $this->localeResolver->expects(self::exactly(2))->method('getLocale')->willReturn($locale);
-        $this->numberFormatterFactory
+        $this->localeResolverMock->expects(self::exactly(2))->method('getLocale')->willReturn($locale);
+        $this->numberFormatterFactoryMock
             ->expects(self::once())
             ->method('create')
-            ->with(['locale' => $locale, 'style' => 2])
-            ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
-        $this->serializer->method('serialize')->willReturnMap(
+            ->with(['locale' => $locale, 'style' => \NumberFormatter::CURRENCY])
+            ->willReturn(new NumberFormatter($locale, \NumberFormatter::CURRENCY));
+        $this->serializerMock->method('serialize')->willReturnMap(
             [
                 [[], '[]']
             ]
@@ -200,7 +216,7 @@ class CurrencyTest extends TestCase
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn(new \Zend_Currency($options, 'en_US'));
-        $this->serializer->method('serialize')->willReturnMap(
+        $this->serializerMock->method('serialize')->willReturnMap(
             [
                 [[], '[]']
             ]
