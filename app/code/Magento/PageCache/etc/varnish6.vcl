@@ -62,13 +62,13 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass shopping cart and checkout
-    if (req.url ~ "/checkout") {
+    # Bypass customer, shopping cart, checkout
+    if (req.url ~ "/customer" || req.url ~ "/checkout") {
         return (pass);
     }
 
     # Bypass health check requests
-    if (req.url ~ "/pub/health_check.php") {
+    if (req.url ~ "^/(pub/)?(health_check.php)$") {
         return (pass);
     }
 
@@ -162,12 +162,10 @@ sub vcl_backend_response {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
 
-    # cache only successfully responses and 404s
-    if (beresp.status != 200 && beresp.status != 404) {
-        set beresp.ttl = 0s;
-        set beresp.uncacheable = true;
-        return (deliver);
-    } elsif (beresp.http.Cache-Control ~ "private") {
+    # cache only successfully responses and 404s that are not marked as private
+    if (beresp.status != 200 &&
+            beresp.status != 404 &&
+            beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
         set beresp.ttl = 86400s;
         return (deliver);

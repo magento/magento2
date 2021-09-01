@@ -75,7 +75,7 @@ class ProductUrlSuffix implements ResolverInterface
                 self::$xml_path_product_url_suffix,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            );
+            ) ?? '';
         }
         return $this->productUrlSuffix[$storeId];
     }

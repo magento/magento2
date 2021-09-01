@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
+use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Class to retrieve action class.
@@ -35,10 +39,10 @@ class ActionList
         'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const',
         'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare',
         'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final',
-        'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'instanceof',
-        'insteadof','interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected',
-        'public', 'require', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var',
-        'while', 'xor', 'void',
+        'finally', 'fn', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'instanceof',
+        'insteadof', 'interface', 'isset', 'list', 'match', 'namespace', 'new', 'or', 'print', 'private', 'protected',
+        'public', 'require', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'void',
+        'while', 'xor', 'yield',
     ];
 
     /**
@@ -52,9 +56,7 @@ class ActionList
     private $actionInterface;
 
     /**
-     * ActionList constructor
-     *
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
@@ -62,22 +64,23 @@ class ActionList
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        \Magento\Framework\Config\CacheInterface $cache,
+        CacheInterface $cache,
         ModuleReader $moduleReader,
-        $actionInterface = \Magento\Framework\App\ActionInterface::class,
+        $actionInterface = ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = [],
         SerializerInterface $serializer = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
+        $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         $state = $objectManager->get(State::class);
 
         if ($state->getMode() === State::MODE_PRODUCTION) {
             $directoryList = $objectManager->get(DirectoryList::class);
-            $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheKey . '.' . 'php';
+            $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA)
+                . '/' . $cacheKey . '.' . 'php';
 
             if (file_exists($file)) {
                 $this->actions = (include $file) ?? $moduleReader->getActionFiles();
@@ -124,7 +127,9 @@ class ActionList
             )
         );
         if (isset($this->actions[$fullPath])) {
-            return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
+            return is_subclass_of($this->actions[$fullPath], $this->actionInterface)
+                ? $this->actions[$fullPath]
+                : null;
         }
         return null;
     }

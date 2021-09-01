@@ -157,11 +157,17 @@ class QuantityValidator
             if ($stockStatus->getStockStatus() === Stock::STOCK_OUT_OF_STOCK
                     || $parentStockStatus && $parentStockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
             ) {
-                $quoteItem->addErrorInfo(
-                    'cataloginventory',
-                    Data::ERROR_QTY,
-                    __('This product is out of stock.')
-                );
+                $hasError = $quoteItem->getStockStateResult()
+                    ? $quoteItem->getStockStateResult()->getHasError() : false;
+                if (!$hasError) {
+                    $quoteItem->addErrorInfo(
+                        'cataloginventory',
+                        Data::ERROR_QTY,
+                        __('This product is out of stock.')
+                    );
+                } else {
+                    $quoteItem->addErrorInfo(null, Data::ERROR_QTY);
+                }
                 $quoteItem->getQuote()->addErrorInfo(
                     'stock',
                     'cataloginventory',
@@ -179,7 +185,7 @@ class QuantityValidator
          * Check item for options
          */
         if ($options) {
-            $qty = $product->getTypeInstance()->prepareQuoteItemQty($qty, $product);
+            $qty = $product->getTypeInstance()->prepareQuoteItemQty($quoteItem->getQty(), $product);
             $quoteItem->setData('qty', $qty);
             if ($stockStatus) {
                 $this->checkOptionsQtyIncrements($quoteItem, $options);

@@ -4,10 +4,10 @@ type Mutation {
     addConfigurableProductsToCart(input: AddConfigurableProductsToCartInput): AddConfigurableProductsToCartOutput @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\AddConfigurableProductsToCart")
 }
 
-type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
+type ConfigurableProduct implements ProductInterface, RoutableInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
     variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
     configurable_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
-    configurable_product_options_selection(configurableOptionValueUids: [ID!]): ConfigurableProductOptionsSelection @doc(description: "Metadata for the specified configurable options selection") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\OptionsSelectionMetadata")
+    configurable_product_options_selection(configurableOptionValueUids: [ID!]): ConfigurableProductOptionsSelection @doc(description: "Specified configurable product options selection") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\OptionsSelectionMetadata")
 }
 
 type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
@@ -64,6 +64,7 @@ input ConfigurableProductCartItemInput {
 type ConfigurableCartItem implements CartItemInterface {
     customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
     configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions")
+    configured_variant: ProductInterface! @doc(description: "Product details of the cart item") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ProductResolver")
 }
 
 type SelectedConfigurableOption {
@@ -82,6 +83,7 @@ type ConfigurableWishlistItem implements WishlistItemInterface @doc(description:
 
 type ConfigurableProductOptionsSelection @doc(description: "Metadata corresponding to the configurable options selection.") {
     options_available_for_selection: [ConfigurableOptionAvailableForSelection!] @doc(description: "Configurable options available for further selection based on current selection.")
+    configurable_options: [ConfigurableProductOption!] @doc(description: "Configurable options available for further selection based on current selection.")
     media_gallery: [MediaGalleryInterface!] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\SelectionMediaGallery") @doc(description: "Product images and videos corresponding to the specified configurable options selection.")
     variant: SimpleProduct @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Variant") @doc(description: "Variant represented by the specified configurable options selection. It is expected to be null, until selections are made for each configurable option.")
 }
@@ -89,6 +91,20 @@ type ConfigurableProductOptionsSelection @doc(description: "Metadata correspondi
 type ConfigurableOptionAvailableForSelection @doc(description: "Configurable option available for further selection based on current selection.") {
     option_value_uids: [ID!]! @doc(description: "Configurable option values available for further selection.")
     attribute_code: String! @doc(description: "Attribute code that uniquely identifies configurable option.")
+}
+
+type ConfigurableProductOption {
+    uid: ID!
+    attribute_code: String!
+    label: String!
+    values: [ConfigurableProductOptionValue!]
+}
+
+type ConfigurableProductOptionValue {
+    uid: ID!
+    is_available: Boolean!
+    is_use_default: Boolean!
+    label: String!
 }
 
 type StoreConfig @doc(description: "The type contains information about a store config") {

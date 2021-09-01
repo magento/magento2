@@ -153,7 +153,7 @@ class Status extends AbstractDb
 
         $select = $this->getConnection()->select()
             ->from($this->getMainTable(), ['product_id', 'stock_status'])
-            ->where('product_id IN(?)', $productIds)
+            ->where('product_id IN(?)', $productIds, \Zend_Db::INT_TYPE)
             ->where('stock_id=?', (int) $stockId)
             ->where('website_id=?', (int) $websiteId);
         return $this->getConnection()->fetchPairs($select);
@@ -190,7 +190,8 @@ class Status extends AbstractDb
             ['entity_id', 'type_id']
         )->where(
             'entity_id IN(?)',
-            $productIds
+            $productIds,
+            \Zend_Db::INT_TYPE
         );
         return $this->getConnection()->fetchPairs($select);
     }
@@ -360,7 +361,8 @@ class Status extends AbstractDb
                 $attribute->getAttributeId()
             )->where(
                 "t1.{$linkField} IN(?)",
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
 
             $rows = $connection->fetchPairs($select);

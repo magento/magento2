@@ -46,7 +46,7 @@ interface ReadInterface
      * @param string $escape [optional]
      * @return array|bool false on end of file
      */
-    public function readCsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\');
+    public function readCsv($length = 0, $delimiter = ',', $enclosure = '"', $escape = "\0");
 
     /**
      * Returns the current position

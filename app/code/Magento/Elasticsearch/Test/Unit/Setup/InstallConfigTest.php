@@ -25,6 +25,9 @@ class InstallConfigTest extends TestCase
      */
     private $configWriterMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setup(): void
     {
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMockForAbstractClass();
@@ -41,13 +44,16 @@ class InstallConfigTest extends TestCase
                     'elasticsearch-index-prefix' => 'elasticsearch5_index_prefix',
                     'elasticsearch-enable-auth' => 'elasticsearch5_enable_auth',
                     'elasticsearch-username' => 'elasticsearch5_username',
-                    'elasticsearch-password' => 'elasticsearch5_password',
+                    'elasticsearch-password' => 'elasticsearch5_password'
                 ]
             ]
         );
     }
 
-    public function testConfigure()
+    /**
+     * @return void
+     */
+    public function testConfigure(): void
     {
         $inputOptions = [
             'search-engine' => 'elasticsearch5',
@@ -56,22 +62,20 @@ class InstallConfigTest extends TestCase
         ];
 
         $this->configWriterMock
-            ->expects($this->at(0))
             ->method('save')
-            ->with('catalog/search/engine', 'elasticsearch5');
-        $this->configWriterMock
-            ->expects($this->at(1))
-            ->method('save')
-            ->with('catalog/search/elasticsearch5_server_hostname', 'localhost');
-        $this->configWriterMock
-            ->expects($this->at(2))
-            ->method('save')
-            ->with('catalog/search/elasticsearch5_server_port', '9200');
+            ->withConsecutive(
+                ['catalog/search/engine', 'elasticsearch5'],
+                ['catalog/search/elasticsearch5_server_hostname', 'localhost'],
+                ['catalog/search/elasticsearch5_server_port', '9200']
+            );
 
         $this->installConfig->configure($inputOptions);
     }
 
-    public function testConfigureWithEmptyInput()
+    /**
+     * @return void
+     */
+    public function testConfigureWithEmptyInput(): void
     {
         $this->configWriterMock->expects($this->never())->method('save');
         $this->installConfig->configure([]);

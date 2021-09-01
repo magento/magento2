@@ -190,4 +190,40 @@ QUERY;
             self::assertEquals($product['url_key'], $productExpectedData['url_key']);
         }
     }
+
+    /**
+     * Test query with disabled linked product in the default store
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related_disabled_in_store.php
+     *
+     * @return void
+     */
+    public function testQueryDisableRelatedProductInStore(): void
+    {
+        $productSku = 'simple_with_related';
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items {
+            related_products
+            {
+                sku
+                name
+                url_key
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query, [], '', ['Store' => 'default']);
+
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertCount(1, $response['products']['items']);
+        self::assertArrayHasKey(0, $response['products']['items']);
+        self::assertArrayHasKey('related_products', $response['products']['items'][0]);
+        $relatedProducts = $response['products']['items'][0]['related_products'];
+        self::assertCount(0, $relatedProducts);
+    }
 }

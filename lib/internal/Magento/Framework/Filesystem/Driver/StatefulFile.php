@@ -363,7 +363,7 @@ class StatefulFile implements DriverInterface
      * @return array|bool|null
      * @throws FileSystemException
      */
-    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\')
+    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = "\0")
     {
         return $this->driverFile->fileGetCsv($resource, $length, $delimiter, $enclosure, $escape);
     }

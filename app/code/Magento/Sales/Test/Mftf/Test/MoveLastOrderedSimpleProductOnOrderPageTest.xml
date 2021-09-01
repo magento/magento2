@@ -55,7 +55,7 @@
         <click selector="{{AdminCustomerActivitiesLastOrderedSection.addProductToOrder($$createProduct.name$$)}}" stepKey="addProductToOrder"/>
 
         <!-- Click Update Changes -->
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert product in items ordered grid -->
         <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createProduct.name$$" stepKey="seeProductName"/>

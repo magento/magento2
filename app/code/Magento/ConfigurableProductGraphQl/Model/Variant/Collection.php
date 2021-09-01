@@ -120,10 +120,10 @@ class Collection
      * Retrieve child products from for passed in parent id.
      *
      * @param int $id
-     * @param ContextInterface|null $context
+     * @param ContextInterface $context
      * @return array
      */
-    public function getChildProductsByParentId(int $id, ContextInterface $context = null) : array
+    public function getChildProductsByParentId(int $id, ContextInterface $context) : array
     {
         $childrenMap = $this->fetch($context);
 
@@ -137,10 +137,10 @@ class Collection
     /**
      * Fetch all children products from parent id's.
      *
-     * @param ContextInterface|null $context
+     * @param ContextInterface $context
      * @return array
      */
-    private function fetch(ContextInterface $context = null) : array
+    private function fetch(ContextInterface $context) : array
     {
         if (empty($this->parentProducts) || !empty($this->childrenMap)) {
             return $this->childrenMap;
@@ -151,6 +151,7 @@ class Collection
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
+            $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
             $this->collectionProcessor->process(
                 $childCollection,
                 $this->searchCriteriaBuilder->create(),

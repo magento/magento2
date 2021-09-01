@@ -49,6 +49,12 @@ enum PriceTypeEnum @doc(description: "This enumeration the price type.") {
     DYNAMIC
 }
 
+enum CustomizableDateTypeEnum @doc(description: "This enumeration customizable date type.") {
+    DATE
+    DATE_TIME
+    TIME
+}
+
 type ProductPrices @doc(description: "ProductPrices is deprecated, replaced by PriceRange. The ProductPrices object contains the regular price of an item, as well as its minimum and maximum prices. Only composite products, which include bundle, configurable, and grouped products, can contain a minimum and maximum price.") {
     minimalPrice: Price @deprecated(reason: "Use PriceRange.minimum_price.") @doc(description: "The lowest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the from value.")
     maximalPrice: Price @deprecated(reason: "Use PriceRange.maximum_price.") @doc(description: "The highest possible final price for all the options defined within a composite product. If you are specifying a price range, this would be the to value.")
@@ -136,7 +142,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     uid: ID! @doc(description: "The unique ID for a `CustomizableAreaValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
 
-type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation.") {
+type CategoryTree implements CategoryInterface, RoutableInterface @doc(description: "Category tree implementation") {
     children: [CategoryTree] @doc(description: "Child categories tree.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
@@ -154,6 +160,7 @@ type CustomizableDateOption implements CustomizableOptionInterface @doc(descript
 type CustomizableDateValue @doc(description: "CustomizableDateValue defines the price and sku of a product whose page contains a customized date picker.") {
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
+    type: CustomizableDateTypeEnum @doc(description: "DATE, DATE_TIME or TIME") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableDateTypeOptionValue")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     uid: ID! @doc(description: "The unique ID for a `CustomizableDateValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
@@ -301,10 +308,10 @@ type CustomizableCheckboxValue @doc(description: "CustomizableCheckboxValue defi
     uid: ID! @doc(description: "The unique ID for a `CustomizableCheckboxValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid")
 }
 
-type VirtualProduct implements ProductInterface, CustomizableProductInterface @doc(description: "A virtual product is non-tangible product that does not require shipping and is not kept in inventory.") {
+type VirtualProduct implements ProductInterface, RoutableInterface, CustomizableProductInterface @doc(description: "A virtual product is a non-tangible product that does not require shipping and is not kept in inventory") {
 }
 
-type SimpleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "A simple product is tangible and are usually sold as single units or in fixed quantities.")
+type SimpleProduct implements ProductInterface, RoutableInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "A simple product is tangible and is usually sold in single units or in fixed quantities")
 {
 }
 
@@ -467,6 +474,7 @@ type Aggregation @doc(description: "A bucket that contains information for each 
     label: String @doc(description: "The aggregation display name.")
     attribute_code: String! @doc(description: "Attribute code of the aggregation group.")
     options: [AggregationOption] @doc(description: "Array of options for the aggregation.")
+    position: Int @doc(description: "The relative position of the attribute in a layered navigation block")
 }
 
 interface AggregationOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\AggregationOptionTypeResolverComposite") {
