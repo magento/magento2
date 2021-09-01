@@ -1713,7 +1713,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @return array
      */
-    public function getVisibleStatusHistory(): array
+    public function getVisibleStatusHistory()
     {
         $history = [];
         foreach ($this->getStatusHistoryCollection() as $status) {
