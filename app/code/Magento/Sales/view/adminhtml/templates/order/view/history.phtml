@@ -74,7 +74,7 @@
     <?php endif;?>
 
     <ul class="note-list">
-    <?php foreach ($block->getOrder()->getStatusHistoryCollection(true) as $_item): ?>
+    <?php foreach ($block->getOrder()->getAdminVisibleStatusHistory() as $_item): ?>
         <li class="note-list-item">
             <span class="note-list-date">
                 <?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
