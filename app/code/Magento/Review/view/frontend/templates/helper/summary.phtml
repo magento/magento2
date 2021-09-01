@@ -19,7 +19,9 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
         <?php if ($rating):?>
         <div class="rating-summary">
              <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-             <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating); ?>%">
+             <div class="rating-result"
+                  id="rating-result_<?= /* @noEscape */ $block->getProduct()->getId() ?>"
+                  title="<?= $block->escapeHtmlAttr($rating); ?>%">
                  <span>
                      <span>
                          <span itemprop="ratingValue"><?= $block->escapeHtml($rating); ?>
@@ -30,7 +32,7 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
          </div>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                 "width:" . $block->escapeHtmlAttr($rating) . "%",
-                'div.rating-summary div.rating-result>span:first-child'
+                '#rating-result_' . $block->getProduct()->getId() . ' span'
             ) ?>
         <?php endif;?>
         <div class="reviews-actions">
