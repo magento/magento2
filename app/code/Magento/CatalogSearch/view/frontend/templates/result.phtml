@@ -4,7 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/** This changes need to valid applying filters and configuration before search process is started. */
+use Magento\CatalogSearch\Block\Result;
+
+/** These changes need to valid applying filters and configuration before search process is started. */
+
+/** @var $block  Result*/
 $productList = $block->getProductListHtml();
 ?>
 <?php if ($block->getResultCount()) : ?>
