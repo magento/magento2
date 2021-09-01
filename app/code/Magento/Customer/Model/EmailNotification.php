@@ -404,6 +404,10 @@ class EmailNotification implements EmailNotificationInterface
 
         $customerEmailData = $this->getFullCustomerObject($customer);
 
+        if ($customer->getExtensionAttributes() && !is_null($customer->getExtensionAttributes()->getCompanyAttributes()) && $customer->getExtensionAttributes()->getCompanyAttributes()->getStatus()!=1) {
+            return;
+        }
+
         $this->sendEmailTemplate(
             $customer,
             $types[$type],
