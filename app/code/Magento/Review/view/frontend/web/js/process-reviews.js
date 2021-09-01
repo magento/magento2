@@ -4,7 +4,9 @@
  */
 
 define([
-    'jquery'
+    'jquery',
+    'tabs',
+    'collapsible'
 ], function ($) {
     'use strict';
 
@@ -43,7 +45,9 @@ define([
         if (reviewTab.attr('role') === requiredReviewTabRole && reviewTab.hasClass('active')) {
             processReviews(config.productReviewUrl, location.hash === '#reviews');
         } else {
-            processReviews(config.productReviewUrl);
+            reviewTab.one('beforeOpen', function () {
+                processReviews(config.productReviewUrl);
+            });
         }
 
         $(function () {
