@@ -125,11 +125,11 @@ class InvoiceTest extends TestCase
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Invoice #%1', (int)$invoice->getIncrementId())
+                    __('Invoice #%1', $invoice->getIncrementId())
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Invoice #%1', (int)$invoice->getIncrementId()))
+            sprintf('Title for %s was not found.', __('Invoice #%1', $invoice->getIncrementId()))
         );
         $this->assertOrderInformation($order, $blockHtml);
     }
