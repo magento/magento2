@@ -3,9 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Integrity\Library\PhpParser;
-
-use Magento\TestFramework\Integrity\Library\PhpParser\Uses;
+namespace Magento\TestFramework\Integrity\Library\PhpParser;
 
 /**
  */
