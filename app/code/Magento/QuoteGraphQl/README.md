@@ -65,10 +65,10 @@ You can get more information about [GraphQl In Magento 2](https://devdocs.magent
 - `setPaymentMethodOnCart` mutation - defines which payment method to apply to the cart.
   [Learn more about setPaymentMethodOnCart mutation](https://devdocs.magento.com/guides/v2.4/graphql/mutations/set-payment-method.html).
 
-- `setGuestEmailOnCart` mutation - assigns email to the quest cart.
+- `setGuestEmailOnCart` mutation - assigns email to the guest cart.
   [Learn more about setGuestEmailOnCart mutation](https://devdocs.magento.com/guides/v2.4/graphql/mutations/set-guest-email.html).
 
-- `setPaymentMethodAndPlaceOrder` mutation - sets the cart payment method and converts the cart into an order. This mutation has been deprecated. Use the `setPaymentMethodOnCart` and `placeOrder` mutations instead.
+- `setPaymentMethodAndPlaceOrder` mutation - sets the cart payment method and converts the cart into an order. **This mutation has been deprecated**. Use the `setPaymentMethodOnCart` and `placeOrder` mutations instead.
   [Learn more about setPaymentMethodAndPlaceOrder mutation](https://devdocs.magento.com/guides/v2.4/graphql/mutations/set-payment-place-order.html).
 
 - `mergeCarts` mutation - transfers the contents of a guest cart into the cart of a logged-in customer.
