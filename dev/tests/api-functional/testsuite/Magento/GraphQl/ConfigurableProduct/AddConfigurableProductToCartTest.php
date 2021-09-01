@@ -251,7 +251,6 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
      */
     public function testAddConfigurableProductNotAssignedToWebsite()
@@ -291,11 +290,31 @@ QUERY;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
-            'doesn\'t exist. Verify the product and try again.'
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
         );
 
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_only_parent_two_websites.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     */
+    public function testAddUnassignedToWebsiteConfigurableProductVariationToCart()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+        );
+
+        $reservedOrderId = 'test_order_2';
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $headerMap = ['Store' => 'fixture_second_store'];
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, 1);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
