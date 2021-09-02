@@ -392,6 +392,13 @@ QUERY;
             }
           }
         }
+        product_links {
+          link_type
+          linked_product_sku
+          linked_product_type
+          position
+          sku
+        }
         short_description {
             html
         }

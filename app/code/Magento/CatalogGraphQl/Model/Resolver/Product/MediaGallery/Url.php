@@ -10,7 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\ImageFactory;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Image\Placeholder as PlaceholderProvider;
-use Magento\CatalogGraphQl\Service\CheckImageCacheFileService;
+use Magento\CatalogGraphQl\Model\CheckImageCacheFileExist;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -22,19 +22,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class Url implements ResolverInterface
 {
     /**
-     * @var CheckImageCacheFileService
+     * @var CheckImageCacheFileExist
      */
-    private $checkImageCacheFileService;
-
-    /**
-     * @var ImageFactory
-     */
-    private $productImageFactory;
-
-    /**
-     * @var PlaceholderProvider
-     */
-    private $placeholderProvider;
+    private $checkImageCacheFileExist;
 
     /**
      * @var string[]
@@ -42,15 +32,25 @@ class Url implements ResolverInterface
     private $placeholderCache = [];
 
     /**
+     * @var PlaceholderProvider
+     */
+    private $placeholderProvider;
+
+    /**
+     * @var ImageFactory
+     */
+    private $productImageFactory;
+
+    /**
      * @param ImageFactory $productImageFactory
      * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
-        CheckImageCacheFileService $checkImageCacheFileService,
+        CheckImageCacheFileExist $checkImageCacheFileExist,
         ImageFactory $productImageFactory,
         PlaceholderProvider $placeholderProvider
     ) {
-        $this->checkImageCacheFileService = $checkImageCacheFileService;
+        $this->checkImageCacheFileExist = $checkImageCacheFileExist;
         $this->productImageFactory = $productImageFactory;
         $this->placeholderProvider = $placeholderProvider;
     }
@@ -79,23 +79,25 @@ class Url implements ResolverInterface
             $imagePath = $product->getData($value['image_type']);
             $imgUrl = $this->getImageUrl($value['image_type'], $imagePath);
             if ($imagePath) {
-                return $this->checkImageCacheFileService->execute(
+                return $this->checkImageCacheFileExist->execute(
                     $imgUrl,
                     $imagePath,
                     $value['image_type']
                 );
             } else {
+
                 return $imgUrl;
             }
 
         } elseif (isset($value['file'])) {
             $imgUrl = $this->getImageUrl('image', $value['file']);
-            return $this->checkImageCacheFileService->execute(
+            return $this->checkImageCacheFileExist->execute(
                 $imgUrl,
                 $value['file'],
                 'image'
             );
         }
+
         return [];
     }
 
@@ -104,6 +106,7 @@ class Url implements ResolverInterface
      *
      * @param string $imageType
      * @param string|null $imagePath
+     *
      * @return string
      * @throws \Exception
      */

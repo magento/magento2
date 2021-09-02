@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Service;
+namespace Magento\CatalogGraphQl\Model;
 
 use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\ImageFactory;
@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Service check if image cache file exist
  */
-class CheckImageCacheFileService
+class CheckImageCacheFileExist
 {
     /**
      * @var Filesystem\Directory\WriteInterface
@@ -66,6 +66,7 @@ class CheckImageCacheFileService
      * @param string $imgUrl
      * @param string $imagePath
      * @param string $imageType
+     *
      * @return string
      * @throws NoSuchEntityException
      */
@@ -73,33 +74,34 @@ class CheckImageCacheFileService
         string $imgUrl,
         string $imagePath,
         string $imageType
-    ) {
-        if ($imgUrl) {
-            $mediaUrl = $this->storeManager->getStore()->getBaseUrl(DirectoryList::MEDIA);
-            $filePath = str_replace($mediaUrl, '', $imgUrl);
-            if (!$this->mediaDirectory->isFile($filePath)) {
-                $image = $this->productImageFactory->create();
-                $image->setDestinationSubdir($imageType)
-                    ->setBaseFile($imagePath);
-                if (!$image->isBaseFilePlaceholder()) {
-                    $params = $this->getImageParams($image);
-                    if (isset($params['watermark_file'])) {
-                        $image->setWatermark(
-                            $params['watermark_file'],
-                            $params['watermark_position'],
-                            [
-                                'width'  => $params['watermark_width'],
-                                'height' => $params['watermark_height']
-                            ],
-                            $params['watermark_width'],
-                            $params['watermark_height'],
-                            $params['watermark_image_opacity']
-                        );
-                        $image->saveFile();
-                    }
-                }
-            }
+    ): string {
+        $mediaUrl = $this->storeManager->getStore()->getBaseUrl(DirectoryList::MEDIA);
+        $filePath = str_replace($mediaUrl, '', $imgUrl);
+        if ($this->mediaDirectory->isFile($filePath)) {
+            return $imgUrl;
         }
+        $image = $this->productImageFactory->create();
+        $image->setDestinationSubdir($imageType)
+            ->setBaseFile($imagePath);
+        if ($image->isBaseFilePlaceholder()) {
+            return $imgUrl;
+        }
+        $params = $this->getImageParams($image);
+        if (isset($params['watermark_file'])) {
+            $image->setWatermark(
+                $params['watermark_file'],
+                $params['watermark_position'],
+                [
+                    'width'  => $params['watermark_width'],
+                    'height' => $params['watermark_height']
+                ],
+                $params['watermark_width'],
+                $params['watermark_height'],
+                $params['watermark_image_opacity']
+            );
+            $image->saveFile();
+        }
+
         return $imgUrl;
     }
 
