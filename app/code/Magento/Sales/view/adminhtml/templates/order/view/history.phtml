@@ -4,8 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\View\History $block */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Sales\Block\Adminhtml\Order\View\History;
+use Magento\Sales\ViewModel\OrderHistoryComment;
+
+/** @var History $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var  OrderHistoryComment $viewModel */
+
+$viewModel = $block->getData('orderCommentModel');
 ?>
 <div id="order_history_block" class="edit-order-comments">
     <?php if ($block->canAddComment()): ?>
@@ -74,7 +81,7 @@
     <?php endif;?>
 
     <ul class="note-list">
-    <?php foreach ($block->getOrder()->getAdminVisibleStatusHistory() as $_item): ?>
+    <?php foreach ($viewModel->getOrderComments($block->getOrder()->getId()) as $_item): ?>
         <li class="note-list-item">
             <span class="note-list-date">
                 <?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>

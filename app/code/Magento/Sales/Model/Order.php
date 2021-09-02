@@ -1693,22 +1693,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Return collection of not visible on frontend order status history items.
-     *
-     * @return array
-     */
-    public function getAdminVisibleStatusHistory(): array
-    {
-        $history = [];
-        foreach ($this->getStatusHistoryCollection() as $status) {
-            if (!$status->isDeleted() && $status->getComment() && !$status->getIsVisibleOnFront()) {
-                $history[] = $status;
-            }
-        }
-        return $history;
-    }
-
-    /**
      * Return collection of visible on frontend order status history items.
      *
      * @return array
