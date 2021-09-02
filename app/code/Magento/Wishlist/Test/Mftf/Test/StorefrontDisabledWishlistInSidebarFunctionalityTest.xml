@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDisabledWishlistInSidebarFunctionalityTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="'Show In Sidebar' Wishlist Functionality"/>
+            <title value="Wishlist should not be displayed in the sidebar if 'Show in Sidebar' option is set to 'No'"/>
+            <description value="Customer should not see wishlist block in the sidebar if 'Show in Sidebar' option is set to 'No'"/>
+            <testCaseId value="MC-42429"/>
+            <useCaseId value="MC-41880"/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{WishlistHideFromSidebar.path}} {{WishlistHideFromSidebar.value}}" stepKey="disableWishlistInSidebar"/>
+            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{WishlistShowInSidebar.path}} {{WishlistShowInSidebar.value}}" stepKey="enableWishlistInSidebar"/>
+            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Assert the Wishlist is not visible in sidebar for logged in customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertCustomerSidebarItemIsPresentActionGroup" stepKey="assertWishlistFunctionalityIsEnabledForCustomer">
+            <argument name="itemName" value="My Wish List"/>
+        </actionGroup>
+
+        <!-- Check the category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPageAsLoggedInCustomer"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoadForLoggedInCustomer"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnCategoryPageForLoggedInCustomer"/>
+
+        <!-- Check the search result page -->
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefrontForLoggedInCustomer">
+            <argument name="phrase" value="$createProduct.name$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSearchPageToLoadForLoggedInCustomer"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnSearchResultPageForLoggedInCustomer"/>
+
+        <!-- Assert the Wishlist is not visible in sidebar for guest customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+
+        <!-- Check the category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPageAsGuest"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoadForGuest"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnCategoryPageForGuest"/>
+
+        <!-- Check the search result page -->
+        <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefrontForGuest">
+            <argument name="phrase" value="$createProduct.name$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSearchPageToLoadForGuest"/>
+        <actionGroup ref="StorefrontAssertWishlistBlockIsNotVisibleOnSidebarActionGroup" stepKey="assertWishlistBlockIsNotVisibleOnSearchResultPageForGuest"/>
+    </test>
+</tests>
