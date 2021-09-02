@@ -55,6 +55,8 @@ class OauthHelper
             $consumer->setCreatedAt($date);
         }
         $consumer->save();
+        //need to add this to decrypt token after save
+        $consumer->load($consumer->getId());
         $token = $objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
         $verifier = $token->createVerifierToken($consumer->getId())->getVerifier();
 
