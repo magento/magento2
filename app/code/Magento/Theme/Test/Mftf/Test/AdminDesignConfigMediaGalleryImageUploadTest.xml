@@ -36,8 +36,15 @@
         <comment userInput="Upload Image" stepKey="uploadImageComment"/>
         <click selector="{{AdminDesignConfigSection.selectFromGalleryByFieldsetName('Head')}}" stepKey="openMediaGallery"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="verifyMediaGalleryStorageBtn"/>
-        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
+        <comment userInput="BIC workaround" stepKey="navigateToFolder"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder">
             <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
+            <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
         <actionGroup ref="AttachImageActionGroup" stepKey="selectImageFromMediaStorage">
             <argument name="Image" value="ImageUpload3"/>
@@ -62,17 +69,18 @@
         <!--Delete Image: will be in both root and favicon-->
         <comment userInput="Delete Image" stepKey="deleteImageComment"/>
         <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
-        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder2">
+        <comment userInput="BIC workaround" stepKey="navigateToFolder2"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandStorageRootFolder2">
             <argument name="FolderName" value="Storage Root"/>
         </actionGroup>
-        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
-            <argument name="Image" value="ImageUpload3"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
         </actionGroup>
-        <actionGroup ref="NavigateToFaviconMediaFolderActionGroup" stepKey="navigateToFolder3">
-            <argument name="StoreFolder" value="{{AdminDesignConfigSection.storeLink}}"/>
+        <comment userInput="BIC workaround" stepKey="deleteImageFromStorage"/>
+        <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteFolderFromMediaGallery">
+            <argument name="Image" value="{{ImageFolder.name}}"/>
         </actionGroup>
-        <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage2">
-            <argument name="Image" value="ImageUpload3"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="navigateToFolder3"/>
+        <comment userInput="BIC workaround" stepKey="deleteImageFromStorage2"/>
     </test>
 </tests>
