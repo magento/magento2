@@ -13,6 +13,8 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Ui\DataProvider\Product\GroupedProductDataProvider;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +48,16 @@ class GroupedProductDataProviderTest extends TestCase
     protected $configMock;
 
     /**
+     * @var PoolInterface|MockObject
+     */
+    private $modifiersPool;
+
+    /**
+     * @var ModifierInterface|MockObject
+     */
+    private $modifierMockOne;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -77,6 +89,18 @@ class GroupedProductDataProviderTest extends TestCase
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->setMethods(['getComposableTypes'])
             ->getMockForAbstractClass();
+
+        $this->modifiersPool = $this->getMockBuilder(PoolInterface::class)
+            ->getMockForAbstractClass();
+        $this->modifierMockOne = $this->getMockBuilder(ModifierInterface::class)
+            ->setMethods(['modifyData'])
+            ->getMockForAbstractClass();
+        $this->modifierMockOne->expects($this->any())
+            ->method('modifyData')
+            ->willReturn($this->returnArgument(0));
+        $this->modifiersPool->expects($this->any())
+            ->method('getModifiersInstances')
+            ->willReturn([$this->modifierMockOne]);
     }
 
     /**
@@ -95,6 +119,7 @@ class GroupedProductDataProviderTest extends TestCase
             'addFilterStrategies' => [],
             'meta' => [],
             'data' => [],
+            'modifiersPool' => $this->modifiersPool
         ]);
     }
 

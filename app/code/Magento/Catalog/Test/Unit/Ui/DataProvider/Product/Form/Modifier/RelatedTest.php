@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Catalog\Helper\Product\AddUrlToName as NameHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Catalog\Ui\Component\Listing\Columns\Price;
@@ -50,6 +51,11 @@ class RelatedTest extends AbstractModifierTest
     private $attributeSetRepository;
 
     /**
+     * @var NameHelper|MockObject
+     */
+    private $nameHelper;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -60,6 +66,7 @@ class RelatedTest extends AbstractModifierTest
         $this->imageHelper = $this->createMock(ImageHelper::class);
         $this->status = $this->createMock(Status::class);
         $this->attributeSetRepository = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->nameHelper = $this->createMock(NameHelper::class);
     }
 
     /**
@@ -74,6 +81,7 @@ class RelatedTest extends AbstractModifierTest
             'imageHelper' => $this->imageHelper,
             'status' => $this->status,
             'attributeSetRepository' => $this->attributeSetRepository,
+            'nameHelper' => $this->nameHelper
         ]);
     }
 
@@ -104,6 +112,7 @@ class RelatedTest extends AbstractModifierTest
         $currentProductId = 1;
         $currentStoreId = 1;
         $thumnailUrl = '/path/to/thumnail';
+        $productName = 'Simple product';
         $model = $this->getModel();
         $priceModifier = $this->createMock(Price::class);
         $attributeSet = $this->createConfiguredMock(AttributeSetInterface::class, ['getAttributeSetName' => 'Default']);
@@ -141,6 +150,8 @@ class RelatedTest extends AbstractModifierTest
                     $productLinks
                 )
             );
+        $this->nameHelper->method('addUrlToName')
+            ->willReturn($productName);
         $data = $this->getSampleData();
         $expected = $data;
         $expected[$currentProductId]['links'] = $expectedLinks;
@@ -164,7 +175,7 @@ class RelatedTest extends AbstractModifierTest
             $product = $this->createMock(ProductInterface::class);
             $product->method('getId')->willReturn($n);
             $product->method('getSku')->willReturn($sku);
-            $product->method('getName')->willReturn('Simple ' . $n);
+            $product->method('getName')->willReturn('Simple product');
             $product->method('getPrice')->willReturn($n % 10);
             $products[$sku] = $product;
         } while (++$n < 20);
@@ -231,7 +242,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 2,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 2',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-2',
@@ -241,7 +252,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 3,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 3',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-3',
@@ -251,7 +262,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 13,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 13',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-13',
@@ -263,7 +274,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 11,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 11',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-11',
@@ -273,7 +284,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 17,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 17',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-17',
@@ -283,7 +294,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 6,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 6',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-6',
@@ -295,7 +306,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 9,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 9',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-9',
@@ -305,7 +316,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 19,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 19',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-19',
@@ -315,7 +326,7 @@ class RelatedTest extends AbstractModifierTest
                         [
                             'id' => 7,
                             'thumbnail' => '/path/to/thumnail',
-                            'name' => 'Simple 7',
+                            'name' => 'Simple product',
                             'status' => 'Enabled',
                             'attribute_set' => 'Default',
                             'sku' => 'simple-7',
