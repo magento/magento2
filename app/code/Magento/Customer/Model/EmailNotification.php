@@ -19,6 +19,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Customer\Model\Data\CustomerSecure;
+use Magento\Company\Api\Data\CompanyCustomerInterface as CompanyCustomer;
 
 /**
  * Customer email notification
@@ -404,7 +405,9 @@ class EmailNotification implements EmailNotificationInterface
 
         $customerEmailData = $this->getFullCustomerObject($customer);
 
-        if ($customer->getExtensionAttributes() && !is_null($customer->getExtensionAttributes()->getCompanyAttributes()) && $customer->getExtensionAttributes()->getCompanyAttributes()->getStatus()!=1) {
+        if ($customer->getExtensionAttributes() &&
+            $customer->getExtensionAttributes()
+                ->getCompanyAttributes()->getStatus() !== CompanyCustomer::STATUS_ACTIVE) {
             return;
         }
 
