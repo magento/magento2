@@ -8,7 +8,7 @@
         "magento/framework": "*",
         "magento/module-webapi": "*",
         "magento/module-authorization": "*",
-        "webonyx/graphql-php": "^14.9.0"
+        "webonyx/graphql-php": "~14.9.0"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*"
