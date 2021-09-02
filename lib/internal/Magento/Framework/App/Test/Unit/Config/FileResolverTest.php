@@ -44,6 +44,9 @@ class FileResolverTest extends TestCase
      */
     protected $moduleReader;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->iteratorFactory = $this->getMockBuilder(FileIteratorFactory::class)
@@ -64,14 +67,16 @@ class FileResolverTest extends TestCase
     }
 
     /**
-     * Test for get method with primary scope
+     * Test for get method with primary scope.
      *
-     * @dataProvider providerGet
      * @param string $filename
      * @param array $fileList
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @dataProvider providerGet
      */
-    public function testGetPrimary($filename, $fileList)
+    public function testGetPrimary($filename, $fileList): void
     {
         $scope = 'primary';
         $directory = $this->createMock(Read::class);
@@ -84,10 +89,15 @@ class FileResolverTest extends TestCase
         )->willReturn(
             $fileList
         );
-        $i = 1;
+        $willReturnArgs = [];
+
         foreach ($fileList as $file) {
-            $directory->expects($this->at($i++))->method('getAbsolutePath')->willReturn($file);
+            $willReturnArgs[] = $file;
         }
+        $directory
+            ->method('getAbsolutePath')
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+
         $this->filesystem->expects(
             $this->once()
         )->method(
@@ -110,13 +120,15 @@ class FileResolverTest extends TestCase
     }
 
     /**
-     * Test for get method with global scope
+     * Test for get method with global scope.
      *
-     * @dataProvider providerGet
      * @param string $filename
      * @param array $fileList
+     *
+     * @return void
+     * @dataProvider providerGet
      */
-    public function testGetGlobal($filename, $fileList)
+    public function testGetGlobal($filename, $fileList): void
     {
         $scope = 'global';
         $this->moduleReader->expects(
@@ -132,13 +144,15 @@ class FileResolverTest extends TestCase
     }
 
     /**
-     * Test for get method with default scope
+     * Test for get method with default scope.
      *
-     * @dataProvider providerGet
      * @param string $filename
      * @param array $fileList
+     *
+     * @return void
+     * @dataProvider providerGet
      */
-    public function testGetDefault($filename, $fileList)
+    public function testGetDefault($filename, $fileList): void
     {
         $scope = 'some_scope';
         $this->moduleReader->expects(
@@ -154,11 +168,11 @@ class FileResolverTest extends TestCase
     }
 
     /**
-     * Data provider for get tests
+     * Data provider for get tests.
      *
      * @return array
      */
-    public function providerGet()
+    public function providerGet(): array
     {
         return [
             ['di.xml', ['di.xml', 'anotherfolder/di.xml']],
