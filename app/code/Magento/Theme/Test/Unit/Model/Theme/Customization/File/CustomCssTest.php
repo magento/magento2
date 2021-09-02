@@ -38,7 +38,7 @@ class CustomCssTest extends TestCase
     protected $object;
 
     /**
-     * Initialize testable object
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -46,7 +46,7 @@ class CustomCssTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
@@ -61,13 +61,14 @@ class CustomCssTest extends TestCase
     }
 
     /**
+     * @return void
      * cover _prepareSortOrder
      * cover _prepareFileName
      */
-    public function testPrepareFile()
+    public function testPrepareFile(): void
     {
         $file = $this->getMockBuilder(FileInterface::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'delete',
                     'save',
@@ -79,11 +80,10 @@ class CustomCssTest extends TestCase
                     'getTheme',
                     'setTheme',
                     'getCustomizationService',
-                    'setCustomizationService',
-                    'getId',
-                    'setData',
+                    'setCustomizationService'
                 ]
             )
+            ->addMethods(['getId', 'setData'])
             ->getMockForAbstractClass();
         $file->expects($this->any())
             ->method('setData')
@@ -91,18 +91,15 @@ class CustomCssTest extends TestCase
                 [
                     ['file_type', CustomCss::TYPE, $this->returnSelf()],
                     ['file_path', CustomCss::TYPE . '/' . CustomCss::FILE_NAME, $this->returnSelf()],
-                    ['sort_order', CustomCss::SORT_ORDER, $this->returnSelf()],
+                    ['sort_order', CustomCss::SORT_ORDER, $this->returnSelf()]
                 ]
             );
         $file->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $file->expects($this->at(0))
+        $file
             ->method('getFileName')
-            ->willReturn(null);
-        $file->expects($this->at(1))
-            ->method('getFileName')
-            ->willReturn(CustomCss::FILE_NAME);
+            ->willReturnOnConsecutiveCalls(null, CustomCss::FILE_NAME);
         $file->expects($this->once())
             ->method('setFileName')
             ->with(CustomCss::FILE_NAME);

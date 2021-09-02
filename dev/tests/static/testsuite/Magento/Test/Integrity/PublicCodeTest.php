@@ -5,7 +5,10 @@
  */
 namespace Magento\Test\Integrity;
 
+use Exception;
 use Magento\Framework\App\Utility\Files;
+use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionParameter;
@@ -13,7 +16,7 @@ use ReflectionParameter;
 /**
  * Tests @api annotated code integrity
  */
-class PublicCodeTest extends \PHPUnit\Framework\TestCase
+class PublicCodeTest extends TestCase
 {
     /**
      * List of simple return types that are used in docblocks.
@@ -87,7 +90,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      * Find all layout update files in magento modules and themes.
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function layoutFilesDataProvider()
     {
@@ -141,38 +144,28 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Retrieve list of all interfaces and classes in Magento codebase that are marked with @api annotation.
+     *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function publicPHPTypesDataProvider()
+    public function publicPHPTypesDataProvider(): array
     {
         $files = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::INCLUDE_APP_CODE);
         $result = [];
         foreach ($files as $file) {
             $fileContents = \file_get_contents($file);
             if (strpos($fileContents, '@api') !== false) {
-                foreach ($this->getDeclaredClassesAndInterfaces($file) as $class) {
-                    if (!in_array($class->getName(), $this->getWhitelist())
-                        && (class_exists($class->getName()) || interface_exists($class->getName()))
-                    ) {
-                        $result[$class->getName()] = [$class->getName()];
-                    }
+                $fileClassScanner = new FileClassScanner($file);
+                $className = $fileClassScanner->getClassName();
+
+                if (!in_array($className, $this->getWhitelist())
+                    && (class_exists($className) || interface_exists($className))
+                ) {
+                    $result[$className] = [$className];
                 }
             }
         }
         return $result;
-    }
-
-    /**
-     * Retrieve list of classes and interfaces declared in the file
-     *
-     * @param string $file
-     * @return \Laminas\Code\Scanner\ClassScanner[]
-     */
-    private function getDeclaredClassesAndInterfaces($file)
-    {
-        $fileScanner = new \Magento\Setup\Module\Di\Code\Reader\FileScanner($file);
-        return $fileScanner->getClasses();
     }
 
     /**
