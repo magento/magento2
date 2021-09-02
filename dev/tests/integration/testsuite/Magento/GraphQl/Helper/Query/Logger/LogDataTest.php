@@ -75,7 +75,7 @@ class LogDataTest extends TestCase
         $queryFields = $this->objectManager->get(Fields::class);
         $queryFields->setQuery($query);
 
-        $queryInformation = $this->logData->getQueryInformation(
+        $queryInformation = $this->logData->getRequestInformation(
             $this->request,
             $postData,
             $this->schemaGenerator->generate());
@@ -108,7 +108,7 @@ QUERY,
                     'Store' => 1,
                     'Currency' => 'USD',
                     'Authorization' => '1234',
-                    'X-Magento-Cache-Id' => true,
+                    'X-Magento-Tags' => 'FPC',
                     'Content-length' => 123
                 ],
                 'expectedResult' => [
@@ -117,11 +117,11 @@ QUERY,
                     LoggerInterface::CURRENCY_HEADER => 'USD',
                     LoggerInterface::HAS_AUTH_HEADER => 'true',
                     LoggerInterface::IS_CACHEABLE => 'true',
-                    LoggerInterface::QUERY_LENGTH => 123,
+                    LoggerInterface::REQUEST_LENGTH => 123,
                     LoggerInterface::HAS_MUTATION => 'false',
-                    LoggerInterface::NUMBER_OF_QUERIES => 1,
-                    LoggerInterface::QUERY_NAMES => 'products',
-                    LoggerInterface::QUERY_COMPLEXITY => 5
+                    LoggerInterface::NUMBER_OF_OPERATIONS => 1,
+                    LoggerInterface::OPERATION_NAMES => 'products',
+                    LoggerInterface::COMPLEXITY => 5
                 ]
             ],
             [ // query with no headers
@@ -144,11 +144,38 @@ QUERY,
                     LoggerInterface::CURRENCY_HEADER => '',
                     LoggerInterface::HAS_AUTH_HEADER => 'false',
                     LoggerInterface::IS_CACHEABLE => 'false',
-                    LoggerInterface::QUERY_LENGTH => '',
+                    LoggerInterface::REQUEST_LENGTH => '',
                     LoggerInterface::HAS_MUTATION => 'false',
-                    LoggerInterface::NUMBER_OF_QUERIES => 1,
-                    LoggerInterface::QUERY_NAMES => 'products',
-                    LoggerInterface::QUERY_COMPLEXITY => 5
+                    LoggerInterface::NUMBER_OF_OPERATIONS => 1,
+                    LoggerInterface::OPERATION_NAMES => 'products',
+                    LoggerInterface::COMPLEXITY => 5
+                ]
+            ],
+            [ // query with bad operation name
+                'query' => <<<QUERY
+ {
+    xyz(filter: {sku: {eq: "simple1"}})
+    {
+        items {
+            id
+            name
+            sku
+        }
+    }
+ }
+QUERY,
+                'headers' => [],
+                'expectedResult' => [
+                    LoggerInterface::HTTP_METHOD => 'POST',
+                    LoggerInterface::STORE_HEADER => '',
+                    LoggerInterface::CURRENCY_HEADER => '',
+                    LoggerInterface::HAS_AUTH_HEADER => 'false',
+                    LoggerInterface::IS_CACHEABLE => 'false',
+                    LoggerInterface::REQUEST_LENGTH => '',
+                    LoggerInterface::HAS_MUTATION => 'false',
+                    LoggerInterface::NUMBER_OF_OPERATIONS => 0,
+                    LoggerInterface::OPERATION_NAMES => 'operationNameNotFound',
+                    LoggerInterface::COMPLEXITY => 5
                 ]
             ],
             [ // mutation with all headers
@@ -165,7 +192,7 @@ QUERY,
                     'Store' => 1,
                     'Currency' => 'USD',
                     'Authorization' => '1234',
-                    'X-Magento-Cache-Id' => true,
+                    'X-Magento-Tags' => 'FPC',
                     'Content-length' => 123
                 ],
                 'expectedResult' => [
@@ -174,11 +201,11 @@ QUERY,
                     LoggerInterface::CURRENCY_HEADER => 'USD',
                     LoggerInterface::HAS_AUTH_HEADER => 'true',
                     LoggerInterface::IS_CACHEABLE => 'true',
-                    LoggerInterface::QUERY_LENGTH => '123',
+                    LoggerInterface::REQUEST_LENGTH => '123',
                     LoggerInterface::HAS_MUTATION => 'true',
-                    LoggerInterface::NUMBER_OF_QUERIES => 1,
-                    LoggerInterface::QUERY_NAMES => 'placeOrder',
-                    LoggerInterface::QUERY_COMPLEXITY => 3
+                    LoggerInterface::NUMBER_OF_OPERATIONS => 1,
+                    LoggerInterface::OPERATION_NAMES => 'placeOrder',
+                    LoggerInterface::COMPLEXITY => 3
                 ]
             ],
             [ // mutation with no headers
@@ -198,11 +225,11 @@ QUERY,
                     LoggerInterface::CURRENCY_HEADER => '',
                     LoggerInterface::HAS_AUTH_HEADER => 'false',
                     LoggerInterface::IS_CACHEABLE => 'false',
-                    LoggerInterface::QUERY_LENGTH => '',
+                    LoggerInterface::REQUEST_LENGTH => '',
                     LoggerInterface::HAS_MUTATION => 'true',
-                    LoggerInterface::NUMBER_OF_QUERIES => 1,
-                    LoggerInterface::QUERY_NAMES => 'placeOrder',
-                    LoggerInterface::QUERY_COMPLEXITY => 3
+                    LoggerInterface::NUMBER_OF_OPERATIONS => 1,
+                    LoggerInterface::OPERATION_NAMES => 'placeOrder',
+                    LoggerInterface::COMPLEXITY => 3
                 ]
             ],
             [ // multiple queries
@@ -226,7 +253,7 @@ QUERY,
                     'Store' => 1,
                     'Currency' => 'USD',
                     'Authorization' => '1234',
-                    'X-Magento-Cache-Id' => true,
+                    'X-Magento-Tags' => '',
                     'Content-length' => 123
                 ],
                 'expectedResult' => [
@@ -234,12 +261,12 @@ QUERY,
                     LoggerInterface::STORE_HEADER => 1,
                     LoggerInterface::CURRENCY_HEADER => 'USD',
                     LoggerInterface::HAS_AUTH_HEADER => 'true',
-                    LoggerInterface::IS_CACHEABLE => 'true',
-                    LoggerInterface::QUERY_LENGTH => '123',
+                    LoggerInterface::IS_CACHEABLE => 'false',
+                    LoggerInterface::REQUEST_LENGTH => '123',
                     LoggerInterface::HAS_MUTATION => 'false',
-                    LoggerInterface::NUMBER_OF_QUERIES => 2,
-                    LoggerInterface::QUERY_NAMES => 'cart,products',
-                    LoggerInterface::QUERY_COMPLEXITY => 8
+                    LoggerInterface::NUMBER_OF_OPERATIONS => 2,
+                    LoggerInterface::OPERATION_NAMES => 'cart,products',
+                    LoggerInterface::COMPLEXITY => 8
                 ]
             ],
         ];

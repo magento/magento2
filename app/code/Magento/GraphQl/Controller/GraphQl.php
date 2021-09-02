@@ -173,7 +173,7 @@ class GraphQl implements FrontControllerInterface
             $schema = $this->schemaGenerator->generate();
 
             // log information about the query
-            $queryInformation = $this->logDataHelper->getQueryInformation($request, $data, $schema);
+            $queryInformation = $this->logDataHelper->getRequestInformation($request, $data, $schema);
             $this->loggerPool->execute($queryInformation);
 
             $result = $this->queryProcessor->process(

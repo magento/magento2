@@ -49,8 +49,8 @@ class NewRelic implements LoggerInterface
             $this->newRelicWrapper->addCustomParameter($key, $value);
         }
 
-        $transactionName = $queryDetails[LoggerInterface::QUERY_NAMES] ?: '';
-        if (strpos($queryDetails[LoggerInterface::QUERY_NAMES], ',') > 0) {
+        $transactionName = $queryDetails[LoggerInterface::OPERATION_NAMES] ?: '';
+        if (strpos($queryDetails[LoggerInterface::OPERATION_NAMES], ',') > 0) {
             $transactionName = 'multipleQueries';
         }
         $this->newRelicWrapper->setTransactionName('GraphQL-' . $transactionName);

@@ -14,16 +14,16 @@ interface LoggerInterface
     /**
      * Names of properties to be logged
      */
-    const NUMBER_OF_QUERIES = 'GraphQlNumberOfQueries';
-    const QUERY_NAMES = 'GraphQlQueryNames';
+    const NUMBER_OF_OPERATIONS = 'GraphQlNumberOfOperations';
+    const OPERATION_NAMES = 'GraphQlOperationNames';
     const STORE_HEADER = 'GraphQlStoreHeader';
     const CURRENCY_HEADER = 'GraphQlCurrencyHeader';
     const HAS_AUTH_HEADER = 'GraphQlHasAuthHeader';
     const HTTP_METHOD = 'GraphQlHttpMethod';
     const HAS_MUTATION = 'GraphQlHasMutation';
     const IS_CACHEABLE = 'GraphQlIsCacheable';
-    const QUERY_COMPLEXITY = 'GraphQlQueryComplexity';
-    const QUERY_LENGTH = 'GraphQlQueryLength';
+    const COMPLEXITY = 'GraphQlComplexity';
+    const REQUEST_LENGTH = 'GraphQlRequestLength';
 
     /**
      * Execute logger
