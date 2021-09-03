@@ -3,6 +3,6 @@
     	"./.eslintrc-reset",
     	"./.eslintrc-magento",
     	"./.eslintrc-jquery",
-    	"./.eslintrc-texteditor"
+    	"./.eslintrc-misc"
     ]
 }
