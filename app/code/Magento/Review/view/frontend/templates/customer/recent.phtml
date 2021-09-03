@@ -30,15 +30,18 @@
                 <?php if ($_review->getSum()): ?>
                     <?php $rating = $_review->getSum() / $_review->getCount() ?>
                     <div class="rating-summary">
-                         <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
-                         <div class="rating-result" title="<?= $escaper->escapeHtmlAttr($rating) ?>%">
-                             <span class="rating_<?= $escaper->escapeUrl($_review->getReviewId())?>">
-                                 <span><?= $escaper->escapeHtml($rating) ?>%</span>
+                         <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
+                         <div class="rating-result"
+                              id="rating-result_<?= /* @noEscape */ $block->escapeHtml($_review->getId()) ?>"
+                              title="<?= $block->escapeHtmlAttr($rating) ?>%">
+                             <span>
+                                 <span><?= $block->escapeHtml($rating) ?>%</span>
                              </span>
                          </div>
-                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                            "width:". $escaper->escapeHtmlAttr($rating) . "%",
-                            'div.rating-result>span.rating_' . $escaper->escapeUrl($_review->getReviewId())
+                        <?= /* @noEscape */
+                        $secureRenderer->renderStyleAsTag(
+                            "width:" . $block->escapeHtmlAttr($rating) . "%",
+                            '#rating-result_' . $block->escapeHtml($_review->getId()) . ' span'
                         ) ?>
                      </div>
                 <?php endif; ?>

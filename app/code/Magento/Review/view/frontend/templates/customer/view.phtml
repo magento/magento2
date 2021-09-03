@@ -50,10 +50,12 @@ $product = $block->getProductData();
                                     <span><?= /* @noEscape */ $rating ?>%</span>
                                 </span>
                             </div>
-                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            <?= /* @noEscape */
+                            $secureRenderer->renderStyleAsTag(
                                 "width:" . /* @noEscape */ $rating . "%",
                                 'div#rating-div-'.$_rating->getRatingId().
                                 '>span:first-child'
+                                'div.rating-result.' . $ratingCode . ' span'
                             ) ?>
                         </div>
                     <?php endif; ?>
