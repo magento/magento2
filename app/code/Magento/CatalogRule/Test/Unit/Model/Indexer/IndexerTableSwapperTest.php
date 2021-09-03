@@ -40,7 +40,7 @@ class IndexerTableSwapperTest extends TestCase
     private $tableMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -89,14 +89,10 @@ class IndexerTableSwapperTest extends TestCase
         $temporaryTableName = 'catalogrule_product__temp9604';
         $this->setObjectProperty($model, 'temporaryTables', []);
 
-        $this->resourceConnectionMock->expects($this->at(0))
+        $this->resourceConnectionMock
             ->method('getTableName')
-            ->with($originalTableName)
-            ->willReturn($originalTableName);
-        $this->resourceConnectionMock->expects($this->at(1))
-            ->method('getTableName')
-            ->with($this->stringStartsWith($originalTableName . '__temp'))
-            ->willReturn($temporaryTableName);
+            ->withConsecutive([$originalTableName], [$this->stringStartsWith($originalTableName . '__temp')])
+            ->willReturnOnConsecutiveCalls($originalTableName, $temporaryTableName);
 
         $this->assertEquals(
             $temporaryTableName,
@@ -127,7 +123,7 @@ class IndexerTableSwapperTest extends TestCase
     public function testSwapIndexTables(): void
     {
         $model = $this->getMockBuilder(IndexerTableSwapper::class)
-            ->setMethods(['getWorkingTableName'])
+            ->onlyMethods(['getWorkingTableName'])
             ->setConstructorArgs([$this->resourceConnectionMock])
             ->getMock();
         $originalTableName = 'catalogrule_product';
@@ -136,22 +132,18 @@ class IndexerTableSwapperTest extends TestCase
         $toRename = [
             [
                 'oldName' => $originalTableName,
-                'newName' => $temporaryOriginalTableName,
+                'newName' => $temporaryOriginalTableName
             ],
             [
                 'oldName' => $temporaryTableName,
-                'newName' => $originalTableName,
-            ],
+                'newName' => $originalTableName
+            ]
         ];
 
-        $this->resourceConnectionMock->expects($this->at(0))
+        $this->resourceConnectionMock
             ->method('getTableName')
-            ->with($originalTableName)
-            ->willReturn($originalTableName);
-        $this->resourceConnectionMock->expects($this->at(1))
-            ->method('getTableName')
-            ->with($this->stringStartsWith($originalTableName))
-            ->willReturn($temporaryOriginalTableName);
+            ->withConsecutive([$originalTableName], [$this->stringStartsWith($originalTableName)])
+            ->willReturnOnConsecutiveCalls($originalTableName, $temporaryOriginalTableName);
         $model->expects($this->once())
             ->method('getWorkingTableName')
             ->with($originalTableName)

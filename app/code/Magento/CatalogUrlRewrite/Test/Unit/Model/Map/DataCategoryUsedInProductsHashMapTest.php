@@ -20,21 +20,34 @@ use PHPUnit\Framework\TestCase;
 
 class DataCategoryUsedInProductsHashMapTest extends TestCase
 {
-    /** @var HashMapPool|MockObject */
+    /**
+     * @var HashMapPool|MockObject
+     */
     private $hashMapPoolMock;
 
-    /** @var DataCategoryHashMap|MockObject */
+    /**
+     * @var DataCategoryHashMap|MockObject
+     */
     private $dataCategoryMapMock;
 
-    /** @var DataProductHashMap|MockObject */
+    /**
+     * @var DataProductHashMap|MockObject
+     */
     private $dataProductMapMock;
 
-    /** @var ResourceConnection|MockObject */
+    /**
+     * @var ResourceConnection|MockObject
+     */
     private $connectionMock;
 
-    /** @var DataCategoryUsedInProductsHashMap|MockObject */
+    /**
+     * @var DataCategoryUsedInProductsHashMap|MockObject
+     */
     private $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->hashMapPoolMock = $this->createMock(HashMapPool::class);
@@ -63,9 +76,11 @@ class DataCategoryUsedInProductsHashMapTest extends TestCase
     }
 
     /**
-     * Tests getAllData, getData and resetData functionality
+     * Tests getAllData, getData and resetData functionality.
+     *
+     * @return void
      */
-    public function testGetAllData()
+    public function testGetAllData(): void
     {
         $categoryIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $categoryIdsOther = ['2' => [2, 3, 4]];
@@ -91,12 +106,9 @@ class DataCategoryUsedInProductsHashMapTest extends TestCase
         $selectMock->expects($this->any())
             ->method('where')
             ->willReturnSelf();
-        $this->hashMapPoolMock->expects($this->at(4))
+        $this->hashMapPoolMock
             ->method('resetMap')
-            ->with(DataProductHashMap::class, 1);
-        $this->hashMapPoolMock->expects($this->at(5))
-            ->method('resetMap')
-            ->with(DataCategoryHashMap::class, 1);
+            ->withConsecutive([DataProductHashMap::class, 1], [DataCategoryHashMap::class, 1]);
 
         $this->assertEquals($categoryIds, $this->model->getAllData(1));
         $this->assertEquals($categoryIds[2], $this->model->getData(1, 2));
