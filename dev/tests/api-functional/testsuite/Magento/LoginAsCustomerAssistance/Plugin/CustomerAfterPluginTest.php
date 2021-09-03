@@ -22,11 +22,11 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 /**
  * Api tests for @see \Magento\LoginAsCustomerAssistance\Plugin\CustomerPlugin::afterSave.
  */
-class CustomerPluginTest extends WebapiAbstract
+class CustomerAfterPluginTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'customerCustomerRepositoryV1';
-    const RESOURCE_PATH = '/V1/customers';
+    private const SERVICE_VERSION = 'V1';
+    private const SERVICE_NAME = 'customerCustomerRepositoryV1';
+    private const RESOURCE_PATH = '/V1/customers';
 
     /**
      * @var DataObjectProcessor
@@ -54,10 +54,13 @@ class CustomerPluginTest extends WebapiAbstract
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->dataObjectProcessor = $objectManager->get(DataObjectProcessor::class);
-        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
-        $this->customerRegistry = $objectManager->get(CustomerRegistry::class);
-        $this->isAssistanceEnabled = $objectManager->get(GetLoginAsCustomerAssistanceAllowed::class);
+        $this->dataObjectProcessor = $objectManager->create(DataObjectProcessor::class);
+        $this->customerRegistry = $objectManager->create(CustomerRegistry::class);
+        $this->customerRepository = $objectManager->create(
+            CustomerRepositoryInterface::class,
+            ['customerRegistry' => $this->customerRegistry]
+        );
+        $this->isAssistanceEnabled = $objectManager->create(GetLoginAsCustomerAssistanceAllowed::class);
     }
 
     /**
