@@ -47,14 +47,15 @@ class DataFixtureTest extends TestCase
     protected function setUp(): void
     {
         $this->object = $this->getMockBuilder(DataFixture::class)
-            ->setMethods(['_applyOneFixture', 'getComponentRegistrar', 'getTestKey'])
+            ->onlyMethods(['_applyOneFixture', 'getTestKey'])
+            ->addMethods(['getComponentRegistrar'])
             ->getMock();
         $this->testsIsolationMock = $this->getMockBuilder(TestsIsolation::class)
-            ->setMethods(['createDbSnapshot', 'checkTestIsolation'])
+            ->onlyMethods(['createDbSnapshot', 'checkTestIsolation'])
             ->getMock();
         /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

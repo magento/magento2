@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
@@ -51,7 +52,8 @@ abstract class AbstractDataFixture
 
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($annotationKey);
-        $annotations = $scope === null ? $this->getAnnotations($test) : $test->getAnnotations()[$scope];
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $annotations = $scope === null ? $this->getAnnotations($test) : $annotations[$scope];
         $existingFixtures = [];
         $objectManager = Bootstrap::getObjectManager();
         $fixtureDirectivesParser = $objectManager->get(DataFixtureDirectivesParser::class);
@@ -79,7 +81,8 @@ abstract class AbstractDataFixture
      */
     protected function getAnnotations(TestCase $test): array
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+
         return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 
