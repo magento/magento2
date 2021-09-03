@@ -77,8 +77,9 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
             $existingSecret = $object->getSecret();
+            $entityId = $object->getEntityId();
 
-            if ($existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+            if (!$entityId && $existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
                 $object->setSecret($this->encryptor->encrypt($existingSecret));
             }
 
