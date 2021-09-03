@@ -14,7 +14,8 @@
         "magento/module-sales": "*",
         "magento/module-directory": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-gift-message": "*"
+        "magento/module-gift-message": "*",
+        "magento/module-catalog-inventory": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*"

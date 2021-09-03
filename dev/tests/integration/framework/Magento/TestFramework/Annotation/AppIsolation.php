@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Application;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\TestCase;
@@ -105,16 +106,16 @@ class AppIsolation
     }
 
     /**
-     * Get method annotations.
-     *
-     * Overwrites class-defined annotations.
+     * Get method annotations. Overwrites class-defined annotations.
      *
      * @param TestCase $test
+     *
      * @return array
      */
     private function getAnnotations(TestCase $test): array
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+
         return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 }

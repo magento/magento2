@@ -420,7 +420,7 @@ define([
                          * @param {String} message
                          */
                         insertMethod: function (message) {
-                            var $wrapper = $('<div/>').html(message);
+                            var $wrapper = $('<div></div>').html(message);
 
                             $('.page-main-actions').after($wrapper);
                         }

@@ -53,7 +53,7 @@
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
-            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html" />
+            <argument name="redirectPath" value="$$createSimpleProduct.custom_attributes[url_key]$$.html" />
             <argument name="redirectType" value="No" />
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
@@ -62,12 +62,12 @@
         <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
             <argument name="redirectPath" value="{{_defaultProduct.urlKey}}.html" />
             <argument name="redirectType" value="Temporary (302)"/>
-            <argument name="targetPath" value="$$createSimpleProduct.name$$.html"/>
+            <argument name="targetPath" value="$$createSimpleProduct.custom_attributes[url_key]$$.html"/>
         </actionGroup>
 
         <!--Assert Category Url Redirect is not present -->
         <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedCategory">
-            <argument name="requestPath" value="$$createCategory.name$$.html"/>
+            <argument name="requestPath" value="$$createCategory.custom_attributes[url_key]$$.html"/>
         </actionGroup>
     </test>
 </tests>

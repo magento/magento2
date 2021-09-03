@@ -20,6 +20,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     protected $_allowFixedOnly = false;
 
     /**
+     * @var \Magento\Shipping\Model\CarrierFactoryInterface
+     */
+    private $_carrierFactory;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy

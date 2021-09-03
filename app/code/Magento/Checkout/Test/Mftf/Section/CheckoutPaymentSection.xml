@@ -18,7 +18,7 @@
         <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
         <element name="addressDropdownSelected" type="select" selector="[name=billing_address_id] option:checked"/>
         <element name="placeOrderDisabled" type="button" selector="#checkout-payment-method-load button.disabled"/>
-        <element name="update" type="button" selector=".payment-method._active .payment-method-billing-address .action.action-update"/>
+        <element name="update" type="button" selector=".payment-method._active .payment-method-billing-address .action.action-update" timeout="30"/>
         <element name="guestFirstName" type="input" selector=".payment-method._active .billing-address-form input[name='firstname']"/>
         <element name="guestLastName" type="input" selector=".payment-method._active .billing-address-form input[name*='lastname']"/>
         <element name="guestStreet" type="input" selector=".payment-method._active .billing-address-form input[name*='street[0]']"/>
