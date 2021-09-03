@@ -37,13 +37,13 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
         'used_in_product_listing' => '0',
         'is_visible' => true,
         'scope' => 'store',
-        'attribute_code' => 'fixture_attribute_' . UniqueIdProcessor::UNIQUE_ID_KEY,
+        'attribute_code' => 'fixture_attribute_%uniqid%',
         'frontend_input' => 'text',
         'entity_type_id' => '4',
         'is_required' => false,
         'options' => [],
         'is_user_defined' => true,
-        'default_frontend_label' => 'Fixture Attribute ' . UniqueIdProcessor::UNIQUE_ID_KEY,
+        'default_frontend_label' => 'Fixture Attribute %uniqid%',
         'frontend_labels' => [],
         'backend_type' => 'varchar',
         'is_unique' => '0',
@@ -82,7 +82,7 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
         $fixtureData = array_merge(self::DEFAULT_DATA, $data);
         $result = $service->execute(
             [
-                'attribute' => $this->compositeProcessor->process($fixtureData, $this)
+                'attribute' => $this->compositeProcessor->process($this, $fixtureData)
             ]
         );
 
@@ -97,7 +97,6 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
      */
     public function revert(array $data = []): void
     {
-        $this->compositeProcessor->revert($this);
         $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'deleteById');
         $service->execute(
             [

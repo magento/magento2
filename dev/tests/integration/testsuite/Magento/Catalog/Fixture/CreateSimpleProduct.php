@@ -24,8 +24,8 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     private const DEFAULT_DATA = [
         'type_id' => Type::TYPE_SIMPLE,
         'attribute_set_id' => 4,
-        'name' => 'Simple Product ' . UniqueIdProcessor::UNIQUE_ID_KEY,
-        'sku' => 'simple_' . UniqueIdProcessor::UNIQUE_ID_KEY,
+        'name' => 'Simple Product %uniqid%',
+        'sku' => 'simple_%uniqid%',
         'price' => 10,
         'weight' => 1,
         'visibility' => Visibility::VISIBILITY_BOTH,
@@ -37,7 +37,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
             ],
             [
                 'attribute_code' => 'url_key',
-                'value' => 'simple_url_key_' . UniqueIdProcessor::UNIQUE_ID_KEY,
+                'value' => 'simple_url_key_%uniqid%',
             ]
         ],
         'extension_attributes' => [
@@ -59,18 +59,18 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     /**
      * @var CompositeProcessor
      */
-    private $compositeProcessor;
+    private $dataProcessor;
 
     /**
      * @param ServiceFactory $serviceFactory
-     * @param CompositeProcessor $compositeProcessor
+     * @param CompositeProcessor $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        CompositeProcessor $compositeProcessor
+        CompositeProcessor $dataProcessor
     ) {
         $this->serviceFactory = $serviceFactory;
-        $this->compositeProcessor = $compositeProcessor;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -82,7 +82,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
         $fixtureData = array_merge(self::DEFAULT_DATA, $data);
         $result = $service->execute(
             [
-                'product' => $this->compositeProcessor->process($fixtureData, $this)
+                'product' => $this->dataProcessor->process($this, $fixtureData)
             ]
         );
 
@@ -96,7 +96,6 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
      */
     public function revert(array $data = []): void
     {
-        $this->compositeProcessor->revert($this);
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
         $service->execute(
             [

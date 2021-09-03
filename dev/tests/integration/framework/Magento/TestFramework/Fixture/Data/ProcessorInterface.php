@@ -13,14 +13,9 @@ namespace Magento\TestFramework\Fixture\Data;
 interface ProcessorInterface
 {
     /**
+     * @param DataFixtureInterface $fixture
      * @param array $data
-     * @param $fixture
      * @return array
      */
-    public function process(array &$data, $fixture);
-
-    /**
-     * @param $fixture
-     */
-    public function revert($fixture);
+    public function process(DataFixtureInterface $fixture, array $data): array;
 }

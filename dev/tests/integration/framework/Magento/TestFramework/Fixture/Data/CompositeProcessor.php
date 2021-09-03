@@ -40,22 +40,12 @@ class CompositeProcessor implements ProcessorInterface
      * @param $fixture
      * @return array
      */
-    public function process(array &$data, $fixture)
+    public function process($fixture, array $data): array
     {
         foreach ($this->getProcessors() as $processor) {
-            $this->objectManager->get($processor)->process($data, $fixture);
+            $data = $this->objectManager->get($processor)->process($fixture, $data);
         }
         return $data;
-    }
-
-    /**
-     * @param $fixture
-     */
-    public function revert($fixture)
-    {
-        foreach ($this->getProcessors() as $processor) {
-            $this->objectManager->get($processor)->revert($fixture);
-        }
     }
 
     /**

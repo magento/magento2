@@ -6,12 +6,7 @@ namespace Magento\TestFramework\Fixture\Data;
 
 class UniqueIdProcessor implements ProcessorInterface
 {
-    const UNIQUE_ID_KEY = '%uniqid%';
-    /**
-     * Fixture's name storage
-     * @var array
-     */
-    private $uniqueId = [];
+    private const PLACEHOLDER = '%uniqid%';
 
     /**
      * Fixture  starting increment number
@@ -20,38 +15,26 @@ class UniqueIdProcessor implements ProcessorInterface
     private const INCREMENT = 1;
 
     /**
+     * Fixture's name storage
+     * @var array
+     */
+    static private array $storage = [];
+
+    /**
      * @param array $data
      * @param $fixture
      * @return array
      */
-    public function process(array &$data, $fixture)
+    public function process($fixture, array $data): array
     {
         $class = get_class($fixture);
-        if (!isset($this->uniqueId[$class])) {
-            $this->uniqueId[$class] = self::INCREMENT;
+        if (!isset(self::$storage[$class])) {
+            self::$storage[$class] = ['prefix' => uniqid(), 'increment' => self::INCREMENT];
         }
-        $increment = $this->uniqueId[$class]++;
-        array_walk_recursive($data, function (&$value) use ($increment) {
-            $value = str_replace(self::UNIQUE_ID_KEY, $increment, $value);
+        $hash = self::$storage[$class]['prefix'] . self::$storage[$class]['increment']++;
+        array_walk_recursive($data, function (&$value) use ($hash) {
+            $value = str_replace(self::PLACEHOLDER, $hash, $value);
         });
         return $data;
-    }
-
-    /**
-     * @param RevertibleDataFixture $fixture
-     */
-    public function revert($fixture)
-    {
-        $class = get_class($fixture);
-
-        if (!isset($this->uniqueId[$class])) {
-            return;
-        }
-
-        $this->uniqueId[$class]--;
-
-        if ($this->uniqueId[$class] <= 1) {
-            unset ($this->uniqueId[$class]);
-        }
     }
 }

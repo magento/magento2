@@ -51,7 +51,7 @@ class AddProductAttributeToAttributeSet implements RevertibleDataFixtureInterfac
             [
                 'attribute_set_id' => $attributeSetId,
                 'attribute_group_id' => $attributeGroupId,
-                'attribute_code' => 'fixture_attribute_1',
+                'attribute_code' => 'fixture_attribute',
                 'sort_order' => 0,
             ],
             $data
