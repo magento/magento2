@@ -63,7 +63,7 @@
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.7.0",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "~1.14.2",
+        "magento/zendframework1": "dev-improvement/zf1-php8-compatibility",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",
@@ -381,5 +381,11 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
+    "repositories": [
+        {
+            "url": "https://github.com/karyna-tsymbal-atwix/zf1/",
+            "type": "git"
+        }
+    ],
     "prefer-stable": true
 }
