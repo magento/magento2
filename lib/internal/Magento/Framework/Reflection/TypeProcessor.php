@@ -6,14 +6,15 @@
 
 namespace Magento\Framework\Reflection;
 
-use Magento\Framework\Exception\SerializationException;
-use Magento\Framework\Phrase;
 use Laminas\Code\Reflection\ClassReflection;
 use Laminas\Code\Reflection\DocBlock\Tag\ParamTag;
 use Laminas\Code\Reflection\DocBlock\Tag\ReturnTag;
 use Laminas\Code\Reflection\DocBlockReflection;
 use Laminas\Code\Reflection\MethodReflection;
 use Laminas\Code\Reflection\ParameterReflection;
+use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Phrase;
+use Magento\Setup\Module\Di\Code\Reader\FileScanner;
 
 /**
  * Type processor of config reader properties
@@ -553,9 +554,9 @@ class TypeProcessor
      */
     public function getAliasMapping(ClassReflection $sourceClass): array
     {
-        $sourceFileName = $sourceClass->getDeclaringFile();
+        $uses = (new FileScanner($sourceClass->getFileName()))->getUses();
         $aliases = [];
-        foreach ($sourceFileName->getUses() as $use) {
+        foreach ($uses as $use) {
             if ($use['as'] !== null) {
                 $aliases[$use['as']] = $use['use'];
             } else {

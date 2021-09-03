@@ -115,6 +115,18 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="AdminCaptchaAdminLoginConfigData">
+        <data key="path">admin/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Admin Login</data>
+        <data key="value">backend_login</data>
+    </entity>
+    <entity name="AdminCaptchaAdminForgotPasswordConfigData">
+        <data key="path">admin/captcha/forms</data>
+        <data key="scope_id">0</data>
+        <data key="label">Admin Forgot Password</data>
+        <data key="value">backend_forgotpassword</data>
+    </entity>
     <entity name="AdminCaptchaLength3ConfigData">
         <data key="path">admin/captcha/length</data>
         <data key="scope">admin</data>

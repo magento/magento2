@@ -142,9 +142,9 @@ define([
                     this.options.form.validation.apply(this.options.form, _.compact(args));
 
                 // Clean up errors on region & zip fix
-                $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();
-                $(this.options.regionListId).removeClass('mage-error').parent().find('[generated]').remove();
-                $(this.options.postcodeId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.regionInputId).removeClass('mage-error').parent().find('.mage-error').remove();
+                $(this.options.regionListId).removeClass('mage-error').parent().find('.mage-error').remove();
+                $(this.options.postcodeId).removeClass('mage-error').parent().find('.mage-error').remove();
             }
         },
 
