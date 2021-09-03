@@ -19,6 +19,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
+use Magento\Search\Model\QueryFactory;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -61,6 +62,11 @@ class Search implements ProductQueryInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var QueryFactory
+     */
+    private $queryFactory;
+
+    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
      * @param PageSizeProvider $pageSize
@@ -68,6 +74,7 @@ class Search implements ProductQueryInterface
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ArgumentsProcessorInterface|null $argsSelection
+     * @param QueryFactory|null $queryFactory
      */
     public function __construct(
         SearchInterface $search,
@@ -76,7 +83,8 @@ class Search implements ProductQueryInterface
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ArgumentsProcessorInterface $argsSelection = null
+        ArgumentsProcessorInterface $argsSelection = null,
+        QueryFactory $queryFactory = null
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -86,6 +94,8 @@ class Search implements ProductQueryInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
             ->get(ArgumentsProcessorInterface::class);
+        $this->queryFactory = $queryFactory ?: ObjectManager::getInstance()
+            ->get(QueryFactory::class);
     }
 
     /**
@@ -123,6 +133,16 @@ class Search implements ProductQueryInterface
         );
 
         $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
+
+        // add query statistics data
+        if (!empty($args['search'])) {
+            $query = $this->queryFactory->get();
+            $query->setQueryText($args['search']);
+            $store = $context->getExtensionAttributes()->getStore();
+            $query->setStoreId($store->getId());
+            $query->saveIncrementalPopularity();
+            $query->saveNumResults($searchResults->getTotalCount());
+        }
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
