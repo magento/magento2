@@ -210,10 +210,7 @@ class InterceptionConfigurationBuilder
         foreach ($interceptionConfiguration as &$plugins) {
             $pluginsMethods = [];
             foreach ($plugins as $plugin) {
-                $realPlugin = $this->omConfig->getOriginalInstanceType($plugin);
-                if ($realPlugin != $plugin) {
-                    $plugin = $realPlugin;
-                }
+                $plugin = $this->omConfig->getOriginalInstanceType($plugin);
 
                 $pluginsMethods = array_unique(
                     array_merge($pluginsMethods, array_keys($pluginDefinitionList->getMethodList($plugin)))
