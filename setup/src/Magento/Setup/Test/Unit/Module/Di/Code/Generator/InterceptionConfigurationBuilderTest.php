@@ -16,6 +16,7 @@ use Magento\Setup\Module\Di\Code\Generator\PluginList;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 
 class InterceptionConfigurationBuilderTest extends TestCase
 {
@@ -49,6 +50,11 @@ class InterceptionConfigurationBuilderTest extends TestCase
      */
     private $interceptableValidator;
 
+    /**
+     * @var MockObject
+     */
+    private $omConfig;
+
     protected function setUp(): void
     {
         $this->interceptionConfig =
@@ -60,6 +66,7 @@ class InterceptionConfigurationBuilderTest extends TestCase
         $this->cacheManager = $this->createMock(Manager::class);
         $this->interceptableValidator =
             $this->createMock(InterceptableValidator::class);
+        $this->omConfig = $this->createMock(ConfigInterface::class);
 
         $this->typeReader = $this->createPartialMock(Type::class, ['isConcrete']);
         $this->model = new InterceptionConfigurationBuilder(
@@ -67,7 +74,8 @@ class InterceptionConfigurationBuilderTest extends TestCase
             $this->pluginList,
             $this->typeReader,
             $this->cacheManager,
-            $this->interceptableValidator
+            $this->interceptableValidator,
+            $this->omConfig
         );
     }
 
@@ -105,6 +113,13 @@ class InterceptionConfigurationBuilderTest extends TestCase
             ->method('getPluginsConfig')
             ->willReturn(['instance' => $plugins]);
 
+        $this->omConfig->expects($this->any())
+            ->method('getOriginalInstanceType')
+            ->willReturnMap([
+                ['someinstance', 'someinstance'],
+                ['someinstance1', 'someinstance'],
+            ]);
+
         $this->model->addAreaCode('areaCode');
         $this->model->getInterceptionConfiguration($definedClasses);
     }
@@ -117,6 +132,7 @@ class InterceptionConfigurationBuilderTest extends TestCase
         return [
             [null],
             [['plugin' => ['instance' => 'someinstance']]],
+            [['plugin' => ['instance' => 'someinstance1']]],
             [['plugin' => ['instance' => 'someinstance'], 'plugin2' => ['instance' => 'someinstance']]]
         ];
     }
