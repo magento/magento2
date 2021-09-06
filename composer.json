@@ -76,7 +76,7 @@
         "tedivm/jshrink": "~1.4.0",
         "tubalmartin/cssmin": "4.1.1",
         "web-token/jwt-framework": "^v2.2.7",
-        "webonyx/graphql-php": "^0.13.8",
+        "webonyx/graphql-php": "~14.9.0",
         "wikimedia/less.php": "^3.0.0"
     },
     "require-dev": {
