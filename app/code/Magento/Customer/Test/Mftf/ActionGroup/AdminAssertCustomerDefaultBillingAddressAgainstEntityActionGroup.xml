@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertCustomerDefaultBillingAddressAgainstEntityActionGroup">
+        <annotations>
+            <description>Asserts that Customer's Default Billing Address matches the specified Address entity</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity"/>
+        </arguments>
+
+        <see userInput="{{address.firstname}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="firstName"/>
+        <see userInput="{{address.lastname}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="lastName"/>
+        <see userInput="{{address.street[0]}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="street1"/>
+        <see userInput="{{address.state}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="state"/>
+        <see userInput="{{address.postcode}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="postcode"/>
+        <see userInput="{{address.country}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="country"/>
+        <see userInput="{{address.telephone}}" selector="{{AdminCustomerAddressesDefaultBillingSection.addressDetails}}" stepKey="telephone"/>
+    </actionGroup>
+</actionGroups>
