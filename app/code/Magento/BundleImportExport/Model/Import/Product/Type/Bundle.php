@@ -378,7 +378,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             $newSku = $this->_entityModel->getNewSku();
             while ($bunch = $this->_entityModel->getNextBunch()) {
                 foreach ($bunch as $rowNum => $rowData) {
-                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
+                    $productData = $newSku[mb_strtolower($rowData[Product::COL_SKU])];
                     $productIds[] = $productData[$this->getProductEntityLinkField()];
                 }
                 $this->deleteOptionsAndSelections($productIds);
@@ -390,7 +390,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                         continue;
                     }
-                    $productData = $newSku[strtolower($rowData[Product::COL_SKU])];
+                    $productData = $newSku[mb_strtolower($rowData[Product::COL_SKU])];
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
