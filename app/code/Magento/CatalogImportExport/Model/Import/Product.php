@@ -1319,12 +1319,12 @@ class Product extends AbstractEntity
             $linkIdBySkuForStatusChanged = [];
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
-                $linkId = $this->_oldSku[strtolower($sku)][$linkField];
+                $linkId = $this->_oldSku[mb_strtolower($sku)][$linkField];
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
                         if ($attributeId === $statusAttributeId) {
                             $this->statusProcessor->setStatus($sku, $storeId, $storeValue);
-                            $linkIdBySkuForStatusChanged[strtolower($sku)] = $linkId;
+                            $linkIdBySkuForStatusChanged[mb_strtolower($sku)] = $linkId;
                         }
                         $tableData[] = [
                             $linkField => $linkId,
@@ -1447,7 +1447,7 @@ class Product extends AbstractEntity
         $oldSkus = [];
         foreach ($newProducts as $info) {
             $typeId = $info['type_id'];
-            $sku = strtolower($info['sku']);
+            $sku = mb_strtolower($info['sku']);
             $oldSkus[$sku] = [
                 'type_id' => $typeId,
                 'attr_set_id' => $info['attribute_set_id'],
@@ -1653,7 +1653,7 @@ class Product extends AbstractEntity
                     ];
                 } else {
                     if (!$productLimit || $productsQty < $productLimit) {
-                        $entityRowsIn[strtolower($rowSku)] = [
+                        $entityRowsIn[mb_strtolower($rowSku)] = [
                             'attribute_set_id' => $this->skuProcessor->getNewSku($rowSku)['attr_set_id'],
                             'type_id' => $this->skuProcessor->getNewSku($rowSku)['type_id'],
                             'sku' => $rowSku,
@@ -2597,7 +2597,7 @@ class Product extends AbstractEntity
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
 
         if ($this->isNeedToValidateUrlKey($rowData)) {
-            $urlKey = strtolower($this->getUrlKey($rowData));
+            $urlKey = mb_strtolower($this->getUrlKey($rowData));
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
                 : explode($this->getMultipleValueSeparator(), $rowData[self::COL_STORE_VIEW_CODE]);
@@ -3104,7 +3104,7 @@ class Product extends AbstractEntity
      */
     private function isSkuExist($sku)
     {
-        $sku = strtolower($sku);
+        $sku = mb_strtolower($sku);
         return isset($this->_oldSku[$sku]);
     }
 
@@ -3116,7 +3116,7 @@ class Product extends AbstractEntity
      */
     private function getExistingSku($sku)
     {
-        return $this->_oldSku[strtolower($sku)];
+        return $this->_oldSku[mb_strtolower($sku)];
     }
 
     /**
