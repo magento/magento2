@@ -41,7 +41,9 @@
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
         <dontSeeElement selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.TinyMCE}}" stepKey="dontSeeTinyMCE" />
         <fillField selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.Content}}" userInput="Text Area" stepKey="fillContentTextarea" />
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>

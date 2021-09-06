@@ -30,7 +30,9 @@
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption2Actions"/>
         <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption2"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct2.price}}" stepKey="fillProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleProduct2.quantity}}" stepKey="fillProductQty"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="{{SimpleProduct2.quantity}}"/>
+        </actionGroup>
         <clearField selector="{{AdminProductFormSection.productWeight}}" stepKey="clearWeightField"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeight"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
