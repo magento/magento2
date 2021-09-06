@@ -11,7 +11,8 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-class ProductView {
+class ProductView
+{
     /**
      * @var StockRegistryInterface
      */
@@ -29,8 +30,7 @@ class ProductView {
     public function __construct(
         StockRegistryInterface $stockRegistry,
         Session $checkoutSession
-    )
-    {
+    ) {
         $this->stockRegistry = $stockRegistry;
         $this->checkoutSession = $checkoutSession;
     }
@@ -44,8 +44,7 @@ class ProductView {
     public function afterGetQuantityValidators(
         \Magento\Catalog\Block\Product\View $block,
         array $validators
-    ): array
-    {
+    ): array {
         $stockItem = $this->stockRegistry->getStockItem(
             $block->getProduct()->getId(),
             $block->getProduct()->getStore()->getWebsiteId()
