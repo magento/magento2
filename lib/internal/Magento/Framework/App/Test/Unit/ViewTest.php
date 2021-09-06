@@ -73,6 +73,9 @@ class ViewTest extends TestCase
      */
     protected $response;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
@@ -84,9 +87,8 @@ class ViewTest extends TestCase
             ->willReturn($this->_layoutProcessor);
         $this->_actionFlagMock = $this->createMock(ActionFlag::class);
         $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $pageConfigMock = $this->getMockBuilder(
-            Config::class
-        )->disableOriginalConstructor()
+        $pageConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $pageConfigMock->expects($this->any())
             ->method('publicBuild')
@@ -94,25 +96,28 @@ class ViewTest extends TestCase
 
         $pageConfigRendererFactory = $this->getMockBuilder(RendererFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultPage = $this->getMockBuilder(Page::class)
             ->setConstructorArgs(
-                $helper->getConstructArguments(Page::class, [
-                    'request' => $this->_requestMock,
-                    'pageConfigRendererFactory' => $pageConfigRendererFactory,
-                    'layout' => $this->_layoutMock
-                ])
+                $helper->getConstructArguments(
+                    Page::class,
+                    [
+                        'request' => $this->_requestMock,
+                        'pageConfigRendererFactory' => $pageConfigRendererFactory,
+                        'layout' => $this->_layoutMock
+                    ]
+                )
             )
-            ->setMethods(['renderResult', 'getConfig'])
+            ->onlyMethods(['renderResult', 'getConfig'])
             ->getMock();
         $this->resultPage->expects($this->any())
             ->method('getConfig')
             ->willReturn($pageConfigMock);
         $pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $pageFactory->expects($this->once())
             ->method('create')
@@ -134,12 +139,18 @@ class ViewTest extends TestCase
         );
     }
 
-    public function testGetLayout()
+    /**
+     * @return void
+     */
+    public function testGetLayout(): void
     {
         $this->assertEquals($this->_layoutMock, $this->_view->getLayout());
     }
 
-    public function testLoadLayoutWhenLayoutAlreadyLoaded()
+    /**
+     * @return void
+     */
+    public function testLoadLayoutWhenLayoutAlreadyLoaded(): void
     {
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Layout must be loaded only once.');
@@ -147,30 +158,38 @@ class ViewTest extends TestCase
         $this->_view->loadLayout();
     }
 
-    public function testLoadLayoutWithDefaultSetup()
+    /**
+     * @return void
+     */
+    public function testLoadLayoutWithDefaultSetup(): void
     {
-        $this->_layoutProcessor->expects($this->at(0))->method('addHandle')->with('default');
-        $this->_requestMock->expects(
-            $this->any()
-        )->method(
-            'getFullActionName'
-        )->willReturn(
-            'action_name'
-        );
+        $this->_layoutProcessor
+            ->method('addHandle')
+            ->withConsecutive(['default']);
+        $this->_requestMock->expects($this->any())->method('getFullActionName')->willReturn('action_name');
         $this->_view->loadLayout();
     }
 
-    public function testLoadLayoutWhenBlocksNotGenerated()
+    /**
+     * @return void
+     */
+    public function testLoadLayoutWhenBlocksNotGenerated(): void
     {
         $this->_view->loadLayout('', false, true);
     }
 
-    public function testLoadLayoutWhenXmlNotGenerated()
+    /**
+     * @return void
+     */
+    public function testLoadLayoutWhenXmlNotGenerated(): void
     {
         $this->_view->loadLayout('', true, false);
     }
 
-    public function testGetDefaultLayoutHandle()
+    /**
+     * @return void
+     */
+    public function testGetDefaultLayoutHandle(): void
     {
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
@@ -179,7 +198,10 @@ class ViewTest extends TestCase
         $this->assertEquals('expectedvalue', $this->_view->getDefaultLayoutHandle());
     }
 
-    public function testAddActionLayoutHandlesWhenPageLayoutHandlesExist()
+    /**
+     * @return void
+     */
+    public function testAddActionLayoutHandlesWhenPageLayoutHandlesExist(): void
     {
         $this->_requestMock->expects($this->once())
             ->method('getFullActionName')
@@ -192,7 +214,10 @@ class ViewTest extends TestCase
         $this->_view->addActionLayoutHandles();
     }
 
-    public function testAddPageLayoutHandles()
+    /**
+     * @return void
+     */
+    public function testAddPageLayoutHandles(): void
     {
         $pageHandles = ['full_action_name', 'full_action_name_key_value'];
         $this->_requestMock->expects($this->once())
@@ -205,7 +230,10 @@ class ViewTest extends TestCase
         $this->_view->addPageLayoutHandles(['key' => 'value']);
     }
 
-    public function testGenerateLayoutBlocksWhenFlagIsNotSet()
+    /**
+     * @return void
+     */
+    public function testGenerateLayoutBlocksWhenFlagIsNotSet(): void
     {
         $valueMap = [
             ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
@@ -215,11 +243,14 @@ class ViewTest extends TestCase
         $this->_view->generateLayoutBlocks();
     }
 
-    public function testGenerateLayoutBlocksWhenFlagIsSet()
+    /**
+     * @return void
+     */
+    public function testGenerateLayoutBlocksWhenFlagIsSet(): void
     {
         $valueMap = [
             ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
-            ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
+            ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true]
         ];
         $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
 
@@ -227,23 +258,20 @@ class ViewTest extends TestCase
         $this->_view->generateLayoutBlocks();
     }
 
-    public function testRenderLayoutIfActionFlagExist()
+    /**
+     * @return void
+     */
+    public function testRenderLayoutIfActionFlagExist(): void
     {
-        $this->_actionFlagMock->expects(
-            $this->once()
-        )->method(
-            'get'
-        )->with(
-            '',
-            'no-renderLayout'
-        )->willReturn(
-            true
-        );
+        $this->_actionFlagMock->expects($this->once())->method('get')->with('', 'no-renderLayout')->willReturn(true);
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
         $this->_view->renderLayout();
     }
 
-    public function testRenderLayoutWhenOutputNotEmpty()
+    /**
+     * @return void
+     */
+    public function testRenderLayoutWhenOutputNotEmpty(): void
     {
         $this->_actionFlagMock->expects($this->once())
             ->method('get')
@@ -254,7 +282,10 @@ class ViewTest extends TestCase
         $this->_view->renderLayout('output');
     }
 
-    public function testRenderLayoutWhenOutputEmpty()
+    /**
+     * @return void
+     */
+    public function testRenderLayoutWhenOutputEmpty(): void
     {
         $this->_actionFlagMock->expects($this->once())
             ->method('get')

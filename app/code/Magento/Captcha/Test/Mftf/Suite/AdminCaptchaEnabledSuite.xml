@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="AdminCaptchaEnabledSuite">
+        <before>
+            <!-- Enable Admin Captcha -->
+            <magentoCLI command="config:set {{AdminCaptchaEnableConfigData.path}} {{AdminCaptchaEnableConfigData.value}} " stepKey="enableAdminCaptcha"/>
+        </before>
+        <after>
+            <!-- Enable Admin Captcha -->
+            <magentoCLI command="config:set {{AdminCaptchaEnableConfigData.path}} {{AdminCaptchaEnableConfigData.value}} " stepKey="enableAdminCaptcha"/>
+        </after>
+        <include>
+            <group name="admin_captcha_enabled"/>
+        </include>
+        <exclude>
+            <group name="storefront_captcha_enabled"/>
+        </exclude>
+    </suite>
+</suites>
