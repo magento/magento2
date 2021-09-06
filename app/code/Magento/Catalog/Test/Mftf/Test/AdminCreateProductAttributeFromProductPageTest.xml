@@ -52,7 +52,9 @@
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQty">
+            <argument name="productQty" value="100"/>
+        </actionGroup>
         <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus">
              <argument name="stockStatus" value="In Stock"/>
         </actionGroup>
