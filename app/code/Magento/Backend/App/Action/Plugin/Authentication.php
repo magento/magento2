@@ -102,6 +102,8 @@ class Authentication
     }
 
     /**
+     * Ensures user is authenticated before accessing backend action controllers.
+     *
      * @param \Magento\Backend\App\AbstractAction $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\App\RequestInterface $request
