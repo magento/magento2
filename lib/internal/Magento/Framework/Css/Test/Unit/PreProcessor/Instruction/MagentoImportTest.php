@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\Instruction;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Css\PreProcessor\ErrorHandlerInterface;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
 use Magento\Framework\Css\PreProcessor\Instruction\MagentoImport;
@@ -16,6 +17,7 @@ use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\Theme\ListInterface as ThemeListInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
@@ -54,9 +56,14 @@ class MagentoImportTest extends TestCase
     private $assetRepoMock;
 
     /**
-     * @var ThemeProviderInterface|MockObject
+     * @var ThemeListInterface|MockObject
      */
-    private $themeProviderMock;
+    private $themeListMock;
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
 
     /**
      * @var ModuleManager|MockObject
@@ -64,26 +71,35 @@ class MagentoImportTest extends TestCase
     private $moduleManagerMock;
 
     /**
+     * @var ThemeProviderInterface|MockObject
+     */
+    private $themeProviderMock;
+    /**
      * @var Import
      */
     private $object;
 
     protected function setUp(): void
     {
-        $this->designMock = $this->getMockForAbstractClass(DesignInterface::class);
-        $this->fileSourceMock = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->errorHandlerMock = $this->getMockForAbstractClass(ErrorHandlerInterface::class);
+        $this->designMock = $this->createMock(DesignInterface::class);
+        $this->fileSourceMock = $this->createMock(CollectorInterface::class);
+        $this->errorHandlerMock = $this->createMock(ErrorHandlerInterface::class);
         $this->assetMock = $this->createMock(File::class);
-        $this->assetMock->expects($this->any())->method('getContentType')->willReturn('css');
+        $this->assetMock->method('getContentType')->willReturn('css');
         $this->assetRepoMock = $this->createMock(Repository::class);
-        $this->themeProviderMock = $this->getMockForAbstractClass(ThemeProviderInterface::class);
+        $this->themeListMock = $this->createMock(ThemeListInterface::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
+
+        $this->themeProviderMock = $this->createMock(ThemeProviderInterface::class);
 
         $this->object = (new ObjectManager($this))->getObject(MagentoImport::class, [
             'design' => $this->designMock,
             'fileSource' => $this->fileSourceMock,
             'errorHandler' => $this->errorHandlerMock,
             'assetRepo' => $this->assetRepoMock,
+            'themeList' => $this->themeListMock,
+            'deploymentConfig' => $this->deploymentConfigMock,
             'moduleManager' => $this->moduleManagerMock,
             // Mocking private property
             'themeProvider' => $this->themeProviderMock,
@@ -97,7 +113,7 @@ class MagentoImportTest extends TestCase
      * @param array $foundFiles
      * @param string $expectedContent
      * @param array $enabledModules
-     *
+     * @param bool $onlyEnabled
      * @dataProvider processDataProvider
      */
     public function testProcess(
@@ -106,7 +122,8 @@ class MagentoImportTest extends TestCase
         string $resolvedPath,
         array $foundFiles,
         string $expectedContent,
-        array $enabledModules
+        array $enabledModules,
+        bool $onlyEnabled
     ): void
     {
         $chain = new Chain($this->assetMock, $originalContent, 'css', 'path');
@@ -125,10 +142,10 @@ class MagentoImportTest extends TestCase
         $files = [];
         foreach ($foundFiles as $file) {
             $fileObject = $this->createMock(\Magento\Framework\View\File::class);
-            $fileObject->expects($this->any())
+            $fileObject
                 ->method('getModule')
                 ->willReturn($file['module']);
-            $fileObject->expects($this->any())
+            $fileObject
                 ->method('getFilename')
                 ->willReturn($file['filename']);
             $files[] = $fileObject;
@@ -138,7 +155,10 @@ class MagentoImportTest extends TestCase
             ->with($theme, $resolvedPath)
             ->willReturn($files);
 
-        $this->moduleManagerMock->expects($this->any())->method('isEnabled')
+        $this->deploymentConfigMock->method('get')->with('static_content_only_enabled_modules')
+            ->willReturn($onlyEnabled);
+
+        $this->moduleManagerMock->method('isEnabled')
             ->willReturnCallback(function ($moduleName) use ($enabledModules) {
                 return in_array($moduleName, $enabledModules, true);
             });
@@ -164,6 +184,7 @@ class MagentoImportTest extends TestCase
                 ],
                 "@import 'some/file.css';\n@import 'some/file.css';\n",
                 [],
+                true
             ],
             'modular' => [
                 '//@magento_import "Magento_Module::some/file.css";',
@@ -175,6 +196,7 @@ class MagentoImportTest extends TestCase
                 ],
                 "@import 'Magento_Module::some/file.css';\n@import 'Magento_Two::some/file.css';\n",
                 ['Magento_Module', 'Magento_Two'],
+                true
             ],
             'modular with disabled module' => [
                 '//@magento_import "Magento_Module::some/file.css";',
@@ -186,6 +208,7 @@ class MagentoImportTest extends TestCase
                 ],
                 "@import 'Magento_Two::some/file.css';\n",
                 ['Magento_Two'],
+                true
             ],
             'modular with disabled all modules' => [
                 '//@magento_import "Magento_Module::some/file.css";',
@@ -197,6 +220,7 @@ class MagentoImportTest extends TestCase
                 ],
                 '',
                 [],
+                true
             ],
             'non-modular reference notation' => [
                 '//@magento_import (reference) "some/file.css";',
@@ -208,6 +232,7 @@ class MagentoImportTest extends TestCase
                 ],
                 "@import (reference) 'some/file.css';\n@import (reference) 'some/file.css';\n",
                 [],
+                true
             ],
             'modular reference' => [
                 '//@magento_import (reference) "Magento_Module::some/file.css";',
@@ -220,6 +245,7 @@ class MagentoImportTest extends TestCase
                 "@import (reference) 'Magento_Module::some/file.css';\n" .
                 "@import (reference) 'Magento_Two::some/file.css';\n",
                 ['Magento_Module', 'Magento_Two'],
+                true
             ],
             'modular reference with disabled module' => [
                 '//@magento_import (reference) "Magento_Module::some/file.css";',
@@ -231,6 +257,20 @@ class MagentoImportTest extends TestCase
                 ],
                 "@import (reference) 'Magento_Module::some/file.css';\n",
                 ['Magento_Module'],
+                true
+            ],
+            'modular reference with disabled module and disabled "only enabled modules" flag' => [
+                '//@magento_import (reference) "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module', 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two', 'filename' => 'some/file.css'],
+                ],
+                "@import (reference) 'Magento_Module::some/file.css';\n" .
+                "@import (reference) 'Magento_Two::some/file.css';\n",
+                ['Magento_Module'],
+                false
             ],
             'modular reference with disabled all modules' => [
                 '//@magento_import (reference) "Magento_Module::some/file.css";',
@@ -242,6 +282,20 @@ class MagentoImportTest extends TestCase
                 ],
                 '',
                 [],
+                true
+            ],
+            'modular reference with disabled all modules and disabled "only enabled modules" flag' => [
+                '//@magento_import (reference) "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module', 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two', 'filename' => 'some/file.css'],
+                ],
+                "@import (reference) 'Magento_Module::some/file.css';\n" .
+                "@import (reference) 'Magento_Two::some/file.css';\n",
+                [],
+                false
             ],
         ];
     }
