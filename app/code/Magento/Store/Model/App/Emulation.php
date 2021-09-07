@@ -158,8 +158,6 @@ class Emulation extends \Magento\Framework\DataObject
         $this->_localeResolver->setLocale($newLocaleCode);
         $this->_translate->setLocale($newLocaleCode);
         $this->_translate->loadData($area);
-
-        return;
     }
 
     /**
