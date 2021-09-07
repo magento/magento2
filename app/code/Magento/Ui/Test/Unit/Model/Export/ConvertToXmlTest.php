@@ -76,6 +76,9 @@ class ConvertToXmlTest extends TestCase
      */
     protected $component;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->directory = $this->getMockBuilder(DirectoryWriteInterface::class)
@@ -99,23 +102,19 @@ class ConvertToXmlTest extends TestCase
 
         $this->excelFactory = $this->getMockBuilder(ExcelFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->iteratorFactory = $this->getMockBuilder(SearchResultIteratorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->component = $this->getMockBuilder(UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         $this->stream = $this->getMockBuilder(FileWriteInterface::class)
-            ->setMethods([
-                'lock',
-                'unlock',
-                'close',
-            ])
+            ->onlyMethods(['lock', 'unlock', 'close'])
             ->getMockForAbstractClass();
 
         $this->model = new ConvertToXml(
@@ -127,7 +126,10 @@ class ConvertToXmlTest extends TestCase
         );
     }
 
-    public function testGetRowData()
+    /**
+     * @return void
+     */
+    public function testGetRowData(): void
     {
         $data = ['data_value'];
 
@@ -155,7 +157,10 @@ class ConvertToXmlTest extends TestCase
         $this->assertEquals($data, $result);
     }
 
-    public function testGetXmlFile()
+    /**
+     * @return void
+     */
+    public function testGetXmlFile(): void
     {
         $componentName = 'component_name';
 
@@ -186,7 +191,10 @@ class ConvertToXmlTest extends TestCase
         $this->assertStringContainsString('.xml', $result['value']);
     }
 
-    protected function mockStream()
+    /**
+     * @return void
+     */
+    protected function mockStream(): void
     {
         $this->stream->expects($this->once())
             ->method('lock')
@@ -202,8 +210,10 @@ class ConvertToXmlTest extends TestCase
     /**
      * @param string $componentName
      * @param DocumentInterface $document
+     *
+     * @return void
      */
-    protected function mockExcel($componentName, DocumentInterface $document)
+    protected function mockExcel(string $componentName, DocumentInterface $document): void
     {
         $searchResultIterator = $this->getMockBuilder(SearchResultIterator::class)
             ->disableOriginalConstructor()
@@ -239,19 +249,21 @@ class ConvertToXmlTest extends TestCase
     /**
      * @param string $componentName
      * @param DocumentInterface|null $document
+     *
+     * @return void
      */
-    protected function mockComponent($componentName, DocumentInterface $document = null)
+    protected function mockComponent(string $componentName, ?DocumentInterface $document = null): void
     {
         $context = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getDataProvider'])
+            ->onlyMethods(['getDataProvider'])
             ->getMockForAbstractClass();
 
         $dataProvider = $this->getMockBuilder(DataProviderInterface::class)
-            ->setMethods(['getSearchResult', 'setLimit'])
+            ->onlyMethods(['getSearchResult', 'setLimit'])
             ->getMockForAbstractClass();
 
         $searchResult = $this->getMockBuilder(SearchResultInterface::class)
-            ->setMethods(['getItems'])
+            ->onlyMethods(['getItems'])
             ->getMockForAbstractClass();
 
         $this->component->expects($this->any())
@@ -274,17 +286,20 @@ class ConvertToXmlTest extends TestCase
             ->with(0, 0);
 
         if ($document) {
-            $searchResult->expects($this->at(0))
+            $searchResult
                 ->method('getItems')
                 ->willReturn([$document]);
         } else {
-            $searchResult->expects($this->at(0))
+            $searchResult
                 ->method('getItems')
                 ->willReturn([]);
         }
     }
 
-    protected function mockFilter()
+    /**
+     * @return void
+     */
+    protected function mockFilter(): void
     {
         $this->filter->expects($this->once())
             ->method('getComponent')
@@ -298,7 +313,10 @@ class ConvertToXmlTest extends TestCase
             ->willReturnSelf();
     }
 
-    protected function mockDirectory()
+    /**
+     * @return void
+     */
+    protected function mockDirectory(): void
     {
         $this->directory->expects($this->once())
             ->method('create')
