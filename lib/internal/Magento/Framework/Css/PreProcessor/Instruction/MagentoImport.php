@@ -152,6 +152,7 @@ class MagentoImport implements PreProcessorInterface
         } catch (\LogicException $e) {
             $this->errorHandler->processException($e);
         }
+
         return $importsContent;
     }
 
