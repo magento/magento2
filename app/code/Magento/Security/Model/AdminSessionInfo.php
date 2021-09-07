@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Security\Model;
 
 /**
  * Admin Session Info Model
  *
- * @method string getSessionId()
  * @method int getUserId() getUserId()
  * @method int getStatus()
  * @method string getUpdatedAt()
