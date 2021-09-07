@@ -20,6 +20,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\File\CollectorInterface;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 
 /**
  * @magento_import instruction preprocessor
@@ -104,9 +105,12 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Transform content and/or content type for the specified preprocessing chain object
+     *
+     * @param Chain $chain
+     * @return void
      */
-    public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
+    public function process(Chain $chain): void
     {
         $asset = $chain->getAsset();
         $replaceCallback = function ($matchContent) use ($asset) {
@@ -122,7 +126,7 @@ class MagentoImport implements PreProcessorInterface
      * @param LocalInterface $asset
      * @return string
      */
-    protected function replace(array $matchedContent, LocalInterface $asset)
+    protected function replace(array $matchedContent, LocalInterface $asset): string
     {
         $importsContent = '';
         try {
@@ -157,7 +161,7 @@ class MagentoImport implements PreProcessorInterface
      * @param LocalInterface $asset
      * @return ThemeInterface
      */
-    protected function getTheme(LocalInterface $asset)
+    protected function getTheme(LocalInterface $asset): ThemeInterface
     {
         $context = $asset->getContext();
         if ($context instanceof FallbackContext) {
@@ -169,10 +173,12 @@ class MagentoImport implements PreProcessorInterface
     }
 
     /**
+     * Retrieve theme provider instance
+     *
      * @return ThemeProviderInterface
      * @deprecated 100.1.1
      */
-    private function getThemeProvider()
+    private function getThemeProvider(): ThemeProviderInterface
     {
         if (null === $this->themeProvider) {
             $this->themeProvider = ObjectManager::getInstance()->get(ThemeProviderInterface::class);

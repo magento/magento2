@@ -124,8 +124,7 @@ class MagentoImportTest extends TestCase
         string $expectedContent,
         array $enabledModules,
         bool $onlyEnabled
-    ): void
-    {
+    ): void {
         $chain = new Chain($this->assetMock, $originalContent, 'css', 'path');
         $relatedAsset = $this->createMock(File::class);
         $relatedAsset->expects($this->once())
