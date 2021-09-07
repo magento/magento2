@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    cart(cart_id: String! @doc(description: "The masked ID of the cart to query.")): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Return information about the specified shopping cart.") @cache(cacheable: false)
+    cart(cart_id: String! @doc(description: "The unique ID of the cart to query.")): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Return information about the specified shopping cart.") @cache(cacheable: false)
     customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Return information about the customer's shopping cart.") @cache(cacheable: false)
 }
 
@@ -30,7 +30,7 @@ input createEmptyCartInput @doc(description: "Assigns a specific `cart_id` to th
 }
 
 input AddSimpleProductsToCartInput @doc(description: "Defines the simple and group products to add to the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     cart_items: [SimpleProductCartItemInput!]! @doc(description: "An array of simple and group items to add.")
 }
 
@@ -40,7 +40,7 @@ input SimpleProductCartItemInput @doc(description: "Defines a single product to 
 }
 
 input AddVirtualProductsToCartInput @doc(description: "Defines the virtual products to add to the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     cart_items: [VirtualProductCartItemInput!]! @doc(description: "An array of virtual products to add.")
 }
 
@@ -63,12 +63,12 @@ input CustomizableOptionInput @doc(description: "Defines a customizable option."
 }
 
 input ApplyCouponToCartInput @doc(description: "Specifies the coupon code to apply to the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     coupon_code: String! @doc(description: "A valid coupon code.")
 }
 
 input UpdateCartItemsInput @doc(description: "Modifies the specified items in the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     cart_items: [CartItemUpdateInput!]! @doc(description: "An array of items to be updated.")
 }
 
@@ -80,13 +80,13 @@ input CartItemUpdateInput @doc(description: "A single item to be updated.") {
 }
 
 input RemoveItemFromCartInput @doc(description: "Specifies which items to remove from the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     cart_item_id: Int @doc(description: "Deprecated. Use `cart_item_uid` instead.")
     cart_item_uid: ID @doc(description: "Required field. The unique ID for a `CartItemInterface` object.")
 }
 
 input SetShippingAddressesOnCartInput @doc(description: "Specifies an array of addresses to use for shipping.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     shipping_addresses: [ShippingAddressInput!]! @doc(description: "An array of shipping addresses.")
 }
 
@@ -97,7 +97,7 @@ input ShippingAddressInput @doc(description: "Defines a single shipping address.
 }
 
 input SetBillingAddressOnCartInput @doc(description: "Sets the billing address.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     billing_address: BillingAddressInput! @doc(description: "The billing address.")
 }
 
@@ -123,7 +123,7 @@ input CartAddressInput @doc(description: "Defines the billing or shipping addres
 }
 
 input SetShippingMethodsOnCartInput @doc(description: "Applies one or shipping methods to the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     shipping_methods: [ShippingMethodInput!]! @doc(description: "An array of shipping methods.")
 }
 
@@ -133,16 +133,16 @@ input ShippingMethodInput @doc(description: "Defines the shipping carrier and me
 }
 
 input SetPaymentMethodAndPlaceOrderInput @doc(description: "Applies a payment method to the quote.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     payment_method: PaymentMethodInput! @doc(description: "The payment method data to apply to the cart.")
 }
 
 input PlaceOrderInput @doc(description: "Specifies the quote to be converted to an order.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
 }
 
 input SetPaymentMethodOnCartInput @doc(description: "Applies a payment method to the cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     payment_method: PaymentMethodInput! @doc(description: "The payment method data to apply to the cart.")
 }
 
@@ -152,7 +152,7 @@ input PaymentMethodInput @doc(description: "Defines the payment method.") {
 }
 
 input SetGuestEmailOnCartInput @doc(description: "Defines the guest email and cart.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
     email: String! @doc(description: "The email address of the guest.")
 }
 
@@ -294,7 +294,7 @@ type AppliedCoupon @doc(description: "Contains the applied coupon code.") {
 }
 
 input RemoveCouponFromCartInput @doc(description: "Specifies the cart from which to remove a coupon.") {
-    cart_id: String! @doc(description: "The ID of the cart.")
+    cart_id: String! @doc(description: "The unique ID of a `Cart` object.")
 }
 
 type RemoveCouponFromCartOutput @doc(description: "Contains details about the cart after removing a coupon.") {
