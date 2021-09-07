@@ -15,7 +15,7 @@ type Attribute @doc(description: "Contains details about the attribute, includin
     attribute_type: String @doc(description: "The data type of the attribute.")
     input_type: String @doc(description: "The frontend input type of the attribute.")
     attribute_options: [AttributeOption] @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributeOptions") @doc(description: "Attribute options list.")
-    storefront_properties: StorefrontProperties @doc(description: "Contains details about the storefront properties configured for the attribute.")
+    storefront_properties: StorefrontProperties @doc(description: "Details about the storefront properties configured for the attribute.")
 }
 
 type StorefrontProperties @doc(description: "Indicates where an attribute can be displayed.") {
@@ -26,7 +26,7 @@ type StorefrontProperties @doc(description: "Indicates where an attribute can be
     use_in_search_results_layered_navigation: Boolean @doc(description: "Indicates whether the attribute can be used in layered navigation on search results pages.")
 }
 
-enum UseInLayeredNavigationOptions @doc(description: "Defines whether the attribute filterable in layered navigation.") {
+enum UseInLayeredNavigationOptions @doc(description: "Defines whether the attribute is filterable in layered navigation.") {
     NO
     FILTERABLE_WITH_RESULTS
     FILTERABLE_NO_RESULT

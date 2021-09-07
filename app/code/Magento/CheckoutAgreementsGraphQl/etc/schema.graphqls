@@ -12,7 +12,7 @@ type CheckoutAgreement @doc(description: "Contains details about an individual c
     content_height: String @doc(description: "The height of the text box where the Terms and Conditions statement appears during checkout.")
     checkbox_text: String! @doc(description: "The checkbox text for the checkout agreement.")
     is_html: Boolean! @doc(description: "Indicates whether the `content` text is in HTML format.")
-    mode: CheckoutAgreementMode! @doc(description: "Whether agreements are accepted automatically or manually.")
+    mode: CheckoutAgreementMode! @doc(description: "Indicates whether agreements are accepted automatically or manually.")
 }
 
 enum CheckoutAgreementMode @doc(description: "Indicates how agreements are accepted.") {

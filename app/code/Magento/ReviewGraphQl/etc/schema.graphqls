@@ -35,18 +35,18 @@ type Query {
 }
 
 type ProductReviewRatingsMetadata @doc(description: "Contains an array of metadata about each aspect of a product review.") {
-    items: [ProductReviewRatingMetadata!]! @doc(description: "List of product reviews sorted by position")
+    items: [ProductReviewRatingMetadata!]! @doc(description: "An array of product reviews sorted by position.")
 }
 
 type ProductReviewRatingMetadata @doc(description: "Contains details about a single aspect of a product review.") {
     id: String! @doc(description: "An encoded rating ID.")
-    name: String! @doc(description: "The label assigned to an aspect of a product that is being rated, such as quality or price")
+    name: String! @doc(description: "The label assigned to an aspect of a product that is being rated, such as quality or price.")
     values: [ProductReviewRatingValueMetadata!]! @doc(description: "List of product review ratings sorted by position.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingValueMetadata")
 }
 
 type ProductReviewRatingValueMetadata  @doc(description: "Contails details about a single value in a product review.") {
-    value_id: String! @doc(description: "An encoded rating value id.")
-    value: String! @doc(description: "A ratings scale, such as the number of stars awarded")
+    value_id: String! @doc(description: "An encoded rating value ID.")
+    value: String! @doc(description: "A ratings scale, such as the number of stars awarded.")
 }
 
 type Customer {

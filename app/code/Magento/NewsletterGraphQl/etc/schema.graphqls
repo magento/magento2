@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    subscribeEmailToNewsletter(email: String! @doc(description: "The email address to subscribe.")): SubscribeEmailToNewsletterOutput @doc(description:"Subscribe the specified email to a newsletter") @resolver(class: "Magento\\NewsletterGraphQl\\Model\\Resolver\\SubscribeEmailToNewsletter")
+    subscribeEmailToNewsletter(email: String! @doc(description: "The email address to subscribe.")): SubscribeEmailToNewsletterOutput @doc(description:"Subscribe the specified email to the store's newsletter.") @resolver(class: "Magento\\NewsletterGraphQl\\Model\\Resolver\\SubscribeEmailToNewsletter")
 }
 
 type SubscribeEmailToNewsletterOutput @doc(description: "Contains the status of the request.") {
