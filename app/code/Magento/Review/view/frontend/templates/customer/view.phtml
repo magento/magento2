@@ -43,7 +43,7 @@ $product = $block->getProductData();
                             <span class="rating-label">
                                 <span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span>
                             </span>
-                            <div class="rating-result"
+                            <div class="rating-result <?= $block->escapeHtml($_rating->getRatingCode()) ?>"
                                  id="rating-div-<?= $block->escapeHtml($ratingId) ?>"
                                  title="<?= /* @noEscape */ $rating ?>%">
                                 <span>
@@ -55,7 +55,6 @@ $product = $block->getProductData();
                                 "width:" . /* @noEscape */ $rating . "%",
                                 'div#rating-div-'.$_rating->getRatingId().
                                 '>span:first-child'
-                                'div.rating-result.' . $ratingCode . ' span'
                             ) ?>
                         </div>
                     <?php endif; ?>
