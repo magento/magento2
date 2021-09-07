@@ -66,6 +66,10 @@ class ClassReader implements ClassReaderInterface
     private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
     {
         $parameterType = $reflectionParameter->getType();
+        // In PHP8, $parameterType could be an instance of ReflectionUnionType, which doesn't have isBuiltin method.
+        if ($parameterType !== null && method_exists($parameterType, 'isBuiltin') === false) {
+            return null;
+        }
 
         return $parameterType && !$parameterType->isBuiltin()
             ? new ReflectionClass($parameterType->getName())

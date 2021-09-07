@@ -55,18 +55,12 @@ class Publisher implements PublisherInterface
      *
      * @param ExchangeRepository $exchangeRepository
      * @param EnvelopeFactory $envelopeFactory
-     * @param null $messageQueueConfig @deprecated obsolete dependency
-     * @param null $amqpConfig @deprecated obsolete dependency
      * @param MessageEncoder $messageEncoder
      * @param MessageValidator $messageValidator
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
         EnvelopeFactory $envelopeFactory,
-        $messageQueueConfig = null,
-        $amqpConfig = null,
         MessageEncoder $messageEncoder,
         MessageValidator $messageValidator
     ) {
