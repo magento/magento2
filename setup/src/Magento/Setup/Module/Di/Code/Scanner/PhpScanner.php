@@ -197,16 +197,31 @@ class PhpScanner implements ScannerInterface
      */
     protected function _fetchNamespace($tokenIterator, $count, $tokens)
     {
-        $namespaceParts = [];
-        for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
-            if ($tokens[$tokenOffset][0] === T_STRING) {
-                $namespaceParts[] = "\\";
-                $namespaceParts[] = $tokens[$tokenOffset][1];
-            } elseif ($tokens[$tokenOffset] === '{' || $tokens[$tokenOffset] === ';') {
+        if (version_compare(PHP_VERSION, '8.0') < 0) {
+            $namespaceParts = [];
+            for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
+                if ($tokens[$tokenOffset][0] === T_STRING) {
+                    $namespaceParts[] = "\\";
+                    $namespaceParts[] = $tokens[$tokenOffset][1];
+                } elseif ($tokens[$tokenOffset] === '{' || $tokens[$tokenOffset] === ';') {
+                    break;
+                }
+            }
+            return join('', $namespaceParts);
+        }
+
+        $namespace = '';
+        for ($tokenOffset = ($tokenIterator + 1); $tokenOffset < $count; ++$tokenOffset) {
+            if ($tokens[$tokenOffset][0] === T_NAME_QUALIFIED
+                || $tokens[$tokenOffset][0] === T_NAME_FULLY_QUALIFIED
+            ) {
+                $namespace = $tokens[$tokenOffset][1];
+            } else if ($tokens[$tokenOffset] === '{' || $tokens[$tokenOffset] === ';') {
                 break;
             }
         }
-        return join('', $namespaceParts);
+
+        return $namespace;
     }
 
     /**
