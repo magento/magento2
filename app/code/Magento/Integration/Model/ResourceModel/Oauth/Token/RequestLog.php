@@ -65,7 +65,14 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
         $select->from($this->getMainTable(), 'failures_count')
             ->where('user_name = :user_name AND user_type = :user_type AND lock_expires_at > :expiration_time');
 
-        return (int)$this->getConnection()->fetchOne($select, ['user_name' => $userName, 'user_type' => $userType, 'expiration_time' => $dateTime]);
+        return (int)$this->getConnection()->fetchOne(
+             $select, 
+             [
+                 'user_name' => $userName, 
+                 'user_type' => $userType, 
+                 'expiration_time' => $dateTime,
+             ]
+        );
     }
 
     /**
