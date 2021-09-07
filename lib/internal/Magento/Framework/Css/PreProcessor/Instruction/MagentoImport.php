@@ -7,12 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Css\PreProcessor\Instruction;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Css\PreProcessor\ErrorHandlerInterface;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\PreProcessorInterface;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Framework\View\Design\Theme\ListInterface as ThemeListInterface;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\File\CollectorInterface;
 
@@ -27,6 +32,8 @@ class MagentoImport implements PreProcessorInterface
      */
     const REPLACE_PATTERN =
         '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
+
+    private const CONFIG_PATH_SCD_ONLY_ENABLED_MODULES = 'static_content_only_enabled_modules';
 
     /**
      * @var DesignInterface
@@ -44,12 +51,12 @@ class MagentoImport implements PreProcessorInterface
     protected $errorHandler;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var AssetRepository
      */
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ListInterface
+     * @var ThemeListInterface
      * @deprecated 100.0.2
      */
     protected $themeList;
@@ -60,7 +67,12 @@ class MagentoImport implements PreProcessorInterface
     private $themeProvider;
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var ModuleManager
      */
     private $moduleManager;
 
@@ -68,25 +80,27 @@ class MagentoImport implements PreProcessorInterface
      * @param DesignInterface $design
      * @param CollectorInterface $fileSource
      * @param ErrorHandlerInterface $errorHandler
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
-     * @param \Magento\Framework\Module\Manager|null $moduleManager
+     * @param AssetRepository $assetRepo
+     * @param ThemeListInterface $themeList
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param ModuleManager|null $moduleManager
      */
     public function __construct(
         DesignInterface $design,
         CollectorInterface $fileSource,
         ErrorHandlerInterface $errorHandler,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Design\Theme\ListInterface $themeList,
-        ?\Magento\Framework\Module\Manager $moduleManager = null
+        AssetRepository $assetRepo,
+        ThemeListInterface $themeList,
+        ?DeploymentConfig $deploymentConfig = null,
+        ?ModuleManager $moduleManager = null
     ) {
         $this->design = $design;
         $this->fileSource = $fileSource;
         $this->errorHandler = $errorHandler;
         $this->assetRepo = $assetRepo;
         $this->themeList = $themeList;
-        $this->moduleManager = $moduleManager
-            ?? ObjectManager::getInstance()->get(\Magento\Framework\Module\Manager::class);
+        $this->deploymentConfig = $deploymentConfig ?? ObjectManager::getInstance() ->get(DeploymentConfig::class);
+        $this->moduleManager = $moduleManager ?? ObjectManager::getInstance()->get(ModuleManager::class);
     }
 
     /**
@@ -117,12 +131,12 @@ class MagentoImport implements PreProcessorInterface
             $relatedAsset = $this->assetRepo->createRelated($matchedFileId, $asset);
             $resolvedPath = $relatedAsset->getFilePath();
             $importFiles = $this->fileSource->getFiles($this->getTheme($relatedAsset), $resolvedPath);
+            $deployOnlyEnabled = (bool)$this->deploymentConfig->get(self::CONFIG_PATH_SCD_ONLY_ENABLED_MODULES);
             /** @var $importFile \Magento\Framework\View\File */
             foreach ($importFiles as $importFile) {
                 $moduleName = $importFile->getModule();
 
-                if ($moduleName &&
-                    !$this->moduleManager->isEnabled($moduleName)) {
+                if ($moduleName && $deployOnlyEnabled && !$this->moduleManager->isEnabled($moduleName)) {
                     continue;
                 }
 
@@ -141,7 +155,7 @@ class MagentoImport implements PreProcessorInterface
      * Get theme model based on the information from asset
      *
      * @param LocalInterface $asset
-     * @return \Magento\Framework\View\Design\ThemeInterface
+     * @return ThemeInterface
      */
     protected function getTheme(LocalInterface $asset)
     {
