@@ -10,6 +10,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Oauth\TokenProviderInterface;
 use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Model\ResourceModel\Oauth\Token as TokenResource;
 
 class Provider implements TokenProviderInterface
 {
@@ -29,18 +30,26 @@ class Provider implements TokenProviderInterface
     protected $logger;
 
     /**
+     * @var TokenResource
+     */
+    private $tokenResource;
+
+    /**
      * @param \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory
      * @param \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param TokenResource $tokenResource
      */
     public function __construct(
         \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
         \Magento\Integration\Model\Oauth\TokenFactory $tokenFactory,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        TokenResource $tokenResource
     ) {
         $this->_consumerFactory = $consumerFactory;
         $this->_tokenFactory = $tokenFactory;
         $this->logger = $logger;
+        $this->tokenResource = $tokenResource;
     }
 
     /**
@@ -111,6 +120,7 @@ class Provider implements TokenProviderInterface
             );
         }
         $accessToken = $token->convertToAccess();
+        $this->tokenResource->afterLoad($accessToken);
         $this->logger->info(
             'Request token ' . $token->getToken() . ' was exchanged to obtain access token for consumer ' . $consumerId
         );
