@@ -10,7 +10,6 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Model\ConfigInterface as AsyncConfig;
-use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Logger;
 use Magento\Framework\Bulk\OperationManagementInterface;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\DB\Adapter\ConnectionException;
@@ -73,11 +72,6 @@ class OperationProcessor
     private $communicationConfig;
 
     /**
-     * @var Logger
-     */
-    private $operationLogger;
-
-    /**
      * OperationProcessor constructor.
      *
      * @param MessageValidator $messageValidator
@@ -88,7 +82,6 @@ class OperationProcessor
      * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
      * @param LoggerInterface $logger
-     * @param Logger $operationLogger
      */
     public function __construct(
         MessageValidator $messageValidator,
@@ -98,8 +91,7 @@ class OperationProcessor
         OperationManagementInterface $operationManagement,
         ServiceOutputProcessor $serviceOutputProcessor,
         CommunicationConfig $communicationConfig,
-        LoggerInterface $logger,
-        Logger $operationLogger
+        LoggerInterface $logger
     ) {
         $this->messageValidator = $messageValidator;
         $this->messageEncoder = $messageEncoder;
@@ -109,7 +101,6 @@ class OperationProcessor
         $this->logger = $logger;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->communicationConfig = $communicationConfig;
-        $this->operationLogger = $operationLogger;
     }
 
     /**
@@ -129,7 +120,6 @@ class OperationProcessor
         $entityParams = [];
         $topicName = $operation->getTopicName();
         $handlers = $this->configuration->getHandlers($topicName);
-        $this->operationLogger->logStartTime($operation);
         try {
             $data = $this->jsonHelper->unserialize($operation->getSerializedData());
             $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
