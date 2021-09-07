@@ -71,147 +71,147 @@ class AccountManagementTest extends TestCase
     /**
      * @var AccountManagement
      */
-    protected $accountManagement;
+    private $accountManagement;
 
     /**
      * @var ObjectManagerHelper
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /**
      * @var CustomerFactory|MockObject
      */
-    protected $customerFactory;
+    private $customerFactory;
 
     /**
      * @var ManagerInterface|MockObject
      */
-    protected $manager;
+    private $manager;
 
     /**
      * @var StoreManagerInterface|MockObject
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var Random|MockObject
      */
-    protected $random;
+    private $random;
 
     /**
      * @var Validator|MockObject
      */
-    protected $validator;
+    private $validator;
 
     /**
      * @var ValidationResultsInterfaceFactory|MockObject
      */
-    protected $validationResultsInterfaceFactory;
+    private $validationResultsInterfaceFactory;
 
     /**
      * @var AddressRepositoryInterface|MockObject
      */
-    protected $addressRepository;
+    private $addressRepository;
 
     /**
      * @var CustomerMetadataInterface|MockObject
      */
-    protected $customerMetadata;
+    private $customerMetadata;
 
     /**
      * @var CustomerRegistry|MockObject
      */
-    protected $customerRegistry;
+    private $customerRegistry;
 
     /**
      * @var LoggerInterface|MockObject
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var EncryptorInterface|MockObject
      */
-    protected $encryptor;
+    private $encryptor;
 
     /**
      * @var Share|MockObject
      */
-    protected $share;
+    private $share;
 
     /**
      * @var StringUtils|MockObject
      */
-    protected $string;
+    private $string;
 
     /**
      * @var CustomerRepositoryInterface|MockObject
      */
-    protected $customerRepository;
+    private $customerRepository;
 
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var TransportBuilder|MockObject
      */
-    protected $transportBuilder;
+    private $transportBuilder;
 
     /**
      * @var DataObjectProcessor|MockObject
      */
-    protected $dataObjectProcessor;
+    private $dataObjectProcessor;
 
     /**
      * @var Registry|MockObject
      */
-    protected $registry;
+    private $registry;
 
     /**
      * @var View|MockObject
      */
-    protected $customerViewHelper;
+    private $customerViewHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime|MockObject
      */
-    protected $dateTime;
+    private $dateTime;
 
     /**
      * @var \Magento\Customer\Model\Customer|MockObject
      */
-    protected $customer;
+    private $customer;
 
     /**
      * @var DataObjectFactory|MockObject
      */
-    protected $objectFactory;
+    private $objectFactory;
 
     /**
      * @var ExtensibleDataObjectConverter|MockObject
      */
-    protected $extensibleDataObjectConverter;
+    private $extensibleDataObjectConverter;
 
     /**
      * @var MockObject|Store
      */
-    protected $store;
+    private $store;
 
     /**
      * @var MockObject|CustomerSecure
      */
-    protected $customerSecure;
+    private $customerSecure;
 
     /**
      * @var AuthenticationInterface|MockObject
      */
-    protected $authenticationMock;
+    private $authenticationMock;
 
     /**
      * @var EmailNotificationInterface|MockObject
      */
-    protected $emailNotificationMock;
+    private $emailNotificationMock;
 
     /**
      * @var DateTimeFactory|MockObject
@@ -487,8 +487,7 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->atLeastOnce())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $customer
-            ->method('getStoreId')
+        $customer->method('getStoreId')
             ->willReturnOnConsecutiveCalls(null, null, 1);
         $customer->expects($this->once())
             ->method('setStoreId')
@@ -567,8 +566,7 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->atLeastOnce())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $customer
-            ->method('getStoreId')
+        $customer->method('getStoreId')
             ->willReturnOnConsecutiveCalls(null, null, 1);
         $customer->expects($this->once())
             ->method('setStoreId')
@@ -1177,7 +1175,7 @@ class AccountManagementTest extends TestCase
             ->method('getUniqueHash')
             ->willReturn($newLinkToken);
         $customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->setMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
+            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
             ->disableOriginalConstructor()
             ->getMock();
         $customerSecure->expects($this->any())
@@ -1210,7 +1208,7 @@ class AccountManagementTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCreateAccountWithGroupId()
+    public function testCreateAccountWithGroupId(): void
     {
         $websiteId = 1;
         $defaultStoreId = 1;
@@ -1304,12 +1302,9 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->atLeastOnce())
             ->method('getGroupId')
             ->willReturn($requestedGroupId);
-        $customer->expects($this->at(0))
+        $customer
             ->method('setGroupId')
-            ->willReturn(null);
-        $customer->expects($this->at(1))
-            ->method('setGroupId')
-            ->willReturn($defaultGroupId);
+            ->willReturnOnConsecutiveCalls(null, $defaultGroupId);
         $customer->expects($this->atLeastOnce())
             ->method('getEmail')
             ->willReturn($customerEmail);
@@ -1458,14 +1453,14 @@ class AccountManagementTest extends TestCase
             ->with('name', $customerName)
             ->willReturnSelf();
 
-        $this->scopeConfig
-            ->method('getValue')
+        $this->scopeConfig->method('getValue')
             ->withConsecutive(
                 [
                     AccountManagement::XML_PATH_REMIND_EMAIL_TEMPLATE,
                     ScopeInterface::SCOPE_STORE,
                     $customerStoreId
-                ], [
+                ],
+                [
                     AccountManagement::XML_PATH_FORGOT_EMAIL_IDENTITY,
                     ScopeInterface::SCOPE_STORE,
                     $customerStoreId
@@ -2125,10 +2120,10 @@ class AccountManagementTest extends TestCase
             ->withConsecutive(
                 [
                     'customer_customer_authenticated',
-                    ['model' => $customerModel, 'password' => $password],
+                    ['model' => $customerModel, 'password' => $password]
                 ],
                 [
-                    'customer_data_object_login', ['customer' => $customerData],
+                    'customer_data_object_login', ['customer' => $customerData]
                 ]
             );
 
@@ -2219,15 +2214,9 @@ class AccountManagementTest extends TestCase
         $customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $customerMock
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $customerMock
-            ->method('getWebsiteId')
-            ->willReturn($websiteId);
-        $customerMock
-            ->method('getId')
-            ->willReturnOnConsecutiveCalls(null, 1);
+        $customerMock->method('getStoreId')->willReturn($storeId);
+        $customerMock->method('getWebsiteId')->willReturn($websiteId);
+        $customerMock->method('getId')->willReturnOnConsecutiveCalls(null, 1);
 
         $this->customerRepository
             ->expects($this->once())
