@@ -23,4 +23,7 @@
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_requested_graphql_attributes" type="Magento\QuoteGraphQl\Plugin\ProductAttributesExtender"/>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
+        <plugin name="reset-totals" type="Magento\QuoteGraphQl\Plugin\ResetStoredTotalsBeforeTopResolver" sortOrder="1"/>
+    </type>
 </config>
