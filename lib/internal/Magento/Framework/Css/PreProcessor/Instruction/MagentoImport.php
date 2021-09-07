@@ -169,6 +169,7 @@ class MagentoImport implements PreProcessorInterface
                 $context->getAreaCode() . '/' . $context->getThemePath()
             );
         }
+
         return $this->design->getDesignTheme();
     }
 
