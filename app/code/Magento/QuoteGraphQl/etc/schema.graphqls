@@ -21,7 +21,7 @@ type Mutation {
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput @doc(description: "An input object that defines a guest email address.")): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart") @doc(description:"Assign the email address of a guest to the cart.")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder") @doc(description:"Set the cart payment method and convert the cart into an order.")
     mergeCarts(source_cart_id: String! @doc(description: "The guest's cart ID before they login."), destination_cart_id: String @doc(description: "The cart ID after the guest logs in.")): Cart! @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
-    placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart IS.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
+    placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart ID.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
     addProductsToCart(cartId: String! @doc(description: "The cart ID of the shopper."), cartItems: [CartItemInput!]! @doc(description: "An array that defines the products to add to the cart.")): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
 }
 
@@ -360,7 +360,7 @@ type SelectedCustomizableOption @doc(description: "Identifies a customized produ
     sort_order: Int! @doc(description: "A value indicating the order to display this option.")
 }
 
-type SelectedCustomizableOptionValue @doc(description: "Identifies the value of theselected customized option.") {
+type SelectedCustomizableOptionValue @doc(description: "Identifies the value of the selected customized option.") {
     id: Int! @deprecated(reason: "Use `SelectedCustomizableOptionValue.customizable_option_value_uid` instead.")
     customizable_option_value_uid: ID! @doc(description: "The unique ID for a value object that corresponds to the object represented by the `customizable_option_uid` attribute.")
     label: String! @doc(description: "The display name of the selected value.")

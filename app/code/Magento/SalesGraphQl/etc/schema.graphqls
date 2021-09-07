@@ -15,7 +15,7 @@ type ReorderItemsOutput @doc(description:"Contains the cart and any errors after
 }
 
 type CheckoutUserInputError @doc(description:"An error encountered while adding an item to the cart."){
-    message: String! @doc(description: "A ocalized error message.")
+    message: String! @doc(description: "A localized error message.")
     path: [String]! @doc(description: "The path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
     code: CheckoutUserInputErrorCodes! @doc(description: "An error code that is specific to Checkout.")
 }

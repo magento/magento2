@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
-type ComparableItem @doc(description: "Defines an item in a compare list.") {
+type ComparableItem @doc(description: "Defines an object used to iterate through items for product comparisons.") {
     uid: ID! @doc(description: "The unique ID of an item in a compare list.")
     product: ProductInterface! @doc(description: "Details about a product in a compare list.")
     attributes: [ProductAttribute]! @doc(description: "An array of product attributes that can be used to compare products.")
@@ -17,7 +17,7 @@ type ComparableAttribute @doc(description: "Contains an attribute code that is u
     label: String! @doc(description: "The label of the attribute code.")
 }
 
-type CompareList @doc(description: "Contains an array of items in a compare list.") {
+type CompareList @doc(description: "Contains iterable information such as the array of items, the count, and attributes that represent the compare list.") {
     uid: ID! @doc(description: "The unique ID assigned to the compare list.")
     items: [ComparableItem] @doc(description: "An array of products to compare.")
     attributes: [ComparableAttribute] @doc(description: "An array of attributes that can be used for comparing products.")

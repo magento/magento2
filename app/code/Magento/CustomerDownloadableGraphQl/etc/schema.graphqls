@@ -10,9 +10,9 @@ type CustomerDownloadableProducts @doc(description: "Contains a list of download
 }
 
 type CustomerDownloadableProduct @doc(description: "Contains details about a single downloadable product.") {
-    order_increment_id: String @doc(description: "An incremental ID assigned to the item.")
+    order_increment_id: String @doc(description: "The unique ID assigned to the item.")
     date: String @doc(description: "The date and time the purchase was made.")
     status: String @doc(description: "Indicates when the product becomes available for download. Options are `Pending` and `Invoiced`.")
     download_url: String @doc(description: "The fully qualified URL to the download file.")
-    remaining_downloads: String @doc(description: "The number of times the customer can download the product.")
+    remaining_downloads: String @doc(description: "The remaining number of times the customer can download the product.")
 }
