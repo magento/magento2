@@ -63,6 +63,7 @@ class LogData
         $requestInformation[LoggerInterface::OPERATION_NAMES] =
             count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
         $requestInformation[LoggerInterface::COMPLEXITY] = $this->getFieldCount($data['query'] ?? '');
+        $requestInformation[LoggerInterface::HTTP_RESPONSE_CODE] = $response->getHttpResponseCode();
 
         return $requestInformation;
     }

@@ -133,7 +133,8 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
-                    LoggerInterface::COMPLEXITY => 5
+                    LoggerInterface::COMPLEXITY => 5,
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
             [ // query with no headers
@@ -164,7 +165,8 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
-                    LoggerInterface::COMPLEXITY => 5
+                    LoggerInterface::COMPLEXITY => 5,
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
             [ // query with bad operation name
@@ -195,7 +197,8 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 0,
                     LoggerInterface::OPERATION_NAMES => 'operationNameNotFound',
-                    LoggerInterface::COMPLEXITY => 5
+                    LoggerInterface::COMPLEXITY => 5,
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
             [ // mutation with all headers
@@ -226,7 +229,8 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
-                    LoggerInterface::COMPLEXITY => 3
+                    LoggerInterface::COMPLEXITY => 3,
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
             [ // mutation with no headers
@@ -250,7 +254,8 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
-                    LoggerInterface::COMPLEXITY => 3
+                    LoggerInterface::COMPLEXITY => 3,
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
             [ // multiple queries
@@ -291,7 +296,8 @@ QUERY,
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 2,
                     LoggerInterface::OPERATION_NAMES => 'cart,products',
-                    LoggerInterface::COMPLEXITY => 8
+                    LoggerInterface::COMPLEXITY => 8,
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
         ];

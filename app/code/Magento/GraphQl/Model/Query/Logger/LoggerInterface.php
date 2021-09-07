@@ -24,6 +24,7 @@ interface LoggerInterface
     const IS_CACHEABLE = 'GraphQlIsCacheable';
     const COMPLEXITY = 'GraphQlComplexity';
     const REQUEST_LENGTH = 'GraphQlRequestLength';
+    const HTTP_RESPONSE_CODE = 'GraphQlHttpResponseCode';
 
     /**
      * Execute logger
