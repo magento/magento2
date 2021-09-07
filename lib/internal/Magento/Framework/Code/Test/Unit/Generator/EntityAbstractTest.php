@@ -57,7 +57,7 @@ class EntityAbstractTest extends TestCase
     protected function setUp(): void
     {
         $this->sourceClass = '\\' . DataObject::class;
-        $this->resultClass = '\\' . \Magento\Framework\DataObject_MyResult::class;
+        $this->resultClass = '\\Magento\\Framework\\DataObject_MyResult';
         $this->_model = $this->getMockForAbstractClass(EntityAbstract::class);
     }
 
@@ -262,10 +262,10 @@ class EntityAbstractTest extends TestCase
         }
 
         return [
-            'source_class' => $this->sourceClass,
-            'result_class' => $this->resultClass,
-            'io_object' => $ioObject,
-            'code_generator' => null,
+            'sourceClassName' => $this->sourceClass,
+            'resultClassName' => $this->resultClass,
+            'ioObject' => $ioObject,
+            'classGenerator' => null,
             'definedClasses' => $definedClassesMock,
         ];
     }
@@ -298,17 +298,17 @@ class EntityAbstractTest extends TestCase
 
         // Add configuration for the generation step
         /** @var \PHPUnit\Framework\MockObject\MockObject $ioObject */
-        $ioObject = $mocks['io_object'];
+        $ioObject = $mocks['ioObject'];
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
         }
         $ioObject->expects($this->any())->method('generateResultFileName')->willReturn(self::RESULT_FILE);
 
         return [
-            'source_class' => $mocks['source_class'],
-            'result_class' => $mocks['result_class'],
-            'io_object' => $ioObject,
-            'code_generator' => $codeGenerator,
+            'sourceClassName' => $mocks['sourceClassName'],
+            'resultClassName' => $mocks['resultClassName'],
+            'ioObject' => $ioObject,
+            'classGenerator' => $codeGenerator,
             'definedClasses' => $mocks['definedClasses'],
         ];
     }

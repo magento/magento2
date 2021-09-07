@@ -278,7 +278,7 @@ class RuleTest extends TestCase
             [
                 [
                     'simple_action' => 'by_percent',
-                    'discount_amount' => '9,99'
+                    'discount_amount' => '9.99'
                 ],
                 true
             ],
@@ -430,8 +430,8 @@ class RuleTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetConditionsFieldSetId(): void
     {
         $formName = 'form_name';
@@ -441,8 +441,8 @@ class RuleTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testReindex(): void
     {
         $this->ruleProductProcessor->expects($this->once())->method('reindexList');
