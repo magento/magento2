@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
@@ -81,7 +84,7 @@ class CategoryList implements ResolverInterface
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
-        return $this->fetchCategories($rootCategoryIds, $info, (int) $store->getId());
+        return $this->fetchCategories($rootCategoryIds, $info, $processedArgs, $store, [], $context);
     }
 
     /**
@@ -89,14 +92,31 @@ class CategoryList implements ResolverInterface
      *
      * @param array $categoryIds
      * @param ResolveInfo $info
-     * @param int $storeId
+     * @param array $criteria
+     * @param StoreInterface $store
+     * @param array $attributeNames
+     * @param ContextInterface $context
      * @return array
+     * @throws LocalizedException
      */
-    private function fetchCategories(array $categoryIds, ResolveInfo $info, int $storeId)
-    {
+    private function fetchCategories(
+        array $categoryIds,
+        ResolveInfo $info,
+        array $criteria,
+        StoreInterface $store,
+        array $attributeNames,
+        $context
+    ) : array {
         $fetchedCategories = [];
         foreach ($categoryIds as $categoryId) {
-            $categoryTree = $this->categoryTree->getTree($info, $categoryId, $storeId);
+            $categoryTree = $this->categoryTree->getFilteredTree(
+                $info,
+                $categoryId,
+                $criteria,
+                $store,
+                $attributeNames,
+                $context
+            );
             if (empty($categoryTree)) {
                 continue;
             }
