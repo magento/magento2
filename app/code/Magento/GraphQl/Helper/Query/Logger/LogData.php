@@ -14,6 +14,7 @@ use GraphQL\Language\Parser;
 use GraphQL\Language\Source;
 use GraphQL\Language\Visitor;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Schema;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 
@@ -28,11 +29,17 @@ class LogData
      * @param RequestInterface $request
      * @param array $data
      * @param Schema $schema
+     * @param HttpResponse $response
      * @return array
      *
      * @throws SyntaxError
      */
-    public function getRequestInformation(RequestInterface $request, array $data, Schema $schema) : array
+    public function getRequestInformation(
+        RequestInterface $request,
+        array $data,
+        Schema $schema,
+        HttpResponse $response
+    ) : array
     {
         $requestInformation = [];
         $requestInformation[LoggerInterface::HTTP_METHOD] = $request->getMethod();
@@ -40,7 +47,9 @@ class LogData
         $requestInformation[LoggerInterface::CURRENCY_HEADER] = $request->getHeader('Currency') ?: '';
         $requestInformation[LoggerInterface::HAS_AUTH_HEADER] = $request->getHeader('Authorization') ? 'true' : 'false';
         $requestInformation[LoggerInterface::IS_CACHEABLE] =
-            ($request->getHeader('X-Magento-Tags') && $request->getHeader('X-Magento-Tags') !== '') ? 'true' : 'false';
+            ($response->getHeader('X-Magento-Tags') && $response->getHeader('X-Magento-Tags') !== '')
+                ? 'true'
+                : 'false';
         $requestInformation[LoggerInterface::REQUEST_LENGTH] = $request->getHeader('Content-Length') ?: '';
 
         $schemaConfig = $schema->getConfig();

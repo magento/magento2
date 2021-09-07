@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Helper\Query\Logger;
 
 use Laminas\Http\Headers;
-use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Query\Fields;
 use Magento\Framework\GraphQl\Schema\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
@@ -36,15 +37,19 @@ class LogDataTest extends TestCase
     /** @var SchemaGenerator */
     private $schemaGenerator;
 
-    /** @var Http */
+    /** @var HttpRequest */
     private $request;
+
+    /** @var HttpResponse */
+    private $response;
 
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logData = $this->objectManager->get(LogData::class);
         $this->schemaGenerator = $this->objectManager->get(SchemaGenerator::class);
-        $this->request = $this->objectManager->get(Http::class);
+        $this->request = $this->objectManager->get(HttpRequest::class);
+        $this->response = $this->objectManager->get(HttpResponse::class);
     }
 
     /**
@@ -69,8 +74,10 @@ class LogDataTest extends TestCase
         ];
         $this->request->setContent(json_encode($postData));
 
-        $requestHeaders = $this->objectManager->create(Headers::class)->addHeaders($headers);
+        $requestHeaders = $this->objectManager->create(Headers::class)->addHeaders($headers['request'] ?? []);
         $this->request->setHeaders($requestHeaders);
+        $responseHeaders = $this->objectManager->create(Headers::class)->addHeaders($headers['response'] ?? []);
+        $this->response->setHeaders($responseHeaders);
 
         $queryFields = $this->objectManager->get(Fields::class);
         $queryFields->setQuery($query);
@@ -78,7 +85,8 @@ class LogDataTest extends TestCase
         $queryInformation = $this->logData->getRequestInformation(
             $this->request,
             $postData,
-            $this->schemaGenerator->generate());
+            $this->schemaGenerator->generate(),
+            $this->response);
 
         $this->assertEquals($expectedResult, $queryInformation);
     }
@@ -105,11 +113,15 @@ class LogDataTest extends TestCase
  }
 QUERY,
                 'headers' => [
-                    'Store' => 1,
-                    'Currency' => 'USD',
-                    'Authorization' => '1234',
-                    'X-Magento-Tags' => 'FPC',
-                    'Content-length' => 123
+                    'request' => [
+                        'Store' => 1,
+                        'Currency' => 'USD',
+                        'Authorization' => '1234',
+                        'Content-length' => 123
+                    ],
+                    'response' => [
+                        'X-Magento-Tags' => 'FPC'
+                    ]
                 ],
                 'expectedResult' => [
                     LoggerInterface::HTTP_METHOD => 'POST',
@@ -137,13 +149,17 @@ QUERY,
     }
  }
 QUERY,
-                'headers' => [],
+                'headers' => [
+                    'response' => [
+                        'X-Magento-Tags' => 'FPC'
+                    ]
+                ],
                 'expectedResult' => [
                     LoggerInterface::HTTP_METHOD => 'POST',
                     LoggerInterface::STORE_HEADER => '',
                     LoggerInterface::CURRENCY_HEADER => '',
                     LoggerInterface::HAS_AUTH_HEADER => 'false',
-                    LoggerInterface::IS_CACHEABLE => 'false',
+                    LoggerInterface::IS_CACHEABLE => 'true',
                     LoggerInterface::REQUEST_LENGTH => '',
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
@@ -164,13 +180,17 @@ QUERY,
     }
  }
 QUERY,
-                'headers' => [],
+                'headers' => [
+                    'response' => [
+                        'X-Magento-Tags' => 'FPC'
+                    ]
+                ],
                 'expectedResult' => [
                     LoggerInterface::HTTP_METHOD => 'POST',
                     LoggerInterface::STORE_HEADER => '',
                     LoggerInterface::CURRENCY_HEADER => '',
                     LoggerInterface::HAS_AUTH_HEADER => 'false',
-                    LoggerInterface::IS_CACHEABLE => 'false',
+                    LoggerInterface::IS_CACHEABLE => 'true',
                     LoggerInterface::REQUEST_LENGTH => '',
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 0,
@@ -189,18 +209,19 @@ mutation {
 }
 QUERY,
                 'headers' => [
-                    'Store' => 1,
-                    'Currency' => 'USD',
-                    'Authorization' => '1234',
-                    'X-Magento-Tags' => 'FPC',
-                    'Content-length' => 123
+                    'request' => [
+                        'Store' => 1,
+                        'Currency' => 'USD',
+                        'Authorization' => '1234',
+                        'Content-length' => 123
+                    ]
                 ],
                 'expectedResult' => [
                     LoggerInterface::HTTP_METHOD => 'POST',
                     LoggerInterface::STORE_HEADER => '1',
                     LoggerInterface::CURRENCY_HEADER => 'USD',
                     LoggerInterface::HAS_AUTH_HEADER => 'true',
-                    LoggerInterface::IS_CACHEABLE => 'true',
+                    LoggerInterface::IS_CACHEABLE => 'false',
                     LoggerInterface::REQUEST_LENGTH => '123',
                     LoggerInterface::HAS_MUTATION => 'true',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
@@ -250,18 +271,22 @@ query {
 }
 QUERY,
                 'headers' => [
-                    'Store' => 1,
-                    'Currency' => 'USD',
-                    'Authorization' => '1234',
-                    'X-Magento-Tags' => '',
-                    'Content-length' => 123
+                    'request' => [
+                        'Store' => 1,
+                        'Currency' => 'USD',
+                        'Authorization' => '1234',
+                        'Content-length' => 123
+                    ],
+                    'response' => [
+                        'X-Magento-Tags' => 'FPC'
+                    ]
                 ],
                 'expectedResult' => [
                     LoggerInterface::HTTP_METHOD => 'POST',
-                    LoggerInterface::STORE_HEADER => 1,
+                    LoggerInterface::STORE_HEADER => '1',
                     LoggerInterface::CURRENCY_HEADER => 'USD',
                     LoggerInterface::HAS_AUTH_HEADER => 'true',
-                    LoggerInterface::IS_CACHEABLE => 'false',
+                    LoggerInterface::IS_CACHEABLE => 'true',
                     LoggerInterface::REQUEST_LENGTH => '123',
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 2,
