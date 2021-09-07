@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\IncludeSubcategoriesOnly;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\Category\IncludeDirectChildrenOnly;
 use Magento\Directory\Model\PriceCurrency;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -37,27 +37,27 @@ class Aggregations implements ResolverInterface
     private $priceCurrency;
 
     /**
-     * @var IncludeSubcategoriesOnly
+     * @var IncludeDirectChildrenOnly
      */
-    private $includeSubcategoriesOnly;
+    private $includeDirectChildrenOnly;
 
     /**
      * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
      * @param LayerBuilder $layerBuilder
      * @param PriceCurrency $priceCurrency
-     * @param IncludeSubcategoriesOnly $includeSubcategoriesOnly
+     * @param IncludeDirectChildrenOnly $includeDirectChildrenOnly
      */
     public function __construct(
         \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
         LayerBuilder $layerBuilder,
         PriceCurrency $priceCurrency = null,
-        IncludeSubcategoriesOnly $includeSubcategoriesOnly = null
+        IncludeDirectChildrenOnly $includeDirectChildrenOnly = null
     ) {
         $this->filtersDataProvider = $filtersDataProvider;
         $this->layerBuilder = $layerBuilder;
         $this->priceCurrency = $priceCurrency ?: ObjectManager::getInstance()->get(PriceCurrency::class);
-        $this->includeSubcategoriesOnly = $includeSubcategoriesOnly
-            ?: ObjectManager::getInstance()->get(IncludeSubcategoriesOnly::class);
+        $this->includeDirectChildrenOnly = $includeDirectChildrenOnly
+            ?: ObjectManager::getInstance()->get(IncludeDirectChildrenOnly::class);
     }
 
     /**
@@ -78,9 +78,9 @@ class Aggregations implements ResolverInterface
 
         if ($aggregations) {
             $categoryFilter = $value['categories'] ?? [];
-            $includeSubcategoriesOnly = $args['filter']['includeSubcategoriesOnly'] ?? false;
-            if ($includeSubcategoriesOnly && !empty($categoryFilter)) {
-                $this->includeSubcategoriesOnly->setFilter(['category' => $categoryFilter]);
+            $includeDirectChildrenOnly = $args['filter']['category']['includeDirectChildrenOnly'] ?? false;
+            if ($includeDirectChildrenOnly && !empty($categoryFilter)) {
+                $this->includeDirectChildrenOnly->setFilter(['category' => $categoryFilter]);
             }
             /** @var StoreInterface $store */
             $store = $context->getExtensionAttributes()->getStore();

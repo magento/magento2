@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations;
+namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\Category;
 
 use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -16,9 +16,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 
 /**
- * Include only subcategories of category in aggregation
+ * Class to include only direct subcategories of category in aggregation
  */
-class IncludeSubcategoriesOnly
+class IncludeDirectChildrenOnly
 {
     /**
      * @var string
@@ -82,7 +82,7 @@ class IncludeSubcategoriesOnly
     }
 
     /**
-     * Filter category aggregation to include only subcategories of requested category
+     * Filter category aggregation to include only direct subcategories of requested category
      *
      * @param AggregationInterface $aggregation
      * @param int|null $storeId
@@ -126,7 +126,7 @@ class IncludeSubcategoriesOnly
     }
 
     /**
-     * Filter bucket values to include only subcategories of requested category
+     * Filter bucket values to include only direct subcategories of requested category
      *
      * @param array $categoryBucketValues
      * @param array $categoryIdsRequested

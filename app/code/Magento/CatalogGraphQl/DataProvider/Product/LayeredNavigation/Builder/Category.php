@@ -16,7 +16,7 @@ use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\IncludeSubcategoriesOnly;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\Category\IncludeDirectChildrenOnly;
 
 /**
  * @inheritdoc
@@ -64,9 +64,9 @@ class Category implements LayerBuilderInterface
     private $layerFormatter;
 
     /**
-     * @var IncludeSubcategoriesOnly
+     * @var IncludeDirectChildrenOnly
      */
-    private $includeSubcategoriesOnly;
+    private $includeDirectChildrenOnly;
 
     /**
      * @param CategoryAttributeQuery $categoryAttributeQuery
@@ -74,7 +74,7 @@ class Category implements LayerBuilderInterface
      * @param RootCategoryProvider $rootCategoryProvider
      * @param ResourceConnection $resourceConnection
      * @param LayerFormatter $layerFormatter
-     * @param IncludeSubcategoriesOnly $includeSubcategoriesOnly
+     * @param IncludeDirectChildrenOnly $includeDirectChildrenOnly
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
@@ -82,14 +82,14 @@ class Category implements LayerBuilderInterface
         RootCategoryProvider $rootCategoryProvider,
         ResourceConnection $resourceConnection,
         LayerFormatter $layerFormatter,
-        IncludeSubcategoriesOnly $includeSubcategoriesOnly
+        IncludeDirectChildrenOnly $includeDirectChildrenOnly
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;
         $this->resourceConnection = $resourceConnection;
         $this->rootCategoryProvider = $rootCategoryProvider;
         $this->layerFormatter = $layerFormatter;
-        $this->includeSubcategoriesOnly = $includeSubcategoriesOnly;
+        $this->includeDirectChildrenOnly = $includeDirectChildrenOnly;
     }
 
     /**
@@ -99,7 +99,7 @@ class Category implements LayerBuilderInterface
      */
     public function build(AggregationInterface $aggregation, ?int $storeId): array
     {
-        $aggregation = $this->includeSubcategoriesOnly->filter($aggregation, $storeId);
+        $aggregation = $this->includeDirectChildrenOnly->filter($aggregation, $storeId);
         $bucket = $aggregation->getBucket(self::CATEGORY_BUCKET);
         if ($this->isBucketEmpty($bucket)) {
             return [];

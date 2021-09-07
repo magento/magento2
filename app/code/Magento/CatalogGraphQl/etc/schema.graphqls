@@ -324,8 +324,12 @@ type Products @doc(description: "The Products object is the top-level object ret
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
 }
 
-input AggregationsFilterInput {
-    includeSubcategoriesOnly: Boolean = false @doc(description: "Flag to include only subcategories of requested category.")
+input AggregationsFilterInput @doc(description: "An input object that specifies the filters used in product aggregations.") {
+    category: AggregationsCategoryFilterInput @doc(description: "Filter category aggregations in layered navigation.")
+}
+
+input AggregationsCategoryFilterInput @doc(description: "Filter category aggregations in layered navigation."){
+    includeDirectChildrenOnly: Boolean = false @doc(description: "Indicates whether to include only direct subcategories or all children categories at all levels.")
 }
 
 type CategoryProducts @doc(description: "The category products object returned in the Category query.") {

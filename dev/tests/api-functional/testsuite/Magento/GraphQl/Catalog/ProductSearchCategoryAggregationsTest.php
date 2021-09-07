@@ -24,8 +24,8 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     {
         $filterValue = '{category_id: {eq: "2"}}';
         $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
-        $expectedOptions = $this->getCategoryTwoOptions();
-        $this->assertEquals($expectedOptions, $categoryAggregation);
+        $expectedSubcategorie = $this->getSubcategoriesOfCategoryTwo();
+        $this->assertEquals($expectedSubcategorie, $categoryAggregation);
     }
 
     /**
@@ -37,8 +37,8 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
     {
         $filterValue = '{category_id: {in: ["3","2"]}}';
         $categoryAggregation = $this->aggregationCategoryTesting($filterValue, "true");
-        $expectedOptions = $this->getCategoryThreeOptions() + $this->getCategoryTwoOptions();
-        $this->assertEquals($expectedOptions, $categoryAggregation);
+        $expectedSubcategorie = $this->getSubcategoriesOfCategoryThree() + $this->getSubcategoriesOfCategoryTwo();
+        $this->assertEquals($expectedSubcategorie, $categoryAggregation);
     }
 
     /**
@@ -46,9 +46,9 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      *
      * @return array
      */
-    private function aggregationCategoryTesting(string $filterValue, string $includeSubcategoriesOnly): array
+    private function aggregationCategoryTesting(string $filterValue, string $includeDirectChildrenOnly): array
     {
-        $query = $this->getGraphQlQuery($filterValue, $includeSubcategoriesOnly);
+        $query = $this->getGraphQlQuery($filterValue, $includeDirectChildrenOnly);
         $result = $this->graphQlQuery($query);
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertArrayHasKey('aggregations', $result['products']);
@@ -75,7 +75,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      *
      * @return array<string,string>
      */
-    private function getCategoryTwoOptions(): array
+    private function getSubcategoriesOfCategoryTwo(): array
     {
         return [
             3 => 'Category 1',
@@ -90,7 +90,7 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      *
      * @return array<string,string>
      */
-    private function getCategoryThreeOptions(): array
+    private function getSubcategoriesOfCategoryThree(): array
     {
         return [
             4 => 'Category 1.1',
@@ -102,17 +102,17 @@ class ProductSearchCategoryAggregationsTest extends GraphQlAbstract
      * Get graphQl query.
      *
      * @param string $categoryList
-     * @param string $includeSubcategoriesOnly
+     * @param string $includeDirectChildrenOnly
      * @return string
      */
-    private function getGraphQlQuery(string $categoryList, string $includeSubcategoriesOnly): string
+    private function getGraphQlQuery(string $categoryList, string $includeDirectChildrenOnly): string
     {
         return <<<QUERY
 {
   products(filter: {$categoryList}) {
       total_count
        items { sku }
-    aggregations (filter: {includeSubcategoriesOnly: {$includeSubcategoriesOnly}}) {
+    aggregations (filter: { category: {includeDirectChildrenOnly: {$includeDirectChildrenOnly}}}) {
       attribute_code
       count
       label
