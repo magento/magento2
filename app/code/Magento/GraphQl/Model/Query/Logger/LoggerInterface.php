@@ -7,7 +7,7 @@
 namespace Magento\GraphQl\Model\Query\Logger;
 
 /**
- * Logger interface
+ * Defines Logger interface for GraphQL queries
  */
 interface LoggerInterface
 {

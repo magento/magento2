@@ -86,13 +86,16 @@ class LogDataTest extends TestCase
             $this->request,
             $postData,
             $this->schemaGenerator->generate(),
-            $this->response);
+            $this->response
+        );
 
         $this->assertEquals($expectedResult, $queryInformation);
     }
 
     /**
      * Data provider for testGetQueryInformation
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
      * @return array[]
      */

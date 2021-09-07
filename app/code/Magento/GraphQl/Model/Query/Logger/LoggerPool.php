@@ -40,5 +40,4 @@ class LoggerPool implements LoggerInterface
             $logger->execute($queryDetails);
         }
     }
-
 }

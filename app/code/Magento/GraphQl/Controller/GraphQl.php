@@ -159,7 +159,7 @@ class GraphQl implements FrontControllerInterface
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
         $data = $this->getDataFromRequest($request);
-        $schema = $this->schemaGenerator->generate();
+        $result = [];
 
         try {
             /** @var Http $request */
@@ -171,6 +171,7 @@ class GraphQl implements FrontControllerInterface
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
             $this->queryFields->setQuery($query, $variables);
+            $schema = $this->schemaGenerator->generate();
 
             $result = $this->queryProcessor->process(
                 $schema,

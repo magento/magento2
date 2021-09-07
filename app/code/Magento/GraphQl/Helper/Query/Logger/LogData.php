@@ -39,8 +39,7 @@ class LogData
         array $data,
         Schema $schema,
         HttpResponse $response
-    ) : array
-    {
+    ) : array {
         $requestInformation = [];
         $requestInformation[LoggerInterface::HTTP_METHOD] = $request->getMethod();
         $requestInformation[LoggerInterface::STORE_HEADER] = $request->getHeader('Store') ?: '';
@@ -70,6 +69,8 @@ class LogData
 
     /**
      * Gets the field count for the whole request
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @param string $query
      * @return int
