@@ -34,8 +34,7 @@ var config = {
         'domReady': 'requirejs/domReady',
         'spectrum': 'jquery/spectrum/spectrum',
         'tinycolor': 'jquery/spectrum/tinycolor',
-        'jquery-ui-modules': 'jquery/ui-modules',
-        'matchMedia': 'mediaCheck'
+        'jquery-ui-modules': 'jquery/ui-modules'
     },
     deps: [
         'jquery/jquery-migrate'
