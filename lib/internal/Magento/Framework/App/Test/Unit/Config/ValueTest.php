@@ -38,7 +38,7 @@ class ValueTest extends TestCase
     protected $cacheTypeListMock;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -62,18 +62,12 @@ class ValueTest extends TestCase
     /**
      * @return void
      */
-    public function testGetOldValue()
+    public function testGetOldValue(): void
     {
-        $this->configMock->expects(
-            $this->once()
-        )->method(
-            'getValue'
-        )->with(
-            null,
-            'default'
-        )->willReturn(
-            'old_value'
-        );
+        $this->configMock->expects($this->once())
+            ->method('getValue')
+            ->with(null, 'default')
+            ->willReturn('old_value');
 
         $this->assertEquals('old_value', $this->model->getOldValue());
     }
@@ -82,20 +76,16 @@ class ValueTest extends TestCase
      * @param string $oldValue
      * @param string $value
      * @param bool $result
+     *
+     * @return void
      * @dataProvider dataIsValueChanged
      */
-    public function testIsValueChanged($oldValue, $value, $result)
+    public function testIsValueChanged($oldValue, $value, $result): void
     {
-        $this->configMock->expects(
-            $this->once()
-        )->method(
-            'getValue'
-        )->with(
-            null,
-            'default'
-        )->willReturn(
-            $oldValue
-        );
+        $this->configMock->expects($this->once())
+            ->method('getValue')
+            ->with(null, 'default')
+            ->willReturn($oldValue);
 
         $this->model->setValue($value);
 
@@ -105,38 +95,34 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function dataIsValueChanged()
+    public function dataIsValueChanged(): array
     {
         return [
             ['value', 'value', false],
-            ['value', 'new_value', true],
+            ['value', 'new_value', true]
         ];
     }
 
     /**
      * @return void
      */
-    public function testAfterLoad()
+    public function testAfterLoad(): void
     {
-        $this->eventManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'dispatch'
-        )->with(
-            'model_load_after',
-            ['object' => $this->model]
-        );
-        $this->eventManagerMock->expects(
-            $this->at(1)
-        )->method(
-            'dispatch'
-        )->with(
-            'config_data_load_after',
-            [
-                'data_object' => $this->model,
-                'config_data' => $this->model,
-            ]
-        );
+        $this->eventManagerMock
+            ->method('dispatch')
+            ->withConsecutive(
+                [
+                    'model_load_after',
+                    ['object' => $this->model]
+                ],
+                [
+                    'config_data_load_after',
+                    [
+                        'data_object' => $this->model,
+                        'config_data' => $this->model
+                    ]
+                ]
+            );
 
         $this->model->afterLoad();
     }
@@ -145,10 +131,11 @@ class ValueTest extends TestCase
      * @param mixed $fieldsetData
      * @param string $key
      * @param string $result
-     * @dataProvider dataProviderGetFieldsetDataValue
+     *
      * @return void
+     * @dataProvider dataProviderGetFieldsetDataValue
      */
-    public function testGetFieldsetDataValue($fieldsetData, $key, $result)
+    public function testGetFieldsetDataValue($fieldsetData, $key, $result): void
     {
         $this->model->setData('fieldset_data', $fieldsetData);
         $this->assertEquals($result, $this->model->getFieldsetDataValue($key));
@@ -157,33 +144,35 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderGetFieldsetDataValue()
+    public function dataProviderGetFieldsetDataValue(): array
     {
         return [
             [
                 ['key' => 'value'],
                 'key',
-                'value',
+                'value'
             ],
             [
                 ['key' => 'value'],
                 'none',
-                null,
+                null
             ],
             [
                 'value',
                 'key',
-                null,
-            ],
+                null
+            ]
         ];
     }
 
     /**
      * @param int $callNumber
      * @param string $oldValue
+     *
+     * @return void
      * @dataProvider afterSaveDataProvider
      */
-    public function testAfterSave($callNumber, $oldValue)
+    public function testAfterSave($callNumber, $oldValue): void
     {
         $this->cacheTypeListMock->expects($this->exactly($callNumber))
             ->method('invalidate');
@@ -197,18 +186,18 @@ class ValueTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider()
+    public function afterSaveDataProvider(): array
     {
         return [
             [0, 'some_value'],
-            [1, 'other_value'],
+            [1, 'other_value']
         ];
     }
 
     /**
-     * @return void;
+     * @return void
      */
-    public function testAfterDelete()
+    public function testAfterDelete(): void
     {
         $this->cacheTypeListMock->expects($this->once())->method('invalidate');
         $this->assertInstanceOf(get_class($this->model), $this->model->afterDelete());
