@@ -32,13 +32,15 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
     /**
      * Resource initialization
      *
+     * @param Share|null $share
+     * @param AllowedCountries|null $allowedCountryReader
+     *
      * @return void
      */
     protected function _construct(
         ?Share $share = null,
         ?AllowedCountries $allowedCountryReader = null
-    )
-    {
+    ) {
         $this->_init(\Magento\Customer\Model\Address::class, \Magento\Customer\Model\ResourceModel\Address::class);
         $this->shareConfig = $share ?: ObjectManager::getInstance()
             ->get(Share::class);
