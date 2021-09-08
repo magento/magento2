@@ -37,7 +37,7 @@ type AttributeOption @doc(description: "Defines an attribute option.") {
     value: String @doc(description: "The attribute option value.")
 }
 
-input AttributeInput @doc(description: "Specifies the `attribute_code` and `entity_type` to search.") {
+input AttributeInput @doc(description: "Defines the attribute characteristics to search for the `attribute_code` and `entity_type` to search.") {
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     entity_type: String @doc(description: "The type of entity that defines the attribute.")
 }

@@ -2,19 +2,19 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    deletePaymentToken(public_hash: String! @doc(description: "The public token that is stored in the vault.")): DeletePaymentTokenOutput @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\DeletePaymentToken") @doc(description:"Delete a customer's payment token.")
+    deletePaymentToken(public_hash: String! @doc(description: "The reusable payment token securely stored in the vault.")): DeletePaymentTokenOutput @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\DeletePaymentToken") @doc(description:"Delete a customer's payment token.")
 }
 
 type DeletePaymentTokenOutput @doc(description: "Indicates whether the request succeeded and returns the remaining customer payment tokens.") {
     result: Boolean! @doc(description: "Indicates whether the request succeeded.")
-    customerPaymentTokens: CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @doc(description: "An array of the customer's remaining payment tokens.")
+    customerPaymentTokens: CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @doc(description: "A container for the customer's remaining payment tokens.")
 }
 
 type Query {
     customerPaymentTokens: CustomerPaymentTokens @doc(description: "Return a list of customer payment tokens stored in the vault.") @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @cache(cacheable: false)
 }
 
-type CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @doc(description: "Contains an array of the payment token stored in the customer's vault.") {
+type CustomerPaymentTokens @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\PaymentTokens") @doc(description: "Contains payment tokens stored in the customer's vault.") {
     items: [PaymentToken]! @doc(description: "An array of payment tokens.")
 }
 

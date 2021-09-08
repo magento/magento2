@@ -10,7 +10,7 @@ input ProductFilterInput {
 }
 
 input ProductSortInput {
-    swatch_image: SortEnum @doc(description: "Indicates how to sort the swatches.")
+    swatch_image: SortEnum @doc(description: "Indicates the criteria to sort swatches.")
 }
 
 interface SwatchLayerFilterItemInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\SwatchLayerFilterItemResolver")
@@ -33,11 +33,11 @@ type ConfigurableProductOptionsValues {
 }
 
 interface SwatchDataInterface @typeResolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchDataTypeResolver") {
-    value: String @doc(description: "The value of a swatch item. It could be a HEX color code, image link, or text value.")
+    value: String @doc(description: "The value can be represented as color (HEX code), image link, or text.")
 }
 
 type ImageSwatchData implements SwatchDataInterface {
-    thumbnail: String @doc(description: "The URL to the thumbnail swatch image.")
+    thumbnail: String @doc(description: "The URL assigned to the thumbnail of the swatch image.")
 }
 
 type TextSwatchData implements SwatchDataInterface {
@@ -49,5 +49,5 @@ type ColorSwatchData implements SwatchDataInterface {
 }
 
 type ConfigurableProductOptionValue {
-    swatch: SwatchDataInterface @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData") @doc(description: "The URL to the thumbnail swatch image.")
+    swatch: SwatchDataInterface @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData") @doc(description: "The URL assigned to the thumbnail of the swatch image.")
 }
