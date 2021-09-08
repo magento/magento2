@@ -226,12 +226,12 @@ QUERY;
         }
         $this->assertNotEmpty($fieldDeprecatedReason);
         $this->assertContains(
-            'Symbol was missed. Use `default_display_currency_code`.',
+            'The field name is misspelled. Use `default_display_currency_code` instead.',
             $fieldDeprecatedReason
         );
 
         $this->assertContains(
-            'Symbol was missed. Use `default_display_currency_code`.',
+            'The field name is misspelled. Use `default_display_currency_code` instead.',
             $fieldsValueReasonArray
         );
 
