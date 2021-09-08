@@ -150,8 +150,8 @@ class IncludeDirectChildrenOnly
             if ($childrenIds) {
                 $categoryChildIds[] = explode(',', $childrenIds);
             }
-            $categoryChildIds = array_merge([], ...$categoryChildIds);
         }
+        $categoryChildIds = array_merge([], ...$categoryChildIds);
         foreach ($categoryBucketValues as $key => $bucketValue) {
             $categoryId = (int)$bucketValue->getValue();
             if (!in_array($categoryId, $categoryChildIds)) {

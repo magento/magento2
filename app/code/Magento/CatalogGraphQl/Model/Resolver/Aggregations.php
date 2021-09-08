@@ -57,7 +57,7 @@ class Aggregations implements ResolverInterface
         $this->layerBuilder = $layerBuilder;
         $this->priceCurrency = $priceCurrency ?: ObjectManager::getInstance()->get(PriceCurrency::class);
         $this->includeDirectChildrenOnly = $includeDirectChildrenOnly
-            ?: ObjectManager::getInstance()->get(IncludeDirectChildrenOnly::class);
+            ?: ObjectManager::getInstance()->get(Category\IncludeDirectChildrenOnly::class);
     }
 
     /**
