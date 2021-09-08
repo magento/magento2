@@ -16,7 +16,7 @@ use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\Category\IncludeDirectChildrenOnly;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations;
 
 /**
  * @inheritdoc
@@ -64,7 +64,7 @@ class Category implements LayerBuilderInterface
     private $layerFormatter;
 
     /**
-     * @var IncludeDirectChildrenOnly
+     * @var Aggregations\Category\IncludeDirectChildrenOnly
      */
     private $includeDirectChildrenOnly;
 
@@ -74,7 +74,7 @@ class Category implements LayerBuilderInterface
      * @param RootCategoryProvider $rootCategoryProvider
      * @param ResourceConnection $resourceConnection
      * @param LayerFormatter $layerFormatter
-     * @param IncludeDirectChildrenOnly $includeDirectChildrenOnly
+     * @param Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
      */
     public function __construct(
         CategoryAttributeQuery $categoryAttributeQuery,
@@ -82,7 +82,7 @@ class Category implements LayerBuilderInterface
         RootCategoryProvider $rootCategoryProvider,
         ResourceConnection $resourceConnection,
         LayerFormatter $layerFormatter,
-        IncludeDirectChildrenOnly $includeDirectChildrenOnly
+        Aggregations\Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
     ) {
         $this->categoryAttributeQuery = $categoryAttributeQuery;
         $this->attributesMapper = $attributesMapper;

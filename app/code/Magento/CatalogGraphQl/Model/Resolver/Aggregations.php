@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder;
-use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\Category\IncludeDirectChildrenOnly;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations\Category;
 use Magento\Directory\Model\PriceCurrency;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -37,7 +37,7 @@ class Aggregations implements ResolverInterface
     private $priceCurrency;
 
     /**
-     * @var IncludeDirectChildrenOnly
+     * @var Category\IncludeDirectChildrenOnly
      */
     private $includeDirectChildrenOnly;
 
@@ -45,13 +45,13 @@ class Aggregations implements ResolverInterface
      * @param \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider
      * @param LayerBuilder $layerBuilder
      * @param PriceCurrency $priceCurrency
-     * @param IncludeDirectChildrenOnly $includeDirectChildrenOnly
+     * @param Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly
      */
     public function __construct(
         \Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider\Filters $filtersDataProvider,
         LayerBuilder $layerBuilder,
         PriceCurrency $priceCurrency = null,
-        IncludeDirectChildrenOnly $includeDirectChildrenOnly = null
+        Category\IncludeDirectChildrenOnly $includeDirectChildrenOnly = null
     ) {
         $this->filtersDataProvider = $filtersDataProvider;
         $this->layerBuilder = $layerBuilder;

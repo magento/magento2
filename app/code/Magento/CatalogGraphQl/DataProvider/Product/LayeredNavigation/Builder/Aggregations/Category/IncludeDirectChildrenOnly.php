@@ -148,8 +148,9 @@ class IncludeDirectChildrenOnly
             $category->setStoreId($storeId);
             $childrenIds = $category->getChildren();
             if ($childrenIds) {
-                $categoryChildIds = array_merge($categoryChildIds, explode(',', $childrenIds));
+                $categoryChildIds[] = explode(',', $childrenIds);
             }
+            $categoryChildIds = array_merge([], ...$categoryChildIds);
         }
         foreach ($categoryBucketValues as $key => $bucketValue) {
             $categoryId = (int)$bucketValue->getValue();
