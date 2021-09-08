@@ -37,9 +37,9 @@ type DownloadableProduct implements ProductInterface, RoutableInterface, Customi
     links_title: String @doc(description: "The heading above the list of downloadable products.")
 }
 
-enum DownloadableFileTypeEnum @deprecated(reason: "Use `sample_url` instead.") {
-    FILE @deprecated(reason: "Use `sample_url` instead.")
-    URL @deprecated(reason: "Use `sample_url` instead.")
+enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample") {
+    FILE @deprecated(reason: "`sample_url` serves to get the downloadable sample"")
+    URL @deprecated(reason: "`sample_url` serves to get the downloadable sample"")
 }
 
 type DownloadableProductLinks @doc(description: "Defines characteristics of a downloadable product.") {
@@ -50,9 +50,9 @@ type DownloadableProductLinks @doc(description: "Defines characteristics of a do
     sample_url: String @doc(description: "The full URL to the downloadable sample.")
     is_shareable: Boolean @deprecated(reason: "This information should not be exposed on frontend.")
     number_of_downloads: Int @deprecated(reason: "This information should not be exposed on frontend.")
-    link_type: DownloadableFileTypeEnum @deprecated(reason: "Use `sample_url` instead.")
-    sample_type: DownloadableFileTypeEnum @deprecated(reason: "Use `sample_url` instead.")
-    sample_file: String @deprecated(reason: "Use `sample_url` instead.")
+    link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample)
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     uid: ID! @doc(description: "The unique ID for a `DownloadableProductLinks` object.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
 }
 
@@ -61,8 +61,8 @@ type DownloadableProductSamples @doc(description: "Defines characteristics of a 
     title: String @doc(description: "The display name of the sample.")
     sort_order: Int @doc(description: "A number indicating the sort order.")
     sample_url: String @doc(description: "The full URL to the downloadable sample.")
-    sample_type: DownloadableFileTypeEnum @deprecated(reason: "Use `sample_url` instead.")
-    sample_file: String @deprecated(reason: "Use `sample_url` instead.")
+    sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
 }
 
 type DownloadableOrderItem implements OrderItemInterface @doc(description: "Defines downloadable product options for `OrderItemInterface`.") {
