@@ -110,7 +110,7 @@ class MagentoImport implements PreProcessorInterface
      * @param Chain $chain
      * @return void
      */
-    public function process(Chain $chain): void
+    public function process(Chain $chain)
     {
         $asset = $chain->getAsset();
         $replaceCallback = function ($matchContent) use ($asset) {
@@ -126,7 +126,7 @@ class MagentoImport implements PreProcessorInterface
      * @param LocalInterface $asset
      * @return string
      */
-    protected function replace(array $matchedContent, LocalInterface $asset): string
+    protected function replace(array $matchedContent, LocalInterface $asset)
     {
         $importsContent = '';
         try {
@@ -162,7 +162,7 @@ class MagentoImport implements PreProcessorInterface
      * @param LocalInterface $asset
      * @return ThemeInterface
      */
-    protected function getTheme(LocalInterface $asset): ThemeInterface
+    protected function getTheme(LocalInterface $asset)
     {
         $context = $asset->getContext();
         if ($context instanceof FallbackContext) {
