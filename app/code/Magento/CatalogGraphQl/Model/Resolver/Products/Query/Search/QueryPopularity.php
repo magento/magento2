@@ -57,7 +57,6 @@ class QueryPopularity
         if ($maxQueryLength && $this->string->strlen($queryText) > $maxQueryLength) {
             $queryText = $this->string->substr($queryText, 0, $maxQueryLength);
         }
-        //$query->loadByQueryText($queryText);
         $query->setQueryText($queryText);
         $store = $context->getExtensionAttributes()->getStore();
         $query->setStoreId($store->getId());
