@@ -22,6 +22,11 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Monolog\Test\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Test for MessageControllerDecorator
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MessageControllerDecoratorTest extends TestCase
 {
     /**
@@ -76,6 +81,9 @@ class MessageControllerDecoratorTest extends TestCase
         );
     }
 
+    /**
+     * Check that message lock is created and operation start time is updated
+     */
     public function testLock(): void
     {
         $bUuid = uniqid();

@@ -5,12 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace integration\testsuite\Magento\AsynchronousOperations\Cron;
+namespace Magento\AsynchronousOperations\Cron;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
-use Magento\AsynchronousOperations\Cron\MarkIncompleteOperationsAsFailed;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
