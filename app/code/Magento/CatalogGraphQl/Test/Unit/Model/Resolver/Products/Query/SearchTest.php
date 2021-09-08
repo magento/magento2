@@ -7,25 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Products\Query;
 
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\FieldSelection;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
+use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
-use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Query\FieldSelection;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
-use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
-use Magento\Search\Model\QueryFactory;
-use Magento\Search\Model\Query;
-use Magento\Search\Model\Search\PageSizeProvider;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
+use Magento\Search\Model\Search\PageSizeProvider;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
 
 /**
  * Test for fulltext search query
@@ -68,9 +66,9 @@ class SearchTest extends TestCase
     private $searchCriteriaBuilder;
 
     /**
-     * @var QueryFactory|MockObject
+     * @var QueryPopularity|MockObject
      */
-    private $queryFactory;
+    private $queryPopularity;
 
     /**
      * @var Search
@@ -104,7 +102,7 @@ class SearchTest extends TestCase
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->queryFactory = $this->getMockBuilder(QueryFactory::class)
+        $this->queryPopularity = $this->getMockBuilder(QueryPopularity::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Search(
@@ -115,21 +113,20 @@ class SearchTest extends TestCase
             $this->productsProvider,
             $this->searchCriteriaBuilder,
             $this->argsSelection,
-            $this->queryFactory
+            $this->queryPopularity
         );
     }
 
     public function testPopulateSearchQueryStats(): void
     {
         $args = ['search' => 'test'];
-        $storeId = 1;
-
         $context = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $resolveInfo = $this->getMockBuilder(ResolveInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -143,28 +140,12 @@ class SearchTest extends TestCase
             ->method('search')
             ->with($searchCriteria)
             ->willReturn($results);
-        $query = $this->getMockBuilder(Query::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $query->expects($this->once())->method('setStoreId')->with($storeId);
-        $query->expects($this->once())->method('saveIncrementalPopularity');
-        $query->expects($this->once())->method('saveNumResults');
-        $this->queryFactory->expects($this->once())
-            ->method('get')
-            ->willReturn($query);
-        $extensionAttributes = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $context->expects($this->any())
-            ->method('getExtensionAttributes')
-            ->willReturn($extensionAttributes);
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $store->expects($this->any())->method('getId')->willReturn($storeId);
-        $extensionAttributes->expects($this->any())->method('getStore')->willReturn($store);
         $this->productsProvider->expects($this->any())->method('getList')->willReturn($results);
         $results->expects($this->any())->method('getItems')->willReturn([]);
+
+        $this->queryPopularity->expects($this->once())
+            ->method('execute')
+            ->with($context, $args['search'], 0);
 
         $this->model->getResult($args, $resolveInfo, $context);
     }
