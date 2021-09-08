@@ -16,7 +16,8 @@ $addressCollection = $block->getData('customerAddressCollection');
 
 $addressArray = [];
 if ($block->getCustomerId()):
-    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])
+        ->setScopeFilter($block->getStoreId())->toArray();
 endif;
 
 /**
