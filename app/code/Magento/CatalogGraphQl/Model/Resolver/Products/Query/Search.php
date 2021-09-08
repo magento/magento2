@@ -13,13 +13,14 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
-use Magento\Search\Model\QueryFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -62,9 +63,9 @@ class Search implements ProductQueryInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var QueryFactory
+     * @var QueryPopularity
      */
-    private $queryFactory;
+    private $queryPopularity;
 
     /**
      * @param SearchInterface $search
@@ -74,7 +75,7 @@ class Search implements ProductQueryInterface
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ArgumentsProcessorInterface|null $argsSelection
-     * @param QueryFactory|null $queryFactory
+     * @param QueryPopularity|null $queryPopularity
      */
     public function __construct(
         SearchInterface $search,
@@ -84,7 +85,7 @@ class Search implements ProductQueryInterface
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ArgumentsProcessorInterface $argsSelection = null,
-        QueryFactory $queryFactory = null
+        QueryPopularity $queryPopularity = null
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -92,10 +93,8 @@ class Search implements ProductQueryInterface
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
-            ->get(ArgumentsProcessorInterface::class);
-        $this->queryFactory = $queryFactory ?: ObjectManager::getInstance()
-            ->get(QueryFactory::class);
+        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()->get(ArgumentsProcessorInterface::class);
+        $this->queryPopularity = $queryPopularity ?: ObjectManager::getInstance()->get(QueryPopularity::class);
     }
 
     /**
@@ -136,12 +135,7 @@ class Search implements ProductQueryInterface
 
         // add query statistics data
         if (!empty($args['search'])) {
-            $query = $this->queryFactory->get();
-            $query->setQueryText($args['search']);
-            $store = $context->getExtensionAttributes()->getStore();
-            $query->setStoreId($store->getId());
-            $query->saveIncrementalPopularity();
-            $query->saveNumResults($searchResults->getTotalCount());
+            $this->queryPopularity->execute($context, $args['search'], (int) $searchResults->getTotalCount());
         }
 
         $productArray = [];
