@@ -16,4 +16,3 @@
         <waitForPageLoad stepKey="waitForFormToLoad"/>
     </actionGroup>
 </actionGroups>
-        
