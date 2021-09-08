@@ -37,7 +37,7 @@ type DownloadableProduct implements ProductInterface, RoutableInterface, Customi
     links_title: String @doc(description: "The heading above the list of downloadable products.")
 }
 
-enum DownloadableFileTypeEnum @deprecated(reason: "Use `sample_url` instead,") {
+enum DownloadableFileTypeEnum @deprecated(reason: "Use `sample_url` instead.") {
     FILE @deprecated(reason: "Use `sample_url` instead.")
     URL @deprecated(reason: "Use `sample_url` instead.")
 }
