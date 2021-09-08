@@ -89,12 +89,24 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <!--check if the div#customer-reviews element -->
-        <!--        <scrollTo selector="div#customer-reviews" stepKey="scrollToElement"/>-->
-        <!--        <dontSeeElement selector="div#product-review-container > div#customer-reviews" stepKey="customerReviewDivIsNotLoaded"/>-->
+        <dontSeeElementInDOM selector="div#product-review-container > div#customer-review" stepKey="customerReviewDivIsNotLoaded"/>
         <!-- Click on reviews and add reviews with current user -->
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
         <!-- Verify products reviews div#product-review-container > div#customer-reviews is loaded after click-->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeCustomerReviewsDivIsLoaded">
+            <argument name="selector" value="div#product-review-container > div#customer-reviews"/>
+        </actionGroup>
+
+        <!-- Navigate to PLP and check product rating for list and table views -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage2"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku2">
+            <argument name="query" value="$$createProduct1.sku$$"/>
+        </actionGroup>
+        <!-- Click on the review button for product -->
+        <click selector=".action.view" stepKey="clickOnProductReviewsLink"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <!-- Verify products reviews div#product-review-container > div#customer-reviews is loaded if reviews are open directly-->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeCustomerReviewsDivIsLoaded2">
             <argument name="selector" value="div#product-review-container > div#customer-reviews"/>
         </actionGroup>
     </test>
