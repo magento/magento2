@@ -126,5 +126,14 @@
             <actualResult type="string">$getProductPriceStarsAtUserAccount</actualResult>
             <expectedResult type="string">width: 100%;</expectedResult>
         </assertEquals>
+
+        <!-- Navigate to customer/account/ and check My Recent Reviews-->
+        <amOnPage url="customer/account/" stepKey="amOnCustomerDashboardMyRecentReview"/>
+        <waitForPageLoad stepKey="waitForSchedulePageLoad" time="120"/>
+        <grabAttributeFrom selector="div.rating-result>span.rating_$$createProduct1.id$$ span" userInput="style" stepKey="getProductStarsAtListView2"/>
+        <assertEquals stepKey="checkProductStarsAtCustomerDashboard">
+            <actualResult type="string">$getProductStarsAtListView2</actualResult>
+            <expectedResult type="string">width: 80%;</expectedResult>
+        </assertEquals>
     </test>
 </tests>
