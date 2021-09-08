@@ -12,14 +12,14 @@ input AddBundleProductsToCartInput @doc(description: "Defines the bundle product
 
 input BundleProductCartItemInput @doc(description: "Defines a single bundle product.") {
     data: CartItemInput! @doc(description: "The quantity and SKU of the bundle product.")
-    bundle_options:[BundleOptionInput!]! @doc(description: "An array of options for the bundle product with the chosen value and quantity of each option.")
+    bundle_options:[BundleOptionInput!]! @doc(description: "A mandatory array of options for the bundle product, including each chosen option and specified quantity.")
     customizable_options:[CustomizableOptionInput!] @doc(description: "The ID and value of the option.")
 }
 
-input BundleOptionInput @doc(description: "Defines a bundle option.") {
+input BundleOptionInput @doc(description: "Defines the input for a bundle option.") {
     id: Int! @doc(description: "The ID of the option.")
-    quantity: Float! @doc(description: "The number of a specific child item to add to the cart.")
-    value: [String!]! @doc(description: "An array with the chosen value of the option")
+    quantity: Float! @doc(description: "The number of the selected item to add to the cart.")
+    value: [String!]! @doc(description: "An array with the chosen value of the option.")
 }
 
 type AddBundleProductsToCartOutput @doc(description: "Contains details about the cart after adding bundle products.") {
@@ -47,18 +47,18 @@ type SelectedBundleOptionValue @doc(description: "Contains details about a value
     price: Float! @doc(description: "The price of the value for the selected bundle product option.")
 }
 
-type BundleItem @doc(description: "Defines an individual item in a bundle product.") {
+type BundleItem @doc(description: "Defines an individual item within a bundle product.") {
     option_id: Int @deprecated(reason: "Use `uid` instead") @doc(description: "An ID assigned to each type of item in a bundle product.")
     uid: ID @doc(description: "The unique ID for a `BundleItem` object.")
     title: String @doc(description: "The display name of the item.")
     required: Boolean @doc(description: "Indicates whether the item must be included in the bundle.")
     type: String @doc(description: "The input type that the customer uses to select the item. Examples include radio button and checkbox.")
-    position: Int @doc(description: "The relative position of this item compared to the other bundle items.")
+    position: Int @doc(description: "A number indicating the sequence order of this item compared to the other bundle items.")
     sku: String @doc(description: "The SKU of the bundle product.")
     options: [BundleItemOption] @doc(description: "An array of additional options for this bundle item.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleItemLinks")
 }
 
-type BundleItemOption @doc(description: "Defines characteristics and options for a specific bundle item.") {
+type BundleItemOption @doc(description: "Defines the characteristics that comprise a specific bundle item and its options.") {
     id: Int @deprecated(reason: "Use `uid` instead") @doc(description: "The ID assigned to the bundled item option.")
     label: String @doc(description: "The text that identifies the bundled item option.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\Label")
     qty: Float @deprecated(reason: "Use `quantity` instead.") @doc(description: "Indicates the quantity of this specific bundle item.")
