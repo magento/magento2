@@ -249,11 +249,11 @@ QUERY;
         }
         $this->assertNotEmpty($enumValueDeprecatedReason);
         $this->assertContains(
-            '`sample_url` serves to get the downloadable sample',
+            'Use `sample_url` instead.',
             $enumValueDeprecatedReason
         );
         $this->assertContains(
-            '`sample_url` serves to get the downloadable sample',
+            'Use `sample_url` instead.',
             $enumValueReasonArray
         );
         $this->assertNotEmpty(
