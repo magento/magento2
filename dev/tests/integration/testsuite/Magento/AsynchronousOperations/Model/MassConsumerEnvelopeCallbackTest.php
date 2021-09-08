@@ -26,6 +26,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for MassConsumerEnvelopeCallback
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassConsumerEnvelopeCallbackTest extends TestCase
 {
@@ -67,7 +69,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
     /**
      * @var CollectionFactory
      */
-    private $operationCollection;
+    private $operationCollectionFactory;
 
     /**
      * @inheritdoc
@@ -81,7 +83,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
         $this->messageEncoder = $objectManager->get(MessageEncoder::class);
         $this->operationRepository = $objectManager->get(OperationRepositoryInterface::class);
         $operationProcessor = $this->createMock(OperationProcessor::class);
-        $this->operationCollection = $objectManager->get(CollectionFactory::class);
+        $this->operationCollectionFactory = $objectManager->get(CollectionFactory::class);
         $this->bulkManagement = $objectManager->get(BulkManagementInterface::class);
         $this->saveMultipleOperations = $objectManager->get(SaveMultipleOperationsInterface::class);
         $operationProcessorFactory = $this->createMock(OperationProcessorFactory::class);
@@ -134,7 +136,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
         $this->model->execute($envelope);
 
         /** @var Collection $collection */
-        $collection = $this->operationCollection->create();
+        $collection = $this->operationCollectionFactory->create();
         $collection->addFieldToFilter(OperationInterface::BULK_ID, ['eq' => $buuid]);
         $this->assertEquals(1, $collection->count());
         $operation = $collection->getFirstItem();

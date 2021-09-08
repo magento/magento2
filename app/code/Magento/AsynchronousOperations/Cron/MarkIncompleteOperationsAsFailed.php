@@ -29,7 +29,7 @@ class MarkIncompleteOperationsAsFailed
     /**
      * Default error message
      */
-    private const ERROR_MESSAGE = 'Unknown error';
+    private const ERROR_MESSAGE = 'Unknown Error';
 
     /**
      * @var Operation

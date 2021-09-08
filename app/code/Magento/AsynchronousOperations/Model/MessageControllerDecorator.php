@@ -92,7 +92,7 @@ class MessageControllerDecorator
         $connection->beginTransaction();
         try {
             $lock = $this->messageController->lock($envelope, $consumerName);
-            $this->resource->getConnection()->update(
+            $connection->update(
                 $metadata->getEntityTable(),
                 [
                     'started_at' => $connection->formatDate($this->dateTime->gmtTimestamp())
