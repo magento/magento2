@@ -82,10 +82,10 @@ class FileScanner
         }
 
         $namespaceContentTokenTypes = [
-            T_NS_SEPARATOR,
-            T_STRING,
-            T_NAME_QUALIFIED,
-            T_NAME_FULLY_QUALIFIED
+            T_NS_SEPARATOR => T_NS_SEPARATOR,
+            T_STRING => T_STRING,
+            T_NAME_QUALIFIED => T_NAME_QUALIFIED,
+            T_NAME_FULLY_QUALIFIED => T_NAME_FULLY_QUALIFIED
         ];
 
         /**
@@ -205,8 +205,7 @@ class FileScanner
                 if ($this->tokenType === T_WHITESPACE) {
                     goto SCANNER_NAMESPACE_CONTINUE;
                 }
-
-                if (\in_array($this->tokenType, $namespaceContentTokenTypes, true)) {
+                if (\array_key_exists($this->tokenType, $namespaceContentTokenTypes)) {
                     $infos[$infoIndex]['namespace'] .= $tokenContent;
                 }
 
@@ -263,7 +262,7 @@ class FileScanner
                         goto SCANNER_USE_CONTINUE;
                     }
 
-                    if (\in_array($this->tokenType, $namespaceContentTokenTypes, true)) {
+                    if (\array_key_exists($this->tokenType, $namespaceContentTokenTypes)) {
                         if ($useAsContext == false) {
                             $infos[$infoIndex]['statements'][$useStatementIndex]['use'] .= $tokenContent;
                         } else {

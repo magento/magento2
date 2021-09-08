@@ -212,9 +212,7 @@ class PhpScanner implements ScannerInterface
 
         $namespace = '';
         for ($tokenOffset = ($tokenIterator + 1); $tokenOffset < $count; ++$tokenOffset) {
-            if ($tokens[$tokenOffset][0] === T_NAME_QUALIFIED
-                || $tokens[$tokenOffset][0] === T_NAME_FULLY_QUALIFIED
-            ) {
+            if ($tokens[$tokenOffset][0] === T_NAME_QUALIFIED) {
                 $namespace = $tokens[$tokenOffset][1];
             } else if ($tokens[$tokenOffset] === '{' || $tokens[$tokenOffset] === ';') {
                 break;

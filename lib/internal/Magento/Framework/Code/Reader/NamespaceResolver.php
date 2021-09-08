@@ -106,13 +106,13 @@ class NamespaceResolver
                         $import,
                         function ($token) {
                             $whitelist = [
-                                T_NS_SEPARATOR,
-                                T_STRING,
-                                T_AS,
-                                T_NAME_QUALIFIED,
-                                T_NAME_FULLY_QUALIFIED
+                                T_NS_SEPARATOR => T_NS_SEPARATOR,
+                                T_STRING => T_STRING,
+                                T_AS => T_AS,
+                                T_NAME_QUALIFIED => T_NAME_QUALIFIED,
+                                T_NAME_FULLY_QUALIFIED => T_NAME_FULLY_QUALIFIED
                             ];
-                            if (isset($token[0]) && in_array($token[0], $whitelist)) {
+                            if (isset($token[0]) && \array_key_exists($token[0], $whitelist)) {
                                 return true;
                             }
                             return false;
