@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Config\Source;
 
 /**
- * Option provider for custom media URL type
+ * Option provider for the SMTP Transport Type
  */
 class SmtpTransportType implements \Magento\Framework\Data\OptionSourceInterface
 {
 
     /**
-     * The the possible Auth types
+     * The possible Transport types
      *
      * @codeCoverageIgnore
      * @return array

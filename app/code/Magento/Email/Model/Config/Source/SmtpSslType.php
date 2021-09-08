@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Config\Source;
 
 /**
- * Option provider for custom media URL type
+ * Option provider for SMTP SSL Type
  */
 class SmtpSslType implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
-     * The the possible Auth types
+     * The possible SSL types
      *
      * @codeCoverageIgnore
      * @return array
