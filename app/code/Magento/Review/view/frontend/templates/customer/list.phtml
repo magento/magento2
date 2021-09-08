@@ -56,7 +56,8 @@ $reviewHelper = $block->getData('reviewHelper');
                         <?= /* @noEscape */
                         $secureRenderer->renderStyleAsTag(
                             "width:" . /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) . "%;",
-                            'div.rating-summary div.rating-result>span.rating_' . $escaper->escapeUrl($review->getReviewId())
+                            'div.rating-summary div.rating-result>span.rating_' .
+                                            $escaper->escapeUrl($review->getReviewId())
                         ) ?>
                     <?php endif; ?>
                     </td>
