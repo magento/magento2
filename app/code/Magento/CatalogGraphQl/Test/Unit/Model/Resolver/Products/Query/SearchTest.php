@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for fulltext search query
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SearchTest extends TestCase
 {

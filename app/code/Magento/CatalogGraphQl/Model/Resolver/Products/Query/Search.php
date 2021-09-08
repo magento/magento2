@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -19,10 +20,11 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
-use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 
-/**
+/*a*
  * Full text search for catalog using given search criteria.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Search implements ProductQueryInterface
 {
