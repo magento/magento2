@@ -42,17 +42,18 @@ class Url implements ResolverInterface
     private $productImageFactory;
 
     /**
-     * @param ImageFactory $productImageFactory
+     * @param CheckImageCacheFileExist $checkImageCacheFileExist
      * @param PlaceholderProvider $placeholderProvider
+     * @param ImageFactory $productImageFactory
      */
     public function __construct(
         CheckImageCacheFileExist $checkImageCacheFileExist,
-        ImageFactory $productImageFactory,
-        PlaceholderProvider $placeholderProvider
+        PlaceholderProvider $placeholderProvider,
+        ImageFactory $productImageFactory
     ) {
         $this->checkImageCacheFileExist = $checkImageCacheFileExist;
-        $this->productImageFactory = $productImageFactory;
         $this->placeholderProvider = $placeholderProvider;
+        $this->productImageFactory = $productImageFactory;
     }
 
     /**

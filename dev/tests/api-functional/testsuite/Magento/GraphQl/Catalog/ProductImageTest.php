@@ -7,18 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filesystem;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ProductImageTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
+     * @var ObjectManager
      */
     private $objectManager;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->fileSystem = $this->objectManager->create(Filesystem::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -129,6 +148,67 @@ QUERY;
         self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['thumbnail']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testProductThumbnailCacheImageFile()
+    {
+        $productSku = 'simple';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+        thumbnail {
+            url
+            label
+        }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
+        self::assertTrue($this->checkImageCacheFileExists($response['products']['items'][0]['thumbnail']['url']));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testProductSmallImageCacheImageFile()
+    {
+        $productSku = 'simple';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+        small_image {
+            url
+            label
+        }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        self::assertTrue($this->checkImageCacheFileExists($response['products']['items'][0]['small_image']['url']));
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return bool
+     * @throws FileSystemException|NoSuchEntityException
+     */
+    private function checkImageCacheFileExists(string $url): bool
+    {
+        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $storeBaseUrl = $this->storeManager->getStore()->getBaseUrl('media');
+        $filePath = str_replace($storeBaseUrl, '', $url);
+
+        return $mediaDirectory->isFile($filePath);
     }
 
     /**
