@@ -15,8 +15,8 @@
             <title value="StoreFront Review Rating By Customers"/>
             <description value="Check if product reviews is loaded on Product Page with page load and on click of Review tab"/>
             <severity value="AVERAGE"/>
-            <useCaseId value=""/>
-            <testCaseId value="ACP2E-89"/>
+            <useCaseId value="ACP2E-89"/>
+            <testCaseId value="AC-1180"/>
         </annotations>
         <before>
             <!-- Enable singe store view to view ratings-->
