@@ -21,7 +21,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
 
-/*a*
+/**
  * Full text search for catalog using given search criteria.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
