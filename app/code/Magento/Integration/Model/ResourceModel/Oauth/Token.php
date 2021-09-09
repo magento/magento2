@@ -44,8 +44,7 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         $connectionName = null,
-        $encryptor =  null
-
+        $encryptor = null
     ) {
         $this->_dateTime = $dateTime;
         $this->date = $date;
@@ -208,6 +207,9 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $connection->fetchRow($select);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
@@ -220,6 +222,9 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return parent::_beforeSave($object);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {

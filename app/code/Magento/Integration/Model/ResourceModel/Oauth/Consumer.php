@@ -20,6 +20,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
+     * @param Encryptor $encryptor
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -74,26 +75,31 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $connection->fetchOne($select);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-            $existingSecret = $object->getSecret();
-            $entityId = $object->getEntityId();
+        $existingSecret = $object->getSecret();
+        $entityId = $object->getEntityId();
 
-            if (!$entityId && $existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-                $object->setSecret($this->encryptor->encrypt($existingSecret));
-            }
+        if (!$entityId && $existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+            $object->setSecret($this->encryptor->encrypt($existingSecret));
+        }
 
         return parent::_beforeSave($object);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-            $existingSecret = $object->getSecret();
+        $existingSecret = $object->getSecret();
 
-            if (strlen($existingSecret) > OauthHelper::LENGTH_CONSUMER_SECRET) {
-                $object->setSecret($this->encryptor->decrypt($existingSecret));
-            }
-
+        if (strlen($existingSecret) > OauthHelper::LENGTH_CONSUMER_SECRET) {
+            $object->setSecret($this->encryptor->decrypt($existingSecret));
+        }
 
         return parent::_afterLoad($object);
     }

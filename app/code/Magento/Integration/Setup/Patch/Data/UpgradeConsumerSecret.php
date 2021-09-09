@@ -15,7 +15,6 @@ use Magento\Integration\Model\ResourceModel\Oauth\Consumer\CollectionFactory as 
 use Magento\Integration\Model\ResourceModel\Oauth\Consumer;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Upgrades Oauth Consumer Secret if not encrypted
  */
@@ -51,6 +50,7 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
      * Constructor
      *
      * @param ConsumerCollectionFactory $consumerCollectionFactory
+     * @param Encryptor $encryptor
      * @param Consumer $consumerResourceModel
      * @param LoggerInterface $logger
      */
@@ -59,8 +59,8 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         Encryptor $encryptor,
         Consumer $consumerResourceModel,
         LoggerInterface $logger
-    )
-    {
+    ) {
+
         $this->consumerCollectionFactory= $consumerCollectionFactory;
         $this->encryptor = $encryptor;
         $this->consumerResourceModel = $consumerResourceModel;
@@ -91,10 +91,12 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
                         $connection->update($this->consumerResourceModel->getMainTable(), $data, $where);
                     } catch (\Exception $exception) {
                         $this->logger->critical($exception->getMessage());
+                        return $this;
                     }
                 }
             }
         }
+        return $this;
     }
 
     /**
@@ -121,4 +123,3 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         return [];
     }
 }
-

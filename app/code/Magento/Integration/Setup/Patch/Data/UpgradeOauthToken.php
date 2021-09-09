@@ -17,7 +17,6 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Upgrades Oauth Access Token Secret if not encrypted
  */
@@ -53,6 +52,7 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
      * Constructor
      *
      * @param TokenCollectionFactory $tokenCollectionFactory
+     * @param Encryptor $encryptor
      * @param Token $tokenResourceModel
      * @param LoggerInterface $logger
      */
@@ -61,8 +61,8 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
         Encryptor $encryptor,
         Token $tokenResourceModel,
         LoggerInterface $logger
-    )
-    {
+    ) {
+
         $this->tokenCollectionFactory= $tokenCollectionFactory;
         $this->encryptor = $encryptor;
         $this->tokenResourceModel = $tokenResourceModel;
@@ -95,10 +95,12 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
                         $connection->update($this->tokenResourceModel->getMainTable(), $data, $where);
                     } catch (\Exception $exception) {
                         $this->logger->critical($exception->getMessage());
+                        return $this;
                     }
                 }
             }
         }
+        return $this;
     }
 
     /**
