@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52cbf5bf914a21147ee2d843a9d2fdd2",
+    "content-hash": "15a199e5e23e21b794d4d9bf08bd58be",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -13002,6 +13002,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
+        "magento/framework": 20,
         "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
