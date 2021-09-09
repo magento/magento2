@@ -89,6 +89,11 @@ class OauthTest extends TestCase
     /** @var MockObject */
     private $tokenResourceModelMock;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
