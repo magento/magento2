@@ -14,6 +14,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/magento-trigger/magento-framework"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/esler/zf1"
         }
     ],
     "require": {
@@ -70,7 +74,7 @@
         "magento/composer": "dev-develop",
         "magento/framework": "dev-php80_update",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "~1.14.2",
+        "magento/zendframework1": "dev-patch-1",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",

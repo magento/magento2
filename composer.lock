@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15a199e5e23e21b794d4d9bf08bd58be",
+    "content-hash": "c442807e1b93a7324185132db05fba9d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3763,16 +3763,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.14.5",
+            "version": "dev-patch-1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/zf1.git",
-                "reference": "6ad81500d33f085ca2391f2b59e37bd34203b29b"
+                "url": "https://github.com/esler/zf1.git",
+                "reference": "3f2af6c00fcfae78f6d74461814496a5fbee30bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/6ad81500d33f085ca2391f2b59e37bd34203b29b",
-                "reference": "6ad81500d33f085ca2391f2b59e37bd34203b29b",
+                "url": "https://api.github.com/repos/esler/zf1/zipball/3f2af6c00fcfae78f6d74461814496a5fbee30bc",
+                "reference": "3f2af6c00fcfae78f6d74461814496a5fbee30bc",
                 "shasum": ""
             },
             "require": {
@@ -3793,24 +3793,29 @@
                     "Zend_": "library/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
+            "archive": {
+                "exclude": [
+                    "/demos",
+                    "/documentation",
+                    "/tests"
+                ]
+            },
             "license": [
                 "BSD-3-Clause"
             ],
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "ZF1",
-                "framework"
+                "framework",
+                "zf1"
             ],
             "support": {
-                "issues": "https://github.com/magento/zf1/issues",
-                "source": "https://github.com/magento/zf1/tree/1.14.5"
+                "source": "https://github.com/esler/zf1/tree/patch-1"
             },
-            "time": "2020-12-02T21:12:59+00:00"
+            "time": "2021-05-12T08:01:53+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -13003,6 +13008,7 @@
     "stability-flags": {
         "magento/composer": 20,
         "magento/framework": 20,
+        "magento/zendframework1": 20,
         "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
