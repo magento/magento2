@@ -18,6 +18,7 @@ use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeInterface;
 use Laminas\Mail\Message;
 use Laminas\Mail\Transport\Sendmail;
+use Laminas\Mail\Transport\TransportInterface as LaminasTransportInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -90,9 +91,19 @@ class Transport implements TransportInterface
     private $returnPathValue;
 
     /**
-     * @var Sendmail
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var LaminasTransportInterface|null
      */
     private $laminasTransport;
+
+    /**
+     * @var null|string|array|\Traversable
+     */
+    private $parameters;
 
     /**
      * @var MessageInterface
@@ -124,20 +135,28 @@ class Transport implements TransportInterface
             self::XML_PATH_SENDING_RETURN_PATH_EMAIL,
             ScopeInterface::SCOPE_STORE
         );
+        $this->message = $message;
+        $this->scopeConfig = $scopeConfig;
+        $this->parameters = $parameters;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+    }
 
-        $transport = $scopeConfig->getValue(
-            self::XML_PATH_TRANSPORT,
-            ScopeInterface::SCOPE_STORE
-        );
+    public function getTransport(): LaminasTransportInterface
+    {
+        if ($this->laminasTransport === null) {
+            $transport = $this->scopeConfig->getValue(
+                self::XML_PATH_TRANSPORT,
+                ScopeInterface::SCOPE_STORE
+            );
 
-        if ($transport === 'smtp') {
-            $this->laminasTransport = $this->createSmtpTransport($scopeConfig);
-        } else {
-            $this->laminasTransport = $this->createSendmailTransport($parameters);
+            if ($transport === 'smtp') {
+                $this->laminasTransport = $this->createSmtpTransport();
+            } else {
+                $this->laminasTransport = $this->createSendmailTransport();
+            }
         }
 
-        $this->message = $message;
-        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        return $this->laminasTransport;
     }
 
     /**
@@ -155,7 +174,7 @@ class Transport implements TransportInterface
                 $laminasMessage->setSender($fromAddressList->current()->getEmail());
             }
 
-            $this->laminasTransport->send($laminasMessage);
+            $this->getTransport()->send($laminasMessage);
         } catch (\Exception $e) {
             $this->logger->error($e);
             throw new MailException(new Phrase('Unable to send mail. Please try again later.'));
@@ -170,38 +189,34 @@ class Transport implements TransportInterface
         return $this->message;
     }
 
-    /**
-     * @param $parameters
-     * @return Smtp
-     */
-    private function createSmtpTransport($scopeConfig)
+    private function createSmtpTransport(): Smtp
     {
-        $host = $scopeConfig->getValue(
+        $host = $this->scopeConfig->getValue(
             self::XML_PATH_HOST,
             ScopeInterface::SCOPE_STORE
         );
 
-        $port = $scopeConfig->getValue(
+        $port = $this->scopeConfig->getValue(
             self::XML_PATH_PORT,
             ScopeInterface::SCOPE_STORE
         );
 
-        $username = $scopeConfig->getValue(
+        $username = $this->scopeConfig->getValue(
             self::XML_PATH_USERNAME,
             ScopeInterface::SCOPE_STORE
         );
 
-        $password = $scopeConfig->getValue(
+        $password = $this->scopeConfig->getValue(
             self::XML_PATH_PASSWORD,
             ScopeInterface::SCOPE_STORE
         );
 
-        $auth = $scopeConfig->getValue(
+        $auth = $this->scopeConfig->getValue(
             self::XML_PATH_AUTH,
             ScopeInterface::SCOPE_STORE
         );
 
-        $ssl = $scopeConfig->getValue(
+        $ssl = $this->scopeConfig->getValue(
             self::XML_PATH_SSL,
             ScopeInterface::SCOPE_STORE
         );
@@ -218,7 +233,7 @@ class Transport implements TransportInterface
         ];
 
         if ($ssl && $ssl !== 'none') {
-            $connectionConfig['ssl'] = $ssl;
+            $options['connection_config']['ssl'] = $ssl;
         }
 
         return new Smtp(new SmtpOptions($options));
@@ -228,8 +243,8 @@ class Transport implements TransportInterface
      * @param $parameters
      * @return Sendmail
      */
-    private function createSendmailTransport($parameters)
+    private function createSendmailTransport(): Sendmail
     {
-        return new Sendmail($parameters);
+        return new Sendmail($this->parameters);
     }
 }
