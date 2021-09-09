@@ -43,10 +43,12 @@ class MessageControllerDecorator
      * @var MessageEncoder
      */
     private $messageEncoder;
+
     /**
      * @var DateTime
      */
     private $dateTime;
+
     /**
      * @var MetadataPool
      */
