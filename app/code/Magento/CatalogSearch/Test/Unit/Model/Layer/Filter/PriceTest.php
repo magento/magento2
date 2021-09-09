@@ -188,7 +188,13 @@ class PriceTest extends TestCase
 
         $this->request
             ->method('getParam')
-            ->with($requestField);
+            ->with($requestField)
+            ->willReturnMap(
+                [
+                    [$requestField, $requestValue],
+                    [$idField, $idValue],
+                ]
+            );
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -268,8 +274,8 @@ class PriceTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetItems(): void
     {
         $this->target->setAttributeModel($this->attribute);
