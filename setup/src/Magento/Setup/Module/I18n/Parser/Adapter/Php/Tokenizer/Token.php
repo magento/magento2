@@ -86,6 +86,16 @@ class Token
     }
 
     /**
+     * Check if a token has a Qualified Name type, which was introduced in PHP 8.
+     *
+     * @return bool
+     */
+    public function isFullQualifiedName(): bool
+    {
+        return $this->getName() === T_NAME_FULLY_QUALIFIED;
+    }
+
+    /**
      * Whenever token is equal function
      *
      * @param string $functionName

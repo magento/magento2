@@ -68,7 +68,11 @@ class Tokenizer
         $state = 1;
         $classString = '';
         while ($token = $this->getNextRealToken()) {
-            if ($token->isNamespaceSeparator() && $state != 2) {
+            if ($token->isFullQualifiedName()) {
+                // In PHP 8.0, it can be already a full name e.g. \Magento\Framework\Phrase.
+                $classString = $token->getValue();
+                $state = 3;
+            } elseif ($token->isNamespaceSeparator() && $state != 2) {
                 $classString .= $token->getValue();
                 $state = 2;
             } elseif ($token->isIdentifier() && $state != 3) {
