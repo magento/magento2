@@ -13,6 +13,8 @@ use Magento\Integration\Model\Cache\Type;
  * Integration Config Model.
  *
  * This is a parent class for storing information about Integrations.
+ *
+ * @api
  * @deprecated 100.1.0
  */
 class Config
@@ -60,7 +62,6 @@ class Config
      * Return integrations loaded from cache if enabled or from files merged previously
      *
      * @return array
-     * @api
      */
     public function getIntegrations()
     {

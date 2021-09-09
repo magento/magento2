@@ -12,6 +12,8 @@ use Magento\Framework\Escaper;
 
 /**
  * Class Config
+ *
+ * @api
  */
 class Config
 {
@@ -75,7 +77,6 @@ class Config
      * Check if Minimum Advertised Price is enabled
      *
      * @return bool
-     * @api
      */
     public function isEnabled()
     {

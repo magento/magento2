@@ -27,7 +27,6 @@ interface UserContextInterface
      * Identify current user ID.
      *
      * @return int|null
-     * @api
      */
     public function getUserId();
 
@@ -35,7 +34,6 @@ interface UserContextInterface
      * Retrieve current user type.
      *
      * @return int|null
-     * @api
      */
     public function getUserType();
 }

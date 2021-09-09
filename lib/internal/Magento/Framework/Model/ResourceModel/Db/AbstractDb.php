@@ -246,7 +246,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @throws LocalizedException
      * @return string
-     * @api
      */
     public function getIdFieldName()
     {
@@ -264,7 +263,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @throws LocalizedException
      * @return string
-     * @api
      */
     public function getMainTable()
     {
@@ -279,7 +277,6 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param string $tableName
      * @return string
-     * @api
      */
     public function getTable($tableName)
     {
@@ -391,7 +388,6 @@ abstract class AbstractDb extends AbstractResource
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
      * @throws AlreadyExistsException
-     * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -8,6 +8,9 @@ namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**
@@ -72,7 +75,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param string $attributeCode
      * @return $this
-     * @api
      */
     public function addAttributeInConditionFilter($attributeCode)
     {

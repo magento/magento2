@@ -16,7 +16,6 @@ interface GeneratorInterface
     /**
      * @param \Magento\Framework\DataObject $item
      * @return string
-     * @api
      */
     public function getUrl($item);
 }

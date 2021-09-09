@@ -26,7 +26,6 @@ use Magento\Framework\Message\ManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
- * @api
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface

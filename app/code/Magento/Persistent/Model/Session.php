@@ -297,7 +297,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Remove persistent cookie
      *
      * @return $this
-     * @api
      */
     public function removePersistentCookie()
     {
@@ -313,7 +312,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param int $duration Time in seconds.
      * @param string $path
      * @return $this
-     * @api
      */
     public function setPersistentCookie($duration, $path)
     {

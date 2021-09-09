@@ -20,7 +20,6 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Admin user model
  *
- * @api
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()

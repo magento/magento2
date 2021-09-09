@@ -7,6 +7,9 @@
  */
 namespace Magento\UrlRewrite\Model\ResourceModel;
 
+/**
+ * @api
+ */
 class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
@@ -57,7 +60,6 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
      * @param mixed $store
      * @param bool $withAdmin
      * @return $this
-     * @api
      */
     public function addStoreFilter($store, $withAdmin = true)
     {

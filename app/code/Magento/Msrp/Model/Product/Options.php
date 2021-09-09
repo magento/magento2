@@ -7,6 +7,9 @@ namespace Magento\Msrp\Model\Product;
 
 use Magento\Msrp\Model\Product\Attribute\Source\Type\Price as TypePrice;
 
+/**
+ * @api
+ */
 class Options
 {
     /**
@@ -35,7 +38,6 @@ class Options
      * @param \Magento\Catalog\Model\Product $product
      * @param null $visibility
      * @return bool|null
-     * @api
      */
     public function isEnabled($product, $visibility = null)
     {

@@ -36,6 +36,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * @method UrlRewrite setRedirectType($value)
  * @method UrlRewrite setStoreId($value)
  * @method UrlRewrite setDescription($value)
+ * @api
  */
 class UrlRewrite extends AbstractModel
 {
@@ -114,7 +115,6 @@ class UrlRewrite extends AbstractModel
      * Get metadata
      *
      * @return array
-     * @api
      */
     public function getMetadata()
     {

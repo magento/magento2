@@ -8,7 +8,6 @@ namespace Magento\Downloadable\Model\Link;
 /**
  * Downloadable links purchased model
  *
- * @api
  * @method int getOrderId()
  * @method \Magento\Downloadable\Model\Link\Purchased setOrderId(int $value)
  * @method string getOrderIncrementId()

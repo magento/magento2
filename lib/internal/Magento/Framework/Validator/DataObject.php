@@ -36,7 +36,6 @@ class DataObject implements \Zend_Validate_Interface
      * @param \Zend_Validate_Interface $validator
      * @param string $fieldName Field name to apply validation to, or empty value to validate entity as a whole
      * @return \Magento\Framework\Validator\DataObject
-     * @api
      */
     public function addRule(\Zend_Validate_Interface $validator, $fieldName = '')
     {
@@ -61,7 +60,6 @@ class DataObject implements \Zend_Validate_Interface
      * @return bool
      *
      * @throws \Exception
-     * @api
      */
     public function isValid($entity)
     {

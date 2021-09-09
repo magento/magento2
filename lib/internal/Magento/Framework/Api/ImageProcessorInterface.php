@@ -21,7 +21,6 @@ interface ImageProcessorInterface
      * Process Data objects with image type custom attributes and update the custom attribute values with saved image
      * paths
      *
-     * @api
      * @param CustomAttributesDataInterface $dataObjectWithCustomAttributes
      * @param string $entityType entity type
      * @param CustomAttributesDataInterface $previousCustomerData

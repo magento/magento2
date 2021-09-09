@@ -15,6 +15,7 @@ use Magento\Quote\Model\Quote\Payment;
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.8
+ * @api
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -211,7 +212,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * Check if verification should be used.
      *
      * @return bool
-     * @api
      */
     public function hasVerification()
     {
@@ -226,7 +226,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * Get list of credit cards verification reg exp.
      *
      * @return array
-     * @api
      */
     public function getVerificationRegEx()
     {
@@ -305,7 +304,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param string $type
      * @return bool
-     * @api
      */
     public function otherCcType($type)
     {
@@ -317,7 +315,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param   string $ccNumber
      * @return  bool
-     * @api
      */
     public function validateCcNum($ccNumber)
     {
@@ -357,7 +354,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param string $ccNumber
      * @return bool
-     * @api
      */
     public function validateCcNumOther($ccNumber)
     {

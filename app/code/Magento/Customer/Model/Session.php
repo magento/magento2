@@ -338,7 +338,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve customer id from current session
      *
-     * @api
      * @return int|null
      */
     public function getCustomerId()
@@ -407,7 +406,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Checking customer login status
      *
-     * @api
      * @return bool
      */
     public function isLoggedIn()
@@ -477,7 +475,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authorization customer by identifier
      *
-     * @api
      * @param   int $customerId
      * @return  bool
      */
@@ -495,7 +492,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Logout customer
      *
-     * @api
      * @return $this
      */
     public function logout()

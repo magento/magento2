@@ -11,7 +11,6 @@ use Magento\Downloadable\Model\ResourceModel\Link as Resource;
 /**
  * Downloadable link model
  *
- * @api
  * @method int getProductId()
  * @method Link setProductId(int $value)
  *

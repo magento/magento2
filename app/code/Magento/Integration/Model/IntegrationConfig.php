@@ -15,6 +15,8 @@ use Magento\Integration\Model\Config\Integration\Reader;
  * Integration Api Config Model.
  *
  * This is a parent class for storing information about Integrations.
+ *
+ * @api
  * @deprecated 100.1.0
  */
 class IntegrationConfig
@@ -62,7 +64,6 @@ class IntegrationConfig
      * Return integrations loaded from cache if enabled or from files merged previously
      *
      * @return array
-     * @api
      */
     public function getIntegrations()
     {

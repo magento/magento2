@@ -7,6 +7,8 @@ namespace Magento\PageCache\Model;
 
 /**
  * Checks if session should be depersonalized in Depersonalize plugin
+ *
+ * @api
  */
 class DepersonalizeChecker
 {
@@ -51,7 +53,6 @@ class DepersonalizeChecker
      *
      * @param \Magento\Framework\View\LayoutInterface $subject
      * @return bool
-     * @api
      */
     public function checkIfDepersonalize(\Magento\Framework\View\LayoutInterface $subject)
     {

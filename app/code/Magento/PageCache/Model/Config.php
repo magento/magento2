@@ -117,7 +117,6 @@ class Config
      * Return currently selected cache type: built in or varnish
      *
      * @return int
-     * @api
      */
     public function getType()
     {
@@ -128,7 +127,6 @@ class Config
      * Return page lifetime
      *
      * @return int
-     * @api
      */
     public function getTtl()
     {
@@ -141,7 +139,6 @@ class Config
      * @param string $vclTemplatePath
      * @return string
      * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
-     * @api
      */
     public function getVclFile($vclTemplatePath)
     {
@@ -267,7 +264,6 @@ class Config
      * Whether a cache type is enabled in Cache Management Grid
      *
      * @return bool
-     * @api
      */
     public function isEnabled()
     {

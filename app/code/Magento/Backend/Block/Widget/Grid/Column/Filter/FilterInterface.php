@@ -17,20 +17,17 @@ interface FilterInterface
 {
     /**
      * @return Column
-     * @api
      */
     public function getColumn();
 
     /**
      * @param Column $column
      * @return AbstractFilter
-     * @api
      */
     public function setColumn($column);
 
     /**
      * @return string
-     * @api
      */
     public function getHtml();
 }

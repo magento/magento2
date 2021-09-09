@@ -9,6 +9,8 @@ namespace Magento\Framework\App;
 
 /**
  * Lists router area codes & processes resolves FrontEndNames to area codes
+ *
+ * @api
  */
 class AreaList
 {
@@ -66,7 +68,6 @@ class AreaList
      *
      * @param string $frontName
      * @return null|string
-     * @api
      */
     public function getCodeByFrontName($frontName)
     {
@@ -87,7 +88,6 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getFrontName($areaCode)
     {
@@ -98,7 +98,6 @@ class AreaList
      * Retrieve area codes
      *
      * @return string[]
-     * @api
      */
     public function getCodes()
     {
@@ -110,7 +109,6 @@ class AreaList
      *
      * @param string $areaCode
      * @return string
-     * @api
      */
     public function getDefaultRouter($areaCode)
     {

@@ -6,6 +6,8 @@
 
 /**
  * Factory class for \Magento\Framework\Validator\Constraint
+ *
+ * @api
  */
 namespace Magento\Framework\Validator;
 
@@ -44,7 +46,6 @@ class ConstraintFactory
      *
      * @param array $data
      * @return \Magento\Framework\Validator\Constraint
-     * @api
      */
     public function create(array $data = [])
     {

@@ -143,7 +143,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param string $field
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @api
      */
     public function getConfigFlag($field)
     {
@@ -622,7 +621,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     * @api
      */
     public function getDebugFlag()
     {

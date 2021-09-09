@@ -25,7 +25,6 @@ use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Provide tokens config
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *

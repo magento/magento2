@@ -369,7 +369,6 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @param int $sortOrder
      * @return array
-     * @api
      * @since 101.0.0
      */
     public function addContainerChildren(
@@ -400,8 +399,6 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @param int $sortOrder
      * @return array
-     * @api
-     * @since 101.0.0
      */
     public function getContainerChildren(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -663,8 +660,6 @@ class Eav extends AbstractModifier
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @api
-     * @since 101.0.0
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -848,8 +843,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return array
-     * @api
-     * @since 101.0.0
      */
     public function setupAttributeContainerMeta(ProductAttributeInterface $attribute)
     {
@@ -885,8 +878,6 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return mixed|null
-     * @api
-     * @since 101.0.0
      */
     public function setupAttributeData(ProductAttributeInterface $attribute)
     {
@@ -1129,7 +1120,6 @@ class Eav extends AbstractModifier
      *
      * @param mixed $value
      * @return string
-     * @since 101.0.0
      */
     protected function formatPrice($value)
     {

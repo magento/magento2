@@ -21,7 +21,6 @@ use Magento\Store\Model\Store;
 /**
  * Confugurable product view type
  *
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
