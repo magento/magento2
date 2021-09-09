@@ -381,10 +381,13 @@ class QuoteManagement implements CartManagementInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
+        $customer = $quote->getCustomer();
+
         if ($paymentMethod) {
             $paymentMethod->setChecks(
                 [
@@ -403,18 +406,22 @@ class QuoteManagement implements CartManagementInterface
             $quote->collectTotals();
         }
 
-        if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$quote->getCustomer()) {
+        if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customer) {
             $quote->setCustomerId(null);
-            $quote->setCustomerEmail($quote->getBillingAddress()->getEmail());
-            if ($quote->getCustomerFirstname() === null && $quote->getCustomerLastname() === null) {
-                $quote->setCustomerFirstname($quote->getBillingAddress()->getFirstname());
-                $quote->setCustomerLastname($quote->getBillingAddress()->getLastname());
-                if ($quote->getBillingAddress()->getMiddlename() === null) {
-                    $quote->setCustomerMiddlename($quote->getBillingAddress()->getMiddlename());
+            $billingAddress = $quote->getBillingAddress();
+            $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            if ($quote->getCustomerFirstname() === null
+                && $quote->getCustomerLastname() === null
+                && $billingAddress
+            ) {
+                $quote->setCustomerFirstname($billingAddress->getFirstname());
+                $quote->setCustomerLastname($billingAddress->getLastname());
+                if ($billingAddress->getMiddlename() === null) {
+                    $quote->setCustomerMiddlename($billingAddress->getMiddlename());
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $groupId = $quote->getCustomer()->getGroupId() ?: GroupInterface::NOT_LOGGED_IN_ID;
+            $groupId = $customer ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
             $quote->setCustomerGroupId($groupId);
         }
 
