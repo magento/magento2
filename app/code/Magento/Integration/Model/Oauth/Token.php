@@ -138,7 +138,8 @@ class Token extends \Magento\Framework\Model\AbstractModel
         $this->_oauthHelper = $oauthHelper;
         $this->reader = $reader ?? ObjectManager::getInstance()->get(UserTokenReaderInterface::class);
         $this->issuer = $issuer ?? ObjectManager::getInstance()->get(UserTokenIssuerInterface::class);
-        $this->tokenParamsFactory = $paramsFactory ?? ObjectManager::getInstance()->get(UserTokenParametersInterfaceFactory::class);
+        $this->tokenParamsFactory = $paramsFactory ??
+            ObjectManager::getInstance()->get(UserTokenParametersInterfaceFactory::class);
     }
 
     /**

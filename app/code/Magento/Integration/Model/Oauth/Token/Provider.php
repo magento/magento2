@@ -82,7 +82,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateRequestToken($requestToken, $consumer, $oauthVerifier)
     {
