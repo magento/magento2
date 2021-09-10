@@ -221,6 +221,7 @@ class Transport implements TransportInterface
             ScopeInterface::SCOPE_STORE
         );
 
+
         $options  = [
             'name' => 'localhost',
             'host' => $host,
@@ -236,7 +237,10 @@ class Transport implements TransportInterface
             $options['connection_config']['ssl'] = $ssl;
         }
 
-        return new Smtp(new SmtpOptions($options));
+        $transport = new Smtp();
+        $transport->setOptions(new SmtpOptions($options));
+
+        return $transport;
     }
 
     /**
