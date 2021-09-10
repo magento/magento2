@@ -62,6 +62,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class ProductTest extends AbstractImportTestCase
 {
@@ -672,8 +673,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveProductAttributes(): void
     {
         $testTable = 'test_table';
@@ -755,8 +756,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMultipleValueSeparatorDefault(): void
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
@@ -767,8 +768,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMultipleValueSeparatorFromParameters(): void
     {
         $expectedSeparator = 'value';
@@ -787,8 +788,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetEmptyAttributeValueConstantDefault(): void
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
@@ -799,8 +800,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetEmptyAttributeValueConstantFromParameters(): void
     {
         $expectedSeparator = '__EMPTY__VALUE__TEST__';
@@ -819,8 +820,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteProductsForReplacement(): void
     {
         $importProduct = $this->getMockBuilder(Product::class)
@@ -841,8 +842,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaGalleryAttributeIdIfNotSetYet(): void
     {
         // reset possible existing id
@@ -914,8 +915,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowDeleteBehaviourAddRowErrorCall(): void
     {
         $importProduct = $this->getMockBuilder(Product::class)
@@ -940,8 +941,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidatorCheck(): void
     {
         $messages = ['validator message'];
@@ -1111,8 +1112,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowProcessEntityIncrement(): void
     {
         $count = 0;
@@ -1129,8 +1130,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidateExistingProductTypeAddNewSku(): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
@@ -1178,8 +1179,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidateExistingProductTypeAddErrorRowCall(): void
     {
         $sku = 'sku';
@@ -1260,8 +1261,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidateNewProductTypeGetNewSkuCall(): void
     {
         $sku = 'sku';
@@ -1307,8 +1308,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateDefaultScopeNotValidAttributesResetSku(): void
     {
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -1320,8 +1321,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowSetAttributeSetCodeIntoRowData(): void
     {
         $sku = 'sku';
@@ -1371,8 +1372,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateValidateOptionEntity(): void
     {
         $sku = 'sku';
@@ -1418,8 +1419,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
         $attributesData = 'PARAM1=value1,param2=value2';
@@ -1439,8 +1440,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testParseAttributesWithWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
         $attribute1 = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()

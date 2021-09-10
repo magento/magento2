@@ -821,6 +821,7 @@ class Product extends AbstractEntity
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -3293,7 +3294,7 @@ class Product extends AbstractEntity
      */
     private function getProductMediaPath(): string
     {
-        return $this->joinFilePaths($this->getMediaBasePath(), 'catalog','product');
+        return $this->joinFilePaths($this->getMediaBasePath(), 'catalog', 'product');
     }
 
     /**
@@ -3314,7 +3315,7 @@ class Product extends AbstractEntity
     /**
      * Joins two paths and remove redundant directory separator
      *
-     * @param string ...$paths
+     * @param array $paths
      * @return string
      */
     private function joinFilePaths(...$paths): string
