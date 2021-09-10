@@ -142,7 +142,7 @@ METHOD_BODY
             array_map(
                 function ($item) {
                     $output = '';
-                    if ($item['variadic']) {
+                    if (!empty($item['variadic'])) {
                         $output .= '... ';
                     }
 

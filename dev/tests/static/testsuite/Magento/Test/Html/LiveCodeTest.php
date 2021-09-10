@@ -6,10 +6,9 @@
 
 namespace Magento\Test\Html;
 
-use Magento\Framework\App\Utility;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
-use Magento\Framework\App\Utility\Files;
 use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
+use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +16,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LiveCodeTest extends TestCase
 {
+    private const FILE_EXTENSION = 'html';
+
     /**
      * @var string
      */
@@ -43,22 +44,14 @@ class LiveCodeTest extends TestCase
     public function testCodeStyle(): void
     {
         $reportFile = self::$reportDir . '/html_report.txt';
-        $wrapper = new CodeSniffer\HtmlWrapper();
-        $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/html'), $reportFile, $wrapper);
-        if (!$codeSniffer->canRun()) {
-            $this->markTestSkipped('PHP Code Sniffer is not installed.');
-        }
-        $codeSniffer->setExtensions([CodeSniffer\HtmlWrapper::FILE_EXTENSION]);
-        //Looking for changed .html files
-        $fileList = PHPCodeTest::getWhitelist([CodeSniffer\HtmlWrapper::FILE_EXTENSION], __DIR__, __DIR__);
-
-        $result = $codeSniffer->run($fileList);
-
-        $report = file_exists($reportFile) ? file_get_contents($reportFile) : "";
+        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer->setExtensions([self::FILE_EXTENSION]);
+        $result = $codeSniffer->run(PHPCodeTest::getWhitelist([self::FILE_EXTENSION], __DIR__, __DIR__));
+        $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $report
+            "PHP Code Sniffer detected {$result} violation(s): " . PHP_EOL . $report
         );
     }
 }
