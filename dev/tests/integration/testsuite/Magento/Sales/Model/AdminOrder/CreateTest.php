@@ -732,7 +732,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             /** Unset fake IDs for default billing and shipping customer addresses */
             /** @var Customer $customer */
             $customer = $this->objectManager->create(Customer::class);
-            if(empty($orderData['checkForDefaultStreet'])){
+            if (empty($orderData['checkForDefaultStreet'])) {
                 $customer->load($customerIdFromFixture)->setDefaultBilling(null)->setDefaultShipping(null)->save();
             }
         } else {
@@ -873,11 +873,17 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $errorMessages[] = $validationError->getText();
         }
         self::assertTrue(
-            in_array('Billing Address: "Street Address" contains non-alphabetic or non-numeric characters.', $errorMessages),
+            in_array(
+                'Billing Address: "Street Address" contains non-alphabetic or non-numeric characters.',
+                $errorMessages
+            ),
             'Expected validation message is absent.'
         );
         self::assertTrue(
-            in_array('Shipping Address: "Street Address" contains non-alphabetic or non-numeric characters.', $errorMessages),
+            in_array(
+                'Shipping Address: "Street Address" contains non-alphabetic or non-numeric characters.',
+                $errorMessages
+            ),
             'Expected validation message is absent.'
         );
     }
@@ -900,8 +906,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $shippingAddressAsBilling = 1;
         $invalidAddressData = array_merge($this->getValidAddressData(), ['street' => [0 => 'White', 1 => 'Lane']]);
 
-        // Any change in default customer address should be treated as new address by setting up `customer_address_id` to `null`
-        // in billing and shipping addresses.
+        // Any change in default customer address should be treated as new address by setting up
+        // `customer_address_id` to `null` in billing and shipping addresses.
         $address = array_merge($invalidAddressData, ['save_in_address_book' => '1', 'customer_address_id' => null]);
         $orderData = [
             'currency' => 'USD',

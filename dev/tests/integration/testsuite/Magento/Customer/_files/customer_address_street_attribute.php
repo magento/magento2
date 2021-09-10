@@ -1,7 +1,8 @@
 <?php
 /**
  * Customer default address fixture with entity_id = 2,
- * this fixture also inherit other fixtures for creating simple product, a customer with entity_id=1 and default customer address.
+ * this fixture also inherit other fixtures for creating simple product, a customer with entity_id=1
+ * and default customer address.
  * It also call a new fixture to update customer address `input_validation` rule for `street` field.
  *
  * Copyright © Magento, Inc. All rights reserved.
