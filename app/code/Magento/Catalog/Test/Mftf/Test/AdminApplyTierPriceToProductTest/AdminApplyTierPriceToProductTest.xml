@@ -5,8 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminApplyTierPriceToProductTest">
         <annotations>
             <features value="Catalog"/>
@@ -31,20 +31,17 @@
             <deleteData createDataKey="createSimpleUSCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex1"/>
-            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex1"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-      
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
-            <argument name="product" value="$$createSimpleProduct$$"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForSimpleProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct1">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
-            <argument name="product" value="$$createSimpleProduct$$"/>
-        </actionGroup>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-       
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage1"/>
+
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerGroupPriceAddButton1"/>
         <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent">
@@ -52,7 +49,7 @@
             <argument name="quantity" value="1"/>
             <argument name="priceType" value="Discount"/>
             <argument name="amount" value="10"/>
-        </actionGroup> 
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductTierPriceQtyInput1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductTierPriceValueType1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductTierPricePriceInput"/>
@@ -66,25 +63,30 @@
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad1"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_1"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_1"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_1"/>
+        <actionGroup ref="StorefrontAssertXRegularPriceYMessageOnPLPActionGroup" stepKey="assertProductFinalPriceIs90_1">
+            <argument name="X" value="90"/>
+            <argument name="Y" value="100"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertRegularPriceLabel_1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertRegularPriceAmount_1"/>
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
 
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad3"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_2"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_2"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_2"/>
-
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
-            <argument name="product" value="$$createSimpleProduct$$"/>
+        <actionGroup ref="StorefrontAssertXRegularPriceYMessageOnPLPActionGroup" stepKey="assertProductFinalPriceIs90_2">
+            <argument name="X" value="90"/>
+            <argument name="Y" value="100"/>
         </actionGroup>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertRegularPriceLabel_2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertRegularPriceAmount_2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex2"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct2">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage2"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForcustomerGroupPriceAddButton2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectCustomerGroupNameAttribute1"/>
@@ -93,7 +95,7 @@
             <argument name="quantity" value="1"/>
             <argument name="priceType" value="Discount"/>
             <argument name="amount" value="10"/>
-        </actionGroup> 
+        </actionGroup>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton2"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
 
@@ -101,7 +103,9 @@
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad4"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_1"/>
+        <actionGroup ref="StorefrontAssertPriceOnPLPActionGroup" stepKey="assertProductFinalPriceIs100_1">
+            <argument name="price" value="100"/>
+        </actionGroup>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_3"/>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin2">
@@ -111,15 +115,17 @@
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad5"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_3"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_4"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_3"/>
-
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex3"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
-            <argument name="product" value="$$createSimpleProduct$$"/>
+        <actionGroup ref="StorefrontAssertXRegularPriceYMessageOnPLPActionGroup" stepKey="assertProductFinalPriceIs90_3">
+            <argument name="X" value="90"/>
+            <argument name="Y" value="100"/>
         </actionGroup>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertRegularPriceLabel_4"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertRegularPriceAmount_3"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex3"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct3">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage3"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton3"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForcustomerGroupPriceAddButton3"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
@@ -128,7 +134,7 @@
             <argument name="quantity" value="15"/>
             <argument name="priceType" value="Discount"/>
             <argument name="amount" value="10"/>
-        </actionGroup> 
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductTierPriceQtyInput15"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickToLoseFocusOnRequiredInputElement"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton3_1"/>
@@ -137,10 +143,10 @@
             <argument name="quantity" value="20"/>
             <argument name="priceType" value="Discount"/>
             <argument name="amount" value="18"/>
-        </actionGroup> 
-        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="fillProductTierPriceQtyInput20"/>
-        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="selectProductTierPriceValueType2"/>
-        <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="selectProductTierPricePriceInput18"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductTierPriceQtyInput20"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductTierPriceValueType2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductTierPricePriceInput18"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton3"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
 
@@ -148,53 +154,69 @@
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad6"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_2"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_1"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_1"/>
+        <actionGroup ref="StorefrontAssertXAsLowAsYMessageOnPLPActionGroup" stepKey="assertProductFinalPriceIs100_2">
+            <argument name="X" value="100"/>
+            <argument name="Y" value="82"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertAsLowAsPriceLabel_1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertPriceAfterAsLowAsLabel_1"/>
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad7"/>
 
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage6">
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad8"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_3"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_2"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_2"/>
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage1">
-            <argument name="productUrl" value="$$createSimpleProduct.name$$"/>
+        <actionGroup ref="StorefrontAssertXAsLowAsYMessageOnPLPActionGroup" stepKey="assertProductFinalPriceIs100_3">
+            <argument name="X" value="100"/>
+            <argument name="Y" value="82"/>
         </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', '15')}}" stepKey="assertProductTierPriceByForTextLabelForFirstRow1"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', '20')}}" stepKey="assertProductTierPriceByForTextLabelForSecondRow1"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('1', '90')}}" stepKey="assertProductTierPriceAmountForFirstRow1"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('2', '82')}}" stepKey="assertProductTierPriceAmountForSecondRow1"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow1"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '18')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertAsLowAsPriceLabel_2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertPriceAfterAsLowAsLabel_2"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage1">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad9"/>
+        <actionGroup ref="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup" stepKey="assertProductTierPriceByForTextLabelForFirstRow1">
+            <argument name="priceIndex" value="1"/>
+            <argument name="X" value="15"/>
+            <argument name="Y" value="90"/>
+            <argument name="Z" value="10"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup" stepKey="assertProductTierPriceByForTextLabelForSecondRow1">
+            <argument name="priceIndex" value="2"/>
+            <argument name="X" value="20"/>
+            <argument name="Y" value="82"/>
+            <argument name="Z" value="18"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceAmountForFirstRow1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceAmountForSecondRow1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductQuantity1"/>
 
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="quantity" value="10"/>
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <seeInField userInput="10" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField10"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField1"/>
-        <assertEquals message="Shopping cart should contain subtotal $1,000" stepKey="assertSubtotalField1">
-            <expectedResult type="string">$1,000.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField1</actualResult>
-        </assertEquals>
-       
+        <actionGroup ref="StorefrontAssertProductQtyInCartActionGroup" stepKey="seeInQtyField10">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField1"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField1">
+            <argument name="expectedSubtotal" value="$1,000.00"/>
+        </actionGroup>
         <actionGroup ref="StorefrontChangeProductQtyInTheCartActionGroup" stepKey="fillProductQuantity2">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
             <argument name="qty" value="15"/>
         </actionGroup>
         <actionGroup ref="AdminUpdateShoppingCartActionGroup" stepKey="clickUpdateShoppingCartButton1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadingMaskToDisappear1"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField2"/>
-        <assertEquals message="Shopping cart should contain subtotal $1,350" stepKey="assertSubtotalField2">
-            <expectedResult type="string">$1,350.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField2</actualResult>
-        </assertEquals>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField2"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField2">
+            <argument name="expectedSubtotal" value="$1,350.00"/>
+        </actionGroup>
 
         <actionGroup ref="StorefrontChangeProductQtyInTheCartActionGroup" stepKey="fillProductQuantity3">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
@@ -202,17 +224,15 @@
         </actionGroup>
         <actionGroup ref="AdminUpdateShoppingCartActionGroup" stepKey="clickUpdateShoppingCartButton2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadingMaskToDisappear2"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField3"/>
-        <assertEquals message="Shopping cart should contain subtotal $1,640" stepKey="assertSubtotalField3">
-            <expectedResult type="string">$1,640.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField3</actualResult>
-        </assertEquals>
-       
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex4"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
-            <argument name="product" value="$$createSimpleProduct$$"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField3"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField3">
+            <argument name="expectedSubtotal" value="$1,640.00"/>
         </actionGroup>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage4"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex4"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct4">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage4"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton4"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForcustomerGroupPriceAddButton4"/>
         <actionGroup ref="AdminProductFormAdvancedPricingUpdateTierPriceActionGroup" stepKey="selectProductTierPricePercentageValue2">
@@ -220,30 +240,30 @@
             <argument name="quantity" value="20"/>
             <argument name="priceType" value="Discount"/>
             <argument name="amount" value="25"/>
-        </actionGroup>   
+        </actionGroup>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton4"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage1"/>
-        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField4"/>
-        <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField4">
-            <expectedResult type="string">$1,500.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField4</actualResult>
-        </assertEquals>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal1"/>
-        <assertEquals message="Shopping cart summary section should contain subtotal $1,500" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection1">
-            <expectedResult type="string">$1,500.00</expectedResult>
-            <actualResult type="variable">grabTextFromCheckoutCartSummarySectionSubtotal1</actualResult>
-        </assertEquals>
+        <actionGroup ref="StorefrontAssertProductQtyInCartActionGroup" stepKey="seeInQtyField20">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQuantity" value="20"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField4"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField4">
+            <argument name="expectedSubtotal" value="$1,500.00"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal1"/>
+        <actionGroup ref="StorefrontAssertCartSubtotalActionGroup" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection1">
+            <argument name="expectedSubtotal" value="$1,500.00"/>
+        </actionGroup>
 
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForminiCartSubtotalField1"/>
-        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabTextFromMiniCartSubtotalField"/>
-        <assertEquals message="Mini shopping cart should contain subtotal $1,500" stepKey="assertSubtotalFieldFromMiniShoppingCart1">
-            <expectedResult type="string">$1,500.00</expectedResult>
-            <actualResult type="variable">grabTextFromMiniCartSubtotalField</actualResult>
-        </assertEquals>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromMiniCartSubtotalField"/>
+        <actionGroup ref="StorefrontAssertMiniCartSubtotalActionGroup" stepKey="assertSubtotalFieldFromMiniShoppingCart1">
+            <argument name="expectedSubtotal" value="$1,500.00"/>
+        </actionGroup>
 
         <actionGroup ref="AdminNavigateToStoresConfigurationSalesSalesMSRPActionGroup" stepKey="navigateToAdminSalesConfigPageMAPTab1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminSalesConfigPageLoad1"/>
@@ -254,45 +274,58 @@
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache1"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage2"/>
-        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_2"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField5"/>
-        <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField5">
-            <expectedResult type="string">$1,500.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField5</actualResult>
-        </assertEquals>
+        <actionGroup ref="StorefrontAssertProductQtyInCartActionGroup" stepKey="seeInQtyField20_2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQuantity" value="20"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField5"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField5">
+            <argument name="expectedSubtotal" value="$1,500.00"/>
+        </actionGroup>
 
         <actionGroup ref="AdminNavigateToStoresConfigurationSalesSalesMSRPActionGroup" stepKey="navigateToAdminSalesConfigPageMAPTab2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminSalesConfigPageLoad2"/>
         <actionGroup ref="AdminEnableDisableMAPActionGroup" stepKey="setEnableMAPNo">
             <argument name="status" value="No"/>
-        </actionGroup>    
+        </actionGroup>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeConfigSuccessMessage1"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache2"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage3"/>
-        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_3"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField6"/>
-        <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField6">
-            <expectedResult type="string">$1,500.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField6</actualResult>
-        </assertEquals>
-       
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage2">
-            <argument name="productUrl" value="$$createSimpleProduct.name$$"/>
-        </actionGroup>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', '15')}}" stepKey="assertProductTierPriceByForTextLabelForFirstRow2"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', '20')}}" stepKey="assertProductTierPriceByForTextLabelForSecondRow2"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('1', '90')}}" stepKey="assertProductTierPriceAmountForFirstRow2"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('2', '75')}}" stepKey="assertProductTierPriceAmountForSecondRow2"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '25')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex5"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct5">
+        <actionGroup ref="StorefrontAssertProductQtyInCartActionGroup" stepKey="seeInQtyField20_3">
             <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQuantity" value="20"/>
         </actionGroup>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField6"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField6">
+            <argument name="expectedSubtotal" value="$1,500.00"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad10"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage2">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup" stepKey="assertProductTierPriceByForTextLabelForFirstRow21">
+            <argument name="priceIndex" value="1"/>
+            <argument name="X" value="15"/>
+            <argument name="Y" value="90"/>
+            <argument name="Z" value="10"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup" stepKey="assertProductTierPriceByForTextLabelForSecondRow2">
+            <argument name="priceIndex" value="2"/>
+            <argument name="X" value="20"/>
+            <argument name="Y" value="75"/>
+            <argument name="Z" value="25"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceAmountForFirstRow2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceAmountForSecondRow2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct5">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage5"/>
 
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton5"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForcustomerGroupPriceDeleteButton"/>
@@ -301,9 +334,9 @@
         <actionGroup ref="AdminDeleteTierPriceActionGroup" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton5"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage6"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton6"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton5"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForcustomerGroupPriceAddButton5"/>
         <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" stepKey="dontSeeQtyInputOfFirstRow"/>
         <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" stepKey="dontSeeQtyInputOfSecondRow"/>
         <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="closeAdvancedPricingPopup"/>
@@ -314,23 +347,20 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage4"/>
-        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField7"/>
-        <assertEquals message="Shopping cart should contain subtotal $4,000" stepKey="assertSubtotalField7">
-            <expectedResult type="string">$4,000.00</expectedResult>
-            <actualResult type="variable">grabTextFromSubtotalField7</actualResult>
-        </assertEquals>
-        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal2"/>
-        <assertEquals message="Shopping cart summary section should contain subtotal $4,000" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection2">
-            <expectedResult type="string">$4,000.00</expectedResult>
-            <actualResult type="variable">grabTextFromCheckoutCartSummarySectionSubtotal2</actualResult>
-        </assertEquals>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSubtotalField7"/>
+        <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField7">
+            <argument name="expectedSubtotal" value="$4,000.00"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal2"/>
+        <actionGroup ref="StorefrontAssertCartSubtotalActionGroup" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection2">
+            <argument name="expectedSubtotal" value="$4,000.00"/>
+        </actionGroup>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForminiCartSubtotalField2"/>
 
-        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabTextFromMiniCartSubtotalField2"/>
-        <assertEquals message="Mini shopping cart should contain subtotal $4,000" stepKey="assertSubtotalFieldFromMiniShoppingCart2">
-            <expectedResult type="string">$4,000.00</expectedResult>
-            <actualResult type="variable">grabTextFromMiniCartSubtotalField2</actualResult>
-        </assertEquals>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromMiniCartSubtotalField2"/>
+        <actionGroup ref="StorefrontAssertMiniCartSubtotalActionGroup" stepKey="assertSubtotalFieldFromMiniShoppingCart2">
+            <argument name="expectedSubtotal" value="$4,000.00"/>
+        </actionGroup>
     </test>
 </tests>
