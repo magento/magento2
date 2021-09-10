@@ -83,7 +83,6 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $parentSku = $product['sku'];
         $skuOne = 'simple_10';
         $skuTwo = 'simple_20';
-        $valueIdOne = $product['configurable_options'][0]['values'][0]['value_index'];
 
         $query = <<<QUERY
 mutation {
@@ -623,8 +622,12 @@ QUERY;
      * @param int $quantity
      * @return string
      */
-    private function graphQlQueryForVariant(string $maskedQuoteId, string $parentSku, string $sku, int $quantity): string
-    {
+    private function graphQlQueryForVariant(
+        string $maskedQuoteId,
+        string $parentSku,
+        string $sku,
+        int $quantity
+    ): string {
         return <<<QUERY
 mutation {
   addConfigurableProductsToCart(
