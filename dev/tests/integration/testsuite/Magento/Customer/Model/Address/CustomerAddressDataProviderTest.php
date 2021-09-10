@@ -106,8 +106,6 @@ class CustomerAddressDataProviderTest extends TestCase
         }
     }
 
-
-
     /**
      * Data provider for create allowed or not allowed countries.
      *
