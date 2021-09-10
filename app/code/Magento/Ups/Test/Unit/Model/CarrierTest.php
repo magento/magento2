@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Ups\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
@@ -106,7 +105,7 @@ class CarrierTest extends TestCase
     private $configHelper;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -114,16 +113,16 @@ class CarrierTest extends TestCase
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getValue', 'isSetFlag'])
+            ->onlyMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
         $this->error = $this->getMockBuilder(Error::class)
-            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
 
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->errorFactory->method('create')
@@ -133,12 +132,12 @@ class CarrierTest extends TestCase
 
         $this->country = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getData'])
+            ->onlyMethods(['load', 'getData'])
             ->getMock();
 
         $this->abstractModel = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->country->method('load')
@@ -146,7 +145,7 @@ class CarrierTest extends TestCase
 
         $this->countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->countryFactory->method('create')
@@ -159,7 +158,7 @@ class CarrierTest extends TestCase
 
         $this->configHelper = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
+            ->onlyMethods(['getCode'])
             ->getMock();
 
         $this->model = $this->helper->getObject(
@@ -172,7 +171,7 @@ class CarrierTest extends TestCase
                 'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
-                'configHelper' => $this->configHelper,
+                'configHelper' => $this->configHelper
             ]
         );
     }
@@ -181,7 +180,8 @@ class CarrierTest extends TestCase
      * Callback function, emulates getValue function.
      *
      * @param string $path
-     * @return null|string
+     *
+     * @return null|string|int
      */
     public function scopeConfigGetValue(string $path)
     {
@@ -196,7 +196,7 @@ class CarrierTest extends TestCase
             'carriers/ups/debug' => 1,
             'carriers/ups/username' => 'user',
             'carriers/ups/password' => 'pass',
-            'carriers/ups/access_license_number' => 'acn',
+            'carriers/ups/access_license_number' => 'acn'
         ];
 
         return $pathMap[$path] ?? null;
@@ -233,11 +233,11 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * Data provider for testGenerate method
+     * Data provider for testGenerate method.
      *
      * @return array
      */
-    public function getMethodPriceProvider()
+    public function getMethodPriceProvider(): array
     {
         return [
             [3, self::FREE_METHOD_NAME, true, 6, 0],
@@ -292,9 +292,11 @@ class CarrierTest extends TestCase
      * @param string $data
      * @param array $maskFields
      * @param string $expected
+     *
+     * @return void
      * @dataProvider logDataProvider
      */
-    public function testFilterDebugData($data, array $maskFields, $expected)
+    public function testFilterDebugData($data, array $maskFields, $expected): void
     {
         $refClass = new \ReflectionClass(Carrier::class);
         $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
@@ -310,9 +312,11 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * Get list of variations
+     * Get list of variations.
+     *
+     * @return array
      */
-    public function logDataProvider()
+    public function logDataProvider(): array
     {
         return [
             [
@@ -332,7 +336,7 @@ class CarrierTest extends TestCase
                     <Package ID="0">
                         <Service>ALL</Service>
                     </Package>
-                </RateRequest>',
+                </RateRequest>'
             ],
             [
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -353,7 +357,7 @@ class CarrierTest extends TestCase
                     <Package ID="0">
                         <Service>ALL</Service>
                     </Package>
-                </RateRequest>',
+                </RateRequest>'
             ]
         ];
     }
@@ -361,9 +365,11 @@ class CarrierTest extends TestCase
     /**
      * @param string $countryCode
      * @param string $foundCountryCode
+     *
+     * @return void
      * @dataProvider countryDataProvider
      */
-    public function testSetRequest($countryCode, $foundCountryCode)
+    public function testSetRequest($countryCode, $foundCountryCode): void
     {
         /** @var RateRequest $request */
         $request = $this->helper->getObject(RateRequest::class);
@@ -373,13 +379,13 @@ class CarrierTest extends TestCase
                 'orig_region_code' => 'CA',
                 'orig_post_code' => 90230,
                 'orig_city' => 'Culver City',
-                'dest_country_id' => $countryCode,
+                'dest_country_id' => $countryCode
             ]
         );
 
-        $this->country->expects($this->at(1))
+        $this->country
             ->method('load')
-            ->with($countryCode)
+            ->withConsecutive([], [$countryCode])
             ->willReturnSelf();
 
         $this->country->method('getData')
@@ -390,26 +396,28 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * Get list of country variations
+     * Get list of country variations.
+     *
      * @return array
      */
-    public function countryDataProvider()
+    public function countryDataProvider(): array
     {
         return [
             ['countryCode' => 'PR', 'foundCountryCode' => null],
-            ['countryCode' => 'US', 'foundCountryCode' => 'US'],
+            ['countryCode' => 'US', 'foundCountryCode' => 'US']
         ];
     }
 
     /**
-     * @dataProvider allowedMethodsDataProvider
      * @param string $carrierType
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
      * @param string $allowedMethods
      * @param array $expectedMethods
+     *
      * @return void
+     * @dataProvider allowedMethodsDataProvider
      */
     public function testGetAllowedMethods(
         string $carrierType,
@@ -426,20 +434,20 @@ class CarrierTest extends TestCase
                         'carriers/ups/allowed_methods',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        $allowedMethods,
+                        $allowedMethods
                     ],
                     [
                         'carriers/ups/type',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        $carrierType,
+                        $carrierType
                     ],
                     [
                         'carriers/ups/origin_shipment',
                         ScopeInterface::SCOPE_STORE,
                         null,
-                        'Shipments Originating in United States',
-                    ],
+                        'Shipments Originating in United States'
+                    ]
                 ]
             );
         $this->configHelper->method('getCode')
@@ -461,7 +469,7 @@ class CarrierTest extends TestCase
                 '1DM',
                 'Next Day Air Early AM',
                 '',
-                [],
+                []
             ],
             [
                 'UPS',
@@ -469,7 +477,7 @@ class CarrierTest extends TestCase
                 '1DM',
                 'Next Day Air Early AM',
                 '1DM,1DML,1DA',
-                ['1DM' => 'Next Day Air Early AM'],
+                ['1DM' => 'Next Day Air Early AM']
             ],
             [
                 'UPS_XML',
@@ -477,8 +485,8 @@ class CarrierTest extends TestCase
                 '01',
                 'UPS Next Day Air',
                 '01,02,03',
-                ['01' => 'UPS Next Day Air'],
-            ],
+                ['01' => 'UPS Next Day Air']
+            ]
         ];
     }
 
@@ -491,7 +499,7 @@ class CarrierTest extends TestCase
     {
         $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $xmlElFactory->method('create')
             ->willReturnCallback(
@@ -517,7 +525,7 @@ class CarrierTest extends TestCase
     {
         $httpClientFactory = $this->getMockBuilder(ClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClient = $this->getMockForAbstractClass(ClientInterface::class);
         $httpClientFactory->method('create')

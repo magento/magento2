@@ -133,7 +133,7 @@ abstract class EntityChildTestAbstract extends TestCase
 
     protected function mockDefinedClassesCall()
     {
-        $this->definedClassesMock->expects($this->at(0))
+        $this->definedClassesMock
             ->method('isClassLoadable')
             ->with($this->getSourceClassName())
             ->willReturn(true);
