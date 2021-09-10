@@ -83,6 +83,9 @@ class IndexTest extends TestCase
      */
     private $registryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->registryMock = $this->getMockBuilder(Registry::class)
@@ -91,25 +94,22 @@ class IndexTest extends TestCase
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
+        $this->viewMock = $this->getMockBuilder(View::class)->disableOriginalConstructor()
+            ->onlyMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBlock'])
+        $this->layoutMock = $this->getMockBuilder(Layout::class)->disableOriginalConstructor()
+            ->onlyMethods(['getBlock'])
             ->getMock();
-        $this->menuBlockMock = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActive', 'getMenuModel', 'getParentItems'])
+        $this->menuBlockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()
+            ->onlyMethods(['getMenuModel'])
+            ->addMethods(['setActive', 'getParentItems'])
             ->getMock();
-        $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addLink'])
+        $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)->disableOriginalConstructor()
+            ->onlyMethods(['addLink'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
+        $this->resultPageMock = $this->getMockBuilder(Page::class)->disableOriginalConstructor()
+            ->onlyMethods(['getConfig'])
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -136,18 +136,16 @@ class IndexTest extends TestCase
 
     /**
      * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $this->prepareExecute();
 
         $this->viewMock->expects($this->atLeastOnce())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
-        $this->layoutMock->expects($this->at(0))
-            ->method('getBlock')
-            ->with('menu')
-            ->willReturn($this->menuBlockMock);
         $this->menuBlockMock->expects($this->any())
             ->method('getMenuModel')->willReturnSelf();
         $this->menuBlockMock->expects($this->any())
@@ -165,10 +163,10 @@ class IndexTest extends TestCase
         $this->pageTitleMock->expects($this->once())
             ->method('prepend')
             ->with('Email Templates');
-        $this->layoutMock->expects($this->at(1))
+        $this->layoutMock
             ->method('getBlock')
-            ->with('breadcrumbs')
-            ->willReturn($this->breadcrumbsBlockMock);
+            ->withConsecutive(['menu'], ['breadcrumbs'])
+            ->willReturnOnConsecutiveCalls($this->menuBlockMock, $this->breadcrumbsBlockMock);
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
             ->willReturnSelf();
@@ -178,12 +176,14 @@ class IndexTest extends TestCase
 
     /**
      * @covers \Magento\Email\Controller\Adminhtml\Email\Template\Index::execute
+     *
+     * @return void
      */
-    public function testExecuteAjax()
+    public function testExecuteAjax(): void
     {
         $this->prepareExecute(true);
         $indexController = $this->getMockBuilder(Index::class)
-            ->setMethods(['getRequest', '_forward'])
+            ->onlyMethods(['getRequest', '_forward'])
             ->disableOriginalConstructor()
             ->getMock();
         $indexController->expects($this->once())
@@ -197,8 +197,10 @@ class IndexTest extends TestCase
 
     /**
      * @param bool $ajax
+     *
+     * @return void
      */
-    protected function prepareExecute($ajax = false)
+    protected function prepareExecute(bool $ajax = false): void
     {
         $this->requestMock->expects($this->once())
             ->method('getQuery')

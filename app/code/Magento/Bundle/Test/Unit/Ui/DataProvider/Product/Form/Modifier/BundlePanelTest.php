@@ -93,7 +93,7 @@ class BundlePanelTest extends TestCase
                 'locator' => $this->locatorMock,
                 'urlBuilder' => $this->urlBuilder,
                 'shipmentType' => $this->shipmentType,
-                'arrayManager' => $this->arrayManagerMock,
+                'arrayManager' => $this->arrayManagerMock
             ]
         );
     }
@@ -126,7 +126,7 @@ class BundlePanelTest extends TestCase
                         'children',
                         ArrayManager::DEFAULT_PATH_DELIMITER,
                         $shipmentTypePath
-                    ],
+                    ]
                 ]
             );
         $this->arrayManagerMock->method('merge')
@@ -135,17 +135,21 @@ class BundlePanelTest extends TestCase
             ->willReturn([]);
         $this->arrayManagerMock->method('set')
             ->willReturn([]);
-        $this->arrayManagerMock->expects($this->at(12))
+        $this->arrayManagerMock
             ->method('merge')
-            ->with(
-                $shipmentTypePath . BundlePanel::META_CONFIG_PATH,
-                [],
+            ->withConsecutive(
+                [], [], [], [], [], [], [], [], [], [], [], [],
                 [
-                    'dataScope' => $dataScope,
-                    'validation' => [
-                        'required-entry' => false
+                    $shipmentTypePath . BundlePanel::META_CONFIG_PATH,
+                    [],
+                    [
+                        'dataScope' => $dataScope,
+                        'validation' => [
+                            'required-entry' => false
+                        ]
                     ]
                 ]
+
             );
         $this->bundlePanelModel->modifyMeta($sourceMeta);
     }
@@ -165,7 +169,7 @@ class BundlePanelTest extends TestCase
             [
                 'someAttrGroup/children',
                 'shipment_type'
-            ],
+            ]
         ];
     }
 }
