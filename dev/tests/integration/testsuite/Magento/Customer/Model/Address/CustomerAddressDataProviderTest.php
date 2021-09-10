@@ -108,7 +108,7 @@ class CustomerAddressDataProviderTest extends TestCase
 
 
     /**
-     * Data provider for create default or not default address.
+     * Data provider for create allowed or not allowed countries.
      *
      * @return array
      */
