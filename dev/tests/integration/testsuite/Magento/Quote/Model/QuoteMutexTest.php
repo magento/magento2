@@ -75,6 +75,7 @@ class QuoteMutexTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $var
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function privateMethod(string $var)
     {
