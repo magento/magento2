@@ -89,7 +89,7 @@ class StockTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfiguration::class)
-            ->setMethods(['getIsQtyTypeIds', 'getDefaultScopeId'])
+            ->onlyMethods(['getIsQtyTypeIds', 'getDefaultScopeId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
@@ -100,14 +100,14 @@ class StockTest extends TestCase
             ->getMock();
         $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
         $this->stock = $this->getMockBuilder(Stock::class)
-            ->setMethods(['getTable', 'getConnection'])
+            ->onlyMethods(['getTable', 'getConnection'])
             ->setConstructorArgs(
                 [
                     'context' => $this->contextMock,
                     'scopeConfig' => $this->scopeConfigMock,
                     'dateTime' => $this->dateTimeMock,
                     'stockConfiguration' => $this->stockConfigurationMock,
-                    'storeManager' => $this->storeManagerMock,
+                    'storeManager' => $this->storeManagerMock
                 ]
             )->getMock();
     }
@@ -115,7 +115,6 @@ class StockTest extends TestCase
     /**
      * Test Save Product Status per website with product ids.
      *
-     * @dataProvider productsDataProvider
      * @param int $websiteId
      * @param array $productIds
      * @param array $products
@@ -123,6 +122,7 @@ class StockTest extends TestCase
      * @param array $items
      *
      * @return void
+     * @dataProvider productsDataProvider
      */
     public function testLockProductsStock(
         int $websiteId,
@@ -130,7 +130,7 @@ class StockTest extends TestCase
         array $products,
         array $result,
         array $items
-    ) {
+    ): void {
         $itemIds = [];
         foreach ($items as $item) {
             $itemIds[] = $item['item_id'];
@@ -167,12 +167,9 @@ class StockTest extends TestCase
             ->method('query')
             ->with($this->identicalTo($this->selectMock))
             ->willReturn($this->statementMock);
-        $this->statementMock->expects($this->at(0))
+        $this->statementMock
             ->method('fetchAll')
-            ->willReturn($items);
-        $this->statementMock->expects($this->at(1))
-            ->method('fetchAll')
-            ->willReturn($products);
+            ->willReturnOnConsecutiveCalls($items, $products);
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->identicalTo($this->selectMock))
@@ -207,24 +204,24 @@ class StockTest extends TestCase
                 [
                     1 => ['product_id' => 1],
                     2 => ['product_id' => 2],
-                    3 => ['product_id' => 3],
+                    3 => ['product_id' => 3]
                 ],
                 [
                     1 => [
                         'product_id' => 1,
-                        'type_id' => 'simple',
+                        'type_id' => 'simple'
                     ],
                     2 => [
                         'product_id' => 2,
-                        'type_id' => 'simple',
+                        'type_id' => 'simple'
                     ],
                     3 => [
                         'product_id' => 3,
-                        'type_id' => 'simple',
+                        'type_id' => 'simple'
                     ],
                 ],
                 [['item_id' => 1], ['item_id' => 2], ['item_id' => 3]]
-            ],
+            ]
         ];
     }
 }
