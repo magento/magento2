@@ -192,7 +192,7 @@ class GraphQl implements FrontControllerInterface
 
         // log information about the query, unless it is an introspection query
         if (strpos($data['query'], 'IntrospectionQuery') === false) {
-            $queryInformation = $this->logDataHelper->getRequestInformation($request, $data, $schema, $this->httpResponse);
+            $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }
 

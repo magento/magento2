@@ -32,42 +32,75 @@ class LogData
      * @param HttpResponse|null $response
      * @return array
      */
-    public function getRequestInformation(
+    public function getLogData(
         RequestInterface $request,
         array $data,
-        Schema $schema = null,
-        HttpResponse $response = null
+        ?Schema $schema,
+        ?HttpResponse $response
     ) : array {
-        $requestInformation = [];
+        $logData = [];
+        $logData = array_merge($logData, $this->gatherRequestInformation($request));
+        if ($schema) {
+            $logData = array_merge($logData, $this->gatherQueryInformation($schema));
+        }
+        $logData[LoggerInterface::COMPLEXITY] = $this->getFieldCount($data['query'] ?? '');
+        if ($response) {
+            $logData = array_merge($logData, $this->gatherResponseInformation($response));
+        }
+
+        return $logData;
+    }
+
+    /**
+     * Gets the information needed from the request
+     *
+     * @param RequestInterface $request
+     * @return array
+     */
+    private function gatherRequestInformation(RequestInterface $request) : array
+    {
         $requestInformation[LoggerInterface::HTTP_METHOD] = $request->getMethod();
         $requestInformation[LoggerInterface::STORE_HEADER] = $request->getHeader('Store') ?: '';
         $requestInformation[LoggerInterface::CURRENCY_HEADER] = $request->getHeader('Currency') ?: '';
         $requestInformation[LoggerInterface::HAS_AUTH_HEADER] = $request->getHeader('Authorization') ? 'true' : 'false';
-        $requestInformation[LoggerInterface::IS_CACHEABLE] =
+        $requestInformation[LoggerInterface::REQUEST_LENGTH] = $request->getHeader('Content-Length') ?: '';
+        return $requestInformation;
+    }
+
+    /**
+     * Gets the information needed from the schema
+     *
+     * @param Schema $schema
+     * @return array
+     */
+    private function gatherQueryInformation(Schema $schema) : array
+    {
+        $schemaConfig = $schema->getConfig();
+        $mutationOperations = $schemaConfig->getMutation()->getFields();
+        $queryOperations = $schemaConfig->getQuery()->getFields();
+        $queryInformation[LoggerInterface::HAS_MUTATION] = count($mutationOperations) > 0 ? 'true' : 'false';
+        $queryInformation[LoggerInterface::NUMBER_OF_OPERATIONS] =
+            count($mutationOperations) + count($queryOperations);
+        $operationNames = array_merge(array_keys($mutationOperations), array_keys($queryOperations));
+        $queryInformation[LoggerInterface::OPERATION_NAMES] =
+            count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
+        return $queryInformation;
+    }
+
+    /**
+     * Gets the information needed from the response
+     *
+     * @param HttpResponse $response
+     * @return array
+     */
+    private function gatherResponseInformation(HttpResponse $response) : array
+    {
+        $responseInformation[LoggerInterface::IS_CACHEABLE] =
             ($response->getHeader('X-Magento-Tags') && $response->getHeader('X-Magento-Tags') !== '')
                 ? 'true'
                 : 'false';
-        $requestInformation[LoggerInterface::REQUEST_LENGTH] = $request->getHeader('Content-Length') ?: '';
-
-        if ($schema) {
-            $schemaConfig = $schema->getConfig();
-            $mutationOperations = $schemaConfig->getMutation()->getFields();
-            $queryOperations = $schemaConfig->getQuery()->getFields();
-            $requestInformation[LoggerInterface::HAS_MUTATION] = count($mutationOperations) > 0 ? 'true' : 'false';
-            $requestInformation[LoggerInterface::NUMBER_OF_OPERATIONS] =
-                count($mutationOperations) + count($queryOperations);
-            $operationNames = array_merge(array_keys($mutationOperations), array_keys($queryOperations));
-            $requestInformation[LoggerInterface::OPERATION_NAMES] =
-                count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
-        }
-
-        $requestInformation[LoggerInterface::COMPLEXITY] = $this->getFieldCount($data['query'] ?? '');
-
-        if ($response) {
-            $requestInformation[LoggerInterface::HTTP_RESPONSE_CODE] = $response->getHttpResponseCode();
-        }
-
-        return $requestInformation;
+        $responseInformation[LoggerInterface::HTTP_RESPONSE_CODE] = $response->getHttpResponseCode();
+        return $responseInformation;
     }
 
     /**

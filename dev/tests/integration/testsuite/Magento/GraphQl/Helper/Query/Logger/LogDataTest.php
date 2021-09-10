@@ -82,7 +82,7 @@ class LogDataTest extends TestCase
         $queryFields = $this->objectManager->get(Fields::class);
         $queryFields->setQuery($query);
 
-        $queryInformation = $this->logData->getRequestInformation(
+        $queryInformation = $this->logData->getLogData(
             $this->request,
             $postData,
             $this->schemaGenerator->generate(),
