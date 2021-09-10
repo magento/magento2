@@ -28,17 +28,15 @@ class LogData
      *
      * @param RequestInterface $request
      * @param array $data
-     * @param Schema $schema
-     * @param HttpResponse $response
+     * @param Schema|null $schema
+     * @param HttpResponse|null $response
      * @return array
-     *
-     * @throws SyntaxError
      */
     public function getRequestInformation(
         RequestInterface $request,
         array $data,
-        Schema $schema,
-        HttpResponse $response
+        Schema $schema = null,
+        HttpResponse $response = null
     ) : array {
         $requestInformation = [];
         $requestInformation[LoggerInterface::HTTP_METHOD] = $request->getMethod();
@@ -51,18 +49,23 @@ class LogData
                 : 'false';
         $requestInformation[LoggerInterface::REQUEST_LENGTH] = $request->getHeader('Content-Length') ?: '';
 
-        $schemaConfig = $schema->getConfig();
-        $mutationOperations = $schemaConfig->getMutation()->getFields();
-        $queryOperations = $schemaConfig->getQuery()->getFields();
-        $requestInformation[LoggerInterface::HAS_MUTATION] = count($mutationOperations) > 0 ? 'true' : 'false';
-        $requestInformation[LoggerInterface::NUMBER_OF_OPERATIONS] =
-            count($mutationOperations) + count($queryOperations);
+        if ($schema) {
+            $schemaConfig = $schema->getConfig();
+            $mutationOperations = $schemaConfig->getMutation()->getFields();
+            $queryOperations = $schemaConfig->getQuery()->getFields();
+            $requestInformation[LoggerInterface::HAS_MUTATION] = count($mutationOperations) > 0 ? 'true' : 'false';
+            $requestInformation[LoggerInterface::NUMBER_OF_OPERATIONS] =
+                count($mutationOperations) + count($queryOperations);
+            $operationNames = array_merge(array_keys($mutationOperations), array_keys($queryOperations));
+            $requestInformation[LoggerInterface::OPERATION_NAMES] =
+                count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
+        }
 
-        $operationNames = array_merge(array_keys($mutationOperations), array_keys($queryOperations));
-        $requestInformation[LoggerInterface::OPERATION_NAMES] =
-            count($operationNames) > 0 ? implode(",", $operationNames) : 'operationNameNotFound';
         $requestInformation[LoggerInterface::COMPLEXITY] = $this->getFieldCount($data['query'] ?? '');
-        $requestInformation[LoggerInterface::HTTP_RESPONSE_CODE] = $response->getHttpResponseCode();
+
+        if ($response) {
+            $requestInformation[LoggerInterface::HTTP_RESPONSE_CODE] = $response->getHttpResponseCode();
+        }
 
         return $requestInformation;
     }
@@ -74,25 +77,27 @@ class LogData
      *
      * @param string $query
      * @return int
-     * @throws SyntaxError
-     * @throws \Exception
      */
     private function getFieldCount(string $query): int
     {
-        if (!empty($query)) {
-            $totalFieldCount = 0;
-            $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
-            Visitor::visit(
-                $queryAst,
-                [
-                    'leave' => [
-                        NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
-                            $totalFieldCount++;
-                        }
+        try {
+            if (!empty($query)) {
+                $totalFieldCount = 0;
+                $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+                Visitor::visit(
+                    $queryAst,
+                    [
+                        'leave' => [
+                            NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
+                                $totalFieldCount++;
+                            }
+                        ]
                     ]
-                ]
-            );
-            return $totalFieldCount;
+                );
+                return $totalFieldCount;
+            }
+        } catch (SyntaxError $syntaxError) {
+        } catch (\Exception $exception) {
         }
         return 0;
     }

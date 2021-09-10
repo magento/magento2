@@ -161,6 +161,7 @@ class GraphQl implements FrontControllerInterface
         $data = $this->getDataFromRequest($request);
         $result = [];
 
+        $schema = null;
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
@@ -180,7 +181,7 @@ class GraphQl implements FrontControllerInterface
                 $data['variables'] ?? []
             );
         } catch (\Exception $error) {
-            $result['errors'] = isset($result) && isset($result['errors']) ? $result['errors'] : [];
+            $result['errors'] = isset($result['errors']) ? $result['errors'] : [];
             $result['errors'][] = $this->graphQlError->create($error);
             $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
