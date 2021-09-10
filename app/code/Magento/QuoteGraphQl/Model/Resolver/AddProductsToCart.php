@@ -92,6 +92,7 @@ class AddProductsToCart implements ResolverInterface
      * @param array|null $args
      * @return array
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function run($context, ?array $args): array
     {
