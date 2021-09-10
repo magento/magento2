@@ -21,8 +21,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * UpdateItemQty ajax request
- *
- * @package Magento\Checkout\Controller\Cart
  */
 class UpdateItemQty extends Action implements HttpPostActionInterface
 {
