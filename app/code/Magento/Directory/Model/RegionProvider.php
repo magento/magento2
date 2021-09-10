@@ -36,6 +36,11 @@ class RegionProvider
         $this->jsonSerializer = $jsonSerializer;
     }
 
+    /**
+     * Get region data json
+     *
+     * @return string
+     */
     public function getRegionJson(): string
     {
         $regions = $this->getRegions();
@@ -43,6 +48,8 @@ class RegionProvider
     }
 
     /**
+     * Get regions array
+     *
      * @return array
      */
     private function getRegions() : array
