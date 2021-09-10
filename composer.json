@@ -63,7 +63,7 @@
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.7.0",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "dev-improvement/zf1-php8-compatibility",
+        "magento/zendframework1": "dev-php8-compatibility/zf-compatibility-with-php8",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",

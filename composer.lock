@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57d7a1921c4a0d76f60b11cd2a0a5fc2",
+    "content-hash": "606552833379e5a69a6404dbfed40d4f",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3684,11 +3684,11 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "dev-improvement/zf1-php8-compatibility",
+            "version": "dev-php8-compatibility/zf-compatibility-with-php8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/karyna-tsymbal-atwix/zf1/",
-                "reference": "13003cad6d12e97e88dac58d6296160e2644dd1a"
+                "reference": "c5206c6cb2adbe08f5313302729f9e4f464ad6ef"
             },
             "require": {
                 "php": ">=5.2.11"
@@ -3727,7 +3727,7 @@
                 "framework",
                 "zf1"
             ],
-            "time": "2021-09-03T12:21:05+00:00"
+            "time": "2021-09-10T10:23:41+00:00"
         },
         {
             "name": "monolog/monolog",

@@ -34,7 +34,7 @@
         "laminas/laminas-stdlib": "^3.2.1",
         "laminas/laminas-uri": "^2.5.1",
         "laminas/laminas-validator": "^2.6.0",
-        "magento/zendframework1": "dev-improvement/zf1-php8-compatibility",
+        "magento/zendframework1": "dev-php8-compatibility/zf-compatibility-with-php8",
         "monolog/monolog": "^2.3",
         "ramsey/uuid": "~4.2.0",
         "symfony/console": "~4.4.0",
