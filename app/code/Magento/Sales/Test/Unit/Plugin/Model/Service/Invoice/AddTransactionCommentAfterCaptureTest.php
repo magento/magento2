@@ -65,8 +65,10 @@ class AddTransactionCommentAfterCaptureTest extends TestCase
         $this->invoiceRepository->method('get')->with($invoiceId)->willReturn($invoiceMock);
 
         $transactionMock = $this->createMock(Transaction::class);
-        $transactionMock->expects($this->at(0))->method('addObject')->with($invoiceMock)->willReturnSelf();
-        $transactionMock->expects($this->at(1))->method('addObject')->with($orderMock)->willReturnSelf();
+        $transactionMock
+            ->method('addObject')
+            ->withConsecutive([$invoiceMock], [$orderMock])
+            ->willReturnOnConsecutiveCalls($transactionMock, $transactionMock);
         $transactionMock->expects($this->once())->method('save');
         $this->transactionFactory->method('create')->willReturn($transactionMock);
 

@@ -29,12 +29,15 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
-    private $itemDataBuilder;
+    /**
+     * @var Attribute|MockObject
+     */
+    private $attribute;
 
     /**
-     * @var \Magento\Catalog\Model\Price|MockObject
+     * @var DataBuilder|MockObject
      */
-    private $price;
+    private $itemDataBuilder;
 
     /**
      * @var Collection|MockObject
@@ -56,30 +59,38 @@ class PriceTest extends TestCase
      */
     private $target;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var  ItemFactory|MockObject */
+    /**
+     * @var ItemFactory|MockObject
+     */
     private $filterItemFactory;
 
-    /** @var  State|MockObject */
+    /**
+     * @var State|MockObject
+     */
     private $state;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $dataProviderFactory = $this->getMockBuilder(
-            PriceFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+        $dataProviderFactory = $this->getMockBuilder(PriceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])->getMock();
 
         $this->dataProvider = $this->getMockBuilder(Price::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPriceId', 'getPrice'])
+            ->addMethods(['setPriceId', 'getPrice'])
             ->getMock();
 
         $dataProviderFactory->expects($this->once())
@@ -88,22 +99,20 @@ class PriceTest extends TestCase
 
         $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getState', 'getProductCollection'])
+            ->onlyMethods(['getState', 'getProductCollection'])
             ->getMock();
 
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFilter'])
+            ->onlyMethods(['addFilter'])
             ->getMock();
         $this->layer->expects($this->any())
             ->method('getState')
             ->willReturn($this->state);
 
-        $this->fulltextCollection = $this->getMockBuilder(
-            Collection::class
-        )
+        $this->fulltextCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getFacetedData'])
+            ->onlyMethods(['addFieldToFilter', 'getFacetedData'])
             ->getMock();
 
         $this->layer->expects($this->any())
@@ -112,21 +121,17 @@ class PriceTest extends TestCase
 
         $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addItemData', 'build'])
+            ->onlyMethods(['addItemData', 'build'])
             ->getMock();
 
-        $this->filterItemFactory = $this->getMockBuilder(
-            ItemFactory::class
-        )
+        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $filterItem = $this->getMockBuilder(
-            Item::class
-        )
+        $filterItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
+            ->addMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())->willReturnSelf();
@@ -136,7 +141,7 @@ class PriceTest extends TestCase
 
         $escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
@@ -144,7 +149,8 @@ class PriceTest extends TestCase
 
         $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
+            ->onlyMethods(['getAttributeCode', 'getFrontend'])
+            ->addMethods(['getIsFilterable'])
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -154,37 +160,28 @@ class PriceTest extends TestCase
                 'layer' => $this->layer,
                 'itemDataBuilder' => $this->itemDataBuilder,
                 'filterItemFactory' => $this->filterItemFactory,
-                'escaper' => $escaper,
+                'escaper' => $escaper
             ]
         );
     }
 
     /**
-     * @param $requestValue
-     * @param $idValue
-     * @param $isIdUsed
+     * @param int|null $requestValue
+     * @param int|bool|null $idValue
+     *
+     * @return void
      * @dataProvider applyWithEmptyRequestDataProvider
      */
-    public function testApplyWithEmptyRequest($requestValue, $idValue)
+    public function testApplyWithEmptyRequest(?int $requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
         $idField = 'id';
 
         $this->target->setRequestVar($requestField);
 
-        $this->request->expects($this->at(0))
+        $this->request
             ->method('getParam')
-            ->with($requestField)
-            ->willReturnCallback(
-                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                    switch ($field) {
-                        case $requestField:
-                            return $requestValue;
-                        case $idField:
-                            return $idValue;
-                    }
-                }
-            );
+            ->with($requestField);
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -193,28 +190,28 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider()
+    public function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
                 'requestValue' => null,
-                'id' => 0,
+                'id' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false,
+                'id' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null,
+                'id' => null
             ]
         ];
     }
 
-    /** @var  Attribute|MockObject */
-    private $attribute;
-
-    public function testApply()
+    /**
+    * @return void
+    */
+    public function testApply(): void
     {
         $priceId = '15-50';
         $requestVar = 'test_request_var';
@@ -237,7 +234,10 @@ class PriceTest extends TestCase
         $this->target->apply($this->request);
     }
 
-    public function testGetItems()
+    /**
+    * @return void
+    */
+    public function testGetItems(): void
     {
         $this->target->setAttributeModel($this->attribute);
 
