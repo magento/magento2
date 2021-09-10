@@ -270,7 +270,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="uncheckMAPUseSystemValue"/>
         <actionGroup ref="AdminEnableDisableMAPActionGroup" stepKey="setEnableMAPYes"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig1"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeConfigSuccessMessage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeConfigSuccessMessage1"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache1"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage2"/>
@@ -289,7 +289,7 @@
             <argument name="status" value="No"/>
         </actionGroup>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig2"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeConfigSuccessMessage1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeConfigSuccessMessage2"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache2"/>
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage3"/>
