@@ -16,6 +16,7 @@ class Amqp
     const CONFIG_PATH_HOST = 'queue/amqp/host';
     const CONFIG_PATH_USER = 'queue/amqp/user';
     const CONFIG_PATH_PASSWORD = 'queue/amqp/password';
+    const DEFAULT_MANAGEMENT_PROTOCOL = 'http';
     const DEFAULT_MANAGEMENT_PORT = '15672';
 
     /**
@@ -51,7 +52,10 @@ class Amqp
         );
         $this->curl->addHeader('content-type', 'application/json');
         $this->host = sprintf(
-            'http://%s:%s/api/',
+            '%s://%s:%s/api/',
+            defined('RABBITMQ_MANAGEMENT_PROTOCOL')
+                ? RABBITMQ_MANAGEMENT_PROTOCOL
+                : self::DEFAULT_MANAGEMENT_PROTOCOL,
             $this->deploymentConfig->get(self::CONFIG_PATH_HOST),
             defined('RABBITMQ_MANAGEMENT_PORT') ? RABBITMQ_MANAGEMENT_PORT : self::DEFAULT_MANAGEMENT_PORT
         );

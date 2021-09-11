@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Test\Helper;
 
 class MemoryTest extends \PHPUnit\Framework\TestCase
@@ -34,24 +35,14 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRealMemoryUsageWin()
     {
-        $this->_shell->expects(
-            $this->at(0)
-        )->method(
-            'execute'
-        )->with(
-            $this->stringStartsWith('ps ')
-        )->will(
-            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found')))
-        );
-        $this->_shell->expects(
-            $this->at(1)
-        )->method(
-            'execute'
-        )->with(
-            $this->stringStartsWith('tasklist.exe ')
-        )->willReturn(
-            '"php.exe","12345","N/A","0","26,321 K"'
-        );
+        $this->_shell
+            ->method('execute')
+            ->withConsecutive([$this->stringStartsWith('ps ')], [$this->stringStartsWith('tasklist.exe ')])
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found'))),
+                '"php.exe","12345","N/A","0","26,321 K"'
+            );
+
         $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
         $this->assertEquals(26952704, $object->getRealMemoryUsage());
     }

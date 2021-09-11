@@ -36,6 +36,29 @@
                 </field>
             </group>
         </section>
+        <section id="system">
+            <group id="security" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1">
+                <label>Security</label>
+                <field id="max_session_size_admin" translate="label" type="text" sortOrder="1" showInDefault="1" canRestore="1">
+                    <label>Max Session Size in Admin</label>
+                    <attribute type="modal_title_text">Are You Sure About Your Max Session Size in Admin Settings?</attribute>
+                    <attribute type="modal_content_body_path">Magento_Security::system/config/session_size_admin/modal_content_body.phtml</attribute>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <frontend_model>Magento\Security\Block\Config\Backend\Session\SessionSize</frontend_model>
+                    <backend_model>Magento\Security\Model\Config\Backend\Session\SessionSize</backend_model>
+                    <comment>Limit the maximum session size in bytes. Use 0 to disable.</comment>
+                </field>
+                <field id="max_session_size_storefront" translate="label" type="text" sortOrder="2" showInDefault="1" canRestore="1">
+                    <label>Max Session Size in Storefront</label>
+                    <attribute type="modal_title_text">Are You Sure About Your Max Session Size in Storefront Settings?</attribute>
+                    <attribute type="modal_content_body_path">Magento_Security::system/config/session_size_storefront/modal_content_body.phtml</attribute>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <frontend_model>Magento\Security\Block\Config\Backend\Session\SessionSize</frontend_model>
+                    <backend_model>Magento\Security\Model\Config\Backend\Session\SessionSize</backend_model>
+                    <comment>Limit the maximum session size in bytes. Use 0 to disable.</comment>
+                </field>
+            </group>
+        </section>
         <section id="customer">
             <group id="password">
                 <field id="password_reset_protection_type" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
