@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
 
 /**
- * Class Block
+ * The block of the layout generator
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Block implements Layout\GeneratorInterface

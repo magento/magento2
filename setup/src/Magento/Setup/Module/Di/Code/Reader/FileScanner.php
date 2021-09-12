@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
-use Laminas\Code\Exception;
+use Laminas\Code\Exception\InvalidArgumentException;
 use Laminas\Code\Exception\RuntimeException;
 
 /**
@@ -46,17 +46,19 @@ class FileScanner
      *
      * @param string $file
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(string $file)
     {
         $this->file = $file;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!file_exists($file)) {
-            throw new Exception\InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'File "%s" not found',
                 $file
             ));
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $tokens = token_get_all(file_get_contents($file));
         $this->tokens = $tokens;
     }
@@ -413,7 +415,7 @@ class FileScanner
     }
 
     /**
-     * copied from laminas-code 3.5.1
+     * Copied from laminas-code 3.5.1
      *
      * @param string|null $namespace
      *
@@ -427,7 +429,7 @@ class FileScanner
     }
 
     /**
-     * copied from laminas-code 3.5.1
+     * Copied from laminas-code 3.5.1
      *
      * @param string|null $namespace
      *

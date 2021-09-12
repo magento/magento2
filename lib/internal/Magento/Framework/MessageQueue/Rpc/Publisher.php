@@ -72,7 +72,7 @@ class Publisher implements PublisherInterface
     //@codingStandardsIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {

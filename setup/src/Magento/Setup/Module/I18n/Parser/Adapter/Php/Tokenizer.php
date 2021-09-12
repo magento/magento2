@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Module\I18n\Parser\Adapter\Php;
 
 /**
- * Tokenizer
+ * The PHP tokenizer for i18n parser
  */
 class Tokenizer
 {
@@ -46,6 +47,7 @@ class Tokenizer
      */
     public function parse($filePath)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_tokens = token_get_all(file_get_contents($filePath));
         $this->_tokensCount = count($this->_tokens);
     }

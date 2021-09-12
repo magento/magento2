@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 /**
- * Token
+ * The PHP tokenizer token for i18n parser
  */
 class Token
 {
@@ -177,6 +178,8 @@ class Token
     }
 
     /**
+     * Checks value if this is concatenation operator
+     *
      * @return bool
      */
     public function isConcatenateOperator()
