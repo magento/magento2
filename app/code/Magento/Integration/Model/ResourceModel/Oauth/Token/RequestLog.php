@@ -46,7 +46,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -54,7 +54,9 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @param string $userName
+     * @param int $userType
      */
     public function getFailuresCount($userName, $userType)
     {
@@ -66,17 +68,19 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
             ->where('user_name = :user_name AND user_type = :user_type AND lock_expires_at > :expiration_time');
 
         return (int)$this->getConnection()->fetchOne(
-             $select, 
-             [
-                 'user_name' => $userName, 
-                 'user_type' => $userType, 
-                 'expiration_time' => $dateTime,
-             ]
+            $select,
+            [
+                'user_name' => $userName,
+                'user_type' => $userType,
+                'expiration_time' => $dateTime,
+            ]
         );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @param string $userName
+     * @param int $userType
      */
     public function resetFailuresCount($userName, $userType)
     {
@@ -87,7 +91,9 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @param string $userName
+     * @param int $userType
      */
     public function incrementFailuresCount($userName, $userType)
     {
@@ -111,7 +117,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb im
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clearExpiredFailures()
     {
