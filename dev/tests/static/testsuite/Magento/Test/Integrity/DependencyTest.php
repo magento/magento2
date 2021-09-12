@@ -360,7 +360,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach ($configs as $file) {
             $dbSchemaWhitelist = (array)json_decode(file_get_contents($file->getFullPath()));
             $isStagingModule = (substr_compare($file->getComponentName(), 'Staging', -strlen('Staging')) === 0);
-            if ($isStagingModule) {
+            if ($isStagingModule || $file->getComponentName() === 'Magento_MultipleWishlist') {
                 // even though staging modules modify the constraints, they almost never declare new tables
                 continue;
             }
