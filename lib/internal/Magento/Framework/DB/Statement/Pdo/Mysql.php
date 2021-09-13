@@ -88,7 +88,21 @@ class Mysql extends \Zend_Db_Statement_Pdo
             return $this->_executeWithBinding($params);
         } else {
             return $this->tryExecute(function () use ($params) {
-                return $params !== null ? $this->_stmt->execute($params) : $this->_stmt->execute();
+                if ($params) {
+                    $queryStringReplaceCount = preg_match_all('#[^\?](\?)(?!\?)#', $this->_stmt->queryString, $matches);
+
+                    foreach (array_keys($params) as $paramName) {
+                        if (is_string($paramName) && strpos($this->_stmt->queryString, $paramName) !== false) {
+                            $queryStringReplaceCount++;
+                        }
+                    }
+
+                    if ($queryStringReplaceCount === count($params)) {
+                        return $this->_stmt->execute($params);
+                    }
+                }
+
+                return $this->_stmt->execute();
             });
         }
     }
