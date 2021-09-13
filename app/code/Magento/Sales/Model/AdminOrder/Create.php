@@ -2164,7 +2164,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param object $buyRequest
-     * @param array $productOptions     *
+     * @param array $productOptions
      * @return $this
      */
     private function formattedOptions(\Magento\Catalog\Model\Product $product, $buyRequest, $productOptions)
