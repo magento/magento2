@@ -17,6 +17,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Schema;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
+use Magento\Ui\Block\Logger;
 
 /**
  * Helper class to collect data for logging GraphQl requests
@@ -40,13 +41,15 @@ class LogData
     ) : array {
         $logData = [];
         $logData = array_merge($logData, $this->gatherRequestInformation($request));
-        $complexity = $this->getFieldCount($data['query'] ?? '');
-        if ($complexity !== -1) {
+
+        try {
+            $complexity = $this->getFieldCount($data['query'] ?? '');
             $logData[LoggerInterface::COMPLEXITY] = $complexity;
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
             }
-        }
+        } catch (\Exception $exception) {}
+
         if ($response) {
             $logData = array_merge($logData, $this->gatherResponseInformation($response));
         }
@@ -102,6 +105,10 @@ class LogData
             ($response->getHeader('X-Magento-Tags') && $response->getHeader('X-Magento-Tags') !== '')
                 ? 'true'
                 : 'false';
+        $responseInformation[LoggerInterface::X_MAGENTO_CACHE_ID] =
+            $response->getHeader('X-Magento-Cache-Id')
+                ? $response->getHeader('X-Magento-Cache_Id')->getFieldValue()
+                : '';
         $responseInformation[LoggerInterface::HTTP_RESPONSE_CODE] = $response->getHttpResponseCode();
         return $responseInformation;
     }
@@ -113,27 +120,25 @@ class LogData
      *
      * @param string $query
      * @return int
+     * @throws SyntaxError
+     * @throws /Exception
      */
     private function getFieldCount(string $query): int
     {
-        try {
-            if (!empty($query)) {
-                $totalFieldCount = 0;
-                $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
-                Visitor::visit(
-                    $queryAst,
-                    [
-                        'leave' => [
-                            NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
-                                $totalFieldCount++;
-                            }
-                        ]
+        if (!empty($query)) {
+            $totalFieldCount = 0;
+            $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+            Visitor::visit(
+                $queryAst,
+                [
+                    'leave' => [
+                        NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
+                            $totalFieldCount++;
+                        }
                     ]
-                );
-                return $totalFieldCount;
-            }
-        } catch (\Exception $exception) {
-            return -1;
+                ]
+            );
+            return $totalFieldCount;
         }
         return 0;
     }

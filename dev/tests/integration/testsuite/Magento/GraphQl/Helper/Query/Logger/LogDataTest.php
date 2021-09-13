@@ -123,7 +123,8 @@ QUERY,
                         'Content-length' => 123
                     ],
                     'response' => [
-                        'X-Magento-Tags' => 'FPC'
+                        'X-Magento-Tags' => 'FPC',
+                        'X-Magento-Cache-Id' => '1234'
                     ]
                 ],
                 'expectedResult' => [
@@ -137,7 +138,8 @@ QUERY,
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
                     LoggerInterface::COMPLEXITY => 5,
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
                 ]
             ],
             [ // query with no headers
@@ -153,23 +155,20 @@ QUERY,
     }
  }
 QUERY,
-                'headers' => [
-                    'response' => [
-                        'X-Magento-Tags' => 'FPC'
-                    ]
-                ],
+                'headers' => [],
                 'expectedResult' => [
                     LoggerInterface::HTTP_METHOD => 'POST',
                     LoggerInterface::STORE_HEADER => '',
                     LoggerInterface::CURRENCY_HEADER => '',
                     LoggerInterface::HAS_AUTH_HEADER => 'false',
-                    LoggerInterface::IS_CACHEABLE => 'true',
+                    LoggerInterface::IS_CACHEABLE => 'false',
                     LoggerInterface::REQUEST_LENGTH => '',
                     LoggerInterface::HAS_MUTATION => 'false',
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'products',
                     LoggerInterface::COMPLEXITY => 5,
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => ''
                 ]
             ],
             [ // query with bad operation name
@@ -187,7 +186,8 @@ QUERY,
 QUERY,
                 'headers' => [
                     'response' => [
-                        'X-Magento-Tags' => 'FPC'
+                        'X-Magento-Tags' => 'FPC',
+                        'X-Magento-Cache-Id' => '1234'
                     ]
                 ],
                 'expectedResult' => [
@@ -201,7 +201,8 @@ QUERY,
                     LoggerInterface::NUMBER_OF_OPERATIONS => 0,
                     LoggerInterface::OPERATION_NAMES => 'operationNameNotFound',
                     LoggerInterface::COMPLEXITY => 5,
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
                 ]
             ],
             [ // bad query
@@ -217,7 +218,8 @@ QUERY,
 QUERY,
                 'headers' => [
                     'response' => [
-                        'X-Magento-Tags' => 'FPC'
+                        'X-Magento-Tags' => 'FPC',
+                        'X-Magento-Cache-Id' => '1234'
                     ]
                 ],
                 'expectedResult' => [
@@ -227,7 +229,8 @@ QUERY,
                     LoggerInterface::HAS_AUTH_HEADER => 'false',
                     LoggerInterface::IS_CACHEABLE => 'true',
                     LoggerInterface::REQUEST_LENGTH => '',
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
                 ]
             ],
             [ // mutation with all headers
@@ -246,6 +249,9 @@ QUERY,
                         'Currency' => 'USD',
                         'Authorization' => '1234',
                         'Content-length' => 123
+                    ],
+                    'response' => [
+                        'X-Magento-Cache-Id' => '1234'
                     ]
                 ],
                 'expectedResult' => [
@@ -259,7 +265,8 @@ QUERY,
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
                     LoggerInterface::COMPLEXITY => 3,
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
                 ]
             ],
             [ // mutation with no headers
@@ -284,7 +291,8 @@ QUERY,
                     LoggerInterface::NUMBER_OF_OPERATIONS => 1,
                     LoggerInterface::OPERATION_NAMES => 'placeOrder',
                     LoggerInterface::COMPLEXITY => 3,
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => ''
                 ]
             ],
             [ // multiple queries
@@ -312,7 +320,9 @@ QUERY,
                         'Content-length' => 123
                     ],
                     'response' => [
-                        'X-Magento-Tags' => 'FPC'
+                        'X-Magento-Tags' => 'FPC',
+                        'X-Magento-Cache-Id' => '1234'
+
                     ]
                 ],
                 'expectedResult' => [
@@ -326,7 +336,8 @@ QUERY,
                     LoggerInterface::NUMBER_OF_OPERATIONS => 2,
                     LoggerInterface::OPERATION_NAMES => 'cart,products',
                     LoggerInterface::COMPLEXITY => 8,
-                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200,
+                    LoggerInterface::X_MAGENTO_CACHE_ID => '1234'
                 ]
             ],
         ];

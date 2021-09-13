@@ -25,6 +25,7 @@ interface LoggerInterface
     const COMPLEXITY = 'GraphQlComplexity';
     const REQUEST_LENGTH = 'GraphQlRequestLength';
     const HTTP_RESPONSE_CODE = 'GraphQlHttpResponseCode';
+    const X_MAGENTO_CACHE_ID = 'GraphQlXMagentoCacheId';
 
     /**
      * Execute logger
