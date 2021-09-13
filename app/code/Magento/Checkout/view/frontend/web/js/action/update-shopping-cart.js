@@ -115,7 +115,7 @@ define([
                     $.each(responseData, function (index, data) {
 
                         if (data.itemId !== undefined) {
-                            let elm = $('#cart-' + data.itemId + '-qty');
+                            var elm = $('#cart-' + data.itemId + '-qty');
                             elm.val(elm.attr('data-item-qty'));
                         }
                         response['error_message'] = data.error;
