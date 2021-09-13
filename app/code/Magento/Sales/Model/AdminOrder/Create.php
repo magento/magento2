@@ -2163,11 +2163,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * Set $buyRequest with formatted product options.
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param $buyRequest
-     * @param $productOptions
-     *
+     * @param object $buyRequest
+     * @param array $productOptions     *
+     * @return $this
      */
-    private function formattedOptions(\Magento\Catalog\Model\Product $product, $buyRequest, $productOptions): void
+    private function formattedOptions(\Magento\Catalog\Model\Product $product, $buyRequest, $productOptions)
     {
         if ($productOptions !== null && !empty($productOptions['options'])) {
             $formattedOptions = [];
@@ -2195,5 +2195,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $buyRequest->setData('options', $formattedOptions);
             }
         }
+        return $this;
     }
 }
