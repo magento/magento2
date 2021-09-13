@@ -17,7 +17,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/esler/zf1"
+            "url": "https://github.com/karyna-tsymbal-atwix/zf1"
         }
     ],
     "require": {
@@ -71,10 +71,10 @@
         "laminas/laminas-view": "~2.12.0",
         "league/flysystem": "^2.0",
         "league/flysystem-aws-s3-v3": "^2.0",
-        "magento/composer": "dev-develop",
+        "magento/composer": "1.8.x-dev as 1.8.0",
         "magento/framework": "dev-php80_update",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "dev-patch-1",
+        "magento/zendframework1": "dev-php8-compatibility/zf-compatibility-with-php8",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",

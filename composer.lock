@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3713d7ddc399c760e974e0bea937bf4",
+    "content-hash": "c58d905fe0b69b0316c40da887bc25d8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3639,21 +3639,21 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.7.0",
+            "version": "1.8.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "59a67efe96a11d9d00ae20694c48c20770c4e904"
+                "reference": "044dc5bf65eb9f348035057080cab764b6f33e5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/59a67efe96a11d9d00ae20694c48c20770c4e904",
-                "reference": "59a67efe96a11d9d00ae20694c48c20770c4e904",
+                "url": "https://api.github.com/repos/magento/composer/zipball/044dc5bf65eb9f348035057080cab764b6f33e5e",
+                "reference": "044dc5bf65eb9f348035057080cab764b6f33e5e",
                 "shasum": ""
             },
             "require": {
                 "composer/composer": "^1.9 || ^2.0",
-                "php": "~7.3.0||~7.4.0",
+                "php": "~7.3.0||~7.4.0||~8.0.0",
                 "symfony/console": "~4.4.0"
             },
             "require-dev": {
@@ -3673,9 +3673,9 @@
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
                 "issues": "https://github.com/magento/composer/issues",
-                "source": "https://github.com/magento/composer/tree/1.7.0"
+                "source": "https://github.com/magento/composer/tree/1.8.x"
             },
-            "time": "2021-03-29T21:33:27+00:00"
+            "time": "2021-08-03T03:04:34+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -3761,16 +3761,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.14.5",
+            "version": "dev-php8-compatibility/zf-compatibility-with-php8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/zf1.git",
-                "reference": "6ad81500d33f085ca2391f2b59e37bd34203b29b"
+                "url": "https://github.com/karyna-tsymbal-atwix/zf1.git",
+                "reference": "c5206c6cb2adbe08f5313302729f9e4f464ad6ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/6ad81500d33f085ca2391f2b59e37bd34203b29b",
-                "reference": "6ad81500d33f085ca2391f2b59e37bd34203b29b",
+                "url": "https://api.github.com/repos/karyna-tsymbal-atwix/zf1/zipball/c5206c6cb2adbe08f5313302729f9e4f464ad6ef",
+                "reference": "c5206c6cb2adbe08f5313302729f9e4f464ad6ef",
                 "shasum": ""
             },
             "require": {
@@ -3791,24 +3791,29 @@
                     "Zend_": "library/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
+            "archive": {
+                "exclude": [
+                    "/demos",
+                    "/documentation",
+                    "/tests"
+                ]
+            },
             "license": [
                 "BSD-3-Clause"
             ],
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "ZF1",
-                "framework"
+                "framework",
+                "zf1"
             ],
             "support": {
-                "issues": "https://github.com/magento/zf1/issues",
-                "source": "https://github.com/magento/zf1/tree/1.14.5"
+                "source": "https://github.com/karyna-tsymbal-atwix/zf1/tree/php8-compatibility/zf-compatibility-with-php8"
             },
-            "time": "2020-12-02T21:12:59+00:00"
+            "time": "2021-09-10T10:23:41+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -10563,16 +10568,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "0.5.6",
+            "version": "0.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "fac86158ffc7392e49636f77e63684c026df43b8"
+                "reference": "816e826ce0b7fb32098d8cb6de62511ce6021cea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/fac86158ffc7392e49636f77e63684c026df43b8",
-                "reference": "fac86158ffc7392e49636f77e63684c026df43b8",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/816e826ce0b7fb32098d8cb6de62511ce6021cea",
+                "reference": "816e826ce0b7fb32098d8cb6de62511ce6021cea",
                 "shasum": ""
             },
             "require": {
@@ -10606,22 +10611,22 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/0.5.6"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/0.5.7"
             },
-            "time": "2021-08-31T08:08:22+00:00"
+            "time": "2021-09-12T11:52:00+00:00"
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.98",
+            "version": "0.12.99",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3bb7cc246c057405dd5e290c3ecc62ab51d57e00"
+                "reference": "b4d40f1d759942f523be267a1bab6884f46ca3f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3bb7cc246c057405dd5e290c3ecc62ab51d57e00",
-                "reference": "3bb7cc246c057405dd5e290c3ecc62ab51d57e00",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b4d40f1d759942f523be267a1bab6884f46ca3f7",
+                "reference": "b4d40f1d759942f523be267a1bab6884f46ca3f7",
                 "shasum": ""
             },
             "require": {
@@ -10652,7 +10657,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.98"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.99"
             },
             "funding": [
                 {
@@ -10672,7 +10677,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-02T12:33:01+00:00"
+            "time": "2021-09-12T20:09:55+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -13063,13 +13068,24 @@
             "time": "2016-07-21T11:18:01+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "magento/composer",
+            "version": "1.8.9999999.9999999-dev",
+            "alias": "1.8.0",
+            "alias_normalized": "1.8.0.0"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "magento/composer": 20,
+        "magento/framework": 20,
+        "magento/zendframework1": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.0.0||~8.1.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
