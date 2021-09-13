@@ -72,6 +72,9 @@ class DataObjectHelperTest extends TestCase
      */
     protected $joinProcessorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -89,7 +92,7 @@ class DataObjectHelperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->joinProcessorMock = $this->getMockBuilder(JoinProcessor::class)
-            ->setMethods(['extractExtensionAttributes'])
+            ->onlyMethods(['extractExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->joinProcessorMock->expects($this->any())
@@ -109,7 +112,10 @@ class DataObjectHelperTest extends TestCase
         );
     }
 
-    public function testPopulateWithArrayWithSimpleAttributes()
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithSimpleAttributes(): void
     {
         $id = 5;
         $countryId = 15;
@@ -122,17 +128,13 @@ class DataObjectHelperTest extends TestCase
         /** @var Address $addressDataObject */
         $addressDataObject = $this->objectManager->getObject(
             Address::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         /** @var Region $regionDataObject */
         $regionDataObject = $this->objectManager->getObject(
             Region::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
         $data = [
             'id' => $id,
@@ -141,18 +143,14 @@ class DataObjectHelperTest extends TestCase
             'default_shipping' => $isDefaultShipping,
             'region' => [
                 'region_id' => $regionId,
-                'region' => $region,
+                'region' => $region
             ],
         ];
 
-        $this->methodsMapProcessor->expects($this->at(0))
+        $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->with(AddressInterface::class, 'getStreet')
-            ->willReturn('string[]');
-        $this->methodsMapProcessor->expects($this->at(1))
-            ->method('getMethodReturnType')
-            ->with(AddressInterface::class, 'getRegion')
-            ->willReturn(RegionInterface::class);
+            ->withConsecutive([AddressInterface::class, 'getStreet'], [AddressInterface::class, 'getRegion'])
+            ->willReturnOnConsecutiveCalls('string[]', RegionInterface::class);
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -172,7 +170,10 @@ class DataObjectHelperTest extends TestCase
         $this->assertEquals($regionId, $addressDataObject->getRegion()->getRegionId());
     }
 
-    public function testPopulateWithArrayWithCustomAttribute()
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithCustomAttribute(): void
     {
         $id = 5;
 
@@ -200,7 +201,7 @@ class DataObjectHelperTest extends TestCase
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'metadataService' => $metadataServiceMock,
-                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'attributeValueFactory' => $this->attributeValueFactoryMock
             ]
         );
 
@@ -230,7 +231,10 @@ class DataObjectHelperTest extends TestCase
         );
     }
 
-    public function testPopulateWithArrayWithCustomAttributes()
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithCustomAttributes(): void
     {
         $id = 5;
 
@@ -258,7 +262,7 @@ class DataObjectHelperTest extends TestCase
             [
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'metadataService' => $metadataServiceMock,
-                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'attributeValueFactory' => $this->attributeValueFactoryMock
             ]
         );
 
@@ -267,7 +271,7 @@ class DataObjectHelperTest extends TestCase
             CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                 [
                     AttributeInterface::ATTRIBUTE_CODE => $customAttributeCode,
-                    AttributeInterface::VALUE => $customAttributeValue,
+                    AttributeInterface::VALUE => $customAttributeValue
                 ],
             ],
         ];
@@ -296,24 +300,22 @@ class DataObjectHelperTest extends TestCase
     /**
      * @param array $data1
      * @param array $data2
+     *
+     * @return void
      * @dataProvider dataProviderForTestMergeDataObjects
      */
-    public function testMergeDataObjects($data1, $data2)
+    public function testMergeDataObjects($data1, $data2): void
     {
         /** @var Address $addressDataObject */
         $firstAddressDataObject = $this->objectManager->getObject(
             Address::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         /** @var Region $regionDataObject */
         $firstRegionDataObject = $this->objectManager->getObject(
             Region::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         $firstRegionDataObject->setRegionId($data1['region']['region_id']);
@@ -330,17 +332,13 @@ class DataObjectHelperTest extends TestCase
 
         $secondAddressDataObject = $this->objectManager->getObject(
             Address::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         /** @var Region $regionDataObject */
         $secondRegionDataObject = $this->objectManager->getObject(
             Region::class,
-            [
-                'dataObjectHelper' => $this->dataObjectHelper,
-            ]
+            ['dataObjectHelper' => $this->dataObjectHelper]
         );
 
         $secondRegionDataObject->setRegionId($data2['region']['region_id']);
@@ -359,14 +357,10 @@ class DataObjectHelperTest extends TestCase
             ->method('buildOutputDataArray')
             ->with($secondAddressDataObject, get_class($firstAddressDataObject))
             ->willReturn($data2);
-        $this->methodsMapProcessor->expects($this->at(0))
+        $this->methodsMapProcessor
             ->method('getMethodReturnType')
-            ->with(Address::class, 'getStreet')
-            ->willReturn('string[]');
-        $this->methodsMapProcessor->expects($this->at(1))
-            ->method('getMethodReturnType')
-            ->with(Address::class, 'getRegion')
-            ->willReturn(RegionInterface::class);
+            ->withConsecutive([Address::class, 'getStreet'], [Address::class, 'getRegion'])
+            ->willReturnOnConsecutiveCalls('string[]', RegionInterface::class);
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
             ->with(RegionInterface::class, [])
@@ -388,7 +382,7 @@ class DataObjectHelperTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestMergeDataObjects()
+    public function dataProviderForTestMergeDataObjects(): array
     {
         return [
             [
@@ -399,7 +393,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => true,
                     'region' => [
                         'region_id' => '1',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ],
                 [
@@ -409,7 +403,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => false,
                     'region' => [
                         'region_id' => '2',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ]
             ],
@@ -419,7 +413,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => true,
                     'region' => [
                         'region_id' => '1',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ],
                 [
@@ -429,7 +423,7 @@ class DataObjectHelperTest extends TestCase
                     'default_shipping' => false,
                     'region' => [
                         'region_id' => '2',
-                        'region' => 'TX',
+                        'region' => 'TX'
                     ]
                 ]
             ]

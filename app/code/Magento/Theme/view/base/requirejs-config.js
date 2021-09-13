@@ -16,13 +16,10 @@ var config = {
     shim: {
         'jquery/jquery-migrate': ['jquery'],
         'jquery/jstree/jquery.hotkeys': ['jquery'],
-        'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
-        'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
-        'MutationObserver': ['es6-collections'],
         'matchMedia': {
             'exports': 'mediaCheck'
         },
@@ -30,7 +27,6 @@ var config = {
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
-        'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
