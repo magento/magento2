@@ -11,7 +11,7 @@
     <test name="AdminExportSimpleProductWithCustomAttributeTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
+            <stories value="Export Products"/>
             <title value="Export Simple Product with custom attribute"/>
             <description value="Admin should be able to export Simple Product with custom attribute"/>
             <severity value="CRITICAL"/>
@@ -28,7 +28,8 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <magentoCron stepKey="runCron"/>
+            <magentoCLI command="cron:run" arguments="--group index" stepKey="cronRun"/>
+            <magentoCLI command="cron:run" arguments="--group index" stepKey="cronRunToStartReindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -36,7 +37,7 @@
             <deleteData createDataKey="createSimpleProductWithCustomAttributeSet" stepKey="deleteSimpleProductWithCustomAttributeSet"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -48,18 +49,26 @@
         <!-- Export created below products -->
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <magentoCron stepKey="runCronIndex" groups="index"/>
-
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="pageReload" />
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
         <!-- Download product -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
         <!-- Delete exported file -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
     </test>

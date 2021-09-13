@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnhancedMediaGalleryVerifyFilterByAssetTest">
+        <annotations>
+            <features value="MediaGalleryUi"/>
+            <stories value="Story 58: User sees entities where asset is used in"/>
+            <title value="User sees entities where asset is used in"/>
+            <description value="User sees entities where asset is used in"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951024"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1292"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
+
+            <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters2"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="openCategoryPage">
+            <argument name="id" value="$category.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstIMage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
+
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFiltersAgain"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
+            <argument name="filterName" value="Asset"/>
+            <argument name="optionName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
+        <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
+            <argument name="numberOfRecords" value="1 records found"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageImageColumnActionGroup" stepKey="assertCategoryGridPageImageColumn"/>
+        <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryInGrid">
+            <argument name="category" value="$category$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup" stepKey="assertCategoryGridPageProductsInMenuEnabledColumns"/>
+    </test>
+</tests>

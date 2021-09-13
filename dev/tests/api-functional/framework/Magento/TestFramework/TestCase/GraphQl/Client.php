@@ -157,6 +157,37 @@ class Client
     }
 
     /**
+     * Perform HTTP POST request, return response data and headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function postWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        $url = $this->getEndpointUrl();
+        $headers = array_merge($headers, ['Accept: application/json', 'Content-Type: application/json']);
+        $requestArray = [
+            'query' => $query,
+            'variables' => !empty($variables) ? $variables : null,
+            'operationName' => !empty($operationName) ? $operationName : null
+        ];
+        $postData = $this->json->jsonEncode($requestArray);
+
+        $response = $this->curlClient->postWithFullResponse($url, $postData, $headers);
+        $responseBody = $this->processResponse($response['body']);
+        $responseHeaders = !empty($response['header']) ? $this->processResponseHeaders($response['header']) : [];
+
+        return ['headers' => $responseHeaders, 'body' => $responseBody];
+    }
+
+    /**
      * Process errors
      *
      * @param array $responseBodyArray
@@ -213,7 +244,7 @@ class Client
 
         $headerLines = preg_split('/((\r?\n)|(\r\n?))/', $headers);
         foreach ($headerLines as $headerLine) {
-            $headerParts = preg_split('/:/', $headerLine);
+            $headerParts = preg_split('/: /', $headerLine, 2);
             if (count($headerParts) == 2) {
                 $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
             } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {

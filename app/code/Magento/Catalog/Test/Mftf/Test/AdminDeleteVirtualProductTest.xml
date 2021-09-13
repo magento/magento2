@@ -35,18 +35,17 @@
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
         <!--Verify product on product page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.name$$)}}" stepKey="amOnVirtualProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$$)}}" stepKey="amOnVirtualProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
         <!-- Search for the product by sku -->
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createVirtualProduct.sku$$" stepKey="fillSearchBarByProductSku"/>
-        <waitForPageLoad stepKey="waitForSearchButton"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
+            <argument name="query" value="$$createVirtualProduct.sku$$"/>
+        </actionGroup>
         <!-- Should not see any search results -->
         <dontSee userInput="$$createVirtualProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
         <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>
         <!-- Go to the category page that we created in the before block -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <!-- Should not see the product -->
         <dontSee userInput="$$createVirtualProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
         <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>

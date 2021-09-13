@@ -19,11 +19,12 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_varchar_attribute.php');
 Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
 
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()
-    ->create(ProductRepositoryInterface::class);
+$productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
 $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
@@ -35,7 +36,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId(Product::ENTITY, 'Default');
 $associatedProductIds = [];
-$productIds = [10, 20];
+$idsToReindex = $productIds = [10, 20];
 array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {
@@ -50,6 +51,7 @@ foreach ($options as $option) {
         ->setSku('simple_' . $productId)
         ->setPrice($productId)
         ->setTestConfigurable($option->getValue())
+        ->setVarcharAttribute('varchar' . $productId)
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
         ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);

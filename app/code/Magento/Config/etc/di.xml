@@ -96,7 +96,7 @@
 
     <virtualType name="systemConfigQueryLocker" type="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
+            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Proxy</argument>
         </arguments>
     </virtualType>
 
@@ -207,6 +207,10 @@
     <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
+                <item name="structure" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ConfigStructureSource</item>
+                    <item name="sortOrder" xsi:type="string">1</item>
+                </item>
                 <item name="modular" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</item>
                     <item name="sortOrder" xsi:type="string">10</item>
@@ -344,6 +348,26 @@
                 <item name="web/unsecure/base_url" xsi:type="string">1</item>
             </argument>
             <argument name="excludeList" xsi:type="object">Magento\Config\Model\Config\Export\ExcludeList</argument>
+        </arguments>
+    </type>
+    <virtualType name="adminhtmlConfigStructureData" type="\Magento\Config\Model\Config\Structure\Data">
+        <arguments>
+            <argument name="configScope" xsi:type="object">adminhtmlConfigScope</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="adminhtmlConfigStructure" type="Magento\Config\Model\Config\Structure">
+        <arguments>
+            <argument name="structureData" xsi:type="object">adminhtmlConfigStructureData</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\App\Config\Source\ConfigStructureSource">
+        <arguments>
+            <argument name="structure" xsi:type="object">adminhtmlConfigStructure</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Model\Config">
+        <arguments>
+            <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
     </type>
 </config>

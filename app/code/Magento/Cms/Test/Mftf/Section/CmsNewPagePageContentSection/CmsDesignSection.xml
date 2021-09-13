@@ -9,6 +9,10 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CmsDesignSection">
         <element name="DesignTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Design']"/>
+        <element name="customDesignUpdateTab" type="button" selector="//strong[@class='admin__collapsible-title']//span[text()='Custom Design Update']"/>
+        <element name="customDesignFrom" type="input" selector="input[name='custom_theme_from']"/>
+        <element name="customDesignTo" type="input" selector="input[name='custom_theme_to']"/>
+        <element name="customTheme" type="select" selector="//div[@data-index='custom_design_update']//select[@name='custom_theme']"/>
         <element name="LayoutDropdown" type="select" selector="select[name='page_layout']"/>
     </section>
 </sections>

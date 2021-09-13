@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryInsertImageLargeFileSizeTest">
+        <annotations>
+            <features value="MediaGalleryRenditions"/>
+            <stories value="User inserts image rendition to the content"/>
+            <title value="Admin user should see correct image file size after rendition"/>
+            <description value="Admin user should see correct image file size after rendition"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1507933/scenarios/5200023"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1806"/>
+            <severity value="AVERAGE"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersOnStandaloneMediaGalleryPage"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+                <argument name="name" value="category"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage">
+                <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Open category page -->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="openCategoryPage">
+            <argument name="id" value="$category.id$"/>
+        </actionGroup>
+
+        <!-- Add image to category from gallery -->
+        <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFiltersAgain"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+            <argument name="name" value="category"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="addCategoryImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImage">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelected"/>
+
+        <!-- Assert added image size -->
+        <actionGroup ref="AdminAssertImageUploadFileSizeThanActionGroup" stepKey="assertSize">
+            <argument name="fileSize" value="26 KB"/>
+        </actionGroup>
+    </test>
+</tests>

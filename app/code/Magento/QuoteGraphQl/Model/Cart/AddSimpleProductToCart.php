@@ -16,7 +16,7 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
 /**
- * Add simple product to cart
+ * Add simple product to cart mutation
  */
 class AddSimpleProductToCart
 {
@@ -52,11 +52,15 @@ class AddSimpleProductToCart
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
+        $cartItemData['model'] = $cart;
         $sku = $this->extractSku($cartItemData);
 
         try {
             $product = $this->productRepository->get($sku, false, null, true);
         } catch (NoSuchEntityException $e) {
+            throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
+        }
+        if (!in_array($cart->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 

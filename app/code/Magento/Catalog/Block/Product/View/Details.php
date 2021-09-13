@@ -14,6 +14,7 @@ namespace Magento\Catalog\Block\Product\View;
  * Holds a group of blocks to show as tabs.
  *
  * @api
+ * @since 103.0.1
  */
 class Details extends \Magento\Framework\View\Element\Template
 {
@@ -25,10 +26,12 @@ class Details extends \Magento\Framework\View\Element\Template
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return array
+     * @since 103.0.1
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getGroupSortedChildNames(string $groupName, string $callback): array
     {
-        $groupChildNames = $this->getGroupChildNames($groupName, $callback);
+        $groupChildNames = $this->getGroupChildNames($groupName);
         $layout = $this->getLayout();
 
         $childNamesSortOrder = [];

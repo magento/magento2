@@ -122,7 +122,7 @@
         </actionGroup>
 
         <!-- Customer placed the order with 20 products -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="scrollToLimiter"/>
         <selectOption userInput="36" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>
@@ -193,15 +193,13 @@
         <!-- Place Order -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
         <see userInput="20" selector="{{CheckoutOrderSummarySection.itemsQtyInCart}}" stepKey="see20Products"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNextButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForCheckoutLoad"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
         <waitForPageLoad stepKey="waitForSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Go to My Account > My Orders page -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
-        <waitForPageLoad stepKey="waitForAccountPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrdersLoad"/>
 

@@ -11,7 +11,6 @@ var config = {
             'translateInline':        'mage/translate-inline',
             'sticky':                 'mage/sticky',
             'tabs':                   'mage/tabs',
-            'zoom':                   'mage/zoom',
             'collapsible':            'mage/collapsible',
             'dropdownDialog':         'mage/dropdown',
             'dropdown':               'mage/dropdowns',
@@ -33,7 +32,6 @@ var config = {
         }
     },
     deps: [
-        'jquery/jquery.mobile.custom',
         'mage/common',
         'mage/dataPost',
         'mage/bootstrap'
@@ -49,3 +47,24 @@ var config = {
         }
     }
 };
+
+/* eslint-disable max-depth */
+/**
+ * Adds polyfills only for browser contexts which prevents bundlers from including them.
+ */
+if (typeof window !== 'undefined' && window.document) {
+    /**
+     * Polyfill localStorage and sessionStorage for browsers that do not support them.
+     */
+    try {
+        if (!window.localStorage || !window.sessionStorage) {
+            throw new Error();
+        }
+
+        localStorage.setItem('storage_test', 1);
+        localStorage.removeItem('storage_test');
+    } catch (e) {
+        config.deps.push('mage/polyfill');
+    }
+}
+/* eslint-enable max-depth */

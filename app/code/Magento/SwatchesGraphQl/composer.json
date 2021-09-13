@@ -6,10 +6,11 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-swatches": "*",
-        "magento/module-catalog": "*"
+        "magento/module-catalog": "*",
+        "magento/module-catalog-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-configurable-product-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

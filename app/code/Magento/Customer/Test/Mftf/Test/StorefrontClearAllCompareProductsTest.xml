@@ -102,8 +102,8 @@
                 <requiredEntity createDataKey="createDownloadableProduct1"/>
             </createData>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
@@ -182,8 +182,7 @@
             <argument name="productVar" value="$$createDownloadableProduct1$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnMyAccountDashboard1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="amOnMyAccountDashboard1"/>
 
         <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearComparedProducts1"/>
     </test>

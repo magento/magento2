@@ -42,13 +42,13 @@ class DataTest extends TestCase
     private $objectManager;
 
     /**
-     * @inheritdoc
+     * @inheritdoc 
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->setConstructorArgs(
                 [
                     'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
@@ -59,9 +59,7 @@ class DataTest extends TestCase
 
         $this->model = $this->objectManager->getObject(
             Data::class,
-            [
-                '_attrDataFactory' => $this->attrDataFactory
-            ]
+            ['_attrDataFactory' => $this->attrDataFactory]
         );
     }
 
@@ -75,6 +73,8 @@ class DataTest extends TestCase
      * @param bool $expected
      * @param array $messages
      * @param array $data
+     *
+     * @return void
      */
     public function testIsValid(
         $attributeData,
@@ -82,11 +82,11 @@ class DataTest extends TestCase
         $expected,
         $messages,
         $data = ['attribute' => 'new_test']
-    ) {
+    ): void {
         $entity = $this->_getEntityMock();
         $attribute = $this->_getAttributeMock($attributeData);
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->setConstructorArgs(
                 [
                     'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
@@ -113,7 +113,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function isValidDataProvider()
+    public function isValidDataProvider(): array
     {
         return [
             'is_valid' => [
@@ -121,65 +121,65 @@ class DataTest extends TestCase
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
-                    'is_visible' => true,
+                    'is_visible' => true
                 ],
                 'attributeReturns' => true,
                 'isValid' => true,
-                'messages' => [],
+                'messages' => []
             ],
             'is_invalid' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
-                    'is_visible' => true,
+                    'is_visible' => true
                 ],
                 'attributeReturns' => ['Error'],
                 'isValid' => false,
-                'messages' => ['attribute' => ['Error']],
+                'messages' => ['attribute' => ['Error']]
             ],
             'no_data_models' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
                     'frontend_input' => 'text',
-                    'is_visible' => true,
+                    'is_visible' => true
                 ],
                 'attributeReturns' => ['Error'],
                 'isValid' => false,
-                'messages' => ['attribute' => ['Error']],
+                'messages' => ['attribute' => ['Error']]
             ],
             'no_data_models_no_frontend_input' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
-                    'is_visible' => true,
+                    'is_visible' => true
                 ],
                 'attributeReturns' => ['Error'],
                 'isValid' => true,
-                'messages' => [],
+                'messages' => []
             ],
             'no_data_for attribute' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
-                    'is_visible' => true,
+                    'is_visible' => true
                 ],
                 'attributeReturns' => true,
                 'isValid' => true,
                 'messages' => [],
-                'setData' => ['attribute2' => 'new_test'],
+                'setData' => ['attribute2' => 'new_test']
             ],
             'is_valid_data_from_entity' => [
                 'attributeData' => [
                     'attribute_code' => 'attribute',
                     'data_model' => $this->_getDataModelMock(null),
                     'frontend_input' => 'text',
-                    'is_visible' => true,
+                    'is_visible' => true
                 ],
                 'attributeReturns' => true,
                 'isValid' => true,
                 'messages' => [],
-                'setData' => [],
+                'setData' => []
             ],
             'is_invisible' => [
                 'attributeData' => [
@@ -190,7 +190,7 @@ class DataTest extends TestCase
                 ],
                 'attributeReturns' => ['Error'],
                 'isValid' => true,
-                'messages' => [],
+                'messages' => []
             ],
         ];
     }
@@ -199,8 +199,10 @@ class DataTest extends TestCase
      * Testing \Magento\Eav\Model\Validator\Attribute\Data::isValid
      *
      * In this test entity attributes are got from attribute collection.
+     *
+     * @return void
      */
-    public function testIsValidAttributesFromCollection()
+    public function testIsValidAttributesFromCollection(): void
     {
         /** @var AbstractEntity $resource */
         $resource = $this->getMockForAbstractClass(AbstractEntity::class, [], '', false);
@@ -213,10 +215,10 @@ class DataTest extends TestCase
             ]
         );
         $collection = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getItems'])->getMock();
+            ->addMethods(['getItems'])->getMock();
         $collection->expects($this->once())->method('getItems')->willReturn([$attribute]);
         $entityType = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getAttributeCollection'])
+            ->addMethods(['getAttributeCollection'])
             ->getMock();
         $entityType->expects($this->once())->method('getAttributeCollection')->willReturn($collection);
         $entity = $this->_getEntityMock();
@@ -224,7 +226,7 @@ class DataTest extends TestCase
         $entity->expects($this->once())->method('getEntityType')->willReturn($entityType);
         $dataModel = $this->_getDataModelMock(true);
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->setConstructorArgs(
                 [
                     'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
@@ -249,17 +251,19 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider whiteBlackListProvider
      * @param callable $callback
+     *
+     * @return void
+     * @dataProvider allowDenyListProvider
      */
-    public function testIsValidBlackListWhiteListChecks($callback)
+    public function testIsValidExclusionInclusionListChecks($callback): void
     {
         $attribute = $this->_getAttributeMock(
             [
                 'attribute_code' => 'attribute',
                 'data_model' => $this->_getDataModelMock(null),
                 'frontend_input' => 'text',
-                'is_visible' => true,
+                'is_visible' => true
             ]
         );
         $secondAttribute = $this->_getAttributeMock(
@@ -267,14 +271,14 @@ class DataTest extends TestCase
                 'attribute_code' => 'attribute2',
                 'data_model' => $this->_getDataModelMock(null),
                 'frontend_input' => 'text',
-                'is_visible' => true,
+                'is_visible' => true
             ]
         );
         $data = ['attribute' => 'new_test_data', 'attribute2' => 'some data'];
         $entity = $this->_getEntityMock();
         $dataModel = $this->_getDataModelMock(true, $data['attribute']);
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->setConstructorArgs(
                 [
                     'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
@@ -302,19 +306,22 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function whiteBlackListProvider()
+    public function allowDenyListProvider(): array
     {
-        $whiteCallback = function ($validator) {
-            $validator->setAttributesWhiteList(['attribute']);
+        $allowedCallbackList = function ($validator) {
+            $validator->setAllowedAttributesList(['attribute']);
         };
 
-        $blackCallback = function ($validator) {
-            $validator->setAttributesBlackList(['attribute2']);
+        $deniedCallbackList = function ($validator) {
+            $validator->setDeniedAttributesList(['attribute2']);
         };
-        return ['white_list' => [$whiteCallback], 'black_list' => [$blackCallback]];
+        return ['allowed' => [$allowedCallbackList], 'denied' => [$deniedCallbackList]];
     }
 
-    public function testSetAttributesWhiteList()
+    /**
+     * @return void
+     */
+    public function testSetAttributesAllowedList(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -328,12 +335,17 @@ class DataTest extends TestCase
             )
             ->getMock();
         $validator = new Data($attrDataFactory);
-        $result = $validator->setAttributesWhiteList($attributes);
-        $this->assertAttributeEquals($attributes, '_attributesWhiteList', $validator);
+        $result = $validator->setIncludedAttributesList($attributes);
+
+        // phpstan:ignore
+        $this->assertAttributeEquals($attributes, '_attributesAllowed', $validator);
         $this->assertEquals($validator, $result);
     }
 
-    public function testSetAttributesBlackList()
+    /**
+     * @return void
+     */
+    public function testSetAttributesDeniedList(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -347,12 +359,16 @@ class DataTest extends TestCase
             )
             ->getMock();
         $validator = new Data($attrDataFactory);
-        $result = $validator->setAttributesBlackList($attributes);
-        $this->assertAttributeEquals($attributes, '_attributesBlackList', $validator);
+        $result = $validator->setDeniedAttributesList($attributes);
+        // phpstan:ignore
+        $this->assertAttributeEquals($attributes, '_attributesDenied', $validator);
         $this->assertEquals($validator, $result);
     }
 
-    public function testAddErrorMessages()
+    /**
+     * @return void
+     */
+    public function testAddErrorMessages(): void
     {
         $data = ['attribute1' => 'new_test', 'attribute2' => 'some data'];
         $entity = $this->_getEntityMock();
@@ -361,7 +377,7 @@ class DataTest extends TestCase
                 'attribute_code' => 'attribute1',
                 'data_model' => $firstDataModel = $this->_getDataModelMock(['Error1']),
                 'frontend_input' => 'text',
-                'is_visible' => true,
+                'is_visible' => true
             ]
         );
         $secondAttribute = $this->_getAttributeMock(
@@ -369,13 +385,13 @@ class DataTest extends TestCase
                 'attribute_code' => 'attribute2',
                 'data_model' => $secondDataModel = $this->_getDataModelMock(['Error2']),
                 'frontend_input' => 'text',
-                'is_visible' => true,
+                'is_visible' => true
             ]
         );
         $expectedMessages = ['attribute1' => ['Error1'], 'attribute2' => ['Error2']];
         $expectedDouble = ['attribute1' => ['Error1', 'Error1'], 'attribute2' => ['Error2', 'Error2']];
         $factory = $this->getMockBuilder(AttributeDataFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->setConstructorArgs(
                 [
                     'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
@@ -386,46 +402,20 @@ class DataTest extends TestCase
         $validator = new Data($factory);
         $validator->setAttributes([$firstAttribute, $secondAttribute])->setData($data);
 
-        $factory->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            $firstAttribute,
-            $entity
-        )->willReturn(
-            $firstDataModel
-        );
-        $factory->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            $secondAttribute,
-            $entity
-        )->willReturn(
-            $secondDataModel
-        );
-        $factory->expects(
-            $this->at(2)
-        )->method(
-            'create'
-        )->with(
-            $firstAttribute,
-            $entity
-        )->willReturn(
-            $firstDataModel
-        );
-        $factory->expects(
-            $this->at(3)
-        )->method(
-            'create'
-        )->with(
-            $secondAttribute,
-            $entity
-        )->willReturn(
-            $secondDataModel
-        );
+        $factory
+            ->method('create')
+            ->withConsecutive(
+                [$firstAttribute, $entity],
+                [$secondAttribute, $entity],
+                [$firstAttribute, $entity],
+                [$secondAttribute, $entity]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $firstDataModel,
+                $secondDataModel,
+                $firstDataModel,
+                $secondDataModel
+            );
 
         $this->assertFalse($validator->isValid($entity));
         $this->assertEquals($expectedMessages, $validator->getMessages());
@@ -435,20 +425,21 @@ class DataTest extends TestCase
 
     /**
      * @param array $attributeData
+     *
      * @return MockObject
      */
-    protected function _getAttributeMock($attributeData)
+    protected function _getAttributeMock($attributeData): MockObject
     {
         $attribute = $this->getMockBuilder(Attribute::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getAttributeCode',
-                    'getDataModel',
                     'getFrontendInput',
                     '__wakeup',
-                    'getIsVisible',
+                    'getIsVisible'
                 ]
             )
+            ->addMethods(['getDataModel'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -490,16 +481,13 @@ class DataTest extends TestCase
     /**
      * @param boolean $returnValue
      * @param string|null $argument
+     *
      * @return MockObject
      */
-    protected function _getDataModelMock($returnValue, $argument = null)
+    protected function _getDataModelMock($returnValue, $argument = null): MockObject
     {
-        $dataModel = $this->getMockBuilder(
-            AbstractData::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['setExtractedData', 'validateValue']
-            )->getMockForAbstractClass();
+        $dataModel = $this->getMockBuilder(AbstractData::class)->disableOriginalConstructor()
+            ->onlyMethods(['setExtractedData', 'validateValue'])->getMockForAbstractClass();
         if ($argument) {
             $dataModel->expects(
                 $this->once()
@@ -519,14 +507,14 @@ class DataTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function _getEntityMock()
+    protected function _getEntityMock(): MockObject
     {
-        $entity = $this->getMockBuilder(
-            AbstractModel::class
-        )->setMethods(
-            ['getAttribute', 'getResource', 'getEntityType', '__wakeup']
-        )->disableOriginalConstructor()
+        $entity = $this->getMockBuilder(AbstractModel::class)
+            ->onlyMethods(['getResource', '__wakeup'])
+            ->addMethods(['getAttribute', 'getEntityType'])
+            ->disableOriginalConstructor()
             ->getMock();
+
         return $entity;
     }
 

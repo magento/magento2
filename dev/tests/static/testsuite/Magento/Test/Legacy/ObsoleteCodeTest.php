@@ -169,7 +169,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
-                $this->_testObsoleteClasses($content, $file);
+                $this->_testObsoleteClasses($content);
                 $this->_testObsoleteNamespaces($content);
                 $this->_testObsoletePaths($file);
             },
@@ -210,7 +210,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         foreach (self::$_classes as $row) {
             list($class, , $replacement) = $row;
             $this->_assertNotRegExp(
-                '/[^a-z\d_]' . preg_quote($class, '/') . '[^a-z\d_\\\\]/iS',
+                '/[^a-z\d_\$]' . preg_quote($class, '/') . '[^a-z\d_\\\\]/iS',
                 $content,
                 $this->_suggestReplacement(sprintf("Class '%s' is obsolete.", $class), $replacement)
             );
@@ -950,8 +950,10 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         $appPath = BP;
         foreach ($blackList as $file) {
             if ($absolutePath) {
+                // phpcs:ignore
                 $ignored = array_merge($ignored, glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT));
             } else {
+                // phpcs:ignore
                 $ignored = array_merge($ignored, $this->processPattern($appPath, $file));
             }
         }

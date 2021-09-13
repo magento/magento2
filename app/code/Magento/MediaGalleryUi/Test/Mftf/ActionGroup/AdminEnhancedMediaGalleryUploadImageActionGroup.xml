@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryUploadImageActionGroup">
+        <annotations>
+            <description>Uploads the provided Image to Media Gallery. If you use this action group, you MUST add steps to delete the image in the "after" steps.</description>
+        </annotations>
+        <arguments>
+            <argument name="image"/>
+        </arguments>
+        <waitForPageLoad stepKey="waitForPageFullyLoaded"/>
+        <waitForElement selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" stepKey="waitForUploadButton"/>
+        <attachFile selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" userInput="{{image.value}}" stepKey="uploadImage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

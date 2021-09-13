@@ -129,7 +129,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</description>
                 </tooltip>
                 <imports>
@@ -474,7 +474,7 @@
         <modal name="customer_address_update_modal">
             <settings>
                 <options>
-                    <option name="title" xsi:type="string">Add/Update Address</option>
+                    <option name="title" xsi:type="string" translate="true">Add/Update Address</option>
                 </options>
             </settings>
             <insertForm name="update_customer_address_form_loader" component="Magento_Customer/js/form/components/insert-form">
@@ -511,7 +511,7 @@
                     <imports>true</imports>
                 </dataLinks>
                 <externalProvider>customer_address_listing.customer_address_listing_data_source</externalProvider>
-                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_listing_columns.ids</selectionsProvider>
+                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_columns.ids</selectionsProvider>
                 <autoRender>true</autoRender>
                 <dataScope>customer_address_listing</dataScope>
                 <ns>customer_address_listing</ns>

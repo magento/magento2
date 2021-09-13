@@ -21,11 +21,18 @@
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
         <!--Grid view bookmarks-->
         <element name="bookmarkToggle" type="button" selector="div.admin__data-grid-action-bookmarks button[data-bind='toggleCollapsible']" timeout="30"/>
+        <element name="bookmarkToggleByIndex" type="button" selector="(//div[contains(@class,'admin__data-grid-action-bookmarks')])[{{index}}]//button[@data-bind='toggleCollapsible']" parameterized="true" timeout="30"/>
         <element name="bookmarkOption" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
+        <element name="bookmarkOptionByIndex" type="button" selector="(//div[contains(@class, 'admin__data-grid-action-bookmarks')])[{{index}}]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <!--Visible columns management-->
         <element name="columnsToggle" type="button" selector="div.admin__data-grid-action-columns button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="columnCheckbox" type="checkbox" selector="//div[contains(@class,'admin__data-grid-action-columns')]//div[contains(@class, 'admin__field-option')]//label[text() = '{{column}}']/preceding-sibling::input" parameterized="true"/>
         <element name="perPage" type="select" selector="#product_attributes_listing.product_attributes_listing.listing_top.listing_paging_sizes"/>
         <element name="attributeName" type="input" selector="//div[text()='{{arg}}']/../preceding-sibling::td//input" parameterized="true"/>
+        <!--Sorting-->
+        <element name="columnByLabel" type="text" parameterized="true" selector="th[data-sort='{{columnName}}']"/>
+        <element name="columnNotSorted" type="text" parameterized="true" selector="th[data-sort='{{columnName}}'].not-sort"/>
+        <element name="columnSortedAscending" type="text" parameterized="true" selector="th[data-sort='{{columnName}}']._ascend"/>
+        <element name="columnSortedDescending" type="text" parameterized="true" selector="th[data-sort='{{columnName}}']._descend"/>
     </section>
 </sections>

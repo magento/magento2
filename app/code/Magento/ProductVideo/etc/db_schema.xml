@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalog_product_entity_media_gallery_value_video" resource="default" engine="innodb"
            comment="Catalog Product Video Table">
-        <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="false"
                 comment="Media Entity ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="provider" nullable="true" length="32" comment="Video provider ID"/>
         <column xsi:type="text" name="url" nullable="true" comment="Video URL"/>
@@ -25,7 +25,7 @@
         <constraint xsi:type="foreign" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_STORE_ID_STORE_STORE_ID"
                     table="catalog_product_entity_media_gallery_value_video" column="store_id" referenceTable="store"
                     referenceColumn="store_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_VAL_ID_STORE_ID">
+        <constraint xsi:type="primary" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_VIDEO_VAL_ID_STORE_ID">
             <column name="value_id"/>
             <column name="store_id"/>
         </constraint>

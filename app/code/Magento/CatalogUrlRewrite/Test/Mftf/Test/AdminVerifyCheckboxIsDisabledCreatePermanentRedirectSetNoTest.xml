@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCheckboxIsDisabledCreatePermanentRedirectSetNoTest">
+        <annotations>
+            <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
+            <title value="Verify checkbox is disabled 'Create Permanent Redirect' set 'No'"/>
+            <description value="Verify checkbox is disabled 'Create Permanent Redirect' set 'No' on category and product edit page."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-35589"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{DisableCreatePermanentRedirect.path}} {{DisableCreatePermanentRedirect.value}}" stepKey="enableCreatePermanentRedirect"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
+            <magentoCLI command="config:set {{EnableCreatePermanentRedirect.path}} {{EnableCreatePermanentRedirect.value}}" stepKey="disableCreatePermanentRedirect"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="scrollToSeoSection" x="0" y="-120" />
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <grabValueFrom selector="{{AdminProductSEOSection.urlKeyRedirectCheckbox}}" stepKey="grabValue"/>
+        <assertEmpty stepKey="checkUrlKeyRedirectCheckbox">
+            <actualResult type="string">$grabValue</actualResult>
+        </assertEmpty>
+
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedSubCategory">
+            <argument name="Category" value="$$createDefaultCategory$$"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSeoSection1" x="0" y="-120" />
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSeoSection1"/>
+        <grabValueFrom selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}" stepKey="grabValue1"/>
+        <assertEmpty stepKey="checkUrlKeyRedirectCheckbox1">
+            <actualResult type="string">$grabValue1</actualResult>
+        </assertEmpty>
+    </test>
+</tests>

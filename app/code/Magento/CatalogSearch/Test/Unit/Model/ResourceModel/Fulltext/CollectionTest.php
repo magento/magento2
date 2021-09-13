@@ -13,37 +13,37 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverFactory;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
-use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
+use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
-use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\UniversalFactory;
 use Magento\Search\Api\SearchInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 /**
  * Test class for Fulltext Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends BaseCollection
+class CollectionTest extends TestCase
 {
     /**
      * @var ObjectManager
      */
     private $objectManager;
-
-    /**
-     * @var TemporaryStorage|MockObject
-     */
-    private $temporaryStorage;
 
     /**
      * @var SearchInterface|MockObject
@@ -95,7 +95,6 @@ class CollectionTest extends BaseCollection
      */
     protected function setUp(): void
     {
-        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
         $this->objectManager = new ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
         $this->universalFactory = $this->getUniversalFactory();
@@ -103,33 +102,21 @@ class CollectionTest extends BaseCollection
         $this->criteriaBuilder = $this->getCriteriaBuilder();
         $this->filterBuilder = $this->getFilterBuilder();
 
-        $productLimitationMock = $this->createMock(
-            ProductLimitation::class
-        );
+        $productLimitationMock = $this->createMock(ProductLimitation::class);
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
-        $this->temporaryStorage = $this->getMockBuilder(TemporaryStorage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $temporaryStorageFactory = $this->getMockBuilder(TemporaryStorageFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $temporaryStorageFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->temporaryStorage);
         $searchCriteriaResolver = $this->getMockBuilder(SearchCriteriaResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['resolve'])
+            ->onlyMethods(['resolve'])
             ->getMockForAbstractClass();
         $searchCriteriaResolverFactory = $this->getMockBuilder(SearchCriteriaResolverFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $searchCriteriaResolverFactory->expects($this->any())
             ->method('create')
@@ -137,16 +124,16 @@ class CollectionTest extends BaseCollection
 
         $this->searchResultApplierFactory = $this->getMockBuilder(SearchResultApplierFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $totalRecordsResolver = $this->getMockBuilder(TotalRecordsResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['resolve'])
+            ->onlyMethods(['resolve'])
             ->getMockForAbstractClass();
         $totalRecordsResolverFactory = $this->getMockBuilder(TotalRecordsResolverFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $totalRecordsResolverFactory->expects($this->any())
             ->method('create')
@@ -158,16 +145,15 @@ class CollectionTest extends BaseCollection
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
-                'temporaryStorageFactory' => $temporaryStorageFactory,
                 'productLimitationFactory' => $productLimitationFactoryMock,
                 'searchCriteriaResolverFactory' => $searchCriteriaResolverFactory,
                 'searchResultApplierFactory' => $this->searchResultApplierFactory,
-                'totalRecordsResolverFactory' => $totalRecordsResolverFactory,
+                'totalRecordsResolverFactory' => $totalRecordsResolverFactory
             ]
         );
 
         $this->search = $this->getMockBuilder(SearchInterface::class)
-            ->setMethods(['search'])
+            ->onlyMethods(['search'])
             ->getMockForAbstractClass();
         $this->model->setSearchCriteriaBuilder($this->criteriaBuilder);
         $this->model->setSearch($this->search);
@@ -179,15 +165,17 @@ class CollectionTest extends BaseCollection
      */
     protected function tearDown(): void
     {
-        $reflectionProperty = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $reflectionProperty = new ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue(null);
     }
 
     /**
-     * Test to Return field faceted data from faceted search result
+     * Test to Return field faceted data from faceted search result.
+     *
+     * @return void
      */
-    public function testGetFacetedDataWithEmptyAggregations()
+    public function testGetFacetedDataWithEmptyAggregations(): void
     {
         $pageSize = 10;
 
@@ -243,7 +231,7 @@ class CollectionTest extends BaseCollection
     protected function getScopeConfig()
     {
         $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue'])
+            ->onlyMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -253,10 +241,11 @@ class CollectionTest extends BaseCollection
     /**
      * @return MockObject
      */
-    protected function getCriteriaBuilder()
+    protected function getCriteriaBuilder(): MockObject
     {
         $criteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->setMethods(['addFilter', 'create', 'setRequestName'])
+            ->addMethods(['setRequestName'])
+            ->onlyMethods(['addFilter','create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -266,7 +255,7 @@ class CollectionTest extends BaseCollection
     /**
      * @return MockObject
      */
-    protected function getFilterBuilder()
+    protected function getFilterBuilder(): MockObject
     {
         $filterBuilder = $this->createMock(FilterBuilder::class);
 
@@ -276,21 +265,24 @@ class CollectionTest extends BaseCollection
     /**
      * @param MockObject $filterBuilder
      * @param array $filters
+     *
      * @return MockObject
      */
-    protected function addFiltersToFilterBuilder(MockObject $filterBuilder, array $filters)
+    protected function addFiltersToFilterBuilder(MockObject $filterBuilder, array $filters): MockObject
     {
-        $i = 1;
+        $fields = $values = [];
+
         foreach ($filters as $field => $value) {
-            $filterBuilder->expects($this->at($i++))
-                ->method('setField')
-                ->with($field)
-                ->willReturnSelf();
-            $filterBuilder->expects($this->at($i++))
-                ->method('setValue')
-                ->with($value)
-                ->willReturnSelf();
+            $fields[] = $field;
+            $values[] = $value;
         }
+
+        $filterBuilder->method('setField')
+            ->with(...$fields)
+            ->willReturnSelf();
+        $filterBuilder->method('setValue')
+            ->with(...$values)
+            ->willReturnSelf();
 
         return $filterBuilder;
     }
@@ -298,12 +290,82 @@ class CollectionTest extends BaseCollection
     /**
      * @return MockObject
      */
-    protected function createFilter()
+    protected function createFilter(): MockObject
     {
         $filter = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         return $filter;
+    }
+
+    /**
+     * Get Mocks for StoreManager so Collection can be used.
+     *
+     * @return MockObject
+     */
+    private function getStoreManager(): MockObject
+    {
+        $store = $this->getMockBuilder(Store::class)
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->onlyMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($store);
+
+        return $storeManager;
+    }
+
+    /**
+     * Get mock for UniversalFactory so Collection can be used.
+     *
+     * @return MockObject
+     */
+    private function getUniversalFactory(): MockObject
+    {
+        $connection = $this->getMockBuilder(Mysql::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['select'])
+            ->getMockForAbstractClass();
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $connection->expects($this->any())->method('select')->willReturn($select);
+
+        $entity = $this->getMockBuilder(AbstractEntity::class)
+            ->onlyMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entity->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($connection);
+        $entity->expects($this->exactly(2))
+            ->method('getTable')
+            ->willReturnArgument(0);
+        $entity->expects($this->once())
+            ->method('getDefaultAttributes')
+            ->willReturn(['attr1', 'attr2']);
+        $entity->expects($this->once())
+            ->method('getEntityTable')
+            ->willReturn('table');
+
+        $universalFactory = $this->getMockBuilder(UniversalFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $universalFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($entity);
+
+        return $universalFactory;
     }
 }

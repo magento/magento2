@@ -216,16 +216,23 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
 
             $item->mergeBuyRequest($buyRequest);
             $item->addToCart($this->cart, true);
+
+            $related = $this->getRequest()->getParam('related_product');
+            if (!empty($related)) {
+                $this->cart->addProductsByIds(explode(',', $related));
+            }
+
             $this->cart->save()->getQuote()->collectTotals();
             $wishlist->save();
 
             if (!$this->cart->getQuote()->getHasError()) {
-                $message = __(
-                    'You added %1 to your shopping cart.',
-                    $this->escaper->escapeHtml($item->getProduct()->getName())
+                $this->messageManager->addComplexSuccessMessage(
+                    'addCartSuccessMessage',
+                    [
+                        'product_name' => $item->getProduct()->getName(),
+                        'cart_url' => $this->cartHelper->getCartUrl()
+                    ]
                 );
-                $this->messageManager->addSuccessMessage($message);
-
                 $productsToAdd = [
                     [
                         'sku' => $item->getProduct()->getSku(),
@@ -239,7 +246,8 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
                 $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                     ->setDuration(3600)
                     ->setPath('/')
-                    ->setHttpOnly(false);
+                    ->setHttpOnly(false)
+                    ->setSameSite('Strict');
 
                 $this->cookieManager->setPublicCookie(
                     'add_to_cart',

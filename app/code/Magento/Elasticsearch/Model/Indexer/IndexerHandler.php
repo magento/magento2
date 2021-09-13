@@ -5,12 +5,19 @@
  */
 namespace Magento\Elasticsearch\Model\Indexer;
 
-use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
-use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Catalog\Model\Category;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\Indexer\CacheContext;
 
 /**
  * Indexer Handler for Elasticsearch engine.
@@ -18,7 +25,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * Default batch size
+     * Size of default batch
      */
     const DEFAULT_BATCH_SIZE = 500;
 
@@ -58,6 +65,29 @@ class IndexerHandler implements IndexerInterface
     private $scopeResolver;
 
     /**
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
+     * @var CacheContext
+     */
+    private $cacheContext;
+
+    /**
+     * @var Processor
+     */
+    private $processor;
+
+    /**
+     * IndexerHandler constructor.
      * @param IndexStructureInterface $indexStructure
      * @param ElasticsearchAdapter $adapter
      * @param IndexNameResolver $indexNameResolver
@@ -65,6 +95,9 @@ class IndexerHandler implements IndexerInterface
      * @param ScopeResolverInterface $scopeResolver
      * @param array $data
      * @param int $batchSize
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param CacheContext|null $cacheContext
+     * @param Processor|null $processor
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -73,7 +106,10 @@ class IndexerHandler implements IndexerInterface
         Batch $batch,
         ScopeResolverInterface $scopeResolver,
         array $data = [],
-        $batchSize = self::DEFAULT_BATCH_SIZE
+        int $batchSize = self::DEFAULT_BATCH_SIZE,
+        ?DeploymentConfig $deploymentConfig = null,
+        ?CacheContext $cacheContext = null,
+        ?Processor $processor = null
     ) {
         $this->indexStructure = $indexStructure;
         $this->adapter = $adapter;
@@ -82,6 +118,9 @@ class IndexerHandler implements IndexerInterface
         $this->data = $data;
         $this->batchSize = $batchSize;
         $this->scopeResolver = $scopeResolver;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
+        $this->processor = $processor ?: ObjectManager::getInstance()->get(Processor::class);
     }
 
     /**
@@ -91,12 +130,46 @@ class IndexerHandler implements IndexerInterface
     {
         $dimension = current($dimensions);
         $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+
+        $this->batchSize = $this->deploymentConfig->get(
+            self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Fulltext::INDEXER_ID . '/elastic_save'
+        ) ?? $this->batchSize;
+
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $scopeId);
             $this->adapter->addDocs($docs, $scopeId, $this->getIndexerId());
+            if ($this->processor->getIndexer()->isScheduled()) {
+                $this->updateCacheContext($docs);
+            }
         }
         $this->adapter->updateAlias($scopeId, $this->getIndexerId());
         return $this;
+    }
+
+    /**
+     * Add category cache tags for the affected products to the cache context
+     *
+     * @param array $docs
+     * @return void
+     */
+    private function updateCacheContext(array $docs) : void
+    {
+        $categoryIds = [];
+        foreach ($docs as $document) {
+            if (!empty($document['category_ids'])) {
+                if (is_array($document['category_ids'])) {
+                    foreach ($document['category_ids'] as $id) {
+                        $categoryIds[] = $id;
+                    }
+                } elseif (is_numeric($document['category_ids'])) {
+                    $categoryIds[] = $document['category_ids'];
+                }
+            }
+        }
+        if (!empty($categoryIds)) {
+            $categoryIds = array_unique($categoryIds);
+            $this->cacheContext->registerEntities(Category::CACHE_TAG, $categoryIds);
+        }
     }
 
     /**
@@ -130,6 +203,22 @@ class IndexerHandler implements IndexerInterface
     public function isAvailable($dimensions = [])
     {
         return $this->adapter->ping();
+    }
+
+    /**
+     * Update mapping data for index.
+     *
+     * @param Dimension[] $dimensions
+     * @param string $attributeCode
+     * @return IndexerInterface
+     */
+    public function updateIndex(array $dimensions, string $attributeCode): IndexerInterface
+    {
+        $dimension = current($dimensions);
+        $scopeId = (int)$this->scopeResolver->getScope($dimension->getValue())->getId();
+        $this->adapter->updateIndexMapping($scopeId, $this->getIndexerId(), $attributeCode);
+
+        return $this;
     }
 
     /**

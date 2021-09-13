@@ -66,6 +66,10 @@
     display: inline-block;
     overflow: hidden;
     width: 100%;
+
+    &.white-space-preserved {
+        white-space: pre;
+    }
 }
 
 body._in-resize {
@@ -227,7 +231,7 @@ body._in-resize {
         font-size: @data-grid__font-size; // Rewrite old styles. Should be deleted afterwards
         line-height: @line-height__base;
         transition: @smooth__background-color;
-        vertical-align: top;
+        vertical-align: middle;
 
         &._resizing {
             border-left: 1px solid @color-blue-pure;
@@ -391,7 +395,6 @@ body._in-resize {
     .data-grid-checkbox-cell {
         overflow: hidden;
         padding: 0;
-        vertical-align: top;
         vertical-align: middle;
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
 

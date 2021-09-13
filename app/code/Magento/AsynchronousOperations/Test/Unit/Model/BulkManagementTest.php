@@ -80,14 +80,12 @@ class BulkManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->entityManager = $this->createMock(EntityManager::class);
-        $this->bulkSummaryFactory = $this
-            ->getMockBuilder(BulkSummaryInterfaceFactory::class)
-            ->setMethods(['create'])
+        $this->bulkSummaryFactory = $this->getMockBuilder(BulkSummaryInterfaceFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->operationCollectionFactory = $this
-            ->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+        $this->operationCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->publisher = $this->getMockForAbstractClass(BulkPublisherInterface::class);
@@ -105,7 +103,7 @@ class BulkManagementTest extends TestCase
                 'publisher' => $this->publisher,
                 'metadataPool' => $this->metadataPool,
                 'resourceConnection' => $this->resourceConnection,
-                'logger' => $this->logger,
+                'logger' => $this->logger
             ]
         );
     }
@@ -115,7 +113,7 @@ class BulkManagementTest extends TestCase
      *
      * @return void
      */
-    public function testScheduleBulk()
+    public function testScheduleBulk(): void
     {
         $bulkUuid = 'bulk-001';
         $description = 'Bulk summary description...';
@@ -159,7 +157,7 @@ class BulkManagementTest extends TestCase
      *
      * @return void
      */
-    public function testScheduleBulkWithException()
+    public function testScheduleBulkWithException(): void
     {
         $bulkUuid = 'bulk-001';
         $description = 'Bulk summary description...';
@@ -187,16 +185,95 @@ class BulkManagementTest extends TestCase
     }
 
     /**
+     * Test for scheduleBulk method with exception during publishing.
+     *
+     * @return void
+     */
+    public function testScheduleBulkWithExceptionDuringPublishing()
+    {
+        $bulkUuid = 'bulk-001';
+        $description = 'Bulk summary description...';
+        $userId = 1;
+        $userType = UserContextInterface::USER_TYPE_ADMIN;
+        $connectionName = 'default';
+        $exceptionMessage = 'Exception message';
+        $operation = $this->createMock(OperationInterface::class);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataPool->expects($this->once())
+            ->method('getMetadata')
+            ->with(BulkSummaryInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())
+            ->method('getEntityConnectionName')
+            ->willReturn($connectionName);
+        $connection = $this->createMock(AdapterInterface::class);
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnectionByName')
+            ->with($connectionName)
+            ->willReturn($connection);
+        $connection->expects($this->once())
+            ->method('beginTransaction')
+            ->willReturnSelf();
+        $bulkSummary = $this->createMock(BulkSummaryInterface::class);
+        $this->bulkSummaryFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($bulkSummary);
+        $this->entityManager->expects($this->once())
+            ->method('load')
+            ->with($bulkSummary, $bulkUuid)
+            ->willReturn($bulkSummary);
+        $bulkSummary->expects($this->once())
+            ->method('setBulkId')
+            ->with($bulkUuid)
+            ->willReturnSelf();
+        $bulkSummary->expects($this->once())
+            ->method('setDescription')
+            ->with($description)
+            ->willReturnSelf();
+        $bulkSummary->expects($this->once())
+            ->method('setUserId')
+            ->with($userId)
+            ->willReturnSelf();
+        $bulkSummary->expects($this->once())
+            ->method('setUserType')
+            ->with($userType)
+            ->willReturnSelf();
+        $bulkSummary->expects($this->once())
+            ->method('getOperationCount')
+            ->willReturn(1);
+        $bulkSummary->expects($this->once())
+            ->method('setOperationCount')
+            ->with(2)
+            ->willReturnSelf();
+        $this->entityManager->expects($this->once())
+            ->method('save')
+            ->with($bulkSummary)
+            ->willReturn($bulkSummary);
+        $this->publisher->expects($this->once())
+            ->method('publish')
+            ->willThrowException(new \Exception($exceptionMessage));
+        $connection->expects($this->never())
+            ->method('commit');
+        $connection->expects($this->once())
+            ->method('rollBack')
+            ->willReturnSelf();
+        $this->logger->expects($this->once())
+            ->method('critical')
+            ->with($exceptionMessage);
+        $this->assertFalse($this->bulkManagement->scheduleBulk($bulkUuid, [$operation], $description, $userId));
+    }
+
+    /**
      * Test for retryBulk method.
      *
      * @return void
      */
-    public function testRetryBulk()
+    public function testRetryBulk(): void
     {
         $bulkUuid = 'bulk-001';
         $errorCodes = ['errorCode'];
         $connectionName = 'default';
-        $operationId = 1;
+        $operationId = 0;
         $operationTable = 'magento_operation';
         $topicName = 'topic.name';
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
@@ -216,13 +293,22 @@ class BulkManagementTest extends TestCase
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation->expects($this->once())->method('getId')->willReturn($operationId);
-        $operation->expects($this->once())->method('setId')->with(null)->willReturnSelf();
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
+        $connection
+            ->method('quoteInto')
+            ->withConsecutive(
+                ['operation_key IN (?)', [$operationId]],
+                ['bulk_uuid = ?', $bulkUuid]
+            )
+            ->willReturnOnConsecutiveCalls(
+                'operation_key IN (' . $operationId . ')',
+                "bulk_uuid = '$bulkUuid'"
+            );
         $connection->expects($this->once())
-            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId . ')');
-        $connection->expects($this->once())
-            ->method('delete')->with($operationTable, 'id IN (' . $operationId . ')')->willReturn(1);
+            ->method('delete')
+            ->with($operationTable, 'operation_key IN (' . $operationId . ') AND bulk_uuid = \'' . $bulkUuid . '\'')
+            ->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->once())->method('getTopicName')->willReturn($topicName);
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
@@ -234,12 +320,12 @@ class BulkManagementTest extends TestCase
      *
      * @return void
      */
-    public function testRetryBulkWithException()
+    public function testRetryBulkWithException(): void
     {
         $bulkUuid = 'bulk-001';
         $errorCodes = ['errorCode'];
         $connectionName = 'default';
-        $operationId = 1;
+        $operationId = 0;
         $operationTable = 'magento_operation';
         $exceptionMessage = 'Exception message';
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
@@ -259,13 +345,21 @@ class BulkManagementTest extends TestCase
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation->expects($this->once())->method('getId')->willReturn($operationId);
-        $operation->expects($this->once())->method('setId')->with(null)->willReturnSelf();
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
+        $connection
+            ->method('quoteInto')
+            ->withConsecutive(
+                ['operation_key IN (?)', [$operationId]],
+                ['bulk_uuid = ?', $bulkUuid]
+            )
+            ->willReturnOnConsecutiveCalls(
+                'operation_key IN (' . $operationId . ')',
+                "bulk_uuid = '$bulkUuid'"
+            );
         $connection->expects($this->once())
-            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId . ')');
-        $connection->expects($this->once())
-            ->method('delete')->with($operationTable, 'id IN (' . $operationId . ')')
+            ->method('delete')
+            ->with($operationTable, 'operation_key IN (' . $operationId . ') AND bulk_uuid = \'' . $bulkUuid . '\'')
             ->willThrowException(new \Exception($exceptionMessage));
         $connection->expects($this->once())->method('rollBack')->willReturnSelf();
         $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);
@@ -278,7 +372,7 @@ class BulkManagementTest extends TestCase
      *
      * @return void
      */
-    public function testDeleteBulk()
+    public function testDeleteBulk(): void
     {
         $bulkUuid = 'bulk-001';
         $bulkSummary = $this->getMockForAbstractClass(BulkSummaryInterface::class);

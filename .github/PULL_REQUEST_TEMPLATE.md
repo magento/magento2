@@ -23,7 +23,7 @@
     If relevant, please provide a list of fixed issues in the format magento/magento2#<issue_number>.
     There could be 1 or more issues linked here and it will help us find some more information about the reasoning behind this change.
 -->
-1. magento/magento2#<issue_number>: Issue title
+1. Fixes magento/magento2#<issue_number>
 
 ### Manual testing scenarios (*)
 <!---
@@ -43,4 +43,5 @@
  - [ ] Pull request has a meaningful description of its purpose
  - [ ] All commits are accompanied by meaningful commit messages
  - [ ] All new or changed code is covered with unit/integration tests (if applicable)
+ - [ ] README.md files for modified modules are updated and included in the pull request if any [README.md predefined sections](https://github.com/magento/devdocs/wiki/Magento-module-README.md) require an update
  - [ ] All automated tests passed successfully (all builds are green)

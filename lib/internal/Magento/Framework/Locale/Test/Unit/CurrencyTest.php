@@ -41,11 +41,14 @@ class CurrencyTest extends TestCase
     const TEST_NONCACHED_CURRENCY_LOCALE = 'en_US';
     const TEST_CACHED_CURRENCY = 'CAD';
     const TEST_CACHED_CURRENCY_LOCALE = 'en_CA';
-    const TEST_NONEXISTANT_CURRENCY = 'QQQ';
-    const TEST_NONEXISTANT_CURRENCY_LOCALE = 'fr_FR';
+    const TEST_NONEXISTENT_CURRENCY = 'QQQ';
+    const TEST_NONEXISTENT_CURRENCY_LOCALE = 'fr_FR';
     const TEST_EXCEPTION_CURRENCY = 'ZZZ';
     const TEST_EXCEPTION_CURRENCY_LOCALE = 'es_ES';
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->mockEventManager = $this
@@ -67,19 +70,25 @@ class CurrencyTest extends TestCase
                 [
                     'eventManager'     => $this->mockEventManager,
                     'localeResolver'   => $this->mockLocaleResolver,
-                    'currencyFactory'  => $this->mockCurrencyFactory,
+                    'currencyFactory'  => $this->mockCurrencyFactory
                 ]
             );
     }
 
-    public function testGetDefaultCurrency()
+    /**
+     * @return void
+     */
+    public function testGetDefaultCurrency(): void
     {
         $expectedDefaultCurrency = Currency::DEFAULT_CURRENCY;
         $retrievedDefaultCurrency = $this->testCurrencyObject->getDefaultCurrency();
         $this->assertEquals($expectedDefaultCurrency, $retrievedDefaultCurrency);
     }
 
-    public function testGetCurrencyNonCached()
+    /**
+     * @return void
+     */
+    public function testGetCurrencyNonCached(): void
     {
         $options = new \Zend_Currency(null, self::TEST_NONCACHED_CURRENCY_LOCALE);
 
@@ -101,7 +110,10 @@ class CurrencyTest extends TestCase
         $this->assertEquals([self::TEST_NONCACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
     }
 
-    public function testGetCurrencyCached()
+    /**
+     * @return void
+     */
+    public function testGetCurrencyCached(): void
     {
         $options = new \Zend_Currency(null, self::TEST_CACHED_CURRENCY_LOCALE);
 
@@ -146,9 +158,12 @@ class CurrencyTest extends TestCase
         $this->assertEquals([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
     }
 
-    public function testGetNonExistantCurrency()
+    /**
+     * @return void
+     */
+    public function testGetNonExistentCurrency(): void
     {
-        $options = new \Zend_Currency(null, self::TEST_NONEXISTANT_CURRENCY_LOCALE);
+        $options = new \Zend_Currency(null, self::TEST_NONEXISTENT_CURRENCY_LOCALE);
 
         $this->mockCurrencyFactory
             ->expects($this->once())
@@ -164,27 +179,27 @@ class CurrencyTest extends TestCase
             ->method('dispatch');
 
         $retrievedCurrencyObject = $this->testCurrencyObject
-            ->getCurrency(self::TEST_NONEXISTANT_CURRENCY);
+            ->getCurrency(self::TEST_NONEXISTENT_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_NONEXISTANT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertEquals(self::TEST_NONEXISTENT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
         $this->assertEquals('euro', $retrievedCurrencyObject->getName());
         $this->assertEquals(['EUR'], $retrievedCurrencyObject->getCurrencyList());
     }
 
-    public function testExceptionCase()
+    /**
+     * @return void
+     */
+    public function testExceptionCase(): void
     {
         $options = new \Zend_Currency(null, self::TEST_EXCEPTION_CURRENCY_LOCALE);
 
         $this->mockCurrencyFactory
-            ->expects($this->at(0))
             ->method('create')
-            ->willThrowException(new \Exception());
-
-        $this->mockCurrencyFactory
-            ->expects($this->at(1))
-            ->method('create')
-            ->willReturn($options);
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new \Exception()),
+                $options
+            );
 
         $this->mockEventManager
             ->expects($this->once())

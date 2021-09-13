@@ -15,6 +15,7 @@
         <queries>
             <query xsi:type="boolQuery" name="graphql_product_search_with_aggregation" boost="1">
                 <queryReference clause="should" ref="search" />
+                <queryReference clause="should" ref="partial_search" />
                 <queryReference clause="must" ref="category"/>
                 <queryReference clause="must" ref="price"/>
                 <queryReference clause="must" ref="visibility"/>
@@ -22,6 +23,11 @@
             <query xsi:type="matchQuery" value="$search_term$" name="search">
                 <match field="sku"/>
                 <match field="*"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="partial_search">
+                <match field="*"/>
+                <match field="name" matchCondition="match_phrase_prefix"/>
+                <match field="sku" matchCondition="match_phrase_prefix"/>
             </query>
             <query name="category" xsi:type="filteredQuery">
                 <filterReference clause="must" ref="category_filter"/>
@@ -48,6 +54,9 @@
                 <metrics>
                     <metric type="count"/>
                 </metrics>
+                <parameters>
+                    <parameter name="include" value="$category_ids_to_aggregate$"/>
+                </parameters>
             </bucket>
         </aggregations>
         <from>0</from>
@@ -61,6 +70,7 @@
         <queries>
             <query xsi:type="boolQuery" name="graphql_product_search" boost="1">
                 <queryReference clause="should" ref="search" />
+                <queryReference clause="should" ref="partial_search" />
                 <queryReference clause="must" ref="category"/>
                 <queryReference clause="must" ref="price"/>
                 <queryReference clause="must" ref="visibility"/>
@@ -68,6 +78,11 @@
             <query xsi:type="matchQuery" value="$search_term$" name="search">
                 <match field="sku"/>
                 <match field="*"/>
+            </query>
+            <query xsi:type="matchQuery" value="$search_term$" name="partial_search">
+                <match field="*"/>
+                <match field="name" matchCondition="match_phrase_prefix"/>
+                <match field="sku" matchCondition="match_phrase_prefix"/>
             </query>
             <query name="category" xsi:type="filteredQuery">
                 <filterReference clause="must" ref="category_filter"/>

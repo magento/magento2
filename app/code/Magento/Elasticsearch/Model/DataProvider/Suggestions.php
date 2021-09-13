@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
 /**
  * The implementation to provide suggestions mechanism for Elasticsearch5
  *
- * @deprecated because of EOL for Elasticsearch5
+ * @deprecated 100.3.5 because of EOL for Elasticsearch5
  * @see \Magento\Elasticsearch\Model\DataProvider\Base\Suggestions
  */
 class Suggestions implements SuggestedQueriesInterface

@@ -5,7 +5,9 @@
  */
 namespace Magento\Test\Integrity\Magento\Framework\Api;
 
+use Laminas\Code\Reflection\ClassReflection;
 use Magento\Framework\App\Utility\Files;
+use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 
 /**
  * Check interfaces inherited from \Magento\Framework\Api\ExtensibleDataInterface.
@@ -170,18 +172,18 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
                 if (preg_match('/' . $extensibleClassPattern . '/', $fileContent) &&
                     !preg_match('/' . $abstractExtensibleClassPattern . '/', $fileContent)
                 ) {
-                    $fileReflection = new \Laminas\Code\Reflection\FileReflection($filename, true);
-                    foreach ($fileReflection->getClasses() as $classReflection) {
-                        if ($classReflection->isSubclassOf(self::EXTENSIBLE_DATA_INTERFACE)) {
-                            $methodsToCheck = ['setExtensionAttributes', 'getExtensionAttributes'];
-                            foreach ($methodsToCheck as $methodName) {
-                                try {
-                                    $classReflection->getMethod($methodName);
-                                } catch (\ReflectionException $e) {
-                                    $className = $classReflection->getName();
-                                    $errors[] = "'{$className}::{$methodName}()' must be declared or "
-                                        . "'{$className}' should not be inherited from extensible class.";
-                                }
+                    $fileClassScanner = new FileClassScanner($filename);
+                    $classReflection = new ClassReflection($fileClassScanner->getClassName());
+
+                    if ($classReflection->isSubclassOf(self::EXTENSIBLE_DATA_INTERFACE)) {
+                        $methodsToCheck = ['setExtensionAttributes', 'getExtensionAttributes'];
+                        foreach ($methodsToCheck as $methodName) {
+                            try {
+                                $classReflection->getMethod($methodName);
+                            } catch (\ReflectionException $e) {
+                                $className = $classReflection->getName();
+                                $errors[] = "'{$className}::{$methodName}()' must be declared or "
+                                    . "'{$className}' should not be inherited from extensible class.";
                             }
                         }
                     }
@@ -239,12 +241,11 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
      */
     protected function getFiles($dir, $pattern)
     {
-        $files = glob($dir . '/' . $pattern, GLOB_NOSORT);
+        $files = [glob($dir . '/' . $pattern, GLOB_NOSORT)];
         foreach (glob($dir . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $newDir) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $files = array_merge($files, $this->getFiles($newDir, $pattern));
+            $files[] = $this->getFiles($newDir, $pattern);
         }
-        return $files;
+        return array_merge([], ...$files);
     }
 
     /**

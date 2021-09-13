@@ -71,7 +71,7 @@ class Attribute implements LayerBuilderInterface
      */
     public function build(AggregationInterface $aggregation, ?int $storeId): array
     {
-        $attributeOptions = $this->getAttributeOptions($aggregation);
+        $attributeOptions = $this->getAttributeOptions($aggregation, $storeId);
 
         // build layer per attribute
         $result = [];
@@ -83,15 +83,16 @@ class Attribute implements LayerBuilderInterface
             $result[$bucketName] = $this->layerFormatter->buildLayer(
                 $attribute['attribute_label'] ?? $bucketName,
                 \count($bucket->getValues()),
-                $attribute['attribute_code'] ?? $bucketName
+                $attribute['attribute_code'] ?? $bucketName,
+                isset($attribute['position']) ? $attribute['position'] : null
             );
 
-            foreach ($bucket->getValues() as $value) {
-                $metrics = $value->getMetrics();
+            $options = $this->getSortedOptions($bucket, isset($attribute['options']) ? $attribute['options'] : []);
+            foreach ($options as $option) {
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
-                    $attribute['options'][$metrics['value']] ?? $metrics['value'],
-                    $metrics['value'],
-                    $metrics['count']
+                    $option['label'],
+                    $option['value'],
+                    $option['count']
                 );
             }
         }
@@ -133,10 +134,11 @@ class Attribute implements LayerBuilderInterface
      * Get list of attributes with options
      *
      * @param AggregationInterface $aggregation
+     * @param int|null $storeId
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    private function getAttributeOptions(AggregationInterface $aggregation): array
+    private function getAttributeOptions(AggregationInterface $aggregation, ?int $storeId): array
     {
         $attributeOptionIds = [];
         $attributes = [];
@@ -154,6 +156,42 @@ class Attribute implements LayerBuilderInterface
             return [];
         }
 
-        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds), $attributes);
+        return $this->attributeOptionProvider->getOptions(
+            \array_merge([], ...$attributeOptionIds),
+            $storeId,
+            $attributes
+        );
+    }
+
+    /**
+     * Get sorted options
+     *
+     * @param BucketInterface $bucket
+     * @param array $optionLabels
+     * @return array
+     */
+    private function getSortedOptions(BucketInterface $bucket, array $optionLabels): array
+    {
+        /**
+         * Option labels array has been sorted
+         */
+        $options = $optionLabels;
+        foreach ($bucket->getValues() as $value) {
+            $metrics = $value->getMetrics();
+            $optionValue = $metrics['value'];
+            $optionLabel = $optionLabels[$optionValue] ?? $optionValue;
+            $options[$optionValue] = $metrics + ['label' => $optionLabel];
+        }
+
+        /**
+         * Delete options without bucket values
+         */
+        foreach ($options as $optionId => $option) {
+            if (!is_array($options[$optionId])) {
+               unset($options[$optionId]);
+            }
+        }
+
+        return array_values($options);
     }
 }

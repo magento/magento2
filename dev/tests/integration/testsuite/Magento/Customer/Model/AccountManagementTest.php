@@ -13,6 +13,8 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Url as UrlBuilder;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -104,14 +106,15 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
-        /** @var \Magento\Customer\Model\CustomerRegistry $addressRegistry */
         $addressRegistry = $this->objectManager->get(\Magento\Customer\Model\AddressRegistry::class);
         //Cleanup customer from registry
         $customerRegistry->remove(1);
         $addressRegistry->remove(1);
         $addressRegistry->remove(2);
+        $resourceModel = $this->objectManager->get(\Magento\Customer\Model\ResourceModel\Visitor::class);
+        $resourceModel->getConnection()->delete($resourceModel->getMainTable());
+        parent::tearDown();
     }
 
     /**
@@ -139,6 +142,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test attempt to login with wrong user name.
+     *
      */
     public function testLoginWrongUsername()
     {
@@ -155,7 +160,40 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangePassword()
     {
+        /** @var SessionManagerInterface $session */
+        $session = $this->objectManager->get(SessionManagerInterface::class);
+        $customerId = 1;
+        $time = time();
+
+        $session->start();
+
+        // open new session
+        $activeSessionId = uniqid("active-$time-");
+        $this->startNewSession($activeSessionId);
+        $activeVisitor = $this->createVisitorSession($activeSessionId, $customerId);
+        $session->setVisitorData($activeVisitor->getData());
+
+        // open new session
+        $currentSessionId = uniqid("current-$time-");
+        $this->startNewSession($currentSessionId);
+        $currentVisitor = $this->createVisitorSession($currentSessionId, $customerId);
+        $session->setVisitorData($currentVisitor->getData());
+
+        $this->assertNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should not be set.');
+        // change password
         $this->accountManagement->changePassword('customer@example.com', 'password', 'new_Password123');
+        $this->assertEquals(
+            $currentSessionId,
+            $session->getSessionId(),
+            'Current session was renewed'
+        );
+
+        // open customer active session
+        $this->startNewSession($activeSessionId);
+        $this->assertNotNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should be set.');
+        // Make sure current visitor session is updated.
+        $this->assertLessThanOrEqual($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($activeVisitor->getId()));
+        $this->assertGreaterThan($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($currentVisitor->getId()));
 
         $this->accountManagement->authenticate('customer@example.com', 'new_Password123');
     }
@@ -173,6 +211,8 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test change password on the wrong user
+     *
      */
     public function testChangePasswordWrongUser()
     {
@@ -377,11 +417,45 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testResetPassword()
     {
+        /** @var SessionManagerInterface $session */
+        $session = $this->objectManager->get(SessionManagerInterface::class);
+        $time = time();
+        $customerId = 1;
+
+        $session->start();
+
+        // open new session
+        $activeSessionId = uniqid("active-$time-");
+        $this->startNewSession($activeSessionId);
+        $activeVisitor = $this->createVisitorSession($activeSessionId, $customerId);
+        $session->setVisitorData($activeVisitor->getData());
+
+        // open new session
+        $currentSessionId = uniqid("current-$time-");
+        $this->startNewSession($currentSessionId);
+        $currentVisitor = $this->createVisitorSession($currentSessionId, $customerId);
+        $session->setVisitorData($currentVisitor->getData());
+
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
 
+        $this->assertNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should not be set.');
+
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         $this->assertTrue($this->accountManagement->resetPassword('customer@example.com', $resetToken, $password));
+
+        $this->assertEquals(
+            $currentSessionId,
+            $session->getSessionId(),
+            'Current session was renewed'
+        );
+
+        // open customer active session
+        $this->startNewSession($activeSessionId);
+        $this->assertNotNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should be set.');
+        // Make sure current visitor session is updated.
+        $this->assertLessThanOrEqual($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($activeVisitor->getId()));
+        $this->assertGreaterThan($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($currentVisitor->getId()));
     }
 
     /**
@@ -711,5 +785,67 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customerModel->setRpToken($resetToken);
         $customerModel->setRpTokenCreatedAt(date($date));
         $customerModel->save();
+    }
+
+    /**
+     * Returns the customers cutoff value
+     *
+     * @param int $customerId
+     * @return mixed
+     */
+    private function getCustomerCutoff(
+        int $customerId
+    ) {
+        $customerModel = $this->objectManager->get(\Magento\Customer\Model\ResourceModel\Customer::class);
+        return $customerModel->findSessionCutOff($customerId);
+    }
+
+    /**
+     * Returns the visitors created at value
+     *
+     * @param int $visitorId
+     * @return mixed
+     */
+    private function getVisitorCreatedAt(
+        int $visitorId
+    ) {
+        $visitorModel = $this->objectManager->get(\Magento\Customer\Model\ResourceModel\Visitor::class);
+        return $visitorModel->fetchCreatedAt($visitorId);
+    }
+
+    /**
+     * Starts a new session
+     *
+     * @param string $sessionId
+     */
+    private function startNewSession(string $sessionId): void
+    {
+        /** @var SessionManagerInterface $session */
+        $session = $this->objectManager->get(SessionManagerInterface::class);
+        // close session and cleanup session variable
+        $session->writeClose();
+        $session->clearStorage();
+        // open new session
+        $session->setSessionId($sessionId);
+        $session->start();
+    }
+
+    /**
+     * Creates a new visitor session
+     *
+     * @param string $sessionId
+     * @param int|null $customerId
+     * @return Visitor
+     * @throws \Exception
+     */
+    private function createVisitorSession(string $sessionId, ?int $customerId = null): Visitor
+    {
+        /** @var Visitor $visitor */
+        $visitor = Bootstrap::getObjectManager()->create(Visitor::class);
+        $visitor->setCustomerId($customerId);
+        $visitor->setSessionId($sessionId);
+        $visitor->setLastVisitAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
+        $visitor->save();
+        return $visitor;
     }
 }

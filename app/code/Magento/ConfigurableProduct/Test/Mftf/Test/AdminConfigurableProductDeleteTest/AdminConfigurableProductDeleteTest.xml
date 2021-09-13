@@ -75,14 +75,13 @@
         </after>
 
         <!-- assert product visible in storefront -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="gotoStorefront1"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="gotoStorefront1"/>
         <waitForPageLoad stepKey="wait1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProduct"/>
 
         <!-- go to admin and delete -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
         <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>
@@ -95,7 +94,7 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="seeSuccessMsg"/>
 
         <!-- after delete, assert product page is 404 -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="gotoStorefront2"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="gotoStorefront2"/>
         <waitForPageLoad stepKey="wait3"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
         <dontSee selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="dontSeeProduct"/>

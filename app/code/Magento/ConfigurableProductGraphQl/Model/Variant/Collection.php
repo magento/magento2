@@ -9,12 +9,15 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
  * Collection for fetching configurable child product data.
@@ -118,11 +121,12 @@ class Collection
      * Retrieve child products from for passed in parent id.
      *
      * @param int $id
+     * @param ContextInterface $context
      * @return array
      */
-    public function getChildProductsByParentId(int $id) : array
+    public function getChildProductsByParentId(int $id, ContextInterface $context) : array
     {
-        $childrenMap = $this->fetch();
+        $childrenMap = $this->fetch($context);
 
         if (!isset($childrenMap[$id])) {
             return [];
@@ -134,9 +138,10 @@ class Collection
     /**
      * Fetch all children products from parent id's.
      *
+     * @param ContextInterface $context
      * @return array
      */
-    private function fetch() : array
+    private function fetch(ContextInterface $context) : array
     {
         if (empty($this->parentProducts) || !empty($this->childrenMap)) {
             return $this->childrenMap;
@@ -147,16 +152,21 @@ class Collection
             /** @var ChildCollection $childCollection */
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
+            $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
             $this->collectionProcessor->process(
                 $childCollection,
                 $this->searchCriteriaBuilder->create(),
-                $attributeData
+                $attributeData,
+                $context
             );
             $childCollection->load();
             $this->collectionPostProcessor->process($childCollection, $attributeData);
 
             /** @var Product $childProduct */
             foreach ($childCollection as $childProduct) {
+                if ((int)$childProduct->getStatus() !== Status::STATUS_ENABLED) {
+                    continue;
+                }
                 $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
                 $parentId = (int)$childProduct->getParentId();
                 if (!isset($this->childrenMap[$parentId])) {
@@ -171,19 +181,21 @@ class Collection
     }
 
     /**
-     * Get attributes code
+     * Get attributes codes for given product
      *
-     * @param \Magento\Catalog\Model\Product $currentProduct
+     * @param Product $currentProduct
      * @return array
      */
     private function getAttributesCodes(Product $currentProduct): array
     {
         $attributeCodes = $this->attributeCodes;
-        $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
-        foreach ($allowAttributes as $attribute) {
-            $productAttribute = $attribute->getProductAttribute();
-            if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
-                $attributeCodes[] = $productAttribute->getAttributeCode();
+        if ($currentProduct->getTypeId() == Configurable::TYPE_CODE) {
+            $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
+            foreach ($allowAttributes as $attribute) {
+                $productAttribute = $attribute->getProductAttribute();
+                if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
+                    $attributeCodes[] = $productAttribute->getAttributeCode();
+                }
             }
         }
 

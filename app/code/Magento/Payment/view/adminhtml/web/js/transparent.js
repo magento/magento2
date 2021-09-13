@@ -52,28 +52,29 @@ define([
          * @param {String} method
          */
         _setPlaceOrderHandler: function (event, method) {
+            var $editForm = $(this.options.editFormSelector);
+
+            $editForm.off('beforeSubmitOrder.' + this.options.gateway);
+
             if (method === this.options.gateway) {
-                $(this.options.editFormSelector)
-                    .off('submitOrder')
-                    .on('submitOrder.' +  this.options.gateway, this._placeOrderHandler.bind(this));
-            } else {
-                $(this.options.editFormSelector)
-                    .off('submitOrder.' + this.options.gateway);
+                $editForm.on('beforeSubmitOrder.' +  this.options.gateway, this._placeOrderHandler.bind(this));
             }
         },
 
         /**
          * Handler for form submit to call gateway for credit card validation.
          *
+         * @param {Event} event
          * @return {Boolean}
          * @private
          */
-        _placeOrderHandler: function () {
+        _placeOrderHandler: function (event) {
             if ($(this.options.editFormSelector).valid()) {
                 this._orderSave();
             } else {
                 $('body').trigger('processStop');
             }
+            event.stopImmediatePropagation();
 
             return false;
         },
@@ -141,7 +142,7 @@ define([
                 .on('submit', function (event) {
                     event.stopPropagation();
                 });
-            $(tmpl).appendTo(iframe).submit();
+            $(tmpl).appendTo(iframe).trigger('submit');
             iframe.html('');
         },
 

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoginAsCustomerSeeSpecialPriceOnCategoryTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="'Login as Customer' should see special prices on a category page"/>
+            <title value="Special prices shown on category when Admin user Login as customer account"/>
+            <description value="Login as customer sees special prices on category"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer">
+                <field key="group_id">3</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
+        </after>
+
+        <!-- Creating a new catalog price rule with 50 percent discount for Retailer customer group -->
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+            <argument name="categoryId" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="SelectRetailerCustomerGroupActionGroup" stepKey="selectRetailerCustomerGroup"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="{{CatalogRuleToPercent.simple_action}}"/>
+            <argument name="discountAmount" value="50"/>
+        </actionGroup>
+
+        <!-- Save and apply the new catalog price rule -->
+        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+
+        <!-- Admin Login as Customer -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup" stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Check simple product prices on store front category page -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Price">
+            <argument name="productInfo" value="$5.00"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1RegularPrice">
+            <argument name="productInfo" value="$10.00"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Place order -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
+        <closeTab stepKey="closeLoginAsCustomerTab"/>
+
+        <!-- Open order in admin -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+
+        <!-- Assert order subtotal -->
+        <scrollTo selector="{{AdminOrderTotalSection.subTotal}}" stepKey="scrollToOrderTotalSection"/>
+        <see selector="{{AdminOrderTotalSection.subTotal}}" userInput="$5.00" stepKey="checkOrderTotalInBackend"/>
+    </test>
+</tests>

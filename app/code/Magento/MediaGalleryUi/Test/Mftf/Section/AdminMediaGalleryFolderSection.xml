@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminMediaGalleryFolderSection">
+        <element name="folderNewModalHeader" type="block" selector="//h1[contains(text(), 'New Folder Name')]"/>
+        <element name="folderDeleteModalHeader" type="block" selector="//h1[contains(text(), 'Are you sure you want to delete this folder?')]"/>
+        <element name="folderNewCreateButton" type="button" selector="#create_folder"/>
+        <element name="folderDeleteButton" type="button" selector="#delete_folder" timeout="30"/>
+        <element name="folderDeleteButtonActive" type="button" selector="#delete_folder:not(.disabled)" timeout="30"/>
+        <element name="folderConfirmDeleteButton" type="button" selector="//footer//button/span[contains(text(), 'OK')]" timeout="30"/>
+        <element name="folderCancelDeleteButton" type="button" selector="//footer//button/span[contains(text(), 'Cancel')]"/>
+        <element name="folderNameField" type="button" selector="[name=folder_name]"/>
+        <element name="folderConfirmCreateButton" type="button" selector="//aside[contains(@class,'_show')]//button/span[contains(text(),'Confirm')]" timeout="30"/>
+        <element name="folderNameValidationMessage" type="block" selector="label.mage-error"/>
+        <element name="folderArrow" type="button" selector="#{{id}} &gt; .jstree-icon" parameterized="true"/>
+        <element name="checkIfFolderArrowExpand" type="button" selector="//li[@id='{{id}}' and contains(@class,'jstree-closed')]" parameterized="true"/>
+        <element name="folderInTree" type="text" selector="//div[contains(@class, 'media-directory-container')]//ul//li//a[normalize-space(text())='{{name}}']" parameterized="true"/>
+    </section>
+</sections>

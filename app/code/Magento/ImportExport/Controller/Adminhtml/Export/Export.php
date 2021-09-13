@@ -76,7 +76,7 @@ class Export extends ExportController implements HttpPostActionInterface
     {
         if ($this->getRequest()->getPost(ExportModel::FILTER_ELEMENT_GROUP)) {
             try {
-                $params = $this->getRequest()->getParams();
+                $params = $this->getRequestParameters();
 
                 if (!array_key_exists('skip_attr', $params)) {
                     $params['skip_attr'] = [];
@@ -99,14 +99,24 @@ class Export extends ExportController implements HttpPostActionInterface
                 );
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->messageManager->addError(__('Please correct the data sent value.'));
+                $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
             }
         } else {
-            $this->messageManager->addError(__('Please correct the data sent value.'));
+            $this->messageManager->addErrorMessage(__('Please correct the data sent value.'));
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
+    }
+
+    /**
+     * Retrieve all params as array
+     *
+     * @return array
+     */
+    public function getRequestParameters(): array
+    {
+        return $this->getRequest()->getParams();
     }
 }

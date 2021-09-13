@@ -9,6 +9,7 @@ use Magento\Framework\App\TemplateTypesInterface;
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php if (!$block->getEditMode()): ?>
 <form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
@@ -16,7 +17,9 @@ use Magento\Framework\App\TemplateTypesInterface;
     <fieldset class="admin__fieldset form-inline">
         <legend class="admin__legend"><span><?= $block->escapeHtml(__('Load Default Template')) ?></span></legend><br>
         <div class="admin__field required">
-            <label class="admin__field-label" for="template_select"><span><?= $block->escapeHtml(__('Template')) ?></span></label>
+            <label class="admin__field-label" for="template_select">
+                <span><?= $block->escapeHtml(__('Template')) ?></span>
+            </label>
             <div class="admin__field-control">
                 <select id="template_select" name="code" class="admin__control-select required-entry">
                     <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
@@ -24,7 +27,10 @@ use Magento\Framework\App\TemplateTypesInterface;
                             <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
                         <?php foreach ($options as $option): ?>
-                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
+                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"
+                                <?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ?
+                                    ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?>
+                            </option>
                         <?php endforeach; ?>
                         <?php if ($group): ?>
                             </optgroup>
@@ -46,19 +52,26 @@ use Magento\Framework\App\TemplateTypesInterface;
 <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="email_template_edit_form">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?= $block->escapeHtmlAttr($block->getOrigTemplateCode()) ?>" />
+    <input type="hidden" id="orig_template_code" name="orig_template_code"
+           value="<?= $block->escapeHtmlAttr($block->getOrigTemplateCode()) ?>" />
     <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form"
+      target="_blank">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>"/>
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
     </div>
 </form>
-<script>
+<?php
+$currentlyUsedForPaths = /* @noEscape */ $block->getCurrentlyUsedForPaths();
+$templateType = (int)$block->getTemplateType();
+$typeText = /* @noEscape */ TemplateTypesInterface::TYPE_TEXT;
+$scriptString = <<<script
+
 require([
     "jquery",
     "wysiwygAdapter",
@@ -94,7 +107,7 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?= /* @noEscape */ $block->getCurrentlyUsedForPaths() ?>, 'currently_used_for');
+            this.renderPaths({$currentlyUsedForPaths}, 'currently_used_for');
         },
 
         bindEvents: function(){
@@ -119,10 +132,10 @@ require([
             var self = this;
 
             confirm({
-                content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to strip tags?'))) ?>",
+                content: "{$block->escapeJs(__('Are you sure you want to strip tags?'))}",
                 actions: {
                     confirm: function () {
-                        this.unconvertedText = $('template_text').value;
+                        self.unconvertedText = $('template_text').value;
                         $('convert_button').hide();
                         $('template_text').value =  $('template_text').value.stripScripts().replace(
                             new RegExp('<style[^>]*>[\\S\\s]*?</style>', 'img'), ''
@@ -153,9 +166,9 @@ require([
         },
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = <?= /* @noEscape */ TemplateTypesInterface::TYPE_TEXT ?>;
+                $('preview_type').value = {$typeText};
             } else {
-                $('preview_type').value = <?= (int) $block->getTemplateType() ?>;
+                $('preview_type').value = {$templateType};
             }
 
             if (typeof tinyMCE == 'undefined' || !tinyMCE.get('template_text')) {
@@ -175,10 +188,10 @@ require([
 
         deleteTemplate: function() {
             confirm({
-                content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>",
+                content: "{$block->escapeJs(__('Are you sure you want to delete this template?'))}",
                 actions: {
                     confirm: function () {
-                        window.location.href = '<?= $block->escapeJs($block->escapeUrl($block->getDeleteUrl())) ?>';
+                        window.location.href = '{$block->escapeJs($block->getDeleteUrl())}';
                     }
                 }
             });
@@ -197,7 +210,7 @@ require([
                area: $('email_template_load_form'),
                onComplete: function (transport) {
                    if (transport.responseText.isJSON()) {
-                       var fields = $H(transport.responseText.evalJSON());
+                       var fields = \$H(transport.responseText.evalJSON());
                        fields.each(function(pair) {
                           if ($(pair.key)) {
                               $(pair.key).value = pair.value.strip();
@@ -225,7 +238,9 @@ require([
                        }.bind(this));
                    } else {
                        alert({
-                           content: '<?= $block->escapeJs($block->escapeHtml(__('The template did not load. Please review the log for details.'))) ?>'
+                           content: '{$block->escapeJs(__(
+                               'The template did not load. Please review the log for details.'
+                            ))}'
                        });
                    }
                }.bind(this)
@@ -236,7 +251,8 @@ require([
         renderPaths: function(paths, fieldId) {
             var field = $(fieldId);
             if (field) {
-                field.down('div').down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
+                field.down('div').down('div')
+                .update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
             }
         },
 
@@ -250,7 +266,8 @@ require([
             }
 
             if(!Object.isString(value) && value.title) {
-                value = (value.url ? '<a href="' + value.url + '">' + value.title + '</a>' : value.title) + (value.scope ? '&nbsp;&nbsp;<span class="path-scope-label">(' + value.scope + ')</span>' : '');
+                value = (value.url ? '<a href="' + value.url + '">' + value.title + '</a>' : value.title) +
+                 (value.scope ? '&nbsp;&nbsp;<span class="path-scope-label">(' + value.scope + ')</span>' : '');
             }
 
             return value;
@@ -278,4 +295,6 @@ require([
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

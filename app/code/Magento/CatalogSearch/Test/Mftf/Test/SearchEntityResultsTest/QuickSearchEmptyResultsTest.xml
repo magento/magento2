@@ -24,16 +24,17 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="ThisShouldn'tReturnAnything"/>
         </actionGroup>

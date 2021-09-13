@@ -124,6 +124,9 @@ class AddressTest extends TestCase
      */
     protected $serializer;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -149,7 +152,7 @@ class AddressTest extends TestCase
 
         $this->rateCollection = $this->getMockBuilder(RateCollectorInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
+            ->addMethods(['getResult'])
             ->getMockForAbstractClass();
 
         $this->itemCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
@@ -170,7 +173,7 @@ class AddressTest extends TestCase
 
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode'])
+            ->addMethods(['getBaseCurrency', 'getCurrentCurrency', 'getCurrentCurrencyCode'])
             ->getMockForAbstractClass();
 
         $this->website = $this->getMockBuilder(WebsiteInterface::class)
@@ -201,7 +204,10 @@ class AddressTest extends TestCase
         $this->address->setQuote($this->quote);
     }
 
-    public function testValidateMinimumAmountDisabled()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountDisabled(): void
     {
         $storeId = 1;
 
@@ -217,14 +223,17 @@ class AddressTest extends TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMinimumAmountVirtual()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountVirtual(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
             ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -242,14 +251,17 @@ class AddressTest extends TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMinimumAmount()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmount(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
             ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -266,14 +278,17 @@ class AddressTest extends TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMiniumumAmountWithoutDiscount()
+    /**
+     * @return void
+     */
+    public function testValidateMiniumumAmountWithoutDiscount(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
             ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, false],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -290,14 +305,17 @@ class AddressTest extends TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testValidateMinimumAmountNegative()
+    /**
+     * @return void
+     */
+    public function testValidateMinimumAmountNegative(): void
     {
         $storeId = 1;
         $scopeConfigValues = [
             ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE, $storeId, true],
             ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE, $storeId, 20],
             ['sales/minimum_order/include_discount_amount', ScopeInterface::SCOPE_STORE, $storeId, true],
-            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true],
+            ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE, $storeId, true]
         ];
 
         $this->quote->expects($this->once())
@@ -315,7 +333,10 @@ class AddressTest extends TestCase
         $this->assertTrue($this->address->validateMinimumAmount());
     }
 
-    public function testSetAndGetAppliedTaxes()
+    /**
+     * @return void
+     */
+    public function testSetAndGetAppliedTaxes(): void
     {
         $data = ['data'];
         self::assertInstanceOf(Address::class, $this->address->setAppliedTaxes($data));
@@ -324,8 +345,10 @@ class AddressTest extends TestCase
 
     /**
      * Checks a case, when applied taxes are not provided.
+     *
+     * @return void
      */
-    public function testGetAppliedTaxesWithEmptyValue()
+    public function testGetAppliedTaxesWithEmptyValue(): void
     {
         $this->address->setData('applied_taxes', null);
         self::assertEquals([], $this->address->getAppliedTaxes());
@@ -334,28 +357,57 @@ class AddressTest extends TestCase
     /**
      * Test of requesting shipping rates by address
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testRequestShippingRates()
+    public function testRequestShippingRates(): void
     {
         $storeId = 12345;
         $webSiteId = 6789;
         $baseCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode','convert'])
+            ->onlyMethods(['convert'])
+            ->addMethods(['getCurrentCurrencyCode'])
             ->getMockForAbstractClass();
 
         $currentCurrency = $this->getMockBuilder(Currency::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCurrentCurrencyCode','convert'])
+            ->onlyMethods(['convert'])
+            ->addMethods(['getCurrentCurrencyCode'])
             ->getMockForAbstractClass();
 
         $currentCurrencyCode = 'UAH';
 
+        $this->quote->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->store->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($webSiteId);
+
+        $this->scopeConfig->expects($this->exactly(1))
+            ->method('getValue')
+            ->with(
+                'tax/calculation/price_includes_tax',
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+            ->willReturn(1);
+
         /** @var RateRequest */
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'setWebsiteId', 'setBaseCurrency', 'setPackageCurrency'])
+            ->addMethods(
+                [
+                    'setStoreId',
+                    'setWebsiteId',
+                    'setBaseCurrency',
+                    'setPackageCurrency',
+                    'getBaseSubtotalTotalInclTax',
+                    'getBaseSubtotal'
+                ]
+            )
             ->getMock();
 
         /** @var Collection */
@@ -432,14 +484,8 @@ class AddressTest extends TestCase
             ->willReturnSelf();
 
         $this->storeManager->method('getStore')
+            ->withConsecutive([$storeId], [null])
             ->willReturn($this->store);
-
-        $this->storeManager->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($this->website);
-
-        $this->store->method('getId')
-            ->willReturn($storeId);
 
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);
@@ -451,10 +497,6 @@ class AddressTest extends TestCase
         $this->store->expects($this->once())
             ->method('getCurrentCurrencyCode')
             ->willReturn($currentCurrencyCode);
-
-        $this->website->expects($this->once())
-            ->method('getId')
-            ->willReturn($webSiteId);
 
         $this->addressRateFactory->expects($this->once())
             ->method('create')

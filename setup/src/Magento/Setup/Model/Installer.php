@@ -7,7 +7,10 @@
 namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
+use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
@@ -21,10 +24,13 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -33,19 +39,25 @@ use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Framework\Setup\Patch\PatchApplierFactory;
+use Magento\Framework\Setup\SampleData\State;
 use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\PageCache\Model\Cache\Type as PageCache;
+use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Exception;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
+use ReflectionException;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -215,7 +227,7 @@ class Installer
     private $dataSetupFactory;
 
     /**
-     * @var \Magento\Framework\Setup\SampleData\State
+     * @var State
      */
     protected $sampleDataState;
 
@@ -247,6 +259,11 @@ class Installer
     private $patchApplierFactory;
 
     /**
+     * @var TriggerCleaner
+     */
+    private $triggerCleaner;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -267,10 +284,10 @@ class Installer
      * @param DbValidator $dbValidator
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
-     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
+     * @param State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -292,7 +309,7 @@ class Installer
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState,
+        State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
         PhpReadinessCheck $phpReadinessCheck
     ) {
@@ -319,6 +336,7 @@ class Installer
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
+        $this->triggerCleaner = $this->objectManagerProvider->get()->get(TriggerCleaner::class);
     }
 
     /**
@@ -326,7 +344,9 @@ class Installer
      *
      * @param \ArrayObject|array $request
      * @return void
-     * @throws \LogicException
+     * @throws FileSystemException
+     * @throws LocalizedException
+     * @throws RuntimeException
      */
     public function install($request)
     {
@@ -339,6 +359,11 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
+        $script[] = [
+            'Validating remote storage configuration...',
+            'validateRemoteStorageConfiguration',
+            [$request]
+        ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -368,8 +393,13 @@ class Installer
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
             $this->log->log($message);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            call_user_func_array([$this, $method], $params);
+            try {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array([$this, $method], $params);
+            } catch (RuntimeException | DriverException $e) {
+                $this->revertRemoteStorageConfiguration();
+                throw $e;
+            }
             $this->logProgress();
         }
         $this->log->logSuccess('Magento installation complete.');
@@ -390,6 +420,7 @@ class Installer
      * Get declaration installer. For upgrade process it must be created after deployment config update.
      *
      * @return DeclarationInstaller
+     * @throws Exception
      */
     private function getDeclarationInstaller()
     {
@@ -406,6 +437,7 @@ class Installer
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws FileSystemException
      */
     private function writeInstallationDate()
     {
@@ -421,7 +453,9 @@ class Installer
      * @param \ArrayObject|array $request
      * @param bool $dryRun
      * @return array
-     * @throws \LogicException
+     * @throws FileSystemException
+     * @throws LocalizedException
+     * @throws RuntimeException
      */
     private function createModulesConfig($request, $dryRun = false)
     {
@@ -547,6 +581,9 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @throws FileSystemException
+     * @throws LocalizedException
+     * @throws RuntimeException
      */
     public function installDeploymentConfig($data)
     {
@@ -567,6 +604,7 @@ class Installer
      *
      * @param SchemaSetupInterface $setup
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupModuleRegistry(SchemaSetupInterface $setup)
     {
@@ -665,6 +703,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param AdapterInterface $connection
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupCacheTable(
         SchemaSetupInterface $setup,
@@ -719,6 +758,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param AdapterInterface $connection
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
@@ -755,6 +795,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param AdapterInterface $connection
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupFlagTable(
         SchemaSetupInterface $setup,
@@ -811,6 +852,7 @@ class Installer
      *
      * @param array $request
      * @return void
+     * @throws Exception
      */
     public function declarativeInstallSchema(array $request)
     {
@@ -818,10 +860,35 @@ class Installer
     }
 
     /**
+     * Clear memory tables
+     *
+     * Memory tables that used in old versions of Magento for indexing purposes should be cleaned
+     * Otherwise some supported DB solutions like Galeracluster may have replication error
+     * when memory engine will be switched to InnoDb
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function cleanMemoryTables(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+        $tables = $connection->getTables();
+        foreach ($tables as $table) {
+            $tableData = $connection->showTableStatus($table);
+            if (isset($tableData['Engine']) && $tableData['Engine'] === 'MEMORY') {
+                $connection->truncateTable($table);
+            }
+        }
+    }
+
+    /**
      * Installs DB schema
      *
      * @param array $request
      * @return void
+     * @throws Exception
+     * @throws \Magento\Framework\Setup\Exception
+     * @throws \Zend_Db_Exception
      */
     public function installSchema(array $request)
     {
@@ -835,6 +902,7 @@ class Installer
         $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
+        $this->cleanMemoryTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema', $request);
@@ -866,15 +934,24 @@ class Installer
      * Installs data fixtures
      *
      * @param array $request
+     * @param boolean $keepCacheStatuses
      * @return void
+     * @throws Exception
+     * @throws \Magento\Framework\Setup\Exception
      */
-    public function installDataFixtures(array $request = [])
+    public function installDataFixtures(array $request = [], $keepCacheStatuses = false)
     {
         $frontendCaches = [
             PageCache::TYPE_IDENTIFIER,
             BlockCache::TYPE_IDENTIFIER,
             LayoutCache::TYPE_IDENTIFIER,
         ];
+
+        if ($keepCacheStatuses) {
+            $disabledCaches = $this->getDisabledCacheTypes($frontendCaches);
+
+            $frontendCaches = array_diff($frontendCaches, $disabledCaches);
+        }
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
@@ -886,11 +963,20 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->log->log('Disabling caches:');
-        $this->updateCaches(false, $frontendCaches);
-        $this->handleDBSchemaData($setup, 'data', $request);
-        $this->log->log('Enabling caches:');
-        $this->updateCaches(true, $frontendCaches);
+
+        if ($frontendCaches) {
+            $this->log->log('Disabling caches:');
+            $this->updateCaches(false, $frontendCaches);
+        }
+
+        try {
+            $this->handleDBSchemaData($setup, 'data', $request);
+        } finally {
+            if ($frontendCaches) {
+                $this->log->log('Enabling caches:');
+                $this->updateCaches(true, $frontendCaches);
+            }
+        }
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -932,15 +1018,16 @@ class Installer
      * @param array $request
      * @return void
      * @throws \Magento\Framework\Setup\Exception
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function handleDBSchemaData($setup, $type, array $request)
     {
-        if (!($type === 'schema' || $type === 'data')) {
-            throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
+        if ($type !== 'schema' && $type !== 'data') {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw  new Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
@@ -957,17 +1044,13 @@ class Installer
                 'objectManager' => $this->objectManagerProvider->get()
             ]
         );
+
+        $patchApplierParams = $type === 'schema' ?
+            ['schemaSetup' => $setup] :
+            ['moduleDataSetup' => $setup, 'objectManager' => $this->objectManagerProvider->get()];
+
         /** @var PatchApplier $patchApplier */
-        if ($type === 'schema') {
-            $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
-        } elseif ($type === 'data') {
-            $patchApplier = $this->patchApplierFactory->create(
-                [
-                    'moduleDataSetup' => $setup,
-                    'objectManager' => $this->objectManagerProvider->get()
-                ]
-            );
-        }
+        $patchApplier = $this->patchApplierFactory->create($patchApplierParams);
 
         foreach ($moduleNames as $moduleName) {
             if ($this->isDryRun($request)) {
@@ -1029,11 +1112,11 @@ class Installer
 
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
-            $handlerType = 'schema-recurring';
         } elseif ($type === 'data') {
             $this->log->log('Data post-updates:');
-            $handlerType = 'data-recurring';
         }
+        $handlerType = $type === 'schema' ? 'schema-recurring' : 'data-recurring';
+
         foreach ($moduleNames as $moduleName) {
             if ($this->isDryRun($request)) {
                 $this->log->log("Module '{$moduleName}':");
@@ -1054,13 +1137,16 @@ class Installer
      * Assert DbConfigExists
      *
      * @return void
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     private function assertDbConfigExists()
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         if (!$config) {
-            throw new \Magento\Setup\Exception(
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new Exception(
                 "Can't run this operation: configuration for DB connection is absent."
             );
         }
@@ -1083,6 +1169,8 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @throws Exception
+     * @throws LocalizedException
      */
     public function installUserConfig($data)
     {
@@ -1112,8 +1200,8 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
-     * @throws \Magento\Framework\Validation\ValidationException
-     * @throws \Magento\Setup\Exception
+     * @throws ValidationException
+     * @throws Exception
      */
     public function installSearchConfiguration($data)
     {
@@ -1123,18 +1211,44 @@ class Installer
     }
 
     /**
+     * Validate remote storage on install.  Since it is a deployment-based configuration, the config is already present,
+     * but this function confirms it can connect after Object Manager
+     * has all necessary dependencies loaded to do so.
+     *
+     * @param array $data
+     * @throws ValidationException
+     * @throws Exception
+     */
+    public function validateRemoteStorageConfiguration(array $data)
+    {
+        try {
+            $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        } catch (ReflectionException $e) { // RemoteStorage module is not available; return early
+            return;
+        }
+
+        $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
+
+        if (!empty($validationErrors)) {
+            $this->revertRemoteStorageConfiguration();
+            throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
+        }
+    }
+
+    /**
      * Create data handler
      *
      * @param string $className
      * @param string $interfaceName
      * @return mixed|null
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     protected function createSchemaDataHandler($className, $interfaceName)
     {
         if (class_exists($className)) {
             if (!is_subclass_of($className, $interfaceName) && $className !== $interfaceName) {
-                throw  new \Magento\Setup\Exception($className . ' must implement \\' . $interfaceName);
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
+                throw  new Exception($className . ' must implement \\' . $interfaceName);
             } else {
                 return $this->objectManagerProvider->get()->create($className);
             }
@@ -1191,6 +1305,9 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @throws Exception
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     public function installAdminUser($data)
     {
@@ -1214,17 +1331,19 @@ class Installer
      *
      * @param bool $keepGeneratedFiles Cleanup generated classes and view files and reset ObjectManager
      * @return void
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     public function updateModulesSequence($keepGeneratedFiles = false)
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES);
         if (!$config) {
-            throw new \Magento\Setup\Exception(
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new Exception(
                 "Can't run this operation: deployment configuration is absent."
                 . " Run 'magento setup:config:set --help' for options."
             );
         }
+        $this->flushCaches([ConfigCache::TYPE_IDENTIFIER]);
         $this->cleanCaches();
         if (!$keepGeneratedFiles) {
             $this->cleanupGeneratedFiles();
@@ -1285,11 +1404,12 @@ class Installer
      * @param bool $isEnabled
      * @param array $types
      * @return void
+     * @throws Exception
      */
     private function updateCaches($isEnabled, $types = [])
     {
-        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
+        /** @var Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->create(Manager::class);
 
         $availableTypes = $cacheManager->getAvailableTypes();
         $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
@@ -1308,8 +1428,9 @@ class Installer
         );
 
         $this->log->log('Current status:');
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $this->log->log(print_r($cacheStatus, true));
+        foreach ($cacheStatus as $cache => $status) {
+            $this->log->log(sprintf('%s: %d', $cache, $status));
+        }
     }
 
     /**
@@ -1318,14 +1439,32 @@ class Installer
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws Exception
      */
     private function cleanCaches()
     {
-        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->get(\Magento\Framework\App\Cache\Manager::class);
+        /** @var Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
         $this->log->log('Cache cleared successfully');
+    }
+
+    /**
+     * Flush caches for specific types or all available types
+     *
+     * @param array $types
+     * @return void
+     *
+     * @throws Exception
+     */
+    private function flushCaches($types = [])
+    {
+        /** @var Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
+        $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
+        $cacheManager->flush($types);
+        $this->log->log('Cache types ' . implode(',', $types) . ' flushed successfully');
     }
 
     /**
@@ -1393,6 +1532,7 @@ class Installer
      * Removes deployment configuration
      *
      * @return void
+     * @throws FileSystemException
      */
     private function deleteDeploymentConfig()
     {
@@ -1417,6 +1557,9 @@ class Installer
      * Validates that MySQL is accessible and MySQL version is supported
      *
      * @return void
+     * @throws Exception
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     private function assertDbAccessible()
     {
@@ -1479,7 +1622,7 @@ class Installer
      * @param string $moduleName
      * @param string $type
      * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
@@ -1510,7 +1653,8 @@ class Installer
                 $interface = self::DATA_INSTALL;
                 break;
             default:
-                throw new \Magento\Setup\Exception("$className does not exist");
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
+                throw new Exception("$className does not exist");
         }
 
         return $this->createSchemaDataHandler($className, $interface);
@@ -1522,7 +1666,7 @@ class Installer
      * @param \Magento\Framework\Module\ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     private function generateListOfModuleContext($resource, $type)
     {
@@ -1533,7 +1677,8 @@ class Installer
             } elseif ($type === 'data-version') {
                 $dbVer = $resource->getDataVersion($moduleName);
             } else {
-                throw  new \Magento\Setup\Exception("Unsupported version type $type is requested");
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
+                throw  new Exception("Unsupported version type $type is requested");
             }
             if ($dbVer !== false) {
                 $moduleContextList[$moduleName] = new ModuleContext($dbVer);
@@ -1620,5 +1765,54 @@ class Installer
                 $typeName
             );
         }
+    }
+
+    /**
+     * Remove unused triggers from db
+     *
+     * @throws \Exception
+     */
+    public function removeUnusedTriggers(): void
+    {
+        $this->triggerCleaner->removeTriggers();
+        $this->cleanCaches();
+    }
+
+    /**
+     * Returns list of disabled cache types
+     *
+     * @param array $cacheTypesToCheck
+     * @return array
+     */
+    private function getDisabledCacheTypes(array $cacheTypesToCheck): array
+    {
+        $disabledCaches = [];
+
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->create(CacheManager::class);
+        $cacheStatus = $cacheManager->getStatus();
+
+        foreach ($cacheTypesToCheck as $cacheType) {
+            if (isset($cacheStatus[$cacheType]) && $cacheStatus[$cacheType] === 0) {
+                $disabledCaches[] = $cacheType;
+            }
+        }
+
+        return $disabledCaches;
+    }
+
+    /**
+     * Revert remote storage configuration back to local file driver
+     */
+    private function revertRemoteStorageConfiguration()
+    {
+        if (!$this->deploymentConfigWriter->checkIfWritable()) {
+            return;
+        }
+
+        $remoteStorageData = new ConfigData(ConfigFilePool::APP_ENV);
+        $remoteStorageData->set('remote_storage', ['driver' => 'file']);
+        $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
+        $this->deploymentConfigWriter->saveConfig($configData, true);
     }
 }

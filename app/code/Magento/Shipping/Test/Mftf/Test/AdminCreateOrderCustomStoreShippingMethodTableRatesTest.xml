@@ -64,7 +64,7 @@
                 <argument name="file" value="usa_tablerates.csv"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!--Delete created data-->

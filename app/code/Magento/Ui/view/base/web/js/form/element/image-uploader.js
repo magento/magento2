@@ -78,7 +78,7 @@ define([
                 '/type/image/?isAjax=true';
 
             if (this.mediaGallery.initialOpenSubpath) {
-                openDialogUrl += '&current_tree_path=' + Base64.mageEncode(this.mediaGallery.initialOpenSubpath);
+                openDialogUrl += '&current_tree_path=' + Base64.idEncode(this.mediaGallery.initialOpenSubpath);
             }
 
             browser.openDialog(
@@ -133,7 +133,7 @@ define([
          * @param {Event} e
          */
         triggerImageUpload: function (imageUploader, e) {
-            $(e.target).closest('.file-uploader').find('input[type="file"]').click();
+            $(e.target).closest('.file-uploader').find('input[type="file"]').trigger('click');
         },
 
         /**
