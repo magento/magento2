@@ -181,7 +181,7 @@ abstract class AbstractController extends TestCase
         foreach ($headers as $header) {
             if ($header->getFieldName() === $headerName) {
                 $headerFound = true;
-                $this->assertRegExp($valueRegex, $header->getFieldValue());
+                $this->assertMatchesRegularExpression($valueRegex, $header->getFieldValue());
             }
         }
         if (!$headerFound) {
