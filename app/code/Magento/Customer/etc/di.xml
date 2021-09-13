@@ -366,6 +366,9 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
+    <type name="Magento\Customer\Model\ResourceModel\Address\Collection">
+        <plugin name="AllowedCountriesAddressFilter" type="Magento\Customer\Model\Plugin\AllowedCountriesAddressFilter" disabled="false"/>
+    </type>
     <type name="Magento\Framework\App\ActionInterface">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
