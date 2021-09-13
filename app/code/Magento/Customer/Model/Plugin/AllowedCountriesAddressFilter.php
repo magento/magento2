@@ -11,9 +11,6 @@ use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address as AddressBlock;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Directory\Model\AllowedCountries;
 
-/**
- * Class AllowedCountriesAddressFilter
- */
 class AllowedCountriesAddressFilter
 {
     /**
@@ -42,10 +39,8 @@ class AllowedCountriesAddressFilter
      * Filter customer saved addresses by allowed countries of their store.
      *
      * @param \Magento\Customer\Model\ResourceModel\Address\Collection $subject
-     * @param \Magento\Customer\Model\Customer|array $customer
-     * @return $this
      */
-    public function beforeSetCustomerFilter(Collection $subject, $customer)
+    public function beforeSetCustomerFilter(Collection $subject)
     {
         $storeId = $this->addressBlock->getStoreId() ?? null;
         if ($storeId) {
