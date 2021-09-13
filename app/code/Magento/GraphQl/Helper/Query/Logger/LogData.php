@@ -17,7 +17,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Schema;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
-use Magento\Ui\Block\Logger;
 
 /**
  * Helper class to collect data for logging GraphQl requests
@@ -32,6 +31,7 @@ class LogData
      * @param Schema|null $schema
      * @param HttpResponse|null $response
      * @return array
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function getLogData(
         RequestInterface $request,
@@ -48,7 +48,9 @@ class LogData
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
             }
-        } catch (\Exception $exception) {}
+        } catch (\Exception $exception) {
+            // do nothing
+        }
 
         if ($response) {
             $logData = array_merge($logData, $this->gatherResponseInformation($response));
