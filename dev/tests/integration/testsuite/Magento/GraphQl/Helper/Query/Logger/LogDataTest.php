@@ -204,6 +204,32 @@ QUERY,
                     LoggerInterface::HTTP_RESPONSE_CODE => 200
                 ]
             ],
+            [ // bad query
+                'query' => <<<QUERY
+ {
+    xyz()
+    {
+        dfsfa
+            sku
+        }
+    }
+ }
+QUERY,
+                'headers' => [
+                    'response' => [
+                        'X-Magento-Tags' => 'FPC'
+                    ]
+                ],
+                'expectedResult' => [
+                    LoggerInterface::HTTP_METHOD => 'POST',
+                    LoggerInterface::STORE_HEADER => '',
+                    LoggerInterface::CURRENCY_HEADER => '',
+                    LoggerInterface::HAS_AUTH_HEADER => 'false',
+                    LoggerInterface::IS_CACHEABLE => 'true',
+                    LoggerInterface::REQUEST_LENGTH => '',
+                    LoggerInterface::HTTP_RESPONSE_CODE => 200
+                ]
+            ],
             [ // mutation with all headers
                 'query' => <<<QUERY
 mutation {

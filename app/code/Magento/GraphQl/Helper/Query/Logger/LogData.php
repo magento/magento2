@@ -40,10 +40,13 @@ class LogData
     ) : array {
         $logData = [];
         $logData = array_merge($logData, $this->gatherRequestInformation($request));
-        if ($schema) {
-            $logData = array_merge($logData, $this->gatherQueryInformation($schema));
+        $complexity = $this->getFieldCount($data['query'] ?? '');
+        if ($complexity !== -1) {
+            $logData[LoggerInterface::COMPLEXITY] = $complexity;
+            if ($schema) {
+                $logData = array_merge($logData, $this->gatherQueryInformation($schema));
+            }
         }
-        $logData[LoggerInterface::COMPLEXITY] = $this->getFieldCount($data['query'] ?? '');
         if ($response) {
             $logData = array_merge($logData, $this->gatherResponseInformation($response));
         }
@@ -129,8 +132,8 @@ class LogData
                 );
                 return $totalFieldCount;
             }
-        } catch (SyntaxError $syntaxError) {
         } catch (\Exception $exception) {
+            return -1;
         }
         return 0;
     }
