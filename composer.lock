@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d3d0348c3277599ef6b24de462a6af84",
+    "content-hash": "a3713d7ddc399c760e974e0bea937bf4",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.193.1",
+            "version": "3.193.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5294e06519479b9f41d6e18a88d077c4837a58ff"
+                "reference": "d5080f7a1bb63569c19b8de06f787808eca70cc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5294e06519479b9f41d6e18a88d077c4837a58ff",
-                "reference": "5294e06519479b9f41d6e18a88d077c4837a58ff",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d5080f7a1bb63569c19b8de06f787808eca70cc6",
+                "reference": "d5080f7a1bb63569c19b8de06f787808eca70cc6",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.193.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.193.2"
             },
-            "time": "2021-09-09T18:28:04+00:00"
+            "time": "2021-09-10T18:21:27+00:00"
         },
         {
             "name": "brick/math",
@@ -3639,27 +3639,26 @@
         },
         {
             "name": "magento/composer",
-            "version": "dev-develop",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "044dc5bf65eb9f348035057080cab764b6f33e5e"
+                "reference": "59a67efe96a11d9d00ae20694c48c20770c4e904"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/044dc5bf65eb9f348035057080cab764b6f33e5e",
-                "reference": "044dc5bf65eb9f348035057080cab764b6f33e5e",
+                "url": "https://api.github.com/repos/magento/composer/zipball/59a67efe96a11d9d00ae20694c48c20770c4e904",
+                "reference": "59a67efe96a11d9d00ae20694c48c20770c4e904",
                 "shasum": ""
             },
             "require": {
                 "composer/composer": "^1.9 || ^2.0",
-                "php": "~7.3.0||~7.4.0||~8.0.0",
+                "php": "~7.3.0||~7.4.0",
                 "symfony/console": "~4.4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -3674,9 +3673,9 @@
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
                 "issues": "https://github.com/magento/composer/issues",
-                "source": "https://github.com/magento/composer/tree/develop"
+                "source": "https://github.com/magento/composer/tree/1.7.0"
             },
-            "time": "2021-08-03T03:04:34+00:00"
+            "time": "2021-03-29T21:33:27+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -3762,16 +3761,16 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "dev-patch-1",
+            "version": "1.14.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/esler/zf1.git",
-                "reference": "3f2af6c00fcfae78f6d74461814496a5fbee30bc"
+                "url": "https://github.com/magento/zf1.git",
+                "reference": "6ad81500d33f085ca2391f2b59e37bd34203b29b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/esler/zf1/zipball/3f2af6c00fcfae78f6d74461814496a5fbee30bc",
-                "reference": "3f2af6c00fcfae78f6d74461814496a5fbee30bc",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/6ad81500d33f085ca2391f2b59e37bd34203b29b",
+                "reference": "6ad81500d33f085ca2391f2b59e37bd34203b29b",
                 "shasum": ""
             },
             "require": {
@@ -3792,29 +3791,24 @@
                     "Zend_": "library/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
-            "archive": {
-                "exclude": [
-                    "/demos",
-                    "/documentation",
-                    "/tests"
-                ]
-            },
             "license": [
                 "BSD-3-Clause"
             ],
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "framework",
-                "zf1"
+                "ZF1",
+                "framework"
             ],
             "support": {
-                "source": "https://github.com/esler/zf1/tree/patch-1"
+                "issues": "https://github.com/magento/zf1/issues",
+                "source": "https://github.com/magento/zf1/tree/1.14.5"
             },
-            "time": "2021-05-12T08:01:53+00:00"
+            "time": "2020-12-02T21:12:59+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -9717,16 +9711,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-develop",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "2a3bd283f6fafcdea9f85bbc2539692e51fcce0a"
+                "reference": "00b0e54a4434d5f5007b7c1e15e0ff56378e73b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/2a3bd283f6fafcdea9f85bbc2539692e51fcce0a",
-                "reference": "2a3bd283f6fafcdea9f85bbc2539692e51fcce0a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/00b0e54a4434d5f5007b7c1e15e0ff56378e73b8",
+                "reference": "00b0e54a4434d5f5007b7c1e15e0ff56378e73b8",
                 "shasum": ""
             },
             "require": {
@@ -9768,7 +9762,6 @@
                 "sebastian/phpcpd": "~6.0.0",
                 "squizlabs/php_codesniffer": "~3.6.0"
             },
-            "default-branch": true,
             "bin": [
                 "bin/mftf"
             ],
@@ -9800,9 +9793,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/develop"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.7.0"
             },
-            "time": "2021-09-07T16:12:05+00:00"
+            "time": "2021-09-10T15:01:50+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -10503,33 +10496,33 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.13.0",
+            "version": "1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "be1996ed8adc35c3fd795488a653f4b518be70ea"
+                "reference": "d86dfc2e2a3cd366cee475e52c6bb3bbc371aa0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/be1996ed8adc35c3fd795488a653f4b518be70ea",
-                "reference": "be1996ed8adc35c3fd795488a653f4b518be70ea",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/d86dfc2e2a3cd366cee475e52c6bb3bbc371aa0e",
+                "reference": "d86dfc2e2a3cd366cee475e52c6bb3bbc371aa0e",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.2",
-                "php": "^7.2 || ~8.0, <8.1",
+                "php": "^7.2 || ~8.0, <8.2",
                 "phpdocumentor/reflection-docblock": "^5.2",
                 "sebastian/comparator": "^3.0 || ^4.0",
                 "sebastian/recursion-context": "^3.0 || ^4.0"
             },
             "require-dev": {
-                "phpspec/phpspec": "^6.0",
+                "phpspec/phpspec": "^6.0 || ^7.0",
                 "phpunit/phpunit": "^8.0 || ^9.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.11.x-dev"
+                    "dev-master": "1.x-dev"
                 }
             },
             "autoload": {
@@ -10564,9 +10557,9 @@
             ],
             "support": {
                 "issues": "https://github.com/phpspec/prophecy/issues",
-                "source": "https://github.com/phpspec/prophecy/tree/1.13.0"
+                "source": "https://github.com/phpspec/prophecy/tree/1.14.0"
             },
-            "time": "2021-03-17T13:42:18+00:00"
+            "time": "2021-09-10T09:02:12+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -13072,16 +13065,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "magento/composer": 20,
-        "magento/framework": 20,
-        "magento/zendframework1": 20,
-        "magento/magento2-functional-testing-framework": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.3.0||~7.4.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
