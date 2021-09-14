@@ -423,7 +423,7 @@ class QuoteManagement implements CartManagementInterface
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $groupId = $customerId ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
+            $groupId = $customer ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
             $quote->setCustomerGroupId($groupId);
         }
 
