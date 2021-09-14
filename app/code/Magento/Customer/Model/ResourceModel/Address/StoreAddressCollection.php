@@ -8,7 +8,6 @@ namespace Magento\Customer\Model\ResourceModel\Address;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address as AddressBlock;
 use Magento\Directory\Model\AllowedCountries;
-use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class StoreAddressCollection extends \Magento\Customer\Model\ResourceModel\Address\Collection
@@ -24,11 +23,6 @@ class StoreAddressCollection extends \Magento\Customer\Model\ResourceModel\Addre
     private $allowedCountryReader;
 
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
      * Resource initialization
      *
      * @return void
@@ -36,9 +30,9 @@ class StoreAddressCollection extends \Magento\Customer\Model\ResourceModel\Addre
     protected function _construct()
     {
         parent::_construct();
+
         $this->addressBlock = ObjectManager::getInstance()->get(AddressBlock::class);
         $this->allowedCountryReader = ObjectManager::getInstance()->get(AllowedCountries::class);
-        $this->request = ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -52,7 +46,6 @@ class StoreAddressCollection extends \Magento\Customer\Model\ResourceModel\Addre
         parent::setCustomerFilter($customer);
 
         $storeId = $this->addressBlock->getStoreId() ?? null;
-        //echo $storeId;die;
         if ($storeId) {
             $allowedCountries = $this->allowedCountryReader->getAllowedCountries(
                 ScopeInterface::SCOPE_STORE,
