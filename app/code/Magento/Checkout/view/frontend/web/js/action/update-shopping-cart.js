@@ -108,6 +108,7 @@ define([
          */
         onError: function (response) {
             var that = this,
+                elm,
                 responseData = JSON.parse(response['error_message']);
 
             if (response['error_message']) {
@@ -115,7 +116,7 @@ define([
                     $.each(responseData, function (index, data) {
 
                         if (data.itemId !== undefined) {
-                            var elm = $('#cart-' + data.itemId + '-qty');
+                            elm = $('#cart-' + data.itemId + '-qty');
                             elm.val(elm.attr('data-item-qty'));
                         }
                         response['error_message'] = data.error;
