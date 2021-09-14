@@ -48,9 +48,9 @@ class Shipping extends CommonTaxCollector
             ->calculateTax($baseQuoteDetails, $storeId);
         $baseTaxDetailsItems = $baseTaxDetails->getItems()[self::ITEM_CODE_SHIPPING];
 
-        $quote->getShippingAddress()
+        $shippingAssignment->getShippingAddress()
             ->setShippingAmount($taxDetailsItems->getRowTotal());
-        $quote->getShippingAddress()
+        $shippingAssignment->getShippingAddress()
             ->setBaseShippingAmount($baseTaxDetailsItems->getRowTotal());
 
         $this->processShippingTaxInfo(
