@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 
 /**
- * Class TotalsCollector
+ * Composite object for collecting total.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TotalsCollector
@@ -285,7 +285,7 @@ class TotalsCollector
             /** @var CollectorInterface $collector */
             $collector->collect($quote, $shippingAssignment, $total);
         }
-        
+
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_after',
             [
