@@ -50,7 +50,7 @@ class CurlTest extends TestCase
     private $converterMock;
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -58,7 +58,7 @@ class CurlTest extends TestCase
 
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $curlFactoryMock
@@ -76,7 +76,7 @@ class CurlTest extends TestCase
                 'curlFactory' => $curlFactoryMock,
                 'responseFactory' => $this->responseFactoryMock,
                 'converter' => $this->converterMock,
-                'logger' => $this->loggerMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
@@ -94,7 +94,7 @@ class CurlTest extends TestCase
                     'version' => '1.1',
                     'body'=> ['name' => 'value'],
                     'url' => 'http://www.mystore.com',
-                    'method' => ZendClient::POST,
+                    'method' => ZendClient::POST
                 ]
             ]
         ];
@@ -122,14 +122,8 @@ class CurlTest extends TestCase
         $this->curlAdapterMock->expects($this->once())
             ->method('read')
             ->willReturn($responseString);
-        $this->curlAdapterMock
-            ->method('getErrno')
-            ->willReturn(0);
-
-        $this->responseFactoryMock
-            ->method('create')
-            ->with($responseString)
-            ->willReturn($response);
+        $this->curlAdapterMock->method('getErrno')->willReturn(0);
+        $this->responseFactoryMock->method('create')->with($responseString)->willReturn($response);
 
         $this->assertEquals(
             $response,
@@ -196,7 +190,7 @@ class CurlTest extends TestCase
     private function createJsonConverter()
     {
         $converterMock = $this->getMockBuilder(JsonConverter::class)
-            ->setMethodsExcept(['getContentTypeHeader'])
+            ->onlyMethods(['getContentTypeHeader','toBody'])
             ->disableOriginalConstructor()
             ->getMock();
         $converterMock->method('toBody')->willReturnCallback(function ($value) {

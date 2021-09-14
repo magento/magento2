@@ -16,6 +16,9 @@
             <description value="Print Order from Guest on Frontend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-28494"/>
+            <skip>
+                <issueId value="MQE-2834" />
+            </skip>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
