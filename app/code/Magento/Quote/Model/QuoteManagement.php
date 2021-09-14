@@ -382,6 +382,7 @@ class QuoteManagement implements CartManagementInterface
     /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
