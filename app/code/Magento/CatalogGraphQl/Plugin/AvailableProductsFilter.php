@@ -41,8 +41,14 @@ class AvailableProductsFilter
      * @throws NoSuchEntityException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGet(ProductRepositoryInterface $subject, ProductInterface $result, $sku, $editMode = false, $storeId = null, $forceReload = false): ProductInterface
-    {
+    public function afterGet(
+        ProductRepositoryInterface $subject,
+        ProductInterface $result,
+        $sku,
+        $editMode = false,
+        $storeId = null,
+        $forceReload = false
+    ): ProductInterface {
         if (ProductStatus::STATUS_ENABLED !== (int) $result->getStatus()) {
             throw new NoSuchEntityException(
                 __("The product that was requested doesn't exist. Verify the product and try again.")
