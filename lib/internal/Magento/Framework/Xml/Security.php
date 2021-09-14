@@ -54,7 +54,10 @@ class Security
 
         $document = new DOMDocument();
 
-        $loadEntities = libxml_disable_entity_loader(true);
+        if (version_compare(PHP_VERSION, '8.0') < 0) {
+            // this function no longer has an effect in PHP 8.0, but it's required in earlier versions
+            $loadEntities = libxml_disable_entity_loader(true);
+        }
         $useInternalXmlErrors = libxml_use_internal_errors(true);
 
         /**
@@ -74,7 +77,9 @@ class Security
         $result = (bool)$document->loadXML($xmlContent, LIBXML_NONET);
         restore_error_handler();
         // Entity load to previous setting
-        libxml_disable_entity_loader($loadEntities);
+        if (isset($loadEntities)) {
+            libxml_disable_entity_loader($loadEntities);
+        }
         libxml_use_internal_errors($useInternalXmlErrors);
 
         if (!$result) {
