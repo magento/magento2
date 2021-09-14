@@ -48,9 +48,7 @@ class LogData
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
             }
-        } catch (\Exception $exception) {
-            // do nothing
-        }
+        } catch (\Exception $exception) {}  //@codingStandardsIgnoreLine
 
         if ($response) {
             $logData = array_merge($logData, $this->gatherResponseInformation($response));
