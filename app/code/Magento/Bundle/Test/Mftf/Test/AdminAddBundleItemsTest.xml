@@ -58,8 +58,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFirstGridRow"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterBundleProductOptions2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectFirstGridRow2"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddSelectedBundleProducts"/>
-        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts1">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="clickAddSelectedBundleProducts">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct0.sku$$"/>
@@ -130,8 +129,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectNewFirstGridRow"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterNewBundleProductOptions2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectNewFirstGridRow2"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddNewSelectedBundleProducts"/>
-        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="clickAddNewSelectedBundleProducts">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$simpleProduct2.sku$$"/>
