@@ -166,10 +166,6 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
 
             $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
-            if (!$invoice) {
-                throw new LocalizedException(__("The invoice can't be saved at this time. Please try again later."));
-            }
-
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __("The invoice can't be created without products. Add products and try again.")
