@@ -97,11 +97,7 @@
         </actionGroup>
 
         <!-- go to page-->
-        <!--<amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPage"/>-->
-
         <!--Test Assertion - on correct page/page has been published-->
-        <!--<waitForPageLoad stepKey="waitForBundleProductPageToLoad"/>-->
-        <!--<seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>-->
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
             <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
