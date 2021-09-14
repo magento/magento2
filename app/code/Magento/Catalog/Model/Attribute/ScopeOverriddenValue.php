@@ -46,6 +46,11 @@ class ScopeOverriddenValue
     private $resourceConnection;
 
     /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * ScopeOverriddenValue constructor.
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool

@@ -5,18 +5,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Static test for phtml template files.
  */
-class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
+class PhtmlTemplateTest extends TestCase
 {
-    public function testBlockVariableInsteadOfThis()
+    /**
+     * @return void
+     */
+    public function testBlockVariableInsteadOfThis(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * Test usage of methods and variables in template through $this
@@ -24,20 +32,23 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                self::assertNotRegExp(
+                self::assertDoesNotMatchRegularExpression(
                     '/this->(?!helper)\S*/iS',
                     file_get_contents($file),
                     'Access to members and methods of Block class through $this is ' .
                     'obsolete in phtml templates. Use only $block instead of $this.'
                 );
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+            Files::init()->getPhtmlFiles()
         );
     }
 
-    public function testObsoleteBlockMethods()
+    /**
+     * @return void
+     */
+    public function testObsoleteBlockMethods(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * Test usage of protected and private methods and variables in template
@@ -51,20 +62,23 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                self::assertNotRegexp(
+                self::assertDoesNotMatchRegularExpression(
                     '/block->_[^_]+\S*\(/iS',
                     file_get_contents($file),
                     'Access to protected and private members of Block class is ' .
                     'obsolete in phtml templates. Use only public members.'
                 );
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+            Files::init()->getPhtmlFiles()
         );
     }
 
-    public function testObsoleteJavascriptAttributeType()
+    /**
+     * @return void
+     */
+    public function testObsoleteJavascriptAttributeType(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * "text/javascript" type attribute in not obligatory to use in templates due to HTML5 standards.
@@ -73,19 +87,22 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                self::assertNotRegexp(
+                self::assertDoesNotMatchRegularExpression(
                     '/type="text\/javascript"/',
                     file_get_contents($file),
                     'Please do not use "text/javascript" type attribute.'
                 );
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+            Files::init()->getPhtmlFiles()
         );
     }
 
-    public function testJqueryUiLibraryIsNotUsedInTemplates()
+    /**
+     * @return void
+     */
+    public function testJqueryUiLibraryIsNotUsedInTemplates(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * 'jquery/ui' library is not obligatory to use in phtml files.
@@ -97,20 +114,23 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
                 if (strpos($file, '/view/frontend/templates/') !== false
                     || strpos($file, '/view/base/templates/') !== false
                 ) {
-                    self::assertNotRegexp(
+                    self::assertDoesNotMatchRegularExpression(
                         '/(["\'])jquery\/ui\1/',
                         file_get_contents($file),
                         'Please do not use "jquery/ui" library in templates. Use needed jquery ui widget instead.'
                     );
                 }
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+            Files::init()->getPhtmlFiles()
         );
     }
 
-    public function testJsComponentsAreProperlyInitializedInDataMageInitAttribute()
+    /**
+     * @return void
+     */
+    public function testJsComponentsAreProperlyInitializedInDataMageInitAttribute(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * JS components in data-mage-init attributes should be initialized not in php.
@@ -124,48 +144,56 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
                     && (strpos($file, '/view/frontend/templates/') !== false
                     || strpos($file, '/view/base/templates/') !== false)
                 ) {
-                    self::assertNotRegExp(
+                    self::assertDoesNotMatchRegularExpression(
                         '/data-mage-init=(?:\'|")(?!\s*{\s*"[^"]+")/',
                         file_get_contents($file),
                         'Please do not initialize JS component in php. Do it in template.'
                     );
                 }
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+            Files::init()->getPhtmlFiles()
         );
     }
 
     /**
      * @return array
      */
-    private function getWhiteList()
+    private function getWhiteList(): array
     {
         $whiteListFiles = [];
         $componentRegistrar = new ComponentRegistrar();
+
         foreach ($this->getFilesData('data_mage_init/whitelist.php') as $fileInfo) {
             $whiteListFiles[] = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $fileInfo[0])
                 . DIRECTORY_SEPARATOR . $fileInfo[1];
         }
+
         return $whiteListFiles;
     }
 
     /**
      * @param string $filePattern
+     *
      * @return array
      */
-    private function getFilesData($filePattern)
+    private function getFilesData($filePattern): array
     {
         $result = [];
+
         foreach (glob(__DIR__ . '/_files/initialize_javascript/' . $filePattern) as $file) {
             $fileData = include $file;
             $result = array_merge($result, $fileData);
         }
+
         return $result;
     }
 
-    public function testJsComponentsAreProperlyInitializedInXMagentoInitAttribute()
+    /**
+     * @return void
+     */
+    public function testJsComponentsAreProperlyInitializedInXMagentoInitAttribute(): void
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * JS components in x-magento-init attributes should be initialized not in php.
@@ -177,14 +205,14 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
                 if (strpos($file, '/view/frontend/templates/') !== false
                     || strpos($file, '/view/base/templates/') !== false
                 ) {
-                    self::assertNotRegExp(
+                    self::assertDoesNotMatchRegularExpression(
                         '@x-magento-init.>(?!\s*+{\s*"[^"]+"\s*:\s*{\s*"[\w/-]+")@i',
                         file_get_contents($file),
                         'Please do not initialize JS component in php. Do it in template.'
                     );
                 }
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+            Files::init()->getPhtmlFiles()
         );
     }
 }
