@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "119b605f3043b0edb670ebe8f952eeec",
+    "content-hash": "f9140b3f664d018c323c56550b93af45",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -493,16 +493,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "2.1.6",
+            "version": "2.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "e5cac5f9d2354d08b67f1d21c664ae70d748c603"
+                "reference": "f381e45f0b83a602a315613e08fffe0d8f2288c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/e5cac5f9d2354d08b67f1d21c664ae70d748c603",
-                "reference": "e5cac5f9d2354d08b67f1d21c664ae70d748c603",
+                "url": "https://api.github.com/repos/composer/composer/zipball/f381e45f0b83a602a315613e08fffe0d8f2288c8",
+                "reference": "f381e45f0b83a602a315613e08fffe0d8f2288c8",
                 "shasum": ""
             },
             "require": {
@@ -571,7 +571,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/composer/issues",
-                "source": "https://github.com/composer/composer/tree/2.1.6"
+                "source": "https://github.com/composer/composer/tree/2.1.7"
             },
             "funding": [
                 {
@@ -587,7 +587,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-19T15:11:08+00:00"
+            "time": "2021-09-14T12:26:01+00:00"
         },
         {
             "name": "composer/metadata-minifier",
@@ -9663,21 +9663,19 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "10",
+            "version": "8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "6e5f03aea8309236427955d94d10f0547847e083"
+                "reference": "a490fea57b349affb2623f8d22a17bf8d4b290ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/6e5f03aea8309236427955d94d10f0547847e083",
-                "reference": "6e5f03aea8309236427955d94d10f0547847e083",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/a490fea57b349affb2623f8d22a17bf8d4b290ab",
+                "reference": "a490fea57b349affb2623f8d22a17bf8d4b290ab",
                 "shasum": ""
             },
             "require": {
-                "ext-dom": "*",
-                "ext-simplexml": "*",
                 "php": ">=7.3",
                 "squizlabs/php_codesniffer": "^3.6",
                 "webonyx/graphql-php": "^14.9"
@@ -9702,9 +9700,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v10"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v8"
             },
-            "time": "2021-09-14T10:03:35+00:00"
+            "time": "2021-08-25T11:27:24+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
