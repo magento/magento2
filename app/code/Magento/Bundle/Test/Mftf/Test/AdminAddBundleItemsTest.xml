@@ -68,17 +68,17 @@
             <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
         </actionGroup>
 
-        <!--&lt;!&ndash; Check that Bundle Options initialized with default quantity &ndash;&gt;-->
-        <!--<grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>-->
-        <!--<assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">-->
-            <!--<expectedResult type="string">1</expectedResult>-->
-            <!--<actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>-->
-        <!--</assertEquals>-->
-        <!--<grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>-->
-        <!--<assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">-->
-            <!--<expectedResult type="string">1</expectedResult>-->
-            <!--<actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>-->
-        <!--</assertEquals>-->
+        <!-- Check that Bundle Options initialized with proper quantity -->
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
+            <expectedResult type="string">50</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
+            <expectedResult type="string">50</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
+        </assertEquals>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty2"/>
@@ -97,7 +97,7 @@
         <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scroll"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
-        <seeElement stepKey="LookingForBundleItemPresence" selector="{{AdminProductFormBundleSection.listedBundleItem}}"/>
+        <seeElement selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="LookingForBundleItemPresence"/>
 
         <!--Checking on customer side-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
@@ -162,7 +162,8 @@
         <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scrollAgain"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenNewSectionBundleItems2"/>
-        <seeElement selector="{{AdminProductFormBundleSection.listedBundleItem2}}" stepKey="LookingForNewBundleItemPresence"/>
+        <seeElement selector="{{AdminProductFormBundleSection.bundleOptionXTitle('1')}}" stepKey="LookingForNewBundleItemPresence"/>
+
         <!--Checking on customer side-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPageAgain">
             <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
