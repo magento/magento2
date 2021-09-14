@@ -112,7 +112,7 @@ class NamespaceResolver
                                 T_NAME_QUALIFIED => T_NAME_QUALIFIED,
                                 T_NAME_FULLY_QUALIFIED => T_NAME_FULLY_QUALIFIED
                             ];
-                            if (isset($token[0]) && \array_key_exists($token[0], $whitelist)) {
+                            if (isset($token[0], $whitelist[$token[0]])) {
                                 return true;
                             }
                             return false;

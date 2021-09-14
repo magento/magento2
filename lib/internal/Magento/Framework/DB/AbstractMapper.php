@@ -126,7 +126,7 @@ abstract class AbstractMapper implements MapperInterface
                 if (!is_array($value)) {
                     throw new \InvalidArgumentException('Wrong type of argument, expecting array for '. $mapperMethod);
                 }
-                call_user_func_array([$this, $mapperMethod], array_values($value));
+                call_user_func_array([$this, $mapperMethod], ...[$value]);
             }
         }
         return $this->select;
@@ -395,8 +395,9 @@ abstract class AbstractMapper implements MapperInterface
      * Hook for operations before rendering filters
      *
      * @return void
+     * phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
      */
-    protected function renderFiltersBefore() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    protected function renderFiltersBefore()
     {
     }
 

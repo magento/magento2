@@ -207,7 +207,7 @@ class FileScanner
                 if ($this->tokenType === T_WHITESPACE) {
                     goto SCANNER_NAMESPACE_CONTINUE;
                 }
-                if (\array_key_exists($this->tokenType, $namespaceContentTokenTypes)) {
+                if (isset($namespaceContentTokenTypes[$this->tokenType])) {
                     $infos[$infoIndex]['namespace'] .= $tokenContent;
                 }
 
