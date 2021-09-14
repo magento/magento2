@@ -243,7 +243,6 @@
         <arguments>
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
-        <plugin name="AllowedCountriesAddressFilter" type="Magento\Customer\Model\Plugin\AllowedCountriesAddressFilter"/>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
