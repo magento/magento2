@@ -387,6 +387,7 @@ class QuoteManagement implements CartManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $customer = $quote->getCustomer();
+        $customerId = $customer ? $customer->getId() : null;
 
         if ($paymentMethod) {
             $paymentMethod->setChecks(
@@ -406,7 +407,7 @@ class QuoteManagement implements CartManagementInterface
             $quote->collectTotals();
         }
 
-        if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customer) {
+        if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customerId) {
             $quote->setCustomerId(null);
             $billingAddress = $quote->getBillingAddress();
             $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
@@ -421,7 +422,7 @@ class QuoteManagement implements CartManagementInterface
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $groupId = $customer ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
+            $groupId = $customerId ? $customer->getGroupId() : GroupInterface::NOT_LOGGED_IN_ID;
             $quote->setCustomerGroupId($groupId);
         }
 
