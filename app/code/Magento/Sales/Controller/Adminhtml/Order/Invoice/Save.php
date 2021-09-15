@@ -128,6 +128,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @codeCoverageIgnore
      */
     public function execute()
     {
