@@ -1,13 +1,12 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CodeMessDetector\Rule\UnusedCode;
 
-use PDepend\Source\AST\ASTParameter;
 use PHPMD\AbstractNode;
 use PHPMD\Node\ClassNode;
 use PHPMD\Node\MethodNode;
@@ -52,7 +51,7 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
          */
         foreach (['around', 'after'] as $pluginMethodPrefix) {
             if ($this->isFunctionNameStartingWith($node, $pluginMethodPrefix)) {
-                $this->removeVariablesByCount($node, 2);
+                $this->removeVariablesByCount(2);
 
                 break;
             }
@@ -63,7 +62,7 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
          * that should be ignored
          */
         if ($this->isFunctionNameStartingWith($node, 'before')) {
-            $this->removeVariablesByCount($node, 1);
+            $this->removeVariablesByCount(1);
         }
     }
 
@@ -80,39 +79,24 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
     }
 
     /**
-     * Get first $numberOfParams parameters of method
-     *
-     * @param MethodNode $node
-     * @param int $numberOfParams
-     * @return array
-     */
-    private function getMethodParametersByLength(MethodNode $node, int $numberOfParams): array
-    {
-        return array_slice($node->getNode()->getParameters(), 0, $numberOfParams);
-    }
-
-    /**
      * Remove first $countOfRemovingVariables from given node
      *
-     * @param MethodNode $node
      * @param int $countOfRemovingVariables
      */
-    private function removeVariablesByCount(MethodNode $node, int $countOfRemovingVariables)
+    private function removeVariablesByCount(int $countOfRemovingVariables)
     {
-        $methodParameters = $this->getMethodParametersByLength($node, $countOfRemovingVariables);
-        /** @var ASTParameter $methodParameter */
-        foreach ($methodParameters as $methodParameter) {
-            unset($this->nodes[$methodParameter->getName()]);
-        }
+        array_splice($this->nodes, 0, $countOfRemovingVariables);
     }
 
     /**
      * Check if namespace contain "Plugin"
+     * Case sensitive ignored
+     *
      * @param $class
      * @return bool
      */
     private function isPluginClass($class): bool
     {
-        return (stripos($class, 'Plugin') !== false);
+        return (stripos($class, 'plugin') !== false);
     }
 }
