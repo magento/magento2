@@ -89,13 +89,12 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
     }
 
     /**
-     * Check if namespace contain "Plugin"
-     * Case sensitive ignored
+     * Check if namespace contain "Plugin". Case-sensitive ignored
      *
-     * @param $class
+     * @param string $class
      * @return bool
      */
-    private function isPluginClass($class): bool
+    private function isPluginClass(string $class): bool
     {
         return (stripos($class, 'plugin') !== false);
     }
