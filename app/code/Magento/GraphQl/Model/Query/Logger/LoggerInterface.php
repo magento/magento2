@@ -21,7 +21,6 @@ interface LoggerInterface
     const HAS_AUTH_HEADER = 'GraphQlHasAuthHeader';
     const HTTP_METHOD = 'GraphQlHttpMethod';
     const HAS_MUTATION = 'GraphQlHasMutation';
-    const IS_CACHEABLE = 'GraphQlIsCacheable';
     const COMPLEXITY = 'GraphQlComplexity';
     const REQUEST_LENGTH = 'GraphQlRequestLength';
     const HTTP_RESPONSE_CODE = 'GraphQlHttpResponseCode';

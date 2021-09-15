@@ -101,10 +101,6 @@ class LogData
      */
     private function gatherResponseInformation(HttpResponse $response) : array
     {
-        $responseInformation[LoggerInterface::IS_CACHEABLE] =
-            ($response->getHeader('X-Magento-Tags') && $response->getHeader('X-Magento-Tags') !== '')
-                ? 'true'
-                : 'false';
         $responseInformation[LoggerInterface::X_MAGENTO_CACHE_ID] =
             $response->getHeader('X-Magento-Cache-Id')
                 ? $response->getHeader('X-Magento-Cache_Id')->getFieldValue()
