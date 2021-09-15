@@ -395,9 +395,8 @@ abstract class AbstractMapper implements MapperInterface
      * Hook for operations before rendering filters
      *
      * @return void
-     * phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
      */
-    protected function renderFiltersBefore()
+    protected function renderFiltersBefore() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
     }
 

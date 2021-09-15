@@ -189,8 +189,7 @@ abstract class AbstractModel extends DataObject
         $this->_logger = $context->getLogger();
         $this->_actionValidator = $context->getActionValidator();
 
-        if (
-            $this->_resource !== null
+        if ($this->_resource !== null
             && (method_exists($this->_resource, 'getIdFieldName') || ($this->_resource instanceof DataObject))
         ) {
             $this->_idFieldName = $this->_getResource()->getIdFieldName();
