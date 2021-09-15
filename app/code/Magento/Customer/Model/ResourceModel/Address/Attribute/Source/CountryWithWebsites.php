@@ -19,6 +19,7 @@ use Magento\Directory\Model\ResourceModel\Country\CollectionFactory as CountryCo
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory as AttrubuteOptionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -53,12 +54,24 @@ class CountryWithWebsites extends Table
     private $shareConfig;
 
     /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @param OptionCollectionFactory $attrOptionCollectionFactory
      * @param AttrubuteOptionFactory $attrOptionFactory
      * @param CountryCollectionFactory $countriesFactory
      * @param AllowedCountries $allowedCountriesReader
      * @param StoreManagerInterface $storeManager
      * @param Share $shareConfig
+     * @param \Magento\Framework\App\Request\Http|null $request
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         OptionCollectionFactory $attrOptionCollectionFactory,
@@ -66,12 +79,18 @@ class CountryWithWebsites extends Table
         CountryCollectionFactory $countriesFactory,
         AllowedCountries $allowedCountriesReader,
         StoreManagerInterface $storeManager,
-        CustomerShareConfig $shareConfig
+        CustomerShareConfig $shareConfig,
+        ?\Magento\Framework\App\Request\Http $request = null,
+        ?\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->countriesFactory = $countriesFactory;
         $this->allowedCountriesReader = $allowedCountriesReader;
         $this->storeManager = $storeManager;
         $this->shareConfig = $shareConfig;
+        $this->request = $request
+            ?? ObjectManager::getInstance()->get(\Magento\Framework\App\Request\Http::class);
+        $this->customerRepository = $customerRepository
+            ?? ObjectManager::getInstance()->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
     }
 
@@ -98,7 +117,14 @@ class CountryWithWebsites extends Table
 
                 $allowedCountries = array_unique(array_merge([], ...$allowedCountries));
             } else {
-                $allowedCountries = $this->allowedCountriesReader->getAllowedCountries();
+                $storeId = null;
+                $customerId = $this->request->getParam('parent_id') ?? null;
+                if ($customerId) {
+                    $customer = $this->customerRepository->getById($customerId);
+                    $storeId = $customer->getStoreId();
+                }
+
+                $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $storeId);
             }
 
             $this->options = $this->createCountriesCollection()
