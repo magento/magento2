@@ -46,6 +46,12 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
      */
     private $logger;
 
+    /**#@+
+     * Constant for batch size limit
+     */
+    private const BATCH_SIZE = 100;
+    /**#@-*/
+
     /**
      * Constructor
      *
@@ -75,27 +81,29 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         $this->consumerCollection = $this->consumerCollectionFactory->create();
         $this->consumerCollection->addFieldToSelect('entity_id');
         $this->consumerCollection->addFieldToSelect('secret');
-        $consumerCollection = $this->consumerCollection->getItems();
         $connection = $this->consumerResourceModel->getConnection();
+        $this->consumerCollection->getSelect()->limit(self::BATCH_SIZE);
+        $collectionItems = $this->consumerCollection->getItems();
 
-        /** @var $consumer Consumer */
-        foreach ($consumerCollection as $consumer) {
-            $existingSecret = $consumer->getSecret();
-            $entityId = $consumer->getEntityId();
+            /** @var $consumer Consumer */
+            foreach ($collectionItems as $consumer) {
+                $existingSecret = $consumer->getSecret();
+                $entityId = $consumer->getEntityId();
 
-            if ($entityId && $existingSecret) {
-                if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-                    $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
-                    $where = ['entity_id = ?' => $entityId];
-                    try {
-                        $connection->update($this->consumerResourceModel->getMainTable(), $data, $where);
-                    } catch (\Exception $exception) {
-                        $this->logger->critical($exception->getMessage());
-                        return $this;
+                if ($entityId && $existingSecret) {
+                    if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+                        $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
+                        $where = ['entity_id = ?' => $entityId];
+                        try {
+                            $connection->update($this->consumerResourceModel->getMainTable(), $data, $where);
+                        } catch (\Exception $exception) {
+                            $this->logger->critical($exception->getMessage());
+                            return $this;
+                        }
                     }
                 }
             }
-        }
+
         return $this;
     }
 

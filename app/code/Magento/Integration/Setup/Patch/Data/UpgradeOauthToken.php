@@ -48,6 +48,12 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
      */
     private $logger;
 
+    /**#@+
+     * Constant for batch size limit
+     */
+    private const BATCH_SIZE = 200;
+    /**#@-*/
+
     /**
      * Constructor
      *
@@ -78,11 +84,12 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
         $this->tokenCollection->addFieldToSelect('entity_id');
         $this->tokenCollection->addFieldToSelect('secret');
         $this->tokenCollection->addFieldToSelect('type');
-        $tokenCollection = $this->tokenCollection->getItems();
+        $this->tokenCollection->getSelect()->limit(self::BATCH_SIZE);
+        $collectionItems = $this->tokenCollection->getItems();
         $connection = $this->tokenResourceModel->getConnection();
 
         /** @var $token Token */
-        foreach ($tokenCollection as $token) {
+        foreach ($collectionItems as $token) {
             $existingSecret = $token->getSecret();
             $entityId = $token->getEntityId();
             $type = strtolower($token->getType());

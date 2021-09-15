@@ -179,8 +179,7 @@ class OauthTest extends TestCase
         $tokenProvider = new Provider(
             $this->_consumerFactory,
             $this->_tokenFactory,
-            $this->_loggerMock,
-            $this->tokenResourceModelMock
+            $this->_loggerMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
