@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Profiler\Test\Unit\Driver;
 
 use Magento\Framework\Profiler;
@@ -14,34 +16,43 @@ use Magento\Framework\Profiler\Driver\Standard\OutputInterface;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 class StandardTest extends TestCase
 {
     /**
      * @var Stat|MockObject
      */
-    protected $_stat;
+    private $stat;
 
     /**
      * @var Standard
      */
-    protected $_driver;
+    private $driver;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->_stat = $this->createMock(Stat::class);
-        $this->_driver = new Standard(['stat' => $this->_stat]);
+        $this->stat = $this->createMock(Stat::class);
+        $this->driver = new Standard(['stat' => $this->stat]);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         Profiler::reset();
     }
 
     /**
-     * Test __construct method with no arguments
+     * Test __construct method with no arguments.
+     *
+     * @return void
      */
-    public function testDefaultConstructor()
+    public function testDefaultConstructor(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -50,20 +61,24 @@ class StandardTest extends TestCase
     }
 
     /**
-     * Test clear method
+     * Test clear method.
+     *
+     * @return void
      */
-    public function testClear()
+    public function testClear(): void
     {
-        $this->_stat->expects($this->once())->method('clear')->with('timer_id');
-        $this->_driver->clear('timer_id');
+        $this->stat->expects($this->once())->method('clear')->with('timer_id');
+        $this->driver->clear('timer_id');
     }
 
     /**
-     * Test start method
+     * Test start method.
+     *
+     * @return void
      */
-    public function testStart()
+    public function testStart(): void
     {
-        $this->_stat->expects(
+        $this->stat->expects(
             $this->once()
         )->method(
             'start'
@@ -73,15 +88,17 @@ class StandardTest extends TestCase
             $this->greaterThanOrEqual(0),
             $this->greaterThanOrEqual(0)
         );
-        $this->_driver->start('timer_id');
+        $this->driver->start('timer_id');
     }
 
     /**
-     * Test stop method
+     * Test stop method.
+     *
+     * @return void
      */
-    public function testStop()
+    public function testStop(): void
     {
-        $this->_stat->expects(
+        $this->stat->expects(
             $this->once()
         )->method(
             'stop'
@@ -91,13 +108,15 @@ class StandardTest extends TestCase
             $this->greaterThanOrEqual(0),
             $this->greaterThanOrEqual(0)
         );
-        $this->_driver->stop('timer_id');
+        $this->driver->stop('timer_id');
     }
 
     /**
-     * Test _initOutputs method
+     * Test _initOutputs method.
+     *
+     * @return void
      */
-    public function testInitOutputs()
+    public function testInitOutputs(): void
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -105,34 +124,21 @@ class StandardTest extends TestCase
         $config = [
             'outputs' => [
                 'outputTypeOne' => ['baseDir' => '/custom/base/dir'],
-                'outputTypeTwo' => ['type' => 'specificOutputTypeTwo'],
+                'outputTypeTwo' => ['type' => 'specificOutputTypeTwo']
             ],
             'baseDir' => '/base/dir',
-            'outputFactory' => $outputFactory,
+            'outputFactory' => $outputFactory
         ];
 
         $outputOne = $this->getMockForAbstractClass(OutputInterface::class);
         $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
 
-        $outputFactory->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            ['baseDir' => '/custom/base/dir', 'type' => 'outputTypeOne']
-        )->willReturn(
-            $outputOne
-        );
-
-        $outputFactory->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            ['type' => 'specificOutputTypeTwo', 'baseDir' => '/base/dir']
-        )->willReturn(
-            $outputTwo
-        );
+        $outputFactory->method('create')
+            ->withConsecutive(
+                [['baseDir' => '/custom/base/dir', 'type' => 'outputTypeOne']],
+                [['type' => 'specificOutputTypeTwo', 'baseDir' => '/base/dir']]
+            )
+            ->willReturnOnConsecutiveCalls($outputOne, $outputTwo);
 
         $driver = new Standard($config);
         $this->assertAttributeCount(2, '_outputs', $driver);
@@ -140,33 +146,37 @@ class StandardTest extends TestCase
     }
 
     /**
-     * Test display method
+     * Test display method.
+     *
+     * @return void
      */
-    public function testDisplayAndRegisterOutput()
+    public function testDisplayAndRegisterOutput(): void
     {
         $outputOne = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputOne->expects($this->once())->method('display')->with($this->_stat);
+        $outputOne->expects($this->once())->method('display')->with($this->stat);
         $outputTwo = $this->getMockForAbstractClass(OutputInterface::class);
-        $outputTwo->expects($this->once())->method('display')->with($this->_stat);
+        $outputTwo->expects($this->once())->method('display')->with($this->stat);
 
-        $this->_driver->registerOutput($outputOne);
-        $this->_driver->registerOutput($outputTwo);
+        $this->driver->registerOutput($outputOne);
+        $this->driver->registerOutput($outputTwo);
         Profiler::enable();
-        $this->_driver->display();
+        $this->driver->display();
         Profiler::disable();
-        $this->_driver->display();
+        $this->driver->display();
     }
 
     /**
-     * Test _getOutputFactory method creating new object by default
+     * Test _getOutputFactory method creating new object by default.
+     *
+     * @return void
      */
-    public function testDefaultOutputFactory()
+    public function testDefaultOutputFactory(): void
     {
-        $method = new \ReflectionMethod($this->_driver, '_getOutputFactory');
+        $method = new ReflectionMethod($this->driver, '_getOutputFactory');
         $method->setAccessible(true);
         $this->assertInstanceOf(
             Factory::class,
-            $method->invoke($this->_driver)
+            $method->invoke($this->driver)
         );
     }
 }

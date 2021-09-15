@@ -117,7 +117,7 @@ class AttributeValue
      * Delete attribute values
      *
      * @param string $entityType
-     * @param array[][] $values
+     * @param array[] $values
      * Format:
      * array(
      *      0 => array(
@@ -160,11 +160,63 @@ class AttributeValue
     }
 
     /**
+     * Insert attribute values
+     *
+     * @param string $entityType
+     * @param array[] $values
+     * Format:
+     * array(
+     *      0 => array(
+     *          attribute_id => 11,
+     *          value => 'some long text',
+     *          ...
+     *      ),
+     *      1 => array(
+     *          attribute_id => 22,
+     *          value => 'some short text',
+     *          ...
+     *      )
+     * )
+     */
+    public function insertValues(string $entityType, array $values): void
+    {
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $connection = $metadata->getEntityConnection();
+        $attributeTables = [];
+        $allAttributes = [];
+
+        foreach ($this->getEntityAttributes($entityType) as $attribute) {
+            $allAttributes[(int) $attribute->getAttributeId()] = $attribute;
+        }
+
+        foreach ($values as $value) {
+            $attribute = $allAttributes[(int) $value['attribute_id']] ?? null;
+            if ($attribute && !$attribute->isStatic()) {
+                $columns = array_keys($value);
+                $columnsHash = implode(',', $columns);
+                $attributeTable = $attribute->getBackend()->getTable();
+                $attributeTables[$attributeTable][$columnsHash][] = array_values($value);
+            }
+        }
+
+        foreach ($attributeTables as $table => $tableData) {
+            foreach ($tableData as $columns => $data) {
+                $connection->insertArray(
+                    $table,
+                    explode(',', $columns),
+                    $data
+                );
+            }
+        }
+    }
+
+    /**
      * Get attribute of given entity type
      *
      * @param string $entityType
+     * @return array
      */
-    private function getEntityAttributes(string $entityType)
+    private function getEntityAttributes(string $entityType): array
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $eavEntityType = $metadata->getEavEntityType();
