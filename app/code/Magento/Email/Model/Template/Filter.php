@@ -11,6 +11,7 @@ use Exception;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
@@ -30,14 +31,13 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Information as StoreInformation;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Core Email Template Filter Model
@@ -591,7 +591,10 @@ class Filter extends Template
             unset($params['url']);
         }
 
-        // Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl in multi-store environment
+        /**
+         * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
+         * in multi-store environment
+         */
         $this->urlModel->setScope($this->_storeManager->getStore());
         $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
 
@@ -858,8 +861,8 @@ class Filter extends Template
             if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
                 $configValue = $storeInformationObj->getData('country');
             } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
-                $configValue = $storeInformationObj->getData('region')?
-                    $storeInformationObj->getData('region'):
+                $configValue = $storeInformationObj->getData('region') ?
+                    $storeInformationObj->getData('region') :
                     $configValue;
             }
         }

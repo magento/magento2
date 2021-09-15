@@ -772,7 +772,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $params['_scope_to_url'] = true;
         }
 
-        // Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl in multi-store environment
+        /**
+         * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
+         * in multi-store environment
+         */
         $params['_escape_params'] = $store->getCode();
 
         return $url->getUrl($route, $params);
