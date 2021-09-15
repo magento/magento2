@@ -117,6 +117,7 @@ class CountryWithWebsites extends Table
 
                 $allowedCountries = array_unique(array_merge([], ...$allowedCountries));
             } else {
+                // Address can be added only for the allowed country list.
                 $storeId = null;
                 $customerId = $this->request->getParam('parent_id') ?? null;
                 if ($customerId) {
@@ -124,7 +125,10 @@ class CountryWithWebsites extends Table
                     $storeId = $customer->getStoreId();
                 }
 
-                $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(ScopeInterface::SCOPE_WEBSITE, $storeId);
+                $allowedCountries = $this->allowedCountriesReader->getAllowedCountries(
+                    ScopeInterface::SCOPE_WEBSITE,
+                    $storeId
+                );
             }
 
             $this->options = $this->createCountriesCollection()
