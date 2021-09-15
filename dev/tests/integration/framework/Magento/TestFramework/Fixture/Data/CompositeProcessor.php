@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Fixture\Data;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Fixture\DataFixtureInterface;
 /**
  * Class CompositeProcessor
- * @package Magento\TestFramework\Fixture\Data
+ * Invokes all registered processors for data fixture
  */
 class CompositeProcessor implements ProcessorInterface
 {
@@ -36,11 +37,11 @@ class CompositeProcessor implements ProcessorInterface
     }
 
     /**
+     * @param DataFixtureInterface $fixture
      * @param array $data
-     * @param $fixture
      * @return array
      */
-    public function process($fixture, array $data): array
+    public function process(DataFixtureInterface $fixture, array $data): array
     {
         foreach ($this->getProcessors() as $processor) {
             $data = $this->objectManager->get($processor)->process($fixture, $data);
@@ -53,7 +54,7 @@ class CompositeProcessor implements ProcessorInterface
      *
      * @return array
      */
-    public function getProcessors(): array
+    private function getProcessors(): array
     {
         return [
             UniqueIdProcessor::class

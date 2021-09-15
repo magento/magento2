@@ -10,8 +10,7 @@ namespace Magento\Catalog\Fixture;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
-use Magento\TestFramework\Fixture\Data\CompositeProcessor;
-use Magento\TestFramework\Fixture\Data\UniqueIdProcessor;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
 /**
  * Create product attribute fixture
@@ -57,20 +56,20 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
 
 
     /**
-     * @var CompositeProcessor
+     * @var ProcessorInterface
      */
-    private $compositeProcessor;
+    private $dataProcessor;
 
     /**
      * @param ServiceFactory $serviceFactory
-     * @param CompositeProcessor $compositeProcessor
+     * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        CompositeProcessor $compositeProcessor
+        ProcessorInterface $dataProcessor
     ) {
         $this->serviceFactory = $serviceFactory;
-        $this->compositeProcessor = $compositeProcessor;
+        $this->dataProcessor = $dataProcessor;
     }
 
     /**
@@ -82,7 +81,7 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
         $fixtureData = array_merge(self::DEFAULT_DATA, $data);
         $result = $service->execute(
             [
-                'attribute' => $this->compositeProcessor->process($this, $fixtureData)
+                'attribute' => $this->dataProcessor->process($this, $fixtureData)
             ]
         );
 
@@ -93,7 +92,6 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
 
     /**
      * @inheritdoc
-     * @throws \ReflectionException
      */
     public function revert(array $data = []): void
     {

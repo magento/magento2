@@ -13,8 +13,7 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
-use Magento\TestFramework\Fixture\Data\CompositeProcessor;
-use Magento\TestFramework\Fixture\Data\UniqueIdProcessor;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
 /**
  * Create simple product fixture
@@ -57,17 +56,17 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     private $serviceFactory;
 
     /**
-     * @var CompositeProcessor
+     * @var ProcessorInterface
      */
     private $dataProcessor;
 
     /**
      * @param ServiceFactory $serviceFactory
-     * @param CompositeProcessor $dataProcessor
+     * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        CompositeProcessor $dataProcessor
+        ProcessorInterface $dataProcessor
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;

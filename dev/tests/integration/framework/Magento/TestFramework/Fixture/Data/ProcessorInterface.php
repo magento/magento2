@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture\Data;
 
+use Magento\TestFramework\Fixture\DataFixtureInterface;
+
 /**
  * Interface for data fixtures processors
  */

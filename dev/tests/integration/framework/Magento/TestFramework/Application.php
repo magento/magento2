@@ -416,6 +416,7 @@ class Application
                 \Magento\Framework\App\State::class => TestFramework\App\State::class,
                 Mail\TransportInterface::class => TestFramework\Mail\TransportInterfaceMock::class,
                 Mail\Template\TransportBuilder::class => TestFramework\Mail\Template\TransportBuilderMock::class,
+                \Magento\TestFramework\Fixture\Data\ProcessorInterface::class => \Magento\TestFramework\Fixture\Data\CompositeProcessor::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {

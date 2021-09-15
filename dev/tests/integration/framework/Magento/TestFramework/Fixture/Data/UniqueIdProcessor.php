@@ -3,6 +3,7 @@
 
 namespace Magento\TestFramework\Fixture\Data;
 
+use Magento\TestFramework\Fixture\DataFixtureInterface;
 
 class UniqueIdProcessor implements ProcessorInterface
 {
@@ -21,11 +22,11 @@ class UniqueIdProcessor implements ProcessorInterface
     static private array $storage = [];
 
     /**
+     * @param DataFixtureInterface $fixture
      * @param array $data
-     * @param $fixture
      * @return array
      */
-    public function process($fixture, array $data): array
+    public function process(DataFixtureInterface $fixture, array $data): array
     {
         $class = get_class($fixture);
         if (!isset(self::$storage[$class])) {

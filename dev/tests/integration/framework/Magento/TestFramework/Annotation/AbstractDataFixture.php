@@ -195,11 +195,17 @@ abstract class AbstractDataFixture
      */
     private function revertDataFixture(array $fixtureData): void
     {
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $isSecureArea = $registry->registry('isSecureArea');
         $dataFixtureFactory = Bootstrap::getObjectManager()->get(DataFixtureFactory::class);
         $fixture = $dataFixtureFactory->create($fixtureData['name']);
         if ($fixture instanceof RevertibleDataFixtureInterface) {
             try {
+                $registry->unregister('isSecureArea');
+                $registry->register('isSecureArea', true);
                 $fixture->revert($fixtureData['result'] ?? []);
+                $registry->unregister('isSecureArea');
+                $registry->register('isSecureArea', $isSecureArea);
             } catch (NoSuchEntityException $exception) {
                 //ignore
             }

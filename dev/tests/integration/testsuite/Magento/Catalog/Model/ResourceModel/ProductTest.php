@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ResourceModel;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -202,33 +201,5 @@ class ProductTest extends TestCase
 
         $attribute = $this->model->getAttributeRawValue($product->getId(), $attributeCode, 1);
         $this->assertEmpty($attribute);
-    }
-
-    /**
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute with:{"attribute_code": "fixture_attribute_2"}
-     * @magentoDataFixture Magento\Catalog\Fixture\AddProductAttributeToAttributeSet with:{"attribute_code": "fixture_attribute_2"}
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product1
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product2
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product3
-     * @throws NoSuchEntityException
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws StateException
-     * @throws NoSuchEntityException
-     */
-    public function testThirdProductCustomSecondAttribute(): void
-    {
-        $product3 = DataFixtureStorageManager::getStorage()->get('product3')->getData('product');
-        $product = $this->productRepository->get($product3->getSku(), true, 0, true);
-        $product->setCustomAttribute('fixture_attribute_2', 'default_value');
-        $this->productRepository->save($product);
-
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute_2', 1);
-        $this->assertEquals('default_value', $actual);
-
-        $product2 = DataFixtureStorageManager::getStorage()->get('product2')->getData('product');
-        $this->assertNotEquals($product3->getSku(), $product2->getSku());
     }
 }

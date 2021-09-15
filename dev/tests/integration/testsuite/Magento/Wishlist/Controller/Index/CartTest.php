@@ -15,6 +15,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test for add product to cart from wish list.
@@ -117,12 +118,13 @@ class CartTest extends AbstractController
      *
      * @return void
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
-     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product1
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product2
      */
     public function testAddItemWithRelatedProducts(): void
     {
-        $firstProductId = $this->productRepository->get('simple')->getId();
-        $secondProductID = $this->productRepository->get('custom-design-simple-product')->getId();
+        $firstProductId = DataFixtureStorageManager::getStorage()->get('product1')->getProduct()->getId();
+        $secondProductID = DataFixtureStorageManager::getStorage()->get('product2')->getProduct()->getId();
         $relatedIds = $expectedAddedIds = [$firstProductId, $secondProductID];
 
         $this->customerSession->setCustomerId(1);
