@@ -156,11 +156,11 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
             if (!$order->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
+                throw new LocalizedException(__('The order no longer exists.'));
             }
 
             if (!$order->canInvoice()) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('The order does not allow an invoice to be created.')
                 );
             }
@@ -168,7 +168,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice->getTotalQty()) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __("The invoice can't be created without products. Add products and try again.")
                 );
             }
