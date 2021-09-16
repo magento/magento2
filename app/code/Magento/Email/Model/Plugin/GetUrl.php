@@ -16,6 +16,7 @@ class GetUrl
      * @param string $route
      * @param array $params
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeGetUrl(
         \Magento\Email\Model\AbstractTemplate $subject,
