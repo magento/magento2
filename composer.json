@@ -10,18 +10,8 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/magento-trigger/magento-framework"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/karyna-tsymbal-atwix/zf1"
-        }
-    ],
     "require": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.4.0||~8.0.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
@@ -72,9 +62,8 @@
         "league/flysystem": "^2.0",
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.8.x-dev as 1.8.0",
-        "magento/framework": "dev-php80_update",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "dev-php8-compatibility/zf-compatibility-with-php8",
+        "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^5.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",
@@ -95,7 +84,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "friendsofphp/php-cs-fixer": "~3.0.0",
         "lusitanian/oauth": "~0.8.10",
-        "magento/magento-coding-standard": "*",
+        "magento/magento-coding-standard": "8",
         "magento/magento2-functional-testing-framework": "^3.7",
         "pdepend/pdepend": "~2.10.0",
         "phpcompatibility/php-compatibility": "^9.3",

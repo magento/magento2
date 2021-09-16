@@ -31,8 +31,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class QuantityValidatorTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuantityValidatorTest extends TestCase
