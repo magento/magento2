@@ -19,34 +19,34 @@ define([
             },
             'US': {
                 '1': {
-                    'id'  : 1,
+                    'id': 1,
                     'code': 'AL',
                     'name': 'Alabama'
                 },
                 '2': {
-                    'id'  : 2,
+                    'id': 2,
                     'code': 'AK',
                     'name': 'Alaska'
                 },
                 '3': {
-                    'id'  : 3,
+                    'id': 3,
                     'code': 'AS',
                     'name': 'American Samoa'
                 }
             },
             'DE': {
                 '81': {
-                    'id'  : 4,
+                    'id': 4,
                     'code': 'BAY',
                     'name': 'Bayern'
                 },
                 '82': {
-                    'id'  : 5,
+                    'id': 5,
                     'code': 'BER',
                     'name': 'Berlin'
                 },
                 '83': {
-                    'id'  : 6,
+                    'id': 6,
                     'code': 'BRG',
                     'name': 'Brandenburg'
                 }
