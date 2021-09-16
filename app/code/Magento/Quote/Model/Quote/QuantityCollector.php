@@ -12,11 +12,6 @@ use Magento\Quote\Model\Quote;
 class QuantityCollector
 {
     /**
-     * @var []
-     */
-    private $quoteCache = [];
-
-    /**
      * Collect items qty
      *
      * @param Quote $quote
