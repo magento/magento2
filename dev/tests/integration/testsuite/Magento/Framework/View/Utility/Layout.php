@@ -105,7 +105,7 @@ class Layout
             'structure' => $objectManager->create(\Magento\Framework\View\Layout\Data\Structure::class, []),
             'messageManager' => $objectManager->get(\Magento\Framework\Message\ManagerInterface::class),
             'themeResolver' => $objectManager->get(\Magento\Framework\View\Design\Theme\ResolverInterface::class),
-            'reader' => $objectManager->get('commonRenderPool'),
+            'readerPool' => $objectManager->get('commonRenderPool'),
             'generatorPool' => $objectManager->get(\Magento\Framework\View\Layout\GeneratorPool::class),
             'cache' => $objectManager->get(\Magento\Framework\App\Cache\Type\Layout::class),
             'readerContextFactory' => $objectManager->get(\Magento\Framework\View\Layout\Reader\ContextFactory::class),
