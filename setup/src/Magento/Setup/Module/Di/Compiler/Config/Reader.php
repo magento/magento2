@@ -100,11 +100,6 @@ class Reader
             $config['instanceTypes'][$virtualType] = $areaConfig->getInstanceType($virtualType);
         }
 
-        // sort configuration to have it in the same order on every build
-        ksort($config['arguments']);
-        ksort($config['preferences']);
-        ksort($config['instanceTypes']);
-
         return $config;
     }
 
