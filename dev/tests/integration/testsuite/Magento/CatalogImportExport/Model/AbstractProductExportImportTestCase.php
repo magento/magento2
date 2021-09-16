@@ -363,7 +363,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
             /** @var \ReflectionProperty $itemsPerPageProperty */
             $itemsPerPageProperty = $this->objectManager->create(\ReflectionProperty::class, [
                 'class' => \Magento\CatalogImportExport\Model\Export\Product::class,
-                'name' => '_itemsPerPage'
+                'property' => '_itemsPerPage'
             ]);
             $itemsPerPageProperty->setAccessible(true);
             $itemsPerPageProperty->setValue($exportProduct, 1);

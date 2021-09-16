@@ -56,6 +56,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ['name' => 'Richard', 'age' => 24],
             ['name' => 'Jane', 'age' => 12],
             ['name' => 'Spot', 'age' => 7],
+            ['name' => 'Bill', 'age' => '25']
         ];
     }
 
@@ -105,12 +106,12 @@ TEMPLATE;
 
         $expectedResult2 = <<<EXPECTED_RESULT
 <ul>
-    
+
     <li>
         index: 0 sku: ABC123
         name: Product ABC price: 123 quantity: 2
     </li>
-    
+
 </ul>
 EXPECTED_RESULT;
         return [
