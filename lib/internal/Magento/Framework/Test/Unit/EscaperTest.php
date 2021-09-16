@@ -137,6 +137,8 @@ class EscaperTest extends TestCase
     {
         return [
             'zero length string' => ['', ''],
+            'null as string' => [null, ''],
+            'Magento\Framework\Phrase as string' => [__('test'), 'test'],
             'only digits' => ['123', '123'],
             '<' => ['<', '\u003C'],
             '>' => ['>', '\\u003E'],
