@@ -69,6 +69,8 @@ class UnusedFormalParameter extends PhpmdUnusedFormalParameter
     /**
      * Check if the first part of function fully qualified name is equal to $name
      *
+     * getImage and getName are equal. getImage used prior to usage in phpmd source
+     *
      * @param MethodNode $node
      * @param string $name
      * @return boolean
