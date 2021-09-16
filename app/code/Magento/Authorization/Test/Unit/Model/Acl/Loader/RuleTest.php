@@ -91,9 +91,11 @@ class RuleTest extends TestCase
     }
 
     /**
-     * Test populating acl rule from cache
+     * Test populating acl rule from cache.
+     *
+     * @return void
      */
-    public function testPopulateAclFromCache()
+    public function testPopulateAclFromCache(): void
     {
         $this->resourceMock->expects($this->never())->method('getTable');
         $this->resourceMock->expects($this->never())
@@ -107,17 +109,23 @@ class RuleTest extends TestCase
                     [
                         ['role_id' => 1, 'resource_id' => 'Magento_Backend::all', 'permission' => 'allow'],
                         ['role_id' => 2, 'resource_id' => 1, 'permission' => 'allow'],
-                        ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny'],
+                        ['role_id' => 3, 'resource_id' => 1, 'permission' => 'deny']
                     ]
                 )
             );
 
         $aclMock = $this->createMock(Acl::class);
         $aclMock->method('has')->willReturn(true);
-        $aclMock->expects($this->at(1))->method('allow')->with('1', null, null);
-        $aclMock->expects($this->at(2))->method('allow')->with('1', 'Magento_Backend::all', null);
-        $aclMock->expects($this->at(4))->method('allow')->with('2', 1, null);
-        $aclMock->expects($this->at(6))->method('deny')->with('3', 1, null);
+        $aclMock
+            ->method('allow')
+            ->withConsecutive(
+                ['1', null, null],
+                ['1', 'Magento_Backend::all', null],
+                ['2', 1, null]
+            );
+        $aclMock
+            ->method('deny')
+            ->with('3', 1, null);
 
         $this->model->populateAcl($aclMock);
     }
