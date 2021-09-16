@@ -54,10 +54,6 @@ class UnusedFormalParameterTest extends TestCase
             ]
         );
 
-        /*$methodNode->expects($this->once())
-            ->method('getDocComment')
-            ->willReturn('');*/
-
         $variableDeclarators = [];
         foreach ($methodParams as $methodParam) {
             $variableDeclarator = $this->createASTNodeMock();
