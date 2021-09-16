@@ -100,6 +100,8 @@
             <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProductTwo" selector="{{StorefrontBundledSection.bundleProductName}}"/>
+        <actionGroup ref="StorefrontAssertProductNameIsNotShownOnProductPageActionGroup" stepKey="LookingForNameOfProductTwo">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>

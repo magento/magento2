@@ -37,8 +37,11 @@
         </after>
 
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Create bundle product-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
@@ -66,12 +69,17 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--Creating Second bundle product-->
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage2" />
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad2"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage2">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad2"/>
 
         <!--Create bundle product 2-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
@@ -104,7 +112,9 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown2"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown2">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--Mass delete bundle products-->
         <!--Clear Filters-->
@@ -117,19 +127,30 @@
         <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="selectAndDeleteProducts"/>
 
         <!--Locating delete message-->
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
+        <!--<seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>-->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="deleteMessage">
+            <argument name="message" value="A total of 2 record(s) have been deleted."/>
+        </actionGroup>
 
         <!--Clear Cache - resets products according to enabled/disabled view-->
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="ClearPageCaches"/>
 
         <!--Testing deletion of products-->
-        <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
-        <dontSeeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
-        <seeElement stepKey="LookingForPageNotFoundMessage" selector="{{StorefrontBundledSection.pageNotFound}}"/>
-        <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageAgain2"/>
-        <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement2"/>
-        <dontSeeElement stepKey="LookingForNameOfProduct2" selector="{{StorefrontBundledSection.bundleProductName}}"/>
-        <seeElement stepKey="LookingForPageNotFoundMessage2" selector="{{StorefrontBundledSection.pageNotFound}}"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPageAgain">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForProductPageToLoadToShowElement"/>
+        <actionGroup ref="StorefrontAssertProductNameIsNotShownOnProductPageActionGroup" stepKey="LookingForNameOfProduct">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForPageNotFoundMessage"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPageAgain2">
+            <argument name="productUrl" value="{{BundleProduct.urlKey2}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForProductPageToLoadToShowElement2"/>
+        <actionGroup ref="StorefrontAssertProductNameIsNotShownOnProductPageActionGroup" stepKey="LookingForNameOfProduct2">
+            <argument name="productName" value="{{BundleProduct.name2}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForPageNotFoundMessage2"/>
     </test>
 </tests>
