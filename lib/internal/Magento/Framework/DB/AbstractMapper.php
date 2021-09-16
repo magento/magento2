@@ -126,7 +126,8 @@ abstract class AbstractMapper implements MapperInterface
                 if (!is_array($value)) {
                     throw new \InvalidArgumentException('Wrong type of argument, expecting array for '. $mapperMethod);
                 }
-                call_user_func_array([$this, $mapperMethod], ...[$value]);
+                // The `array_values` is a workaround to ensure the same behavior in PHP 7 and 8.
+                call_user_func_array([$this, $mapperMethod], array_values($value));
             }
         }
         return $this->select;
