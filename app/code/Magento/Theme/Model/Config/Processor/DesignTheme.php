@@ -51,10 +51,10 @@ class DesignTheme implements PreProcessorInterface
     {
         foreach ($config as $scope => &$item) {
             if ($scope === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $item = $this->changeThemeFullPathToIdentifier($item);
+                $item = $this->changeThemeFullPathToIdentifier($item ?? []);
             } else {
                 foreach ($item as &$scopeItems) {
-                    $scopeItems = $this->changeThemeFullPathToIdentifier($scopeItems);
+                    $scopeItems = $this->changeThemeFullPathToIdentifier($scopeItems ?? []);
                 }
             }
         }
@@ -65,11 +65,8 @@ class DesignTheme implements PreProcessorInterface
     /**
      * Check \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID config path
      * and convert theme_full_path (Ex. "frontend/Magento/blank") to theme_id
-     *
-     * @param array $configItems
-     * @return array
      */
-    private function changeThemeFullPathToIdentifier($configItems)
+    private function changeThemeFullPathToIdentifier(array $configItems): array
     {
         $theme = null;
         $themeIdentifier = $this->arrayManager->get(DesignInterface::XML_PATH_THEME_ID, $configItems);
