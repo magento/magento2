@@ -6,9 +6,9 @@
 
 namespace Magento\Backend\Model\Menu\Director;
 
-use Psr\Log\LoggerInterface;
 use Magento\Backend\Model\Menu\Builder;
 use Magento\Backend\Model\Menu\Builder\AbstractCommand;
+use Psr\Log\LoggerInterface;
 
 /**
  * @api
