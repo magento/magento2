@@ -115,7 +115,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
 
             if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-                foreach ($this->storeManager->getStores() as $store) {
+                foreach ($this->storeManager->getStores(true) as $store) {
                     $this->connection->truncateTable($this->getIndexTable($store->getId()));
                 }
             } else {
@@ -127,7 +127,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $workingState = $this->isWorkingState();
 
             if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-                foreach ($this->storeManager->getStores() as $store) {
+                foreach ($this->storeManager->getStores(true) as $store) {
                     $this->connection->delete(
                         $this->tableMaintainer->getMainTable($store->getId()),
                         ['product_id IN (?)' => $this->limitationByProducts]
@@ -236,7 +236,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      */
     protected function removeEntries()
     {
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             $this->connection->delete(
                 $this->getIndexTable($store->getId()),
                 ['product_id IN (?)' => $this->limitationByProducts]
@@ -299,7 +299,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private function getCategoryIdsFromIndex(array $productIds): array
     {
         $categoryIds = [];
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             $storeCategories = $this->connection->fetchCol(
                 $this->connection->select()
                     ->from($this->getIndexTable($store->getId()), ['category_id'])

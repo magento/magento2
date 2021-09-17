@@ -78,7 +78,7 @@ class StoreGroup
      */
     public function afterDelete(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $storeGroup)
     {
-        foreach ($storeGroup->getStores() as $store) {
+        foreach ($storeGroup->getStores(true) as $store) {
             $this->tableMaintainer->dropTablesForStore((int)$store->getId());
         }
         return $objectResource;

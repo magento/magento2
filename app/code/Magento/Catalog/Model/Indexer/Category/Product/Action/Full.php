@@ -133,7 +133,7 @@ class Full extends AbstractAction
      */
     private function createTables(): void
     {
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             $this->tableMaintainer->createTablesForStore((int)$store->getId());
         }
     }
@@ -145,7 +145,7 @@ class Full extends AbstractAction
      */
     private function clearReplicaTables(): void
     {
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             $this->connection->truncateTable($this->tableMaintainer->getMainReplicaTable((int)$store->getId()));
         }
     }
@@ -158,7 +158,7 @@ class Full extends AbstractAction
     private function switchTables(): void
     {
         $tablesToSwitch = [];
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             $tablesToSwitch[] = $this->tableMaintainer->getMainTable((int)$store->getId());
         }
         $this->activeTableSwitcher->switchTable($this->connection, $tablesToSwitch);
@@ -188,7 +188,7 @@ class Full extends AbstractAction
     {
         $userFunctions = [];
 
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
                 $userFunctions[$store->getId()] = function () use ($store) {
                     $this->reindexStore($store);

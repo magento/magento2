@@ -169,7 +169,7 @@ abstract class AbstractAction
      */
     protected function reindex()
     {
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
                 $this->currentStoreId = $store->getId();
                 $this->reindexRootCategory($store);
@@ -246,7 +246,7 @@ abstract class AbstractAction
                     ['path']
                 )->where(
                     'entity_id = ?',
-                    $categoryId
+                    $categoryId == 0 ? 1 : $categoryId
                 )
             );
         }
@@ -284,10 +284,6 @@ abstract class AbstractAction
                 'ccp.category_id = cc.entity_id',
                 []
             )->joinInner(
-                ['cpw' => $this->getTable('catalog_product_website')],
-                'cpw.product_id = ccp.product_id',
-                []
-            )->joinInner(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'ccp.product_id = cpe.entity_id',
                 []
@@ -316,11 +312,6 @@ abstract class AbstractAction
                 $store->getId(),
                 []
             )->where(
-                'cc.path LIKE ' . $this->connection->quote($rootPath . '/%')
-            )->where(
-                'cpw.website_id = ?',
-                $store->getWebsiteId()
-            )->where(
                 $this->connection->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
@@ -342,6 +333,19 @@ abstract class AbstractAction
                     ),
                 ]
             );
+
+            if ($store->getId() != 0) {
+                $select->joinInner(
+                    ['cpw' => $this->getTable('catalog_product_website')],
+                    'cpw.product_id = ccp.product_id',
+                    []
+                )->where(
+                    'cpw.website_id = ?',
+                    $store->getWebsiteId()
+                )->where(
+                    'cc.path LIKE ' . $this->connection->quote($rootPath . '/%')
+                );
+            }
 
             $this->addFilteringByChildProductsToSelect($select, $store);
 
@@ -524,10 +528,6 @@ abstract class AbstractAction
             'ccp.product_id = cpe.entity_id',
             []
         )->joinInner(
-            ['cpw' => $this->getTable('catalog_product_website')],
-            'cpw.product_id = ccp.product_id',
-            []
-        )->joinInner(
             ['cpsd' => $this->getTable('catalog_product_entity_int')],
             'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0'
                 . ' AND cpsd.attribute_id = ' . $statusAttributeId,
@@ -562,9 +562,6 @@ abstract class AbstractAction
             $store->getId(),
             []
         )->where(
-            'cpw.website_id = ?',
-            $store->getWebsiteId()
-        )->where(
             $this->connection->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         )->where(
@@ -589,6 +586,17 @@ abstract class AbstractAction
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
             ]
         );
+
+        if ($store->getId() != 0) {
+            $select->joinInner(
+                ['cpw' => $this->getTable('catalog_product_website')],
+                'cpw.product_id = ccp.product_id',
+                []
+            )->where(
+                'cpw.website_id = ?',
+                $store->getWebsiteId()
+            );
+        }
 
         $this->addFilteringByChildProductsToSelect($select, $store);
 
@@ -772,10 +780,6 @@ abstract class AbstractAction
                 ['cp' => $this->getTable('catalog_product_entity')],
                 []
             )->joinInner(
-                ['cpw' => $this->getTable('catalog_product_website')],
-                'cpw.product_id = cp.entity_id',
-                []
-            )->joinInner(
                 ['cpsd' => $this->getTable('catalog_product_entity_int')],
                 'cpsd.' . $linkField . ' = cp.' . $linkField . ' AND cpsd.store_id = 0' .
                 ' AND cpsd.attribute_id = ' .
@@ -804,9 +808,6 @@ abstract class AbstractAction
                 'ccp.product_id = cp.entity_id',
                 []
             )->where(
-                'cpw.website_id = ?',
-                $store->getWebsiteId()
-            )->where(
                 $this->connection->getIfNullSql('cpss.value', 'cpsd.value') . ' = ?',
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
@@ -834,6 +835,17 @@ abstract class AbstractAction
                     ),
                 ]
             );
+
+            if ($store->getId() != 0) {
+                $select->joinInner(
+                    ['cpw' => $this->getTable('catalog_product_website')],
+                    'cpw.product_id = ccp.product_id',
+                    []
+                )->where(
+                    'cpw.website_id = ?',
+                    $store->getWebsiteId()
+                );
+            }
 
             $this->productsSelects[$store->getId()] = $select;
         }

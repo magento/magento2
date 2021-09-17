@@ -11,6 +11,7 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 
 /**
  * Category resource collection
@@ -327,7 +328,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
             $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
             foreach ($anchor as $item) {
-                $productsCount = isset($categoriesProductsCount[$item->getId()])
+                $productsCount = isset($categoryProductsCount[$item->getId()])
                     ? (int)$categoryProductsCount[$item->getId()]
                     : $this->getProductsCountFromCategoryTable($item, $websiteId);
                 $item->setProductCount($productsCount);
@@ -556,7 +557,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
     {
-        $categoryTable = $this->getTable('catalog_category_product_index');
+        $tableMaintainer = \Magento\Framework\App\ObjectManager::getInstance()->get(TableMaintainer::class);
+        $categoryTable = $tableMaintainer->getMainTable($this->getProductStoreId());
         $select = $this->_conn->select()
             ->from(
                 ['cat_index' => $categoryTable],
