@@ -10,9 +10,7 @@ namespace Magento\Catalog\Api;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ProductTierPriceManagementTest
- *
- * @package Magento\Catalog\Api
+ * ProductTierPriceManagementTest API operations test
  */
 class ProductTierPriceManagementTest extends WebapiAbstract
 {

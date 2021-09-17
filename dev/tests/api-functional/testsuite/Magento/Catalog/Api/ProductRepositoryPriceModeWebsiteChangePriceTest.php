@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Store\Model\Store;
 
 class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
 {
@@ -29,11 +30,11 @@ class ProductRepositoryPriceModeWebsiteChangePriceTest extends WebapiAbstract
     public function testChangePriceForStore()
     {
         /** @var $store1 \Magento\Store\Model\Group   */
-        $store1 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        $store1 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Store::class);
         $store1->load(self::STORE1_CODE_FROM_FIXTURE);
 
         /** @var $store2 \Magento\Store\Model\Group   */
-        $store2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+        $store2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(Store::class);
         $store2->load(self::STORE2_CODE_FROM_FIXTURE);
 
         $sku = 'simple';

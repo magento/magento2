@@ -8,7 +8,7 @@ namespace Magento\Catalog\Api;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * TierPriceStorage test.
+ * TierPriceStorage API operations test.
  */
 class TierPriceStorageTest extends WebapiAbstract
 {

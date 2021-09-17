@@ -21,6 +21,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Base prices storage.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BasePriceStorage implements BasePriceStorageInterface
 {
@@ -98,8 +99,8 @@ class BasePriceStorage implements BasePriceStorageInterface
      * @param ProductRepositoryInterface $productRepository
      * @param Result $validationResult
      * @param InvalidSkuProcessor $invalidSkuProcessor
-     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param array $allowedProductTypes [optional]
+     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      */
     public function __construct(
         PricePersistenceFactory $pricePersistenceFactory,
