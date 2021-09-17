@@ -514,5 +514,5 @@ type StoreConfig {
 type SimpleWishlistItem implements WishlistItemInterface @doc(description: "Contains a simple product wish list item.") {
 }
 
-type VirtualWishlistItem implements WishlistItemInterface @doc(description: "Contains virtual product wish list item.") {
+type VirtualWishlistItem implements WishlistItemInterface @doc(description: "Contains a virtual product wish list item.") {
 }

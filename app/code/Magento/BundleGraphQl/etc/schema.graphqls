@@ -36,7 +36,7 @@ type SelectedBundleOption @doc(description: "Contains details about a selected b
     uid: ID! @doc(description: "The unique ID for a `SelectedBundleOption` object")
     label: String! @doc(description: "The display name of the selected bundle product option.")
     type: String! @doc(description: "The type of selected bundle product option.")
-    values: [SelectedBundleOptionValue!]! @doc(description: "An array of selected bundle option values,")
+    values: [SelectedBundleOptionValue!]! @doc(description: "An array of selected bundle option values.")
 }
 
 type SelectedBundleOptionValue @doc(description: "Contains details about a value for a selected bundle option.") {
