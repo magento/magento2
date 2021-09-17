@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Fixture;
 
 /**
- * Callable data fixture
+ * Callable data fixture type
  */
 class CallableDataFixture implements RevertibleDataFixtureInterface
 {
