@@ -54,7 +54,8 @@ class Config
      */
     protected $maskStatusesMapping = [
         Area::AREA_FRONTEND => [
-            \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATUS_FRAUD
+            \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATUS_FRAUD,
+            \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW => \Magento\Sales\Model\Order::STATE_PROCESSING
         ]
     ];
 
@@ -128,7 +129,6 @@ class Config
         }
         return $status;
     }
-
 
     /**
      * Retrieve status label for detected area
