@@ -67,7 +67,7 @@ input FilterTypeInput @doc(description: "Defines the comparison operators that c
 
 input FilterEqualTypeInput @doc(description: "Defines a filter that matches the input exactly.") {
     in: [String] @doc(description: "Use this attribute to filter on an array of values. For example, to filter on category IDs 4, 5, and 6, specify a value of `[\"4\", \"5\", \"6\"]`.")
-    eq: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific category ID, specify a value like `5`.")
+    eq: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific category ID, specify a value such as `5`.")
 }
 
 input FilterRangeTypeInput @doc(description: "Defines a filter that matches a range of values, such as prices or dates.") {

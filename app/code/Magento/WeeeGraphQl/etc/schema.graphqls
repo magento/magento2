@@ -15,7 +15,7 @@ type CartItemPrices {
 }
 
 type FixedProductTax @doc(description: "A single FPT that can be applied to a product price.") {
-    amount: Money @doc(description: "The mount of the Fixed Product Tax.")
+    amount: Money @doc(description: "The amount of the Fixed Product Tax.")
     label: String @doc(description: "The display label assigned to the Fixed Product Tax.")
 }
 

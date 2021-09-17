@@ -4,7 +4,7 @@ type StoreConfig {
     head_shortcut_icon : String @doc(description: "The small graphic image (favicon) that appears in the address bar and tab of the browser.")
     default_title : String @doc(description: "The title that appears at the title bar of each page when viewed in a browser.")
     title_prefix : String @doc(description: "A prefix that appears before the title to create a two- or three-part title.")
-    title_suffix : String @doc(description: "A suffix that appears after the title to create a two-or three part title.")
+    title_suffix : String @doc(description: "A suffix that appears after the title to create a two- or three-part title.")
     default_description : String @doc(description: "The description that provides a summary of your site for search engine listings. It should not be more than 160 characters in length.")
     default_keywords : String @doc(description: "A series of keywords that describe your store, each separated by a comma.")
     head_includes : String @doc(description: "Scripts that must be included in the HTML before the closing `<head>` tag.")

@@ -44,7 +44,7 @@ type ProductReviewRatingMetadata @doc(description: "Contains details about a sin
     values: [ProductReviewRatingValueMetadata!]! @doc(description: "List of product review ratings sorted by position.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingValueMetadata")
 }
 
-type ProductReviewRatingValueMetadata  @doc(description: "Contails details about a single value in a product review.") {
+type ProductReviewRatingValueMetadata  @doc(description: "Contains details about a single value in a product review.") {
     value_id: String! @doc(description: "An encoded rating value ID.")
     value: String! @doc(description: "A ratings scale, such as the number of stars awarded.")
 }
