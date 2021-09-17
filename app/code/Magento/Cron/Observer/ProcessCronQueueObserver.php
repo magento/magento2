@@ -807,7 +807,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     private function isGroupInExcludeFilter($groupId): bool
     {
         $excludeGroup = $this->_request->getParam('exclude-group', []);
-        return in_array($groupId, $excludeGroup);
+        return is_array($excludeGroup) && in_array($groupId, $excludeGroup);
     }
 
     /**
