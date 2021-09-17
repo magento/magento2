@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+
 class TestService
 {
     const DEFAULT_VALUE = 42;
@@ -83,6 +85,15 @@ class TestService
     public function dataArray(array $dataObjects)
     {
         return $dataObjects;
+    }
+
+    /**
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    public function search(SearchCriteriaInterface $searchCriteria)
+    {
+        return $searchCriteria;
     }
 
     /**
