@@ -78,6 +78,10 @@
                 message: "'mobile' theme is removed. Update code to be compatible with tinymce5",
                 selector: "ObjectExpression > Property[key.name='theme'][value.value='mobile']"
             },
+            {
+                message: "This method should not be used to remove built-in (native) properties",
+                selector: "CallExpression[callee.property.name='removeProp'] > :matches([arguments] Literal[value='disabled'], Literal[value='checked'], Literal[value='selected'], Literal[value='required'], Literal[value='value'], Literal[value='readOnly'])"
+            }
         ]
     }
 }
