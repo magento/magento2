@@ -30,6 +30,11 @@ class CronCommand extends Command
     const INPUT_KEY_GROUP = 'group';
 
     /**
+     * Name of input option
+     */
+    const INPUT_KEY_EXCLUDE_GROUP = 'exclude-group';
+
+    /**
      * Object manager factory
      *
      * @var ObjectManagerFactory
@@ -71,6 +76,12 @@ class CronCommand extends Command
                 'Run jobs only from specified group'
             ),
             new InputOption(
+                self::INPUT_KEY_EXCLUDE_GROUP,
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Exclude jobs from the specified group'
+            ),
+            new InputOption(
                 Cli::INPUT_KEY_BOOTSTRAP,
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -100,6 +111,7 @@ class CronCommand extends Command
         $objectManager = $this->objectManagerFactory->create($omParams);
 
         $params[self::INPUT_KEY_GROUP] = $input->getOption(self::INPUT_KEY_GROUP);
+        $params[self::INPUT_KEY_EXCLUDE_GROUP] = $input->getOption(self::INPUT_KEY_EXCLUDE_GROUP);
         $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = '0';
         $bootstrap = $input->getOption(Cli::INPUT_KEY_BOOTSTRAP);
         if ($bootstrap) {
