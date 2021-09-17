@@ -90,17 +90,21 @@ TEMPLATE;
         2 name: Spot, lastname: , age: 7
     </li>
 
+    <li>
+        3 name: Bill, lastname: , age: 25
+    </li>
+
 </ul>
 EXPECTED_RESULT;
 
         $template2 = <<<TEMPLATE
 <ul>
-    {{for item in order.all_visible_items}}
+{{for item in order.all_visible_items}}
     <li>
         index: {{var loop.index}} sku: {{var item.sku}}
         name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
     </li>
-    {{/for}}
+{{/for}}
 </ul>
 TEMPLATE;
 
