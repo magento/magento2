@@ -322,7 +322,7 @@ type Products @doc(description: "The Products object is the top-level object ret
     filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.") @deprecated(reason: "Use aggregations instead")
     aggregations: [Aggregation] @doc(description: "Layered navigation aggregations.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
-    suggestions: [SearchSuggestion] @doc(description: "An array of search suggestions for case when search query have no results.")
+    suggestions: [SearchSuggestion] @doc(description: "An array of search suggestions for case when search query have no results.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\SearchSuggestions")
 }
 
 type CategoryProducts @doc(description: "The category products object returned in the Category query.") {
