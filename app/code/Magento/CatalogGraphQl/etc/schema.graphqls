@@ -479,7 +479,7 @@ type Aggregation @doc(description: "A bucket that contains information for each 
 }
 
 type SearchSuggestion @doc(description: "A string that contains search suggestion") {
-    value: String! @doc(description: "The search suggestion of existing product.")
+    search: String! @doc(description: "The search suggestion of existing product.")
 }
 
 interface AggregationOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\AggregationOptionTypeResolverComposite") {
