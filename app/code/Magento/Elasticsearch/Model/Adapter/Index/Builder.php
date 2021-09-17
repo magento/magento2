@@ -63,7 +63,7 @@ class Builder implements BuilderInterface
                         ),
                         'char_filter' => array_keys($charFilter)
                     ],
-                    // this analyzer must not include keyword_repeat amd stemmer filters
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
@@ -78,7 +78,7 @@ class Builder implements BuilderInterface
                             array_keys($filter)
                         ),
                     ],
-                    // this analyzer must not include keyword_repeat amd stemmer filters
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'sku_prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
