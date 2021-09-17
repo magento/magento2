@@ -9,7 +9,9 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 
 use Exception;
 use GraphQL\Error\Error as GraphQLError;
+use GraphQL\Language\AST\IntValueNode;
 use GraphQL\Language\AST\Node;
+use GraphQL\Language\AST\ValueNode;
 
 /**
  * Replacement for the IntType definition that can typecast non-numeric values for backwards compatibility
@@ -42,9 +44,18 @@ class IntType extends \GraphQl\Type\Definition\IntType
     public function parseLiteral(Node $valueNode, ?array $variables = null): int
     {
         try {
-            return $this->parseValue($valueNode->value);
+            if (
+                $valueNode instanceof ValueNode
+                && !($valueNode instanceof IntValueNode)
+                && isset($valueNode->value)
+            ) {
+                $valueNode = new IntValueNode([
+                    'value' => (string)$this->parseValue($valueNode->value),
+                    'loc' => $valueNode->loc
+                ]);
+            }
         } catch (Exception $e) {
         }
-        return parent::parseLiteral($valueNode);
+        return parent::parseLiteral($valueNode, $variables);
     }
 }

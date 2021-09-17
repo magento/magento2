@@ -9,7 +9,10 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 
 use Exception;
 use GraphQL\Error\Error as GraphQLError;
+use GraphQL\Language\AST\FloatValueNode;
+use GraphQL\Language\AST\IntValueNode;
 use GraphQL\Language\AST\Node;
+use GraphQL\Language\AST\ValueNode;
 
 /**
  * Replacement for the FloatType definition that can typecast non-numeric values for backwards compatibility
@@ -42,9 +45,19 @@ class FloatType extends \GraphQL\Type\Definition\FloatType
     public function parseLiteral(Node $valueNode, ?array $variables = null): float
     {
         try {
-            return $this->parseValue($valueNode->value);
+            if (
+                $valueNode instanceof ValueNode
+                && !($valueNode instanceof FloatValueNode)
+                && !($valueNode instanceof IntValueNode)
+                && isset($valueNode->value)
+            ) {
+                $valueNode = new FloatValueNode([
+                    'value' => (string)$this->parseValue($valueNode->value),
+                    'loc' => $valueNode->loc
+                ]);
+            }
         } catch (Exception $e) {
         }
-        return parent::parseLiteral($valueNode);
+        return parent::parseLiteral($valueNode, $variables);
     }
 }

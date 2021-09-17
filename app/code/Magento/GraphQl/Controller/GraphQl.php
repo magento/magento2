@@ -211,12 +211,6 @@ class GraphQl implements FrontControllerInterface
     private function overrideStandardGraphQLTypes(): void
     {
         $standardTypes = GraphQLType::getStandardTypes();
-//        $intConfig = [
-//            'name' => $standardInt->name,
-//            'description' => $standardInt->description,
-//            'astNode' => $standardInt->astNode,
-//            'extensionASTNodes' => $standardInt->extensionASTNodes
-//        ];
 
         $intType = new IntType($standardTypes[GraphQLType::INT]->config);
         $floatType = new FloatType($standardTypes[GraphQLType::FLOAT]->config);

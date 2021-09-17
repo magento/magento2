@@ -10,6 +10,8 @@ namespace Magento\Framework\GraphQl\Type\Definition;
 use Exception;
 use GraphQL\Error\Error as GraphQLError;
 use GraphQL\Language\AST\Node;
+use GraphQL\Language\AST\StringValueNode;
+use GraphQL\Language\AST\ValueNode;
 
 /**
  * Replacement for the StringType definition that can typecast non-string values for backwards compatibility
@@ -42,9 +44,18 @@ class StringType extends \GraphQl\Type\Definition\StringType
     public function parseLiteral(Node $valueNode, ?array $variables = null): string
     {
         try {
-            return $this->parseValue($valueNode->value);
+            if (
+                $valueNode instanceof ValueNode
+                && !($valueNode instanceof StringValueNode)
+                && isset($valueNode->value)
+            ) {
+                $valueNode = new StringValueNode([
+                    'value' => $this->parseValue($valueNode->value),
+                    'loc' => $valueNode->loc
+                ]);
+            }
         } catch (Exception $e) {
         }
-        return parent::parseLiteral($valueNode);
+        return parent::parseLiteral($valueNode, $variables);
     }
 }
