@@ -93,8 +93,28 @@ class ConsumerTest extends TestCase
         $this->assertTrue($this->directory->isExist($this->filePath));
         $data = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $data);
-        $skuPosition = array_search(ProductInterface::SKU, array_keys($data));
+        $skuPosition = $this->getSkuPosition($data);
         $this->assertNotFalse($skuPosition);
         $this->assertEquals('simple2', $data[1][$skuPosition]);
+    }
+
+    /**
+     * Get sku position from array.
+     *
+     * @param array $csvFileData
+     *
+     * @return bool|int
+     */
+    private function getSkuPosition(array $csvFileData)
+    {
+        foreach ($csvFileData as $data) {
+            $skuPosition = array_search(ProductInterface::SKU, $data);
+
+            if ($skuPosition !== false) {
+                return $skuPosition;
+            }
+        }
+
+        return false;
     }
 }
