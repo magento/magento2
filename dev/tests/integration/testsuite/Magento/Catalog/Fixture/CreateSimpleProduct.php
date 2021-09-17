@@ -101,7 +101,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     /**
      * Recursively merge product data
      *
-     * @param array ...$arrays
+     * @param array $arrays
      * @return array
      */
     private function merge(array ...$arrays): array
@@ -114,7 +114,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
                 foreach ($array as $key => $value) {
                     if (is_array($value) && array_key_exists($key, $result) && is_array($result[$key])) {
                         $result[$key] = $this->merge($result[$key], $value);
-                    }  else {
+                    } else {
                         $result[$key] = $value;
                     }
                 }
