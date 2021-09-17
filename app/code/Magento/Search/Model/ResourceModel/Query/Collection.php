@@ -9,6 +9,7 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Helper;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -116,21 +117,22 @@ class Collection extends AbstractCollection
      */
     public function setQueryFilter($query)
     {
-        $this->getSelect()->reset(
-            \Magento\Framework\DB\Select::FROM
-        )->distinct(
-            true
-        )->from(
-            ['main_table' => $this->getTable('search_query')]
-        )->where(
-            'num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
-            $this->_resourceHelper->addLikeEscape($query, ['position' => 'start'])
-        )->order(
-            'popularity ' . \Magento\Framework\DB\Select::SQL_DESC
-        );
+        $this->getSelect()
+            ->reset(Select::FROM)
+            ->distinct(true)
+            ->from(['main_table' => $this->getTable('search_query')])
+            ->reset(Select::COLUMNS)
+            ->columns(['query_text', 'num_results', 'popularity'])
+            ->where(
+                'num_results > 0 AND display_in_terms = 1 AND query_text LIKE ?',
+                $this->_resourceHelper->addLikeEscape($query, ['position' => 'start'])
+            )
+            ->order('popularity ' . \Magento\Framework\DB\Select::SQL_DESC);
+
         if ($this->getStoreId()) {
             $this->getSelect()->where('store_id = ?', (int)$this->getStoreId());
         }
+
         return $this;
     }
 
