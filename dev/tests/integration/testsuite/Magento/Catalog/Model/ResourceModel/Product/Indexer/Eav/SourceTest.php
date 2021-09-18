@@ -138,26 +138,23 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
         $options = $objectManager->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class);
         $options->setAttributeFilter($attr->getId());
-        $optionIds = $options->getAllIds();
-        $product1Id = $optionIds[0] * 10;
-        $product2Id = $optionIds[1] * 10;
 
         /** @var \Magento\Catalog\Model\Product $product1 **/
-        $product1 = $productRepository->getById($product1Id);
+        $product1 = $productRepository->get('simple_ms_1');
         $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
         $product1->setNewsFromDate(date('Y-m-d H:i:s'));
         $productRepository->save($product1);
 
         /** @var \Magento\Catalog\Model\Product $product2 **/
-        $product2 = $productRepository->getById($product2Id);
-        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
-        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $product2 = $productRepository->get('simple_ms_2');
+        $product2->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product2->setNewsFromDate(date('Y-m-d H:i:s'));
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();
         $connection = $this->productResource->getConnection();
         $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
-            ->where('entity_id in (?)', [$product1Id, $product2Id])
+            ->where('entity_id in (?)', [$product1->getId(), $product2->getId()])
             ->where('attribute_id = ?', $attr->getId());
 
         $result = $connection->fetchAll($select);
@@ -219,6 +216,7 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         $sourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             MultiselectSourceMock::class
         );
+
         $options = $sourceModel->getAllOptions();
         $product1Id = $options[0]['value'] * 10;
         $product2Id = $options[1]['value'] * 10;
@@ -231,8 +229,8 @@ class SourceTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product2 **/
         $product2 = $productRepository->getById($product2Id);
-        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
-        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $product2->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product2->setNewsFromDate(date('Y-m-d H:i:s'));
         $productRepository->save($product2);
 
         $this->_eavIndexerProcessor->reindexAll();

@@ -105,7 +105,7 @@ class Source extends AbstractEav
         );
 
         if ($multiSelect == true) {
-            $select->where('ea.backend_type = ?', 'varchar')->where('ea.frontend_input = ?', 'multiselect');
+            $select->where('ea.backend_type = ?', 'text')->where('ea.frontend_input = ?', 'multiselect');
         } else {
             $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input IN( ? )', ['select', 'boolean']);
         }
@@ -303,14 +303,14 @@ class Source extends AbstractEav
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
         $select = $connection->select()->from(
-            ['pvd' => $this->getTable('catalog_product_entity_varchar')],
+            ['pvd' => $this->getTable('catalog_product_entity_text')],
             []
         )->join(
             ['cs' => $this->getTable('store')],
             '',
             []
         )->joinLeft(
-            ['pvs' => $this->getTable('catalog_product_entity_varchar')],
+            ['pvs' => $this->getTable('catalog_product_entity_text')],
             "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
             . ' AND pvs.store_id=cs.store_id',
             []

@@ -207,6 +207,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Enabled', $this->_model->getAttributeText('status'));
     }
 
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
@@ -215,9 +216,9 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get('simple_ms_2');
         $product->getAttributeText('multiselect_attribute');
         $expected = [
-            'Multiselect option 2',
-            'Multiselect option 3',
-            'Multiselect option 4'
+            'Option 2',
+            'Option 3',
+            'Option 4 "!@#$%^&*'
         ];
         self::assertEquals(
             $expected,
@@ -225,10 +226,11 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
-    public function testMultipleMultiselectValues()
+    public function testMultipleMultiselectTextValues()
     {
         $expectedArray = [];
 
@@ -240,7 +242,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals(
             $expectedArray,
-            $product->getAttributeText('multiselect_attribute')
+            $product->getAttributeText('multiselect_attribute_text')
         );
     }
 
