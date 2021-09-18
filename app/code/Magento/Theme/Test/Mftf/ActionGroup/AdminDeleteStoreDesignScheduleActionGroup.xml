@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteStoreDesignScheduleActionGroup">
+        <annotations>
+            <description>Goes to the Admin Schedule grid page. Deletes the provided Schedule. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="schedule"/>
+        </arguments>
+
+        <amOnPage url="{{AdminScheduleDesignPage.url}}" stepKey="amOnAdmin"/>
+        <waitForPageLoad stepKey="waitWidgetsLoad"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <selectOption selector="{{AdminNewScheduleDesignSection.selectStore}}" userInput="{{schedule.store}}" stepKey="selectStore"/>
+        <selectOption selector="{{AdminNewScheduleDesignSection.selectDesign}}" userInput="{{schedule.design_theme}}" stepKey="selectDesign"/>
+        <click selector="{{AdminNewScheduleDesignSection.clickDatePicker}}" stepKey="clickDatePicker"/>
+        <click selector="{{AdminNewScheduleDesignSection.selectToDate}}" stepKey="selectToDate"/>
+        <click selector="{{AdminNewScheduleDesignSection.searchButton}}" stepKey="clickSearch"/>
+        <click selector="{{AdminNewScheduleDesignSection.searchResult}}" stepKey="clickSearchResult"/>
+        <waitForPageLoad stepKey="waitForResultLoad"/>
+        <click selector="{{AdminNewScheduleDesignSection.delete}}" stepKey="clickDelete"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <click selector="{{AdminNewScheduleDesignSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForDeleteLoad"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the design change" stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

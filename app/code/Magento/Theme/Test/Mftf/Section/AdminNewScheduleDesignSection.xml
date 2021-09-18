@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewScheduleDesignSection">
+        <element name="store" type="select" selector="#store_id"/>
+        <element name="customDesign" type="select" selector="#design"/>
+        <element name="save" type="button" timeout="30" selector=".page-actions-buttons .save"/>
+        <element name="selectStore" type="select" selector=".admin__data-grid-wrap .admin__control-select"/>
+        <element name="selectDesign" type="select" selector="#designGrid_filter_package"/>
+        <element name="searchButton" type="button" selector=".action-default.scalable.action-secondary" timeout="30"/>
+        <element name="searchResult" type="button" selector="//*[@id='designGrid_table']/tbody/tr[1]"/>
+        <element name="delete" type="button" selector=".page-actions-buttons .delete"/>
+        <element name="ok" type="button" selector="//footer[@class='modal-footer']/button[contains(@class, 'action-accept')]" timeout="60"/>
+        <element name="clickDatePicker" type="button" selector=".ui-datepicker-trigger" timeout="30"/>
+        <element name="selectToDate" type="button" selector="//*[@id='ui-datepicker-div']/div[2]/button[1]" timeout="30"/>
+    </section>
+</sections>

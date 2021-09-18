@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateNewStoreDesignScheduleActionGroup">
+        <annotations>
+            <description>Fill the general settings for New Store Design Change</description>
+        </annotations>
+        <arguments>
+            <argument name="schedule"/>
+        </arguments>
+        <selectOption selector="{{AdminNewScheduleDesignSection.store}}" userInput="{{schedule.store}}" stepKey="setStore"/>
+        <selectOption selector="{{AdminNewScheduleDesignSection.customDesign}}" userInput="{{schedule.design_theme}}" stepKey="setCustomDesign"/>
+        <click selector="{{AdminNewScheduleDesignSection.save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForLoad"/>
+        <seeElement selector="div#messages" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

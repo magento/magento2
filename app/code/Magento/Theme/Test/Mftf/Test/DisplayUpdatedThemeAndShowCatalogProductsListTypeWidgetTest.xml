@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DisplayUpdatedThemeAndShowCatalogProductsListTypeWidgetTest">
+        <annotations>
+            <features value="Theme"/>
+            <stories value="Theme configuration"/>
+            <title value="Updated theme and Catalog Products List Type widget should get display"/>
+            <description value="Updated theme and the Catalog Products List Type Widget should get display on Product Details page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42043"/>
+            <group value="Theme"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteStoreDesignScheduleActionGroup" stepKey="deleteSchedule">
+                <argument name="schedule" value="CustomDesign"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidget">
+                <argument name="widget" value="CatalogProductsListWidget"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminNewScheduleDesignPage.url}}" stepKey="createScheduleDesignPage"/>
+
+        <actionGroup ref="AdminCreateNewStoreDesignScheduleActionGroup" stepKey="fillForm">
+            <argument name="schedule" value="CustomDesign"/>
+         </actionGroup>
+
+        <actionGroup ref="AdminCreateSpecificWidgetActionGroup" stepKey="fillWidgetForm">
+            <argument name="widget" value="CatalogProductsListWidget"/>
+            <argument name="searchSKU" value="$$createSimpleProduct.sku$$"/>
+            <argument name="searchName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
+        <seeElement selector="{{AdminNewWidgetSection.catalogProductListWidgetElement}}" stepKey="seeCatalogProductListWidgetElement"/>
+        <seeInPageSource stepKey="seeBlankTheme" html="Magento/blank"/>
+    </test>
+</tests>

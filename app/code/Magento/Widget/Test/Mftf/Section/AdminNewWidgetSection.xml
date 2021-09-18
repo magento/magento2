@@ -55,8 +55,18 @@
         <element name="numberOfProductsToDisplay" type="input" selector="[name='parameters[products_count]']"/>
         <element name="template" type="select" selector="[name='parameters[template]']"/>
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
-        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/> 
+        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
         <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
+        <element name="selectSpecificContainer" type="select" selector="select[name='widget_instance[0][all_products][block]']"/>
+        <element name="selectSpecificRadio" type="input" selector="#specific_all_products_0"/>
+        <element name="specificOptionsChooser" type="button" selector="#all_products_ids_0 .widget-option-chooser" />
+        <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="skuFilter" type="input" selector=".admin__data-grid-wrap input[name='chooser_sku']"/>
+        <element name="nameFilter" type="input" selector=".admin__data-grid-wrap input[name='chooser_name']"/>
+        <element name="applyFilters" type="button" selector=".admin__filter-actions button[data-action='grid-filter-apply']" timeout="30"/>
+        <element name="selectFilteredRecord" type="input" selector=".admin__data-grid-wrap input[name='in_products']"/>
+     <!--   <element name="catalogProductListWidgetElement" type="input" selector="//*[@id='maincontent']/div[3]/div/div[5]"/>-->
+        <element name="catalogProductListWidgetElement" type="input" selector="#authenticationPopup + .block-products-list"/>
     </section>
 </sections>
 

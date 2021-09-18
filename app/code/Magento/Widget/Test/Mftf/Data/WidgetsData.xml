@@ -58,4 +58,18 @@
         <data key="display_on">All Pages</data>
         <data key="container">Sidebar Main</data>
     </entity>
+    <entity name="CatalogProductsListWidget" type="widget">
+        <data key="type">Catalog Products List</data>
+        <data key="design_theme">Magento Blank</data>
+        <data key="name" unique="suffix">TestWidget</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
+        <data key="sort_order">0</data>
+        <data key="page">catalog_category_view</data>
+        <data key="template">Category Link Block Template</data>
+        <data key="condition">SKU</data>
+        <data key="display_on">All Product Types</data>
+        <data key="container">Main Content Bottom</data>
+    </entity>
 </entities>

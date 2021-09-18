@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateSpecificWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>Fill widget main fields and widget layout by index for all product types Display On option</description>
+        </annotations>
+        <arguments>
+            <argument name="searchSKU" type="string"/>
+            <argument name="searchName" type="string"/>
+        </arguments>
+
+        <selectOption selector="{{AdminNewWidgetSection.selectSpecificContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
+        <seeElement selector="{{AdminNewWidgetSection.selectSpecificRadio}}" stepKey="seeSpecificRadio" after="waitForPageLoad"/>
+        <click selector="{{AdminNewWidgetSection.selectSpecificRadio}}" stepKey="clickSpecificRadio" after="seeSpecificRadio"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificOptionsChooser}}" stepKey="seeChooserTrigger" after="clickSpecificRadio"/>
+        <click selector="{{AdminNewWidgetSection.specificOptionsChooser}}" stepKey="clickChooserTrigger" after="seeChooserTrigger"/>
+        <conditionalClick selector="{{AdminNewWidgetSection.clearFilters}}" dependentSelector="{{AdminNewWidgetSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial" after="clickChooserTrigger"/>
+        <fillField selector="{{AdminNewWidgetSection.skuFilter}}" userInput="{{searchSKU}}" stepKey="fillProductSkuFilter" after="clickClearFiltersInitial"/>
+        <fillField selector="{{AdminNewWidgetSection.nameFilter}}" userInput="{{searchName}}" stepKey="fillProductNameFilter" after="fillProductSkuFilter"/>
+        <click selector="{{AdminNewWidgetSection.applyFilters}}" stepKey="clickApplyFilters" after="fillProductNameFilter"/>
+        <click selector="{{AdminNewWidgetSection.selectFilteredRecord}}" stepKey="clickFilteredRecord" after="clickApplyFilters"/>
+        <click selector="{{AdminNewWidgetSection.saveWidget}}" stepKey="clickSaveWidget" />
+      </actionGroup>
+  </actionGroups>
