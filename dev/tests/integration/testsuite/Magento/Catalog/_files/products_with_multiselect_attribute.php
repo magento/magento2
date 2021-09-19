@@ -62,7 +62,9 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setSku('simple_ms_2')
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setMultiselectAttribute([$multiSelectAttributeOptionsIds[1], $multiSelectAttributeOptionsIds[2], $multiSelectAttributeOptionsIds[3]])
+    ->setMultiselectAttribute(
+        [$multiSelectAttributeOptionsIds[1], $multiSelectAttributeOptionsIds[2], $multiSelectAttributeOptionsIds[3]]
+    )
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();

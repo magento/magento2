@@ -207,7 +207,6 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Enabled', $this->_model->getAttributeText('status'));
     }
 
-
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
      */
@@ -225,7 +224,6 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
             $product->getAttributeText('multiselect_attribute')
         );
     }
-
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
@@ -245,7 +243,6 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
             $product->getAttributeText('multiselect_attribute_text')
         );
     }
-
 
     public function testGetCustomDesignDate()
     {

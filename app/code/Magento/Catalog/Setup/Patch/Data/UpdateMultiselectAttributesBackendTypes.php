@@ -38,7 +38,7 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -46,7 +46,7 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -54,8 +54,7 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
     }
 
     /**
-     * @return UpdateMultiselectAttributesBackendTypes
-     * @throws LocalizedException
+     * @inheritdoc
      */
     public function apply()
     {

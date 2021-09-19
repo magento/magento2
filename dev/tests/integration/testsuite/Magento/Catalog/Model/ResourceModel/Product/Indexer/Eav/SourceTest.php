@@ -14,11 +14,6 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
-/**
- * Class SourceTest
- * @magentoAppIsolation enabled
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class SourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
