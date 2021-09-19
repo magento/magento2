@@ -21,7 +21,10 @@ use PHPUnit\Framework\TestCase;
 
 class BackendAuthenticationTest extends TestCase
 {
-    public function testAroundDispatch()
+    /**
+     * @return void
+     */
+    public function testAroundDispatch(): void
     {
         /** @var AbstractAction|MockObject $subject */
         $subject = $this->createMock(AbstractAction::class);
@@ -41,8 +44,9 @@ class BackendAuthenticationTest extends TestCase
 
         /** @var StorageInterface|MockObject $session */
         $session = $this->getMockForAbstractClass(StorageInterface::class);
-        $session->expects($this->at(0))->method('isLoggedIn')->willReturn(false);
-        $session->expects($this->at(1))->method('isLoggedIn')->willReturn(true);
+        $session
+            ->method('isLoggedIn')
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $username = 'admin';
         $password = '123123qa';
@@ -57,10 +61,10 @@ class BackendAuthenticationTest extends TestCase
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
         $authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
-        $authorization->expects($this->at(0))->method('isAllowed')->with('Magento_Rss::rss')
-            ->willReturn(true);
-        $authorization->expects($this->at(1))->method('isAllowed')->with('Magento_Catalog::catalog_inventory')
-            ->willReturn(false);
+        $authorization
+            ->method('isAllowed')
+            ->withConsecutive(['Magento_Rss::rss'], ['Magento_Catalog::catalog_inventory'])
+            ->willReturnOnConsecutiveCalls(true, false);
 
         $aclResources = [
             'feed' => 'Magento_Rss::rss',
