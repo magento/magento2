@@ -52,6 +52,7 @@ class CodeSnifferTest extends \PHPUnit\Framework\TestCase
             'standards' => [self::RULE_SET],
             'extensions' => $extensions,
             'reports' => ['full' => self::REPORT_FILE],
+            'reportWidth' => 120
         ];
 
         $this->_tool->setExtensions($extensions);
