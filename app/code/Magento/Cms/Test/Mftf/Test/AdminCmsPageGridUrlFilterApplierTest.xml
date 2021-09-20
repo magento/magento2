@@ -21,16 +21,19 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCmsPage" stepKey="createPage"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="goToCMSPages"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminOpenDashboardPageActionGroup" stepKey="goToAdminDashboard"/>
         </before>
         <after>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilter"/>
             <deleteData createDataKey="createPage" stepKey="deletePage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <amOnPage url="{{CmsPagesPage.url}}?filters[title]=$$createPage.title$$" stepKey="navigateToPageGridWithFilters"/>
         <waitForPageLoad stepKey="waitForPageGrid"/>
-        <see selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
-        <seeElement selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
-        <see selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
+        <waitForText selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
+        <waitForText selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
     </test>
 </tests>
