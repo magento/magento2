@@ -16,6 +16,7 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SourceTest extends \PHPUnit\Framework\TestCase
 {
