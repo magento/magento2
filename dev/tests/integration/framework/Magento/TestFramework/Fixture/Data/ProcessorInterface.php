@@ -15,6 +15,8 @@ use Magento\TestFramework\Fixture\DataFixtureInterface;
 interface ProcessorInterface
 {
     /**
+     * Processes provided data
+     *
      * @param DataFixtureInterface $fixture
      * @param array $data
      * @return array

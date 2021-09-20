@@ -5,26 +5,29 @@ namespace Magento\TestFramework\Fixture\Data;
 
 use Magento\TestFramework\Fixture\DataFixtureInterface;
 
+/**
+ * Replaces uniqid placeholder in the provided data with unique ID
+ */
 class UniqueIdProcessor implements ProcessorInterface
 {
     private const PLACEHOLDER = '%uniqid%';
 
     /**
      * Fixture  starting increment number
+     *
      * @var int
      */
     private const INCREMENT = 1;
 
     /**
      * Fixture's name storage
+     *
      * @var array
      */
-    static private array $storage = [];
+    private static $storage = [];
 
     /**
-     * @param DataFixtureInterface $fixture
-     * @param array $data
-     * @return array
+     * @inheritdoc
      */
     public function process(DataFixtureInterface $fixture, array $data): array
     {

@@ -20,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class consist of dataFixtures base logic
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDataFixture
 {
@@ -195,7 +197,7 @@ abstract class AbstractDataFixture
      */
     private function revertDataFixture(array $fixtureData): void
     {
-        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
         $isSecureArea = $registry->registry('isSecureArea');
         $dataFixtureFactory = Bootstrap::getObjectManager()->get(DataFixtureFactory::class);
         $fixture = $dataFixtureFactory->create($fixtureData['name']);

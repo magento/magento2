@@ -9,8 +9,8 @@ namespace Magento\TestFramework\Fixture\Data;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixtureInterface;
+
 /**
- * Class CompositeProcessor
  * Invokes all registered processors for data fixture
  */
 class CompositeProcessor implements ProcessorInterface
@@ -37,9 +37,7 @@ class CompositeProcessor implements ProcessorInterface
     }
 
     /**
-     * @param DataFixtureInterface $fixture
-     * @param array $data
-     * @return array
+     * @inheritdoc
      */
     public function process(DataFixtureInterface $fixture, array $data): array
     {

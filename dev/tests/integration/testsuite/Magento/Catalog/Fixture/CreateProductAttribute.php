@@ -54,7 +54,6 @@ class CreateProductAttribute implements RevertibleDataFixtureInterface
      */
     private $serviceFactory;
 
-
     /**
      * @var ProcessorInterface
      */
