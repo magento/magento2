@@ -8,14 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminGridSelectAllActionGroup">
+    <actionGroup name="AdminGridDeselectAllActionGroup">
         <annotations>
-            <description>Click on "Select All" option on the grid</description>
+            <description>Click on "Deselect All" option on the grid</description>
         </annotations>
 
         <waitForElementVisible selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="waitForElement"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
-        <click selector="{{AdminGridSelectRows.multicheckOption('Select All')}}" stepKey="clickSelectAllCustomers"/>
+        <click selector="{{AdminGridSelectRows.multicheckOption('Deselect All')}}" stepKey="clickDeselectAllCustomers"/>
     </actionGroup>
 </actionGroups>
