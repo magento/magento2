@@ -13,7 +13,7 @@
             <description>Expands the 'Attributes' tab on the Admin Product page.</description>
         </annotations>
 
-        <scrollTo selector="{{AdminProductAttributeSection.attributeSectionHeader}}" stepKey="scrollToAttributesTab"/>
+        <scrollTo selector="{{AdminProductAttributeSection.attributeSectionHeader}}" x="0" y="-78" stepKey="scrollToAttributesTab"/>
         <conditionalClick selector="{{AdminProductAttributeSection.attributeSectionHeader}}" dependentSelector="{{AdminProductAttributeSection.attributeSection}}" visible="false" stepKey="expandAttributesTab"/>
     </actionGroup>
 </actionGroups>
