@@ -14,9 +14,8 @@ use Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory;
 use Magento\Setup\Module\Di\Definition\Collection as DefinitionsCollection;
 
 /**
- * Class Reader
+ * DI Confir Reader
  *
- * @package Magento\Setup\Module\Di\Compiler\Config
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Reader
