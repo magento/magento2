@@ -87,7 +87,7 @@ class AddDataForBelarus implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return string[]
      */
