@@ -27,16 +27,16 @@
             <createData entity="CustomerCart" stepKey="createCustomerCart">
                 <requiredEntity createDataKey="createCustomer"/>
             </createData>
-    
+
             <createData entity="CustomerCartItem" stepKey="addCartItem">
                 <requiredEntity createDataKey="createCustomerCart"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-    
+
             <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </createData>
-    
+
             <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </updateData>
@@ -53,20 +53,17 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createOrder"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="startCreateInvoice"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="submitInvoice"/>
-
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
-        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="getOrderId"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="{$getOrderId}"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="createOrder"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderId"/>
+        <comment userInput="BIC workaround" stepKey="startCreateInvoice"/>
+        <comment userInput="BIC workaround" stepKey="submitInvoice"/>
+        <comment userInput="BIC workaround" stepKey="onOrderPage"/>
+        <comment userInput="BIC workaround" stepKey="clearFilters"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
 
         <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
-            <argument name="orderId" value="{$getOrderId}"/>
+            <argument name="orderId" value="$createCustomerCart.return$"/>
         </actionGroup>
         <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
         <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateCreditMemoTotals"/>
@@ -75,6 +72,6 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemosTab"/>
         <waitForPageLoad stepKey="waitForCreditMemosGridToLoad"/>
 
-        <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
+        <waitForText selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="$123" stepKey="seeCreditMemoInGrid"/>
     </test>
 </tests>
