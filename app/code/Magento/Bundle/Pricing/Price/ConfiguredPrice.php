@@ -86,6 +86,8 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     }
 
     /**
+     * Set item to the model
+     *
      * @param ItemInterface $item
      * @return $this
      */
@@ -155,7 +157,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     {
         if ($this->item && $this->item->getProduct()->getId()) {
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
-            return parent::getValue() + $this->discountCalculator->calculateDiscount($this->item->getProduct(), $configuredOptionsAmount);
+            return parent::getValue() + $this->discountCalculator->calculateDiscount(
+                $this->item->getProduct(),
+                $configuredOptionsAmount
+            );
         }
         return parent::getValue();
     }
