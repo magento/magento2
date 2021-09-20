@@ -365,7 +365,6 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @throws LocalizedException
      * @todo: Move this code to block
-     *
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
