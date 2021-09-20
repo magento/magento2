@@ -310,9 +310,8 @@ class Weee extends AbstractTotal
         foreach ($item->getChildren() as $child) {
             $associatedTaxables[] = $child->getAssociatedTaxables();
         }
-        $item->setAssociatedTaxables(
-            array_unique(array_merge([], ...$associatedTaxables))
-        );
+        $associatedTaxables = array_merge([], ...$associatedTaxables);
+        $item->setAssociatedTaxables($associatedTaxables);
     }
 
     /**

@@ -83,7 +83,6 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $parentSku = $product['sku'];
         $skuOne = 'simple_10';
         $skuTwo = 'simple_20';
-        $valueIdOne = $product['configurable_options'][0]['values'][0]['value_index'];
 
         $query = <<<QUERY
 mutation {
@@ -251,6 +250,25 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     */
+    public function testAddConfigurableProductNotAssignedToWebsite()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "configurable"');
+
+        $reservedOrderId = 'test_order_2';
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $headerMap = ['Store' => 'fixture_second_store'];
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, 1);
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddNonExistentConfigurableProductVariationToCart()
@@ -271,11 +289,31 @@ QUERY;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
-            'doesn\'t exist. Verify the product and try again.'
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
         );
 
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_only_parent_two_websites.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     */
+    public function testAddUnassignedToWebsiteConfigurableProductVariationToCart()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+        );
+
+        $reservedOrderId = 'test_order_2';
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $headerMap = ['Store' => 'fixture_second_store'];
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, 1);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
@@ -584,8 +622,12 @@ QUERY;
      * @param int $quantity
      * @return string
      */
-    private function graphQlQueryForVariant(string $maskedQuoteId, string $parentSku, string $sku, int $quantity): string
-    {
+    private function graphQlQueryForVariant(
+        string $maskedQuoteId,
+        string $parentSku,
+        string $sku,
+        int $quantity
+    ): string {
         return <<<QUERY
 mutation {
   addConfigurableProductsToCart(
