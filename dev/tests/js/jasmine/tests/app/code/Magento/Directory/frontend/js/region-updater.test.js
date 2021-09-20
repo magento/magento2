@@ -17,40 +17,42 @@ define([
                     'US'
                 ]
             },
-            'US': {
-                '1': {
-                    'id': 1,
-                    'code': 'AL',
-                    'name': 'Alabama'
-                },
-                '2': {
-                    'id': 2,
-                    'code': 'AK',
-                    'name': 'Alaska'
-                },
-                '3': {
-                    'id': 3,
-                    'code': 'AS',
-                    'name': 'American Samoa'
-                }
-            },
-            'DE': {
-                '81': {
-                    'id': 4,
-                    'code': 'BAY',
-                    'name': 'Bayern'
-                },
-                '82': {
-                    'id': 5,
-                    'code': 'BER',
-                    'name': 'Berlin'
-                },
-                '83': {
-                    'id': 6,
-                    'code': 'BRG',
-                    'name': 'Brandenburg'
-                }
-            }
+            'US':
+                [
+                    {
+                        'id': 1,
+                        'code': 'AL',
+                        'name': 'Alabama'
+                    },
+                    {
+                        'id': 2,
+                        'code': 'AK',
+                        'name': 'Alaska'
+                    },
+                    {
+                        'id': 3,
+                        'code': 'AS',
+                        'name': 'American Samoa'
+                    }
+                ],
+            'DE':
+                [
+                    {
+                        'id': 81,
+                        'code': 'BAY',
+                        'name': 'Bayern'
+                   },
+                   {
+                        'id': 82,
+                        'code': 'BER',
+                        'name': 'Berlin'
+                   },
+                    {
+                       'id': 83,
+                       'code': 'BRG',
+                       'name': 'Brandenburg'
+                   }
+            ]
         },
         defaultCountry = 'GB',
         countries = {
@@ -122,7 +124,7 @@ define([
             'countriesWithOptionalZip': ['GB']
         };
 
-        $(countryEl).regionUpdater($.extend({}, defaultConfig, config || {}));
+        $(countryEl).directoryRegionUpdater($.extend({}, defaultConfig, config || {}));
     }
 
     beforeEach(function () {
@@ -132,13 +134,13 @@ define([
         regionInputEl = document.createElement('input');
         postalCodeEl = document.createElement('input');
         countryEl = document.createElement('select');
-        regionSelectEl.setAttribute('id', 'region_id');
+        regionSelectEl.setAttribute('id', 'dir_region_id');
         regionSelectEl.setAttribute('style', 'display:none;');
-        regionInputEl.setAttribute('id', 'region');
+        regionInputEl.setAttribute('id', 'dir_region');
         regionInputEl.setAttribute('style', 'display:none;');
-        countryEl.setAttribute('id', 'country');
+        countryEl.setAttribute('id', 'dir_country');
         postalCodeEl.setAttribute('id', 'zip');
-        formEl.setAttribute('id', 'test_form');
+        formEl.setAttribute('id', 'dir_test_form');
         formEl.appendChild(createFormField(countryEl));
         formEl.appendChild(createFormField(regionSelectEl, regionInputEl));
         formEl.appendChild(createFormField(postalCodeEl));

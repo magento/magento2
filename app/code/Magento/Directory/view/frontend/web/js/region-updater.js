@@ -12,7 +12,7 @@ define([
 ], function ($, mageTemplate, _) {
     'use strict';
 
-    $.widget('mage.regionUpdater', {
+    $.widget('mage.directoryRegionUpdater', {
         options: {
             regionTemplate:
                 '<option value="<%- data.value %>" <% if (data.isSelected) { %>selected="selected"<% } %>>' +
@@ -256,5 +256,5 @@ define([
         }
     });
 
-    return $.mage.regionUpdater;
+    return $.mage.directoryRegionUpdater;
 });
