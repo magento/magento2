@@ -155,7 +155,7 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct with:{"sku":"simple","custom_attributes":{"special_price":5.99}}
+     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      */
