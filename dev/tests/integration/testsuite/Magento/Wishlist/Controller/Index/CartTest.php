@@ -118,8 +118,8 @@ class CartTest extends AbstractController
      *
      * @return void
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product1
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product2
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product2
      */
     public function testAddItemWithRelatedProducts(): void
     {

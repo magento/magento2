@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Fixture;
+namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
@@ -13,9 +13,9 @@ use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
 /**
- * Create categpry fixture
+ * Creates category fixture
  */
-class CreateCategory implements RevertibleDataFixtureInterface
+class Category implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_PARENT_ID = 2;
 

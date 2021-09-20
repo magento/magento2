@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Fixture;
+namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -16,9 +16,9 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
 /**
- * Create simple product fixture
+ * Creates simple product fixture
  */
-class CreateSimpleProduct implements RevertibleDataFixtureInterface
+class Product implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'type_id' => Type::TYPE_SIMPLE,

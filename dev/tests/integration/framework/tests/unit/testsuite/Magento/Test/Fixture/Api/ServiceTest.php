@@ -16,6 +16,8 @@ use stdClass;
 
 /**
  * Test fixture api service
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class ServiceTest extends TestCase
 {
@@ -40,7 +42,11 @@ class ServiceTest extends TestCase
         $serviceInputProcessor = $this->createMock(ServiceInputProcessor::class);
         $serviceInputProcessor->expects($this->once())
             ->method('process')
-            ->willReturnArgument(2);
+            ->willReturnCallback(
+                function (string $serviceClassName, string $serviceMethodName, array $params) {
+                    return array_values($params);
+                }
+            );
 
         $this->fakeClass = $this->getMockBuilder(stdClass::class)
             ->addMethods(['fakeMethod'])

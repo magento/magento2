@@ -275,7 +275,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"id":13,"name":"Category 1.2"}
      */
     public function testGetCategoryById()
     {
@@ -294,7 +294,7 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"id":8,"is_active":false}
      */
     public function testGetDisabledCategory()
     {

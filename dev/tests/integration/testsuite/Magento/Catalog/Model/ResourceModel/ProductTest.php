@@ -52,7 +52,7 @@ class ProductTest extends TestCase
     /**
      * Checks a possibility to retrieve product raw attribute value.
      *
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct with:{"sku": "simple"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      */
     public function testGetAttributeRawValue()
     {
@@ -66,9 +66,9 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Fixture\AddProductAttributeToAttributeSet
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct with:{"sku": "simple"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -86,9 +86,9 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Fixture\AddProductAttributeToAttributeSet
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct with:{"sku": "simple"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -110,9 +110,9 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Fixture\AddProductAttributeToAttributeSet
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct with:{"sku": "simple"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -134,9 +134,9 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateProductAttribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Fixture\AddProductAttributeToAttributeSet
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct with:{"sku": "simple"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
      * @throws InputException
@@ -155,7 +155,7 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default_store catalog/price/scope 1
      * @magentoDataFixtureDataProvider productFixtureDataProvider
