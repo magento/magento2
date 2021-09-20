@@ -14,6 +14,9 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class SourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
