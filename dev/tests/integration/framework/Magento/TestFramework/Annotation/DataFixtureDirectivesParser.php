@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Fixture;
+namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;

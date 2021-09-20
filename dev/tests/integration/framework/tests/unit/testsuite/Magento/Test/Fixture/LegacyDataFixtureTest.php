@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Test\Fixture;
 
+use Magento\Framework\DataObject;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
 use Magento\TestFramework\Fixture\LegacyDataFixture;
 use PHPUnit\Framework\TestCase;
@@ -60,7 +61,7 @@ class LegacyDataFixtureTest extends TestCase
     public function testRevert(): void
     {
         $this->model->apply();
-        $this->model->revert();
+        $this->model->revert(new DataObject());
         $this->assertEquals('', getenv('sample_fixture_three'));
     }
 

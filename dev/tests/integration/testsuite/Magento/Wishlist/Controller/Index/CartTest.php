@@ -123,8 +123,8 @@ class CartTest extends AbstractController
      */
     public function testAddItemWithRelatedProducts(): void
     {
-        $firstProductId = DataFixtureStorageManager::getStorage()->get('product1')->getProduct()->getId();
-        $secondProductID = DataFixtureStorageManager::getStorage()->get('product2')->getProduct()->getId();
+        $firstProductId = DataFixtureStorageManager::getStorage()->get('product1')->getId();
+        $secondProductID = DataFixtureStorageManager::getStorage()->get('product2')->getId();
         $relatedIds = $expectedAddedIds = [$firstProductId, $secondProductID];
 
         $this->customerSession->setCustomerId(1);

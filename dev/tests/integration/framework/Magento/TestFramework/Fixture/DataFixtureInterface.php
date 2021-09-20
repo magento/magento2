@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture;
 
+use Magento\Framework\DataObject;
+
 /**
  * Interface for data fixtures
  */
@@ -16,7 +18,7 @@ interface DataFixtureInterface
      * Apply fixture data
      *
      * @param array $data
-     * @return array|null
+     * @return DataObject|null
      */
-    public function apply(array $data = []): ?array;
+    public function apply(array $data = []): ?DataObject;
 }

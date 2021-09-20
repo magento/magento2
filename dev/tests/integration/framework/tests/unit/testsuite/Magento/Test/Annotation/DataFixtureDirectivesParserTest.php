@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Fixture;
+namespace Magento\Test\Annotation;
 
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
+use Magento\TestFramework\Annotation\DataFixtureDirectivesParser;
 use PHPUnit\Framework\TestCase;
 
 /**

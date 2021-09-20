@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\DataObject;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
-/**
- * Creates product attribute fixture
- */
 class Attribute implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -74,31 +72,40 @@ class Attribute implements RevertibleDataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function apply(array $data = []): ?DataObject
     {
         $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
-        $fixtureData = array_merge(self::DEFAULT_DATA, $data);
-        $result = $service->execute(
+
+        return $service->execute(
             [
-                'attribute' => $this->dataProcessor->process($this, $fixtureData)
+                'attribute' => $this->prepareData($data)
             ]
         );
-
-        return [
-            'attribute' => $result
-        ];
     }
 
     /**
      * @inheritdoc
      */
-    public function revert(array $data = []): void
+    public function revert(DataObject $data): void
     {
         $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'deleteById');
         $service->execute(
             [
-                'attributeCode' => $data['attribute']->getAttributeCode()
+                'attributeCode' => $data->getAttributeCode()
             ]
         );
+    }
+
+    /**
+     * Prepare attribute data
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareData(array $data): array
+    {
+        $data = array_merge(self::DEFAULT_DATA, $data);
+
+        return $this->dataProcessor->process($this, $data);
     }
 }

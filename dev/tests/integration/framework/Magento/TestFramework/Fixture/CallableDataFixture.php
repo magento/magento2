@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture;
 
+use Magento\Framework\DataObject;
+
 /**
  * Callable data fixture type
  */
@@ -29,7 +31,7 @@ class CallableDataFixture implements RevertibleDataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function apply(array $data = []): ?DataObject
     {
         call_user_func($this->callback);
         return null;
@@ -38,7 +40,7 @@ class CallableDataFixture implements RevertibleDataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function revert(array $data = []): void
+    public function revert(DataObject $data): void
     {
         $rollbackCallback = null;
         if (is_array($this->callback)) {

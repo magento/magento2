@@ -183,9 +183,7 @@ class ProductTest extends TestCase
         return [
             'product' => [
                 'sku' => 'simple',
-                'custom_attributes' => [
-                    'special_price' => 5.99
-                ],
+                'special_price' => 5.99,
             ]
         ];
     }
