@@ -47,7 +47,6 @@ var config = {
             'collapsible':                        'mage/collapsible',
             'menu':                               'mage/backend/menu',
             'jstree':                             'jquery/jstree/jquery.jstree',
-            'details':                            'jquery/jquery.details',
             'jquery-ui-modules/widget':           'jquery/ui',
             'jquery-ui-modules/core':             'jquery/ui',
             'jquery-ui-modules/accordion':        'jquery/ui',
