@@ -28,7 +28,7 @@ class CodeSnifferTest extends \PHPUnit\Framework\TestCase
     const RULE_SET = 'some/ruleset/directory';
 
     /**
-     * Report file
+     * Report file path
      */
     const REPORT_FILE = 'some/report/file.xml';
 
