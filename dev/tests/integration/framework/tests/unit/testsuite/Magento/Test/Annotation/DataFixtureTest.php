@@ -47,7 +47,7 @@ class DataFixtureTest extends TestCase
     protected function setUp(): void
     {
         $this->object = $this->getMockBuilder(DataFixture::class)
-            ->onlyMethods(['_applyOneFixture', 'getTestKey'])
+            ->onlyMethods(['getTestKey'])
             ->addMethods(['getComponentRegistrar'])
             ->getMock();
         $this->testsIsolationMock = $this->getMockBuilder(TestsIsolation::class)
@@ -77,7 +77,7 @@ class DataFixtureTest extends TestCase
         $objectManager->expects($this->atLeastOnce())
             ->method('create')
             ->willReturnCallback(
-                function (string $type, array $arguments = []) use ($sharedInstances) {
+                function (string $type, array $arguments = []) {
                     if ($type === LegacyDataFixture::class) {
                         array_unshift($arguments, new LegacyDataFixturePathResolver(new ComponentRegistrar()));
                     }

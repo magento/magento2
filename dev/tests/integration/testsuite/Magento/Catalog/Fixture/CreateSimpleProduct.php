@@ -30,14 +30,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
         'visibility' => Visibility::VISIBILITY_BOTH,
         'status' => Status::STATUS_ENABLED,
         'custom_attributes' => [
-            [
-                'attribute_code' => 'tax_class_id',
-                'value' => '2',
-            ],
-            [
-                'attribute_code' => 'url_key',
-                'value' => 'simple_url_key_%uniqid%',
-            ]
+            'tax_class_id' => '2'
         ],
         'extension_attributes' => [
             'website_ids' => [1],
@@ -78,10 +71,9 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
     public function apply(array $data = []): ?array
     {
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'save');
-        $fixtureData = array_merge(self::DEFAULT_DATA, $data);
         $result = $service->execute(
             [
-                'product' => $this->dataProcessor->process($this, $fixtureData)
+                'product' => $this->dataProcessor->process($this, $this->prepareData($data))
             ]
         );
 
@@ -101,5 +93,45 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
                 'sku' => $data['product']->getSku()
             ]
         );
+    }
+
+    /**
+     * Prepare product data
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareData(array $data): array
+    {
+        $default = self::DEFAULT_DATA;
+        return $this->merge($default, $data);
+    }
+
+    /**
+     * Recursively merge product data
+     *
+     * @param array $arrays
+     * @return array
+     */
+    private function merge(array ...$arrays): array
+    {
+        $result = [];
+        while ($arrays) {
+            $array = array_shift($arrays);
+            // is array an associative array
+            if (array_values($array) !== $array) {
+                foreach ($array as $key => $value) {
+                    if (is_array($value) && array_key_exists($key, $result) && is_array($result[$key])) {
+                        $result[$key] = $this->merge($result[$key], $value);
+                    } else {
+                        $result[$key] = $value;
+                    }
+                }
+            } elseif ($array) {
+                $result = $array;
+            }
+        }
+
+        return $result;
     }
 }
