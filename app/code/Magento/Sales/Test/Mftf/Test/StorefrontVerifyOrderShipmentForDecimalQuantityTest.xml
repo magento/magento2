@@ -84,7 +84,8 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!--Step10. Click place order-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
         <!--Step11. Go to admin Order page for newly created order-->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="{$grabOrderNumber}"/>
