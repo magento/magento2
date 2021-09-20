@@ -57,7 +57,7 @@ function getTasks() {
         return [
             'connect:' + theme,
             'jasmine:' + theme
-        ]
+        ];
     });
 
     return _.flatten(tasks);
