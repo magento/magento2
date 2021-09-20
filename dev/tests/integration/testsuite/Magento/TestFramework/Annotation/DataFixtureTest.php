@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoDbIsolation disabled
+ * @magentoDataFixtureDataProvider classFixtureDataProvider
  */
 class DataFixtureTest extends TestCase
 {
@@ -100,6 +101,87 @@ class DataFixtureTest extends TestCase
             ],
             $this->dataStorage->getData('fixtures')
         );
+    }
+
+    /**
+     * @magentoDataFixture afterTestFixtureClass
+     * @magentoDataFixture Magento\TestFramework\Fixture\TestOne as:test1
+     * @magentoDataFixture Magento\TestFramework\Fixture\TestTwo as:test2
+     * @magentoDataFixture Magento\TestFramework\Fixture\TestThree as:test3
+     * @magentoDataFixtureDataProvider methodFixtureDataProvider
+     */
+    public function testMethodFixtureDataProvider(): void
+    {
+        $this->assertEquals(
+            [
+                'Magento\TestFramework\Fixture\TestOne' => true,
+                'Magento\TestFramework\Fixture\TestTwo' => true,
+                'test01' => 'value03',
+                'test11' => 'value11',
+                'test02' => 'value02',
+            ],
+            $this->dataStorage->getData('fixtures')
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function methodFixtureDataProvider(): array
+    {
+        return [
+            'test1' => [
+                'test01' => 'value01',
+                'test11' => 'value11',
+            ],
+            'test2' => [
+                'test02' => 'value02',
+            ],
+            'test3' => [
+                'key' => 'test01',
+                'value' => 'value03',
+            ],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture afterTestFixtureClass
+     * @magentoDataFixture Magento\TestFramework\Fixture\TestOne as:test1
+     * @magentoDataFixture Magento\TestFramework\Fixture\TestTwo as:test2
+     * @magentoDataFixture Magento\TestFramework\Fixture\TestThree as:test3
+     */
+    public function testClassFixtureDataProvider(): void
+    {
+        $this->assertEquals(
+            [
+                'Magento\TestFramework\Fixture\TestOne' => true,
+                'Magento\TestFramework\Fixture\TestTwo' => true,
+                'test01' => 'class-value03',
+                'test11' => 'class-value11',
+                'test02' => 'class-value02',
+            ],
+            $this->dataStorage->getData('fixtures')
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function classFixtureDataProvider(): array
+    {
+        return [
+            'test1' => [
+                'test01' => 'class-value01',
+                'test11' => 'class-value11',
+            ],
+            'test2' => [
+                'test02' => 'class-value02',
+            ],
+            'test3' => [
+                'key' => 'test01',
+                'value' => 'class-value03',
+            ],
+        ];
     }
 
     public static function afterTestFixtureClass(): void

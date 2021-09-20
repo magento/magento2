@@ -38,8 +38,8 @@ class DataFixtureDirectivesParser
      */
     public function parse(string $fixture): array
     {
-        list($name, $directives) = array_pad(array_values(array_filter(explode(' ', $fixture, 2))), 2, '');
-        $id = null;
+        list($factory, $directives) = array_pad(array_values(array_filter(explode(' ', $fixture, 2))), 2, '');
+        $name = null;
         $data = [];
         if ($directives) {
             $json = '{}';
@@ -57,21 +57,21 @@ class DataFixtureDirectivesParser
                         $data = $this->serializer->unserialize($json);
                         break;
                     case 'as':
-                        $id = $value;
+                        $name = $value;
                         break;
                     default:
                         throw new \InvalidArgumentException("Unknown data fixture directive '$directive'");
                 }
             }
         }
-        if (strpos($name, '\\') !== false && !class_exists($name) && !is_callable($name)) {
+        if (strpos($factory, '\\') !== false && !class_exists($factory) && !is_callable($factory)) {
             // usage of a single directory separator symbol streamlines search across the source code
             throw new LocalizedException(__('Directory separator "\\" is prohibited in fixture declaration.'));
         }
 
         return [
-            'identifier' => $id,
             'name' => $name,
+            'factory' => $factory,
             'data' => $data,
         ];
     }

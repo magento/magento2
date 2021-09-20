@@ -32,7 +32,7 @@ class DataFixture extends Base
         }
         $fixture = $this->replaceFixtures([$this->getFixtureAsArray($fixture)], $replacedFixtures);
 
-        return reset($fixture)['name'];
+        return reset($fixture)['factory'];
     }
 
     /**
@@ -70,8 +70,8 @@ class DataFixture extends Base
     {
         if ($replacedFixtures) {
             foreach ($fixtures as $key => $fixture) {
-                if (!empty($replacedFixtures[$fixture['name']])) {
-                    $fixtures[$key] = $this->getFixtureAsArray($replacedFixtures[$fixture['name']]);
+                if (!empty($replacedFixtures[$fixture['factory']])) {
+                    $fixtures[$key] = $this->getFixtureAsArray($replacedFixtures[$fixture['factory']]);
                 }
             }
         }
@@ -143,7 +143,7 @@ class DataFixture extends Base
     {
         $offset = false;
         foreach ($existingFixtures as $key => $fixture) {
-            if ($fixture['name'] === $fixtureToFind) {
+            if ($fixture['factory'] === $fixtureToFind) {
                 $offset = $key;
                 break;
             }
@@ -173,7 +173,7 @@ class DataFixture extends Base
     }
 
     /**
-     * Creates an array with the supplied fixture name
+     * Creates an array with the supplied fixture factory
      *
      * @param string $fixture
      * @return string[]
@@ -181,7 +181,7 @@ class DataFixture extends Base
     private function getFixtureAsArray(string $fixture): array
     {
         return [
-            'name' => $fixture
+            'factory' => $fixture
         ];
     }
 }

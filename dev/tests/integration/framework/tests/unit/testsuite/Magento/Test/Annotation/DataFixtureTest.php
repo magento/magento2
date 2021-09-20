@@ -14,6 +14,7 @@ use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Event\Param\Transaction;
 use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
 use Magento\TestFramework\Fixture\DataFixtureInterface;
+use Magento\TestFramework\Fixture\DataFixtureSetup;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
@@ -60,12 +61,14 @@ class DataFixtureTest extends TestCase
             ->getMockForAbstractClass();
 
         DataFixtureStorageManager::setStorage(new DataFixtureStorage());
+        $dataFixtureFactory = new DataFixtureFactory($objectManager);
 
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
             DataFixtureDirectivesParser::class => new DataFixtureDirectivesParser(new Json()),
-            DataFixtureFactory::class => new DataFixtureFactory($objectManager),
+            DataFixtureFactory::class => $dataFixtureFactory,
             LegacyDataFixture::class => $this->createMock(DataFixtureInterface::class),
+            DataFixtureSetup::class => new DataFixtureSetup($dataFixtureFactory),
         ];
         $objectManager->expects($this->atLeastOnce())
             ->method('get')

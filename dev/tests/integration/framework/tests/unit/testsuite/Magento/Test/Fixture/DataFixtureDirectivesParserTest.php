@@ -59,8 +59,8 @@ class DataFixtureDirectivesParserTest extends TestCase
             [
                 'path/to/fixture.php as:test1 with:{"k1": "v1", "k2": ["v21", "v22"], "k3": {"k 31": "v 31"}}',
                 [
-                    'identifier' => 'test1',
-                    'name' => 'path/to/fixture.php',
+                    'name' => 'test1',
+                    'factory' => 'path/to/fixture.php',
                     'data' => [
                         'k1' => 'v1',
                         'k2' => ['v21', 'v22'],
@@ -71,8 +71,8 @@ class DataFixtureDirectivesParserTest extends TestCase
             [
                 'path/to/fixture.php with:{"k1": "v1", "k2": ["v21", "v22"], "k3": {"k 31": "v 31"}} as:test1',
                 [
-                    'identifier' => 'test1',
-                    'name' => 'path/to/fixture.php',
+                    'name' => 'test1',
+                    'factory' => 'path/to/fixture.php',
                     'data' => [
                         'k1' => 'v1',
                         'k2' => ['v21', 'v22'],
@@ -83,8 +83,8 @@ class DataFixtureDirectivesParserTest extends TestCase
             [
                 'path/to/fixture.php with:{"k1": "v1", "k2": ["v21", "v22"], "k3": {"k 31": "v 31"}}',
                 [
-                    'identifier' => null,
-                    'name' => 'path/to/fixture.php',
+                    'name' => null,
+                    'factory' => 'path/to/fixture.php',
                     'data' => [
                         'k1' => 'v1',
                         'k2' => ['v21', 'v22'],
@@ -95,8 +95,8 @@ class DataFixtureDirectivesParserTest extends TestCase
             [
                 'path/to/fixture.php as:test1',
                 [
-                    'identifier' => 'test1',
-                    'name' => 'path/to/fixture.php',
+                    'name' => 'test1',
+                    'factory' => 'path/to/fixture.php',
                     'data' => [],
                 ]
             ],

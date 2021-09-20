@@ -17,15 +17,11 @@ class UniqueIdProcessor implements ProcessorInterface
     private const PLACEHOLDER = '%uniqid%';
 
     /**
-     * Fixture  starting increment number
-     *
      * @var int
      */
     private const INCREMENT = 1;
 
     /**
-     * Fixture's name storage
-     *
      * @var array
      */
     private static $storage = [];
@@ -41,7 +37,9 @@ class UniqueIdProcessor implements ProcessorInterface
         }
         $hash = self::$storage[$class]['prefix'] . self::$storage[$class]['increment']++;
         array_walk_recursive($data, function (&$value) use ($hash) {
-            $value = str_replace(self::PLACEHOLDER, $hash, $value);
+            if (is_string($value)) {
+                $value = str_replace(self::PLACEHOLDER, $hash, $value);
+            }
         });
         return $data;
     }

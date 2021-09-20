@@ -13,7 +13,7 @@ use Magento\TestFramework\Annotation\AdminConfigFixture;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Annotation\DataFixtureBeforeTransaction;
-use Magento\TestFramework\Fixture\DataFixtureFactory;
+use Magento\TestFramework\Fixture\DataFixtureSetup;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\ConfigInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\AdminConfigFixture as AdminConfigFixtureApplier;
@@ -49,9 +49,9 @@ class Resolver implements ResolverInterface
     private $currentFixtureType = null;
 
     /**
-     * @var DataFixtureFactory
+     * @var DataFixtureSetup
      */
-    private $dataFixtureFactory;
+    private $dataFixtureSetup;
 
     /**
      * @param ConfigInterface $config
@@ -60,7 +60,7 @@ class Resolver implements ResolverInterface
     {
         $this->config = $config;
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->dataFixtureFactory = $this->objectManager->create(DataFixtureFactory::class);
+        $this->dataFixtureSetup = $this->objectManager->create(DataFixtureSetup::class);
     }
 
     /**
@@ -122,8 +122,7 @@ class Resolver implements ResolverInterface
         }
         /** @var DataFixtureApplier $dataFixtureApplier */
         $dataFixtureApplier = $this->getApplier($this->getCurrentTest(), $this->currentFixtureType);
-        $fixture = $this->dataFixtureFactory->create($dataFixtureApplier->replace($path));
-        $fixture->apply();
+        $this->dataFixtureSetup->apply($dataFixtureApplier->replace($path));
     }
 
     /**

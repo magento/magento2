@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture;
 
-use PHPUnit\Framework\Exception;
-
 /**
  * File based data fixture
  */
@@ -64,15 +62,10 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
     {
         try {
             require $filePath;
-        } catch (\Exception $e) {
-            throw new Exception(
-                sprintf(
-                    "Error in fixture: %s.\n %s\n %s",
-                    $filePath,
-                    $e->getMessage(),
-                    $e->getTraceAsString()
-                ),
-                500,
+        } catch (\Throwable $e) {
+            throw new \Exception(
+                'Error in fixture: ' . $filePath,
+                0,
                 $e
             );
         }

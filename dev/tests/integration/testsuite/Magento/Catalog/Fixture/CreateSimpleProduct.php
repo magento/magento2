@@ -127,7 +127,7 @@ class CreateSimpleProduct implements RevertibleDataFixtureInterface
                         $result[$key] = $value;
                     }
                 }
-            } elseif ($array) {
+            } elseif (array_values($result) === $result) {
                 $result = $array;
             }
         }

@@ -155,9 +155,10 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
+     * @magentoDataFixture Magento\Catalog\Fixture\CreateSimpleProduct as:product
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default_store catalog/price/scope 1
+     * @magentoDataFixtureDataProvider productFixtureDataProvider
      */
     public function testUpdateStoreSpecificSpecialPrice()
     {
@@ -172,6 +173,21 @@ class ProductTest extends TestCase
 
         $product = $this->productRepository->get('simple', false, 0, true);
         $this->assertEquals(5.99, $product->getSpecialPrice());
+    }
+
+    /**
+     * @return array
+     */
+    public function productFixtureDataProvider(): array
+    {
+        return [
+            'product' => [
+                'sku' => 'simple',
+                'custom_attributes' => [
+                    'special_price' => 5.99
+                ],
+            ]
+        ];
     }
 
     /**
