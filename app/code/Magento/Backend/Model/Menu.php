@@ -242,7 +242,7 @@ class Menu extends \ArrayObject
      *
      * @param \Magento\Backend\Model\Menu $menu
      * @param string $itemId
-     * @param array &$parents
+     * @param array $parents
      * @return bool
      */
     protected function _findParentItems($menu, $itemId, &$parents)
