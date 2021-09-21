@@ -75,7 +75,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
                 $this->localeResolver->emulate($this->storeManager->getStore($storeCode)->getId());
                 $this->storeManager->setCurrentStore($storeCode);
                 $this->updateContext($storeCode);
-             }
+            }
         } elseif (!$this->isAlreadySet()) {
             $storeCode = $this->storeCookieManager->getStoreCodeFromCookie()
                 ?: $this->storeManager->getDefaultStoreView()->getCode();

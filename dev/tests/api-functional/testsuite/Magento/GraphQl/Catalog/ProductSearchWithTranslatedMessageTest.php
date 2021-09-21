@@ -34,7 +34,6 @@ class ProductSearchWithTranslatedMessageTest extends GraphQlAbstract
         $this->graphQlQuery($this->getQuery(), [], '', $header);
     }
 
-
     private function getQuery()
     {
         return <<<QUERY
