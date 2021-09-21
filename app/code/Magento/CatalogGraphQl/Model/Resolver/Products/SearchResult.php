@@ -83,4 +83,14 @@ class SearchResult
     {
         return $this->data['totalPages'] ?? 0;
     }
+
+    /**
+     * Retrieve an array in the format of GraphQL-readable type containing search suggestions.
+     *
+     * @return array
+     */
+    public function getSuggestions() : array
+    {
+        return $this->data['suggestions'] ?? [];
+    }
 }

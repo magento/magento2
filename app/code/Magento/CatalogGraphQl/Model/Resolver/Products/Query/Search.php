@@ -19,6 +19,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -61,6 +62,21 @@ class Search implements ProductQueryInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var Suggestions
+     */
+    private $suggestions;
+
+    /**
+     * @var StdlibString
+     */
+    private $string;
+
+    /**
+     * @var SuggestedQueries
+     */
+    private $suggestedQueries;
+
+    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
      * @param PageSizeProvider $pageSize
@@ -68,6 +84,7 @@ class Search implements ProductQueryInterface
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ArgumentsProcessorInterface|null $argsSelection
+     * @param Suggestions|null $suggestions
      */
     public function __construct(
         SearchInterface $search,
@@ -76,8 +93,10 @@ class Search implements ProductQueryInterface
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        ArgumentsProcessorInterface $argsSelection = null
-    ) {
+        ArgumentsProcessorInterface $argsSelection = null,
+        Suggestions $suggestions = null
+    )
+    {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
         $this->pageSizeProvider = $pageSize;
@@ -86,6 +105,8 @@ class Search implements ProductQueryInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
             ->get(ArgumentsProcessorInterface::class);
+        $this->suggestions = $suggestions ?: ObjectManager::getInstance()
+            ->get(Suggestions::class);
     }
 
     /**
@@ -131,14 +152,21 @@ class Search implements ProductQueryInterface
             $productArray[$product->getId()]['model'] = $product;
         }
 
+        $suggestions = [];
+        $totalCount = (int) $searchResults->getTotalCount();
+        if ($totalCount === 0 && !empty($args['search'])) {
+            $suggestions = $this->suggestions->execute($context, $args['search']);
+        }
+
         return $this->searchResultFactory->create(
             [
-                'totalCount' => $searchResults->getTotalCount(),
+                'totalCount' => $totalCount,
                 'productsSearchResult' => $productArray,
                 'searchAggregation' => $itemsResults->getAggregations(),
                 'pageSize' => $realPageSize,
                 'currentPage' => $realCurrentPage,
                 'totalPages' => $totalPages,
+                'suggestions' => $suggestions,
             ]
         );
     }
