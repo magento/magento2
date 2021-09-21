@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
-use GraphQL\Type\Definition\Type as GraphQLType;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
@@ -20,9 +19,6 @@ use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
-use Magento\Framework\GraphQl\Type\Definition\FloatType;
-use Magento\Framework\GraphQl\Type\Definition\IntType;
-use Magento\Framework\GraphQl\Type\Definition\StringType;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Helper\Query\Logger\LogData;
@@ -167,8 +163,6 @@ class GraphQl implements FrontControllerInterface
 
         $schema = null;
         try {
-            $this->overrideStandardGraphQLTypes();
-
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
 
@@ -203,23 +197,6 @@ class GraphQl implements FrontControllerInterface
         }
 
         return $this->httpResponse;
-    }
-
-    /**
-     * Replace the standard type definitions with ones that know how to cast input values
-     */
-    private function overrideStandardGraphQLTypes(): void
-    {
-        $standardTypes = GraphQLType::getStandardTypes();
-
-        $intType = new IntType($standardTypes[GraphQLType::INT]->config);
-        $floatType = new FloatType($standardTypes[GraphQLType::FLOAT]->config);
-        $stringType = new StringType($standardTypes[GraphQLType::STRING]->config);
-        \GraphQL\GraphQL::overrideStandardTypes([
-            GraphQLType::INT => $intType,
-            GraphQLType::FLOAT => $floatType,
-            GraphQLType::STRING => $stringType
-        ]);
     }
 
     /**
