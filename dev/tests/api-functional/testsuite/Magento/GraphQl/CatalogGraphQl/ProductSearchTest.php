@@ -81,4 +81,40 @@ class ProductSearchTest extends GraphQlAbstract
 }
 QUERY;
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
+     */
+    public function testSearchSuggestions() : void
+    {
+        $query = $this->getSearchQueryWithSuggestions();
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']);
+        $this->assertEmpty($response['products']['items']);
+        $this->assertNotEmpty($response['products']['suggestions']);
+    }
+
+    /**
+     * Prepare search query with suggestions
+     *
+     * @return string
+     */
+    private function getSearchQueryWithSuggestions() : string
+    {
+        return <<<QUERY
+{
+  products(
+    search: "smiple"
+   ) {
+    items {
+      name
+      sku
+    }
+    suggestions {
+      search
+    }
+  }
+}
+QUERY;
+    }
 }

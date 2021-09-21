@@ -30,7 +30,7 @@ class QueryProcessor
 
     /**
      * @param QueryFactory $queryFactory
-     * @param StdlibString  $string
+     * @param StdlibString $string
      */
     public function __construct(
         QueryFactory $queryFactory,

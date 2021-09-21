@@ -19,10 +19,10 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Full text search for catalog using given search criteria.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Search implements ProductQueryInterface
 {
@@ -67,16 +67,6 @@ class Search implements ProductQueryInterface
     private $suggestions;
 
     /**
-     * @var StdlibString
-     */
-    private $string;
-
-    /**
-     * @var SuggestedQueries
-     */
-    private $suggestedQueries;
-
-    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
      * @param PageSizeProvider $pageSize
@@ -95,8 +85,7 @@ class Search implements ProductQueryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ArgumentsProcessorInterface $argsSelection = null,
         Suggestions $suggestions = null
-    )
-    {
+    ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
         $this->pageSizeProvider = $pageSize;
