@@ -17,20 +17,24 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-25580"/>
             <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <comment userInput="BIC workaround" stepKey="disableWYSIWYG"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
+                <argument name="UrlKey" value="{{_defaultCmsPage.identifier}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid" />
-        <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues" />
-        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton" />
-        <actionGroup ref="VerifyCreatedCmsPage" stepKey="verifyCmsPage" />
-        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
-            <argument name="UrlKey" value="{{_defaultCmsPage.identifier}}"/>
-        </actionGroup>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+        <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton"/>
+        <actionGroup ref="VerifyCreatedCmsPage" stepKey="verifyCmsPage"/>
+        <comment userInput="BIC workaround" stepKey="deletePage"/>
     </test>
 </tests>

@@ -79,10 +79,11 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!--Click place order-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
         <!--Order review page has address that was created during checkout-->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <!--Create Invoice for this Order-->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>

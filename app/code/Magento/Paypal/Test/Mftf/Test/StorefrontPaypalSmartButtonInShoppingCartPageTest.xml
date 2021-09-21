@@ -110,9 +110,10 @@
         <!-- I see order successful Page instead of Order Review Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
 
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="getOrderNumber"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
-            <argument name="orderId" value="{$getOrderNumber}"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="getOrderNumber"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="entityId" value="{$getOrderNumber}"/>
         </actionGroup>
         <actionGroup ref="AdminAssertNoAuthorizeButtonOnOrderPageActionGroup" stepKey="dontSeeOrderWaitingForAuthorize"/>
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkOrderStatus">

@@ -44,11 +44,12 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="openCheckoutPage"/>
         <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="fillAddressForm"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
 
         <!-- Reorder created order -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
         </actionGroup>
         <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" stepKey="startReorder"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
