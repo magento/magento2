@@ -20,6 +20,7 @@ class LoginAsCustomerButtonDataProviderPlugin
      * @var IsAssistanceEnabled
      */
     private $isAssistanceEnabled;
+
     /**
      * @var IsCustomerEnabled
      */
@@ -48,8 +49,9 @@ class LoginAsCustomerButtonDataProviderPlugin
      */
     public function afterGetData(DataProvider $subject, array $result, int $customerId): array
     {
-        if (isset($result['on_click']) &&
-            !($this->isCustomerEnabled->execute($customerId) && $this->isAssistanceEnabled->execute($customerId))) {
+        if (isset($result['on_click'])
+            && !($this->isCustomerEnabled->execute($customerId) && $this->isAssistanceEnabled->execute($customerId))
+        ) {
             $result['on_click'] = 'window.lacNotAllowedPopup()';
         }
 

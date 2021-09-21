@@ -10,7 +10,7 @@ namespace Magento\LoginAsCustomerAssistance\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Get is customer enabled
+ * Checks if customer is active by customer id
  */
 class GetIsCustomerEnabled
 {
