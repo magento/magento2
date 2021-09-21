@@ -60,9 +60,6 @@ class AddSimpleProductToCart
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
-        if (!in_array($cart->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
-            throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
-        }
 
         try {
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));

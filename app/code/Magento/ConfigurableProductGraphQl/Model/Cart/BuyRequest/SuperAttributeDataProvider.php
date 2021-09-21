@@ -92,9 +92,6 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find specified product.'));
         }
-        if (!in_array($cart->getStore()->getWebsiteId(), $product->getWebsiteIds())) {
-            throw new GraphQlNoSuchEntityException(__('Could not find specified product.'));
-        }
 
         $this->checkProductStock($sku, (float) $qty, (int) $cart->getStore()->getWebsiteId());
 
