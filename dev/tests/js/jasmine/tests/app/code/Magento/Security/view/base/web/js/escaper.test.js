@@ -45,12 +45,12 @@ define([
             },
             'text with special characters and allowed tag': {
                 data: '&<br/>"\'&amp;&lt;&gt;&quot;&#039;&#9;',
-                expected: '&amp;<br>"\'&amp;&lt;&gt;"\'\t',
+                expected: '&amp;<br />"\'&amp;&lt;&gt;"\'\t',
                 allowedTags: ['br']
             },
             'text with multiple allowed tags, includes self closing tag': {
                 data: '<span>some text in tags<br /></span>',
-                expected: '<span>some text in tags<br></span>',
+                expected: '<span>some text in tags<br /></span>',
                 allowedTags: ['span', 'br']
             },
             'text with multiple allowed tags and allowed attribute in double quotes': {

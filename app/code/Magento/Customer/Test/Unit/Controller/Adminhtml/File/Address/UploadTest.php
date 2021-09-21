@@ -232,7 +232,7 @@ class UploadTest extends TestCase
         $resultJson->expects($this->once())
             ->method('setData')
             ->with([
-                'error' => implode('</br>', $errors),
+                'error' => implode('<br />', $errors),
                 'errorcode' => 0,
             ])
             ->willReturnSelf();

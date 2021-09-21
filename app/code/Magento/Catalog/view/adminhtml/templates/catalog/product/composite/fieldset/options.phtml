@@ -15,7 +15,7 @@
               class="fieldset admin__fieldset <?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
         <legend class="legend admin__legend">
             <span><?= $block->escapeHtml(__('Custom Options')) ?></span>
-        </legend><br>
+        </legend><br />
         <?php foreach ($options as $option) :?>
             <?= $block->getOptionHtml($option) ?>
         <?php endforeach;?>

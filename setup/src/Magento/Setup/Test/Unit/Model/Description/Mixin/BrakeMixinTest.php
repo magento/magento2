@@ -43,9 +43,9 @@ class BrakeMixinTest extends TestCase
                 . 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 
                 'Lorem ipsum dolor sit amet.' . PHP_EOL
-                . '</br>' . PHP_EOL
+                . '<br />' . PHP_EOL
                 . 'Consectetur adipiscing elit.' . PHP_EOL
-                . '</br>' . PHP_EOL
+                . '<br />' . PHP_EOL
                 . 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
             ]
         ];

@@ -45,7 +45,7 @@
                                 <fieldset class="fieldset">
                                     <legend class="legend">
                                         <span><?= $block->escapeHtml($block->getCarrierName($code)) ?></span>
-                                    </legend><br>
+                                    </legend><br />
                                     <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate) : ?>
                                     <div class="field choice">
                                         <?php if ($_rate->getErrorMessage()) : ?>

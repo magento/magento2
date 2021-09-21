@@ -15,8 +15,8 @@
             </strong>
             <div class="box-content">
                 <p>
-                    <?= $block->escapeHtml($block->getName()) ?><br>
-                    <?= $block->escapeHtml($block->getCustomer()->getEmail()) ?><br>
+                    <?= $block->escapeHtml($block->getName()) ?><br />
+                    <?= $block->escapeHtml($block->getCustomer()->getEmail()) ?><br />
                 </p>
                 <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
             </div>

@@ -10,7 +10,7 @@
     <form class="form form-newsletter-manage" action="<?= $block->escapeUrl($block->getAction()) ?>" method="post" id="form-validate">
         <fieldset class="fieldset">
             <?= $block->getBlockHtml('formkey') ?>
-            <legend class="legend"><span><?= $block->escapeHtml(__('Subscription option')) ?></span></legend><br>
+            <legend class="legend"><span><?= $block->escapeHtml(__('Subscription option')) ?></span></legend><br />
             <div class="field choice">
                 <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?= $block->escapeHtmlAttr(__('General Subscription')) ?>"<?php if ($block->getIsSubscribed()) : ?> checked="checked"<?php endif; ?> class="checkbox">
                 <label for="subscription" class="label"><span><?= $block->escapeHtml(__('General Subscription')) ?></span></label>

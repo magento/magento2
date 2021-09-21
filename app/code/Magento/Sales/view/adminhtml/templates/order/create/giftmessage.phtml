@@ -19,7 +19,7 @@ $giftMessageHelper = $block->getData('giftMessageHelper');
             <legend class="admin__legend">
                 <span><?= $block->escapeHtml(__('Gift Message for the Entire Order')) ?></span>
             </legend>
-            <br>
+            <br />
             <?php if ($giftMessageHelper->isMessagesAllowed('main', $block->getQuote(), $block->getStoreId())): ?>
                 <p>
                     <?= $block->escapeHtml(

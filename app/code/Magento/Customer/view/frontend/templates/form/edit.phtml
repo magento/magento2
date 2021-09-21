@@ -17,7 +17,7 @@ use Magento\Customer\Block\Widget\Name;
       autocomplete="off">
     <fieldset class="fieldset info">
         <?= $block->getBlockHtml('formkey') ?>
-        <legend class="legend"><span><?= $block->escapeHtml(__('Account Information')) ?></span></legend><br>
+        <legend class="legend"><span><?= $block->escapeHtml(__('Account Information')) ?></span></legend><br />
         <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
 
         <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
@@ -53,7 +53,7 @@ use Magento\Customer\Block\Widget\Name;
     <fieldset class="fieldset password" data-container="change-email-password">
         <legend class="legend">
             <span data-title="change-email-password"><?= $block->escapeHtml(__('Change Email and Password')) ?></span>
-        </legend><br>
+        </legend><br />
         <div class="field email required" data-container="change-email">
             <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
