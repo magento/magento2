@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Security\Model;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
  * Admin Sessions Manager Model
@@ -174,8 +174,15 @@ class AdminSessionsManager
     public function getCurrentSession()
     {
         if (!$this->currentSession) {
+            $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
+            if (!$adminSessionInfoId) {
+                $this->createNewSession();
+                $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
+                $this->logoutOtherUserSessions();
+            }
+
             $this->currentSession = $this->adminSessionInfoFactory->create();
-            $this->currentSession->load($this->authSession->getAdminSessionInfoId(), 'id');
+            $this->currentSession->load($adminSessionInfoId, 'id');
         }
 
         return $this->currentSession;
