@@ -76,7 +76,7 @@
         <waitForPageLoad stepKey="waitForVirtualProductPage"/>
         <click stepKey="addVirtualProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
-        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
+        <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for CA -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
