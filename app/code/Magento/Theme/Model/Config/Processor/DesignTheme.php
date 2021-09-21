@@ -42,6 +42,7 @@ class DesignTheme implements PreProcessorInterface
 
     /**
      * Change value from theme_full_path (Ex. "frontend/Magento/blank") to theme_id field for every existed scope.
+     *
      * All other values leave without changes.
      *
      * @param array $config
@@ -63,8 +64,10 @@ class DesignTheme implements PreProcessorInterface
     }
 
     /**
-     * Check \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID config path
-     * and convert theme_full_path (Ex. "frontend/Magento/blank") to theme_id
+     * Convert theme_full_path from config (Ex. "frontend/Magento/blank") to theme_id.
+     *
+     * @see \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID
+     * @param array $configItems complete store configuration for a single scope as nested array
      */
     private function changeThemeFullPathToIdentifier(array $configItems): array
     {
