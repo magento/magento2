@@ -41,18 +41,18 @@ define([
                         'id': 81,
                         'code': 'BAY',
                         'name': 'Bayern'
-                   },
-                   {
+                    },
+                    {
                         'id': 82,
                         'code': 'BER',
                         'name': 'Berlin'
-                   },
+                    },
                     {
-                       'id': 83,
-                       'code': 'BRG',
-                       'name': 'Brandenburg'
-                   }
-            ]
+                        'id': 83,
+                        'code': 'BRG',
+                        'name': 'Brandenburg'
+                    }
+                ]
         },
         defaultCountry = 'GB',
         countries = {
