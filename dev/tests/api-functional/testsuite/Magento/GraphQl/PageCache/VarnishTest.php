@@ -15,6 +15,10 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class VarnishTest extends GraphQlAbstract
 {
+    protected function setUp(): void
+    {
+        $this->markTestSkipped("Tests are skipped until vcl files are merged into mainline");
+    }
     /**
      * Test that we obtain cache MISS/HIT when expected for a guest.
      *
@@ -42,8 +46,8 @@ class VarnishTest extends GraphQlAbstract
      * Test that changing the STORE header returns different cache results.
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
     public function testCacheResultForGuestWithStoreHeader()
     {
@@ -58,22 +62,27 @@ class VarnishTest extends GraphQlAbstract
         $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId]);
 
         // Obtain a new X-Magento-Cache-Id using after updating the STORE header
-        $secondStoreResponse = $this->graphQlQueryWithResponseHeaders($query, [
+        $secondStoreResponse = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            [
             CacheIdCalculator::CACHE_ID_HEADER => $defaultStoreCacheId,
-            'STORE' => 'fixture_second_store'
-        ]);
+            'Store' => 'fixture_second_store'
+        ]
+        );
         $secondStoreCacheId = $secondStoreResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
         // Verify we obtain a cache MISS the first time we search by this X-Magento-Cache-Id
         $this->assertCacheMiss($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
-            'STORE' => 'fixture_second_store'
+            'Store' => 'fixture_second_store'
         ]);
 
         // Verify we obtain a cache HIT the second time around with the STORE header
         $this->assertCacheHit($query, [
             CacheIdCalculator::CACHE_ID_HEADER => $secondStoreCacheId,
-            'STORE' => 'fixture_second_store'
+            'Store' => 'fixture_second_store'
         ]);
 
         // Verify we still obtain a cache HIT for the default store
@@ -81,62 +90,158 @@ class VarnishTest extends GraphQlAbstract
     }
 
     /**
-     * Test that changing the CONTENT-CURRENCY header returns different cache results.
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/multiple_currencies.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      */
     public function testCacheResultForGuestWithCurrencyHeader()
     {
-        // obtain cache id
-        // cache miss
-        // cache hit
-        // set CONTENT-CURRENCY header
-        // obtain new cache id and set it on the request
-        // cache miss
-        // cache hit
-        // remove CONTENT-CURRENCY header and use original cache id
-        // cache hit
+        $productSku = 'simple_product';
+        $query = $this->getProductQuery($productSku);
+
+        // Verify caching works as expected without a currency header
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
+        $defaultCurrencyCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
+        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
+
+        // Obtain a new X-Magento-Cache-Id using after updating the CONTENT-CURRENCY header
+        $secondCurrencyResponse = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            [
+            CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId,
+            'content-currency' => 'EUR'
+        ]
+        );
+        $secondCurrencyCacheId = $secondCurrencyResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
+        // Verify we obtain a cache MISS the first time we search by this X-Magento-Cache-Id
+        $this->assertCacheMiss($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $secondCurrencyCacheId,
+            'content-currency' => 'EUR'
+        ]);
+
+        // Verify we obtain a cache HIT the second time around with the changed currency header
+        $this->assertCacheHit($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $secondCurrencyCacheId,
+            'content-currency' => 'EUR'
+        ]);
+
+        // Verify we still obtain a cache HIT for the default currency ( no content-currency header)
+        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId]);
     }
 
     /**
      * Test that a request with a cache id which differs from the one returned by the response is not cacheable.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      */
     public function testCacheResultForGuestWithOutdatedCacheId()
     {
-        // obtain cache id
-        // cache miss
-        // cache hit
-        // set STORE header
-        // obtain new cache id, but continue using old cache id
-        // cache miss
-        // cache miss (since supplied cache id does not match cache id from response)
-        // update header with new cache id
-        // cache miss
-        // cache hit
+        $productSku = 'simple_product';
+        $query = $this->getProductQuery($productSku);
+
+        // Verify caching with no headers in the request
+        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
+        $defaultCacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId]);
+        $this->assertCacheHit($query, [CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId]);
+
+        // Obtain a new X-Magento-Cache-Id using after updating the request with STORE header
+        $responseWithStore = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId,
+                'STORE' => 'fixture_second_store'
+            ]
+        );
+        $storeCacheId = $responseWithStore['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
+        // Verify we obtain a cache MISS since we use the old cache id
+        $this->assertCacheMiss($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId,
+            'STORE' => 'fixture_second_store'
+        ]);
+
+        // Verify we obtain cache MISS again since the cache id in the request doesn't match the cache id from response
+        $this->assertCacheMiss($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $defaultCacheId,
+            'STORE' => 'fixture_second_store'
+        ]);
+
+        // Verify we get a cache MISS first time with the updated cache id
+        $this->assertCacheMiss($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $storeCacheId,
+            'STORE' => 'fixture_second_store'
+        ]);
+
+        // Verify we  obtain a cache HIT second time around with the updated cache id
+        $this->assertCacheHit($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $storeCacheId,
+            'STORE' => 'fixture_second_store'
+        ]);
     }
 
     /**
      * Test that we obtain cache MISS/HIT when expected for a customer.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      */
     public function testCacheResultForCustomer()
     {
-        // generateCustomerToken
-        // obtain auth token
-        // obtain cache id
-        // cache miss
-        // cache hit
-    }
+        $productSku = 'simple_product';
+        $query = $this->getProductQuery($productSku);
 
-    /**
-     * Test that omitting the Auth token does not send cached content for a logged-in customer.
-     */
-    public function testCacheResultForCustomerWithMissingAuthToken()
-    {
-        // generateCustomerToken
-        // obtain auth token
-        // obtain cache id
-        // cache miss
-        // cache hit
-        // unset auth token
-        // cache miss
+        $email = 'customer@example.com';
+        $password = 'password';
+        $generateToken = $this->generateCustomerToken($email, $password);
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders($generateToken);
+
+        // Obtain the X-Magento-Cache-id from the response and authorization token - customer logs in
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $tokenResponse['headers']);
+        $cacheIdCustomer = $tokenResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
+
+        // Verify we obtain cache MISS the first time we search by this X-Magento-Cache-Id
+        $this->assertCacheMiss($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
+            'Authorization' => 'Bearer ' . $customerToken
+        ]);
+
+        // Verify we obtain cache HIT second time using the same X-Magento-Cache-Id
+        $this->assertCacheHit($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
+            'Authorization' => 'Bearer ' . $customerToken
+        ]);
+        $revokeTokenQuery = $this->revokeCustomerToken();
+
+        // Verify that once customer logs out, X-Magento-Cache-Id will be that of an unregistered user
+        $revokeTokenResponse = $this->graphQlMutationWithResponseHeaders(
+            $revokeTokenQuery,
+            [],
+            '',
+            [
+                CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
+                'Authorization' => 'Bearer ' . $customerToken
+            ]
+        );
+
+        $cacheIdGuest = $revokeTokenResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertNotEquals($cacheIdCustomer, $cacheIdGuest);
+
+        //Verify that omitting the Auth token doesn't send cached content for a logged-in customer
+        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
+        $this->assertCacheMiss($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
     }
 
     /**
@@ -187,5 +292,37 @@ class VarnishTest extends GraphQlAbstract
 QUERY;
 
         return $productQuery;
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @return string
+     */
+    private function generateCustomerToken(string $email, string $password) : string
+    {
+        return <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+    }
+
+    /**
+     * @return string
+     */
+    private function revokeCustomerToken() : string
+    {
+        return <<<MUTATION
+mutation {
+	revokeCustomerToken
+	{ result }
+}
+MUTATION;
     }
 }
