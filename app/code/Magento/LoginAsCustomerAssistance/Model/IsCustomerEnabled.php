@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerAssistance\Model;
 
-use Magento\Framework\App\ResourceConnection;
 use Magento\LoginAsCustomerAssistance\Model\ResourceModel\GetIsCustomerEnabled;
 
 /**
@@ -26,7 +25,7 @@ class IsCustomerEnabled
     private $getIsCustomerEnabled;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @param GetIsCustomerEnabled $getIsCustomerEnabled
      */
     public function __construct(
         GetIsCustomerEnabled $getIsCustomerEnabled
@@ -38,12 +37,12 @@ class IsCustomerEnabled
      * Check if Customer is enabled by Customer id.
      *
      * @param int $customerId
+     *
      * @return bool
      */
     public function execute(int $customerId): bool
     {
         if (!isset($this->registry[$customerId])) {
-
             $this->registry[$customerId] = $this->getIsCustomerEnabled->execute($customerId);
         }
 
