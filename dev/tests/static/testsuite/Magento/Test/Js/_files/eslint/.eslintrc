@@ -2,6 +2,7 @@
     "extends": [
     	"./.eslintrc-reset",
     	"./.eslintrc-magento",
-    	"./.eslintrc-jquery"
+    	"./.eslintrc-jquery",
+    	"./.eslintrc-misc"
     ]
 }
