@@ -58,7 +58,7 @@
             <argument name="attributeCode" value="$$productAttribute.attribute_code$$"/>
         </actionGroup>
         <!--Check that attribute value is selected-->
-        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTitle1"/>
+        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" x="0" y="-78" stepKey="scrollToAttributeTitle1"/>
         <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" visible="false" stepKey="expandAttributeTab1"/>
         <seeOptionIsSelected selector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" userInput="option2" stepKey="seeAttributeValueIsSelected1"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
@@ -72,7 +72,7 @@
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct2">
             <argument name="productSku" value="{{simpleProductWithShortNameAndSku.sku}}"/>
         </actionGroup>
-        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTitle2"/>
+        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" x="0" y="-78" stepKey="scrollToAttributeTitle2"/>
         <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" visible="false" stepKey="expandAttributeTab2"/>
         <seeOptionIsSelected selector="{{AdminProductAttributeSection.dropDownAttribute($$productAttribute.attribute_code$$)}}" userInput="" stepKey="seeAttributeValueIsSelected2"/>
     </test>

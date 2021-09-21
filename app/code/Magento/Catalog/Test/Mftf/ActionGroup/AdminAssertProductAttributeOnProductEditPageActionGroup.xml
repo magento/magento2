@@ -16,8 +16,9 @@
             <argument name="attributeCode" defaultValue="{{newProductAttribute.attribute_code}}" type="string"/>
             <argument name="attributeLabel" defaultValue="{{ProductAttributeFrontendLabel.label}}" type="string"/>
         </arguments>
+        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" x="0" y="-78" stepKey="scrollToAttributesTab"/>
         <conditionalClick selector="{{AdminProductFormSection.attributeTab}}" dependentSelector="{{AdminProductFormSection.attributeTabOpened}}" visible="false" stepKey="clickToOpen"/>
-        <scrollTo selector="{{AdminProductFormSection.attributeTab}}" stepKey="scrollToAttributeTab"/>
+        <comment userInput="BIC workaround" stepKey="scrollToAttributeTab"/>
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(attributeLabel)}}" stepKey="seeAttributeLabelInProductForm"/>
         <seeElement selector="{{AdminProductFormSection.newAddedAttribute(attributeCode)}}" stepKey="seeProductAttributeIsAdded"/>
     </actionGroup>
