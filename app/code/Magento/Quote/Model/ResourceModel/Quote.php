@@ -61,8 +61,11 @@ class Quote extends AbstractDb
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         $storeIds = $object->getSharedStoreIds();
+
         if ($storeIds) {
-            if ($storeIds != ['*']) {
+            // In PHP > 8, comparing the arrays [0] != ['*'] returned false
+            // This check emulates an old behavior (as it was in PHP 7)
+            if ($storeIds !== ['*'] && $storeIds !== [0]) {
                 $select->where('store_id IN (?)', $storeIds);
             }
         } else {
