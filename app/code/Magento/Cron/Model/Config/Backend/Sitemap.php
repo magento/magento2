@@ -72,7 +72,13 @@ class Sitemap extends \Magento\Framework\App\Config\Value
     public function afterSave()
     {
         $time = $this->getData('groups/generate/fields/time/value');
+        if (null === $time) {
+            $time = explode(',', $this->_config->getValue('sitemap/generate/time'));
+        }
         $frequency = $this->getData('groups/generate/fields/frequency/value');
+        if (null === $frequency) {
+            $frequency = $this->getValue();
+        }
 
         $cronExprArray = [
             (int)$time[1], //Minute
