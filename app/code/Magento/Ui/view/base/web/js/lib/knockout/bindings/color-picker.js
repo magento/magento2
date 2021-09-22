@@ -5,10 +5,8 @@
 define([
     'ko',
     'jquery',
-    '../template/renderer',
-    'spectrum',
-    'tinycolor'
-], function (ko, $, renderer, spectrum, tinycolor) {
+    '../template/renderer'
+], function (ko, $, renderer) {
     'use strict';
 
     /**
@@ -54,9 +52,11 @@ define([
                 return true;
             };
 
-            $(element).spectrum(config);
+            require(['tinycolor', 'spectrum'], function () {
+                $(element).spectrum(config);
 
-            changeColorPickerStateBasedOnViewModel(element, viewModel);
+                changeColorPickerStateBasedOnViewModel(element, viewModel);
+            });
         },
 
         /**
@@ -76,15 +76,17 @@ define([
                 config.value('');
             }
 
-            if (tinycolor(config.value()).isValid() || config.value() === '') {
-                $(element).spectrum('set', config.value());
+            require(['tinycolor', 'spectrum'], function (tinycolor) {
+                if (tinycolor(config.value()).isValid() || config.value() === '') {
+                    $(element).spectrum('set', config.value());
 
-                if (config.value() !== '') {
-                    config.value($(element).spectrum('get').toString());
+                    if (config.value() !== '') {
+                        config.value($(element).spectrum('get').toString());
+                    }
                 }
-            }
 
-            changeColorPickerStateBasedOnViewModel(element, viewModel);
+                changeColorPickerStateBasedOnViewModel(element, viewModel);
+            });
         }
     };
 
