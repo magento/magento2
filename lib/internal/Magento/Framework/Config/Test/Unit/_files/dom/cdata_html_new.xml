@@ -7,6 +7,6 @@
 -->
 <root>
     <node>
-        <subnode><![CDATA[Some <br /> Other <br /> Phrase]]></subnode>
+        <subnode><![CDATA[Some <br/> Other <br/> Phrase]]></subnode>
     </node>
 </root>

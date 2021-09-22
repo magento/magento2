@@ -105,12 +105,12 @@ TEMPLATE;
 
         $expectedResult2 = <<<EXPECTED_RESULT
 <ul>
-    
+
     <li>
         index: 0 sku: ABC123
         name: Product ABC price: 123 quantity: 2
     </li>
-    
+
 </ul>
 EXPECTED_RESULT;
         return [
@@ -321,7 +321,7 @@ EXPECTED_RESULT;
 
         $template = '{{mydir "somevalue" param1=yes|foofilter|nl2br}}blah {{var address}} blah{{/mydir}}';
 
-        $expected = 'HALB 85787 XT ,NITSUA<br />' . "\n" . '.RD NIAMOD 10511 HALBSEYEULAVEMOS';
+        $expected = 'HALB 85787 XT ,NITSUA<br/>' . "\n" . '.RD NIAMOD 10511 HALBSEYEULAVEMOS';
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 

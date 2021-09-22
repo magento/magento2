@@ -255,7 +255,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $separator
      * @return string
      */
-    public function displayPriceAttribute($code, $strong = false, $separator = '<br />')
+    public function displayPriceAttribute($code, $strong = false, $separator = '<br/>')
     {
         if ($code == 'tax_amount' && $this->getOrder()->getRowTaxDisplayPrecision()) {
             return $this->displayRoundedPrices(
@@ -284,7 +284,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $separator
      * @return string
      */
-    public function displayPrices($basePrice, $price, $strong = false, $separator = '<br />')
+    public function displayPrices($basePrice, $price, $strong = false, $separator = '<br/>')
     {
         return $this->displayRoundedPrices($basePrice, $price, 2, $strong, $separator);
     }
@@ -299,7 +299,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * @param string $separator
      * @return string
      */
-    public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br />')
+    public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br/>')
     {
         if ($this->getOrder()->isCurrencyDifferent()) {
             $res = '';

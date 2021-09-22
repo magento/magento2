@@ -57,7 +57,7 @@ class OutputTest extends TestCase
         $this->_testAttribute(
             'productAttribute',
             Product::ENTITY,
-            "&lt;p&gt;line1&lt;/p&gt;<br />\nline2"
+            "&lt;p&gt;line1&lt;/p&gt;<br/>\nline2"
         );
     }
 
