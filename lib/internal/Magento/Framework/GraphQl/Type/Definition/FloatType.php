@@ -41,6 +41,7 @@ class FloatType extends \GraphQL\Type\Definition\FloatType
      * @param array|null $variables
      * @return float
      * @throws Exception
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function parseLiteral(Node $valueNode, ?array $variables = null): float
     {
@@ -48,8 +49,7 @@ class FloatType extends \GraphQL\Type\Definition\FloatType
             if ($valueNode instanceof ValueNode
                 && !($valueNode instanceof FloatValueNode)
                 && !($valueNode instanceof IntValueNode)
-                && isset($valueNode->value))
-            {
+                && isset($valueNode->value)) {
                 $valueNode = new FloatValueNode([
                     'value' => (string)$this->parseValue($valueNode->value),
                     'loc' => $valueNode->loc

@@ -40,14 +40,14 @@ class IntType extends \GraphQL\Type\Definition\IntType
      * @param array|null $variables
      * @return int
      * @throws Exception
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function parseLiteral(Node $valueNode, ?array $variables = null): int
     {
         try {
             if ($valueNode instanceof ValueNode
                 && !($valueNode instanceof IntValueNode)
-                && isset($valueNode->value))
-            {
+                && isset($valueNode->value)) {
                 $valueNode = new IntValueNode([
                     'value' => (string)$this->parseValue($valueNode->value),
                     'loc' => $valueNode->loc

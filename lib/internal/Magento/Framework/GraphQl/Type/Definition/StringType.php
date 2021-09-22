@@ -40,14 +40,14 @@ class StringType extends \GraphQL\Type\Definition\StringType
      * @param array|null $variables
      * @return string
      * @throws Exception
+     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function parseLiteral(Node $valueNode, ?array $variables = null): string
     {
         try {
             if ($valueNode instanceof ValueNode
                 && !($valueNode instanceof StringValueNode)
-                && isset($valueNode->value))
-            {
+                && isset($valueNode->value)) {
                 $valueNode = new StringValueNode([
                     'value' => $this->parseValue($valueNode->value),
                     'loc' => $valueNode->loc
