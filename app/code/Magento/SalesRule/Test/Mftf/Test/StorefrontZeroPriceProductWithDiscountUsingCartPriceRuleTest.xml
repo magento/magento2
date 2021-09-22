@@ -80,8 +80,8 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Navigate to admin order details page -->
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
-            <argument name="entityId" value="$grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
         <!-- Assert Discount amount in admin -->
