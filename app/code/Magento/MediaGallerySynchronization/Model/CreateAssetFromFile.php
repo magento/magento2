@@ -98,12 +98,12 @@ class CreateAssetFromFile implements CreateAssetFromFileInterface
             [
                 'id' => null,
                 'path' => $path,
-                'title' => $meta['basename'],
-                'width' => $meta['extra']['image-width'],
-                'height' => $meta['extra']['image-height'],
+                'title' => $meta['basename'] ?? '',
+                'width' => $meta['extra']['image-width'] ?? 0,
+                'height' => $meta['extra']['image-height'] ?? 0,
                 'hash' => $this->getHash($path),
-                'size' => $meta['size'],
-                'contentType' => 'image/' . $meta['extension'],
+                'size' => $meta['size'] ?? 0,
+                'contentType' => sprintf('%s/%s', 'image', $meta['extension'] ?? ''),
                 'source' => 'Local'
             ]
         );
