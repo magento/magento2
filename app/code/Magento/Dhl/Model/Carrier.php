@@ -994,7 +994,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
                 if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
                     $debugPoint['info'] = sprintf(
-                        __("DHL service is not available at %s date"),
+                        __("DHL service is not available at %s date")->render(),
                         $responseData['date']
                     );
                     $unavailable = true;
