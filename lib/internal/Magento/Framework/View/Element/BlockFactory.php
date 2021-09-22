@@ -23,12 +23,6 @@ class BlockFactory
     protected $objectManager;
 
     /**
-     * Constructor
-     *
-     * @param ObjectManagerInterface $objectManager
-     */
-
-    /**
      * Object manager config
      *
      * @var \Magento\Framework\ObjectManager\ConfigInterface
