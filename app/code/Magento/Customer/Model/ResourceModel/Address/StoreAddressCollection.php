@@ -16,7 +16,7 @@ class StoreAddressCollection extends Collection
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager;
+    private $_objectManager;
 
     /**
      * @var AddressBlock
