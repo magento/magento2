@@ -136,6 +136,12 @@ class ShipmentFactory
                 }
             } else {
                 if (isset($items[$orderItem->getId()])) {
+                    if (!is_numeric($items[$orderItem->getId()])) {
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('The specified qty is not valid.')
+                        );
+                    }
+
                     $qty = min($items[$orderItem->getId()], $orderItem->getQtyToShip());
                 } elseif (!count($items)) {
                     $qty = $orderItem->getQtyToShip();
