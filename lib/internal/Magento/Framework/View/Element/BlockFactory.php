@@ -27,9 +27,27 @@ class BlockFactory
      *
      * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManagerInterface $objectManager)
+
+    /**
+     * Object manager config
+     *
+     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * Constructor
+     *
+     * @param ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $config
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        \Magento\Framework\ObjectManager\ConfigInterface $config
+    )
     {
         $this->objectManager = $objectManager;
+        $this->config           = $config;
     }
 
     /**
@@ -43,6 +61,10 @@ class BlockFactory
     public function createBlock($blockName, array $arguments = [])
     {
         $blockName = ltrim($blockName, '\\');
+        $configArguments = $this->config->getArguments($blockName);
+        if (isset($configArguments['data'])) {
+            $arguments['data']+= $configArguments['data'];
+        }
         $block = $this->objectManager->create($blockName, $arguments);
         if (!$block instanceof BlockInterface) {
             throw new \LogicException($blockName . ' does not implement BlockInterface');
