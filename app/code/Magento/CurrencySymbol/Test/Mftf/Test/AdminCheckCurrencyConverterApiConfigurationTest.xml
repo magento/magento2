@@ -59,6 +59,7 @@
             <argument name="messageType" value="warning"/>
         </actionGroup>
         <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURAndUSD"/>
+        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
         <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPageAfterSetEUR"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesAfterEUR">
             <argument name="rateService" value="Currency Converter API"/>
@@ -81,6 +82,7 @@
         <see selector="{{StorefrontCategoryMainSection.productPrice}}" userInput="€" stepKey="seeEURCurrencySymbolInPrice"/>
         <!--Set allowed currencies greater then 10-->
         <magentoCLI command="config:set currency/options/allow RHD,CHW,YER,ZMK,CHE,EUR,USD,AMD,RUB,DZD,ARS,AWG" stepKey="setGreaterThanTenAllowedCurrencies"/>
+        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches2"/>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
         <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPageAfterChangeAllowed"/>
         <actionGroup ref="AdminImportUnsupportedCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
