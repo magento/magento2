@@ -42,7 +42,6 @@
                 <argument name="taxCode" value="SimpleTaxNYRate"/>
             </actionGroup>
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
-            <see selector="{{StorefrontMinicartSection.quantity}}" userInput="6" stepKey="seeCartQuantity"/>
             <!-- Create cart price rule -->
             <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="createCartPriceRule">
                 <argument name="ruleName" value="SalesRuleWithFullDiscount"/>
