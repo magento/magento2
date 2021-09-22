@@ -78,7 +78,7 @@ class StoreAddressCollection extends Collection
      *
      * @return void
      */
-    protected function _construct()
+    public function _construct()
     {
         parent::_construct();
 
