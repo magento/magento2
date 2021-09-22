@@ -350,7 +350,6 @@ class GraphQlReader implements ReaderInterface
         return $source;
     }
 
-
     /**
      * Replace the standard type definitions with ones that know how to cast input values
      */

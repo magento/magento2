@@ -16,7 +16,7 @@ use GraphQL\Language\AST\ValueNode;
 /**
  * Replacement for the IntType definition that can typecast non-numeric values for backwards compatibility
  */
-class IntType extends \GraphQl\Type\Definition\IntType
+class IntType extends \GraphQL\Type\Definition\IntType
 {
     /**
      * Try to typecast valid values before running the native validations
@@ -44,17 +44,17 @@ class IntType extends \GraphQl\Type\Definition\IntType
     public function parseLiteral(Node $valueNode, ?array $variables = null): int
     {
         try {
-            if (
-                $valueNode instanceof ValueNode
+            if ($valueNode instanceof ValueNode
                 && !($valueNode instanceof IntValueNode)
-                && isset($valueNode->value)
-            ) {
+                && isset($valueNode->value))
+            {
                 $valueNode = new IntValueNode([
                     'value' => (string)$this->parseValue($valueNode->value),
                     'loc' => $valueNode->loc
                 ]);
             }
         } catch (Exception $e) {
+            // If parsing fails let it go through the regular method to throw the expected error
         }
         return parent::parseLiteral($valueNode, $variables);
     }

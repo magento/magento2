@@ -16,7 +16,7 @@ use GraphQL\Language\AST\ValueNode;
 /**
  * Replacement for the StringType definition that can typecast non-string values for backwards compatibility
  */
-class StringType extends \GraphQl\Type\Definition\StringType
+class StringType extends \GraphQL\Type\Definition\StringType
 {
     /**
      * Try to typecast valid values before running the native validations
@@ -44,17 +44,17 @@ class StringType extends \GraphQl\Type\Definition\StringType
     public function parseLiteral(Node $valueNode, ?array $variables = null): string
     {
         try {
-            if (
-                $valueNode instanceof ValueNode
+            if ($valueNode instanceof ValueNode
                 && !($valueNode instanceof StringValueNode)
-                && isset($valueNode->value)
-            ) {
+                && isset($valueNode->value))
+            {
                 $valueNode = new StringValueNode([
                     'value' => $this->parseValue($valueNode->value),
                     'loc' => $valueNode->loc
                 ]);
             }
         } catch (Exception $e) {
+            // If parsing fails let it go through the regular method to throw the expected error
         }
         return parent::parseLiteral($valueNode, $variables);
     }

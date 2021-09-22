@@ -45,18 +45,18 @@ class FloatType extends \GraphQL\Type\Definition\FloatType
     public function parseLiteral(Node $valueNode, ?array $variables = null): float
     {
         try {
-            if (
-                $valueNode instanceof ValueNode
+            if ($valueNode instanceof ValueNode
                 && !($valueNode instanceof FloatValueNode)
                 && !($valueNode instanceof IntValueNode)
-                && isset($valueNode->value)
-            ) {
+                && isset($valueNode->value))
+            {
                 $valueNode = new FloatValueNode([
                     'value' => (string)$this->parseValue($valueNode->value),
                     'loc' => $valueNode->loc
                 ]);
             }
         } catch (Exception $e) {
+            // If parsing fails let it go through the regular method to throw the expected error
         }
         return parent::parseLiteral($valueNode, $variables);
     }
