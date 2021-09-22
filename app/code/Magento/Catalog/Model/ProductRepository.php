@@ -280,6 +280,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function get($sku, $editMode = false, $storeId = null, $forceReload = false)
     {
+        $storeId = $storeId === null ? null : (int) $storeId;
         $cacheKey = $this->getCacheKey([$editMode, $storeId]);
         $cachedProduct = $this->getProductFromLocalCache($sku, $cacheKey);
         if ($cachedProduct === null || $forceReload) {
