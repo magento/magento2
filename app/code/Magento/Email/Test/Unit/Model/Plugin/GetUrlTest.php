@@ -9,6 +9,7 @@ namespace Magento\Email\Test\Unit\Model\Plugin;
 
 use Magento\Email\Model\Plugin\GetUrl;
 use Magento\Store\Model\Store;
+use Magento\Email\Model\AbstractTemplate;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -17,13 +18,11 @@ class GetUrlTest extends TestCase
     /** @var  Store|MockObject */
     private $storeMock;
 
-    /** @var  GetUrl|Object */
+    /** @var  GetUrl */
     private $plugin;
 
     /**
-     * setUp
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -43,7 +42,7 @@ class GetUrlTest extends TestCase
         $params['_escape_params'] = $storeCode;
         $route = '';
 
-        $abstractTemplateMock = $this->getMockBuilder(\Magento\Email\Model\AbstractTemplate::class)
+        $abstractTemplateMock = $this->getMockBuilder(AbstractTemplate::class)
             ->disableOriginalConstructor()
             ->getMock();
 
