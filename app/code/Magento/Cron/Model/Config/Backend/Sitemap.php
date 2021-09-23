@@ -17,7 +17,7 @@ namespace Magento\Cron\Model\Config\Backend;
 class Sitemap extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Cron string path
+     * Cron expression path
      */
     const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
 
@@ -71,14 +71,12 @@ class Sitemap extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $time = $this->getData('groups/generate/fields/time/value');
-        if (null === $time) {
-            $time = explode(',', $this->_config->getValue('sitemap/generate/time'));
-        }
-        $frequency = $this->getData('groups/generate/fields/frequency/value');
-        if (null === $frequency) {
-            $frequency = $this->getValue();
-        }
+        $time = $this->getData('groups/generate/fields/time/value') ?:
+            explode(
+                ',',
+                $this->_config->getValue('sitemap/generate/time', $this->getScope(), $this->getScopeId()) ?: '0,0,0'
+            );
+        $frequency = $this->getValue();
 
         $cronExprArray = [
             (int)$time[1], //Minute
@@ -108,6 +106,7 @@ class Sitemap extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(__('We can\'t save the cron expression.'));
         }
         return parent::afterSave();
