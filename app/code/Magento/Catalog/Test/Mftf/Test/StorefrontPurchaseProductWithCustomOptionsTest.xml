@@ -122,17 +122,18 @@
         <!-- Place Order -->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
 
         <!-- Login to Admin and open Order -->
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterByOrderId">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageOpened"/>
+        <comment userInput="BIC workaround" stepKey="filterByOrderId"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPageOpened"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
