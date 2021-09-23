@@ -32,7 +32,7 @@ class GetUrlTest extends TestCase
     }
 
     /**
-     * Test if unique store parameter passed in third argument `$params` of `beforeGetUrl` function.
+     * Test if unique store parameter passed in third argument (`$params`) of `beforeGetUrl` function.
      *
      * @return void
      */
