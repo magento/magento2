@@ -41,7 +41,6 @@ class FloatType extends \GraphQL\Type\Definition\FloatType
      * @param array|null $variables
      * @return float
      * @throws Exception
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function parseLiteral(Node $valueNode, ?array $variables = null): float
     {
@@ -55,9 +54,7 @@ class FloatType extends \GraphQL\Type\Definition\FloatType
                     'loc' => $valueNode->loc
                 ]);
             }
-        } catch (Exception $e) {
-            // If parsing fails let it go through the regular method to throw the expected error
-        }
+        } catch (Exception $e) {} // @codingStandardsIgnoreLine
         return parent::parseLiteral($valueNode, $variables);
     }
 }

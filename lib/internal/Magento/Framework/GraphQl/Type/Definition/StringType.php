@@ -40,7 +40,6 @@ class StringType extends \GraphQL\Type\Definition\StringType
      * @param array|null $variables
      * @return string
      * @throws Exception
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function parseLiteral(Node $valueNode, ?array $variables = null): string
     {
@@ -53,9 +52,7 @@ class StringType extends \GraphQL\Type\Definition\StringType
                     'loc' => $valueNode->loc
                 ]);
             }
-        } catch (Exception $e) {
-            // If parsing fails let it go through the regular method to throw the expected error
-        }
+        } catch (Exception $e) {} // @codingStandardsIgnoreLine
         return parent::parseLiteral($valueNode, $variables);
     }
 }
