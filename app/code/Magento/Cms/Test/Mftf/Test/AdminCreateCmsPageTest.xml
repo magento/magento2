@@ -17,9 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-25580"/>
             <group value="Cms"/>
-            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSYWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <comment userInput="BIC workaround" stepKey="disableWYSIWYG"/>
         </before>
@@ -30,6 +30,7 @@
                 <argument name="UrlKey" value="{{_defaultCmsPage.identifier}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSYWYG"/>
         </after>
         <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
         <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues"/>
