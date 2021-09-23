@@ -13,11 +13,11 @@
         <annotations>
             <description>Clears the Admin Customer Address grid Filters. Sets the grid view to 'Default View'.</description>
         </annotations>
-        
+
         <conditionalClick selector="{{AdminCustomerAddressFiltersSection.clearAll}}" dependentSelector="{{AdminCustomerAddressFiltersSection.clearAll}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminCustomerAddressFiltersSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
-        <click selector="{{AdminCustomerAddressFiltersSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
+        <click selector="{{AdminCustomerAddressFiltersSection.viewBookmark(DefaultGridView.name)}}" stepKey="resetToDefaultGridView"/>
         <waitForPageLoad stepKey="waitForGridLoad"/>
-        <see selector="{{AdminCustomerFiltersSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+        <see selector="{{AdminCustomerFiltersSection.viewDropdown}}" userInput="{{DefaultGridView.name}}" stepKey="seeDefaultViewSelected"/>
     </actionGroup>
 </actionGroups>

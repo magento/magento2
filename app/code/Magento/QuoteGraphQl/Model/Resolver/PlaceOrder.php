@@ -10,30 +10,29 @@ namespace Magento\QuoteGraphQl\Model\Resolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\QuoteGraphQl\Model\Cart\CheckCartCheckoutAllowance;
 
 /**
- * @inheritdoc
+ * Resolver for placing order after payment method has already been set
  */
 class PlaceOrder implements ResolverInterface
 {
     /**
-     * @var CartManagementInterface
-     */
-    private $cartManagement;
-
-    /**
      * @var GetCartForUser
      */
     private $getCartForUser;
+
+    /**
+     * @var PlaceOrderModel
+     */
+    private $placeOrder;
 
     /**
      * @var OrderRepositoryInterface
@@ -41,34 +40,18 @@ class PlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
-     * @var CheckCartCheckoutAllowance
-     */
-    private $checkCartCheckoutAllowance;
-
-    /**
-     * @var PaymentMethodManagementInterface
-     */
-    private $paymentMethodManagement;
-
-    /**
      * @param GetCartForUser $getCartForUser
-     * @param CartManagementInterface $cartManagement
+     * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
-     * @param CheckCartCheckoutAllowance $checkCartCheckoutAllowance
-     * @param PaymentMethodManagementInterface $paymentMethodManagement
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartManagementInterface $cartManagement,
-        OrderRepositoryInterface $orderRepository,
-        CheckCartCheckoutAllowance $checkCartCheckoutAllowance,
-        PaymentMethodManagementInterface $paymentMethodManagement
+        PlaceOrderModel $placeOrder,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->getCartForUser = $getCartForUser;
-        $this->cartManagement = $cartManagement;
+        $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
-        $this->checkCartCheckoutAllowance = $checkCartCheckoutAllowance;
-        $this->paymentMethodManagement = $paymentMethodManagement;
     }
 
     /**
@@ -80,34 +63,27 @@ class PlaceOrder implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
-
+        $userId = (int)$context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
-        $this->checkCartCheckoutAllowance->execute($cart);
-
-        if ((int)$context->getUserId() === 0) {
-            if (!$cart->getCustomerEmail()) {
-                throw new GraphQlInputException(__("Guest email for cart is missing."));
-            }
-            $cart->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
-        }
 
         try {
-            $cartId = $cart->getId();
-            $orderId = $this->cartManagement->placeOrder($cartId, $this->paymentMethodManagement->get($cartId));
+            $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
+            $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
-
-            return [
-                'order' => [
-                    'order_number' => $order->getIncrementId(),
-                    // @deprecated The order_id field is deprecated, use order_number instead
-                    'order_id' => $order->getIncrementId(),
-                ],
-            ];
+        } catch (GraphQlInputException | GraphQlNoSuchEntityException | GraphQlAuthorizationException $e) {
+            throw $e;
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
         }
+
+        return [
+            'order' => [
+                'order_number' => $order->getIncrementId(),
+                // @deprecated The order_id field is deprecated, use order_number instead
+                'order_id' => $order->getIncrementId(),
+            ],
+        ];
     }
 }
