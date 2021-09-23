@@ -72,7 +72,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         }
 
         // No expected lock data, means we should never call it
-        if (empty($expectedLockData)){
+        if (empty($expectedLockData)) {
             $lockManager->expects($this->never())
                 ->method('lock');
         }
@@ -132,7 +132,9 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 ['default'],                        // --exclude-group default
             ],
             '--exclude-group=index, all other groups should run' => [
-                array_filter($listOfGroups, function($g) { return $g !== 'index'; }),   // groups to run, all but index
+                array_filter($listOfGroups, function ($g) {
+                    return $g !== 'index';
+                }),                                                                     // groups to run, all but index
                 null,                                                                   //
                 ['index']                                                               // --exclude-group index
             ],
@@ -142,9 +144,13 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 $listOfGroups                       // groups to exclude, all of them
             ],
             'exclude all groups but consumers, consumers runs' => [
-                array_filter($listOfGroups, function($g) { return $g === 'consumers'; }),
+                array_filter($listOfGroups, function ($g) {
+                        return $g === 'consumers';
+                }),
                 null,
-                array_filter($listOfGroups, function($g) { return $g !== 'consumers'; })
+                array_filter($listOfGroups, function ($g) {
+                    return $g !== 'consumers';
+                })
             ],
         ];
     }

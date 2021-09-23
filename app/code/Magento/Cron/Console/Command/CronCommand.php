@@ -105,6 +105,7 @@ class CronCommand extends Command
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
             return;
         }
+        // phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageWarning
         $omParams = $_SERVER;
         $omParams[StoreManager::PARAM_RUN_CODE] = 'admin';
         $omParams[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
@@ -128,5 +129,6 @@ class CronCommand extends Command
         $cronObserver = $objectManager->create(\Magento\Framework\App\Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
         $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
+        return Cli::RETURN_SUCCESS;
     }
 }
