@@ -86,23 +86,23 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         $collectionItems = $this->consumerCollection->getItems();
 
             /** @var $consumer Consumer */
-            foreach ($collectionItems as $consumer) {
-                $existingSecret = $consumer->getSecret();
-                $entityId = $consumer->getEntityId();
+        foreach ($collectionItems as $consumer) {
+            $existingSecret = $consumer->getSecret();
+            $entityId = $consumer->getEntityId();
 
-                if ($entityId && $existingSecret) {
-                    if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-                        $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
-                        $where = ['entity_id = ?' => $entityId];
-                        try {
-                            $connection->update($this->consumerResourceModel->getMainTable(), $data, $where);
-                        } catch (\Exception $exception) {
-                            $this->logger->critical($exception->getMessage());
-                            return $this;
-                        }
+            if ($entityId && $existingSecret) {
+                if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+                    $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
+                    $where = ['entity_id = ?' => $entityId];
+                    try {
+                        $connection->update($this->consumerResourceModel->getMainTable(), $data, $where);
+                    } catch (\Exception $exception) {
+                        $this->logger->critical($exception->getMessage());
+                        return $this;
                     }
                 }
             }
+        }
 
         return $this;
     }
