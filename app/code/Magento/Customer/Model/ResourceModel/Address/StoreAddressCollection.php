@@ -16,7 +16,7 @@ class StoreAddressCollection extends Collection
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $_objectManager;
+    private $objectManager;
 
     /**
      * @var AddressBlock
@@ -56,7 +56,7 @@ class StoreAddressCollection extends Collection
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
 
         parent::__construct(
             $entityFactory,
@@ -82,15 +82,15 @@ class StoreAddressCollection extends Collection
     {
         parent::_construct();
 
-        $this->addressBlock = $this->_objectManager->create(AddressBlock::class);
-        $this->allowedCountryReader = $this->_objectManager->create(AllowedCountries::class);
+        $this->addressBlock = $this->objectManager->create(AddressBlock::class);
+        $this->allowedCountryReader = $this->objectManager->create(AllowedCountries::class);
     }
 
     /**
      * Set allowed country filter for customer's addresses
      *
      * @param \Magento\Customer\Model\Customer|array $customer
-     * @return $this
+     * @return $this|Object
      */
     public function setCustomerFilter($customer)
     {
