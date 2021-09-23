@@ -27,18 +27,18 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->_model->execute(new \Magento\Framework\Event\Observer());
     }
 
-//    /**
-//     * @magentoConfigFixture current_store crontab/default/jobs/catalog_product_alert/schedule/cron_expr * * * * *
-//     */
-//    public function testDispatchScheduled()
-//    {
-//        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-//            \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
-//        );
-//        $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_PENDING);
-//        $collection->addFieldToFilter('job_code', 'catalog_product_alert');
-//        $this->assertGreaterThan(0, $collection->count(), 'Cron has failed to schedule tasks for itself for future.');
-//    }
+    /**
+     * @magentoConfigFixture current_store crontab/default/jobs/catalog_product_alert/schedule/cron_expr * * * * *
+     */
+    public function testDispatchScheduled()
+    {
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
+        );
+        $collection->addFieldToFilter('status', \Magento\Cron\Model\Schedule::STATUS_PENDING);
+        $collection->addFieldToFilter('job_code', 'catalog_product_alert');
+        $this->assertGreaterThan(0, $collection->count(), 'Cron has failed to schedule tasks for itself for future.');
+    }
 
     public function testDispatchNoFailed()
     {
@@ -107,11 +107,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function groupFiltersDataProvider(): array
     {
-        $listOfGroups = array_reverse(array_keys($this->getFilterTestCronGroups()), true);
 
         return [
             'no flags runs all groups' => [
-                $listOfGroups                       // groups to run
+                ['consumers', 'index', 'default']    // groups to run
             ],
             '--group=default should run'  => [
                 ['default'],                        // groups to run
@@ -133,25 +132,19 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 ['default'],                        // --exclude-group default
             ],
             '--exclude-group=index, all other groups should run' => [
-                array_filter($listOfGroups, function ($g) {
-                    return $g !== 'index';
-                }),                                                                     // groups to run, all but index
-                null,                                                                   //
-                ['index']                                                               // --exclude-group index
+                ['consumers', 'default'],           // groups to run, all but index
+                null,                               //
+                ['index']                           // --exclude-group index
             ],
             '--exclude-group for every group runs nothing' => [
                 [],                                 // groups to run, none
                 null,                               //
-                $listOfGroups                       // groups to exclude, all of them
+                ['default', 'consumers', 'index']   // groups to exclude, all of them
             ],
             'exclude all groups but consumers, consumers runs' => [
-                array_filter($listOfGroups, function ($g) {
-                        return $g === 'consumers';
-                }),
+                ['consumers'],
                 null,
-                array_filter($listOfGroups, function ($g) {
-                    return $g !== 'consumers';
-                })
+                ['index', 'default']
             ],
         ];
     }
