@@ -6,15 +6,21 @@
 namespace Magento\Customer\Model\ResourceModel\Address;
 
 use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address as AddressBlock;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * Class Store Address Collection
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StoreAddressCollection extends Collection
 {
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -39,8 +45,10 @@ class StoreAddressCollection extends Collection
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -53,7 +61,7 @@ class StoreAddressCollection extends Collection
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->objectManager = $objectManager;
@@ -91,6 +99,7 @@ class StoreAddressCollection extends Collection
      *
      * @param \Magento\Customer\Model\Customer|array $customer
      * @return $this|Object
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCustomerFilter($customer)
     {
