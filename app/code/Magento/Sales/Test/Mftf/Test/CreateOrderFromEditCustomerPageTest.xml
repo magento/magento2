@@ -95,12 +95,12 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <!--Filter and Open the customer edit page -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomer">
-            <argument name="email" value="$$simpleCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$simpleCustomer.id$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickOnCreateOrderButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
@@ -190,11 +190,13 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Filter and Open the customer edit page -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomer1">
-            <argument name="email" value="$$simpleCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage1">
+            <argument name="customerId" value="$$simpleCustomer.id$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad1"/>
+        
         <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="clickOnOrdersButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToOpen"/>
         <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderId')}}" stepKey="selectOnOrderID"/>
