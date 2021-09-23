@@ -318,6 +318,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpression($range)
     {
         switch ($range) {
+            case 'today':
             case '24h':
                 $expression = $this->getConnection()->getConcatSql(
                     [
@@ -420,6 +421,9 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
+            case 'today':
+                $dateEnd->modify('now');
+                break;
             case '24h':
                 $dateEnd = new \DateTime();
                 $dateEnd->modify('+1 hour');

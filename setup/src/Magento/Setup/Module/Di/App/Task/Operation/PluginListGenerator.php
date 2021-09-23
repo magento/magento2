@@ -47,6 +47,9 @@ class PluginListGenerator implements OperationInterface
         // remove primary scope for production mode as it is only called in developer mode
         $scopes = array_diff($scopes, ['primary']);
 
+        // sort configuration to have it in the same order on every build
+        ksort($scopes);
+
         $this->configWriter->write($scopes);
     }
 
