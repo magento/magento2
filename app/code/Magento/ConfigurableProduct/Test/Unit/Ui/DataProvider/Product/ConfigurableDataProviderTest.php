@@ -89,7 +89,7 @@ class ConfigurableDataProviderTest extends TestCase
     /**
      * @return object
      */
-    protected function getModel()
+    protected function getModel(): ConfigurableDataProvider
     {
         return $this->objectManager->getObject(ConfigurableDataProvider::class, [
             'name' => 'testName',
@@ -107,7 +107,7 @@ class ConfigurableDataProviderTest extends TestCase
     /**
      * Test checks ConfigurableDataProvider type
      */
-    public function testCheckType()
+    public function testCheckType(): void
     {
         $this->assertInstanceOf(ConfigurableDataProvider::class, $this->getModel());
     }
@@ -115,7 +115,7 @@ class ConfigurableDataProviderTest extends TestCase
     /**
      * Test checks collection type
      */
-    public function testGetCollection()
+    public function testGetCollection(): void
     {
         $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
     }
