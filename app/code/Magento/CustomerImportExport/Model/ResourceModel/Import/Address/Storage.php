@@ -98,7 +98,7 @@ class Storage
         $select->reset(Select::COLUMNS)->columns([$tableId . '.entity_id', $tableId . '.parent_id']);
 
         $pageSize = $this->config->getValue(AbstractEntity::XML_PATH_PAGE_SIZE);
-        $pageSize = !is_null($pageSize) ? (int) $pageSize : null;
+        $pageSize = $pageSize !== null ? (int) $pageSize : null;
         $getChuck = function (int $offset) use ($customerIds, $pageSize) {
             return array_slice($customerIds, $offset, $pageSize);
         };

@@ -663,7 +663,7 @@ class Checkout
         ) === \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
         if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
-            $billingAddress = clone $shippingAddress;
+            $billingAddress = clone $shippingAddress; /** @phpstan-ignore-line */
             $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
             $data = $billingAddress->getData();
             $data['save_in_address_book'] = 0;

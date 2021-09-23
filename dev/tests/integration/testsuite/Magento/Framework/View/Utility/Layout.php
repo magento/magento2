@@ -10,7 +10,7 @@
 namespace Magento\Framework\View\Utility;
 
 /**
- * Class Layout
+ * The integration testsuite for Layout view utility
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -71,7 +71,7 @@ class Layout
      *
      * @param string|array $layoutUpdatesFile
      * @param array $args
-     * @return \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getLayoutFromFixture($layoutUpdatesFile, array $args = [])
     {

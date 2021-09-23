@@ -287,12 +287,14 @@ class ShipmentFactory
                     return isset($items[$parent->getId()]) && $items[$parent->getId()] > 0;
                 }
             }
-        } else {
-            return $item->getQtyToShip() > 0;
         }
+
+        return $item->getQtyToShip() > 0;
     }
 
     /**
+     * Casts Qty to float or integer type
+     *
      * @param Item $item
      * @param string|int|float $qty
      * @return float|int

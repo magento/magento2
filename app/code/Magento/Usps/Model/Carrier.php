@@ -634,7 +634,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             );
                         }
                     }
-                    uasort($priceArr, function($previous, $next){
+                    uasort($priceArr, function ($previous, $next) {
                         return ($previous <= $next) ? -1 : 1;
                     });
                 } elseif (!$isUS && is_object($xml->Package->Service)) {
@@ -656,7 +656,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             );
                         }
                     }
-                    uasort($priceArr, function($previous, $next){
+                    uasort($priceArr, function ($previous, $next) {
                         return ($previous <= $next) ? -1 : 1;
                     });
                 }
