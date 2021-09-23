@@ -28,7 +28,7 @@ $formData = $block->getFormData();
       autocomplete="off">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <fieldset class="fieldset create info">
-        <legend class="legend"><span><?= $escaper->escapeHtml(__('Personal Information')) ?></span></legend><br />
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Personal Information')) ?></span></legend><br>
         <input type="hidden" name="success_url" value="<?= $escaper->escapeUrl($block->getSuccessUrl()) ?>">
         <input type="hidden" name="error_url" value="<?= $escaper->escapeUrl($block->getErrorUrl()) ?>">
         <?= $block->getLayout()
@@ -74,7 +74,7 @@ $formData = $block->getFormData();
         <?php $postcodeValidationClass = $addressHelper->getAttributeValidationClass('postcode'); ?>
         <?php $regionValidationClass = $addressHelper->getAttributeValidationClass('region'); ?>
         <fieldset class="fieldset address">
-            <legend class="legend"><span><?= $escaper->escapeHtml(__('Address Information')) ?></span></legend><br />
+            <legend class="legend"><span><?= $escaper->escapeHtml(__('Address Information')) ?></span></legend><br>
             <input type="hidden" name="create_address" value="1" />
 
             <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
@@ -224,7 +224,7 @@ $formData = $block->getFormData();
     <?php endif; ?>
     <fieldset class="fieldset create account"
               data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
-        <legend class="legend"><span><?= $escaper->escapeHtml(__('Sign-in Information')) ?></span></legend><br />
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Sign-in Information')) ?></span></legend><br>
         <div class="field required">
             <label for="email_address" class="label"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
             <div class="control">

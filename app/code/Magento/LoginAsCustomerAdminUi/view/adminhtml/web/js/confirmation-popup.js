@@ -98,7 +98,7 @@ define([
                                         });
 
                                         alert({
-                                            content: messages.join('<br />')
+                                            content: messages.join('<br>')
                                         });
                                     }
                                 },

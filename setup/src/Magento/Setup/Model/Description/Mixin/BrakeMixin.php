@@ -11,7 +11,7 @@ namespace Magento\Setup\Model\Description\Mixin;
 class BrakeMixin implements DescriptionMixinInterface
 {
     /**
-     * Add <br/> tag to text after each new line (\r\n)
+     * Add <br> tag to text after each new line (\r\n)
      *
      * @param string $text
      * @return string
@@ -19,7 +19,7 @@ class BrakeMixin implements DescriptionMixinInterface
     public function apply($text)
     {
         return implode(
-            PHP_EOL . '<br/>' . PHP_EOL,
+            PHP_EOL . '<br>' . PHP_EOL,
             explode(PHP_EOL, trim($text))
         );
     }

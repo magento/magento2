@@ -94,7 +94,7 @@ class Upload extends Action implements HttpGetActionInterface, HttpPostActionInt
 
             $errors = $fileUploader->validate();
             if (true !== $errors) {
-                $errorMessage = implode('<br />', $errors);
+                $errorMessage = implode('<br>', $errors);
                 throw new LocalizedException(__($errorMessage));
             }
 

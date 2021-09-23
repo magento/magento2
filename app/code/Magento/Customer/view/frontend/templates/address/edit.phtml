@@ -34,7 +34,7 @@ $viewModel = $block->getViewModel();
       enctype="multipart/form-data"
       data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
     <fieldset class="fieldset">
-        <legend class="legend"><span><?= $escaper->escapeHtml(__('Contact Information')) ?></span></legend><br />
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Contact Information')) ?></span></legend><br>
         <?= $block->getBlockHtml('formkey') ?>
         <input type="hidden" name="success_url" value="<?= $escaper->escapeUrl($block->getSuccessUrl()) ?>">
         <input type="hidden" name="error_url" value="<?= $escaper->escapeUrl($block->getErrorUrl()) ?>">
@@ -54,7 +54,7 @@ $viewModel = $block->getViewModel();
 
     </fieldset>
     <fieldset class="fieldset">
-        <legend class="legend"><span><?= $escaper->escapeHtml(__('Address')) ?></span></legend><br />
+        <legend class="legend"><span><?= $escaper->escapeHtml(__('Address')) ?></span></legend><br>
         <div class="field street required">
             <label for="street_1" class="label"><span><?= /* @noEscape */ $_street ?></span></label>
             <div class="control">

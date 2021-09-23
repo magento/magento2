@@ -86,7 +86,7 @@ class Upload extends Action
 
             $errors = $fileUploader->validate();
             if (true !== $errors) {
-                $errorMessage = implode('</br>', $errors);
+                $errorMessage = implode('<br>', $errors);
                 throw new LocalizedException(__($errorMessage));
             }
 

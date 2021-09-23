@@ -48,8 +48,8 @@ class HtmlFormConverterTest extends TestCase
          <body>
 
          <form action="some">
-          <p><input type="radio" name="parameter1" value="val1">val1<br />
-          <input type="radio" name="parameter2" value="val2">val2<br />
+          <p><input type="radio" name="parameter1" value="val1">val1<br>
+          <input type="radio" name="parameter2" value="val2">val2<br>
           <input type="radio" name="parameter3" value="val3">val3</p>
           <p><input type="submit"></p>
          </form>

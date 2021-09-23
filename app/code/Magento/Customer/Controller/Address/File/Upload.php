@@ -87,7 +87,7 @@ class Upload extends Action implements HttpPostActionInterface
 
                 $errors = $fileUploader->validate();
                 if (true !== $errors) {
-                    $errorMessage = implode('<br/>', $errors);
+                    $errorMessage = implode('<br>', $errors);
                     $result = $this->processError(($errorMessage));
                 } else {
                     $result = $fileUploader->upload();

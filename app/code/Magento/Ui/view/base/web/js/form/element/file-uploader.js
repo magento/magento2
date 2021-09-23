@@ -447,7 +447,7 @@ define([
                          */
                         insertMethod: function (constructedMessage) {
                             var escapedFileName = $('<div>').text(error.filename).html(),
-                                errorMsgBodyHtml = '<strong>%s</strong> %s.<br />'
+                                errorMsgBodyHtml = '<strong>%s</strong> %s.<br>'
                                     .replace('%s', escapedFileName)
                                     .replace('%s', $t('was not uploaded'));
 

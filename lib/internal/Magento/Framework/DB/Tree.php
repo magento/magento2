@@ -800,9 +800,9 @@ class Tree
             $this->_db->rollBack();
             echo "alert('node not moved: fatal error');";
             echo $e->getMessage();
-            echo "<br />\r\n";
+            echo "<br>\r\n";
             echo $sql;
-            echo "<br />\r\n";
+            echo "<br>\r\n";
             exit;
         }
     }
@@ -1010,10 +1010,10 @@ class Tree
         } catch (\Exception $e) {
             $this->_db->rollBack();
             echo $e->getMessage();
-            echo "<br />\r\n";
+            echo "<br>\r\n";
             /** @phpstan-ignore-next-line */
             echo $sql;
-            echo "<br />\r\n";
+            echo "<br>\r\n";
             exit;
         }
         echo "alert('node added')";

@@ -245,11 +245,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     $this->escapeHtml(
                         'For Type "Local Server" use relative path to &lt;Magento root directory&gt;/'
                         .$this->imagesDirectoryProvider->getDirectoryRelativePath()
-                        .', e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br /><br />'
+                        .', e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>'
                         .'For example, in case <i>product_images</i>, files should be placed into '
                         .'<i>&lt;Magento root directory&gt;/'
-                        .$this->imagesDirectoryProvider->getDirectoryRelativePath() . '/product_images</i> folder.<br />'
-                        .'<br />If remote storage is enabled, in case <i>product_images</i>, files should be placed into '
+                        .$this->imagesDirectoryProvider->getDirectoryRelativePath() . '/product_images</i> folder.<br>'
+                        .'<br>If remote storage is enabled, in case <i>product_images</i>, files should be placed into '
                         .'<i>&lt;Remote Storage&gt;/'
                         .$this->imagesDirectoryProvider->getDirectoryRelativePath() . '/product_images</i> folder.',
                         ['i', 'br']
