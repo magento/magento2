@@ -5,6 +5,7 @@
  */
 namespace Magento\Newsletter\Model;
 
+use InvalidArgumentException;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\DateTime\Timezone\LocalizedDateToUtcConverterInterface;
@@ -202,7 +203,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      */
     public function setQueueStartAtByString($startAt)
     {
-        if ($startAt === null || $startAt == '') {
+        if (!(is_string($startAt) || $startAt === null)) {
+            throw new InvalidArgumentException('Start date should be of type string or null');
+        }
+
+        if ($startAt === null || $startAt === '') {
             $this->setQueueStartAt(null);
         } else {
             $this->setQueueStartAt($this->utcConverter->convertLocalizedDateToUtc($startAt));

@@ -5,6 +5,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
+use InvalidArgumentException;
 use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
@@ -54,6 +55,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
             'sender_name' => 'john doe',
             'subject' => 'test subject',
             'text' => 'newsletter text',
+            'start_at' => ''
         ];
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($postForQueue);
@@ -80,5 +82,28 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
             $this->equalTo(['You saved the newsletter queue.']),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
+     */
+    public function testQueueNotSavedWithInvalidStartDate(): void
+    {
+        $postForQueue = [
+            'sender_email' => 'johndoe_gieee@unknown-domain.com',
+            'sender_name' => 'john doe',
+            'subject' => 'test invalid param',
+            'text' => 'newsletter text',
+            'start_at' => 0
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($postForQueue);
+        $this->_model->load('some_unique_code', 'template_code');
+        $this->getRequest()->setParam('template_id', $this->_model->getId());
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Start date should be of type string or null');
+
+        $this->dispatch('backend/newsletter/queue/save');
     }
 }
