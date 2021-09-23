@@ -104,18 +104,6 @@ class AddUrlToNameTest extends TestCase
     }
 
     /**
-     * @return object
-     */
-    protected function getModel(): AddUrlToName
-    {
-        return $this->objectManager->getObject(AddUrlToName::class, [
-            'locator' => $this->locatorMock,
-            'urlBuilder' => $this->urlBuilderMock,
-            'escaper' => $this->escaperMock,
-        ]);
-    }
-
-    /**
      * Test checks AddUrlToName type
      */
     public function testCheckType(): void
@@ -124,7 +112,7 @@ class AddUrlToNameTest extends TestCase
     }
 
     /**
-     * Test checks addUrlToName method
+     * Test checks modifyData method
      *
      * @param string $expectedData
      * @dataProvider getDataDataProvider
@@ -145,5 +133,17 @@ class AddUrlToNameTest extends TestCase
                     '<a href="javascript:;" onclick="window.open(\'Sample URL\', \'_blank\');">Sample product</a>',
             ]
         ];
+    }
+
+    /**
+     * @return object
+     */
+    private function getModel(): AddUrlToName
+    {
+        return $this->objectManager->getObject(AddUrlToName::class, [
+            'locator' => $this->locatorMock,
+            'urlBuilder' => $this->urlBuilderMock,
+            'escaper' => $this->escaperMock,
+        ]);
     }
 }

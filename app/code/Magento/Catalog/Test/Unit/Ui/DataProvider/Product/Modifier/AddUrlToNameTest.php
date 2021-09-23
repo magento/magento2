@@ -60,7 +60,7 @@ class AddUrlToNameTest extends TestCase
     /**
      * @var StoreInterface|MockObject
      */
-    protected $storeMock;
+    private $storeMock;
 
     /**
      * @return void
@@ -100,19 +100,6 @@ class AddUrlToNameTest extends TestCase
         $this->escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturn(self::SAMPLE_PRODUCT_NAME);
-    }
-
-    /**
-     * @return object
-     */
-    protected function getModel(): AddUrlToName
-    {
-        return $this->objectManager->getObject(AddUrlToName::class, [
-            'urlBuilder' => $this->urlBuilderMock,
-            'escaper' => $this->escaperMock,
-            'request' => $this->requestMock,
-            'storeManager' => $this->storeManagerMock,
-        ]);
     }
 
     /**
@@ -161,5 +148,18 @@ class AddUrlToNameTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * @return object
+     */
+    private function getModel(): AddUrlToName
+    {
+        return $this->objectManager->getObject(AddUrlToName::class, [
+            'urlBuilder' => $this->urlBuilderMock,
+            'escaper' => $this->escaperMock,
+            'request' => $this->requestMock,
+            'storeManager' => $this->storeManagerMock,
+        ]);
     }
 }

@@ -87,24 +87,6 @@ class ConfigurableDataProviderTest extends TestCase
     }
 
     /**
-     * @return object
-     */
-    protected function getModel(): ConfigurableDataProvider
-    {
-        return $this->objectManager->getObject(ConfigurableDataProvider::class, [
-            'name' => 'testName',
-            'primaryFieldName' => 'testPrimaryFieldName',
-            'requestFieldName' => 'testRequestFieldName',
-            'collectionFactory' => $this->collectionFactoryMock,
-            'meta' => [],
-            'data' => [],
-            'addFieldStrategies' => [],
-            'addFilterStrategies' => [],
-            'modifiersPool' => $this->modifiersPool
-        ]);
-    }
-
-    /**
      * Test checks ConfigurableDataProvider type
      */
     public function testCheckType(): void
@@ -118,5 +100,23 @@ class ConfigurableDataProviderTest extends TestCase
     public function testGetCollection(): void
     {
         $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
+    }
+
+    /**
+     * @return object
+     */
+    private function getModel(): ConfigurableDataProvider
+    {
+        return $this->objectManager->getObject(ConfigurableDataProvider::class, [
+            'name' => 'testName',
+            'primaryFieldName' => 'testPrimaryFieldName',
+            'requestFieldName' => 'testRequestFieldName',
+            'collectionFactory' => $this->collectionFactoryMock,
+            'meta' => [],
+            'data' => [],
+            'addFieldStrategies' => [],
+            'addFilterStrategies' => [],
+            'modifiersPool' => $this->modifiersPool
+        ]);
     }
 }
