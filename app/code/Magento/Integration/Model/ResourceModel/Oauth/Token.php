@@ -213,10 +213,9 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
-            $existingSecret = $object->getSecret();
 
-            if ($existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-                $object->setSecret($this->encryptor->encrypt($existingSecret));
+            if (!empty($object->getSecret())) {
+                $object->setSecret($this->encryptor->encrypt($object->getSecret()));
             }
         }
             return parent::_beforeSave($object);

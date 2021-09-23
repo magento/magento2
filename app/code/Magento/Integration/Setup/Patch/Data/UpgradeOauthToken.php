@@ -51,7 +51,7 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
     /**#@+
      * Constant for batch size limit
      */
-    private const BATCH_SIZE = 200;
+    private const BATCH_SIZE = 100;
     /**#@-*/
 
     /**
