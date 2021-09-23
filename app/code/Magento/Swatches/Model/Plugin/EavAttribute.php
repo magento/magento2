@@ -5,9 +5,11 @@
  */
 namespace Magento\Swatches\Model\Plugin;
 
+use Exception;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
 use Magento\Swatches\Model\Swatch;
@@ -113,7 +115,7 @@ class EavAttribute
      * Swatch save operations
      *
      * @param Attribute $attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     public function afterAfterSave(Attribute $attribute)
@@ -164,7 +166,7 @@ class EavAttribute
      * Prepare attribute for conversion from any swatch type to dropdown
      *
      * @param Attribute $attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      */
     protected function convertSwatchToDropdown(Attribute $attribute)
@@ -188,7 +190,7 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return Attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function processSwatchOptions(Attribute $attribute)
     {
@@ -250,6 +252,7 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @return void
+     * @throws LocalizedException
      */
     protected function saveSwatchParams(Attribute $attribute)
     {
@@ -294,7 +297,7 @@ class EavAttribute
      *
      * @param array $attributeOptions
      * @param int|null $swatchType
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
     {
@@ -309,7 +312,7 @@ class EavAttribute
      * Cleaning the text type of swatch option values after switching.
      *
      * @param array $attributeOptions
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function cleanTextSwatchValuesAfterSwitch(array $attributeOptions)
     {
@@ -337,7 +340,9 @@ class EavAttribute
      * Save Textual Swatch data
      *
      * @param Attribute $attribute
+     *
      * @return void
+     * @throws Exception
      */
     protected function processTextualSwatch(Attribute $attribute)
     {
@@ -350,7 +355,14 @@ class EavAttribute
                     //option was deleted by button with basket
                     continue;
                 }
-                $defaultSwatchValue = reset($storeValues);
+                if (is_array($storeValues)) {
+                    $defaultSwatchValue = reset($storeValues);
+                } else {
+                    throw new Exception(
+                        __('Invalid attribute type')
+                    );
+                }
+
                 foreach ($storeValues as $storeId => $value) {
                     if ($value === null || $value === '') {
                         $value = $defaultSwatchValue;
