@@ -6,11 +6,13 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager as CategoryLayoutManager;
 use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager as ProductLayoutManager;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
@@ -61,6 +63,16 @@ class Design extends \Magento\Framework\Model\AbstractModel
     private $productLayoutUpdates;
 
     /**
+     * @var Session
+     */
+    private $catalogSession;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param TimezoneInterface $localeDate
@@ -71,6 +83,8 @@ class Design extends \Magento\Framework\Model\AbstractModel
      * @param TranslateInterface|null $translator
      * @param CategoryLayoutManager|null $categoryLayoutManager
      * @param ProductLayoutManager|null $productLayoutManager
+     * @param Session|null $catalogSession
+     * @param CategoryRepositoryInterface|null $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -83,7 +97,9 @@ class Design extends \Magento\Framework\Model\AbstractModel
         array $data = [],
         TranslateInterface $translator = null,
         ?CategoryLayoutManager $categoryLayoutManager = null,
-        ?ProductLayoutManager $productLayoutManager = null
+        ?ProductLayoutManager $productLayoutManager = null,
+        ?Session $catalogSession = null,
+        ?CategoryRepositoryInterface $categoryRepository = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_design = $design;
@@ -92,6 +108,10 @@ class Design extends \Magento\Framework\Model\AbstractModel
             ?? ObjectManager::getInstance()->get(CategoryLayoutManager::class);
         $this->productLayoutUpdates = $productLayoutManager
             ?? ObjectManager::getInstance()->get(ProductLayoutManager::class);
+        $this->catalogSession = $catalogSession
+            ?? ObjectManager::getInstance()->get(Session::class);
+        $this->categoryRepository = $categoryRepository
+            ?? ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -118,6 +138,17 @@ class Design extends \Magento\Framework\Model\AbstractModel
     {
         if ($object instanceof Product) {
             $currentCategory = $object->getCategory();
+            if (!$currentCategory) {
+                $lastId = $this->catalogSession->getLastVisitedCategoryId();
+                if ($object->canBeShowInCategory($lastId)) {
+                    $categoryId = $lastId;
+                    try {
+                        $currentCategory = $this->categoryRepository->get($categoryId);
+                    } catch (NoSuchEntityException $e) {
+                        $currentCategory = null;
+                    }
+                }
+            }
         } else {
             $currentCategory = $object;
         }

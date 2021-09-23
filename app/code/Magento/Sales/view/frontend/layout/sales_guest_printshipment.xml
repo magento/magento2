@@ -15,7 +15,7 @@
             <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="order.date" template="Magento_Sales::order/order_date.phtml" />
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="Magento_Sales::order/print/shipment.phtml">
+            <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="Magento_Sales::order/print/shipment.phtml" cacheable="false">
                 <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list" />
             </block>
         </referenceContainer>

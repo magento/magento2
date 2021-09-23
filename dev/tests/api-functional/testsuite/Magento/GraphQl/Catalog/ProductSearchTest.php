@@ -198,6 +198,7 @@ QUERY;
                 'attribute_code' => $attribute->getAttributeCode(),
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'count' => 2,
+                'position' => 0,
                 'options' => [
                     [
                         'label' => 'Option 1',
@@ -255,6 +256,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options{
            label
            value
@@ -313,6 +315,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           label
@@ -361,6 +364,7 @@ QUERY;
                 'attribute_code' => $attribute->getAttributeCode(),
                 'count' => 1,
                 'label' => $attribute->getDefaultFrontendLabel(),
+                'position' => $attribute->getPosition(),
                 'options' => [
                     [
                         'label' => 'Option 3',
@@ -445,6 +449,7 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
+        $this->assertCount(2, $response['products']['aggregations']);
     }
 
     /**
@@ -515,6 +520,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           count
@@ -588,6 +594,7 @@ QUERY;
                 'attribute_code' => $attribute_code,
                 'count' => 1,
                 'label' => 'Second Test Configurable',
+                'position' => 1,
                 'options' => [
                     [
                         'count' => 3,
@@ -663,6 +670,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           count

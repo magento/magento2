@@ -220,7 +220,7 @@ class ObjectManager
                             if (isset($arguments[$parameterName])) {
                                 $args[] = $arguments[$parameterName];
                             } else {
-                                if ($parameter->isArray()) {
+                                if ($parameter->getType() && $parameter->getType()->getName() === 'array') {
                                     $args[] = [];
                                 } elseif ($parameter->allowsNull()) {
                                     $args[] = null;

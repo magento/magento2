@@ -93,6 +93,9 @@ class RendererTest extends TestCase
      */
     protected $objectManagerHelper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
@@ -124,14 +127,14 @@ class RendererTest extends TestCase
             ->getMock();
 
         $this->assetsCollection = $this->getMockBuilder(GroupedCollection::class)
-            ->setMethods(['getGroups'])
+            ->onlyMethods(['getGroups'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->assetInterfaceMock = $this->getMockForAbstractClass(AssetInterface::class);
 
         $this->titleMock = $this->getMockBuilder(Title::class)
-            ->setMethods(['set', 'get'])
+            ->onlyMethods(['set', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -150,7 +153,10 @@ class RendererTest extends TestCase
         );
     }
 
-    public function testRenderElementAttributes()
+    /**
+     * @return void
+     */
+    public function testRenderElementAttributes(): void
     {
         $elementType = 'elementType';
         $attributes = ['attr1' => 'value1', 'attr2' => 'value2'];
@@ -164,7 +170,10 @@ class RendererTest extends TestCase
         $this->assertEquals($expected, $this->renderer->renderElementAttributes($elementType));
     }
 
-    public function testRenderMetadata()
+    /**
+     * @return void
+     */
+    public function testRenderMetadata(): void
     {
         $metadata = [
             'charset' => 'charsetValue',
@@ -184,10 +193,10 @@ class RendererTest extends TestCase
             . '<meta property="og:video:secure_url" content="secure_url"/>' . "\n"
             . '<meta name="msapplication-TileImage" content="https://site.domain/ms-tile.jpg"/>' . "\n";
 
-        $this->stringMock->expects($this->at(0))
+        $this->stringMock
             ->method('upperCaseWords')
-            ->with('charset', '_', '')
-            ->willReturn('Charset');
+            ->withConsecutive(['charset', '_', ''])
+            ->willReturnOnConsecutiveCalls('Charset');
 
         $this->pageConfigMock->expects($this->once())
             ->method('getCharset')
@@ -208,9 +217,11 @@ class RendererTest extends TestCase
     }
 
     /**
-     * Test renderMetadata when it has 'msapplication-TileImage' meta passed
+     * Test renderMetadata when it has 'msapplication-TileImage' meta passed.
+     *
+     * @return void
      */
-    public function testRenderMetadataWithMsApplicationTileImageAsset()
+    public function testRenderMetadataWithMsApplicationTileImageAsset(): void
     {
         $metadata = [
             'msapplication-TileImage' => 'images/ms-tile.jpg'
@@ -232,7 +243,10 @@ class RendererTest extends TestCase
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }
 
-    public function testRenderTitle()
+    /**
+     * @return void
+     */
+    public function testRenderTitle(): void
     {
         $title = 'some_title';
         $expected = "<title>some_title</title>" . "\n";
@@ -252,7 +266,10 @@ class RendererTest extends TestCase
         $this->assertEquals($expected, $this->renderer->renderTitle());
     }
 
-    public function testPrepareFavicon()
+    /**
+     * @return void
+     */
+    public function testPrepareFavicon(): void
     {
         $filePath = 'file';
         $this->pageConfigMock->expects($this->exactly(3))
@@ -266,7 +283,7 @@ class RendererTest extends TestCase
                     $filePath,
                     Head::VIRTUAL_CONTENT_TYPE_LINK,
                     ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
-                    'icon',
+                    'icon'
                 ],
                 [
                     $filePath,
@@ -279,7 +296,10 @@ class RendererTest extends TestCase
         $this->renderer->prepareFavicon();
     }
 
-    public function testPrepareFaviconDefault()
+    /**
+     * @return void
+     */
+    public function testPrepareFaviconDefault(): void
     {
         $defaultFilePath = 'default_file';
         $this->pageConfigMock->expects($this->once())
@@ -310,9 +330,11 @@ class RendererTest extends TestCase
      * @param $groupOne
      * @param $groupTwo
      * @param $expectedResult
+     *
+     * @return void
      * @dataProvider dataProviderRenderAssets
      */
-    public function testRenderAssets($groupOne, $groupTwo, $expectedResult)
+    public function testRenderAssets($groupOne, $groupTwo, $expectedResult): void
     {
         $assetUrl = 'url';
         $assetNoRoutUrl = 'no_route_url';
@@ -340,7 +362,7 @@ class RendererTest extends TestCase
                     [GroupedCollection::PROPERTY_CAN_MERGE, true],
                     [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupOne['type']],
                     ['attributes', $groupOne['attributes']],
-                    ['ie_condition', $groupOne['condition']],
+                    ['ie_condition', $groupOne['condition']]
                 ]
             );
 
@@ -365,7 +387,7 @@ class RendererTest extends TestCase
                     [GroupedCollection::PROPERTY_CAN_MERGE, true],
                     [GroupedCollection::PROPERTY_CONTENT_TYPE, $groupTwo['type']],
                     ['attributes', $groupTwo['attributes']],
-                    ['ie_condition', $groupTwo['condition']],
+                    ['ie_condition', $groupTwo['condition']]
                 ]
             );
 
@@ -399,7 +421,7 @@ class RendererTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderRenderAssets()
+    public function dataProviderRenderAssets(): array
     {
         return [
             [
@@ -438,10 +460,13 @@ class RendererTest extends TestCase
                 '<link  href="no_route_url" />' . "\n"
                     . '<link  attr="value" href="url" />' . "\n"
                     . '<link  attr="value" href="url" />' . "\n"
-            ],
+            ]
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testRenderAssetWithNoContentType() : void
     {
         $type = '';
@@ -468,7 +493,7 @@ class RendererTest extends TestCase
                     [GroupedCollection::PROPERTY_CAN_MERGE, true],
                     [GroupedCollection::PROPERTY_CONTENT_TYPE, $type],
                     ['attributes', 'rel="some-rel"'],
-                    ['ie_condition', null],
+                    ['ie_condition', null]
                 ]
             );
 
