@@ -11,8 +11,6 @@ use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address as AddressBlock;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Store Address Collection
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StoreAddressCollection extends Collection
