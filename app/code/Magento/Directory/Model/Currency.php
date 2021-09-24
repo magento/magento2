@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
+use Magento\Framework\NumberFormatter;
 use Magento\Framework\NumberFormatterFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -28,7 +29,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Minimum version of ICU required.
      */
-    const MIN_INTL_ICU_VERSION = 60.0;
+    const MIN_INTL_ICU_VERSION = '60.0';
 
     /**
      * CONFIG path constants
@@ -193,7 +194,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getRates(): array
+    public function getRates()
     {
         return $this->_rates;
     }
@@ -204,7 +205,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param array $rates Currency Rates
      * @return $this
      */
-    public function setRates(array $rates): Currency
+    public function setRates(array $rates)
     {
         $this->_rates = $rates;
         return $this;
@@ -232,7 +233,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getRate($toCurrency): float
+    public function getRate($toCurrency)
     {
         $code = $this->getCurrencyCodeFromToCurrency($toCurrency);
         $rates = $this->getRates();
@@ -250,7 +251,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getAnyRate($toCurrency): float
+    public function getAnyRate($toCurrency)
     {
         $code = $this->getCurrencyCodeFromToCurrency($toCurrency);
         $rates = $this->getRates();
@@ -269,7 +270,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function convert(float $price, $toCurrency = null): float
+    public function convert($price, $toCurrency = null)
     {
         if ($toCurrency === null) {
             return $price;
@@ -327,12 +328,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @throws \Zend_Currency_Exception
      */
-    public function format(
-        float $price,
-        array $options = [],
-        bool $includeContainer = true,
-        bool $addBrackets = false
-    ): string {
+    public function format($price, $options = [], $includeContainer = true, $addBrackets = false)
+    {
         return $this->formatPrecision($price, 2, $options, $includeContainer, $addBrackets);
     }
 
@@ -348,12 +345,12 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @throws \Zend_Currency_Exception
      */
     public function formatPrecision(
-        float $price,
-        int $precision,
-        array $options = [],
-        bool $includeContainer = true,
-        bool $addBrackets = false
-    ): string {
+        $price,
+        $precision,
+        $options = [],
+        $includeContainer = true,
+        $addBrackets = false
+    ) {
         if (!isset($options['precision'])) {
             $options['precision'] = $precision;
         }
@@ -375,7 +372,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @throws \Zend_Currency_Exception
      */
-    public function formatTxt(float $price, array $options = []): string
+    public function formatTxt($price, $options = [])
     {
         if (!is_numeric($price)) {
             $price = $this->_localeFormat->getNumber($price);
@@ -430,11 +427,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Format currency.
      *
-     * @param string $price
+     * @param float $price
      * @param array $options
      * @return string
      */
-    private function formatCurrency(string $price, array $options): string
+    private function formatCurrency(float $price, array $options): string
     {
         $customerOptions = new \Magento\Framework\DataObject([]);
 
@@ -470,7 +467,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param array $options
      * @return \Magento\Framework\NumberFormatter
      */
-    private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
+    private function getNumberFormatter(array $options): NumberFormatter
     {
         $key = 'currency_' .
             hash('sha256', $this->localeResolver->getLocale() . $this->serializer->serialize($options));
@@ -523,6 +520,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Return Formatted Price.
      *
      * @return string
+     * @throws \Zend_Currency_Exception
      */
     public function getOutputFormat(): string
     {
@@ -536,7 +534,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getConfigAllowCurrencies(): array
+    public function getConfigAllowCurrencies()
     {
         $allowedCurrencies = $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_ALLOW);
         $appBaseCurrencyCode = $this->_directoryHelper->getBaseCurrencyCode();
@@ -558,7 +556,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getConfigDefaultCurrencies(): array
+    public function getConfigDefaultCurrencies()
     {
         return $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_DEFAULT);
     }
@@ -568,7 +566,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return array
      */
-    public function getConfigBaseCurrencies(): array
+    public function getConfigBaseCurrencies()
     {
         return $this->currencyConfig->getConfigCurrencies(self::XML_PATH_CURRENCY_BASE);
     }
@@ -581,7 +579,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getCurrencyRates($currency, array $toCurrencies = null): array
+    public function getCurrencyRates($currency, $toCurrencies = null)
     {
         if ($currency instanceof Currency) {
             $currency = $currency->getCode();

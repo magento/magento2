@@ -21,14 +21,14 @@ class CurrencyTest extends TestCase
     /**
      * @var Currency
      */
-    protected $currency;
+    private $currency;
 
-    protected $currencyCode = 'USD';
+    private $currencyCode = 'USD';
 
     /**
      * @var CurrencyInterface|MockObject
      */
-    protected $localeCurrencyMock;
+    private $localeCurrencyMock;
 
     /**
      * @var LocalResolverInterface
