@@ -174,7 +174,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->_getData('currency_code');
     }
@@ -219,7 +219,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return  $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function load($id, $field = null): Currency
+    public function load($id, $field = null)
     {
         $this->unsRate();
         $this->setData('currency_code', $id);
