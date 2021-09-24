@@ -100,8 +100,6 @@ class CronCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|void
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
