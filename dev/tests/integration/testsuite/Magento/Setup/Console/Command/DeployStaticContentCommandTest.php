@@ -127,6 +127,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
             $this->config,
             require __DIR__ . '/_files/config/dump_config.php'
         );
+        $newData['remote_storage'] = $this->envConfig['remote_storage'];
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $newData], true);
 
         // remove application environment config for emulate work without db
