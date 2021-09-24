@@ -234,7 +234,7 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
         $postData = $this->createPostData($dataToSend);
         $this->performShipmentCreationRequest($postData);
         $this->assertCreateShipmentRequestWithError(
-            "The specified qty is not valid.",
+            "Shipment Document Validation Error(s):\nYou can't create a shipment without products.",
             "admin/order_shipment/new/order_id/{$postData['order_id']}"
         );
     }

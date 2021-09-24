@@ -136,12 +136,6 @@ class ShipmentFactory
                 }
             } else {
                 if (isset($items[$orderItem->getId()])) {
-                    if (!is_numeric($items[$orderItem->getId()])) {
-                        throw new \Magento\Framework\Exception\LocalizedException(
-                            __('The specified qty is not valid.')
-                        );
-                    }
-
                     $qty = min($items[$orderItem->getId()], $orderItem->getQtyToShip());
                 } elseif (!count($items)) {
                     $qty = $orderItem->getQtyToShip();
@@ -171,7 +165,7 @@ class ShipmentFactory
 
         // Remove from shipment items without qty or with qty=0
         if (!$orderItem->isDummy(true)
-            && (!isset($items[$orderItem->getId()]) || $items[$orderItem->getId()] <= 0)
+            && (!isset($items[$orderItem->getId()]) || (int) $items[$orderItem->getId()] <= 0)
         ) {
             return false;
         }
