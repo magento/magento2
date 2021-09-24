@@ -25,6 +25,11 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Currency extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Minimum version of ICU required.
+     */
+    const MIN_INTL_ICU_VERSION = 60.0;
+
+    /**
      * CONFIG path constants
      */
     const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
@@ -340,9 +345,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         }
         if ($includeContainer) {
             return '<span class="price">' . ($addBrackets ? '[' : '') . $this->formatTxt(
-                $price,
-                $options
-            ) . ($addBrackets ? ']' : '') . '</span>';
+                    $price,
+                    $options
+                ) . ($addBrackets ? ']' : '') . '</span>';
         }
         return $this->formatTxt($price, $options);
     }
@@ -380,6 +385,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function canUseNumberFormatter(array $options): bool
     {
+        if (version_compare(INTL_ICU_VERSION, self::MIN_INTL_ICU_VERSION, '<')) {
+            return false;
+        }
+
         $allowedOptions = [
             'precision',
             LocaleCurrency::CURRENCY_OPTION_DISPLAY,
@@ -429,7 +438,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         }
 
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
             $formattedCurrency = str_replace(' ', '', $formattedCurrency);
         }
 
