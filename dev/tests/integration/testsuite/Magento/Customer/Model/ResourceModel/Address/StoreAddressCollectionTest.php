@@ -32,7 +32,9 @@ class StoreAddressCollectionTest extends \PHPUnit\Framework\TestCase
         $storeId = $customer->getStoreId();
         $allowedCountries = $allowedCountriesObj->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
         $strAllowedCountries = implode("%S, %S", $allowedCountries);
-        $format = '%AWHERE%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Sparent_id%S = %S-1%S)' .
+        $format = '%AWHERE' .
+            '%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Scountry_id%S IN(%S' . $strAllowedCountries . '%S))' .
+            '%SAND%S(%Sparent_id%S = %S-1%S)%SAND%S(%Scountry_id%S IN(%S' . $strAllowedCountries . '%S))' .
             '%SAND%S(%Sparent_id%S = %S3%S)%SAND%S(%Scountry_id%S IN(%S' . $strAllowedCountries . '%S))%A';
         $this->assertStringMatchesFormat($format, (string)$select);
     }

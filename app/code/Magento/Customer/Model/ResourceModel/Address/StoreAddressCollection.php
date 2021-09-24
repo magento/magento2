@@ -6,7 +6,6 @@
 namespace Magento\Customer\Model\ResourceModel\Address;
 
 use Magento\Directory\Model\AllowedCountries;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address as AddressBlock;
 use Magento\Store\Model\ScopeInterface;
 
@@ -15,13 +14,6 @@ use Magento\Store\Model\ScopeInterface;
  */
 class StoreAddressCollection extends Collection
 {
-    /**
-     * Object Manager instance
-     *
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
     /**
      * @var AddressBlock
      */
@@ -43,7 +35,8 @@ class StoreAddressCollection extends Collection
      * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
-     * @param ObjectManagerInterface $objectManager
+     * @param AddressBlock $addressBlock
+     * @param AllowedCountries $allowedCountryReader
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -59,10 +52,12 @@ class StoreAddressCollection extends Collection
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-        ObjectManagerInterface $objectManager,
+        AddressBlock $addressBlock,
+        AllowedCountries $allowedCountryReader,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
-        $this->objectManager = $objectManager;
+        $this->addressBlock = $addressBlock;
+        $this->allowedCountryReader = $allowedCountryReader;
 
         parent::__construct(
             $entityFactory,
@@ -77,19 +72,6 @@ class StoreAddressCollection extends Collection
             $entitySnapshot,
             $connection
         );
-    }
-
-    /**
-     * Resource initialization
-     *
-     * @return void
-     */
-    public function _construct()
-    {
-        parent::_construct();
-
-        $this->addressBlock = $this->objectManager->create(AddressBlock::class);
-        $this->allowedCountryReader = $this->objectManager->create(AllowedCountries::class);
     }
 
     /**
