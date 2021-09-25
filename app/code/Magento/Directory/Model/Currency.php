@@ -184,7 +184,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCurrencyCode(): string
+    public function getCurrencyCode(): ?string
     {
         return $this->_getData('currency_code');
     }
@@ -309,7 +309,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return Filter
      */
-    public function getFilter(): Filter
+    public function getFilter()
     {
         if (!$this->_filter) {
             $this->_filter = $this->_currencyFilterFactory->create(['code' => $this->getCode()]);
