@@ -61,7 +61,7 @@ This module introduces the following layouts and layout handles in the directori
 - `view/base/layout`:
     - `catalog_product_prices`
 
-- `view/frantend/layout`:
+- `view/frontend/layout`:
     - `checkout_cart_index`
     - `checkout_index_index`
     - `checkout_item_price_renderers`
