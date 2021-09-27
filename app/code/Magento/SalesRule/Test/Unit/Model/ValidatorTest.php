@@ -274,6 +274,7 @@ class ValidatorTest extends TestCase
     {
         $negativePrice = -1;
 
+        $rule = $this->createMock(Rule::class);
         $this->item->setDiscountCalculationPrice($negativePrice);
         $this->item->setData('calculation_price', $negativePrice);
 
@@ -284,7 +285,7 @@ class ValidatorTest extends TestCase
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
-        $this->model->process($this->item);
+        $this->model->process($this->item, $rule);
     }
 
     /**
