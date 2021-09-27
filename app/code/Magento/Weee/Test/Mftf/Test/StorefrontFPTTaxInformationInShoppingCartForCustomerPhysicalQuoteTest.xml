@@ -95,7 +95,6 @@
             <argument name="postcode" value="{{US_Address_CA.postcode}}"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontCheckoutCartTaxAmountFPTActionGroup" stepKey="checkTaxAmountCA"/>
-        <pause stepKey="pause1"/>
         <!--  Step 5: Change Data -->
         <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="setEstimateShippingAndTaxAddressToSwitzerland">
             <argument name="country" value="Switzerland"/>
