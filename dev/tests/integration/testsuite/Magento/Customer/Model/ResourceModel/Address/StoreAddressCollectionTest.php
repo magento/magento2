@@ -26,12 +26,13 @@ class StoreAddressCollectionTest extends \PHPUnit\Framework\TestCase
         $collection->setCustomerFilter($customer);
         $customer->setId(3);
         $collection->setCustomerFilter($customer);
-        $allowedCountriesObj = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Directory\Model\AllowedCountries::class
-        );
         $format = '%AWHERE%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Sparent_id%S = %S-1%S)%SAND%S(%Sparent_id%S = %S3%S)%A';
-        $storeId = $customer->getStoreId() ?? null;
+
+        $storeId = $customer->getStoreId() ?? 1;
         if ($storeId) {
+            $allowedCountriesObj = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                \Magento\Directory\Model\AllowedCountries::class
+            );
             $allowedCountries = $allowedCountriesObj->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
             $strAllowedCountries = implode("%S, %S", $allowedCountries);
             $format = '%AWHERE%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Sparent_id%S = %S-1%S)' .
