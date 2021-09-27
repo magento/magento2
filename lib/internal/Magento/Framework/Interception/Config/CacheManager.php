@@ -88,6 +88,9 @@ class CacheManager
      */
     public function saveCompiled(string $key, array $data)
     {
+        // sort configuration to have it in the same order on every build
+        ksort($data);
+
         $this->configWriter->write($key, $data);
     }
 
