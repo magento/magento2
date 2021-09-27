@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
             <magentoCLI command="config:set tax/weee/enable 1" stepKey="EnableWeee"/>
             <magentoCLI command="config:set tax/weee/display_list 0" stepKey="EnableDisplayInListFPTOnly"/>
@@ -50,7 +52,7 @@
             </actionGroup>
         </after>
 
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>
 
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct1EditPage">
             <argument name="productId" value="$simpleProduct1.id$"/>
