@@ -511,7 +511,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCurrencySymbol(): string
+    public function getCurrencySymbol()
     {
         return $this->_localeCurrency->getCurrency($this->getCode())->getSymbol();
     }
@@ -522,7 +522,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @throws \Zend_Currency_Exception
      */
-    public function getOutputFormat(): string
+    public function getOutputFormat()
     {
         $formatted = $this->formatTxt(0);
         $number = $this->formatTxt(0, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
