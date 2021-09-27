@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminSearchSynonymsNewSection">
         <element name="save" type="button" selector="//button[@id='save']"/>
-        <element name="resetButton" type="button" selector="//button[@id='reset_ui_form']"/>
+        <element name="resetButton" type="button" selector="//button[@id='reset']"/>
         <element name="scope" type="select" selector="//select[@name='scope_id']"/>
         <element name="synonyms" type="textarea" selector="//textarea[@name='synonyms']"/>
         <element name="merge" type="checkbox" selector="//input[@name='mergeOnConflict']"/>
