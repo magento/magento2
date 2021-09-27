@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\ProductAlert\Helper\Data as AlertsHelper;
+use Magento\ProductAlert\Model\ResourceModel\Price as PriceResourceModel;
 use Magento\ProductAlert\Model\PriceFactory;
 
 /**
@@ -32,15 +33,23 @@ class Subscribe implements ResolverInterface
     private $priceFactory;
 
     /**
+     * @var PriceResourceModel
+     */
+    private $priceResource;
+
+    /**
      * @param AlertsHelper $helper
      * @param PriceFactory $priceFactory
+     * @param PriceResourceModel $priceResource
      */
     public function __construct(
         AlertsHelper $helper,
-        PriceFactory $priceFactory
+        PriceFactory $priceFactory,
+        PriceResourceModel $priceResource
     ) {
         $this->helper = $helper;
         $this->priceFactory = $priceFactory;
+        $this->priceResource = $priceResource;
     }
 
     /**
@@ -73,7 +82,7 @@ class Subscribe implements ResolverInterface
             throw new GraphQlAlreadyExistsException(__('The current user is currently subscribed to price alert.'));
         }
 
-        $model->getResource()->save($model);
+        $this->priceResource->save($model);
 
         return [
             'id' => $model->getId(),

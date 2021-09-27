@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\ProductAlert\Helper\Data as AlertsHelper;
+use Magento\ProductAlert\Model\ResourceModel\Stock as StockResourceModel;
 use Magento\ProductAlert\Model\StockFactory;
 
 /**
@@ -32,14 +33,23 @@ class Unsubscribe implements ResolverInterface
     private $stockFactory;
 
     /**
+     * @var StockResourceModel
+     */
+    private $stockResource;
+
+    /**
      * @param AlertsHelper $helper
+     * @param StockFactory $stockFactory
+     * @param StockResourceModel $stockResource
      */
     public function __construct(
         AlertsHelper $helper,
-        StockFactory $stockFactory
+        StockFactory $stockFactory,
+        StockResourceModel $stockResource
     ) {
         $this->helper = $helper;
         $this->stockFactory = $stockFactory;
+        $this->stockResource = $stockResource;
     }
 
     /**
@@ -72,7 +82,7 @@ class Unsubscribe implements ResolverInterface
             throw new GraphQlNoSuchEntityException(__('The current user isn\'t subscribed to stocK alert.'));
         } 
 
-        $model->getResource()->delete($model);
+        $this->stockResource->delete($model);
 
         return true;
     }

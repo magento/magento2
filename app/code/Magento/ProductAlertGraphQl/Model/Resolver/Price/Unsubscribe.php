@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\ProductAlert\Helper\Data as AlertsHelper;
+use Magento\ProductAlert\Model\ResourceModel\Price as PriceResourceModel;
 use Magento\ProductAlert\Model\PriceFactory;
 
 /**
@@ -32,15 +33,23 @@ class Unsubscribe implements ResolverInterface
     private $priceFactory;
 
     /**
+     * @var PriceResourceModel
+     */
+    private $priceResource;
+
+    /**
      * @param AlertsHelper $helper
      * @param PriceFactory $priceFactory
+     * @param PriceResourceModel $priceResource
      */
     public function __construct(
         AlertsHelper $helper,
-        PriceFactory $priceFactory
+        PriceFactory $priceFactory,
+        PriceResourceModel $priceResource
     ) {
         $this->helper = $helper;
         $this->priceFactory = $priceFactory;
+        $this->priceResource = $priceResource;
     }
 
     /**
@@ -57,7 +66,7 @@ class Unsubscribe implements ResolverInterface
 
         /* Guest checking */
         if (!$customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts'));
+            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts.'));
         }
 
         $productId = ((int) $args['productId']) ?: null;
@@ -73,7 +82,7 @@ class Unsubscribe implements ResolverInterface
             throw new GraphQlNoSuchEntityException(__('The current user isn\'t subscribed to price alert.'));
         }
 
-        $model->getResource()->delete($model);
+        $this->priceResource->delete($model);
 
         return true;
     }
