@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ProductAlertGraphQl\Model\Resolver\Price;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -55,8 +56,8 @@ class Subscribe implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
 
         /* Guest checking */
-        if (null === $customerId || 0 === $customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts'));
+        if (!$customerId) {
+            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts.'));
         }
 
         $productId = ((int) $args['productId']) ?: null;
@@ -69,7 +70,7 @@ class Subscribe implements ResolverInterface
                 ->loadByParam();
 
         if ($model->getId()) {
-            throw new GraphQlInputException(__('The current user is currently subscribed to price alert.'));
+            throw new GraphQlAlreadyExistsException(__('The current user is currently subscribed to price alert.'));
         }
 
         $model->save();

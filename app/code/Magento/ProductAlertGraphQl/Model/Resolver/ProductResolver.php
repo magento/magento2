@@ -42,7 +42,7 @@ class ProductResolver implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            throw new LocalizedException(__('Missing key "model" in alert value data'));
+            throw new LocalizedException(__('The "model" key in the alert value data is missing'));
         }
 
         $alert = $value['model'];

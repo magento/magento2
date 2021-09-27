@@ -10,6 +10,7 @@ namespace Magento\ProductAlertGraphQl\Model\Resolver\Stock;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\ProductAlert\Helper\Data as AlertsHelper;
@@ -54,8 +55,8 @@ class Unsubscribe implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
 
         /* Guest checking */
-        if (null === $customerId || 0 === $customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts'));
+        if (!$customerId) {
+            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts.'));
         }
 
         $productId = ((int) $args['productId']) ?: null;
@@ -68,10 +69,10 @@ class Unsubscribe implements ResolverInterface
                 ->loadByParam();
         
         if (!$model->getId()) {
-            throw new GraphQlInputException(__('The current user isn\'t subscribed to stocl alert.'));
+            throw new GraphQlNoSuchEntityException(__('The current user isn\'t subscribed to stocK alert.'));
         } 
 
-        $model->delete();
+        $model->getResource()->delete($model);
 
         return true;
     }

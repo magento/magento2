@@ -1,3 +1,3 @@
-# ProductAlertGraphQl
+# Magento_ProductAlertGraphQl module
 
-**ProductAlertGraphQl** provides resolver information for using Product alerts via GraphQl.
+The Magento_ProductAlertGraphQl provides resolver information for using Product Alerts via GraphQl.
