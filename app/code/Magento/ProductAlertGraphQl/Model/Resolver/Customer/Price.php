@@ -60,8 +60,8 @@ class Price implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
 
         /* Guest checking */
-        if (null === $customerId || 0 === $customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts'));
+        if (!$customerId) {
+            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts.'));
         }
 
         $alerts = $this->getProductAlertsForCustomer($customerId, $store->getId());

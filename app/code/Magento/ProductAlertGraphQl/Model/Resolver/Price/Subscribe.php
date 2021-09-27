@@ -73,7 +73,7 @@ class Subscribe implements ResolverInterface
             throw new GraphQlAlreadyExistsException(__('The current user is currently subscribed to price alert.'));
         }
 
-        $model->save();
+        $model->getResource()->save($model);
 
         return [
             'id' => $model->getId(),
