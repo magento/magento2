@@ -90,6 +90,31 @@ class CartFixedDiscount
     }
 
     /**
+     * Get discount amount for item calculated proportionally based on already applied discount
+     *
+     * @param float $ruleDiscount
+     * @param float $qty
+     * @param float $baseItemPrice
+     * @param float $baseItemDiscountAmount
+     * @param float $baseRuleTotalsDiscount
+     * @param string $discountType
+     * @return float
+     */
+    public function getDiscountedAmountProportionally(
+        float $ruleDiscount,
+        float $qty,
+        float $baseItemPrice,
+        float $baseItemDiscountAmount,
+        float $baseRuleTotalsDiscount,
+        string $discountType
+    ): float {
+        $baseItemPriceTotal = $baseItemPrice * $qty - $baseItemDiscountAmount;
+        $ratio = $baseItemPriceTotal / $baseRuleTotalsDiscount;
+        $discountAmount = $this->deltaPriceRound->round($ruleDiscount * $ratio, $discountType);
+        return $discountAmount;
+    }
+
+    /**
      * Get shipping discount amount
      *
      * @param Rule $rule
@@ -186,10 +211,6 @@ class CartFixedDiscount
             $baseRuleTotals = ($quote->getIsMultiShipping() && $isMultiShipping) ?
                 $this->getQuoteTotalsForMultiShipping($quote) :
                 $this->getQuoteTotalsForRegularShipping($address, $baseRuleTotals);
-        } else {
-            if ($quote->getIsMultiShipping() && $isMultiShipping) {
-                $baseRuleTotals = $quote->getBaseSubtotal();
-            }
         }
         return (float) $baseRuleTotals;
     }

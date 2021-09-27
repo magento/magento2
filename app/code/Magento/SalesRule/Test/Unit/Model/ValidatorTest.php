@@ -290,33 +290,6 @@ class ValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testProcessWhenItemPriceIsNegativeDiscountsAreZeroed(): void
-    {
-        $negativePrice = -1;
-        $nonZeroDiscount = 123;
-        $this->model->init(
-            $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
-        );
-
-        $this->item->setDiscountCalculationPrice($negativePrice);
-        $this->item->setData('calculation_price', $negativePrice);
-
-        $this->item->setDiscountAmount($nonZeroDiscount);
-        $this->item->setBaseDiscountAmount($nonZeroDiscount);
-        $this->item->setDiscountPercent($nonZeroDiscount);
-
-        $this->model->process($this->item);
-
-        $this->assertEquals(0, $this->item->getDiscountAmount());
-        $this->assertEquals(0, $this->item->getBaseDiscountAmount());
-        $this->assertEquals(0, $this->item->getDiscountPercent());
-    }
-
-    /**
-     * @return void
-     */
     public function testApplyRulesThatAppliedRuleIdsAreCollected(): void
     {
         $positivePrice = 1;
@@ -328,6 +301,7 @@ class ValidatorTest extends TestCase
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
+        $rule = $this->createMock(Rule::class);
 
         $this->item->setDiscountCalculationPrice($positivePrice);
         $this->item->setData('calculation_price', $positivePrice);
@@ -337,7 +311,7 @@ class ValidatorTest extends TestCase
             ->method('applyRules')
             ->with(
                 $this->item,
-                $this->ruleCollection,
+                [$rule],
                 $this->anything(),
                 $this->anything()
             )
@@ -349,7 +323,7 @@ class ValidatorTest extends TestCase
                 $expectedRuleIds
             );
 
-        $this->model->process($this->item);
+        $this->model->process($this->item, $rule);
     }
 
     /**

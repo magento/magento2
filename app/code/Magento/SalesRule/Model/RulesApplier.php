@@ -9,7 +9,6 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
 use Magento\Framework\App\ObjectManager;
-use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
@@ -97,7 +96,7 @@ class RulesApplier
      * Apply rules to current order item
      *
      * @param AbstractItem $item
-     * @param Collection $rules
+     * @param array $rules
      * @param bool $skipValidation
      * @param mixed $couponCode
      * @return array
@@ -107,7 +106,6 @@ class RulesApplier
     {
         $address = $item->getAddress();
         $appliedRuleIds = [];
-        $this->discountAggregator = [];
         /* @var $rule Rule */
         foreach ($rules as $rule) {
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
@@ -133,10 +131,6 @@ class RulesApplier
 
             $this->applyRule($item, $rule, $address, $couponCode);
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
-
-            if ($rule->getStopRulesProcessing()) {
-                break;
-            }
         }
 
         return $appliedRuleIds;
@@ -265,10 +259,18 @@ class RulesApplier
             ];
             /** @var \Magento\SalesRule\Model\Data\RuleDiscount $itemDiscount */
             $ruleDiscount = $this->discountInterfaceFactory->create(['data' => $data]);
-            $this->discountAggregator[] = $ruleDiscount;
-            $item->getExtensionAttributes()->setDiscounts($this->discountAggregator);
+            $this->discountAggregator[$item->getId()][$rule->getId()] = $ruleDiscount;
+            $item->getExtensionAttributes()->setDiscounts(array_values($this->discountAggregator[$item->getId()]));
         }
         return $this;
+    }
+
+    /**
+     * Reset discount aggregator
+     */
+    public function resetDiscountAggregator()
+    {
+        $this->discountAggregator = [];
     }
 
     /**
@@ -354,7 +356,7 @@ class RulesApplier
         $address = $item->getAddress();
         $quote = $item->getQuote();
 
-        $item->setAppliedRuleIds(join(',', $appliedRuleIds));
+        $item->setAppliedRuleIds($this->validatorUtility->mergeIds($item->getAppliedRuleIds(), $appliedRuleIds));
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
 
