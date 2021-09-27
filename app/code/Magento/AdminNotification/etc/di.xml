@@ -9,7 +9,7 @@
     <type name="Magento\Framework\Notification\NotifierList">
         <arguments>
             <argument name="notifiers" xsi:type="array">
-                <item name="adminnotification" xsi:type="string">Magento\AdminNotification\Model\Inbox</item>
+                <item key="" name="adminnotification" xsi:type="string">Magento\AdminNotification\Model\Inbox</item>
             </argument>
         </arguments>
     </type>

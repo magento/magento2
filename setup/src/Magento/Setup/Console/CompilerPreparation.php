@@ -57,6 +57,7 @@ class CompilerPreparation
         $this->serviceManager = $serviceManager;
         $this->input = $input;
         $this->filesystemDriver = $filesystemDriver;
+        $something = ObjectManager::getInstance()->get(JsonHelper::class);
     }
 
     /**
