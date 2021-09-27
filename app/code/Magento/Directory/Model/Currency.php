@@ -29,7 +29,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Minimum version of ICU required.
      */
-    const MIN_INTL_ICU_VERSION = '60.0';
+    private const MIN_INTL_ICU_VERSION = '60.0';
 
     /**
      * CONFIG path constants
@@ -174,7 +174,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCode(): ?string
+    public function getCode()
     {
         return $this->_getData('currency_code');
     }
@@ -184,7 +184,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function getCurrencyCode(): ?string
+    public function getCurrencyCode()
     {
         return $this->_getData('currency_code');
     }
@@ -427,11 +427,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * Format currency.
      *
-     * @param float $price
+     * @param string $price
      * @param array $options
      * @return string
      */
-    private function formatCurrency(float $price, array $options): string
+    private function formatCurrency(string $price, array $options): string
     {
         $customerOptions = new \Magento\Framework\DataObject([]);
 
@@ -595,7 +595,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function saveRates(array $rates): Currency
+    public function saveRates($rates)
     {
         $this->_getResource()->saveRates($rates);
         return $this;
