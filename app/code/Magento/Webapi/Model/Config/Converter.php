@@ -83,6 +83,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             } else {
                 $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] =
                     array_unique(
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         array_merge(
                             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES],
                             $resourcePermissionSet
