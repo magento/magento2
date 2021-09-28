@@ -26,7 +26,7 @@ class LinksListTest extends TestCase
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * Set up
