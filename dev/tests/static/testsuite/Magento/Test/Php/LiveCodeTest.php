@@ -452,7 +452,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             touch($reportFile);
         }
 
-        $fileList = self::getWhitelist(['php']);
+        $fileList = self::getWhitelist(['php', 'phtml']);
         $blackList = Files::init()->readLists(__DIR__ . '/_files/phpstan/blacklist/*.txt');
         if ($blackList) {
             $blackListPattern = sprintf('#(%s)#i', implode('|', $blackList));
