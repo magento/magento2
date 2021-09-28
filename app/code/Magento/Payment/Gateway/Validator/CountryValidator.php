@@ -36,7 +36,7 @@ class CountryValidator extends AbstractValidator
 
     /**
      * @param array $validationSubject
-     * @return bool
+     * @return \Magento\Payment\Gateway\Validator\ResultInterface
      * @throws NotFoundException
      * @throws \Exception
      */
