@@ -9,34 +9,120 @@
  */
 namespace Magento\Customer\Model\ResourceModel\Address;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class StoreAddressCollectionTest extends \PHPUnit\Framework\TestCase
+/**
+ * Assert that only relevant addresses for the allowed countries under a website/store fetch.
+ *
+ * @magentoDbIsolation enabled
+ */
+class StoreAddressCollectionTest extends TestCase
 {
-    public function testSetCustomerFilter()
-    {
-        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\ResourceModel\Address\StoreAddressCollection::class
-        );
-        $select = $collection->getSelect();
-        $this->assertSame($collection, $collection->setCustomerFilter([1, 2]));
-        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Customer::class
-        );
-        $collection->setCustomerFilter($customer);
-        $customer->setId(3);
-        $collection->setCustomerFilter($customer);
-        $format = '%AWHERE%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Sparent_id%S = %S-1%S)%SAND%S(%Sparent_id%S = %S3%S)%A';
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
 
-        $storeId = $customer->getStoreId() ?? 1;
-        if ($storeId) {
-            $allowedCountriesObj = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\Directory\Model\AllowedCountries::class
-            );
-            $allowedCountries = $allowedCountriesObj->getAllowedCountries(ScopeInterface::SCOPE_STORE, $storeId);
-            $strAllowedCountries = implode("%S, %S", $allowedCountries);
-            $format = "%AWHERE%S(%Sparent_id%S IN(%S1%S, %S2%S))%SAND%S(%Scountry_id%S IN(%S$strAllowedCountries%S))%A";
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var StoreAddressCollection
+     */
+    private $storeAddressCollection;
+
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->storeAddressCollection = $this->objectManager->create(StoreAddressCollection::class);
+    }
+
+    /**
+     * Ensure that config changes are deleted or restored.
+     */
+    protected function tearDown(): void
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var ConfigInterface $config */
+        $config = $this->objectManager->get(ConfigInterface::class);
+        $config->deleteConfig('general/country/allow');
+        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
+
+        /** @var Writer $configWriter */
+        $configWriter = $this->objectManager->get(WriterInterface::class);
+
+        $configWriter->save('customer/account_share/scope', 1);
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+        parent::tearDown();
+    }
+
+    /**
+     * Assert that only allowed country address fetched.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     *
+     * @dataProvider addressesDataProvider
+     *
+     * @param $customerId
+     * @param $allowedCountries
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testSetCustomerFilter($customerId, $allowedCountries) : void
+    {
+        /** @var ConfigInterface $config */
+        $config = $this->objectManager->get(ConfigInterface::class);
+        $config->saveConfig('general/country/allow', implode(',', $allowedCountries));
+        $this->objectManager->get(ReinitableConfigInterface::class)->reinit();
+
+        /** @var Writer $configWriter */
+        $configWriter = $this->objectManager->get(WriterInterface::class);
+        $configWriter->save('customer/account_share/scope', 0);
+        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
+        $scopeConfig->clean();
+
+        $customer = $this->customerRepository->getById($customerId);
+        $addresses = $this->storeAddressCollection->setCustomerFilter($customer);
+        $this->assertIsArray($addresses->getData());
+
+        foreach ($addresses->getData() as $address) {
+            $this->assertContains($address['country_id'], $allowedCountries);
         }
-        $this->assertStringMatchesFormat($format, (string)$select);
+    }
+
+    /**
+     * Data provider for create allowed or not allowed countries.
+     *
+     * @return array
+     */
+    public function addressesDataProvider(): array
+    {
+        return [
+            'address_in_single_allowed_country' => [1, ['US']],
+            'address_not_in_single_allowed_country' => [1, ['FR']],
+            'address_in_multiple_allowed_countries' => [1, ['US', 'IN']],
+            'address_not_in_multiple_allowed_countries' => [1, ['FR', 'DE']],
+        ];
     }
 }
