@@ -22,6 +22,7 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
             <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
             <magentoCLI command="config:set tax/weee/enable 1" stepKey="EnableWeee"/>
