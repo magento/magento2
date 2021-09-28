@@ -274,7 +274,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             touch($reportFile);
         }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml', 'xml']);
+        $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
         $ignoreList = Files::init()->readLists(__DIR__ . '/_files/phpcs/ignorelist/*.txt');
         if ($ignoreList) {
             $ignoreListPattern = sprintf('#(%s)#i', implode('|', $ignoreList));
