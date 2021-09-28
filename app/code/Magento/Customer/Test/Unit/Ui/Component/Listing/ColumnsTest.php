@@ -20,27 +20,44 @@ use PHPUnit\Framework\TestCase;
 
 class ColumnsTest extends TestCase
 {
-    /** @var ContextInterface|MockObject */
+    /**
+     * @var ContextInterface|MockObject
+     */
     protected $context;
 
-    /** @var ColumnFactory|MockObject */
+    /**
+     * @var ColumnFactory|MockObject
+     */
     protected $columnFactory;
 
-    /** @var AttributeRepository|MockObject */
+    /**
+     * @var AttributeRepository|MockObject
+     */
     protected $attributeRepository;
 
-    /** @var Attribute|MockObject */
+    /**
+     * @var Attribute|MockObject
+     */
     protected $attribute;
 
-    /** @var ColumnInterface|MockObject */
+    /**
+     * @var ColumnInterface|MockObject
+     */
     protected $column;
 
-    /** @var InlineEditUpdater|MockObject */
+    /**
+     * @var InlineEditUpdater|MockObject
+     */
     protected $inlineEditUpdater;
 
-    /** @var Columns */
+    /**
+     * @var Columns
+     */
     protected $component;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(ContextInterface::class)
@@ -77,7 +94,10 @@ class ColumnsTest extends TestCase
         );
     }
 
-    public function testPrepareWithAddColumn()
+    /**
+     * @return void
+     */
+    public function testPrepareWithAddColumn(): void
     {
         $attributeCode = 'attribute_code';
 
@@ -102,7 +122,7 @@ class ColumnsTest extends TestCase
                         'is_searchable_in_grid' => true,
                         'validation_rules' => [],
                         'required'=> false,
-                        'entity_type_code' => 'customer_address',
+                        'entity_type_code' => 'customer_address'
                     ]
                 ]
             );
@@ -115,7 +135,10 @@ class ColumnsTest extends TestCase
         $this->component->prepare();
     }
 
-    public function testPrepareWithUpdateColumn()
+    /**
+     * @return void
+     */
+    public function testPrepareWithUpdateColumn(): void
     {
         $attributeCode = 'billing_attribute_code';
         $backendType = 'backend-type';
@@ -136,7 +159,7 @@ class ColumnsTest extends TestCase
             'is_searchable_in_grid' => true,
             'validation_rules' => [],
             'required'=> false,
-            'entity_type_code' => 'customer',
+            'entity_type_code' => 'customer'
         ];
 
         $this->attributeRepository->expects($this->atLeastOnce())
@@ -151,28 +174,28 @@ class ColumnsTest extends TestCase
             ->method('getData')
             ->with('config')
             ->willReturn([]);
-        $this->column->expects($this->at(3))
+        $this->column
             ->method('setData')
-            ->with(
-                'config',
+            ->withConsecutive(
                 [
-                    'options' => [
-                        [
-                            'label' => 'Label',
-                            'value' => 'Value'
+                    'config',
+                    [
+                        'options' => [
+                            [
+                                'label' => 'Label',
+                                'value' => 'Value'
+                            ]
                         ]
                     ]
-                ]
-            );
-        $this->column->expects($this->at(5))
-            ->method('setData')
-            ->with(
-                'config',
+                ],
                 [
-                    'name' => $attributeCode,
-                    'dataType' => $backendType,
-                    'filter' => 'text',
-                    'visible' => true
+                    'config',
+                    [
+                        'name' => $attributeCode,
+                        'dataType' => $backendType,
+                        'filter' => 'text',
+                        'visible' => true
+                    ]
                 ]
             );
 
@@ -180,7 +203,10 @@ class ColumnsTest extends TestCase
         $this->component->prepare();
     }
 
-    public function testPrepareWithUpdateStaticColumn()
+    /**
+     * @return void
+     */
+    public function testPrepareWithUpdateStaticColumn(): void
     {
         $attributeCode = 'billing_attribute_code';
         $backendType = 'static';
@@ -201,7 +227,7 @@ class ColumnsTest extends TestCase
             'is_searchable_in_grid' => true,
             'validation_rules' => [],
             'required'=> false,
-            'entity_type_code' => 'customer',
+            'entity_type_code' => 'customer'
         ];
         $this->inlineEditUpdater->expects($this->once())
             ->method('applyEditing')
@@ -218,30 +244,28 @@ class ColumnsTest extends TestCase
         $this->column->expects($this->atLeastOnce())
             ->method('getData')
             ->with('config')
-            ->willReturn([
-                'editor' => 'text'
-            ]);
-        $this->column->expects($this->at(3))
+            ->willReturn(['editor' => 'text']);
+        $this->column
             ->method('setData')
-            ->with(
-                'config',
+            ->withConsecutive(
                 [
-                    'editor' => 'text',
-                    'options' => [
-                        [
-                            'label' => 'Label',
-                            'value' => 'Value'
+                    'config',
+                    [
+                        'editor' => 'text',
+                        'options' => [
+                            [
+                                'label' => 'Label',
+                                'value' => 'Value'
+                            ]
                         ]
                     ]
-                ]
-            );
-        $this->column->expects($this->at(6))
-            ->method('setData')
-            ->with(
-                'config',
+                ],
                 [
-                    'editor' => 'text',
-                    'visible' => true
+                    'config',
+                    [
+                        'editor' => 'text',
+                        'visible' => true
+                    ]
                 ]
             );
 

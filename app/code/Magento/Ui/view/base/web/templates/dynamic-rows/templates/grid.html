@@ -11,13 +11,13 @@
      css="$data.setClasses($data)"
      attr="'data-index': index">
     <label if="$data.label" class="admin__field-label" attr="for: $data.uid">
-        <span translate="$data.label"/>
+        <span translate="$data.label"></span>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
         <div class="admin__control-table-pagination" visible="!!$data.getRecordCount()">
             <div class="admin__data-grid-pager-wrap">
-                <select class="admin__control-select" data-bind="value:pageSize, event:{change: reload}">
+                <select class="admin__control-select" data-bind="value:pageSize, event:{change: updatePageSize}">
                     <option value="5">5</option>
                     <option value="20" selected="selected">20</option>
                     <option value="30">30</option>
@@ -29,7 +29,7 @@
                 <label class="admin__control-support-text" data-bind="text: $t('per page')"></label>
                 <div class="admin__data-grid-pager">
                     <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
-                    <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                    <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage"/>
                     <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
                     <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
                 </div>
@@ -41,21 +41,21 @@
                  class="admin__data-grid-loading-mask"
                  if="$data.showSpinner">
                 <div class="spinner">
-                    <span repeat="8"/>
+                    <span repeat="8"></span>
                 </div>
             </div>
             <table class="admin__dynamic-rows data-grid" data-role="grid">
                 <thead if="$data.columnsHeader">
                 <tr>
                     <th if="dndConfig.enabled"
-                        class="data-grid-draggable-row-cell"/>
+                        class="data-grid-draggable-row-cell"></th>
 
                     <th repeat="foreach: labels, item: '$label'"
                         class="data-grid-th"
                         visible="$label().visible"
                         disable="$label().disabled"
                         css="$label().columnsHeaderClasses">
-                        <span translate="$label().label"/>
+                        <span translate="$label().label"></span>
                     </th>
                 </tr>
                 </thead>
@@ -66,7 +66,7 @@
                     css="'_odd-row': $index % 2">
                     <td if="dndConfig.enabled"
                         class="data-grid-draggable-row-cell"
-                        template="name: dndConfig.template, data: dnd"/>
+                        template="name: dndConfig.template, data: dnd"></td>
 
                     <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
                     <td if="elem.template"
@@ -74,7 +74,7 @@
                         disable="elem.disabled"
                         css="$parent.setClasses(elem)"
                         template="elem.template"
-                        attr="'data-index': index"/>
+                        attr="'data-index': index"></td>
                     <!-- /ko -->
                 </tr>
                 </tbody>
@@ -85,9 +85,9 @@
             <button attr="{disabled: disabled}"
                     type="button"
                     click="addChild.bind($data, false, false)">
-                <span translate="addButtonLabel"/>
+                <span translate="addButtonLabel"></span>
             </button>
         </div>
-        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
     </div>
 </div>

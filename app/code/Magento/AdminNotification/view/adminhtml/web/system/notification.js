@@ -52,7 +52,7 @@ define([
                 tmpl = $(tmpl);
 
                 this.element.html(
-                    $('<ul />', {
+                    $('<ul></ul>', {
                         'class': 'message-system-list'
                     }).append(tmpl)
                 ).trigger('contentUpdated');

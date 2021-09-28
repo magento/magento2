@@ -8,15 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateCreditMemoWithCashOnDeliveryTest">
+    <test name="AdminCreateCreditMemoWithCashOnDeliveryTest" deprecated="Use AdminCreateCreditMemoForOrderWithCashOnDeliveryTest instead">
         <annotations>
             <stories value="Credit memo entity"/>
-            <title value="Create Credit Memo with cash on delivery payment method"/>
+            <title value="DEPRECATED. Create Credit Memo with cash on delivery payment method"/>
             <description value="Create Credit Memo with cash on delivery payment and assert 0 shipping refund"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-15863"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCreateCreditMemoForOrderWithCashOnDeliveryTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
