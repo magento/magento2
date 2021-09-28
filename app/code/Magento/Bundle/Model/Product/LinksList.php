@@ -44,7 +44,7 @@ class LinksList
         LinkInterfaceFactory $linkFactory,
         Type $type,
         DataObjectHelper $dataObjectHelper,
-        Link  $linkHelper
+        ?Link  $linkHelper = null
     ) {
         $this->linkFactory = $linkFactory;
         $this->type = $type;
