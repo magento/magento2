@@ -98,7 +98,7 @@ class LinkManagement implements ProductLinkManagementInterface
         StoreManagerInterface $storeManager,
         DataObjectHelper $dataObjectHelper,
         MetadataPool $metadataPool,
-        Link  $linkHelper
+        ?Link  $linkHelper = null
     ) {
         $this->productRepository = $productRepository;
         $this->linkFactory = $linkFactory;
