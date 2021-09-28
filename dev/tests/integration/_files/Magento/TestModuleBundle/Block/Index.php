@@ -37,7 +37,7 @@ class Index extends Template
 
     /**
      * @param $id
-     * @return object
+     * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws NoSuchEntityException
      */
     public function GetBundleById($id): object
