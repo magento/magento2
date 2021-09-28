@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcb783c9056b0045c51d33748f5e614c",
+    "content-hash": "4cc1bf2fd2fd6f0d244f3440383583ff",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -9745,16 +9745,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "dev-develop",
+            "version": "11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "5df47dc2275182d359b2763250d8ec09e1cfaf6e"
+                "reference": "e59094aeebb2b7c59ac143656a82bb941811c45a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/5df47dc2275182d359b2763250d8ec09e1cfaf6e",
-                "reference": "5df47dc2275182d359b2763250d8ec09e1cfaf6e",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/e59094aeebb2b7c59ac143656a82bb941811c45a",
+                "reference": "e59094aeebb2b7c59ac143656a82bb941811c45a",
                 "shasum": ""
             },
             "require": {
@@ -9767,7 +9767,6 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5.8"
             },
-            "default-branch": true,
             "type": "phpcodesniffer-standard",
             "autoload": {
                 "classmap": [
@@ -9785,9 +9784,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/develop"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v11"
             },
-            "time": "2021-09-27T10:16:44+00:00"
+            "time": "2021-09-28T09:53:56+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -12965,9 +12964,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "magento/magento-coding-standard": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
