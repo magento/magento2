@@ -40,7 +40,7 @@ class Index extends Template
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws NoSuchEntityException
      */
-    public function GetBundleById($id): object
+    public function getBundleById($id): \Magento\Catalog\Api\Data\ProductInterface
     {
         return $this->productRepositoryInterface->getById($id);
     }
