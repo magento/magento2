@@ -14,7 +14,6 @@ use Magento\Framework\DB\Statement\Parameter;
  */
 class Mysql extends \Zend_Db_Statement_Pdo
 {
-
     /**
      * Executes statement with binding values to it. Allows transferring specific options to DB driver.
      *
@@ -40,7 +39,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
         // Separate array with values, as they are bound by reference
         foreach ($params as $name => $param) {
             $dataType = \PDO::PARAM_STR;
-            $length = null;
+            $length = is_string($param) ? strlen($param) : 0;
             $driverOptions = null;
 
             if ($param instanceof Parameter) {
@@ -88,7 +87,7 @@ class Mysql extends \Zend_Db_Statement_Pdo
             return $this->_executeWithBinding($params);
         } else {
             return $this->tryExecute(function () use ($params) {
-                return $params !== null ? $this->_stmt->execute($params) : $this->_stmt->execute();
+                return !empty($params) ? $this->_stmt->execute($params) : $this->_stmt->execute();
             });
         }
     }
