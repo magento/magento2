@@ -339,6 +339,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
         }
 
+        cli_set_process_title("Magento cron - group=$groupId - job=$jobCode");
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()));
         $this->retrier->execute(
             function () use ($schedule) {
