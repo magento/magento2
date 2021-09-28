@@ -154,14 +154,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'json' => [
-                '{"type": "basic", "unit": "inch", "sign": "(\")", "size": "1.5\""}',
-                '"text_attribute={""type"": ""basic"", ""unit"": ""inch"", ""sign"": ""(\"")"", ""size"": ""1.5\""""}"'
+                '{"type": "basic", "unit": "inch", "sign": "(")", "size": "1.5""}',
+                '"text_attribute={""type"": ""basic"", ""unit"": ""inch"", ""sign"": ""("")"", ""size"": ""1.5""""}"'
             ],
             'markup' => [
                 '<div data-content>Element type is basic, measured in inches ' .
-                '(marked with sign (\")) with size 1.5\", mid-price range</div>',
+                '(marked with sign (")) with size 1.5", mid-price range</div>',
                 '"text_attribute=<div data-content>Element type is basic, measured in inches ' .
-                '(marked with sign (\"")) with size 1.5\"", mid-price range</div>"'
+                '(marked with sign ("")) with size 1.5"", mid-price range</div>"'
             ],
         ];
     }
