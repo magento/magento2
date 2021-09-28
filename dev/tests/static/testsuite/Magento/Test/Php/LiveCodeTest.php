@@ -274,7 +274,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             touch($reportFile);
         }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
-        $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml']);
+        $fileList = $this->isFullScan() ? $this->getFullWhitelist() : self::getWhitelist(['php', 'phtml', 'xml']);
         $ignoreList = Files::init()->readLists(__DIR__ . '/_files/phpcs/ignorelist/*.txt');
         if ($ignoreList) {
             $ignoreListPattern = sprintf('#(%s)#i', implode('|', $ignoreList));
@@ -285,7 +285,6 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
                 }
             );
         }
-
         $result = $codeSniffer->run($fileList);
         $report = file_get_contents($reportFile);
         $this->assertEquals(
@@ -452,7 +451,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             touch($reportFile);
         }
 
-        $fileList = self::getWhitelist(['php', 'phtml']);
+        $fileList = self::getWhitelist(['php']);
         $blackList = Files::init()->readLists(__DIR__ . '/_files/phpstan/blacklist/*.txt');
         if ($blackList) {
             $blackListPattern = sprintf('#(%s)#i', implode('|', $blackList));

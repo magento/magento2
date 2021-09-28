@@ -9,6 +9,7 @@ namespace Magento\Setup\Console;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Console\Exception\GenerationDirectoryAccessException;
 use Magento\Framework\Console\GenerationDirectoryAccess;
 use Magento\Framework\Exception\FileSystemException;
