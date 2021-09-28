@@ -21,7 +21,7 @@ class LinksListTest extends TestCase
     /**
      * @var Product
      */
-    protected $product;
+    private $product;
 
     /**
      * @var ObjectManagerInterface
