@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
 use Magento\Backend\App\Action;
+use Magento\Catalog\Helper\Catalog;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
 use Magento\Framework\App\ProductMetadataInterface;
@@ -50,6 +52,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
         $this->configFactory = $configFactory;
         $this->productMetadata = $productMetadata;
         $this->notificationLogger = $notificationLogger;
+        $something = ObjectManager::getInstance()->get(Catalog::class);
     }
 
     /**
