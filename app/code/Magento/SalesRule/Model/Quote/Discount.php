@@ -282,7 +282,7 @@ class Discount extends AbstractTotal
         array &$addressDiscountAggregator
     ) {
         $itemExtAttr = $item->getExtensionAttributes();
-        if ($itemExtAttr && get_class($itemExtAttr) === Magento\SalesRule\Api\Data\RuleDiscountInterface::class) {
+        if ($itemExtAttr && get_class($itemExtAttr) === \Magento\SalesRule\Api\Data\RuleDiscountInterface::class) {
             $discountBreakdown = $itemExtAttr->getDiscounts();
         } else {
             $discountBreakdown = null;
