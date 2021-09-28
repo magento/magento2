@@ -69,6 +69,6 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
             ]
         )->save();
 
-        $this->assertEquals($consumerSecret, $this->encryptor->decrypt($this->consumerModel->getSecret()));
+        $this->assertEquals($consumerSecret, $this->consumerModel->getSecret());
     }
 }

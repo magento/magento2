@@ -15,7 +15,6 @@ use Magento\Integration\Api\UserTokenIssuerInterface;
 use Magento\Integration\Api\UserTokenReaderInterface;
 use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenCollection;
-use Magento\Integration\Model\ResourceModel\Oauth\Token as TokenResourceModel;
 
 /**
  * oAuth token model
@@ -101,11 +100,6 @@ class Token extends \Magento\Framework\Model\AbstractModel
     private $tokenParamsFactory;
 
     /**
-     * @var TokenResourceModel
-     */
-    private $tokenResourceModel;
-
-    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -121,7 +115,6 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param UserTokenReaderInterface|null $reader
      * @param UserTokenIssuerInterface|null $issuer
      * @param UserTokenParametersInterfaceFactory|null $paramsFactory
-     * @param TokenResourceModel|null $tokenResourceModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -137,8 +130,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         array $data = [],
         ?UserTokenReaderInterface $reader = null,
         ?UserTokenIssuerInterface $issuer = null,
-        ?UserTokenParametersInterfaceFactory $paramsFactory = null,
-        ?TokenResourceModel $tokenResourceModel = null
+        ?UserTokenParametersInterfaceFactory $paramsFactory = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_keyLengthFactory = $keyLengthFactory;
@@ -150,8 +142,6 @@ class Token extends \Magento\Framework\Model\AbstractModel
         $this->issuer = $issuer ?? ObjectManager::getInstance()->get(UserTokenIssuerInterface::class);
         $this->tokenParamsFactory = $paramsFactory ??
             ObjectManager::getInstance()->get(UserTokenParametersInterfaceFactory::class);
-        $this->tokenResourceModel = $tokenResourceModel ??
-            ObjectManager::getInstance()->get(TokenResourceModel::class);
     }
 
     /**
@@ -219,12 +209,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         if (self::TYPE_REQUEST != $this->getType()) {
             throw new OauthException(__('Cannot convert to access token due to token is not request type'));
         }
-        $this->tokenResourceModel->afterLoad(
-            $this->saveAccessToken(
-                UserContextInterface::USER_TYPE_INTEGRATION
-            )
-        );
-        return $this;
+        return $this->saveAccessToken(UserContextInterface::USER_TYPE_INTEGRATION);
     }
 
     /**

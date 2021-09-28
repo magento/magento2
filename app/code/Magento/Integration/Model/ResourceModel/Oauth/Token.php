@@ -227,13 +227,21 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
-            $existingSecret = $object->getSecret();
-
-            if (strlen($existingSecret) > OauthHelper::LENGTH_TOKEN_SECRET) {
-                $object->setSecret($this->encryptor->decrypt($existingSecret));
-            }
-
+            $object->setSecret($this->encryptor->decrypt($object->getSecret()));
         }
+
         return parent::_afterLoad($object);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getType() === \Magento\Integration\Model\Oauth\Token::TYPE_ACCESS) {
+            $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+        }
+
+        return parent::_afterSave($object);
     }
 }

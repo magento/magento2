@@ -310,6 +310,6 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
         $model->save();
 
-        $this->assertEquals($tokenSecret, $this->encryptor->decrypt($model->getSecret()));
+        $this->assertEquals($tokenSecret, $model->getSecret());
     }
 }

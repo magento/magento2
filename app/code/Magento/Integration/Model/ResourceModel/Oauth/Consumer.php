@@ -7,7 +7,6 @@ namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 
 class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -80,11 +79,10 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $existingSecret = $object->getSecret();
         $entityId = $object->getEntityId();
 
-        if (!$entityId && $existingSecret && strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-            $object->setSecret($this->encryptor->encrypt($existingSecret));
+        if (!$entityId && $object->getSecret()) {
+            $object->setSecret($this->encryptor->encrypt($object->getSecret()));
         }
 
         return parent::_beforeSave($object);
@@ -95,12 +93,18 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $existingSecret = $object->getSecret();
-
-        if (strlen($existingSecret) > OauthHelper::LENGTH_CONSUMER_SECRET) {
-            $object->setSecret($this->encryptor->decrypt($existingSecret));
-        }
+        $object->setSecret($this->encryptor->decrypt($object->getSecret()));
 
         return parent::_afterLoad($object);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+
+        return parent::_afterSave($object);
     }
 }
