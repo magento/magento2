@@ -23,17 +23,17 @@ class ConfigurableDataProviderTest extends TestCase
     /**
      * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var CollectionFactory|MockObject
      */
-    protected $collectionFactoryMock;
+    private $collectionFactoryMock;
 
     /**
      * @var Collection|MockObject
      */
-    protected $collectionMock;
+    private $collectionMock;
 
     /**
      * @var PoolInterface|MockObject
@@ -44,6 +44,22 @@ class ConfigurableDataProviderTest extends TestCase
      * @var ModifierInterface|MockObject
      */
     private $modifierMockOne;
+
+    /**
+     * Test checks ConfigurableDataProvider type
+     */
+    public function testCheckType(): void
+    {
+        $this->assertInstanceOf(ConfigurableDataProvider::class, $this->getModel());
+    }
+
+    /**
+     * Test checks collection type
+     */
+    public function testGetCollection(): void
+    {
+        $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
+    }
 
     /**
      * @return void
@@ -84,22 +100,6 @@ class ConfigurableDataProviderTest extends TestCase
         $this->modifiersPool->expects($this->any())
             ->method('getModifiersInstances')
             ->willReturn([$this->modifierMockOne]);
-    }
-
-    /**
-     * Test checks ConfigurableDataProvider type
-     */
-    public function testCheckType(): void
-    {
-        $this->assertInstanceOf(ConfigurableDataProvider::class, $this->getModel());
-    }
-
-    /**
-     * Test checks collection type
-     */
-    public function testGetCollection(): void
-    {
-        $this->assertInstanceOf(Collection::class, $this->getModel()->getCollection());
     }
 
     /**
