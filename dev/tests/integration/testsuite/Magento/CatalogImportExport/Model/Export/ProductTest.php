@@ -132,7 +132,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'text_attribute');
         $attribute->setDefaultValue($attributeData);
         /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository */
-        $productAttributeRepository = $objectManager->get(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
+        $productAttributeRepository = $objectManager->get(
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
+        );
         $productAttributeRepository->save($attribute);
         $product->setCustomAttribute('text_attribute', $attribute->getDefaultValue());
         $productRepository->save($product);
@@ -607,7 +609,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $productAction->updateWebsites([$productId], [$secondStore->getWebsiteId()], 'add');
         $product->setStoreId($secondStore->getId());
         $product->setPrice('9.99');
-        $product->getResource()->save($product);
+        $this->productRepository->save($product);
 
         $exportData = $this->model->export();
 
