@@ -54,6 +54,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryAdminPage"/>
         <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAllCategories"/>
         <see userInput="{{SimpleSubCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
+        <see userInput="temporary intentional failure to see state of application in screenshot and html" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage2"/>
 
         <!-- Check on storefront that category was created -->
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
