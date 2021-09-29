@@ -103,7 +103,13 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+        $secret = $object->getSecret();
+        if ($object->isObjectNew() ||
+            isset($object->getOrigData()['secret']) &&
+            $object->getOrigData()['secret'] !== $secret
+        ) {
+            $object->setSecret($this->encryptor->decrypt($secret));
+        }
 
         return parent::_afterSave($object);
     }
