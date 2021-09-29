@@ -4,7 +4,9 @@
  */
 
 define([
-    'jquery'
+    'jquery',
+    'tabs',
+    'collapsible'
 ], function ($) {
     'use strict';
 
