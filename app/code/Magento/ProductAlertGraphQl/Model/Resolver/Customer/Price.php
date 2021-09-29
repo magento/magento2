@@ -81,7 +81,7 @@ class Price implements ResolverInterface
      * Get price alerts for customer
      *
      * @param int $customerId
-     * @param int $$storeId
+     * @param int $storeId
      * @return array
      */
     private function getProductAlertsForCustomer($customerId, $storeId): array

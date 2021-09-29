@@ -80,7 +80,7 @@ class Unsubscribe implements ResolverInterface
         
         if (!$model->getId()) {
             throw new GraphQlNoSuchEntityException(__('The current user isn\'t subscribed to stocK alert.'));
-        } 
+        }
 
         $this->stockResource->delete($model);
 

@@ -31,11 +31,6 @@ class Stock implements ResolverInterface
     private $helper;
 
     /**
-     * @var StockFactory
-     */
-    private $stockFactory;
-
-    /**
      * @param CollectionFactory $stockCollectionFactory
      * @param AlertsHelper $helper
      */
@@ -83,10 +78,10 @@ class Stock implements ResolverInterface
     }
 
     /**
-     * Get customer alerts
+     * Get stock customer alerts
      *
      * @param int $customerId
-     * @param int $$storeId
+     * @param int $storeId
      * @return array
      */
     private function getProductAlertsForCustomer($customerId, $storeId): array
