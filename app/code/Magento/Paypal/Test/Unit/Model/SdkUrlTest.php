@@ -85,6 +85,7 @@ class SdkUrlTest extends TestCase
      * @param string $locale
      * @param string $intent
      * @param string|null $disallowedFunding
+     * @param bool $isBuyerCountryEnabled
      * @param bool $isPaypalGuestCheckoutEnabled
      * @param array $expected
      * @dataProvider getConfigDataProvider
@@ -93,9 +94,11 @@ class SdkUrlTest extends TestCase
         string $locale,
         string $intent,
         ?string $disallowedFunding,
+        bool $isBuyerCountryEnabled,
         bool $isPaypalGuestCheckoutEnabled,
         array $expected
-    ) {
+    )
+    {
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $this->configMock->method('getValue')->willReturnMap(
             [
@@ -103,6 +106,7 @@ class SdkUrlTest extends TestCase
                 ['sandbox_client_id', null, 'sb'],
                 ['sandbox_flag', null, true],
                 ['disable_funding_options', null, $disallowedFunding],
+                ['buyer_country', null, $isBuyerCountryEnabled ? 'US' : ''],
                 ['paymentAction', null, $intent],
                 ['in_context', null, true],
                 [
@@ -112,7 +116,6 @@ class SdkUrlTest extends TestCase
                 ],
             ]
         );
-
         self::assertEquals($expected['sdkUrl'], $this->model->getUrl());
     }
 
@@ -150,7 +153,7 @@ class SdkUrlTest extends TestCase
     private function getUnsupportedPaymentMethods()
     {
         return [
-            'venmo'=> 'venmo',
+            'venmo' => 'venmo',
             'bancontact' => 'bancontact',
             'eps' => 'eps',
             'giropay' => 'giropay',

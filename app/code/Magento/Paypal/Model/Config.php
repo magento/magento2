@@ -12,7 +12,6 @@ use Magento\Payment\Helper\Formatter;
  * Config model that is aware of all \Magento\Paypal payment methods
  *
  * Works with PayPal-specific system configuration
-
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -620,7 +619,8 @@ class Config extends AbstractConfig
         \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory,
         \Magento\Paypal\Model\CertFactory $certFactory,
         $params = []
-    ) {
+    )
+    {
         parent::__construct($scopeConfig);
         $this->directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;
@@ -840,7 +840,7 @@ class Config extends AbstractConfig
     public function getPayPalBasicStartUrl($token)
     {
         $params = [
-            'cmd'   => '_express-checkout',
+            'cmd' => '_express-checkout',
             'token' => $token,
         ];
 
@@ -1519,6 +1519,7 @@ class Config extends AbstractConfig
             case 'merchant_id':
             case 'client_id':
             case 'sandbox_client_id':
+            case 'buyer_country':
             case 'supported_locales':
             case 'smart_buttons_supported_locales':
                 return "payment/{$this->_methodCode}/{$fieldName}";
@@ -1615,8 +1616,8 @@ class Config extends AbstractConfig
         if ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && $this->isMethodAvailable(self::METHOD_PAYFLOWLINK)) {
             $pathPrefix = 'payment/payflow_link';
         } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && $this->isMethodAvailable(
-            self::METHOD_PAYFLOWADVANCED
-        )
+                self::METHOD_PAYFLOWADVANCED
+            )
         ) {
             $pathPrefix = 'payment/payflow_advanced';
         } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS) {

@@ -82,7 +82,8 @@ class SdkUrl
         StoreManagerInterface $storeManager,
         $disallowedFundingMap = [],
         $unsupportedPaymentMethods = []
-    ) {
+    )
+    {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
@@ -116,6 +117,7 @@ class SdkUrl
                 $params['intent'] = $this->getIntent();
                 $params['merchant-id'] = $this->config->getValue('merchant_id');
                 $params['disable-funding'] = $this->getDisallowedFunding();
+                $params['buyer-country'] = $this->getBuyerCountry();
                 $params = array_replace($params, $this->queryParams);
             }
             $params['components'] = implode(',', $components);
@@ -156,7 +158,7 @@ class SdkUrl
      */
     private function areButtonsEnabled()
     {
-        return (bool)(int) $this->config->getValue('in_context');
+        return (bool)(int)$this->config->getValue('in_context');
     }
 
     /**
@@ -169,6 +171,17 @@ class SdkUrl
         return (int)$this->config->getValue('sandbox_flag') ?
             $this->config->getValue('sandbox_client_id') :
             $this->config->getValue('client_id');
+    }
+
+    /**
+     * get Configured value for paypal buyer country
+     * @return string
+     */
+    private function getBuyerCountry()
+    {
+        return (int)$this->config->getValue('sandbox_flag') ?
+            $this->config->getValue('buyer_country') :
+            '';
     }
 
     /**

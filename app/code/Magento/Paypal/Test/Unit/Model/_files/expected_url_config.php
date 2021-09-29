@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @param array $params
  * @return String
  */
-function generateExpectedPaypalSdkUrl(array $params) : String
+function generateExpectedPaypalSdkUrl(array $params): string
 {
     return 'https://www.paypal.com/sdk/js?' . http_build_query($params);
 }
@@ -20,6 +20,7 @@ return [
         'es_MX',
         'Authorization',
         'CREDIT,ELV,CARD',
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -55,6 +56,7 @@ return [
         'en_BR',
         'Sale',
         null,
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -78,6 +80,7 @@ return [
         'en_US',
         'Order',
         null,
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -101,6 +104,7 @@ return [
         'en_BR',
         'Authorization',
         'CREDIT,ELV',
+        false,
         false,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -136,6 +140,56 @@ return [
         'en_BR',
         'Authorization',
         'CREDIT,ELV',
+        false,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_BR',
+                    'currency' => 'USD',
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    ),
+                    'components' => implode(',', ['messages', 'buttons'])
+                ]
+            )
+        ]
+    ],
+    'buyer_country_enabled' => [
+        'en_BR',
+        'Authorization',
+        'CREDIT,ELV',
+        true,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_BR',
+                    'currency' => 'USD',
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    ),
+                    'buyer-country' => 'US',
+                    'components' => implode(',', ['messages', 'buttons'])
+                ]
+            )
+        ]
+    ],
+    'buyer_country_disabled' => [
+        'en_BR',
+        'Authorization',
+        'CREDIT,ELV',
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
