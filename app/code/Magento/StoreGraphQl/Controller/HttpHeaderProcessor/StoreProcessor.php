@@ -15,6 +15,7 @@ use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Process the "Store" header entry
@@ -42,21 +43,29 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     private $localeResolver;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param ResolverInterface $localeResolver
+     * @param LoggerInterface $logger
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
         StoreCookieManagerInterface $storeCookieManager,
-        ResolverInterface $localeResolver = null
+        ResolverInterface $localeResolver = null,
+        LoggerInterface $logger = null
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;
         $this->storeCookieManager = $storeCookieManager;
         $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(ResolverInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -71,10 +80,14 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     {
         if (!empty($headerValue)) {
             $storeCode = ltrim(rtrim($headerValue));
-            if ($this->isStoreValid($storeCode)) {
+            try {
                 $this->localeResolver->emulate($this->storeManager->getStore($storeCode)->getId());
+                // $this->storeManager->getStore($storeCode) throws error with non existing stores 
+                // and logged in the catch
                 $this->storeManager->setCurrentStore($storeCode);
                 $this->updateContext($storeCode);
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
             }
         } elseif (!$this->isAlreadySet()) {
             $storeCode = $this->storeCookieManager->getStoreCodeFromCookie()
@@ -109,20 +122,5 @@ class StoreProcessor implements HttpHeaderProcessorInterface
         $storeKey = StoreManagerInterface::CONTEXT_STORE;
 
         return $this->httpContext->getValue($storeKey) !== null;
-    }
-
-    /**
-     * Check if provided store code exist
-     *
-     * @param string $storeCode
-     * @return bool
-     */
-    private function isStoreValid(string $storeCode): bool
-    {
-        $stores = $this->storeManager->getStores(true, true);
-        if (isset($stores[$storeCode])) {
-            return true;
-        }
-        return false;
     }
 }
