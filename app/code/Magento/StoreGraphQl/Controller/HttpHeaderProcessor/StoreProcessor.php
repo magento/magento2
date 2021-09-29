@@ -82,7 +82,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             $storeCode = ltrim(rtrim($headerValue));
             try {
                 $this->localeResolver->emulate($this->storeManager->getStore($storeCode)->getId());
-                // $this->storeManager->getStore($storeCode) throws error with non existing stores 
+                // $this->storeManager->getStore($storeCode) throws error with non existing stores
                 // and logged in the catch
                 $this->storeManager->setCurrentStore($storeCode);
                 $this->updateContext($storeCode);
