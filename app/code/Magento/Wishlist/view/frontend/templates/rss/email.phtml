@@ -12,7 +12,6 @@ $wishlistHelper = $block->getData('wishlistHelper');
 ?>
 <?php if ($block->getLink()): ?>
 <p id="wishlist-rss-email-link">
-    <h2>{{escapehtml "H2"}}</h2>
     <?= $block->escapeHtml(__("RSS link to %1's wishlist", $wishlistHelper->getCustomerName())) ?>
     <br />
     <a href="<?= $block->escapeUrl($block->getLink()) ?>"><?= $block->escapeUrl($block->getLink()) ?></a>
