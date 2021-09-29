@@ -57,10 +57,6 @@
                     <compiled_css_secure_folder>css_secure</compiled_css_secure_folder>
                     <compiled_js_folder>js</compiled_js_folder>
                     <design_theme_folder>theme</design_theme_folder>
-                    <media_gallery_image_folders>
-                        <sales_logo_folder>sales/store/logo</sales_logo_folder>
-                        <sales_logo_html_folder>sales/store/logo_html</sales_logo_html_folder>
-                    </media_gallery_image_folders>
                 </allowed_resources>
             </media_storage_configuration>
         </system>
