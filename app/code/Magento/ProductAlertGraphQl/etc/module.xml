@@ -6,11 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_ProductAlertGraphQl">
-        <sequence>
-            <module name="Magento_CatalogGraphQl"/>
-            <module name="Magento_CustomerGraphQl"/>
-            <module name="Magento_ProductAlert"/>
-        </sequence>
-    </module>
+    <module name="Magento_ProductAlertGraphQl" />
 </config>
