@@ -29,6 +29,12 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="revertCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="0.7067"/>
+            </actionGroup>
             <!--Set currency allow previous config-->
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setDefaultAllowedCurrencies"/>
             <magentoCLI command="config:set {{DefaultCurrencyConverterApiKeyConfigData.path}} {{DefaultCurrencyConverterApiKeyConfigData.value}}" stepKey="setDefaultCurrencyConverterApiKey"/>
