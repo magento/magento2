@@ -27,22 +27,16 @@ use Psr\Log\LoggerInterface;
 class Collection extends AbstractCollection
 {
     /**
-     * Store for filter
-     *
      * @var int
      */
     protected $_storeId;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Search resource helper
-     *
      * @var Helper
      */
     protected $_resourceHelper;
