@@ -409,7 +409,6 @@ class Data extends AbstractHelper
      * Get current scope from request
      *
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCurrentScope(): array
     {
