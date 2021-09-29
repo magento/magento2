@@ -82,8 +82,7 @@ class SdkUrl
         StoreManagerInterface $storeManager,
         $disallowedFundingMap = [],
         $unsupportedPaymentMethods = []
-    )
-    {
+    ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
@@ -174,7 +173,8 @@ class SdkUrl
     }
 
     /**
-     * get Configured value for paypal buyer country
+     * Get Configured value for paypal buyer country
+     *
      * @return string
      */
     private function getBuyerCountry()

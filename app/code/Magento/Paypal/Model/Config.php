@@ -619,8 +619,7 @@ class Config extends AbstractConfig
         \Magento\Payment\Model\Source\CctypeFactory $cctypeFactory,
         \Magento\Paypal\Model\CertFactory $certFactory,
         $params = []
-    )
-    {
+    ) {
         parent::__construct($scopeConfig);
         $this->directoryHelper = $directoryHelper;
         $this->_storeManager = $storeManager;
@@ -1616,8 +1615,8 @@ class Config extends AbstractConfig
         if ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && $this->isMethodAvailable(self::METHOD_PAYFLOWLINK)) {
             $pathPrefix = 'payment/payflow_link';
         } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && $this->isMethodAvailable(
-                self::METHOD_PAYFLOWADVANCED
-            )
+            self::METHOD_PAYFLOWADVANCED
+        )
         ) {
             $pathPrefix = 'payment/payflow_advanced';
         } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS) {

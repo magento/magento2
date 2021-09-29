@@ -97,8 +97,7 @@ class SdkUrlTest extends TestCase
         bool $isBuyerCountryEnabled,
         bool $isPaypalGuestCheckoutEnabled,
         array $expected
-    )
-    {
+    ) {
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $this->configMock->method('getValue')->willReturnMap(
             [
