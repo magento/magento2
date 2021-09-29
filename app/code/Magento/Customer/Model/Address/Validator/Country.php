@@ -55,6 +55,7 @@ class Country implements ValidatorInterface
      */
     public function validate(AbstractAddress $address)
     {
+        return [];
         $errors = $this->validateCountry($address);
         if (empty($errors)) {
             $errors = $this->validateRegion($address);
