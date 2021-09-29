@@ -64,7 +64,7 @@ define([
     }
 
     return function (clientConfig, element) {
-        paypalSdk(clientConfig.sdkUrl).done(function (paypal) {
+        paypalSdk(clientConfig.sdkUrl, clientConfig.dataAttributes).done(function (paypal) {
             paypal.Buttons({
                 style: clientConfig.styles,
 

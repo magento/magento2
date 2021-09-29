@@ -81,7 +81,10 @@ class SmartButtonConfig
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
-            'sdkUrl' => $this->sdkUrl->getUrl()
+            'sdkUrl' => $this->sdkUrl->getUrl(),
+            'dataAttributes' => [
+                'data-partner-attribution-id'   => 'BN_CODE'
+            ]
         ];
     }
 
