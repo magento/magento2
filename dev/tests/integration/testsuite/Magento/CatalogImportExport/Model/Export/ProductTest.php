@@ -42,8 +42,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $productRepository;
 
     /**
-     * Stock item attributes which must be exported
-     *
      * @var array
      */
     public static $stockItemAttributes = [
