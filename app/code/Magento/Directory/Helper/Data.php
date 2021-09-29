@@ -409,6 +409,7 @@ class Data extends AbstractHelper
      * Get current scope from request
      *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCurrentScope(): array
     {
@@ -432,6 +433,14 @@ class Data extends AbstractHelper
                 'type' => ScopeInterface::SCOPE_STORE,
                 'value' => $request->getParam(self::STORE_ID),
             ];
+        } else {
+            $storeId = $this->_storeManager->getStore()->getId();
+            if ($storeId) {
+                $scope = [
+                    'type' => ScopeInterface::SCOPE_STORE,
+                    'value' => $storeId,
+                ];
+            }
         }
 
         return $scope;
