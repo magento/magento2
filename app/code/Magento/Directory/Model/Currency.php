@@ -395,11 +395,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function canUseNumberFormatter(array $options): bool
     {
-        $this->numberFormatter = $this->getNumberFormatter($options);
-        if(strpos($this->numberFormatter->formatCurrency(0, ''), $this->getCurrencySymbol()) !== false) {
-            return false;
-        }
-
         $allowedOptions = [
             'precision',
             LocaleCurrency::CURRENCY_OPTION_DISPLAY,
