@@ -33,7 +33,6 @@ class AddressAttributeFilter implements ArgumentInterface
         $this->allowedCountryReader = $allowedCountryReader;
     }
 
-
     /**
      * Set allowed country filter for customer's addresses
      *
