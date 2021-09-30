@@ -9,6 +9,8 @@
  */
 namespace Magento\Framework\Filter;
 
+use Exception;
+use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
 use Magento\Framework\Filter\DirectiveProcessor\ForDirective;
@@ -168,13 +170,21 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string $value
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function filter($value)
     {
+        if (!is_string($value)) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new InvalidArgumentException(__(
+                'Argument \'value\' must be type of string, %1 given.',
+                gettype($value)
+            )->render());
+        }
+
         foreach ($this->directiveProcessors as $directiveProcessor) {
             if (!$directiveProcessor instanceof DirectiveProcessorInterface) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Directive processors must implement ' . DirectiveProcessorInterface::class
                 );
             }
@@ -182,15 +192,12 @@ class Template implements \Zend_Filter_Interface
             if (preg_match_all($directiveProcessor->getRegularExpression(), $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
-
                     $value = str_replace($construction[0], $replacedValue, $value);
                 }
             }
         }
 
-        $value = $this->afterFilter($value);
-
-        return $value;
+        return $this->afterFilter($value);
     }
 
     /**
