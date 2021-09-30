@@ -66,24 +66,24 @@ class BlockActions extends Column
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_EDIT,
                                 [
-                                    'block_id' => $item['block_id'],
+                                    'block_id' => $item['block_id']
                                 ]
                             ),
-                            'label' => __('Edit'),
+                            'label' => __('Edit')
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_DELETE,
                                 [
-                                    'block_id' => $item['block_id'],
+                                    'block_id' => $item['block_id']
                                 ]
                             ),
                             'label' => __('Delete'),
                             'confirm' => [
                                 'title' => __('Delete %1', $title),
-                                'message' => __('Are you sure you want to delete a %1 record?', $title),
+                                'message' => __('Are you sure you want to delete a %1 record?', $title)
                             ],
-                            'post' => true,
+                            'post' => true
                         ],
                     ];
                 }

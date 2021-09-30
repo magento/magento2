@@ -87,7 +87,8 @@ class Column extends AbstractComponent implements ColumnInterface
                 'config',
                 array_replace_recursive(
                     (array)$this->wrappedComponent->getData('config'),
-                    (array)$this->getData('config')
+                    (array)$this->getData('config'),
+                    ['__disableTmpl' => ['label' => true]]
                 )
             );
         }
