@@ -195,6 +195,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\Lock\LockManagerInterface $lockManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param DeadlockRetrierInterface $retrier
+     * @param Request $environment
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
