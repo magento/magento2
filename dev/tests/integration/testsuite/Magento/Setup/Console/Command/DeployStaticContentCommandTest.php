@@ -135,7 +135,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => $newData], true);
 
-        //remove db details from application environment config to emulate work without db & set remote storage details
+        // rewrite application environment config with only remote storage details to emulate work without db
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
             $this->phpFormatter->format(['remote_storage' => $this->envConfig['remote_storage']])
