@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @param array $params
  * @return String
  */
-function generateExpectedPaypalSdkUrl(array $params): string
+function generateExpectedPaypalSdkUrl(array $params) : String
 {
     return 'https://www.paypal.com/sdk/js?' . http_build_query($params);
 }
