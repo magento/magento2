@@ -27,22 +27,16 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
     /**
-     * Current Product Type Id
-     *
      * @var string
      */
     protected $_typeId;
 
     /**
-     * Product Type is composite flag
-     *
      * @var bool
      */
     protected $_isComposite = false;
 
     /**
-     * Core store config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
@@ -59,8 +53,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected $stockConfiguration;
 
     /**
-     * Param for switching logic which depends on action type (full reindex or partial)
-     *
      * @var string
      */
     private $actionType;
