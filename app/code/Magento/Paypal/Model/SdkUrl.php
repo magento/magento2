@@ -42,7 +42,6 @@ class SdkUrl
     private $queryParams = [];
 
     /**
-     * Maps the old checkout SDK configuration values to the current ones
      *
      * @var array
      */
@@ -61,7 +60,6 @@ class SdkUrl
     private $localeResolver;
 
     /**
-     * Generated Url to PayPAl SDK
      *
      * @var string
      */

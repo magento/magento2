@@ -179,7 +179,6 @@ class Config extends AbstractConfig
     const PAYLATER = 'paypal_paylater';
 
     /**
-     * Instructions for generating proper BN code
      *
      * @var array
      */
@@ -190,7 +189,6 @@ class Config extends AbstractConfig
     ];
 
     /**
-     * Style system config map (Express Checkout)
      *
      * @var array
      */
@@ -203,7 +201,6 @@ class Config extends AbstractConfig
     ];
 
     /**
-     * Currency codes supported by PayPal methods
      *
      * @var string[]
      */
@@ -233,7 +230,6 @@ class Config extends AbstractConfig
     ];
 
     /**
-     * Merchant country supported by PayPal
      *
      * @var string[]
      */
@@ -309,7 +305,6 @@ class Config extends AbstractConfig
     ];
 
     /**
-     * Buyer country supported by PayPal
      *
      * @var string[]
      */
