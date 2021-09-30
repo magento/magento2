@@ -7,9 +7,11 @@
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\Metadata\Form\Date;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 class DateTest extends AbstractFormTestCase
 {
@@ -66,6 +68,53 @@ class DateTest extends AbstractFormTestCase
         // yyyy-MM-dd
         $actual = $this->date->extractValue($requestMock);
         $this->assertEquals('1999-01-02', $actual);
+    }
+
+    /**
+     * Test extractValue without inputFilter set
+     */
+    public function testExtractValueWithoutInputFilter()
+    {
+        /* local version of locale */
+        $localeMock = $this->getMockBuilder(TimezoneInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $localeMock->expects($this->any())->method('getDateFormat')->willReturn('d/M/yy');
+
+        /* local version of attribute meta data */
+        $attributeMetadataMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+        $attributeMetadataMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn('date');
+        $attributeMetadataMock->expects($this->any())
+            ->method('getStoreLabel')
+            ->willReturn('Space Date');
+        $attributeMetadataMock->expects($this->any())
+            ->method('getInputFilter')
+            ->willReturn(null);
+        $attributeMetadataMock->expects($this->any())
+            ->method('isUserDefined')
+            ->willReturn(true);
+        $attributeMetadataMock->expects($this->any())
+            ->method('getFrontendInput')
+            ->willReturn('date');
+
+        $date = new Date(
+            $localeMock,
+            $this->loggerMock,
+            $attributeMetadataMock,
+            $this->localeResolverMock,
+            null,
+            0
+        );
+
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $requestMock->expects($this->once())->method('getParam')->willReturn('01/2/1999');
+
+        $actual = $date->extractValue($requestMock);
+        $this->assertEquals('1999-02-01', $actual);
     }
 
     /**
