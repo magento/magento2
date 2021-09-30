@@ -57,6 +57,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     /**
      * Config path to mail sending setting that shows if email communications are disabled
      * @deprecated
+     * @see https://github.com/magento/magento2/issues/5988
      */
     const XML_PATH_SYSTEM_SMTP_DISABLE = 'system/smtp/disable';
 

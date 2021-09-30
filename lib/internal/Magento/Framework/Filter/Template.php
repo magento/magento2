@@ -9,7 +9,6 @@
  */
 namespace Magento\Framework\Filter;
 
-use Exception;
 use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
@@ -170,12 +169,11 @@ class Template implements \Zend_Filter_Interface
      *
      * @param string $value
      * @return string
-     * @throws Exception
+     * @throws \Exception
      */
     public function filter($value)
     {
         if (!is_string($value)) {
-            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new InvalidArgumentException(__(
                 'Argument \'value\' must be type of string, %1 given.',
                 gettype($value)
