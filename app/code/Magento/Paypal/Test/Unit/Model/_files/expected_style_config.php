@@ -27,7 +27,10 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id'   => 'BN_CODE'
+            ]
         ]
     ],
     'checkout' => [
@@ -51,7 +54,10 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id'   => 'BN_CODE'
+            ]
         ]
     ],
     'mini_cart' => [
@@ -74,7 +80,10 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id'   => 'BN_CODE'
+            ]
         ]
     ],
     'product' => [
@@ -97,7 +106,10 @@ return [
             ],
             'isVisibleOnProductPage' => false,
             'isGuestCheckoutAllowed' => true,
-            'sdkUrl' => 'http://mock.url'
+            'sdkUrl' => 'http://mock.url',
+            'dataAttributes' => [
+                'data-partner-attribution-id'   => 'BN_CODE'
+            ]
         ]
     ],
 ];
