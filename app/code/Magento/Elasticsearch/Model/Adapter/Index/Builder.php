@@ -63,11 +63,11 @@ class Builder implements BuilderInterface
                         ),
                         'char_filter' => array_keys($charFilter)
                     ],
-                    // this analyzer must not include stemmer filter
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
-                        'filter' => ['lowercase', 'keyword_repeat', 'asciifolding'],
+                        'filter' => ['lowercase', 'asciifolding'],
                         'char_filter' => array_keys($charFilter)
                     ],
                     'sku' => [
@@ -78,11 +78,11 @@ class Builder implements BuilderInterface
                             array_keys($filter)
                         ),
                     ],
-                    // this analyzer must not include stemmer filter
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'sku_prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
-                        'filter' => ['lowercase', 'keyword_repeat', 'asciifolding']
+                        'filter' => ['lowercase', 'asciifolding']
                     ]
                 ],
                 'tokenizer' => $tokenizer,
