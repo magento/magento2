@@ -49,9 +49,11 @@ class Storage
      */
     public function afterReplace(StorageInterface $object, array $result, array $urls)
     {
+        $existingToDelete = [];
         $toSave = [];
         foreach ($this->filterUrls($result) as $record) {
             $metadata = $record->getMetadata();
+            $existingToDelete[] = $record->getUrlRewriteId();
             $toSave[] = [
                 'url_rewrite_id' => $record->getUrlRewriteId(),
                 'category_id' => $metadata['category_id'],
@@ -59,6 +61,7 @@ class Storage
             ];
         }
         if (count($toSave) > 0) {
+            $this->productResource->removeMultiple($existingToDelete);
             $this->productResource->saveMultiple($toSave);
         }
         return $result;
