@@ -134,10 +134,10 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
      */
     public function testValidateUrlKeysMultipleStores()
     {
+        $this->markTestSkipped('Blocked by AC-373 - re-add the fixture removed.');
         $filesystem = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem::class
         );
