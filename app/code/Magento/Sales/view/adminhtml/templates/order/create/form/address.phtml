@@ -10,13 +10,13 @@
  */
 
 /**
- * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
+ * @var $viewModel \Magento\Sales\ViewModel\Customer\Address\AddressAttributeFilter
  */
-$addressCollection = $block->getData('customerAddressCollection');
+$viewModel = $block->getViewModel();
 
 $addressArray = [];
 if ($block->getCustomerId()):
-    $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
+    $addressArray = $viewModel->setScopeFilter($block->getStoreId())->setCustomerFilter([$block->getCustomerId()])->toArray();
 endif;
 
 /**

@@ -22,6 +22,8 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory as AttrubuteO
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Return allowed countries for specified website
@@ -54,12 +56,12 @@ class CountryWithWebsites extends Table
     private $shareConfig;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     private $request;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
@@ -70,8 +72,8 @@ class CountryWithWebsites extends Table
      * @param AllowedCountries $allowedCountriesReader
      * @param StoreManagerInterface $storeManager
      * @param Share $shareConfig
-     * @param \Magento\Framework\App\Request\Http|null $request
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface|null $customerRepository
+     * @param Http|null $request
+     * @param CustomerRepositoryInterface|null $customerRepository
      */
     public function __construct(
         OptionCollectionFactory $attrOptionCollectionFactory,
@@ -80,17 +82,17 @@ class CountryWithWebsites extends Table
         AllowedCountries $allowedCountriesReader,
         StoreManagerInterface $storeManager,
         CustomerShareConfig $shareConfig,
-        ?\Magento\Framework\App\Request\Http $request = null,
-        ?\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository = null
+        ?Http $request = null,
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         $this->countriesFactory = $countriesFactory;
         $this->allowedCountriesReader = $allowedCountriesReader;
         $this->storeManager = $storeManager;
         $this->shareConfig = $shareConfig;
         $this->request = $request
-            ?? ObjectManager::getInstance()->get(\Magento\Framework\App\Request\Http::class);
+            ?? ObjectManager::getInstance()->get(Http::class);
         $this->customerRepository = $customerRepository
-            ?? ObjectManager::getInstance()->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+            ?? ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
         parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
     }
 
