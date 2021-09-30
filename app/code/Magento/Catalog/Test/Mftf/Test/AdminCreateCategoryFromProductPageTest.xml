@@ -28,7 +28,7 @@
             <!-- Delete the created data -->
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
-                <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+                <argument name="categoryName" value="{{_defaultCategory.name}}"/>
             </actionGroup>
             <comment userInput="BIC workaround" stepKey="getRidOfCreatedCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
@@ -46,20 +46,19 @@
 
         <!-- Fill out the form for the new category -->
         <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
-            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
         <!-- Check in admin that category was created -->
         <comment userInput="BIC workaround" stepKey="checkIfCategoryPresent"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryAdminPage"/>
         <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAllCategories"/>
-        <see userInput="{{SimpleSubCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
-        <see userInput="temporary intentional failure to see state of application in screenshot and html" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage2"/>
+        <see userInput="{{_defaultCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
 
         <!-- Check on storefront that category was created -->
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
-            <argument name="categoryUrl" value="{{SimpleSubCategory.name_lwr}}"/>
+            <argument name="categoryUrl" value="{{_defaultCategory.urlKey}}"/>
         </actionGroup>
-        <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
+        <see userInput="{{_defaultCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
     </test>
 </tests>
