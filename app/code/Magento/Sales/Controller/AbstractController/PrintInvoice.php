@@ -4,10 +4,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sales\Controller\AbstractController;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Model\Order;
 
 abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
 {
@@ -17,9 +25,9 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     protected $orderAuthorization;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $_coreRegistry;
+    protected $coreRegistry;
 
     /**
      * @var PageFactory
@@ -27,54 +35,85 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
 
     /**
+     * @var InvoiceRepositoryInterface
+     */
+    protected $invoiceRepository;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var Order
+     */
+    protected $order;
+
+    /**
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
      * @param PageFactory $resultPageFactory
      */
     public function __construct(
-        Context $context,
+        Context                         $context,
         OrderViewAuthorizationInterface $orderAuthorization,
-        \Magento\Framework\Registry $registry,
-        PageFactory $resultPageFactory
+        Registry                        $registry,
+        PageFactory                     $resultPageFactory,
+        InvoiceRepositoryInterface      $invoiceRepository,
+        Session                         $session,
+        Order                           $order
     ) {
         $this->orderAuthorization = $orderAuthorization;
-        $this->_coreRegistry = $registry;
+        $this->coreRegistry = $registry;
         $this->resultPageFactory = $resultPageFactory;
+        $this->invoiceRepository = $invoiceRepository;
+        $this->session = $session;
+        $this->order = $order;
         parent::__construct($context);
     }
 
     /**
      * Print Invoice Action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return Redirect|Page
      */
     public function execute()
     {
         $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {
-            $invoice = $this->_objectManager->create(
-                \Magento\Sales\Api\InvoiceRepositoryInterface::class
-            )->get($invoiceId);
+            try {
+                $invoice = $this->invoiceRepository->get($invoiceId);
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                /** @var Redirect $resultRedirect */
+                $resultRedirect = $this->resultRedirectFactory->create();
+                if ($this->session->isLoggedIn()) {
+                    $resultRedirect->setPath('*/*/history');
+                } else {
+                    $resultRedirect->setPath('sales/guest/form');
+                }
+                return $resultRedirect;
+            }
             $order = $invoice->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
-            $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
+            $order = $this->order->load($orderId);
         }
 
         if ($this->orderAuthorization->canView($order)) {
-            $this->_coreRegistry->register('current_order', $order);
+            $this->coreRegistry->register('current_order', $order);
             if (isset($invoice)) {
-                $this->_coreRegistry->register('current_invoice', $invoice);
+                $this->coreRegistry->register('current_invoice', $invoice);
             }
-            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            /** @var Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
             $resultPage->addHandle('print');
             return $resultPage;
         } else {
-            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            /** @var Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
+            if ($this->session->isLoggedIn()) {
                 $resultRedirect->setPath('*/*/history');
             } else {
                 $resultRedirect->setPath('sales/guest/form');
