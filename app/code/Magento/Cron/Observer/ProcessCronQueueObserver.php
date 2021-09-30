@@ -9,6 +9,7 @@
  */
 namespace Magento\Cron\Observer;
 
+use Laminas\Http\PhpEnvironment\Request;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
@@ -129,6 +130,16 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $dateTime;
 
     /**
+     * @var Request
+     */
+    protected Request $environment;
+
+    /**
+     * @var string
+     */
+    protected string $originalProcessTitle;
+
+    /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
      */
     protected $phpExecutableFinder;
@@ -201,7 +212,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         StatFactory $statFactory,
         \Magento\Framework\Lock\LockManagerInterface $lockManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        DeadlockRetrierInterface $retrier
+        DeadlockRetrierInterface $retrier,
+        Request $environment
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -211,6 +223,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_request = $request;
         $this->_shell = $shell;
         $this->dateTime = $dateTime;
+        $this->environment = $environment;
         $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
         $this->logger = $logger;
         $this->state = $state;
@@ -339,7 +352,17 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
         }
 
-        cli_set_process_title("Magento cron - group=$groupId - job=$jobCode");
+        if (!isset($this->originalProcessTitle)) {
+            $this->originalProcessTitle = implode(' ', $this->environment->getServer('argv'));
+        }
+
+        if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
+            // Group is already shown, so no need to include here in duplicate
+            cli_set_process_title($this->originalProcessTitle . " # job: $jobCode");
+        } else {
+            cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
+        }
+
         $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()));
         $this->retrier->execute(
             function () use ($schedule) {
