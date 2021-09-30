@@ -27,11 +27,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Currency extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Minimum version of ICU required.
-     */
-    private const MIN_INTL_ICU_VERSION = '60.0';
-
-    /**
      * CONFIG path constants
      */
     const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
@@ -400,7 +395,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function canUseNumberFormatter(array $options): bool
     {
-        if (version_compare(INTL_ICU_VERSION, self::MIN_INTL_ICU_VERSION, '<')) {
+        $this->numberFormatter = $this->getNumberFormatter($options);
+        if(strpos($this->numberFormatter->formatCurrency(0, ''), $this->getCurrencySymbol()) !== false) {
             return false;
         }
 
@@ -417,6 +413,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         if (array_key_exists('display', $options)
             && $options['display'] !== \Magento\Framework\Currency::NO_SYMBOL
             && $options['display'] !== \Magento\Framework\Currency::USE_SYMBOL
+        ) {
+            return false;
+        }
+
+        $formattedCurrency = $this->formatCurrency(0, $options);
+        if (strpos($formattedCurrency, $this->getCurrencySymbol()) !== false ||
+            strpos($formattedCurrency, $this->getCurrencyCode()) !== false
         ) {
             return false;
         }
