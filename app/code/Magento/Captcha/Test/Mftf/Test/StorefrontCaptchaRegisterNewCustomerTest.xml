@@ -21,6 +21,7 @@
         </annotations>
         <before>
             <!--  Enable captcha for customer. -->
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
             <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerCreateFormConfigData.path}} {{StorefrontCaptchaOnCustomerCreateFormConfigData.value}}" stepKey="enableUserRegistrationCaptcha" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="alwaysEnableCaptcha" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
@@ -31,6 +32,7 @@
         </before>
         <after>
             <!-- Set default configuration. -->
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
             <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="defaultCaptchaMode" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />

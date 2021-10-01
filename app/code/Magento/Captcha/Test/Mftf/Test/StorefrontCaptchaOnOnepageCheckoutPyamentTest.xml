@@ -32,6 +32,7 @@
             <magentoCLI command="config:set {{BankTransferEnableConfigData.path}} {{BankTransferEnableConfigData.value}}" stepKey="enableBankTransfer"/>
 
             <!--  Enable captcha for Checkout/Placing Order -->
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
             <magentoCLI command="config:set {{StorefrontCaptchaOnOnepageCheckoutConfigData.path}} {{StorefrontCaptchaOnOnepageCheckoutConfigData.value}}" stepKey="enableOnOpageCheckoutCaptcha" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="alwaysEnableCaptcha" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
@@ -45,7 +46,8 @@
             <magentoCLI command="config:set {{BankTransferDisabledConfigData.path}} {{BankTransferDisabledConfigData.value}}" stepKey="disabledBankTransfer"/>
 
             <!-- Set default configuration for captcha -->
-            <magentoCLI command="config:set {{StorefrontCaptchaOnOnepageCheckoutConfigData.path}} {{StorefrontCaptchaOnOnepageCheckoutConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="defaultCaptchaMode" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />

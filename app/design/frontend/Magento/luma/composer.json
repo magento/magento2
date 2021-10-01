@@ -1,22 +1,24 @@
 {
     "name": "magento/theme-frontend-luma",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/theme-frontend-blank": "*"
-    },
     "type": "magento2-theme",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.3",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/theme-frontend-blank": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
         ]
     }
 }
+

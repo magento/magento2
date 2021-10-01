@@ -35,13 +35,14 @@
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForInitialPageLoad" />
         <waitForPageLoad stepKey="waitForSecondaryPageLoad" />
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
-            <argument name="name" value="blockImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
-            <argument name="name" value="blockImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
@@ -56,7 +57,7 @@
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
-            <argument name="name" value="blockImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInBlocks">
@@ -72,7 +73,7 @@
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultViewAgain"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderAgain">
-            <argument name="name" value="blockImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
@@ -80,7 +81,7 @@
 
         <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
         <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
-            <argument name="name" value="blockImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
    </test>
 </tests>

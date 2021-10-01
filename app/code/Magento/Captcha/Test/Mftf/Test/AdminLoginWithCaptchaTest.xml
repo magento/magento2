@@ -21,6 +21,8 @@
         </annotations>
 
         <before>
+            <magentoCLI command="config:set {{AdminCaptchaEnableConfigData.path}} {{AdminCaptchaEnableConfigData.value}} " stepKey="enableAdminCaptcha"/>
+            <magentoCLI command="config:set {{AdminCaptchaAdminLoginConfigData.path}} {{AdminCaptchaAdminLoginConfigData.value}}" stepKey="enableCaptchaOnAdminLogin"/>
             <magentoCLI command="config:set {{AdminCaptchaLength3ConfigData.path}} {{AdminCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
             <magentoCLI command="config:set {{AdminCaptchaSymbols1ConfigData.path}} {{AdminCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
@@ -28,6 +30,8 @@
             </actionGroup>
         </before>
         <after>
+            <magentoCLI command="config:set {{AdminCaptchaEnableConfigData.path}} {{AdminCaptchaEnableConfigData.value}} " stepKey="enableAdminCaptcha"/>
+            <magentoCLI command="config:set {{AdminCaptchaAdminLoginConfigData.path}} {{AdminCaptchaAdminLoginConfigData.value}},{{AdminCaptchaAdminForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
             <magentoCLI command="config:set {{AdminCaptchaDefaultLengthConfigData.path}} {{AdminCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{AdminCaptchaDefaultSymbolsConfigData.path}} {{AdminCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">

@@ -61,6 +61,7 @@
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
 
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInProducts">
             <argument name="entityName" value="Products"/>
@@ -71,6 +72,7 @@
 
         <deleteData createDataKey="product" stepKey="deleteProduct"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters2"/>
 
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>

@@ -7961,12 +7961,12 @@
             "version": "1.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/allure-framework/allure-php-commons.git",
+                "url": "https://github.com/allure-framework/allure-php-api.git",
                 "reference": "f64b69afeff472c564a4e2379efb2b69c430ec5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-php-commons/zipball/f64b69afeff472c564a4e2379efb2b69c430ec5a",
+                "url": "https://api.github.com/repos/allure-framework/allure-php-api/zipball/f64b69afeff472c564a4e2379efb2b69c430ec5a",
                 "reference": "f64b69afeff472c564a4e2379efb2b69c430ec5a",
                 "shasum": ""
             },
@@ -8009,7 +8009,7 @@
             ],
             "support": {
                 "email": "allure@yandex-team.ru",
-                "issues": "https://github.com/allure-framework/allure-php-commons/issues",
+                "issues": "https://github.com/allure-framework/allure-php-api/issues",
                 "source": "https://github.com/allure-framework/allure-php-api"
             },
             "time": "2021-03-26T14:32:27+00:00"

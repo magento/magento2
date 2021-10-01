@@ -20,6 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
             <magentoCLI command="config:set {{StorefrontCaptchaOnContactUsFormConfigData.path}} {{StorefrontCaptchaOnContactUsFormConfigData.value}}" stepKey="enableUserEditCaptcha"/>
@@ -28,6 +29,7 @@
             </actionGroup>
         </before>
         <after>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaEnableConfigData.path}} {{StorefrontCustomerCaptchaEnableConfigData.value}}" stepKey="enableCaptcha"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
             <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />

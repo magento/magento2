@@ -36,5 +36,7 @@
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept"/>
         <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
         <element name="insertEditImageModalWindow" type="block" selector=".mce-floatpanel.mce-window[aria-label='Insert/edit image']"/>
+        <element name="mediaGalleryFolderTreeIconCollapsed" type="button" parameterized="true" selector="//a[text()='{{folderName}}']/parent::li[contains(@class,'jstree-closed')]/ins"/>
+        <element name="mediaGalleryFolderTreeIconExpanded" type="button" parameterized="true" selector="//a[text()='{{folderName}}']/parent::li[contains(@class,'jstree-open')]/ins"/>
     </section>
 </sections>

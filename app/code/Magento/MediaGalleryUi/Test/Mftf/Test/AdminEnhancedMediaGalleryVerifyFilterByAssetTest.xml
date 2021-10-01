@@ -23,16 +23,25 @@
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
         </before>
 
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllImages"/>
+            <comment userInput="BIC workaround" stepKey="deleteAllImages"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
 
             <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openMediaGalleryCategoryGridPage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters2"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
@@ -41,7 +50,14 @@
             <argument name="id" value="$category.id$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstIMage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>

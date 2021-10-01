@@ -24,8 +24,16 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
@@ -33,16 +41,19 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
-        <waitForPageLoad stepKey="waitForPageLoad" />
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
-            <argument name="name" value="testImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
-            <argument name="name" value="testImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
+        <comment userInput="BIC workaround" stepKey="waitForGridToLoadAfterNewFolderCreated"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -55,6 +66,7 @@
         <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="disableCategory"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminMediaGalleryApplySelectFilterActionGroup" stepKey="selectFilterOption">
             <argument name="filterLabel" value="Content Status"/>
@@ -64,14 +76,10 @@
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
             <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterInMediaGalleryGrid"/>
-        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderToDelete">
-            <argument name="name" value="testImage"/>
-        </actionGroup>
-        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
-        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
-            <argument name="name" value="testImage"/>
-        </actionGroup>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <comment userInput="BIC workaround" stepKey="clearFilterInMediaGalleryGrid"/>
+        <comment userInput="BIC workaround" stepKey="selectFolderToDelete"/>
+        <comment userInput="BIC workaround" stepKey="deleteFolder"/>
+        <comment userInput="BIC workaround" stepKey="assertFolderWasDeleted"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
     </test>
 </tests>
