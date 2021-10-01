@@ -19,8 +19,6 @@ use Magento\Catalog\Helper\Data as CatalogHelper;
 class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
-     *
      * @var Json
      */
     private $serializer;

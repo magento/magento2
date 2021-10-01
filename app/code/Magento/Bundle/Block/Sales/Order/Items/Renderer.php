@@ -16,8 +16,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
-     *
      * @var Json
      */
     private $serializer;
@@ -43,7 +41,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Check if shipment type (invoice etc) is separate
+     *
      * @param mixed $item
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -79,7 +80,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Check if sub product calculations are present
+     *
      * @param mixed $item
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -117,7 +121,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Get bundle selection attributes
+     *
      * @param mixed $item
+     *
      * @return mixed|null
      */
     public function getSelectionAttributes($item)
@@ -134,7 +141,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Get html of bundle selection attributes
+     *
      * @param mixed $item
+     *
      * @return string
      */
     public function getValueHtml($item)
@@ -183,7 +193,10 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
     }
 
     /**
+     * Check if price info can be shown
+     *
      * @param mixed $item
+     *
      * @return bool
      */
     public function canShowPriceInfo($item)
