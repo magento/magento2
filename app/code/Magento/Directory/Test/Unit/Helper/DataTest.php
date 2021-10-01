@@ -296,6 +296,8 @@ class DataTest extends TestCase
     }
 
     /**
+     * Test private method `getCurrentScope`, if no request parameter `scope type` sent.
+     *
      * @throws \ReflectionException
      */
     public function testGetCurrentScopeWithoutRequestParameters()
