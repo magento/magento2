@@ -61,45 +61,33 @@ class Filter extends Template
     const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
 
     /**
-     * Use absolute links flag
-     *
      * @var bool
      */
     protected $_useAbsoluteLinks = false;
 
     /**
-     * Whether to allow SID in store directive: NO
-     *
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
      */
     protected $_useSessionInUrl = false;
 
     /**
-     * Modifier Callbacks
-     *
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
     /**
-     * Whether template being filtered is child of another template
-     *
      * @var bool
      */
     private $isChildTemplate = false;
 
     /**
-     * List of CSS files to inline
-     *
      * @var []
      */
     private $inlineCssFiles = [];
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId;
@@ -153,22 +141,16 @@ class Filter extends Template
     protected $_layoutFactory;
 
     /**
-     * Setup callbacks for filters
-     *
      * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * Layout directive params
-     *
      * @var array
      */
     protected $_directiveParams;
 
     /**
-     * App state
-     *
      * @var State
      */
     protected $_appState;
