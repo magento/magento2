@@ -25,6 +25,9 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductFilteredBySkuAndName">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>

@@ -21,6 +21,14 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete attribute sets -->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet2">
+                <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create attribute set-->

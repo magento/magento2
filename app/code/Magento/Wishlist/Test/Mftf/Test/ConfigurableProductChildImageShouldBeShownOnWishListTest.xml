@@ -30,7 +30,17 @@
             <createData entity="Simple_US_Customer" stepKey="customer"/>
         </before>
         <after>
+            <actionGroup ref="AdminOpenSalesCheckoutConfigPageActionGroup" stepKey="openSalesCheckoutCartConfig1">
+                <argument name="tabGroupAnchor" value="#checkout_cart-link"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForAllowedCurrency">
+                <argument name="rowId" value="row_checkout_cart_configurable_product_image"/>
+            </actionGroup>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersConfigurable"/>
             <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterConfigurable">
