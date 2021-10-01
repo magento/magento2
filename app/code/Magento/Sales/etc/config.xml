@@ -115,18 +115,10 @@
             </grid>
         </dev>
         <system>
-            <filesystem>
-                <media>{{media_dir}}</media>
-            </filesystem>
             <media_storage_configuration>
-                <media_storage>0</media_storage>
-                <media_database>default_setup</media_database>
-                <configuration_update_time>3600</configuration_update_time>
                 <allowed_resources>
-                    <sales_image_folders>
-                        <sales_logo_folder>sales/store/logo</sales_logo_folder>
-                        <sales_logo_html_folder>sales/store/logo_html</sales_logo_html_folder>
-                    </sales_image_folders>
+                    <sales_logo_folder>sales/store/logo</sales_logo_folder>
+                    <sales_logo_html_folder>sales/store/logo_html</sales_logo_html_folder>
                 </allowed_resources>
             </media_storage_configuration>
         </system>
