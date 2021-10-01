@@ -354,7 +354,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         }
 
         if (!isset($this->originalProcessTitle)) {
-            $this->originalProcessTitle = implode(' ', $this->environment->getServer('argv'));
+            $this->originalProcessTitle = PHP_BINARY . ' ' . implode(' ', $this->environment->getServer('argv'));
         }
 
         if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
