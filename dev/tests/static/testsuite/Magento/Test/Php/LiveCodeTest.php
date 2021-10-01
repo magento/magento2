@@ -285,6 +285,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
                 }
             );
         }
+
         $result = $codeSniffer->run($fileList);
         $report = file_get_contents($reportFile);
         $this->assertEquals(

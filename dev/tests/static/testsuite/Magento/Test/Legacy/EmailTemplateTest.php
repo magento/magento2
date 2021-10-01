@@ -15,9 +15,9 @@ class EmailTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
-        /**
-         * @param string $file
-         */
+            /**
+             * @param string $file
+             */
             function ($file) {
                 $this->assertDoesNotMatchRegularExpression(
                     '/\{\{htmlescape.*?\}\}/i',

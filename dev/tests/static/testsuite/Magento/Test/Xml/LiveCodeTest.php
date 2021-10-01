@@ -39,7 +39,7 @@ class LiveCodeTest extends TestCase
     }
 
     /**
-     * Run the magento specific coding standards on the code
+     * Run the magento specific coding standards on the codedata/UpgradeData.php
      *
      * @return void
      */

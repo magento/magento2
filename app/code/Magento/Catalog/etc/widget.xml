@@ -7,15 +7,6 @@
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
-    <widget type="/Deprecated">
-        <label translate="true">Catalog New Products List</label>
-        <description translate="true">List of Products that are set as New</description>
-        <supported_blocks>Deprecated
-            <block>
-                <block_name>Deprecated</block_name>
-            </block>
-        </supported_blocks>
-    </widget>
     <widget id="new_products" class="Magento\Catalog\Block\Product\Widget\NewWidget" is_email_compatible="true"
             placeholder_image="Magento_Catalog::images/product_widget_new.png" ttl="86400">
         <label translate="true">Catalog New Products List</label>
