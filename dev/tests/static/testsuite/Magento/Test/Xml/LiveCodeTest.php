@@ -10,6 +10,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
+use Magento\TestFramework\Utility\FilesSearch;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -45,10 +46,13 @@ class LiveCodeTest extends TestCase
     public function testCodeStyle(): void
     {
         $reportFile = self::$reportDir . '/xml_report.txt';
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
         $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
         $codeSniffer->setExtensions([self::FILE_EXTENSION]);
         $fileList =  $this->isFullScan() ? array_column(Files::init()->getXmlFiles(), '0')
-            : PHPCodeTest::getWhitelist([self::FILE_EXTENSION], __DIR__, __DIR__);
+            : PHPCodeTest::getWhitelist([self::FILE_EXTENSION]);
         $result = $codeSniffer->run($fileList);
         $report = file_exists($reportFile) ? file_get_contents($reportFile) : '';
         $this->assertEquals(
