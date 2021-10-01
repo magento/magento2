@@ -37,7 +37,7 @@ class AddressAttributeFilter implements ArgumentInterface
      * Set allowed country filter for customer's addresses
      *
      * @param Collection $collection
-     * @param $storeId
+     * @param string|integer $storeId
      * @return Object
      * @throws LocalizedException
      */

@@ -7,14 +7,18 @@
 /**
  * Tests for customer addresses collection
  */
-namespace Magento\Customer\Model\ResourceModel\Address;
+namespace Magento\Sales\ViewModel\Customer\Address;
 
+use Magento\Customer\Model\ResourceModel\Address\Collection;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\Writer;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -23,8 +27,9 @@ use PHPUnit\Framework\TestCase;
  * Assert that only relevant addresses for the allowed countries under a website/store fetch.
  *
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreAddressCollectionTest extends TestCase
+class AddressAttributeFilterTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -37,15 +42,21 @@ class StoreAddressCollectionTest extends TestCase
     protected $customerRepository;
 
     /**
-     * @var StoreAddressCollection
+     * @var AddressAttributeFilter
      */
-    private $storeAddressCollection;
+    private $scopeFilter;
+
+    /**
+     * @var Collection
+     */
+    private $collection;
 
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
-        $this->storeAddressCollection = $this->objectManager->create(StoreAddressCollection::class);
+        $this->collection = $this->objectManager->get(Collection::class);
+        $this->scopeFilter = $this->objectManager->create(AddressAttributeFilter::class);
     }
 
     /**
@@ -53,8 +64,8 @@ class StoreAddressCollectionTest extends TestCase
      */
     protected function tearDown(): void
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        /** @var Registry $registry */
+        $registry = $this->objectManager->get(Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
@@ -83,13 +94,14 @@ class StoreAddressCollectionTest extends TestCase
      *
      * @dataProvider addressesDataProvider
      *
+     * @param Collection $collection
      * @param $customerId
      * @param $allowedCountries
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function testSetCustomerFilter($customerId, $allowedCountries) : void
+    public function testSetScopeFilter($storeId, $allowedCountries) : void
     {
         /** @var ConfigInterface $config */
         $config = $this->objectManager->get(ConfigInterface::class);
@@ -102,8 +114,7 @@ class StoreAddressCollectionTest extends TestCase
         $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
         $scopeConfig->clean();
 
-        $customer = $this->customerRepository->getById($customerId);
-        $addresses = $this->storeAddressCollection->setCustomerFilter($customer);
+        $addresses = $this->scopeFilter->setScopeFilter($this->collection, $storeId);
         $this->assertIsArray($addresses->getData());
 
         foreach ($addresses->getData() as $address) {
@@ -112,17 +123,16 @@ class StoreAddressCollectionTest extends TestCase
     }
 
     /**
-     * Data provider for create allowed or not allowed countries.
+     * Data provider for create allowed countries for a particular store.
      *
+     * @param Collection $collection
      * @return array
      */
     public function addressesDataProvider(): array
     {
         return [
             'address_in_single_allowed_country' => [1, ['US']],
-            'address_not_in_single_allowed_country' => [1, ['FR']],
             'address_in_multiple_allowed_countries' => [1, ['US', 'IN']],
-            'address_not_in_multiple_allowed_countries' => [1, ['FR', 'DE']],
         ];
     }
 }
