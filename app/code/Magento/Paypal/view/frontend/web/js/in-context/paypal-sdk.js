@@ -25,6 +25,7 @@ define([
                     exports: 'paypal'
                 }
             },
+
             /**
              * Add attributes under Paypal SDK Script tag
              */
