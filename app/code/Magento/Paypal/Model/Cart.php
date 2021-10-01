@@ -150,7 +150,7 @@ class Cart extends \Magento\Payment\Model\Cart
         $this->addSubtotal($this->_salesModel->getBaseSubtotal());
         $this->addTax($this->_salesModel->getBaseTaxAmount());
         $this->addShipping($this->_salesModel->getBaseShippingAmount());
-        $this->addDiscount(abs($this->_salesModel->getBaseDiscountAmount()));
+        $this->addDiscount(abs((float) $this->_salesModel->getBaseDiscountAmount()));
     }
 
     /**

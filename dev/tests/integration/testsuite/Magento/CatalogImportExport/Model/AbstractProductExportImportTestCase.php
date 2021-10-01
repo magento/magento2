@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model;
 
+use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
@@ -358,13 +359,10 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
             $index++;
         }
 
-        $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
+        $exportProduct = $this->objectManager->create(Product::class);
         if ($usePagination) {
             /** @var \ReflectionProperty $itemsPerPageProperty */
-            $itemsPerPageProperty = $this->objectManager->create(\ReflectionProperty::class, [
-                'class' => \Magento\CatalogImportExport\Model\Export\Product::class,
-                'name' => '_itemsPerPage'
-            ]);
+            $itemsPerPageProperty = new \ReflectionProperty(Product::class, '_itemsPerPage');
             $itemsPerPageProperty->setAccessible(true);
             $itemsPerPageProperty->setValue($exportProduct, 1);
         }
@@ -407,16 +405,16 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     /**
      * Export products in the system.
      *
-     * @param \Magento\CatalogImportExport\Model\Export\Product|null $exportProduct
+     * @param Product|null $exportProduct
      * @return string Return exported file
      */
-    private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
+    private function exportProducts(Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $this->csvFile = $csvfile;
 
         $exportProduct = $exportProduct ?: $this->objectManager->create(
-            \Magento\CatalogImportExport\Model\Export\Product::class
+            Product::class
         );
         $this->writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\ImportExport\Model\Export\Adapter\Csv::class,
