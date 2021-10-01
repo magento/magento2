@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
@@ -46,11 +45,6 @@ class GraphQlReader implements ReaderInterface
      * @var string
      */
     private $defaultScope;
-
-    /**
-     * @var ComponentRegistrar
-     */
-    private static $componentRegistrar;
 
     /**
      * @param FileResolverInterface $fileResolver
@@ -165,7 +159,6 @@ class GraphQlReader implements ReaderInterface
         $results = $this->copyInterfaceFieldsToConcreteTypes($results);
         return $results;
     }
-
 
     /**
      * Get the minimum amount of additional types so that performance is improved
