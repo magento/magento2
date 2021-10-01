@@ -96,11 +96,6 @@ class GraphQl implements FrontControllerInterface
     private $contextFactory;
 
     /**
-     * @var AreaList
-     */
-    private $areaList;
-
-    /**
      * @var LogData
      */
     private $logDataHelper;
@@ -109,6 +104,11 @@ class GraphQl implements FrontControllerInterface
      * @var LoggerPool
      */
     private $loggerPool;
+
+    /**
+     * @var AreaList
+     */
+    private $areaList;
 
     /**
      * @param Response $response
@@ -122,9 +122,9 @@ class GraphQl implements FrontControllerInterface
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
      * @param ContextFactoryInterface $contextFactory
-     * @param AreaList $areaList
      * @param LogData $logDataHelper
      * @param LoggerPool $loggerPool
+     * @param AreaList $areaList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -139,9 +139,9 @@ class GraphQl implements FrontControllerInterface
         JsonFactory $jsonFactory = null,
         HttpResponse $httpResponse = null,
         ContextFactoryInterface $contextFactory = null,
-        AreaList $areaList = null,
         LogData $logDataHelper = null,
-        LoggerPool $loggerPool = null
+        LoggerPool $loggerPool = null,
+        AreaList $areaList = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -154,9 +154,9 @@ class GraphQl implements FrontControllerInterface
         $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
         $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
         $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
-        $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
         $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
+        $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
     }
 
     /**
