@@ -56,6 +56,13 @@ class SdkUrl
     private $unsupportedPaymentMethods;
 
     /**
+     * These payment methods will be added as parameters to the SDK url to enable them.
+     *
+     * @var array
+     */
+    private $supportedPaymentMethods;
+
+    /**
      * @var ResolverInterface
      */
     private $localeResolver;
@@ -74,6 +81,7 @@ class SdkUrl
      * @param StoreManagerInterface $storeManager
      * @param array $disallowedFundingMap
      * @param array $unsupportedPaymentMethods
+     * @param array $supportedPaymentMethods
      */
     public function __construct(
         ResolverInterface $localeResolver,
@@ -81,7 +89,8 @@ class SdkUrl
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         $disallowedFundingMap = [],
-        $unsupportedPaymentMethods = []
+        $unsupportedPaymentMethods = [],
+        $supportedPaymentMethods = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
@@ -90,6 +99,7 @@ class SdkUrl
         $this->storeManager = $storeManager;
         $this->disallowedFundingMap = $disallowedFundingMap;
         $this->unsupportedPaymentMethods = $unsupportedPaymentMethods;
+        $this->supportedPaymentMethods = $supportedPaymentMethods;
     }
 
     /**
@@ -116,6 +126,7 @@ class SdkUrl
                 $params['intent'] = $this->getIntent();
                 $params['merchant-id'] = $this->config->getValue('merchant_id');
                 $params['disable-funding'] = $this->getDisallowedFunding();
+                $params['enable-funding'] = $this->getAllowedFunding();
                 $params = array_replace($params, $this->queryParams);
             }
             $params['components'] = implode(',', $components);
@@ -196,6 +207,16 @@ class SdkUrl
         $result = array_merge($result, $this->unsupportedPaymentMethods);
 
         return implode(',', $result);
+    }
+
+    /**
+     * Returns allowed funding from configuration
+     *
+     * @return string
+     */
+    private function getAllowedFunding()
+    {
+        return implode(',', $this->supportedPaymentMethods);
     }
 
     /**
