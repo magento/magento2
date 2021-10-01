@@ -414,7 +414,6 @@ class ProductPriceTest extends GraphQlAbstract
         ];
     }
 
-
     /**
      * Check the pricing for a grouped product with simple products having special price set
      *
@@ -750,7 +749,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => $configurableProductVariants[$key]->getPrice()
                     ],
                     "final_price" => [
-                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                        "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
                         "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
@@ -762,7 +761,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => $configurableProductVariants[$key]->getPrice()
                     ],
                     "final_price" => [
-                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                        "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
                         "amount_off" => $regularPrice[$key] - $finalPrice[$key],
