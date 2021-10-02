@@ -108,7 +108,6 @@ class CurrencyTest extends TestCase
         $this->localeResolver->method('getLocale')->willReturn($locale);
 
         $this->localeCurrencyMock
-            ->expects(self::atMost(3))
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn(new \Zend_Currency([], $locale));
@@ -158,10 +157,10 @@ class CurrencyTest extends TestCase
         string $locale,
         string $expected
     ): void {
-        $this->localeResolver->expects(self::atMost(3))->method('getLocale')->willReturn($locale);
+        $this->localeResolver->expects(self::atLeastOnce())->method('getLocale')->willReturn($locale);
 
         $this->localeCurrencyMock
-            ->expects(self::atMost(2))
+            ->expects(self::atLeastOnce())
             ->method('getCurrency')
             ->with($this->currencyCode)
             ->willReturn(new \Zend_Currency($options, 'en_US'));
