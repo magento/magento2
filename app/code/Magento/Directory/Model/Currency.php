@@ -41,8 +41,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     protected $_filter;
 
     /**
-     * Currency Rates
-     *
      * @var array
      */
     protected $_rates;
