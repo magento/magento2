@@ -18,6 +18,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Factory as PriceInfoFactory;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -31,12 +32,20 @@ class Price implements ResolverInterface
     private $priceInfoFactory;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param PriceInfoFactory $priceInfoFactory
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
-        PriceInfoFactory $priceInfoFactory
+        PriceInfoFactory $priceInfoFactory,
+        PriceCurrency $priceCurrency
     ) {
         $this->priceInfoFactory = $priceInfoFactory;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -104,7 +113,8 @@ class Price implements ResolverInterface
         $priceArray = [
                 'amount' => [
                     'value' => $amount->getValue(),
-                    'currency' => $store->getCurrentCurrencyCode()
+                    'currency' => $store->getCurrentCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($amount->getValue(),false,null,null,$store->getCurrentCurrencyCode())
                 ],
                 'adjustments' => []
             ];
@@ -116,6 +126,7 @@ class Price implements ResolverInterface
                     'amount' => [
                         'value' => $amount->getAdjustmentAmount($adjustmentCode),
                         'currency' => $store->getCurrentCurrencyCode(),
+                        'formatted' => $this->priceCurrency->format($amount->getAdjustmentAmount($adjustmentCode),false,null,null,$store->getCurrentCurrencyCode()),
                     ],
                     'description' => $adjustment->isIncludedInDisplayPrice() ?
                         'INCLUDED' : 'EXCLUDED'

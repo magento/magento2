@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
 use Magento\Quote\Model\Quote\TotalsCollector;
@@ -37,18 +38,26 @@ class AvailableShippingMethods implements ResolverInterface
     private $totalsCollector;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
      * @param TotalsCollector $totalsCollector
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
         ShippingMethodConverter $shippingMethodConverter,
-        TotalsCollector $totalsCollector
+        TotalsCollector $totalsCollector,
+        PriceCurrency $priceCurrency
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->shippingMethodConverter = $shippingMethodConverter;
         $this->totalsCollector = $totalsCollector;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -98,18 +107,18 @@ class AvailableShippingMethods implements ResolverInterface
     private function processMoneyTypeData(array $data, string $quoteCurrencyCode): array
     {
         if (isset($data['amount'])) {
-            $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
+            $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode, 'formatted' => $this->priceCurrency->format($data['amount'],false,null,null,$quoteCurrencyCode)];
         }
 
         /** @deprecated The field should not be used on the storefront */
         $data['base_amount'] = null;
 
         if (isset($data['price_excl_tax'])) {
-            $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode];
+            $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode, 'formatted' => $this->priceCurrency->format($data['price_excl_tax'],false,null,null,$quoteCurrencyCode)];
         }
 
         if (isset($data['price_incl_tax'])) {
-            $data['price_incl_tax'] = ['value' => $data['price_incl_tax'], 'currency' => $quoteCurrencyCode];
+            $data['price_incl_tax'] = ['value' => $data['price_incl_tax'], 'currency' => $quoteCurrencyCode, 'formatted' => $this->priceCurrency->format($data['price_incl_tax'],false,null,null,$quoteCurrencyCode)];
         }
         return $data;
     }

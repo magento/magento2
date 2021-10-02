@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
@@ -45,18 +46,26 @@ class BundleOptions implements ResolverInterface
     private $uidEncoder;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param ValueFactory $valueFactory
      * @param Json $serializer
      * @param Uid $uidEncoder
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         ValueFactory $valueFactory,
         Json $serializer,
-        Uid $uidEncoder
+        Uid $uidEncoder,
+        PriceCurrency $priceCurrency
     ) {
         $this->valueFactory = $valueFactory;
         $this->serializer = $serializer;
         $this->uidEncoder = $uidEncoder;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -163,6 +172,7 @@ class BundleOptions implements ResolverInterface
                         'value' => $bundleChildAttributes['price'],
                         //use currency from order
                         'currency' => $formattedItem['product_sale_price']['currency'] ?? null,
+                        'formatted' => $this->priceCurrency->format($bundleChildAttributes['price'],false,null,null,$formattedItem['product_sale_price']['currency'] ?? null)
                     ]
                 ];
             }

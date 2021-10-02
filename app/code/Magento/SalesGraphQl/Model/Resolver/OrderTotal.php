@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
@@ -18,6 +19,20 @@ use Magento\Sales\Api\Data\OrderInterface;
  */
 class OrderTotal implements ResolverInterface
 {
+    /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
+     * OrderTotal constructor.
+     * @param PriceCurrency $priceCurrency
+     */
+    public function __construct(PriceCurrency $priceCurrency)
+    {
+        $this->priceCurrency = $priceCurrency;
+    }
+
     /**
      * @inheritDoc
      */
@@ -38,25 +53,28 @@ class OrderTotal implements ResolverInterface
         $baseCurrency = $order->getBaseCurrencyCode();
 
         return [
-            'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $baseCurrency],
-            'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $currency],
-            'subtotal' => ['value' => $order->getSubtotal(), 'currency' => $currency],
-            'total_tax' => ['value' => $order->getTaxAmount(), 'currency' => $currency],
+            'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $baseCurrency, 'formatted' => $this->priceCurrency->format($order->getBaseGrandTotal(),false,null,null,$baseCurrency)],
+            'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($order->getGrandTotal(),false,null,null,$currency)],
+            'subtotal' => ['value' => $order->getSubtotal(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($order->getSubtotal(),false,null,null,$currency)],
+            'total_tax' => ['value' => $order->getTaxAmount(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($order->getTaxAmount(),false,null,null,$currency)],
             'taxes' => $this->getAppliedTaxesDetails($order),
             'discounts' => $this->getDiscountDetails($order),
-            'total_shipping' => ['value' => $order->getShippingAmount(), 'currency' => $currency],
+            'total_shipping' => ['value' => $order->getShippingAmount(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($order->getShippingAmount(),false,null,null,$currency)],
             'shipping_handling' => [
                 'amount_excluding_tax' => [
                     'value' => $order->getShippingAmount(),
-                    'currency' => $order->getOrderCurrencyCode()
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($order->getShippingAmount(),false,null,null,$order->getOrderCurrencyCode())
                 ],
                 'amount_including_tax' => [
                     'value' => $order->getShippingInclTax(),
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($order->getShippingInclTax(),false,null,null,$currency)
                 ],
                 'total_amount' => [
                     'value' => $order->getShippingAmount(),
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($order->getShippingAmount(),false,null,null,$currency)
                 ],
                 'taxes' => $this->getAppliedShippingTaxesDetails($order),
                 'discounts' => $this->getShippingDiscountDetails($order),
@@ -102,7 +120,8 @@ class OrderTotal implements ResolverInterface
                 'title' => $appliedTaxes['title'] ?? null,
                 'amount' => [
                     'value' => $appliedTaxes['amount'] ?? 0,
-                    'currency' => $order->getOrderCurrencyCode()
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($appliedTaxes['amount'] ?? 0,false,null,null,$order->getOrderCurrencyCode())
                 ]
             ];
             $taxes[] = $appliedTaxesArray;
@@ -124,7 +143,8 @@ class OrderTotal implements ResolverInterface
                 'label' => $order->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => abs($order->getDiscountAmount()),
-                    'currency' => $order->getOrderCurrencyCode()
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(abs($order->getDiscountAmount()),false,null,null,$order->getOrderCurrencyCode())
                 ]
             ];
         }
@@ -174,7 +194,8 @@ class OrderTotal implements ResolverInterface
                 'title' => $appliedShippingTaxes['title'] ?? null,
                 'amount' => [
                     'value' => $appliedShippingTaxes['amount'] ?? 0,
-                    'currency' => $order->getOrderCurrencyCode()
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($appliedShippingTaxes['amount'] ?? 0,false,null,null,$order->getOrderCurrencyCode())
                 ]
             ];
             $shippingTaxes[] = $appliedShippingTaxesArray;
@@ -197,7 +218,8 @@ class OrderTotal implements ResolverInterface
                     'label' => $order->getDiscountDescription() ?? __('Discount'),
                     'amount' => [
                         'value' => abs($order->getShippingDiscountAmount()),
-                        'currency' => $order->getOrderCurrencyCode()
+                        'currency' => $order->getOrderCurrencyCode(),
+                        'formatted' => $this->priceCurrency->format(abs($order->getShippingDiscountAmount()),false,null,null,$order->getOrderCurrencyCode())
                     ]
                 ];
         }

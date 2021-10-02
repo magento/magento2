@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -34,15 +35,23 @@ class InvoiceItems implements ResolverInterface
     private $orderItemProvider;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param ValueFactory $valueFactory
      * @param OrderItemProvider $orderItemProvider
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         ValueFactory $valueFactory,
-        OrderItemProvider $orderItemProvider
+        OrderItemProvider $orderItemProvider,
+        PriceCurrency $priceCurrency
     ) {
         $this->valueFactory = $valueFactory;
         $this->orderItemProvider = $orderItemProvider;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -118,7 +127,8 @@ class InvoiceItems implements ResolverInterface
             'product_sku' => $invoiceItem->getSku(),
             'product_sale_price' => [
                 'value' => $invoiceItem->getPrice(),
-                'currency' => $order->getOrderCurrencyCode()
+                'currency' => $order->getOrderCurrencyCode(),
+                'formatted' => $this->priceCurrency->format($invoiceItem->getPrice(),false,null,null,$order->getOrderCurrencyCode())
             ],
             'quantity_invoiced' => $invoiceItem->getQty(),
             'model' => $invoiceItem,
@@ -147,7 +157,8 @@ class InvoiceItems implements ResolverInterface
                 'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => abs($invoiceItem->getDiscountAmount()) ?? 0,
-                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                    'currency' => $associatedOrder->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(abs($invoiceItem->getDiscountAmount()) ?? 0,false,null,null,$associatedOrder->getOrderCurrencyCode())
                 ]
             ];
         }

@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -34,15 +35,23 @@ class CreditMemoItems implements ResolverInterface
     private $orderItemProvider;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param ValueFactory $valueFactory
      * @param OrderItemProvider $orderItemProvider
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         ValueFactory $valueFactory,
-        OrderItemProvider $orderItemProvider
+        OrderItemProvider $orderItemProvider,
+        PriceCurrency $priceCurrency
     ) {
         $this->valueFactory = $valueFactory;
         $this->orderItemProvider = $orderItemProvider;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -119,7 +128,8 @@ class CreditMemoItems implements ResolverInterface
             'product_sku' => $creditMemoItem->getSku(),
             'product_sale_price' => [
                 'value' => $creditMemoItem->getPrice(),
-                'currency' => $order->getOrderCurrencyCode()
+                'currency' => $order->getOrderCurrencyCode(),
+                'formatted' => $this->priceCurrency->format($creditMemoItem->getPrice(),false,null,null,$order->getOrderCurrencyCode())
             ],
             'quantity_refunded' => $creditMemoItem->getQty(),
             'model' => $creditMemoItem,
@@ -149,7 +159,8 @@ class CreditMemoItems implements ResolverInterface
                 'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => abs($creditmemoItem->getDiscountAmount()) ?? 0,
-                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                    'currency' => $associatedOrder->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(abs($creditmemoItem->getDiscountAmount()) ?? 0,false,null,null,$associatedOrder->getOrderCurrencyCode())
                 ]
             ];
         }
