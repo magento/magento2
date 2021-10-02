@@ -1616,11 +1616,16 @@ QUERY;
     /**
      * Sorting the search results by relevance (DESC => most relevant)
      *
+     * Sorting by relevance may return different results depending on the ES.
+     * To check that sorting works, we compare results with ASC and DESC relevance sorting
+     *
      * Search for products for a fuzzy match and checks if all matching results returned including
      * results based on matching keywords from description
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      * @return void
+     *
+     * @throws \Exception
      */
     public function testSearchAndSortByRelevance()
     {
@@ -1630,7 +1635,7 @@ QUERY;
 {
   products(
         search:"{$search_term}"
-        sort:{relevance:DESC}
+        sort:{relevance:%s}
         pageSize: 5
         currentPage: 1
        )
@@ -1671,16 +1676,16 @@ QUERY;
 
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count']);
-        $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
-        $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $this->assertCount(2, $response['products']['aggregations']);
-        $productsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
-        $count = count($response['products']['items']);
-        for ($i = 0; $i < $count; $i++) {
-            $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
-        }
+        $responseDesc = $this->graphQlQuery(sprintf($query, 'DESC'));
+        $responseAsc = $this->graphQlQuery(sprintf($query, 'ASC'));
+        $this->assertEquals(3, $responseDesc['products']['total_count']);
+        $this->assertNotEmpty($responseDesc['products']['filters'], 'Filters should have the Category layer');
+        $this->assertEquals('Colorful Category', $responseDesc['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertCount(2, $responseDesc['products']['aggregations']);
+        $expectedProductsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
+        $namesDesc = array_column($responseDesc['products']['items'], 'name');
+        $this->assertEqualsCanonicalizing($expectedProductsInResponse, $namesDesc);
+        $this->assertEquals($namesDesc, array_reverse(array_column($responseAsc['products']['items'], 'name')));
     }
 
     /**
