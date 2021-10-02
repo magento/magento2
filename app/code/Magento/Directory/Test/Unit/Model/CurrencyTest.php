@@ -23,6 +23,9 @@ class CurrencyTest extends TestCase
      */
     private $currency;
 
+    /**
+     * @var string Currency Code
+     */
     private $currencyCode = 'USD';
 
     /**
@@ -103,6 +106,13 @@ class CurrencyTest extends TestCase
     public function testGetOutputFormat($expected, $locale): void
     {
         $this->localeResolver->method('getLocale')->willReturn($locale);
+
+        $this->localeCurrencyMock
+            ->expects(self::atMost(3))
+            ->method('getCurrency')
+            ->with($this->currencyCode)
+            ->willReturn(new \Zend_Currency([], $locale));
+
         $this->numberFormatterFactory
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
@@ -148,9 +158,15 @@ class CurrencyTest extends TestCase
         string $locale,
         string $expected
     ): void {
-        $this->localeResolver->expects(self::exactly(2))->method('getLocale')->willReturn($locale);
+        $this->localeResolver->expects(self::atMost(3))->method('getLocale')->willReturn($locale);
+
+        $this->localeCurrencyMock
+            ->expects(self::atMost(2))
+            ->method('getCurrency')
+            ->with($this->currencyCode)
+            ->willReturn(new \Zend_Currency($options, 'en_US'));
+
         $this->numberFormatterFactory
-            ->expects(self::once())
             ->method('create')
             ->with(['locale' => $locale, 'style' => 2])
             ->willReturn(new \Magento\Framework\NumberFormatter($locale, 2));
