@@ -412,7 +412,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
         $formattedCurrency = $this->formatCurrency(0, $options);
         if (($this->getCurrencySymbol() && strpos($formattedCurrency, $this->getCurrencySymbol()) !== false) ||
-            strpos($formattedCurrency, $this->getCurrencyCode()) !== false
+            ($this->getCurrencyCode() && strpos($formattedCurrency, $this->getCurrencyCode()) !== false)
         ) {
             return false;
         }
