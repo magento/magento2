@@ -447,7 +447,7 @@ class Category extends AbstractResource
                     'position' => (int)$position,
                 ];
             }
-            $connection->insertMultiple($this->getCategoryProductTable(), $data);
+            $connection->insertOnDuplicate($this->getCategoryProductTable(), $data, ['position']);
         }
 
         /**
