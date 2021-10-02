@@ -144,13 +144,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         $productThird = $this->productRepository->get('fulltext-3');
         $productFourth = $this->productRepository->get('fulltext-4');
         $productFifth = $this->productRepository->get('fulltext-5');
-        $correctSortedIds = [
-            $productFirst->getId(),
-            $productFourth->getId(),
-            $productSecond->getId(),
-            $productFifth->getId(),
-            $productThird->getId(),
-        ];
+
         $this->reindexAll();
         $result = $this->sortByName();
         $firstInSearchResults = (int) $result[0]['_id'];
@@ -158,15 +152,17 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
         $thirdInSearchResults = (int) $result[2]['_id'];
         $fourthInSearchResults = (int) $result[3]['_id'];
         $fifthInSearchResults = (int) $result[4]['_id'];
-        $actualSortedIds = [
-            $firstInSearchResults,
-            $secondInSearchResults,
-            $thirdInSearchResults,
-            $fourthInSearchResults,
-            $fifthInSearchResults
-        ];
-        $this->assertCount(5, $result);
-        $this->assertEquals($correctSortedIds, $actualSortedIds);
+
+        self::assertCount(5, $result);
+        self::assertEqualsCanonicalizing(
+            [$productFirst->getId(), $productFourth->getId()],
+            [$firstInSearchResults, $secondInSearchResults]
+        );
+        self::assertEqualsCanonicalizing(
+            [$productSecond->getId(), $productFifth->getId()],
+            [$thirdInSearchResults, $fourthInSearchResults]
+        );
+        self::assertEquals($productThird->getId(), $fifthInSearchResults);
     }
 
     /**
