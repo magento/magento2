@@ -26,7 +26,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Assert that only relevant addresses for the allowed countries under a website/store fetch.
  *
- * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressAttributeFilterTest extends TestCase
@@ -94,8 +93,7 @@ class AddressAttributeFilterTest extends TestCase
      *
      * @dataProvider addressesDataProvider
      *
-     * @param Collection $collection
-     * @param $customerId
+     * @param $storeId
      * @param $allowedCountries
      * @return void
      * @throws LocalizedException
@@ -125,7 +123,6 @@ class AddressAttributeFilterTest extends TestCase
     /**
      * Data provider for create allowed countries for a particular store.
      *
-     * @param Collection $collection
      * @return array
      */
     public function addressesDataProvider(): array

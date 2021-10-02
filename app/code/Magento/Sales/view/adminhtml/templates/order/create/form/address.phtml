@@ -15,11 +15,11 @@
  */
 
 $addressCollection = $block->getData('customerAddressCollection');
-$viewModel = $block->getViewModel();
+$AddressCollectionAttributeFilter = $block->getData('customerAddressCollectionAttributeFilter');
 
 $addressArray = [];
 if ($block->getCustomerId()):
-    $addressArray = $viewModel->setScopeFilter($addressCollection, $block->getStoreId())
+    $addressArray = $AddressCollectionAttributeFilter->setScopeFilter($addressCollection, $block->getStoreId())
         ->setCustomerFilter([$block->getCustomerId()])->toArray();
 endif;
 

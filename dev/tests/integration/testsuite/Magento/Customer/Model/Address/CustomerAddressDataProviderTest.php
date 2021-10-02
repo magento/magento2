@@ -7,20 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Address;
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\Writer;
 use Magento\Framework\App\Config\Storage\WriterInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Assert that only relavant addresses for the allowed countries under a website/store fetch.
+ * Assert that only relevant addresses for the allowed countries under a website/store fetch.
  *
- * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerAddressDataProviderTest extends TestCase
 {
@@ -51,8 +52,8 @@ class CustomerAddressDataProviderTest extends TestCase
      */
     protected function tearDown(): void
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        /** @var Registry $registry */
+        $registry = $this->objectManager->get(Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
 
