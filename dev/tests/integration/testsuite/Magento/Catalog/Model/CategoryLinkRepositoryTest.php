@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\CategoryProductLinkInterface;
 use Magento\Framework\App\Area;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
