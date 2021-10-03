@@ -161,6 +161,9 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     ): PaymentDetailsInterface {
         /** @var Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
+        if ($addressInformation->getShippingAddress()->getSaveInAddressBook()) {
+            $quote->removeAddress($quote->getShippingAddress()->getId());
+        }
         $this->validateQuote($quote);
 
         $address = $addressInformation->getShippingAddress();
