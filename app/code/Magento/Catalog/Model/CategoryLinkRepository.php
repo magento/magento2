@@ -11,7 +11,6 @@ use Magento\Catalog\Api\CategoryListDeleteBySkuInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product;
-use Magento\Store\Model\Store;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -91,7 +90,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
      */
     public function deleteByIds($categoryId, $sku)
     {
-        $category = $this->categoryRepository->get($categoryId, Store::DEFAULT_STORE_ID);
+        $category = $this->categoryRepository->get($categoryId);
         $productId = $this->productResource->getIdBySku($sku);
         $productPositions = $category->getProductsPosition();
 
@@ -125,7 +124,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
      */
     public function deleteBySkus(int $categoryId, array $productSkuList): bool
     {
-        $category = $this->categoryRepository->get($categoryId, Store::DEFAULT_STORE_ID);
+        $category = $this->categoryRepository->get($categoryId);
         $products = $this->productResource->getProductsIdsBySkus($productSkuList);
 
         if (!$products) {
