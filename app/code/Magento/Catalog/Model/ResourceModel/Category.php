@@ -36,8 +36,6 @@ class Category extends AbstractResource
     protected $_tree;
 
     /**
-     * Catalog products table name
-     *
      * @var string
      */
     protected $_categoryProductTable;
@@ -48,15 +46,11 @@ class Category extends AbstractResource
     private $entitiesWhereAttributesIs;
 
     /**
-     * Id of 'is_active' category attribute
-     *
      * @var int
      */
     protected $_isActiveAttributeId = null;
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId = null;
