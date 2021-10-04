@@ -13,7 +13,7 @@ use OAuth\Common\Http\Uri\UriInterface;
 class CurlClient extends \OAuth\Common\Http\Client\CurlClient
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function retrieveResponse(
         UriInterface $endpoint,

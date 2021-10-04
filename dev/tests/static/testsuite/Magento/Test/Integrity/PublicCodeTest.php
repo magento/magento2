@@ -11,6 +11,7 @@ use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 use ReflectionParameter;
 
 /**
@@ -111,9 +112,9 @@ class PublicCodeTest extends TestCase
     {
         $nonPublishedClasses = [];
         $reflection = new \ReflectionClass($class);
-        $filter = \ReflectionMethod::IS_PUBLIC;
+        $filter = ReflectionMethod::IS_PUBLIC;
         if ($reflection->isAbstract()) {
-            $filter = $filter | \ReflectionMethod::IS_PROTECTED;
+            $filter = $filter | ReflectionMethod::IS_PROTECTED;
         }
         $methods = $reflection->getMethods($filter);
         foreach ($methods as $method) {
@@ -125,8 +126,11 @@ class PublicCodeTest extends TestCase
              is written on early php 7 when return types are not actively used */
             $returnTypes = [];
             if ($method->hasReturnType()) {
-                if (!$method->getReturnType()->isBuiltin()) {
-                    $returnTypes = [trim($method->getReturnType()->getName(), '?[]')];
+                $methodReturnType = $method->getReturnType();
+                // For PHP 8.0 - ReflectionUnionType doesn't have isBuiltin method.
+                if (method_exists($methodReturnType, 'isBuiltin')
+                    && !$methodReturnType->isBuiltin()) {
+                    $returnTypes = [trim($methodReturnType->getName(), '?[]')];
                 }
             } else {
                 $returnTypes = $this->getReturnTypesFromDocComment($method->getDocComment());
@@ -260,16 +264,20 @@ class PublicCodeTest extends TestCase
 
     /**
      * Check if all method parameters are public
+     *
      * @param string $class
-     * @param \ReflectionMethod $method
+     * @param ReflectionMethod $method
      * @param array $nonPublishedClasses
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function checkParameters($class, \ReflectionMethod $method, array $nonPublishedClasses)
+    private function checkParameters($class, ReflectionMethod $method, array $nonPublishedClasses)
     {
         /* Ignoring docblocks for argument types */
         foreach ($method->getParameters() as $parameter) {
             if ($parameter->hasType()
+                && method_exists($parameter->getType(), 'isBuiltin')
                 && !$parameter->getType()->isBuiltin()
                 && !$this->isGenerated($parameter->getType()->getName())
             ) {
