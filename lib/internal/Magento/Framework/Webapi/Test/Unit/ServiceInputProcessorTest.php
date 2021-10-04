@@ -20,9 +20,9 @@ use Magento\Framework\Reflection\NameFinder;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Webapi\InputLimit\DefaultPageSizeSetter;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\Validator\ConfigProvider;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 use Magento\Framework\Webapi\Validator\EntityArrayValidator;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
@@ -74,7 +74,7 @@ class ServiceInputProcessorTest extends TestCase
     private $serviceTypeToEntityTypeMap;
 
     /**
-     * @var ConfigProvider|MockObject
+     * @var IOLimitConfigProvider|MockObject
      */
     private $inputLimitConfig;
 
@@ -163,7 +163,7 @@ class ServiceInputProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->inputLimitConfig = self::getMockBuilder(ConfigProvider::class)
+        $this->inputLimitConfig = self::getMockBuilder(IOLimitConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 

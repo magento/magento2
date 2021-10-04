@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Validator;
+namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\IOLimit;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -14,7 +14,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Provides configuration related to the GraphQL input limit validation
  */
-class ConfigProvider
+class IOLimitConfigProvider
 {
     /**
      * Path to the configuration setting for if the input limiting is enabled
@@ -40,7 +40,7 @@ class ConfigProvider
     }
 
     /**
-     * @inheritDoc
+     * Get the stored configuration for if the input limiting is enabled
      */
     public function isInputLimitingEnabled(): bool
     {
@@ -51,7 +51,7 @@ class ConfigProvider
     }
 
     /**
-     * @inheritDoc
+     * Get the stored configuration for the maximum page size
      */
     public function getMaximumPageSize(): ?int
     {

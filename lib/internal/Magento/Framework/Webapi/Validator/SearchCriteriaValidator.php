@@ -11,6 +11,7 @@ namespace Magento\Framework\Webapi\Validator;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 
 /**
  * Validates search criteria inputs
@@ -23,19 +24,19 @@ class SearchCriteriaValidator implements ServiceInputValidatorInterface
     private $maximumPageSize;
 
     /**
-     * @var ConfigProvider|null
+     * @var IOLimitConfigProvider|null
      */
     private $configProvider;
 
     /**
      * @param int $maximumPageSize
-     * @param ConfigProvider|null $configProvider
+     * @param IOLimitConfigProvider|null $configProvider
      */
-    public function __construct(int $maximumPageSize, ?ConfigProvider $configProvider = null)
+    public function __construct(int $maximumPageSize, ?IOLimitConfigProvider $configProvider = null)
     {
         $this->maximumPageSize = $maximumPageSize;
         $this->configProvider = $configProvider ?? ObjectManager::getInstance()
-            ->get(ConfigProvider::class);
+            ->get(IOLimitConfigProvider::class);
     }
 
     /**

@@ -24,7 +24,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
-use Magento\Framework\Webapi\InputLimit\DefaultPageSizeSetter;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
 /**

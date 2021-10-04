@@ -11,6 +11,7 @@ namespace Magento\Framework\GraphQl\Query\Resolver\Argument\Validator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\IOLimit\IOLimitConfigProvider;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface;
 
 /**
@@ -24,19 +25,19 @@ class SearchCriteriaValidator implements ValidatorInterface
     private $maxPageSize;
 
     /**
-     * @var ConfigProvider|null
+     * @var IOLimitConfigProvider|null
      */
     private $configProvider;
 
     /**
      * @param int $maxPageSize
-     * @param ConfigProvider|null $configProvider
+     * @param IOLimitConfigProvider|null $configProvider
      */
-    public function __construct(int $maxPageSize, ?ConfigProvider $configProvider = null)
+    public function __construct(int $maxPageSize, ?IOLimitConfigProvider $configProvider = null)
     {
         $this->maxPageSize = $maxPageSize;
         $this->configProvider = $configProvider ?? ObjectManager::getInstance()
-            ->get(ConfigProvider::class);
+            ->get(IOLimitConfigProvider::class);
     }
 
     /**

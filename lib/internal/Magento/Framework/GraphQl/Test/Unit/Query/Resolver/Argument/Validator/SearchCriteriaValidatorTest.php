@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Test\Unit\Query\Resolver\Argument\Validator;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\ConfigProvider;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\IOLimit\IOLimitConfigProvider;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class SearchCriteriaValidatorTest extends TestCase
 {
     /**
-     * @var ConfigProvider|MockObject
+     * @var IOLimitConfigProvider|MockObject
      */
     private $configProvider;
 
@@ -32,7 +32,7 @@ class SearchCriteriaValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configProvider = self::getMockBuilder(ConfigProvider::class)
+        $this->configProvider = self::getMockBuilder(IOLimitConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->validator = new SearchCriteriaValidator(3, $this->configProvider);

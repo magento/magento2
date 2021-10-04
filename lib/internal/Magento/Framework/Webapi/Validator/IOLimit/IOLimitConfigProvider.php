@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Webapi\Validator;
+namespace Magento\Framework\Webapi\Validator\IOLimit;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -14,7 +14,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Provides configuration related to the WebApi input limit validation
  */
-class ConfigProvider
+class IOLimitConfigProvider
 {
     /**
      * Path to the configuration setting for if the input limiting is enabled
@@ -61,7 +61,7 @@ class ConfigProvider
     }
 
     /**
-     * @inheritDoc
+     * Get the stored configuration for the maximum number of items allowed in an array property of an entity
      */
     public function getComplexArrayItemLimit(): ?int
     {
@@ -73,7 +73,7 @@ class ConfigProvider
     }
 
     /**
-     * @inheritDoc
+     * Get the stored configuration for the maxmimum page size
      */
     public function getMaximumPageSize(): ?int
     {
@@ -85,7 +85,7 @@ class ConfigProvider
     }
 
     /**
-     * @inheritDoc
+     * Get the stored configuration for the default page size
      */
     public function getDefaultPageSize(): ?int
     {

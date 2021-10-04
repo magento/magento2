@@ -10,7 +10,7 @@ namespace Magento\Framework\Webapi\Test\Unit\Validator;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Exception\InvalidArgumentException;
-use Magento\Framework\Webapi\Validator\ConfigProvider;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 use Magento\Framework\Webapi\Validator\SearchCriteriaValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class SearchCriteriaValidatorTest extends TestCase
 {
     /**
-     * @var ConfigProvider|MockObject
+     * @var IOLimitConfigProvider|MockObject
      */
     private $config;
 
@@ -32,7 +32,7 @@ class SearchCriteriaValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = self::getMockBuilder(ConfigProvider::class)
+        $this->config = self::getMockBuilder(IOLimitConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->validator = new SearchCriteriaValidator(3, $this->config);

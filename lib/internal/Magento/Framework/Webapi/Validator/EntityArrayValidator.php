@@ -10,6 +10,7 @@ namespace Magento\Framework\Webapi\Validator;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 
 /**
  * Validates service input
@@ -22,19 +23,19 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
     private $complexArrayItemLimit;
 
     /**
-     * @var ConfigProvider|null
+     * @var IOLimitConfigProvider|null
      */
     private $configProvider;
 
     /**
      * @param int $complexArrayItemLimit
-     * @param ConfigProvider|null $configProvider
+     * @param IOLimitConfigProvider|null $configProvider
      */
-    public function __construct(int $complexArrayItemLimit, ?ConfigProvider $configProvider = null)
+    public function __construct(int $complexArrayItemLimit, ?IOLimitConfigProvider $configProvider = null)
     {
         $this->complexArrayItemLimit = $complexArrayItemLimit;
         $this->configProvider = $configProvider ?? ObjectManager::getInstance()
-            ->get(ConfigProvider::class);
+            ->get(IOLimitConfigProvider::class);
     }
 
     /**

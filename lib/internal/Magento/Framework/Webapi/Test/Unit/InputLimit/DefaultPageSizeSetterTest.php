@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Magento\Framework\Webapi\Test\Unit\InputLimit;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Webapi\InputLimit\DefaultPageSizeSetter;
-use Magento\Framework\Webapi\Validator\ConfigProvider;
+use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
+use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 class DefaultPageSizeSetterTest extends TestCase
 {
     /**
-     * @var ConfigProvider|MockObject
+     * @var IOLimitConfigProvider|MockObject
      */
     private $configProvider;
 
@@ -31,7 +31,7 @@ class DefaultPageSizeSetterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configProvider = $this->getMockBuilder(ConfigProvider::class)
+        $this->configProvider = $this->getMockBuilder(IOLimitConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->setter = new DefaultPageSizeSetter($this->configProvider);

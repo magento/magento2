@@ -6,10 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Webapi\InputLimit;
+namespace Magento\Framework\Webapi\Validator\IOLimit;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Webapi\Validator\ConfigProvider;
 
 /**
  * Sets the default page size with the configured input limits
@@ -17,14 +16,14 @@ use Magento\Framework\Webapi\Validator\ConfigProvider;
 class DefaultPageSizeSetter
 {
     /**
-     * @var ConfigProvider
+     * @var IOLimitConfigProvider
      */
     private $validationConfigProvider;
 
     /**
-     * @param ConfigProvider $validationConfigProvider
+     * @param IOLimitConfigProvider $validationConfigProvider
      */
-    public function __construct(ConfigProvider $validationConfigProvider)
+    public function __construct(IOLimitConfigProvider $validationConfigProvider)
     {
         $this->validationConfigProvider = $validationConfigProvider;
     }
