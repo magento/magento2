@@ -143,6 +143,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
            <!--Log Out-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

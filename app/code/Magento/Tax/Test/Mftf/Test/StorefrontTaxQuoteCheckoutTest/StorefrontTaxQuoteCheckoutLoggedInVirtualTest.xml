@@ -70,6 +70,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer_NY.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <comment userInput="BIC workaround" stepKey="deleteVirtualProduct1"/>

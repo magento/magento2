@@ -41,5 +41,6 @@
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
     </test>
 </tests>
