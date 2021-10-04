@@ -98,14 +98,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_addFinalPrice = false;
 
     /**
-     * Cache for all ids
+     * All ids cache
      *
      * @var array
      */
     protected $_allIdsCache = null;
 
     /**
-     * Is add tax percents to product collection flag
+     * Is add tax percents flag to product collection
      *
      * @var bool
      */
@@ -136,42 +136,42 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_priceDataFieldFilters = [];
 
     /**
-     * Price expression sql
+     * Product Price expression sql
      *
      * @var string|null
      */
     protected $_priceExpression;
 
     /**
-     * Additional price expression sql part
+     * Additional product price expression sql part
      *
      * @var string|null
      */
     protected $_additionalPriceExpression;
 
     /**
-     * Max prise (statistics data)
+     * Product max price (statistics data)
      *
      * @var float
      */
     protected $_maxPrice;
 
     /**
-     * Min prise (statistics data)
+     * Product min price (statistics data)
      *
      * @var float
      */
     protected $_minPrice;
 
     /**
-     * Prise standard deviation (statistics data)
+     * Standard deviation of product price (statistics data)
      *
      * @var float
      */
     protected $_priceStandardDeviation;
 
     /**
-     * Prises count (statistics data)
+     * Product Prices count (statistics data)
      *
      * @var int
      */
@@ -249,7 +249,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_groupManagement;
 
     /**
-     * Need to add websites to result flag
+     * Need to add website names to result flag
      *
      * @var bool
      */
