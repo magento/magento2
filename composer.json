@@ -77,7 +77,8 @@
         "tubalmartin/cssmin": "4.1.1",
         "web-token/jwt-framework": "^v2.2.7",
         "webonyx/graphql-php": "~14.9.0",
-        "wikimedia/less.php": "^3.0.0"
+        "wikimedia/less.php": "^3.0.0",
+        "magento/composer-dependency-version-audit-plugin": "~0.1"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.4",

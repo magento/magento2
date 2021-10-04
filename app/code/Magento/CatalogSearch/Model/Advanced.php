@@ -210,6 +210,12 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             $this->addSearchCriteria($attribute, $preparedSearchValue);
 
             if ($attribute->getAttributeCode() == 'price') {
+                foreach ($value as $key => $element) {
+                    if (is_array($element)) {
+                        $value[$key] = 0;
+                    }
+                }
+
                 $rate = 1;
                 $store = $this->_storeManager->getStore();
                 $currency = $store->getCurrentCurrencyCode();
@@ -351,23 +357,30 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add data about search criteria to object state
      *
-     * @todo: Move this code to block
-     *
      * @param EntityAttribute $attribute
      * @param mixed $value
+     *
      * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
+     * @todo: Move this code to block
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
         $from = null;
         $to = null;
         if (is_array($value)) {
+            foreach ($value as $key => $element) {
+                if (is_array($element)) {
+                    $value[$key] = '';
+                }
+            }
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
                     $from = '';
                     $to = '';
+
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);

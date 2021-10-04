@@ -8,6 +8,7 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Action\Full;
@@ -26,22 +27,16 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
     /**
-     * Current Product Type Id
-     *
      * @var string
      */
     protected $_typeId;
 
     /**
-     * Product Type is composite flag
-     *
      * @var bool
      */
     protected $_isComposite = false;
 
     /**
-     * Core store config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
@@ -58,11 +53,14 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected $stockConfiguration;
 
     /**
-     * Param for switching logic which depends on action type (full reindex or partial)
-     *
      * @var string
      */
     private $actionType;
+
+    /**
+     * @var GetStatusExpression
+     */
+    private $getStatusExpression;
 
     /**
      * Class constructor
@@ -72,16 +70,21 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $connectionName
+     * @param \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression|null $getStatusExpression
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        $connectionName = null
+        $connectionName = null,
+        \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression $getStatusExpression = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        $this->getStatusExpression = $getStatusExpression ?: ObjectManager::getInstance()->get(
+            \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression::class
+        );
     }
 
     /**
@@ -251,6 +254,10 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId()
             . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
+        )->joinLeft(
+            ['css' => 'cataloginventory_stock_status'],
+            'css.product_id = e.entity_id',
+            []
         )->columns(
             ['qty' => $qtyExpr]
         )->where(
@@ -292,7 +299,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _updateIndex($entityIds)
     {
-        $this->deleteOldRecords($entityIds);
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
         $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
@@ -300,6 +306,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
         $i = 0;
         $data = [];
+        $savedEntityIds = [];
         while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
             $i++;
             $data[] = [
@@ -309,6 +316,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 'qty' => (double)$row['qty'],
                 'stock_status' => (int)$row['status'],
             ];
+            $savedEntityIds[] = (int)$row['entity_id'];
             if ($i % 1000 == 0) {
                 $this->_updateIndexTable($data);
                 $data = [];
@@ -317,6 +325,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
         $this->_updateIndexTable($data);
 
+        $this->deleteOldRecords(array_diff($entityIds, $savedEntityIds));
         return $this;
     }
 
@@ -376,21 +385,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
     {
-        $isInStockExpression = $isAggregate ? 'MAX(cisi.is_in_stock)' : 'cisi.is_in_stock';
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1,
-                $isInStockExpression
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                $isInStockExpression,
-                1
-            );
-        }
-        return $statusExpr;
+        return $this->getStatusExpression->execute($this->getTypeId(), $connection, $isAggregate);
     }
 
     /**

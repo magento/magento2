@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search\QueryPopularity;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
@@ -22,6 +23,7 @@ use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
  * Full text search for catalog using given search criteria.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Search implements ProductQueryInterface
@@ -67,6 +69,11 @@ class Search implements ProductQueryInterface
     private $suggestions;
 
     /**
+     * @var QueryPopularity
+     */
+    private $queryPopularity;
+
+    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
      * @param PageSizeProvider $pageSize
@@ -75,6 +82,7 @@ class Search implements ProductQueryInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ArgumentsProcessorInterface|null $argsSelection
      * @param Suggestions|null $suggestions
+     * @param QueryPopularity|null $queryPopularity
      */
     public function __construct(
         SearchInterface $search,
@@ -84,7 +92,8 @@ class Search implements ProductQueryInterface
         ProductSearch $productsProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ArgumentsProcessorInterface $argsSelection = null,
-        Suggestions $suggestions = null
+        Suggestions $suggestions = null,
+        QueryPopularity $queryPopularity = null
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -96,6 +105,7 @@ class Search implements ProductQueryInterface
             ->get(ArgumentsProcessorInterface::class);
         $this->suggestions = $suggestions ?: ObjectManager::getInstance()
             ->get(Suggestions::class);
+        $this->queryPopularity = $queryPopularity ?: ObjectManager::getInstance()->get(QueryPopularity::class);
     }
 
     /**
@@ -133,6 +143,11 @@ class Search implements ProductQueryInterface
         );
 
         $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
+
+        // add query statistics data
+        if (!empty($args['search'])) {
+            $this->queryPopularity->execute($context, $args['search'], (int) $searchResults->getTotalCount());
+        }
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
