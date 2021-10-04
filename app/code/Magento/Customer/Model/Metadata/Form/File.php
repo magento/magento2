@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\FileProcessor;
@@ -14,6 +16,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 
 /**
  * Processes files that are save for customer.
@@ -63,6 +66,11 @@ class File extends AbstractData
     protected $fileProcessorFactory;
 
     /**
+     * @var IoFile|null
+     */
+    private $ioFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -77,6 +85,7 @@ class File extends AbstractData
      * @param Filesystem $fileSystem
      * @param UploaderFactory $uploaderFactory
      * @param \Magento\Customer\Model\FileProcessorFactory|null $fileProcessorFactory
+     * @param IoFile|null $ioFile
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -91,7 +100,8 @@ class File extends AbstractData
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
         Filesystem $fileSystem,
         UploaderFactory $uploaderFactory,
-        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null
+        \Magento\Customer\Model\FileProcessorFactory $fileProcessorFactory = null,
+        IoFile $ioFile = null
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->urlEncoder = $urlEncoder;
@@ -101,6 +111,8 @@ class File extends AbstractData
         $this->fileProcessorFactory = $fileProcessorFactory ?: ObjectManager::getInstance()
             ->get(\Magento\Customer\Model\FileProcessorFactory::class);
         $this->fileProcessor = $this->fileProcessorFactory->create(['entityTypeCode' => $this->_entityTypeCode]);
+        $this->ioFile = $ioFile ?: ObjectManager::getInstance()
+            ->get(IoFile::class);
     }
 
     /**
@@ -176,7 +188,7 @@ class File extends AbstractData
     {
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
-        $extension = $this->fileProcessor->getStat($value['name'])['extension'];
+        $extension = $this->ioFile->getPathInfo($value['name'])['extension'];
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
             'file_extensions'
@@ -230,7 +242,7 @@ class File extends AbstractData
         }
 
         // This case is required for file uploader UI component
-        $temporaryFile = FileProcessor::TMP_DIR . '/' . $this->fileProcessor->getStat($filename)['basename'];
+        $temporaryFile = FileProcessor::TMP_DIR . '/' . $this->ioFile->getPathInfo($filename)['basename'];
         if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }

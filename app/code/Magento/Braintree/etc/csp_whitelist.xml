@@ -21,5 +21,17 @@
                 <value id="paypal_analytics" type="host">t.paypal.com</value>
             </values>
         </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="payments_sandbox_braintree_api_com" type="host">payments.sandbox.braintree-api.com</value>
+                <value id="origin_analytics_sand_sandbox_braintree_api_com" type="host">origin-analytics-sand.sandbox.braintree-api.com</value>
+                <value id="assets_braintreegateway_com" type="host">assets.braintreegateway.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="assets_braintreegateway_com" type="host">assets.braintreegateway.com</value>
+            </values>
+        </policy>
     </policies>
 </csp_whitelist>

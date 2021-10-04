@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
  * @magentoAppArea adminhtml
+ * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  */
 class ValidateTest extends \PHPUnit\Framework\TestCase
 {

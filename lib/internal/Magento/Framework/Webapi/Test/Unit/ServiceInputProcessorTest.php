@@ -11,12 +11,14 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\ServiceTypeToEntityTypeMap;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleConstructor;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\WebapiBuilderFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\AssociativeArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\DataArray;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\ObjectWithCustomAttributes;
 use Magento\Webapi\Test\Unit\Service\Entity\DataArrayData;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Nested;
 use Magento\Webapi\Test\Unit\Service\Entity\NestedData;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\Simple;
 use Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
@@ -126,7 +128,8 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
                 'attributeValueFactory' => $this->attributeValueFactoryMock,
                 'methodsMap' => $this->methodsMap,
-                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap
+                'serviceTypeToEntityTypeMap' => $this->serviceTypeToEntityTypeMap,
+                'serviceInputValidator' => new EntityArrayValidator(50)
             ]
         );
 
@@ -320,6 +323,26 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($second instanceof Simple);
         $this->assertEquals(15, $second->getEntityId());
         $this->assertEquals('Second', $second->getName());
+    }
+
+    public function testArrayOfDataObjectPropertiesIsValidated()
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectErrorMessage(
+            'Maximum items of type "\\' . Simple::class . '" is 50'
+        );
+        $objects = [];
+        for ($i = 0; $i < 51; $i++) {
+            $objects[] = ['entityId' => $i + 1, 'name' => 'Item' . $i];
+        }
+        $data = [
+            'dataObjects' => $objects,
+        ];
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'dataArray',
+            $data
+        );
     }
 
     public function testNestedSimpleArrayProperties()

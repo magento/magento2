@@ -5,6 +5,10 @@
  */
 namespace Magento\Variable\Model;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Custom variable model
  *
@@ -16,7 +20,7 @@ namespace Magento\Variable\Model;
  * @api
  * @since 100.0.2
  */
-class Variable extends \Magento\Framework\Model\AbstractModel
+class Variable extends AbstractModel
 {
     const TYPE_TEXT = 'text';
 
@@ -33,12 +37,18 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     protected $_escaper = null;
 
     /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Variable\Model\ResourceModel\Variable $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param WYSIWYGValidatorInterface|null $wysiwygValidator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -46,10 +56,13 @@ class Variable extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Escaper $escaper,
         \Magento\Variable\Model\ResourceModel\Variable $resource,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null
     ) {
         $this->_escaper = $escaper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->wysiwygValidator = $wysiwygValidator
+            ?? ObjectManager::getInstance()->get(WYSIWYGValidatorInterface::class);
     }
 
     /**
@@ -120,6 +133,21 @@ class Variable extends \Magento\Framework\Model\AbstractModel
             return $value;
         }
         return $this->getData('html_value');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeSave()
+    {
+        $html_field = $this->getValue(self::TYPE_HTML);
+        parent::beforeSave();
+
+        //Validating HTML content.
+        if ($html_field && $html_field !== $this->getOrigData('html_value')) {
+            $this->wysiwygValidator->validate($html_field);
+        }
+        return $this;
     }
 
     /**

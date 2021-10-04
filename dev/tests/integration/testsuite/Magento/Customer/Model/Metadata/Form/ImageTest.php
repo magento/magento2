@@ -107,7 +107,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $actual = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertEquals($this->expectedFileName, $actual);
         $this->assertFileExists($expectedPath);
-        $this->assertFileNotExists($tmpFilePath);
+        $this->assertFileDoesNotExist($tmpFilePath);
     }
 
     /**
@@ -150,13 +150,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $processCustomerAddressValueMethod->setAccessible(true);
         $result = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertInstanceOf('Magento\Framework\Api\ImageContent', $result);
-        $this->assertFileNotExists($tmpFilePath);
+        $this->assertFileDoesNotExist($tmpFilePath);
     }
 
     /**
      * Test for processCustomerValue method with invalid value
      *
      * @magentoAppIsolation enabled
+     *
      * @throws FileSystemException
      * @throws \ReflectionException
      */

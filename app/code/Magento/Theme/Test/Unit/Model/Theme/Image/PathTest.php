@@ -50,8 +50,8 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
-            ->with('/theme/origin')
-            ->willReturn('/theme/origin');
+            ->with('theme/origin')
+            ->willReturn('theme/origin');
 
         $this->filesystem->expects($this->any())->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
@@ -62,17 +62,17 @@ class PathTest extends \PHPUnit\Framework\TestCase
             $this->_assetRepo,
             $this->_storeManager
         );
-
-        $this->_model = new Path($this->filesystem, $this->_assetRepo, $this->_storeManager);
     }
 
     public function testGetPreviewImageUrl()
     {
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject */
-        $theme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
-            ['getPreviewImage', 'isPhysical', '__wakeup']
-        );
+        $theme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getPreviewImage'])
+            ->onlyMethods(['isPhysical', '__wakeup'])
+            ->getMock();
+
         $theme->expects($this->any())
             ->method('getPreviewImage')
             ->willReturn('image.png');
@@ -89,10 +89,11 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $expectedPath = 'theme/preview/preview.jpg';
 
         /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject */
-        $theme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
-            ['getPreviewImage', 'isPhysical', '__wakeup']
-        );
+        $theme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getPreviewImage'])
+            ->onlyMethods(['isPhysical', '__wakeup'])
+            ->getMock();
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
@@ -138,8 +139,11 @@ class PathTest extends \PHPUnit\Framework\TestCase
      */
     public function testTemporaryDirectoryGetter()
     {
+        $this->mediaDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('/foo/theme/origin');
         $this->assertEquals(
-            '/theme/origin',
+            '/foo/theme/origin',
             $this->model->getTemporaryDirectory()
         );
     }

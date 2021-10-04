@@ -128,6 +128,8 @@ class FileTest extends AbstractFormTestCase
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
+        $model->setRequestScope('');
+
         $this->assertEquals($expected, $model->extractValue($this->requestMock));
         if (!empty($attributeCode)) {
             unset($_FILES[$attributeCode]);

@@ -82,7 +82,7 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
             'user_id = ?' => (int) $userId,
         ];
         if (!empty($excludedSessionIds)) {
-            $whereStatement['session_id NOT IN (?)'] = $excludedSessionIds;
+            $whereStatement['id NOT IN (?)'] = $excludedSessionIds;
         }
         if (!empty($withStatuses)) {
             $whereStatement['status IN (?)'] = $withStatuses;

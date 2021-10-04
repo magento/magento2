@@ -662,6 +662,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             }
+            $this->validateWidgetParameters($name);
             if ($name && strlen((string)$value)) {
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $value = html_entity_decode($value);
@@ -695,6 +696,23 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
         try {
             if (!$xmlValidator->isValid($xml)) {
+                throw new LocalizedException(__('Layout update is invalid'));
+            }
+        } catch (ValidationException|ValidationSchemaException $e) {
+            throw new LocalizedException(__('Layout update is invalid'));
+        }
+    }
+
+    /**
+     * Check if widget parameter doesn't contains payload
+     *
+     * @param string $param
+     * @throws LocalizedException
+     */
+    private function validateWidgetParameters(string $param): void
+    {
+        try {
+            if (!preg_match('/^\w+$/', $param)) {
                 throw new LocalizedException(__('Layout update is invalid'));
             }
         } catch (ValidationException|ValidationSchemaException $e) {

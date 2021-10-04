@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backup\Model\Fs;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -45,6 +47,7 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -55,7 +58,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         $this->_backupData = $backupData;
         parent::__construct($entityFactory);
 
-        $this->_filesystem = $filesystem;
         $this->_backup = $backup;
         $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
 
@@ -87,12 +89,17 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * Create .htaccess file and deny backups directory access from web
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _hideBackupsForApache()
     {
         $filename = '.htaccess';
-        if (!$this->_varDirectory->isFile($filename)) {
-            $this->_varDirectory->writeFile($filename, 'deny from all');
+        $driver = $this->_varDirectory->getDriver();
+        $absolutePath = $driver->getAbsolutePath($this->_varDirectory->getAbsolutePath(), $filename);
+        if (!$driver->isFile($absolutePath)) {
+            $resource = $driver->fileOpen($absolutePath, 'w+');
+            $driver->fileWrite($resource, 'deny from all');
+            $driver->fileClose($resource);
         }
     }
 

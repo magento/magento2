@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Class Storage
+ * Media File Storage
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -156,8 +156,8 @@ class Storage extends AbstractModel
 
     /**
      * Retrieve storage model
-     * If storage not defined - retrieve current storage
      *
+     * If storage not defined - retrieve current storage
      * params = array(
      *  connection  => string,  - define connection for model if needed
      *  init        => bool     - force initialization process for storage model
@@ -289,9 +289,10 @@ class Storage extends AbstractModel
         $config['media_directory'] = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
 
         $allowedResources = $this->_coreConfig->getValue(self::XML_PATH_MEDIA_RESOURCE_WHITELIST, 'default');
-        foreach ($allowedResources as $allowedResource) {
-            $config['allowed_resources'][] = $allowedResource;
-        }
+        array_walk_recursive($allowedResources, function ($value) use (&$resources) {
+            $resources[] = $value;
+        }, $resources);
+        $config['allowed_resources'] = $resources;
 
         $config['update_time'] = $this->_scopeConfig->getValue(
             self::XML_PATH_MEDIA_UPDATE_TIME,

@@ -9,8 +9,7 @@ namespace Magento\Customer\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class VisitorTest
- * @package Magento\Customer\Model
+ * Class for test for Customer/Model/Visitor
  */
 class VisitorTest extends \PHPUnit\Framework\TestCase
 {
@@ -59,6 +58,7 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
                 'addCommitCallback',
                 'commit',
                 'clean',
+                'load',
             ])->disableOriginalConstructor()->getMock();
         $this->resource->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
         $this->resource->expects($this->any())->method('addCommitCallback')->willReturnSelf();

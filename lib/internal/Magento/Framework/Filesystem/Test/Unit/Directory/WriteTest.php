@@ -48,7 +48,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
             $this->fileFactory,
             $this->driver,
             $this->path,
-            'cool-permissions'
+            0555
         );
     }
 
