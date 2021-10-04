@@ -18,8 +18,7 @@ use Magento\Framework\Exception\InputException;
 interface ImageProcessorInterface
 {
     /**
-     * Process Data objects with image type custom attributes and update the custom attribute values with saved image
-     * paths
+     * Process Data objects with image type custom attributes and update custom attribute values with saved image paths
      *
      * @param CustomAttributesDataInterface $dataObjectWithCustomAttributes
      * @param string $entityType entity type

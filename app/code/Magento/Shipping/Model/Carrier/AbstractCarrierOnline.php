@@ -103,8 +103,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_rawRequest = null;
 
     /**
-     * The security scanner XML document
-     *
      * @var Security
      */
     protected $xmlSecurity;

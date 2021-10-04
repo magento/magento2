@@ -21,43 +21,31 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     const DEBUG_KEYS_MASK = '****';
 
     /**
-     * Carrier's code
-     *
      * @var string
      */
     protected $_code;
 
     /**
-     * Rates result
-     *
      * @var array|null
      */
     protected $_rates;
 
     /**
-     * Number of boxes in package
-     *
      * @var int
      */
     protected $_numBoxes = 1;
 
     /**
-     * Free Method config path
-     *
      * @var string
      */
     protected $_freeMethod = 'free_method';
 
     /**
-     * Whether this carrier has fixed rates calculation
-     *
      * @var bool
      */
     protected $_isFixed = false;
 
     /**
-     * Container types that could be customized
-     *
      * @var string[]
      */
     protected $_customizableContainerTypes = [];
@@ -441,7 +429,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             return;
         }
         $freeRateId = false;
-
+        // phpstan:ignore
         if (is_object($this->_result)) {
             foreach ($this->_result->getAllRates() as $i => $item) {
                 if ($item->getMethod() == $freeMethod) {
@@ -456,8 +444,10 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
         }
         $price = null;
         if ($request->getFreeMethodWeight() > 0) {
+            // phpstan:ignore
             $this->_setFreeMethodRequest($freeMethod);
 
+            // phpstan:ignore
             $result = $this->_getQuotes();
             if ($result && ($rates = $result->getAllRates()) && count($rates) > 0) {
                 if (count($rates) == 1 && $rates[0] instanceof \Magento\Quote\Model\Quote\Address\RateResult\Method) {

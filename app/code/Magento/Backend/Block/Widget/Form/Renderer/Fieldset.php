@@ -29,6 +29,8 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     protected $_template = 'Magento_Backend::widget/form/renderer/fieldset.phtml';
 
     /**
+     * Get element
+     *
      * @return AbstractElement
      */
     public function getElement()
@@ -37,6 +39,8 @@ class Fieldset extends \Magento\Backend\Block\Template implements RendererInterf
     }
 
     /**
+     * Render the element
+     *
      * @param AbstractElement $element
      * @return string
      */

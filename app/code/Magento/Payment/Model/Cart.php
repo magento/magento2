@@ -38,27 +38,22 @@ class Cart
     protected $_eventManager;
 
     /**
-     * Amounts
-     *
      * @var array
      */
     protected $_amounts;
 
     /**
-     * Custom items list
-     *
      * @var array
      */
     protected $_customItems = [];
 
     /**
-     * Items imported from sales model
-     *
      * @var array
      */
     protected $_salesModelItems = [];
 
     /**
+     * @phpcs:ignore
      * Flags that indicates whether discount, shopping and taxes should be transferred as cart item
      *
      * @var array
@@ -66,6 +61,7 @@ class Cart
     protected $_transferFlags = [];
 
     /**
+     * @phpcs:ignore
      * Flags which indicates whether items data is outdated and has to be recollected
      *
      * @var bool

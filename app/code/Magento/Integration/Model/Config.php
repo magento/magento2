@@ -32,8 +32,6 @@ class Config
     protected $_configReader;
 
     /**
-     * Array of integrations
-     *
      * @var array
      */
     protected $_integrations;

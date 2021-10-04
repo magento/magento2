@@ -81,7 +81,7 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
@@ -132,7 +132,7 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processImageContent($entityType, $imageContent)
     {
@@ -167,6 +167,8 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
+     * Get mime type extension
+     *
      * @param string $mimeType
      * @return string
      */
@@ -176,6 +178,8 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
+     * Get file name
+     *
      * @param ImageContentInterface $imageContent
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException

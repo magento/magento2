@@ -32,6 +32,7 @@ abstract class AbstractDb extends AbstractResource
     protected $_resources;
 
     /**
+     * @phpcs:ignore
      * Prefix for resources that will be used in this resource model
      *
      * @var string
@@ -39,15 +40,11 @@ abstract class AbstractDb extends AbstractResource
     protected $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
 
     /**
-     * Connections cache for this resource model
-     *
      * @var array
      */
     protected $_connections = [];
 
     /**
-     * Resource model name that contains entities (names of tables)
-     *
      * @var string
      */
     protected $_resourceModel;
@@ -73,15 +70,11 @@ abstract class AbstractDb extends AbstractResource
     protected $_isPkAutoIncrement = true;
 
     /**
-     * Use is object new method for save of object
-     *
      * @var bool
      */
     protected $_useIsObjectNew = false;
 
     /**
-     * Fields of main table
-     *
      * @var array
      */
     protected $_mainTableFields;
