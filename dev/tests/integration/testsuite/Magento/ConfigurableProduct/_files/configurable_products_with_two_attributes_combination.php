@@ -65,8 +65,9 @@ $associatedProductIds = [];
 $firstAttributeValues =  [];
 $secondAttributeValues = [];
 
+$testImagePath = __DIR__ . '/magento_image.jpg';
 $mediaImage = $mediaDirectory->getAbsolutePath($baseTmpMediaPath . DIRECTORY_SEPARATOR . 'magento_image.jpg');
-$result = $mediaDirectory->getDriver()->filePutContents($mediaImage, file_get_contents(__DIR__ . '/magento_image.jpg'));
+$result = $mediaDirectory->getDriver()->filePutContents($mediaImage, file_get_contents($testImagePath));
 
 array_shift($firstAttributeOptions);
 array_shift($secondAttributeOptions);
