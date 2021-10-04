@@ -7,7 +7,6 @@
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Model\Oauth\Token;
 
@@ -52,16 +51,10 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      */
     private $oauthHelper;
 
-    /**
-     * @var Encryptor
-     */
-    private $encryptor;
-
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->tokenFactory = $this->objectManager->create(\Magento\Integration\Model\Oauth\TokenFactory::class);
-        $this->encryptor = $this->objectManager->create(Encryptor::class);
 
         /** Mock date model to be able to specify "current timestamp" and avoid dependency on real timestamp */
         $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)

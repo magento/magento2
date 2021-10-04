@@ -6,7 +6,6 @@
 declare(strict_types=1);
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 use Magento\Framework\ObjectManagerInterface;
@@ -17,10 +16,6 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ConsumerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var Consumer
-     */
-    private $consumerResourceModel;
 
     /**
      * @var ConsumerModel
@@ -33,11 +28,6 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Encryptor
-     */
-    private $encryptor;
-
-    /**
      * @var Oauth
      */
     private $oauthHelper;
@@ -45,16 +35,8 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->encryptor = $this->objectManager->create(Encryptor::class);
         $this->oauthHelper = $this->objectManager->create(Oauth::class);
-        $this->consumerResourceModel = $this->objectManager->create(
-            Consumer::class,
-            [
-             'encryptor'=> $this->encryptor
-            ]
-        );
         $this->consumerModel = $this->objectManager->create(ConsumerModel::class);
-
         parent::setUp();
     }
 
