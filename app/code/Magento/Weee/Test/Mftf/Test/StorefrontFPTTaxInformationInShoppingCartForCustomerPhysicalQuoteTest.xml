@@ -24,6 +24,8 @@
 
         <before>
             <!-- Preconditions  -->
+            <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+            <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
             <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
