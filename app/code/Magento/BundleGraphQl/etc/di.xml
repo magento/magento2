@@ -23,4 +23,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionPostProcessor">
+        <arguments>
+            <argument name="collectionPostProcessors" xsi:type="array">
+                <item name="disabled_product_option" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Products\DataProvider\Product\DisabledProductOptionPostProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

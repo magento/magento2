@@ -115,7 +115,7 @@ class FixedProductTaxResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->setMethods(['getExtensionAttributes'])
+            ->addMethods(['getExtensionAttributes'])
             ->getMockForAbstractClass();
 
         $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
@@ -129,7 +129,7 @@ class FixedProductTaxResolverTest extends TestCase
 
         $this->contextExtensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
             ->addMethods(['getStore'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->cartItemMock = $this->createMock(CartItemInterface::class);
         $this->fieldMock = $this->createMock(Field::class);
@@ -139,7 +139,9 @@ class FixedProductTaxResolverTest extends TestCase
     }
 
     /**
-     * Verifies that exception is thrown if model is not specified
+     * Verifies that exception is thrown if model is not specified.
+     *
+     * @return void
      */
     public function testShouldThrowException(): void
     {
@@ -150,7 +152,9 @@ class FixedProductTaxResolverTest extends TestCase
     }
 
     /**
-     * Verifies that result is empty if FPT config is disabled
+     * Verifies that result is empty if FPT config is disabled.
+     *
+     * @return void
      */
     public function testShouldReturnEmptyResult(): void
     {
@@ -178,9 +182,11 @@ class FixedProductTaxResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider shouldReturnResultDataProvider
      * @param int $displayType
      * @param array $expected
+     *
+     * @return void
+     * @dataProvider shouldReturnResultDataProvider
      */
     public function testShouldReturnResult(int $displayType, array $expected): void
     {
