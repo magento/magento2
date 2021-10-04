@@ -82,26 +82,32 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         $this->consumerCollection->addFieldToSelect('entity_id');
         $this->consumerCollection->addFieldToSelect('secret');
         $connection = $this->consumerResourceModel->getConnection();
-        $this->consumerCollection->getSelect()->limit(self::BATCH_SIZE);
-        $collectionItems = $this->consumerCollection->getItems();
+        $this->consumerCollection->setPageSize(self::BATCH_SIZE);
+        $pages = $this->consumerCollection->getLastPageNumber();
+        $tableName = $this->consumerResourceModel->getMainTable();
+
+        for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
+            $this->consumerCollection->setCurPage($currentPage);
 
             /** @var $consumer Consumer */
-        foreach ($collectionItems as $consumer) {
-            $existingSecret = $consumer->getSecret();
-            $entityId = $consumer->getEntityId();
+            foreach ($this->consumerCollection as $consumer) {
+                $existingSecret = $consumer->getSecret();
+                $entityId = $consumer->getEntityId();
 
-            if ($entityId && $existingSecret) {
-                if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-                    $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
-                    $where = ['entity_id = ?' => $entityId];
-                    try {
-                        $connection->update($this->consumerResourceModel->getMainTable(), $data, $where);
-                    } catch (\Exception $exception) {
-                        $this->logger->critical($exception->getMessage());
-                        return $this;
+                if ($entityId && $existingSecret) {
+                    if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+                        $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
+                        $where = ['entity_id = ?' => $entityId];
+                        try {
+                            $connection->update($tableName, $data, $where);
+                        } catch (\Exception $exception) {
+                            $this->logger->critical($exception->getMessage());
+                            return $this;
+                        }
                     }
                 }
             }
+            $this->consumerCollection->clear();
         }
 
         return $this;

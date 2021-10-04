@@ -84,28 +84,34 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
         $this->tokenCollection->addFieldToSelect('entity_id');
         $this->tokenCollection->addFieldToSelect('secret');
         $this->tokenCollection->addFieldToSelect('type');
-        $this->tokenCollection->getSelect()->limit(self::BATCH_SIZE);
-        $collectionItems = $this->tokenCollection->getItems();
+        $this->tokenCollection->setPageSize(self::BATCH_SIZE);
         $connection = $this->tokenResourceModel->getConnection();
+        $pages = $this->tokenCollection->getLastPageNumber();
+        $tableName = $this->tokenResourceModel->getMainTable();
 
-        /** @var $token Token */
-        foreach ($collectionItems as $token) {
-            $existingSecret = $token->getSecret();
-            $entityId = $token->getEntityId();
-            $type = strtolower($token->getType());
+        for ($currentPage = 1; $currentPage <= $pages; $currentPage++) {
+            $this->tokenCollection->setCurPage($currentPage);
 
-            if ($entityId && $existingSecret && $type === TokenModel::TYPE_ACCESS) {
-                if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
-                    $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
-                    $where = ['entity_id = ?' => $entityId, 'type = ?' => 'access'];
-                    try {
-                        $connection->update($this->tokenResourceModel->getMainTable(), $data, $where);
-                    } catch (\Exception $exception) {
-                        $this->logger->critical($exception->getMessage());
-                        return $this;
+            /** @var $token Token */
+            foreach ($this->tokenCollection as $token) {
+                $existingSecret = $token->getSecret();
+                $entityId = $token->getEntityId();
+                $type = strtolower($token->getType());
+
+                if ($entityId && $existingSecret && $type === TokenModel::TYPE_ACCESS) {
+                    if (strlen($existingSecret) <= OauthHelper::LENGTH_TOKEN_SECRET) {
+                        $data = ['secret' => $this->encryptor->encrypt($existingSecret)];
+                        $where = ['entity_id = ?' => $entityId, 'type = ?' => 'access'];
+                        try {
+                            $connection->update($tableName, $data, $where);
+                        } catch (\Exception $exception) {
+                            $this->logger->critical($exception->getMessage());
+                            return $this;
+                        }
                     }
                 }
             }
+            $this->tokenCollection->clear();
         }
         return $this;
     }
