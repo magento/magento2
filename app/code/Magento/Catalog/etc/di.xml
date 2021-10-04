@@ -1328,4 +1328,9 @@
         <plugin name="remove_images_from_gallery_after_removing_product"
                 type="Magento\Catalog\Plugin\RemoveImagesFromGalleryAfterRemovingProduct"/>
     </type>
+    <type name="Magento\Catalog\Observer\ImageResizeAfterProductSave">
+        <arguments>
+            <argument name="imageResizeScheduler" xsi:type="object">Magento\MediaStorage\Service\ImageResizeScheduler\Proxy</argument>
+        </arguments>
+    </type>
 </config>
