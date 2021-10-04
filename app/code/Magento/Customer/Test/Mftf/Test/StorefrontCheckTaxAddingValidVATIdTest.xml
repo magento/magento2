@@ -140,6 +140,10 @@
                 <argument name="taxClassName" value="UK_zero"/>
             </actionGroup>
 
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+
            <!--Log Out-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

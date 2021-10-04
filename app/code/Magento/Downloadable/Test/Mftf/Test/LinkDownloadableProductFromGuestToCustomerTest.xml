@@ -34,6 +34,9 @@
             <magentoCLI command="config:set {{DisableGuestCheckoutWithDownloadableItems.path}} {{DisableGuestCheckoutWithDownloadableItems.value}}" stepKey="disableGuestCheckoutWithDownloadableItems" />
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
         </after>
         <!--Step 1: Go to Storefront as Guest-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
