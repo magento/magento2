@@ -677,7 +677,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
             try {
                 // phpcs:disable Magento2.Functions.DiscouragedFunction
-                $results[$attrCode] = call_user_func_array([$instance, $method], $args);
+                $results[$attrCode] = call_user_func_array([$instance, $method], array_values($args));
             } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
                 if ($collectExceptionMessages) {
                     $results[$attrCode] = $e->getMessage();
