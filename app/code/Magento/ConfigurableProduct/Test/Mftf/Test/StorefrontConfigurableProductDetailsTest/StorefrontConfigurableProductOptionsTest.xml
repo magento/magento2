@@ -30,9 +30,6 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
-                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
-            </actionGroup>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
@@ -46,6 +43,9 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

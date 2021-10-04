@@ -31,9 +31,6 @@
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
-                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
-            </actionGroup>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersConfigurable"/>
             <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterConfigurable">
@@ -58,6 +55,9 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
