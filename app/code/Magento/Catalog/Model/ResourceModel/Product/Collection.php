@@ -56,57 +56,41 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_idFieldName = 'entity_id';
 
     /**
-     * Catalog Product Flat is enabled cache per store
-     *
      * @var array
      */
     protected $_flatEnabled = [];
 
     /**
-     * Product websites table name
-     *
      * @var string
      */
     protected $_productWebsiteTable;
 
     /**
-     * Product categories table name
-     *
      * @var string
      */
     protected $_productCategoryTable;
 
     /**
-     * Is add URL rewrites to collection flag
-     *
      * @var bool
      */
     protected $_addUrlRewrite = false;
 
     /**
-     * Add URL rewrite for category
-     *
      * @var int
      */
     protected $_urlRewriteCategory = '';
 
     /**
-     * Is add final price to product collection flag
-     *
      * @var bool
      */
     protected $_addFinalPrice = false;
 
     /**
-     * All ids cache
-     *
      * @var array
      */
     protected $_allIdsCache = null;
 
     /**
-     * Is add tax percents flag to product collection
-     *
      * @var bool
      */
     protected $_addTaxPercents = false;
@@ -136,43 +120,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_priceDataFieldFilters = [];
 
     /**
-     * Product Price expression sql
-     *
      * @var string|null
      */
     protected $_priceExpression;
 
     /**
-     * Additional product price expression sql part
-     *
      * @var string|null
      */
     protected $_additionalPriceExpression;
 
     /**
-     * Product max price (statistics data)
-     *
      * @var float
      */
     protected $_maxPrice;
 
     /**
-     * Product min price (statistics data)
-     *
      * @var float
      */
     protected $_minPrice;
 
     /**
-     * Standard deviation of product price (statistics data)
-     *
      * @var float
      */
     protected $_priceStandardDeviation;
 
     /**
-     * Product Prices count (statistics data)
-     *
      * @var int
      */
     protected $_pricesCount = null;
@@ -249,8 +221,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_groupManagement;
 
     /**
-     * Need to add website names to result flag
-     *
      * @var bool
      */
     protected $needToAddWebsiteNamesToResult;
