@@ -38,6 +38,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * @method UrlRewrite setDescription($value)
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.LongParameterList)
  */
 class UrlRewrite extends AbstractModel
 {
