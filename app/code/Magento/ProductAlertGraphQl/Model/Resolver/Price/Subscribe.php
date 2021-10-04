@@ -66,7 +66,9 @@ class Subscribe implements ResolverInterface
 
         /* Guest checking */
         if (!$customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts.'));
+            throw new GraphQlAuthorizationException(
+                __('The current user cannot perform operations on product alerts.')
+            );
         }
 
         $productId = ((int) $args['productId']) ?: null;
@@ -79,7 +81,9 @@ class Subscribe implements ResolverInterface
                 ->loadByParam();
 
         if ($model->getId()) {
-            throw new GraphQlAlreadyExistsException(__('The current user is currently subscribed to price alert.'));
+            throw new GraphQlAlreadyExistsException(
+                __('The current user is currently subscribed to price alert.')
+            );
         }
 
         $this->priceResource->save($model);

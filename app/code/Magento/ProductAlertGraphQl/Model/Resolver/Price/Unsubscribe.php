@@ -66,7 +66,9 @@ class Unsubscribe implements ResolverInterface
 
         /* Guest checking */
         if (!$customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts.'));
+            throw new GraphQlAuthorizationException(
+                __('The current user cannot perform operations on product alerts.')
+            );
         }
 
         $productId = ((int) $args['productId']) ?: null;
@@ -79,7 +81,9 @@ class Unsubscribe implements ResolverInterface
                 ->loadByParam();
         
         if (!$model->getId()) {
-            throw new GraphQlNoSuchEntityException(__('The current user isn\'t subscribed to price alert.'));
+            throw new GraphQlNoSuchEntityException(
+                __('The current user isn\'t subscribed to price alert.')
+            );
         }
 
         $this->priceResource->delete($model);
