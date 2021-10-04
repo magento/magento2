@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="RemoteStorageAwsS3EnabledMediaGalleryUiSuite">
+        <before>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
+            <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="enableEnhancedMediaGallery"/>
+            <magentoCLI command="config:set {{MediaGalleryRenditionsDataEnabled.path}} {{MediaGalleryRenditionsDataEnabled.value}}" stepKey="enableMediaGalleryRenditions"/>
+
+            <!-- Create Media Gallery Directories for `catalog/category` and `wysiwyg` -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromCategoryImage"/>
+            <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+            <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Enable AWS S3 Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+            <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{MediaGalleryRenditionsDataDisabled.path}} {{MediaGalleryRenditionsDataDisabled.value}}" stepKey="disableMediaGalleryRenditions"/>
+            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
+
+            <!-- Disable Remote Storage -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+        </after>
+        <include>
+            <group name="remote_storage_aws_s3_media_gallery_ui"/>
+        </include>
+        <exclude>
+            <group name="remote_storage_aws_s3"/>
+            <group name="remote_storage_disabled"/>
+            <group name="remote_storage_aws_s3_pagebuilder"/>
+        </exclude>
+    </suite>
+</suites>
