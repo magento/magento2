@@ -53,17 +53,11 @@ class Cart
     protected $_salesModelItems = [];
 
     /**
-     * @phpcs:ignore
-     * Flags that indicates whether discount, shopping and taxes should be transferred as cart item
-     *
      * @var array
      */
     protected $_transferFlags = [];
 
     /**
-     * @phpcs:ignore
-     * Flags which indicates whether items data is outdated and has to be recollected
-     *
      * @var bool
      */
     protected $_itemsCollectingRequired = true;

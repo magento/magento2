@@ -142,9 +142,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected $_canCancelInvoice = false;
 
     /**
-     * @phpcs:ignore
-     * Fields that should be replaced in debug with '***'
-     *
      * @var array
      */
     protected $_debugReplacePrivateDataKeys = [];

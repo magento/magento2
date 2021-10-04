@@ -32,9 +32,6 @@ abstract class AbstractDb extends AbstractResource
     protected $_resources;
 
     /**
-     * @phpcs:ignore
-     * Prefix for resources that will be used in this resource model
-     *
      * @var string
      */
     protected $connectionName = \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;

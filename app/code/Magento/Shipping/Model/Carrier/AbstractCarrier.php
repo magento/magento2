@@ -414,7 +414,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * phpstan:ignore
      */
     protected function _updateFreeMethodQuote($request)
     {
