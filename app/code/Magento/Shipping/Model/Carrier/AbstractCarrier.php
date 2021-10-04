@@ -65,8 +65,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     const HANDLING_ACTION_PERORDER = 'O';
 
     /**
-     * Fields that should be replaced in debug with '***'
-     *
      * @var array
      */
     protected $_debugReplacePrivateDataKeys = [];

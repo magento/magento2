@@ -13,7 +13,6 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 
 /**
- * Class ImageProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageProcessor implements ImageProcessorInterface
