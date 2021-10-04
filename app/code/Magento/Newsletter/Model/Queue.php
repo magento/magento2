@@ -202,11 +202,14 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      */
     public function setQueueStartAtByString($startAt)
     {
-        if ($startAt === null || $startAt == '') {
-            $this->setQueueStartAt(null);
-        } else {
-            $this->setQueueStartAt($this->utcConverter->convertLocalizedDateToUtc($startAt));
-        }
+        // Cast start_at value to null if value is incorrect ("0", "" must be casted to null)
+        $startAt = (string) $startAt ?: null;
+        // Convert start_at value using UTC converter if start_at value is not null
+        $startAt = $startAt === null
+            ? $startAt
+            : $this->utcConverter->convertLocalizedDateToUtc($startAt);
+        $this->setQueueStartAt($startAt);
+
         return $this;
     }
 
