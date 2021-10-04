@@ -14,6 +14,8 @@ namespace Magento\Backend\Model\Widget\Grid\Row;
 interface GeneratorInterface
 {
     /**
+     * Generate row url
+     *
      * @param \Magento\Framework\DataObject $item
      * @return string
      */

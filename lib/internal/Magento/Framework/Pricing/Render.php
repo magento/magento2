@@ -33,12 +33,12 @@ class Render extends AbstractBlock
     const ZONE_DEFAULT   = null;
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var string
+     */
     protected $defaultTypeRender = 'default';
 
     /**
-     * Price layout
-     *
      * @var Layout
      */
     protected $priceLayout;

@@ -16,17 +16,23 @@ use Magento\Backend\Block\Widget\Grid\Column;
 interface FilterInterface
 {
     /**
+     * Retrieve column related to filte
+     *
      * @return Column
      */
     public function getColumn();
 
     /**
+     * Set column related to filterr
+     *
      * @param Column $column
      * @return AbstractFilter
      */
     public function setColumn($column);
 
     /**
+     * Retrieve filter html
+     *
      * @return string
      */
     public function getHtml();

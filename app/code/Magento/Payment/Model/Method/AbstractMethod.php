@@ -60,106 +60,76 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected $_infoBlockType = \Magento\Payment\Block\Info::class;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_isGateway = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_isOffline = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canOrder = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canAuthorize = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canCapture = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canCapturePartial = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canCaptureOnce = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canRefund = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canRefundInvoicePartial = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canVoid = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canUseInternal = true;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canUseCheckout = true;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_isInitializeNeeded = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canFetchTransactionInfo = false;
 
     /**
-     * Payment Method feature
-     *
      * @var bool
      */
     protected $_canReviewPayment = false;

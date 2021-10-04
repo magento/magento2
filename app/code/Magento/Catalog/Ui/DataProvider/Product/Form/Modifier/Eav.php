@@ -197,7 +197,6 @@ class Eav extends AbstractModifier
     private $localeCurrency;
 
     /**
-     * internal cache for attribute models
      * @var array
      */
     private $attributesCache = [];

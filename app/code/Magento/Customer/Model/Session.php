@@ -28,8 +28,6 @@ use Magento\Framework\Session\Generic;
 class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
-     * Customer object
-     *
      * @var CustomerData
      */
     protected $_customer;
@@ -40,15 +38,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_customerResource;
 
     /**
-     * Customer model
-     *
      * @var Customer
      */
     protected $_customerModel;
 
     /**
-     * Flag with customer id validations result
-     *
      * @var bool|null
      */
     protected $_isCustomerIdChecked = null;
@@ -507,8 +501,8 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   bool|null $loginUrl
-     * @return  bool
+     * @param bool|null $loginUrl
+     * @return bool
      * @throws \Magento\Framework\Exception\SessionException
      */
     public function authenticate($loginUrl = null)

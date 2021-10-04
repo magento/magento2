@@ -43,8 +43,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $currentCustomer;
 
     /**
-     * Prices
-     *
      * @var array
      */
     protected $_prices = [];

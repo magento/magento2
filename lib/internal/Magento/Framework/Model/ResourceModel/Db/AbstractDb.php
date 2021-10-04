@@ -53,29 +53,21 @@ abstract class AbstractDb extends AbstractResource
     protected $_resourceModel;
 
     /**
-     * Tables used in this resource model
-     *
      * @var array
      */
     protected $_tables = [];
 
     /**
-     * Main table name
-     *
      * @var string
      */
     protected $_mainTable;
 
     /**
-     * Main table primary key field name
-     *
      * @var string
      */
     protected $_idFieldName;
 
     /**
-     * Primary key auto increment flag
-     *
      * @var bool
      */
     protected $_isPkAutoIncrement = true;

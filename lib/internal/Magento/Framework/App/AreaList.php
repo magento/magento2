@@ -15,8 +15,6 @@ namespace Magento\Framework\App;
 class AreaList
 {
     /**
-     * Area configuration list
-     *
      * @var array
      */
     protected $_areas = [];

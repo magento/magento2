@@ -20,21 +20,29 @@ interface SalesModelInterface
     public function getAllItems();
 
     /**
+     * Get base subtotal
+     *
      * @return float|null
      */
     public function getBaseSubtotal();
 
     /**
+     * Get base tax amount
+     *
      * @return float|null
      */
     public function getBaseTaxAmount();
 
     /**
+     * Get base shipping amount
+     *
      * @return float|null
      */
     public function getBaseShippingAmount();
 
     /**
+     * Get base discount amount
+     *
      * @return float|null
      */
     public function getBaseDiscountAmount();

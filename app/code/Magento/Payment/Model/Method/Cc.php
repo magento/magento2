@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Payment;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @deprecated 100.0.8
  * @api
+ * @phpcs:ignoreFile
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {

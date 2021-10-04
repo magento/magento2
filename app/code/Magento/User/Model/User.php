@@ -70,8 +70,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private const CACHE_TAG = 'user_assigned_role';
 
     /**
-     * Model event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'admin_user';
@@ -84,8 +82,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_role;
 
     /**
-     * Available resources flag
-     *
      * @var bool
      */
     protected $_hasResources = true;
@@ -124,11 +120,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      * @deprecated 101.1.0
      */
     protected $_transportBuilder;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 101.1.0
      */
     protected $_storeManager;
@@ -149,6 +147,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $notificator;
 
     /**
+     * @var DeploymentConfig
      * @deprecated 101.1.0
      */
     private $deploymentConfig;

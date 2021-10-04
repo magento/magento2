@@ -28,8 +28,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
     const COOKIE_NAME = 'persistent_shopping_cart';
 
     /**
-     * Fields which model does not save into `info` db field
-     *
      * @var string[]
      */
     protected $_unserializableFields = [
@@ -42,8 +40,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
     ];
 
     /**
-     * If model loads expired sessions
-     *
      * @var bool
      */
     protected $_loadExpired = false;

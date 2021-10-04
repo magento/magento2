@@ -8,6 +8,7 @@ namespace Magento\Framework\Validator;
 /**
  * Abstract validator class.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -24,8 +25,6 @@ abstract class AbstractValidator implements \Magento\Framework\Validator\Validat
     protected $_translator = null;
 
     /**
-     * Array of validation failure messages
-     *
      * @var array
      */
     protected $_messages = [];

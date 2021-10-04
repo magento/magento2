@@ -35,7 +35,10 @@ class Options
     }
 
     /**
+     * Is enabled
+     *
      * @param \Magento\Catalog\Model\Product $product
+     * @phpcs:ignore
      * @param null $visibility
      * @return bool|null
      */
@@ -57,6 +60,8 @@ class Options
     }
 
     /**
+     * Get visibilities
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      */

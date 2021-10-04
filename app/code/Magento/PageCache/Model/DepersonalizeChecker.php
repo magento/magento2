@@ -27,8 +27,6 @@ class DepersonalizeChecker
     private $moduleManager;
 
     /**
-     * Cache config
-     *
      * @var Config
      */
     private $cacheConfig;

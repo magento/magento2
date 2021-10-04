@@ -14,6 +14,8 @@ namespace Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional;
 interface AdditionalInterface
 {
     /**
+     * Create additional action from configuration
+     *
      * @param array $configuration
      * @return $this
      */

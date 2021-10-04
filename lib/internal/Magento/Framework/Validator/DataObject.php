@@ -24,8 +24,6 @@ class DataObject implements \Zend_Validate_Interface
     private $_rules = [];
 
     /**
-     * Validation error messages
-     *
      * @var array
      */
     private $_messages = [];
@@ -68,6 +66,7 @@ class DataObject implements \Zend_Validate_Interface
         foreach ($this->_rules as $fieldName => $validator) {
             $value = $fieldName ? $entity->getDataUsingMethod($fieldName) : $entity;
             if (!$validator->isValid($value)) {
+                //@phpcs:ignore
                 $this->_messages = array_merge($this->_messages, array_values($validator->getMessages()));
             }
         }

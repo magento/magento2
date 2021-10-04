@@ -36,8 +36,6 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Whether it is the first page after successful login
-     *
      * @var boolean
      */
     protected $_isFirstAfterLogin;

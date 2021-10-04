@@ -19,8 +19,6 @@ use Magento\Framework\Phrase;
 class ImageProcessor implements ImageProcessorInterface
 {
     /**
-     * MIME type/extension map
-     *
      * @var array
      */
     protected $mimeTypeExtensionMap = [

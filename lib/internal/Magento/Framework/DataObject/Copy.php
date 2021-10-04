@@ -27,8 +27,6 @@ class Copy
     protected $fieldsetConfig;
 
     /**
-     * Core event manager proxy
-     *
      * @var ManagerInterface
      */
     protected $eventManager = null;

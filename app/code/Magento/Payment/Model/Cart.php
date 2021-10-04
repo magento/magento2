@@ -25,7 +25,9 @@ class Cart
     const AMOUNT_SUBTOTAL = 'subtotal';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var $_salesModel
+     */
     protected $_salesModel;
 
     /**
@@ -344,6 +346,8 @@ class Cart
     }
 
     /**
+     * Set transfer flag
+     *
      * @param string $flagType
      * @param bool $value
      * @return void
@@ -355,6 +359,8 @@ class Cart
     }
 
     /**
+     * Set Amount
+     *
      * @param string $amountType
      * @param float $amount
      * @return void
@@ -365,6 +371,8 @@ class Cart
     }
 
     /**
+     * Add amount
+     *
      * @param string $amountType
      * @param float $amount
      * @return void

@@ -14,15 +14,11 @@ namespace Magento\Framework\Validator;
 class Constraint extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
-     * Wrapped validator
-     *
      * @var \Magento\Framework\Validator\ValidatorInterface
      */
     protected $_wrappedValidator;
 
     /**
-     * Alias can be used for search
-     *
      * @var string
      */
     protected $_alias;

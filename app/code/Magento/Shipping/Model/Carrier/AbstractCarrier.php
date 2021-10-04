@@ -12,6 +12,7 @@ use Magento\Shipping\Model\Shipment\Request;
 /**
  * Class AbstractCarrier
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -427,6 +428,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * phpstan:ignore
      */
     protected function _updateFreeMethodQuote($request)
     {
@@ -685,6 +687,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             $this->filterXmlData($xml);
             $data = $xml->asXML();
         } catch (\Exception $e) {
+            $this->_logger->critical($e);
         }
         return $data;
     }

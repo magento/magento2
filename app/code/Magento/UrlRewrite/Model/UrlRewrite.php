@@ -90,8 +90,7 @@ class UrlRewrite extends AbstractModel
         EventManager $eventManager = null,
         UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
-    )
-    {
+    ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManager::class);
@@ -152,8 +151,7 @@ class UrlRewrite extends AbstractModel
             ]
         );
 
-        while (
-            $urlRewriteTarget &&
+        while ($urlRewriteTarget &&
             $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
             $urlRewriteTarget->getRedirectType() > 0
         ) {
@@ -191,7 +189,10 @@ class UrlRewrite extends AbstractModel
                     );
 
                     if ($origUrlRewrite) {
-                        $this->cleanCacheForEntity($origUrlRewrite->getEntityType(), (int) $origUrlRewrite->getEntityId());
+                        $this->cleanCacheForEntity(
+                            $origUrlRewrite->getEntityType(),
+                            (int) $origUrlRewrite->getEntityId()
+                        );
                     }
                 }
             } else {

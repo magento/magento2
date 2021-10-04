@@ -21,8 +21,6 @@ class ConstraintFactory
     protected $_objectManager = null;
 
     /**
-     * Instance name to create
-     *
      * @var string
      */
     protected $_instanceName = null;

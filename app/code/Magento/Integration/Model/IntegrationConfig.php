@@ -34,8 +34,6 @@ class IntegrationConfig
     protected $_configReader;
 
     /**
-     * Array of integrations with resource permissions from api config
-     *
      * @var array
      */
     protected $_integrations;

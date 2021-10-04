@@ -14,8 +14,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**
-     * Store associated with rule entities information map
-     *
      * @var array
      */
     protected $_associatedEntitiesMap;
@@ -85,6 +83,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Map data for associated entities
+     *
      * @param string $entityType
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -118,6 +118,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Perform operations after collection load
+     *
      * @return $this
      */
     protected function _afterLoad()
@@ -153,8 +155,11 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Getter for _associatedEntitiesMap property
+     *
      * @return array
      * @deprecated 100.1.0
+     * phpstan:ignore
      */
     private function getAssociatedEntitiesMap()
     {

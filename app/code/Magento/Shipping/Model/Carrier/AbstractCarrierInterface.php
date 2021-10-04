@@ -31,8 +31,7 @@ interface AbstractCarrierInterface
     public function collectRates(RateRequest $request);
 
     /**
-     * Do request to shipment
-     * Implementation must be in overridden method
+     * Do request to shipment - Implementation must be in overridden method
      *
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
@@ -40,8 +39,7 @@ interface AbstractCarrierInterface
     public function requestToShipment($request);
 
     /**
-     * Do return of shipment
-     * Implementation must be in overridden method
+     * Do return of shipment - Implementation must be in overridden method
      *
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
@@ -72,6 +70,8 @@ interface AbstractCarrierInterface
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null);
 
     /**
+     * Validate request for available ship countries
+     *
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      */
