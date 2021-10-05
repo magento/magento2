@@ -60,7 +60,7 @@ class ProductRepositorySave
         ProductInterface $product,
         $saveOptions = false
     ): array {
-        $result[] = $product;
+        $result = [$product, $saveOptions];
         if ($product->getTypeId() !== Configurable::TYPE_CODE) {
             return $result;
         }
