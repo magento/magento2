@@ -11,13 +11,15 @@
  */
 namespace Magento\Cron\Model\Config\Backend;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Sitemap configuration
  */
 class Sitemap extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Cron string path
+     * Cron string path for product alerts
      */
     const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
 
@@ -67,7 +69,7 @@ class Sitemap extends \Magento\Framework\App\Config\Value
      * After save handler
      *
      * @return $this
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function afterSave()
     {
@@ -102,7 +104,7 @@ class Sitemap extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
-            throw new \Exception(__('We can\'t save the cron expression.'));
+            throw new LocalizedException(__('We can\'t save the cron expression.'));
         }
         return parent::afterSave();
     }

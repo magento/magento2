@@ -11,18 +11,20 @@
  */
 namespace Magento\Cron\Model\Config\Backend\Product;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Cron job Alert configuration
  */
 class Alert extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Cron string path
+     * Cron string path for product alerts
      */
     const CRON_STRING_PATH = 'crontab/default/jobs/catalog_product_alert/schedule/cron_expr';
 
     /**
-     * Cron model path
+     * Cron model path for product alerts
      */
     const CRON_MODEL_PATH = 'crontab/default/jobs/catalog_product_alert/run/model';
 
@@ -67,7 +69,7 @@ class Alert extends \Magento\Framework\App\Config\Value
      * @inheritdoc
      *
      * @return $this
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function afterSave()
     {
@@ -102,7 +104,7 @@ class Alert extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
-            throw new \Exception(__('We can\'t save the cron expression.'));
+            throw new LocalizedException(__('We can\'t save the cron expression.'));
         }
 
         return parent::afterSave();
