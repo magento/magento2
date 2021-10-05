@@ -147,7 +147,8 @@ class Amqp
             "truncate" => 50000
         ];
         $this->curl->post(
-            $this->host . 'queue/' . urlencode($this->virtualHost) . '/' . $name . '/get', json_encode($body)
+            $this->host . 'queue/' . urlencode($this->virtualHost) . '/' . $name . '/get',
+            json_encode($body)
         );
         return $this->curl->getBody();
     }
