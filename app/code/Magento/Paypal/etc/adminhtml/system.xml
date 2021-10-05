@@ -247,9 +247,9 @@
                 <group id="express_checkout_required">
                     <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                     <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                    <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                    <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                     <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                    <group id="advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                    <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
                 </group>
             </group>
             <group id="paypal_group_all_in_one" translate="label comment" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -279,9 +279,9 @@
                         </field>
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_ec">
                         <label>Basic Settings - PayPal Website Payments Standard</label>

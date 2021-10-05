@@ -187,6 +187,7 @@
             </argument>
             <argument name="supportedPaymentMethods" xsi:type="array">
                 <item name="venmo" xsi:type="string">venmo</item>
+                <item name="paylater" xsi:type="string">paylater</item>
             </argument>
             <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
         </arguments>

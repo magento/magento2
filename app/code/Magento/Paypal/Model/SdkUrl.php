@@ -206,13 +206,21 @@ class SdkUrl
     }
 
     /**
-     * Returns allowed funding from configuration
+     * Returns allowed funding from configuration after validating
      *
      * @return string
      */
     private function getAllowedFunding()
     {
-        return implode(',', $this->supportedPaymentMethods);
+        $payLaterActive = (boolean)$this->config->getPayLaterConfigValue('experience_active');
+
+        // If Pay Later is enabled, then only paylater parameter will go in enable-funding parameter list
+        if ($payLaterActive == false) {
+            unset($this->supportedPaymentMethods['paylater']);
+            return implode(',', $this->supportedPaymentMethods);
+        } else {
+            return implode(',', $this->supportedPaymentMethods);
+        }
     }
 
     /**
