@@ -494,6 +494,38 @@ class CartFixedTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
+     * @magentoDataFixture Magento/SalesRule/_files/cart_fixed_10_discount.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_products.php
+     * @return void
+     */
+    public function testDiscountsWhenByPercentRuleAppliedFirstAndCartFixedRuleSecond(): void
+    {
+        $totalDiscount = -20.99;
+        $discounts = [
+            'simple1' => 5.72,
+            'simple2' => 15.27,
+        ];
+        $quote = $this->getQuote('test_quote_with_simple_products');
+        $quote->setCouponCode('2?ds5!2d');
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+        $this->assertEquals(21.98, $quote->getBaseSubtotal());
+        $this->assertEquals($totalDiscount, $quote->getShippingAddress()->getDiscountAmount());
+        $items = $quote->getAllItems();
+        $this->assertCount(2, $items);
+        $item = array_shift($items);
+        $this->assertEquals('simple1', $item->getSku());
+        $this->assertEquals(5.99, $item->getPrice());
+        $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
+        $item = array_shift($items);
+        $this->assertEquals('simple2', $item->getSku());
+        $this->assertEquals(15.99, $item->getPrice());
+        $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
+    }
+
+    /**
      * Get list of orders by quote id.
      *
      * @param int $quoteId
