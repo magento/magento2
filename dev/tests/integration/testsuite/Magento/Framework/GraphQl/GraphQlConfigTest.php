@@ -23,16 +23,14 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var ObjectManagerInterface */
+    private $objectManager;
+
    /** @var \Magento\Framework\GraphQl\Config  */
     private $model;
 
-    protected function setUp(): void
-    {
-        /** @var ObjectManagerInterface $objectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-       /** @var Cache $cache */
-        $cache = $objectManager->get(Cache::class);
-        $cache->clean();
+    public function __construct() {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $fileResolverMock = $this->getMockBuilder(
             \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
@@ -43,21 +41,31 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
             $filePath2 => file_get_contents($filePath2)
         ];
         $fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
-        $graphQlReader = $objectManager->create(
+        $graphQlReader = $this->objectManager->create(
             \Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]
         );
-        $reader = $objectManager->create(
-            // phpstan:ignore
+        $reader = $this->objectManager->create(
+        // phpstan:ignore
             \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
-        $data = $objectManager->create(
-            // phpstan:ignore
-            \Magento\Framework\GraphQl\Config\Data ::class,
+        $data = $this->objectManager->create(
+        // phpstan:ignore
+            \Magento\Framework\GraphQl\Config\Data::class,
             ['reader' => $reader]
         );
-         $this->model = $objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' =>$data]);
+        $this->model = $this->objectManager->create(\Magento\Framework\GraphQl\Config::class, ['data' =>$data]);
+        parent::__construct();
+    }
+
+    protected function setUp(): void
+    {
+        /** @var ObjectManagerInterface $objectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var Cache $cache */
+        $cache = $objectManager->get(Cache::class);
+        $cache->clean();
     }
 
     /**
@@ -87,7 +95,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 ]
             ];
             $this->assertResponseFields($expectedOutputArray['Query']['fields'][$fieldKey], $fieldAssertionMap);
-            /** @var \Magento\Framework\GraphQl\Config\Element\Argument $queryFieldArguments */
+            /** @var \Magento\Framework\GraphQl\Config\Element\Argument[] $queryFieldArguments */
             $queryFieldArguments = $queryFields[$fieldKey]->getArguments();
             foreach (array_keys($queryFieldArguments) as $argumentKey) {
                 $argumentAssertionMap = [
@@ -121,7 +129,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $queryEnum = 'PriceAdjustmentDescriptionEnum';
         /** @var \Magento\Framework\GraphQl\Config\Element\Enum $outputEnum */
         $outputEnum = $this->model->getConfigElement($queryEnum);
-        /** @var EnumValue $outputEnumValues */
+        /** @var EnumValue[] $outputEnumValues */
         $outputEnumValues = $outputEnum->getValues();
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputEnum->getName(), $queryEnum);
@@ -154,7 +162,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $expectedOutputArray = require __DIR__ . '/_files/query_array_output.php';
         $this->assertEquals($outputInterface->getName(), $typeThatImplements);
         $outputInterfaceValues = $outputInterface->getInterfaces();
-        /** @var \Magento\Framework\GraphQl\Config\Element\Field $outputInterfaceFields */
+        /** @var \Magento\Framework\GraphQl\Config\Element\Field[] $outputInterfaceFields */
         $outputInterfaceFields =$outputInterface->getFields();
         foreach (array_keys($outputInterfaceValues) as $outputInterfaceValue) {
             $this->assertEquals(
