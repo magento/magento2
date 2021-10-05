@@ -29,11 +29,6 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
     private $tokenCollection;
 
     /**
-     * @var TokenCollectionFactory
-     */
-    private $tokenCollectionFactory;
-
-    /**
      * @var Encryptor
      */
     private $encryptor;
@@ -69,7 +64,7 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
         LoggerInterface $logger
     ) {
 
-        $this->tokenCollectionFactory= $tokenCollectionFactory;
+        $this->tokenCollection= $tokenCollectionFactory->create();
         $this->encryptor = $encryptor;
         $this->tokenResourceModel = $tokenResourceModel;
         $this->logger = $logger;
@@ -80,7 +75,6 @@ class UpgradeOauthToken implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->tokenCollection = $this->tokenCollectionFactory->create();
         $this->tokenCollection->addFieldToSelect('entity_id');
         $this->tokenCollection->addFieldToSelect('secret');
         $this->tokenCollection->addFieldToSelect('type');

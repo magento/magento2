@@ -27,11 +27,6 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
     private $consumerCollection;
 
     /**
-     * @var ConsumerCollectionFactory
-     */
-    private $consumerCollectionFactory;
-
-    /**
      * @var Encryptor
      */
     private $encryptor;
@@ -67,7 +62,7 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
         LoggerInterface $logger
     ) {
 
-        $this->consumerCollectionFactory= $consumerCollectionFactory;
+        $this->consumerCollection= $consumerCollectionFactory->create();
         $this->encryptor = $encryptor;
         $this->consumerResourceModel = $consumerResourceModel;
         $this->logger = $logger;
@@ -78,7 +73,6 @@ class UpgradeConsumerSecret implements DataPatchInterface, PatchVersionInterface
      */
     public function apply()
     {
-        $this->consumerCollection = $this->consumerCollectionFactory->create();
         $this->consumerCollection->addFieldToSelect('entity_id');
         $this->consumerCollection->addFieldToSelect('secret');
         $connection = $this->consumerResourceModel->getConnection();

@@ -303,6 +303,9 @@ class TokenTest extends \PHPUnit\Framework\TestCase
         );
         $model->save();
 
+        $tokenResourceModel = $model->getResource();
+
         $this->assertEquals($tokenSecret, $model->getSecret());
+        $this->assertNotEquals($model->getSecret(), $tokenResourceModel->load($model, 'secret'));
     }
 }

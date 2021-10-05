@@ -51,6 +51,12 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
             ]
         )->save();
 
+        $consumerResourceModel = $this->consumerModel->getResource();
+
         $this->assertEquals($consumerSecret, $this->consumerModel->getSecret());
+        $this->assertNotEquals(
+            $this->consumerModel->getSecret(),
+            $consumerResourceModel->load($this->consumerModel, 'secret')
+        );
     }
 }

@@ -79,9 +79,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $entityId = $object->getEntityId();
-
-        if (!$entityId && $object->getSecret()) {
+        if ($object->getSecret()) {
             $object->setSecret($this->encryptor->encrypt($object->getSecret()));
         }
 
@@ -93,7 +91,9 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+        if ($object->getSecret()) {
+            $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+        }
 
         return parent::_afterLoad($object);
     }
@@ -103,13 +103,8 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $secret = $object->getSecret();
-        //only decrypt secret for new objects or if data property was modified
-        if ($object->isObjectNew() ||
-            isset($object->getOrigData()['secret']) &&
-            $object->getOrigData()['secret'] !== $secret
-        ) {
-            $object->setSecret($this->encryptor->decrypt($secret));
+        if ($object->getSecret()) {
+            $object->setSecret($this->encryptor->decrypt($object->getSecret()));
         }
 
         return parent::_afterSave($object);
