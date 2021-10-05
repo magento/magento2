@@ -75,7 +75,6 @@
         </item>
         <item>
             <path>package.json</path>
-            <word>banner</word>
         </item>
     </whitelist>
 </config>
