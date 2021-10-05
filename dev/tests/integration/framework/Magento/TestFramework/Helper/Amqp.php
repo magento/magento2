@@ -31,15 +31,11 @@ class Amqp
     private $deploymentConfig;
 
     /**
-     * RabbitMQ API host
-     *
      * @var string
      */
     private $host;
 
     /**
-     * RabbitMQ virtual host
-     *
      * @var string
      */
     private $virtualHost;
