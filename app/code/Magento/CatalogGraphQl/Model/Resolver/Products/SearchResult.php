@@ -14,6 +14,9 @@ use Magento\Framework\Api\Search\AggregationInterface;
  */
 class SearchResult
 {
+    /**
+     * @var array
+     */
     private $data;
 
     /**
