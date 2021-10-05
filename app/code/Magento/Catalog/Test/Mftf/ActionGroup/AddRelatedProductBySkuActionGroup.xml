@@ -19,8 +19,11 @@
         <!--Scroll up to avoid error-->
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" x="0" y="-100" stepKey="scrollTo"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedUpSellCrossSell"/>
+        <waitForPageLoad stepKey="waitForSectionExpanded"/>
         <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" stepKey="clickAddRelatedProductButton"/>
+        <waitForPageLoad stepKey="waitForRelatedProductsGrid"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersCleared"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{sku}}" stepKey="fillProductSkuFilter"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
