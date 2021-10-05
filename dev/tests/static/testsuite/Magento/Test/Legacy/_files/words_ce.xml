@@ -73,5 +73,9 @@
             <path>app/design/adminhtml/Magento/backend/Magento_Rma/web/css/source/_module.less</path>
             <word>rma</word>
         </item>
+        <item>
+            <path>package.json</path>
+            <word>banner</word>
+        </item>
     </whitelist>
 </config>
