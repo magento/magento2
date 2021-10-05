@@ -9837,12 +9837,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "19a26a76a3de244bd4d498543089969ea1a9861e"
+                "reference": "914dd7a848c53226415a9df9f32be6e9b9ff10fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/19a26a76a3de244bd4d498543089969ea1a9861e",
-                "reference": "19a26a76a3de244bd4d498543089969ea1a9861e",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/914dd7a848c53226415a9df9f32be6e9b9ff10fb",
+                "reference": "914dd7a848c53226415a9df9f32be6e9b9ff10fb",
                 "shasum": ""
             },
             "require": {
@@ -9875,7 +9875,7 @@
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
                 "source": "https://github.com/magento/magento-coding-standard/tree/develop"
             },
-            "time": "2021-10-04T14:11:24+00:00"
+            "time": "2021-10-05T08:23:46+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
