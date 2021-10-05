@@ -104,6 +104,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $secret = $object->getSecret();
+        //only decrypt secret for new objects or if data property was modified
         if ($object->isObjectNew() ||
             isset($object->getOrigData()['secret']) &&
             $object->getOrigData()['secret'] !== $secret
