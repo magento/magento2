@@ -550,6 +550,7 @@ class CreateHandler implements ExtensionInterface
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processMediaAttributeLabel(
         Product $product,
@@ -571,6 +572,9 @@ class CreateHandler implements ExtensionInterface
 
         if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
             $product->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
+            if ($existImages[$attrData]['label'] == null) {
+                $resetLabel = true;
+            }
         }
 
         if ($attrData === 'no_selection' && !empty($product->getData($mediaAttrCode . '_label'))) {
