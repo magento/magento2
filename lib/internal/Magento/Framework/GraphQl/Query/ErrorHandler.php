@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\AggregateExceptionInterface;
 use Psr\Log\LoggerInterface;
 
@@ -23,12 +24,20 @@ class ErrorHandler implements ErrorHandlerInterface
     private $logger;
 
     /**
+     * @var State
+     */
+    private $appState;
+
+    /**
      * @param LoggerInterface $logger
+     * @param State $appState
      */
     public function __construct(
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        State $appState
     ) {
         $this->logger = $logger;
+        $this->appState = $appState;
     }
 
     /**
@@ -37,6 +46,12 @@ class ErrorHandler implements ErrorHandlerInterface
     public function handle(array $errors, callable $formatter): array
     {
         $formattedErrors = [];
+
+        // When in production mode, only log & report the first error for performance implications
+        if ($this->appState->getMode() === State::MODE_PRODUCTION) {
+            $errors = array_splice($errors, 0, 1);
+        }
+
         foreach ($errors as $error) {
             $this->logger->error($error);
             $previousError = $error->getPrevious();
