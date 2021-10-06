@@ -66,6 +66,7 @@ Magento/Payment/Block/Form
 Magento/Payment/Model/Method
 Magento/Payment/Model/Config
 Magento/ProductAlert/Model
+Magento/ProductAlertGraphQl/Model/Resolver
 Magento/Rating/Model
 Magento/Reports/Block/Adminhtml
 Magento/Reports/Block/Product/Widget
