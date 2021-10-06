@@ -505,7 +505,7 @@ class Checkout
         $solutionType = $this->_config->getMerchantCountry() == 'DE'
             ? \Magento\Paypal\Model\Config::EC_SOLUTION_TYPE_MARK
             : $this->_config->getValue('solutionType');
-        $totalAmount = round($this->_quote->getBaseGrandTotal(), 2);
+        $totalAmount = round((float)$this->_quote->getBaseGrandTotal(), 2);
         $this->_getApi()->setAmount($totalAmount)
             ->setCurrencyCode($this->_quote->getBaseCurrencyCode())
             ->setInvNum($this->_quote->getReservedOrderId())
@@ -663,7 +663,7 @@ class Checkout
         ) === \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
         if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
-            $billingAddress = clone $shippingAddress;
+            $billingAddress = clone $shippingAddress; /** @phpstan-ignore-line */
             $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
             $data = $billingAddress->getData();
             $data['save_in_address_book'] = 0;
