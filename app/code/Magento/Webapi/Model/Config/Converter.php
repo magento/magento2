@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Webapi\Model\Config;
 
 /**
@@ -29,6 +32,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_METHODS = 'methods';
     const KEY_DESCRIPTION = 'description';
     const KEY_REAL_SERVICE_METHOD = 'realMethod';
+    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
     /**
@@ -95,6 +99,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $secureNode = $route->attributes->getNamedItem('secure');
             $secure = $secureNode ? (bool)trim($secureNode->nodeValue) : false;
 
+            $arraySizeLimit = $this->getInputArraySizeLimit($route);
+
             // We could handle merging here by checking if the route already exists
             $result[self::KEY_ROUTES][$url][$method] = [
                 self::KEY_SECURE => $secure,
@@ -104,6 +110,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ],
                 self::KEY_ACL_RESOURCES => $resourceReferences,
                 self::KEY_DATA_PARAMETERS => $data,
+                self::KEY_INPUT_ARRAY_SIZE_LIMIT => $arraySizeLimit,
             ];
 
             $serviceSecure = false;
@@ -112,6 +119,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD])) {
                 $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD] = $serviceMethod;
+            }
+            if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_INPUT_ARRAY_SIZE_LIMIT])) {
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_INPUT_ARRAY_SIZE_LIMIT] = $arraySizeLimit;
             }
             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE] = $serviceSecure || $secure;
             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_DATA_PARAMETERS] = $serviceData;
@@ -167,5 +177,27 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     protected function convertVersion($url)
     {
         return substr($url, 1, strpos($url, '/', 1)-1);
+    }
+
+    /**
+     * Returns array size limit of input data
+     *
+     * @param \DOMElement $routeDOMElement
+     * @return int|null
+     */
+    private function getInputArraySizeLimit(\DOMElement $routeDOMElement): ?int
+    {
+        /** @var \DOMElement $dataDOMElement */
+        foreach ($routeDOMElement->getElementsByTagName('data') as $dataDOMElement) {
+            if ($dataDOMElement->nodeType === XML_ELEMENT_NODE) {
+                $inputArraySizeLimitDOMNode = $dataDOMElement->attributes
+                    ->getNamedItem(self::KEY_INPUT_ARRAY_SIZE_LIMIT);
+                return ($inputArraySizeLimitDOMNode instanceof \DOMNode)
+                    ? (int)$inputArraySizeLimitDOMNode->nodeValue
+                    : null;
+            }
+        }
+
+        return null;
     }
 }

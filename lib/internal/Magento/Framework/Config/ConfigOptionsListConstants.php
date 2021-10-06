@@ -53,6 +53,16 @@ class ConfigOptionsListConstants
      */
     const CONFIG_PATH_FORCE_HTML_MINIFICATION = 'force_html_minification';
 
+    /**
+     * Default limiting input array size for synchronous Web API
+     */
+    const CONFIG_PATH_WEBAPI_SYNC_DEFAULT_INPUT_ARRAY_SIZE_LIMIT = 'webapi/sync/default_input_array_size_limit';
+
+    /**
+     * Default limiting input array size for asynchronous Web API
+     */
+    const CONFIG_PATH_WEBAPI_ASYNC_DEFAULT_INPUT_ARRAY_SIZE_LIMIT = 'webapi/async/default_input_array_size_limit';
+
     /**#@+
      * Input keys for the options
      */

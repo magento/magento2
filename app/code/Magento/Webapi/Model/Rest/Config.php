@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Webapi\Model\Rest;
 
 use Magento\Webapi\Controller\Rest\Router\Route;
@@ -33,6 +36,7 @@ class Config
     const KEY_ROUTE_PATH = 'routePath';
     const KEY_ACL_RESOURCES = 'resources';
     const KEY_PARAMETERS = 'parameters';
+    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /*#@-*/
 
     /*#@-*/
@@ -79,7 +83,8 @@ class Config
             ->setServiceMethod($routeData[self::KEY_METHOD])
             ->setSecure($routeData[self::KEY_IS_SECURE])
             ->setAclResources($routeData[self::KEY_ACL_RESOURCES])
-            ->setParameters($routeData[self::KEY_PARAMETERS]);
+            ->setParameters($routeData[self::KEY_PARAMETERS])
+            ->setInputArraySizeLimit($routeData[self::KEY_INPUT_ARRAY_SIZE_LIMIT]);
         return $route;
     }
 
@@ -120,6 +125,7 @@ class Config
                     self::KEY_IS_SECURE => $methodInfo[Converter::KEY_SECURE],
                     self::KEY_ACL_RESOURCES => array_keys($methodInfo[Converter::KEY_ACL_RESOURCES]),
                     self::KEY_PARAMETERS => $methodInfo[Converter::KEY_DATA_PARAMETERS],
+                    self::KEY_INPUT_ARRAY_SIZE_LIMIT => $methodInfo[Converter::KEY_INPUT_ARRAY_SIZE_LIMIT],
                 ]
             );
             return $routes;
@@ -143,6 +149,7 @@ class Config
                             self::KEY_IS_SECURE => $methodInfo[Converter::KEY_SECURE],
                             self::KEY_ACL_RESOURCES => $aclResources,
                             self::KEY_PARAMETERS => $methodInfo[Converter::KEY_DATA_PARAMETERS],
+                            self::KEY_INPUT_ARRAY_SIZE_LIMIT => $methodInfo[Converter::KEY_INPUT_ARRAY_SIZE_LIMIT],
                         ]
                     );
                 }
