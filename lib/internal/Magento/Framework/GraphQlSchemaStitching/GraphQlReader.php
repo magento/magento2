@@ -60,6 +60,11 @@ class GraphQlReader implements ReaderInterface
     private static $componentRegistrar;
 
     /**
+     * @var boolean
+     */
+    private static $typesOverridden = false;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReaderComposite $typeReader
      * @param string $fileName
@@ -355,12 +360,16 @@ class GraphQlReader implements ReaderInterface
      */
     private function overrideStandardGraphQLTypes(): void
     {
-        $standardTypes = GraphQLType::getStandardTypes();
+        if (!self::$typesOverridden) {
+            $standardTypes = GraphQLType::getStandardTypes();
 
-        GraphQL::overrideStandardTypes([
-            GraphQLType::INT => new IntType($standardTypes[GraphQLType::INT]->config),
-            GraphQLType::FLOAT => new FloatType($standardTypes[GraphQLType::FLOAT]->config),
-            GraphQLType::STRING => new StringType($standardTypes[GraphQLType::STRING]->config)
-        ]);
+            GraphQL::overrideStandardTypes([
+                GraphQLType::INT => new IntType($standardTypes[GraphQLType::INT]->config),
+                GraphQLType::FLOAT => new FloatType($standardTypes[GraphQLType::FLOAT]->config),
+                GraphQLType::STRING => new StringType($standardTypes[GraphQLType::STRING]->config)
+            ]);
+
+            self::$typesOverridden = true;
+        }
     }
 }
