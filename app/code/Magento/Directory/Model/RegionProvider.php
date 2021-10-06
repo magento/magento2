@@ -11,6 +11,9 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 
 class RegionProvider
 {
+    /**
+     * @var RegionsArray
+     */
     private $regions;
     /**
      * @var DataHelper
