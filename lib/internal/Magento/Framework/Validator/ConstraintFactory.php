@@ -6,11 +6,12 @@
 
 /**
  * Factory class for \Magento\Framework\Validator\Constraint
- *
- * @api
  */
 namespace Magento\Framework\Validator;
 
+/**
+ * @api
+ */
 class ConstraintFactory
 {
     /**
