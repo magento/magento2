@@ -76,7 +76,7 @@
         </actionGroup>
 
         <!-- Click 'Create Order' -->
-        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+        <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
 
         <!-- Select products in comparison list section -->
         <click selector="{{AdminCustomerActivitiesComparisonListSection.addProductToOrder($$createFirstSimpleProduct.name$$)}}" stepKey="addFirstProductToOrder"/>
