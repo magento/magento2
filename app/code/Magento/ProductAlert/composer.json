@@ -7,6 +7,9 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
+        "magento/framework-bulk": "*",
+        "magento/module-asynchronous-operations": "*",
+        "magento/module-authorization": "*",
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-customer": "*",

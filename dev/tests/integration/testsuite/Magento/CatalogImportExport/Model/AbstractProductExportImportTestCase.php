@@ -124,8 +124,29 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $csvFile = $this->executeExportTest($skus, $skippedAttributes);
 
         $this->executeImportReplaceTest($skus, $skippedAttributes, false, $csvFile);
-        $this->executeImportReplaceTest($skus, $skippedAttributes, true, $csvFile);
         $this->executeImportDeleteTest($skus, $csvFile);
+    }
+
+    /**
+     * Run import/export test with pagination.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider exportImportDataProvider
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testImportExportWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
+    {
+        $this->fixtures = $fixtures;
+        $this->executeFixtures($fixtures);
+        $this->modifyData($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $this->executeImportReplaceTest($skus, $skippedAttributes, true);
     }
 
     /**

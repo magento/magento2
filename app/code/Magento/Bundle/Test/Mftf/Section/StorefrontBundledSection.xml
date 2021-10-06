@@ -11,6 +11,7 @@
     <section name="StorefrontBundledSection">
         <element name="productCheckbox" type="select" selector="//*[@id='customizeTitle']/following-sibling::div[{{arg1}}]//div[{{arg2}}][@class='field choice']/input" parameterized="true"/>
         <element name="bundleProductsPrice" type="text" selector="//*[@class='bundle-info']//*[contains(@id,'product-price')]/span"/>
+        <element name="bundleSummary" type="text" selector="#bundle-summary"/>
         <element name="nthBundledOption" type="input" selector=".option:nth-of-type({{numOption}}) .choice:nth-of-type({{numOptionSelect}}) input" parameterized="true"/>
         <element name="addToCart" type="button" selector="#bundle-slide" timeout="30"/>
         <element name="addToCartConfigured" type="button" selector="#product-addtocart-button" timeout="30"/>
@@ -21,6 +22,14 @@
         <element name="customizableBundleItemOption" type="text" selector="//div[@class='field choice'][1]//input[@type='checkbox']"/>
         <element name="customizableBundleItemOption2" type="text" selector="//div[@class='field choice'][2]//input[@type='checkbox']"/>
         <element name="nthOptionDiv" type="block" selector="#product-options-wrapper div.field.option:nth-of-type({{var}})" parameterized="true"/>
+        <element name="allBundleOptions" type="block" selector="#product-options-wrapper div.field.option"/>
+        <element name="allBundleOptionProducts" type="block" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}) .choice"/>
+        <element name="bundleOptionRequired" type="block" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}).required"/>
+        <element name="bundleOptionInput" type="input" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}) .choice:nth-of-type({{productIndex}}) input"/>
+        <element name="bundleOptionProductName" type="text" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}) .choice:nth-of-type({{productIndex}}) .product-name"/>
+        <element name="bundleOptionProductPrice" type="text" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}) .choice:nth-of-type({{productIndex}}) .price-notice"/>
+        <element name="bundleOptionQuantity" type="input" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}) .qty input"/>
+        <element name="bundleOptionQuantityDisabled" type="input" parameterized="true" selector="#product-options-wrapper div.field.option:nth-of-type({{optionIndex}}) .qty input[disabled]"/>
         <element name="nthItemOptionsTitle" type="text" selector="dl.item-options dt:nth-of-type({{var}})" parameterized="true"/>
         <element name="nthItemOptionsValue" type="text" selector="dl.item-options dd:nth-of-type({{var}})" parameterized="true"/>
         <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
@@ -39,5 +48,7 @@
         <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>
         <element name="multiSelectOption" type="select" selector="//div[@class='field option  required']//select"/>
         <element name="validationMessageBox" type="block" selector="#validation-message-box"/>
+        <element name="dropDownQuantityValidation" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
+        <element name="radioButtonQuantityValidation" type="input" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field qty qty-holder']//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
     </section>
 </sections>

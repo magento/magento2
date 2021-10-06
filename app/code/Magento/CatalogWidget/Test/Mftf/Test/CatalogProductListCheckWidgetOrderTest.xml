@@ -70,7 +70,7 @@
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
         <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="waitForCategoryVisible" />
         <click selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="selectCategory" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
         <!--Save cms page and go to Storefront-->
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveCmsPage"/>
         <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront1">

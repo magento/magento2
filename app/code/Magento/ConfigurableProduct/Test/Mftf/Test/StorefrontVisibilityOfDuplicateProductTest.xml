@@ -122,7 +122,7 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigProduct.name$$-Updated" stepKey="fillProductName"/>
         <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectInStock">
              <argument name="stockStatus" value="In Stock"/>
-        </actionGroup> 
+        </actionGroup>
         <!--Change product image-->
         <comment userInput="Change product image" stepKey="commentChangeProductImage"/>
         <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
@@ -195,17 +195,15 @@
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProduct"/>
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Assert configurable product in category-->
         <comment userInput="Assert configurable product in category" stepKey="commentAssertProductInCategoryPage"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$-Updated)}}" stepKey="assertProductNameInCategoryPage"/>
         <!--Assert product options in Storefront product page-->
         <comment userInput="Assert product options in Storefront product page" stepKey="commentAssertProductOptions"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.sku$$-1)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$-1)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoadOnStorefront"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$-Updated"  stepKey="seeConfigurableProductName"/>
         <see userInput="{{productAttributeColor.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeColorAttributeName"/>

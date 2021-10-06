@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
-type GroupedProduct implements ProductInterface, PhysicalProductInterface @doc(description: "GroupedProduct defines a grouped product") {
+type GroupedProduct implements ProductInterface, RoutableInterface, PhysicalProductInterface @doc(description: "A grouped product consists of simple standalone products that are presented as a group") {
     items: [GroupedProductItem] @doc(description: "An array containing grouped product items") @resolver(class: "Magento\\GroupedProductGraphQl\\Model\\Resolver\\GroupedItems")
 }
 

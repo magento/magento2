@@ -946,6 +946,72 @@ class ProductPriceTest extends GraphQlAbstract
     }
 
     /**
+     * Check if the special price visible if the current date is in the date range set
+     * for the special price
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_special_price.php
+     */
+    public function testSpecialPriceVisibleIfInDateRange()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple_product"}}) {
+        items {
+            price_range {
+                minimum_price {
+                    regular_price {
+                        value
+                    }
+                }
+            }
+            special_price
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $productInformation = $result['products']['items'][0];
+        $productRegularPrice = $productInformation['price_range']['minimum_price']['regular_price']['value'];
+
+        self::assertEquals('10', $productRegularPrice);
+        self::assertEquals('5.99', $productInformation['special_price']);
+    }
+
+    /**
+     * Check if the special price is not visible if the current date is not in the date range set
+     * for the special price
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_special_price_future_date.php
+     */
+    public function testSpecialPriceNotVisibleIfNotInDateRange()
+    {
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "simple_product"}}) {
+        items {
+            price_range {
+                minimum_price {
+                    regular_price {
+                        value
+                    }
+                }
+            }
+            special_price
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $productInformation = $result['products']['items'][0];
+        $productRegularPrice = $productInformation['price_range']['minimum_price']['regular_price']['value'];
+
+        self::assertEquals('10', $productRegularPrice);
+        self::assertEquals(null, $productInformation['special_price']);
+    }
+
+    /**
      * Get GraphQl query to fetch products by sku
      *
      * @param array $skus

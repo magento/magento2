@@ -3,7 +3,7 @@
     "description": "N/A",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "^100.0.2"
+        "magento/framework": "*"
     },
     "suggest": {
         "magento/module-backend": "*",

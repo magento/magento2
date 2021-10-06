@@ -138,10 +138,9 @@ define([
          * @private
          */
         _create: function () {
-            $(this.element).on('gallery:loaded',  $.proxy(function () {
-                this.fotoramaItem = $(this.element).find('.fotorama-item');
-                this._initialize();
-            }, this));
+            $(this.element).data('gallery') ?
+                this._onGalleryLoaded() :
+                $(this.element).on('gallery:loaded', this._onGalleryLoaded.bind(this));
         },
 
         /**
@@ -169,6 +168,14 @@ define([
                 this._initFotoramaVideo();
                 this._attachFotoramaEvents();
             }
+        },
+
+        /**
+         * Callback which fired after gallery gets initialized.
+         */
+        _onGalleryLoaded: function () {
+            this.fotoramaItem = $(this.element).find('.fotorama-item');
+            this._initialize();
         },
 
         /**
@@ -595,7 +602,7 @@ define([
             }
 
             if (this.isFullscreen && this.fotoramaItem.data('fotorama').activeFrame.i === number) {
-                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].click();
+                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
             }
         },
 
@@ -714,6 +721,7 @@ define([
                 }
 
                 $('.' + this.FTAR).addClass(this.isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
+                $('.' + this.FTVC).addClass('fotorama-show-control');
             }
         },
 
@@ -740,14 +748,14 @@ define([
                         if (window.Froogaloop) {
                             clearInterval(waitForFroogaloop);
                             fotorama.requestFullScreen();
-                            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].click();
+                            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
                             this.Base = false;
                         }
                     }, this), 50);
                 } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
                     setTimeout($.proxy(function () {
                         fotorama.requestFullScreen();
-                        this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].click();
+                        this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
                         this.Base = false;
                     }, this), 50);
                 }
@@ -804,7 +812,7 @@ define([
 
                 if (self.isFullscreen && !self.fotoramaItem.data('fotorama').options.fullscreen.arrows) {
                     if ($('.' + self.FTAR + '--prev').is(':focus') || $('.' + self.FTAR + '--next').is(':focus')) {
-                        $(self.FTCF).focus();
+                        $(self.FTCF).trigger('focus');
                     }
                 }
             });

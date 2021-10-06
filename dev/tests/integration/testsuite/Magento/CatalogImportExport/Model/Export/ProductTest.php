@@ -109,6 +109,64 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify successful export of the product with custom attributes containing json and markup
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoDbIsolation enabled
+     * @dataProvider exportWithJsonAndMarkupTextAttributeDataProvider
+     * @param string $attributeData
+     * @param string $expectedResult
+     * @return void
+     */
+    public function testExportWithJsonAndMarkupTextAttribute(string $attributeData, string $expectedResult): void
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple2');
+
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        $eavConfig->clear();
+        $attribute = $eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'text_attribute');
+        $attribute->setDefaultValue($attributeData);
+        /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository */
+        $productAttributeRepository = $objectManager->get(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
+        $productAttributeRepository->save($attribute);
+        $product->setCustomAttribute('text_attribute', $attribute->getDefaultValue());
+        $productRepository->save($product);
+
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertStringContainsString('Simple Product2', $exportData);
+        $this->assertStringContainsString($expectedResult, $exportData);
+    }
+
+    /**
+     * @return array
+     */
+    public function exportWithJsonAndMarkupTextAttributeDataProvider(): array
+    {
+        return [
+            'json' => [
+                '{"type": "basic", "unit": "inch", "sign": "(\")", "size": "1.5\""}',
+                '"text_attribute={""type"": ""basic"", ""unit"": ""inch"", ""sign"": ""(\"")"", ""size"": ""1.5\""""}"'
+            ],
+            'markup' => [
+                '<div data-content>Element type is basic, measured in inches ' .
+                '(marked with sign (\")) with size 1.5\", mid-price range</div>',
+                '"text_attribute=<div data-content>Element type is basic, measured in inches ' .
+                '(marked with sign (\"")) with size 1.5\"", mid-price range</div>"'
+            ],
+        ];
+    }
+
+    /**
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data_special_chars.php
      * @magentoDbIsolation enabled
      *
@@ -631,6 +689,26 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Test that Product Export takes into account filtering by Website
+     *
+     * Fixtures provide two products, one assigned to default website only,
+     * and the other is assigned to to default and custom websites. Only product assigned custom website is exported
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_options.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testExportProductWithRestrictedWebsite(): void
+    {
+        $websiteRepository = $this->objectManager->get(\Magento\Store\Api\WebsiteRepositoryInterface::class);
+        $website = $websiteRepository->get('second_website');
+
+        $exportData = $this->doExport(['website_id' => $website->getId()]);
+
+        $this->assertStringContainsString('"Simple Product"', $exportData);
+        $this->assertStringNotContainsString('"Virtual Product With Custom Options"', $exportData);
     }
 
     /**
