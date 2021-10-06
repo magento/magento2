@@ -122,14 +122,16 @@
         <!-- Place Order -->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Login to Admin and open Order -->
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <comment userInput="BIC workaround" stepKey="filterByOrderId"/>
         <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
@@ -171,7 +173,10 @@
 
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
 
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnOrderPage"/>
+        <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="amOnOrderPage">
+            <argument name="orderId" value="$orderNumber"/>
+            <argument name="orderNumber" value="$orderId"/>
+        </actionGroup>
 
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>

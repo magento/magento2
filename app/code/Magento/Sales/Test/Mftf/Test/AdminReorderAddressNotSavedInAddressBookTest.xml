@@ -45,11 +45,12 @@
         <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="fillAddressForm"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Reorder created order -->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" stepKey="startReorder"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>

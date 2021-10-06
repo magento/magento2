@@ -80,10 +80,11 @@
         <!--Click place order-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <!--Order review page has address that was created during checkout-->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <!--Create Invoice for this Order-->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="createInvoice"/>

@@ -56,7 +56,9 @@
         </after>
 
         <!--Open order by Id-->
-        <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="entityId" value="$createGuestCart.return$"/>
+        </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <!--Verify order item row-->

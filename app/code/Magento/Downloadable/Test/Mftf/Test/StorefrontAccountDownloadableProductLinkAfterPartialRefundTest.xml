@@ -78,7 +78,8 @@
         <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
@@ -86,13 +87,13 @@
         <comment userInput="BIC workaround" stepKey="searchOrder"/>
         <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderAdmin">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createCreditMemo"/>
 
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">

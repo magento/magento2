@@ -85,10 +85,11 @@
         <!--Step10. Click place order-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <!--Step11. Go to admin Order page for newly created order-->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
@@ -96,7 +97,7 @@
 
         <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
         <!--Step12. Go to Customer Order Shipment Page and Checking the correctness of displayed Qty Shipped -->
-        <amOnPage url="{{StorefrontCustomerOrderShipmentPage.url({$grabOrderNumber})}}" stepKey="amOnOrderShipmentPage"/>
+        <amOnPage url="{{StorefrontCustomerOrderShipmentPage.url({$orderId})}}" stepKey="amOnOrderShipmentPage"/>
         <waitForPageLoad time="30" stepKey="waitForOrderShipmentsPageLoad"/>
         <actionGroup ref="AssertStorefrontOrderShipmentsQtyShippedActionGroup" stepKey="verifyAssertOrderShipments">
             <argument name="expectedQtyShipped" value="2.14"/>

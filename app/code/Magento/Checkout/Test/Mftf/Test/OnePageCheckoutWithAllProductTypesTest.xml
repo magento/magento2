@@ -196,7 +196,8 @@
         <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -204,7 +205,7 @@
         <!-- Open created order -->
         <comment userInput="BIC workaround" stepKey="goToOrders"/>
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="entityId" value="{$grabOrderNumber}"/>
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <!-- Assert that addresses on order page the same -->
