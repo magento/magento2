@@ -9,7 +9,7 @@
  */
 namespace Magento\Cron\Observer;
 
-use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Request as Environment;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
@@ -130,9 +130,9 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $dateTime;
 
     /**
-     * @var Request
+     * @var Environment
      */
-    protected Request $environment;
+    protected Environment $environment;
 
     /**
      * @var string
@@ -195,7 +195,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\Lock\LockManagerInterface $lockManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param DeadlockRetrierInterface $retrier
-     * @param Request $environment
+     * @param Environment $environment
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -214,7 +214,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\Lock\LockManagerInterface $lockManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         DeadlockRetrierInterface $retrier,
-        Request $environment
+        Environment $environment
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
