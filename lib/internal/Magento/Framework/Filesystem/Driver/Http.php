@@ -250,7 +250,7 @@ class Http extends File
      */
     protected function open($hostname, $port)
     {
-        $result = @fsockopen($hostname, $port, $errorNumber, $errorMessage);
+        $result = @fsockopen($hostname, $port, $errorNumber = null, $errorMessage = null);
         if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(

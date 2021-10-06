@@ -10,7 +10,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.0.0",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -25,7 +25,7 @@
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.9 || ^2.0",
-        "guzzlehttp/guzzle": "^6.3.3",
+        "guzzlehttp/guzzle": "^7.3.0",
         "laminas/laminas-code": "~4.4.2",
         "laminas/laminas-escaper": "~2.8.0",
         "laminas/laminas-http": "^2.6.0",
@@ -34,7 +34,7 @@
         "laminas/laminas-stdlib": "^3.2.1",
         "laminas/laminas-uri": "^2.5.1",
         "laminas/laminas-validator": "^2.6.0",
-        "magento/zendframework1": "~1.14.2",
+        "magento/zendframework1": "dev-master as 1.14.6",
         "monolog/monolog": "^2.3",
         "ramsey/uuid": "~4.2.0",
         "symfony/console": "~4.4.0",
