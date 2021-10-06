@@ -33,8 +33,6 @@ class GraphQlReader implements ReaderInterface
     public const GRAPHQL_INTERFACE = 'graphql_interface';
 
     /**
-     * File locator
-     *
      * @var FileResolverInterface
      */
     private $fileResolver;
