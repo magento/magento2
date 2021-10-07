@@ -48,7 +48,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber1"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId1"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
-			<actualResult type="const">$orderNumber1</actualResult>
+            <actualResult type="const">$orderNumber1</actualResult>
         </assertNotEmpty>
 
         <!-- Create Shipment for first Order -->
@@ -63,7 +63,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber2"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId2"/>
         <assertNotEmpty stepKey="assertSecondOrderIdIsNotEmpty">
-			<actualResult type="const">$orderNumber2</actualResult>
+            <actualResult type="const">$orderNumber2</actualResult>
         </assertNotEmpty>
 
         <!-- Create CreditMemo for second Order -->

@@ -39,6 +39,7 @@
             <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
         </before>
         <after>
+            <magentoCLI command="config:set {{DisableZeroSubtotalCheckoutConfigData.path}} {{DisableZeroSubtotalCheckoutConfigData.value}}" stepKey="disableZeroSubtotalCheckout"/>
             <!-- Disable Free Shipping -->
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>

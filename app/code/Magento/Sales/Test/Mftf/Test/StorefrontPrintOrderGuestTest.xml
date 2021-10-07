@@ -250,7 +250,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
-			<actualResult type="const">$orderNumber</actualResult>
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->

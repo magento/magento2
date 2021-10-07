@@ -74,7 +74,7 @@
         <comment userInput="BIC workaround" stepKey="getOrderId" after="seeOrderPendingStatus"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber" after="getOrderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="orderNumber">
-			<actualResult type="const">$orderNumber</actualResult>
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
         <actionGroup ref="VerifyBasicOrderInformationActionGroup" stepKey="verifyOrderInformation" after="assertOrderIdIsNotEmpty">
             <argument name="customer" value="Simple_US_Customer"/>

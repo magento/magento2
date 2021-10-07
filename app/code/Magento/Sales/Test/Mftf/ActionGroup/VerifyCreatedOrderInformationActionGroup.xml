@@ -18,7 +18,7 @@
         <comment userInput="BIC workaround" stepKey="getOrderId"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
-			<actualResult type="const">{$orderNumber}</actualResult>
+            <actualResult type="const">$orderNumber</actualResult>
         </assertNotEmpty>
     </actionGroup>
 </actionGroups>
