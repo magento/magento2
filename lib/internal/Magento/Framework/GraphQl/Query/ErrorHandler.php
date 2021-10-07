@@ -13,8 +13,6 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @inheritDoc
- *
- * @package Magento\Framework\GraphQl\Query
  */
 class ErrorHandler implements ErrorHandlerInterface
 {
