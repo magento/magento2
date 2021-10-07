@@ -85,7 +85,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "friendsofphp/php-cs-fixer": "~3.0.0",
         "lusitanian/oauth": "~0.8.10",
-        "magento/magento-coding-standard": "8",
+        "magento/magento-coding-standard": "13",
         "magento/magento2-functional-testing-framework": "^3.7",
         "pdepend/pdepend": "~2.10.0",
         "phpcompatibility/php-compatibility": "^9.3",
