@@ -16,8 +16,6 @@ use Magento\Framework\ObjectManagerInterface;
 class BlockFactory
 {
     /**
-     * Object manager
-     *
      * @var ObjectManagerInterface
      */
     protected $objectManager;
@@ -38,10 +36,9 @@ class BlockFactory
     public function __construct(
         ObjectManagerInterface $objectManager,
         \Magento\Framework\ObjectManager\ConfigInterface $config
-    )
-    {
+    ) {
         $this->objectManager = $objectManager;
-        $this->config           = $config;
+        $this->config        = $config;
     }
 
     /**
@@ -54,10 +51,14 @@ class BlockFactory
      */
     public function createBlock($blockName, array $arguments = [])
     {
-        $blockName = ltrim($blockName, '\\');
-        $configArguments = $this->config->getArguments($blockName);
-        if (isset($configArguments['data'])) {
-            $arguments['data']+= $configArguments['data'];
+        $blockName          = ltrim($blockName, '\\');
+        $configArguments    = $this->config->getArguments($blockName);
+        if ($configArguments != null && isset($configArguments['data'])) {
+            if ($arguments != null && isset($arguments['data'])) {
+                $arguments['data'] = array_merge($arguments['data'], $configArguments['data']);
+            } else {
+                $arguments['data'] = $configArguments['data'];
+            }
         }
         $block = $this->objectManager->create($blockName, $arguments);
         if (!$block instanceof BlockInterface) {
