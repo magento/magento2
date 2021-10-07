@@ -221,14 +221,14 @@ class MultiDimensionProviderTest extends TestCase
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getIterator'])
+            ->onlyMethods(['getIterator'])
             ->getMockForAbstractClass();
 
         $dimensionProviderMock->expects($this->any())
             ->method('getIterator')
             ->willReturnCallback(
                 function () use ($dimensions) {
-                    return \SplFixedArray::fromArray($dimensions);
+                    return new \ArrayIterator($dimensions);
                 }
             );
 
@@ -248,7 +248,7 @@ class MultiDimensionProviderTest extends TestCase
             ->disableOriginalClone()
             ->disableArgumentCloning()
             ->disallowMockingUnknownTypes()
-            ->setMethods(['getName', 'getValue'])
+            ->onlyMethods(['getName', 'getValue'])
             ->getMock();
 
         $dimensionMock->expects($this->any())
