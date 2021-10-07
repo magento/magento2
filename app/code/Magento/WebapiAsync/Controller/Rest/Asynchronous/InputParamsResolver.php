@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Controller\Rest\Asynchronous;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\InputParamsResolver as WebapiInputParamsResolver;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\RequestValidator;
@@ -50,6 +52,11 @@ class InputParamsResolver
     private $isBulk;
 
     /**
+     * @var InputArraySizeLimitValue|null
+     */
+    private $inputArraySizeLimitValue;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Webapi\Rest\Request $request
@@ -59,6 +66,7 @@ class InputParamsResolver
      * @param \Magento\Webapi\Controller\Rest\RequestValidator $requestValidator
      * @param \Magento\Webapi\Controller\Rest\InputParamsResolver $inputParamsResolver
      * @param bool $isBulk
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,
@@ -67,7 +75,8 @@ class InputParamsResolver
         Router $router,
         RequestValidator $requestValidator,
         WebapiInputParamsResolver $inputParamsResolver,
-        $isBulk = false
+        $isBulk = false,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -76,6 +85,9 @@ class InputParamsResolver
         $this->requestValidator = $requestValidator;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->isBulk = $isBulk;
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+            ->get(InputArraySizeLimitValue::class);
+
     }
 
     /**
@@ -96,8 +108,17 @@ class InputParamsResolver
         }
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
+        $route = $this->getRoute();
+        $serviceMethodName = $route->getServiceMethod();
+        $serviceClassName = $route->getServiceClass();
+        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
+
         foreach ($this->getInputData() as $key => $singleEntityParams) {
-            $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams);
+            $webapiResolvedParams[$key] = $this->resolveBulkItemParams(
+                $singleEntityParams,
+                $serviceMethodName,
+                $serviceClassName
+            );
         }
         return $webapiResolvedParams;
     }
@@ -142,17 +163,14 @@ class InputParamsResolver
      * we don't need to merge body params with url params and use only body params
      *
      * @param array $inputData data to send to method in key-value format
+     * @param string $serviceMethodName service method name
+     * @param string $serviceClassName service class name
      * @return array list of parameters that can be used to call the service method
      * @throws \Magento\Framework\Exception\InputException if no value is provided for required parameters
      * @throws \Magento\Framework\Webapi\Exception
      */
-    private function resolveBulkItemParams($inputData)
+    private function resolveBulkItemParams(array $inputData, string $serviceMethodName, string $serviceClassName)
     {
-        $route = $this->getRoute();
-        $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
-        $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
-
-        return $inputParams;
+        return $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
     }
 }

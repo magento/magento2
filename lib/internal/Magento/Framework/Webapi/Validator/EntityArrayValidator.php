@@ -10,7 +10,7 @@ namespace Magento\Framework\Webapi\Validator;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\ConfigOptionsListConstants as ConfigConstants;
-use Magento\Framework\App\Request\Http as Request;
+use Magento\Framework\Webapi\Request;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\RuntimeException;
@@ -22,7 +22,7 @@ use Magento\Framework\App\DeploymentConfig;
  */
 class EntityArrayValidator implements ServiceInputValidatorInterface
 {
-    private const KEY_ASYNC = 'async';
+    private const ASYNC_PROCESSOR_PATH = "/\/async\/V\d\//";
 
     /**
      * Default limit for asynchronous request
@@ -101,8 +101,7 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
      */
     private function isAsync(): bool
     {
-        $requestUriByPart = explode('/', trim($this->request->getPathInfo(), '/'));
-        return isset($requestUriByPart[2]) && self::KEY_ASYNC === $requestUriByPart[2];
+        return preg_match(self::ASYNC_PROCESSOR_PATH, $this->request->getPathInfo()) === 1;
     }
 
     /**
