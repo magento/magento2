@@ -45,8 +45,8 @@ class ErrorHandler implements ErrorHandlerInterface
     {
         $formattedErrors = [];
 
-        // When in production mode, only log & report the first error for performance implications
-        if ($this->appState->getMode() === State::MODE_PRODUCTION) {
+        // When not in developer mode, only log & report the first error for performance implications
+        if ($this->appState->getMode() !== State::MODE_DEVELOPER) {
             $errors = array_splice($errors, 0, 1);
         }
 

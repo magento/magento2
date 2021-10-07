@@ -15,7 +15,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ErrorHandlerTest extends GraphQlAbstract
 {
     /**
-     * Test that when in production mode, only the first error message is reported.
+     * Test that when not in developer mode, only the first error message is reported.
      *
      * This is important for performance optimization, since an infinite number of errors
      * can be reported for a single query.
