@@ -61,9 +61,10 @@
 
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="grabOrderId"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderId"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="orderNumber"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="{$grabOrderId}"/>
+            <argument name="orderId" value="{$orderNumber}"/>
         </actionGroup>
 
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
@@ -90,7 +91,7 @@
 
         <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="openOrderDetailPage">
             <argument name="orderId" value="$createCustomerCart.return$"/>
-            <argument name="orderNumber" value="{$grabOrderId}"/>
+            <argument name="orderNumber" value="{$orderNumber}"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
