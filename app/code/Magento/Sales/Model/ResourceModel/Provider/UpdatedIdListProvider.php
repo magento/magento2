@@ -5,8 +5,10 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Provider;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Sales\Model\ResourceModel\Provider\Query\IdListBuilder;
 
 /**
  * Provides latest updated entities ids list
@@ -24,13 +26,24 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
     private $connection;
 
     /**
+     * @var IdListBuilder
+     */
+    private $idListQueryBuilder;
+
+    /**
      * NotSyncedDataProvider constructor.
      * @param ResourceConnection $resourceConnection
+     * @param IdListBuilder|null $idListQueryBuilder
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        IdListBuilder $idListQueryBuilder = null
     ) {
         $this->resourceConnection = $resourceConnection;
+        if (!$idListQueryBuilder) {
+            $idListQueryBuilder = ObjectManager::getInstance()->get(IdListBuilder::class);
+        }
+        $this->idListQueryBuilder = $idListQueryBuilder;
     }
 
     /**
@@ -40,21 +53,7 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
     {
         $mainTableName = $this->resourceConnection->getTableName($mainTableName);
         $gridTableName = $this->resourceConnection->getTableName($gridTableName);
-        $select = $this->getConnection()->select()
-            ->from($mainTableName, [$mainTableName . '.entity_id'])
-            ->joinLeft(
-                [$gridTableName => $gridTableName],
-                sprintf(
-                    '%s.%s = %s.%s',
-                    $mainTableName,
-                    'entity_id',
-                    $gridTableName,
-                    'entity_id'
-                ),
-                []
-            )
-            ->where($gridTableName . '.entity_id IS NULL');
-
+        $select = $this->idListQueryBuilder->build($mainTableName, $gridTableName);
         return $this->getConnection()->fetchAll($select, [], \Zend_Db::FETCH_COLUMN);
     }
 
