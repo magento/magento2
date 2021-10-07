@@ -42,8 +42,8 @@ class Injectable
                         $this->dependencies[] = $dependency->getName();
                     }
                 } catch (ReflectionException $e) {
-                    if (preg_match('#^Class ([A-Za-z0-9_\\\\]+) does not exist$#', $e->getMessage(), $result)) {
-                        $this->dependencies[] = $result[1];
+                    if (preg_match('#^Class ([A-Za-z0-9_\"\\\\]+) does not exist$#', $e->getMessage(), $result)) {
+                        $this->dependencies[] = trim($result[1], '"');
                     } else {
                         throw $e;
                     }
