@@ -30,6 +30,16 @@ HTML;
     exit(1);
 }
 
+// PHP 8 compatibility. Define constants that are not present in PHP < 8.0
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80000) {
+    if (!defined('T_NAME_QUALIFIED')) {
+        define('T_NAME_QUALIFIED', 24001);
+    }
+    if (!defined('T_NAME_FULLY_QUALIFIED')) {
+        define('T_NAME_FULLY_QUALIFIED', 24002);
+    }
+}
+
 require_once __DIR__ . '/autoload.php';
 // Sets default autoload mappings, may be overridden in Bootstrap::create
 \Magento\Framework\App\Bootstrap::populateAutoloader(BP, []);
