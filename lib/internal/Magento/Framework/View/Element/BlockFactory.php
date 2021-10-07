@@ -25,7 +25,7 @@ class BlockFactory
      *
      * @var \Magento\Framework\ObjectManager\ConfigInterface
      */
-    protected $config;
+    private $config;
 
     /**
      * Constructor
@@ -51,16 +51,9 @@ class BlockFactory
      */
     public function createBlock($blockName, array $arguments = [])
     {
-        $blockName          = ltrim($blockName, '\\');
-        $configArguments    = $this->config->getArguments($blockName);
-        if ($configArguments != null && isset($configArguments['data'])) {
-            if ($arguments != null && isset($arguments['data'])) {
-                $arguments['data'] = array_merge($arguments['data'], $configArguments['data']);
-            } else {
-                $arguments['data'] = $configArguments['data'];
-            }
-        }
-        $block = $this->objectManager->create($blockName, $arguments);
+        $blockName  = ltrim($blockName, '\\');
+        $arguments  = $this->getConfigArguments($blockName, $arguments);
+        $block      = $this->objectManager->create($blockName, $arguments);
         if (!$block instanceof BlockInterface) {
             throw new \LogicException($blockName . ' does not implement BlockInterface');
         }
@@ -68,5 +61,25 @@ class BlockFactory
             $block->setTemplateContext($block);
         }
         return $block;
+    }
+
+    /**
+     * Get All Config Arguments based on Block Name
+     *
+     * @param string $blockName
+     * @param array $arguments
+     * @return array $arguments
+     */
+    private function getConfigArguments($blockName, array $arguments = [])
+    {
+        $configArguments    = $this->config->getArguments($blockName);
+        if ($configArguments && isset($configArguments['data'])) {
+            if ($arguments && isset($arguments['data'])) {
+                $arguments['data'] = array_merge($arguments['data'], $configArguments['data']);
+            } else {
+                $arguments['data'] = $configArguments['data'];
+            }
+        }
+        return $arguments;
     }
 }
