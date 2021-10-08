@@ -142,11 +142,6 @@ class FilterTest extends TestCase
     private $variableResolver;
 
     /**
-     * @var MockObject|VariableResolverInterface
-     */
-    private $variableResolverInterface;
-
-    /**
      * @var array
      */
     private $directiveProcessors;
@@ -439,7 +434,7 @@ class FilterTest extends TestCase
     public function testConfigDirectiveAvailable()
     {
         $path = "web/unsecure/base_url";
-        $availableConfigs = [['value' => $path]];
+        $availableConfigs = ['value' => $path];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
@@ -449,7 +444,7 @@ class FilterTest extends TestCase
         $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
@@ -475,7 +470,7 @@ class FilterTest extends TestCase
         $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
         $this->scopeConfig->expects($this->never())
             ->method('getValue')
@@ -494,7 +489,7 @@ class FilterTest extends TestCase
     public function testConfigDirectiveGetCountry()
     {
         $path = "general/store_information/country_id";
-        $availableConfigs = [['value' => $path]];
+        $availableConfigs = ['value' => $path];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $expectedCountry = 'United States';
 
@@ -504,7 +499,7 @@ class FilterTest extends TestCase
         $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
 
         $this->storeInformation->expects($this->once())
@@ -520,7 +515,7 @@ class FilterTest extends TestCase
     public function testConfigDirectiveGetRegion()
     {
         $path = "general/store_information/region_id";
-        $availableConfigs = [['value' => $path]];
+        $availableConfigs = ['value' => $path];
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $expectedRegion = 'Texas';
 
@@ -530,7 +525,7 @@ class FilterTest extends TestCase
         $this->store->expects($this->any())->method('getId')->willReturn(1);
 
         $this->configVariables->expects($this->once())
-            ->method('getData')
+            ->method('getAvailableVars')
             ->willReturn($availableConfigs);
 
         $this->storeInformation->expects($this->once())
