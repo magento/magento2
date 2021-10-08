@@ -6,6 +6,8 @@
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Creates Blocks
@@ -23,7 +25,7 @@ class BlockFactory
     /**
      * Object manager config
      *
-     * @var \Magento\Framework\ObjectManager\ConfigInterface
+     * @var ConfigInterface
      */
     private $config;
 
@@ -31,14 +33,15 @@ class BlockFactory
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\ObjectManager\ConfigInterface $config
+     * @param ConfigInterface $config
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        \Magento\Framework\ObjectManager\ConfigInterface $config
+        ?ConfigInterface $config = null
     ) {
         $this->objectManager = $objectManager;
         $this->config        = $config;
+        $this->config        = $config ?: ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
     /**
@@ -72,13 +75,13 @@ class BlockFactory
      */
     private function getConfigArguments($blockName, array $arguments = [])
     {
+        if (!$this->config) {
+            return $arguments;
+        }
         $configArguments    = $this->config->getArguments($blockName);
         if ($configArguments && isset($configArguments['data'])) {
-            if ($arguments && isset($arguments['data'])) {
-                $arguments['data'] = array_merge($arguments['data'], $configArguments['data']);
-            } else {
-                $arguments['data'] = $configArguments['data'];
-            }
+            $arguments['data'] = ($arguments && isset($arguments['data'])) ?
+                array_merge($arguments['data'], $configArguments['data']) : $configArguments['data'];
         }
         return $arguments;
     }
