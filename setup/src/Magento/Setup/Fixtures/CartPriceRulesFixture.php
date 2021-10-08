@@ -199,7 +199,7 @@ class CartPriceRulesFixture extends Fixture
                 'discount_step'             => '',
                 'apply_to_shipping'         => '0',
                 'simple_free_shipping'      => '0',
-                'stop_rules_processing'     => '0',
+                'stop_rules_processing'     => '1',
                 'reward_points_delta'       => '',
                 'store_labels'              => [
                     0 => '',

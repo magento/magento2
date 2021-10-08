@@ -7,9 +7,25 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\ClassModelFactory;
+use Magento\Tax\Model\ResourceModel\TaxClass\Collection;
+use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory;
 
+/**
+ * Imported products tax class processor
+ */
 class TaxClassProcessor
 {
+    /**
+     * Empty tax class name
+     */
+    private const CLASS_NONE_NAME = 'none';
+
+    /**
+     * Empty tax class ID
+     */
+    private const CLASS_NONE_ID = 0;
+
     /**
      * Tax attribute code.
      */
@@ -25,24 +41,24 @@ class TaxClassProcessor
     /**
      * Instance of tax class collection factory.
      *
-     * @var \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory
+     * @var CollectionFactory
      */
     protected $collectionFactory;
 
     /**
      * Instance of tax model factory.
      *
-     * @var \Magento\Tax\Model\ClassModelFactory
+     * @var ClassModelFactory
      */
     protected $classModelFactory;
 
     /**
-     * @param \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $collectionFactory
-     * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
+     * @param CollectionFactory $collectionFactory
+     * @param ClassModelFactory $classModelFactory
      */
     public function __construct(
-        \Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory $collectionFactory,
-        \Magento\Tax\Model\ClassModelFactory $classModelFactory
+        CollectionFactory $collectionFactory,
+        ClassModelFactory $classModelFactory
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->classModelFactory = $classModelFactory;
@@ -59,9 +75,9 @@ class TaxClassProcessor
         if (empty($this->taxClasses)) {
             $collection = $this->collectionFactory->create();
             $collection->addFieldToFilter('class_type', ClassModel::TAX_CLASS_TYPE_PRODUCT);
-            /* @var $collection \Magento\Tax\Model\ResourceModel\TaxClass\Collection */
+            /* @var $collection Collection */
             foreach ($collection as $taxClass) {
-                $this->taxClasses[$taxClass->getClassName()] = $taxClass->getId();
+                $this->taxClasses[mb_strtolower($taxClass->getClassName())] = $taxClass->getId();
             }
         }
         return $this;
@@ -76,7 +92,7 @@ class TaxClassProcessor
      */
     protected function createTaxClass($taxClassName, AbstractType $productTypeModel)
     {
-        /** @var \Magento\Tax\Model\ClassModelFactory $taxClass */
+        /** @var ClassModelFactory $taxClass */
         $taxClass = $this->classModelFactory->create();
         $taxClass->setClassType(ClassModel::TAX_CLASS_TYPE_PRODUCT);
         $taxClass->setClassName($taxClassName);
@@ -98,10 +114,22 @@ class TaxClassProcessor
      */
     public function upsertTaxClass($taxClassName, AbstractType $productTypeModel)
     {
-        if (!isset($this->taxClasses[$taxClassName])) {
-            $this->taxClasses[$taxClassName] = $this->createTaxClass($taxClassName, $productTypeModel);
+        $normalizedTaxClassName = mb_strtolower($taxClassName);
+
+        if ($normalizedTaxClassName === (string) self::CLASS_NONE_ID) {
+            $normalizedTaxClassName = self::CLASS_NONE_NAME;
         }
 
-        return $this->taxClasses[$taxClassName];
+        if (!isset($this->taxClasses[$normalizedTaxClassName])) {
+            $this->taxClasses[$normalizedTaxClassName] = $normalizedTaxClassName === self::CLASS_NONE_NAME
+                ? self::CLASS_NONE_ID
+                : $this->createTaxClass($taxClassName, $productTypeModel);
+        }
+        if ($normalizedTaxClassName === self::CLASS_NONE_NAME) {
+            // Add None option to tax_class_id options.
+            $productTypeModel->addAttributeOption(self::ATRR_CODE, self::CLASS_NONE_ID, self::CLASS_NONE_ID);
+        }
+
+        return $this->taxClasses[$normalizedTaxClassName];
     }
 }

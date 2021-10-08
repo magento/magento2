@@ -156,9 +156,9 @@
         <waitForPageLoad stepKey="waitForUpdatesTobeSaved1"/>
 
         <!--Go to SimpleProduct store front page-->
-        <amOnPage url="$$createSimpleProduct.sku$$.html" stepKey="goToSimpleProductFrontPage"/>
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductFrontPage"/>
         <waitForPageLoad stepKey="waitForProduct"/>
-        <see stepKey="seeProductName" userInput="$$createSimpleProduct.sku$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
+        <see stepKey="seeProductName" userInput="$$createSimpleProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
         <scrollTo stepKey="scrollToTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
         <!--Verify Up Sell Products displayed in SimpleProduct page-->
@@ -167,7 +167,7 @@
         <see stepKey="seeConfigProduct" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createConfigProduct.name$$"/>
 
         <!--Go to Config Product store front page-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="goToConfigProductFrontPage"/>
+        <amOnPage url="$$createConfigProduct.custom_attributes[url_key]$$.html" stepKey="goToConfigProductFrontPage"/>
         <waitForPageLoad stepKey="waitForConfigProductToBeLoaded"/>
         <scrollTo stepKey="scrollToTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
@@ -176,7 +176,7 @@
         <see stepKey="seeSimpleProduct2" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createSimpleProduct1.name$$"/>
 
         <!--Go to SimpleProduct1 store front page-->
-        <amOnPage url="$$createSimpleProduct1.sku$$.html" stepKey="goToSimpleProduct1FrontPage"/>
+        <amOnPage url="$$createSimpleProduct1.custom_attributes[url_key]$$.html" stepKey="goToSimpleProduct1FrontPage"/>
         <waitForPageLoad stepKey="waitForSimpleProduct1ToBeLoaded"/>
 
         <!--Verify No Up Sell Products displayed in SimplProduct1 page-->

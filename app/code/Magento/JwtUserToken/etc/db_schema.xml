@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="jwt_auth_revoked" resource="default" engine="innodb" comment="Holds revoked JWT authentication data">
+        <column xsi:type="int" name="user_type_id" unsigned="true" nullable="false" comment="User Type ID"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" comment="User ID"/>
+        <column xsi:type="bigint" name="revoke_before" nullable="false" unsigned="true"
+                comment="Not accepting tokens issued before this timestamp" />
+        <constraint xsi:type="primary" referenceId="JWT_AUTH_REVOKED_USER">
+            <column name="user_type_id" />
+            <column name="user_id" />
+        </constraint>
+    </table>
+</schema>

@@ -9,6 +9,10 @@ namespace Magento\Directory\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Directory\Model\Currency\Filter;
+use Magento\Framework\Locale\Currency as LocaleCurrency;
+use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
+use Magento\Framework\NumberFormatterFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Currency model
@@ -72,6 +76,31 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     private $currencyConfig;
 
     /**
+     * @var LocalResolverInterface
+     */
+    private $localeResolver;
+
+    /**
+     * @var NumberFormatterFactory
+     */
+    private $numberFormatterFactory;
+
+    /**
+     * @var \Magento\Framework\NumberFormatter
+     */
+    private $numberFormatter;
+
+    /**
+     * @var array
+     */
+    private $numberFormatterCache;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -79,10 +108,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param Currency\FilterFactory $currencyFilterFactory
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param CurrencyConfig $currencyConfig
+     * @param CurrencyConfig|null $currencyConfig
+     * @param LocalResolverInterface|null $localeResolver
+     * @param NumberFormatterFactory|null $numberFormatterFactory
+     * @param Json|null $serializer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,7 +128,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        CurrencyConfig $currencyConfig = null
+        CurrencyConfig $currencyConfig = null,
+        LocalResolverInterface $localeResolver = null,
+        \Magento\Framework\NumberFormatterFactory $numberFormatterFactory = null,
+        Json $serializer = null
     ) {
         parent::__construct(
             $context,
@@ -111,6 +146,9 @@ class Currency extends \Magento\Framework\Model\AbstractModel
         $this->_currencyFilterFactory = $currencyFilterFactory;
         $this->_localeCurrency = $localeCurrency;
         $this->currencyConfig = $currencyConfig ?: ObjectManager::getInstance()->get(CurrencyConfig::class);
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(LocalResolverInterface::class);
+        $this->numberFormatterFactory = $numberFormatterFactory ?: ObjectManager::getInstance()->get(NumberFormatterFactory::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }
 
     /**
@@ -326,7 +364,119 @@ class Currency extends \Magento\Framework\Model\AbstractModel
          * %F - the argument is treated as a float, and presented as a floating-point number (non-locale aware).
          */
         $price = sprintf("%F", $price);
+
+        if ($this->canUseNumberFormatter($options)) {
+            return $this->formatCurrency($price, $options);
+        }
+
         return $this->_localeCurrency->getCurrency($this->getCode())->toCurrency($price, $options);
+    }
+
+    /**
+     * Check if to use Intl.NumberFormatter to format currency.
+     *
+     * @param array $options
+     * @return bool
+     */
+    private function canUseNumberFormatter(array $options): bool
+    {
+        $allowedOptions = [
+            'precision',
+            LocaleCurrency::CURRENCY_OPTION_DISPLAY,
+            LocaleCurrency::CURRENCY_OPTION_SYMBOL
+        ];
+
+        if (!empty(array_diff(array_keys($options), $allowedOptions))) {
+            return false;
+        }
+
+        if (array_key_exists('display', $options)
+            && $options['display'] !== \Magento\Framework\Currency::NO_SYMBOL
+            && $options['display'] !== \Magento\Framework\Currency::USE_SYMBOL
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Format currency.
+     *
+     * @param string $price
+     * @param array $options
+     * @return string
+     */
+    private function formatCurrency(string $price, array $options): string
+    {
+        $customerOptions = new \Magento\Framework\DataObject([]);
+
+        $this->_eventManager->dispatch(
+            'currency_display_options_forming',
+            ['currency_options' => $customerOptions, 'base_code' => $this->getCode()]
+        );
+        $options += $customerOptions->toArray();
+
+        $this->numberFormatter = $this->getNumberFormatter($options);
+
+        $formattedCurrency = $this->numberFormatter->formatCurrency(
+            $price, $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
+        );
+
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
+            // remove only one non-breaking space from custom currency symbol to allow custom NBSP in currency symbol
+            $formattedCurrency = preg_replace('/ /u', '', $formattedCurrency, 1);
+        }
+
+        if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
+                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            $formattedCurrency = str_replace(' ', '', $formattedCurrency);
+        }
+
+        return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
+    }
+
+    /**
+     * Get NumberFormatter object from cache.
+     *
+     * @param array $options
+     * @return \Magento\Framework\NumberFormatter
+     */
+    private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
+    {
+        $key = 'currency_' . md5($this->localeResolver->getLocale() . $this->serializer->serialize($options));
+        if (!isset($this->numberFormatterCache[$key])) {
+            $this->numberFormatter = $this->numberFormatterFactory->create(
+                ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+            );
+
+            $this->setOptions($options);
+            $this->numberFormatterCache[$key] = $this->numberFormatter;
+        }
+
+        return $this->numberFormatterCache[$key];
+    }
+
+    /**
+     * Set number formatter custom options.
+     *
+     * @param array $options
+     * @return void
+     */
+    private function setOptions(array $options): void
+    {
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_SYMBOL, $options)) {
+            $this->numberFormatter->setSymbol(
+                \NumberFormatter::CURRENCY_SYMBOL, $options[LocaleCurrency::CURRENCY_OPTION_SYMBOL]
+            );
+        }
+        if (array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL) {
+            $this->numberFormatter->setSymbol(\NumberFormatter::CURRENCY_SYMBOL, '');
+        }
+        if (array_key_exists('precision', $options)) {
+            $this->numberFormatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $options['precision']);
+        }
     }
 
     /**
