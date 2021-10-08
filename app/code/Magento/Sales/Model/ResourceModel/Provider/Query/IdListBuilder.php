@@ -32,6 +32,8 @@ class IdListBuilder
     private $connection;
 
     /**
+     * IdListBuilder. Builds query for getting updated id list.
+     *
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(ResourceConnection $resourceConnection)
@@ -40,6 +42,8 @@ class IdListBuilder
     }
 
     /**
+     * Adding additional grid table where entities may already exist.
+     *
      * @param string $table
      * @return $this
      */
@@ -82,9 +86,11 @@ class IdListBuilder
     }
 
     /**
+     * @param string $mainTableName
+     * @param string $gridTableName
      * @return Select
      */
-    public function build($mainTableName, $gridTableName): Select
+    public function build(string $mainTableName, string $gridTableName): Select
     {
         $select = $this->getConnection()->select()
             ->from($mainTableName, [$mainTableName . '.entity_id']);

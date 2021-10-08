@@ -5,7 +5,6 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Provider;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Sales\Model\ResourceModel\Provider\Query\IdListBuilder;
@@ -40,9 +39,6 @@ class UpdatedIdListProvider implements NotSyncedDataProviderInterface
         IdListBuilder $idListQueryBuilder = null
     ) {
         $this->resourceConnection = $resourceConnection;
-        if (!$idListQueryBuilder) {
-            $idListQueryBuilder = ObjectManager::getInstance()->get(IdListBuilder::class);
-        }
         $this->idListQueryBuilder = $idListQueryBuilder;
     }
 
