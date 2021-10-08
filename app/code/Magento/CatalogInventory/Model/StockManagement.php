@@ -96,9 +96,9 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
      */
     public function registerProductsSale($items, $websiteId = null)
     {
-        //if (!$websiteId) {
+        if (!$websiteId) {
             $websiteId = $this->stockConfiguration->getDefaultScopeId();
-        //}
+        }
         $this->getResource()->beginTransaction();
         $lockedItems = $this->getResource()->lockProductsStock(array_keys($items), $websiteId);
         $fullSaveItems = $registeredItems = [];
