@@ -40,7 +40,6 @@ class BlockFactory
         ?ConfigInterface $config = null
     ) {
         $this->objectManager = $objectManager;
-        $this->config        = $config;
         $this->config        = $config ?: ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
