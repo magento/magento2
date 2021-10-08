@@ -172,14 +172,6 @@ class DiscountTest extends TestCase
             $this->rulesApplierMock
         );
         $discountData = $this->getMockBuilder(Data::class)
-            ->setConstructorArgs(
-                [
-                    'amount' => 0,
-                    'baseAmount' => 0,
-                    'originalAmount' => 0,
-                    'baseOriginalAmount' => 0
-                ]
-            )
             ->getMock();
         $this->discountFactory->expects($this->any())
             ->method('create')

@@ -110,14 +110,6 @@ class RulesApplierTest extends TestCase
         $ruleId = 1;
         $appliedRuleIds = [$ruleId => $ruleId];
         $discountData = $this->getMockBuilder(Data::class)
-            ->setConstructorArgs(
-                [
-                    'amount' => 0,
-                    'baseAmount' => 0,
-                    'originalAmount' => 0,
-                    'baseOriginalAmount' => 0
-                ]
-            )
             ->getMock();
         $this->discountFactory->expects($this->any())
             ->method('create')
@@ -279,14 +271,6 @@ class RulesApplierTest extends TestCase
             ['fixQuantity', 'calculate']
         );
         $discountData = $this->getMockBuilder(Data::class)
-            ->setConstructorArgs(
-                [
-                    'amount' => 30,
-                    'baseAmount' => 30,
-                    'originalAmount' => 30,
-                    'baseOriginalAmount' => 30
-                ]
-            )
             ->getMock();
         $this->validatorUtility->expects($this->any())
             ->method('getItemQty')
