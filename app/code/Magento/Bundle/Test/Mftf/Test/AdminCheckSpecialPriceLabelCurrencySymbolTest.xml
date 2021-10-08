@@ -16,6 +16,7 @@
             <description value="Admin to validate the bundle products special price column in grid should display currency symbol instead of % sign"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-1378"/>
+            <useCaseId value="ACP2E-64"/>
             <group value="Bundle"/>
         </annotations>
         <before>
