@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Plugin;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
 
 /**
@@ -34,13 +35,14 @@ class CouponUsagesIncrement
      * Increments number of coupon usages before placing order
      *
      * @param QuoteManagement $subject
+     * @param \Closure $proceed
      * @param Quote $quote
      * @param array $orderData
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return OrderInterface|null
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSubmit(QuoteManagement $subject, Quote $quote, $orderData = [])
+    public function aroundSubmit(QuoteManagement $subject, \Closure $proceed, Quote $quote, $orderData = [])
     {
         /* if coupon code has been canceled then need to notify the customer */
         if (!$quote->getCouponCode() && $quote->dataHasChangedFor('coupon_code')) {
@@ -48,5 +50,11 @@ class CouponUsagesIncrement
         }
 
         $this->updateCouponUsages->execute($quote, true);
+        try {
+            return $proceed($quote, $orderData);
+        } catch (\Throwable $e) {
+            $this->updateCouponUsages->execute($quote, false);
+            throw $e;
+        }
     }
 }

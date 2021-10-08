@@ -119,7 +119,7 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
             ) {
                 $this->getResource()->commit();
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Not all of your products are available in the requested quantity.')
+                    __('Some of the products are out of stock.')
                 );
             }
             if ($this->canSubtractQty($stockItem)) {
@@ -137,7 +137,7 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
         }
         $this->qtyCounter->correctItemsQty($registeredItems, $websiteId, '-');
         $this->getResource()->commit();
-        
+
         return $fullSaveItems;
     }
 
