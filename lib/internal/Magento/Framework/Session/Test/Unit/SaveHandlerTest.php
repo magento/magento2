@@ -127,7 +127,8 @@ class SaveHandlerTest extends TestCase
 
         $this->saveHandlerAdapterMock->expects($this->once())
             ->method('read')
-            ->with('test_session_id');
+            ->with('test_session_id')
+            ->willReturn('test_session_data');
 
         $this->assertTrue($this->saveHandler->write("test_session_id", "testdata"));
     }
