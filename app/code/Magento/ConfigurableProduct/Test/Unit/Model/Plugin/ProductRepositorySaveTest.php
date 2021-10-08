@@ -113,10 +113,10 @@ class ProductRepositorySaveTest extends TestCase
      */
     public function testBeforeSaveWhenProductIsSimple(): void
     {
-        $this->product->expects(static::once())
+        $this->product->expects(static::atMost(1))
             ->method('getTypeId')
             ->willReturn('simple');
-        $this->product->expects(static::never())
+        $this->product->expects(static::once())
             ->method('getExtensionAttributes');
 
         $this->assertNull($this->plugin->beforeSave($this->productRepository, $this->product));

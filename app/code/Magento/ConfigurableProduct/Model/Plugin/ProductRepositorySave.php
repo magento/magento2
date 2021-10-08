@@ -60,9 +60,8 @@ class ProductRepositorySave
         ProductInterface $product,
         $saveOptions = false
     ): void {
-        if ($product->getTypeId() === Configurable::TYPE_CODE
-            && null !== ($extensionAttributes = $product->getExtensionAttributes())
-        ) {
+        $extensionAttributes = $product->getExtensionAttributes();
+        if ($extensionAttributes !== null && $product->getTypeId() === Configurable::TYPE_CODE) {
             $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
             $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
