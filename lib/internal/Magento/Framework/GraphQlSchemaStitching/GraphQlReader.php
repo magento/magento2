@@ -68,7 +68,7 @@ class GraphQlReader implements ReaderInterface
 
     /**
      * @inheritdoc
-     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param string|null $scope
      * @return array
      */
