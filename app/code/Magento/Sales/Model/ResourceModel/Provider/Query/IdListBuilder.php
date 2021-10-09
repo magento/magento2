@@ -86,6 +86,8 @@ class IdListBuilder
     }
 
     /**
+     * Builds select object.
+     *
      * @param string $mainTableName
      * @param string $gridTableName
      * @return Select
