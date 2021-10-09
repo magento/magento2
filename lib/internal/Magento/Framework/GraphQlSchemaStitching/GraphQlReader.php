@@ -90,27 +90,7 @@ class GraphQlReader implements ReaderInterface
         $typesToRedo = [];
         $knownTypes = [];
         foreach ($schemaFiles as $partialSchemaContent) {
-            $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
-
-            /**
-             * TODO fix this
-             * There is a bug in parseTypes where the union type is also containing the information for the type below
-             * in this case that meant that we were missing the type directly below CompanyStructureEntity
-             *
-             * This means that we cannot find CompanyStructureItem later in getTypesToUse
-             *
-             * Manually split them out in a proof of concept hack, while we review the regex
-             */
-            if (isset($partialSchemaTypes['CompanyStructureEntity'])) {
-                if (strpos($partialSchemaTypes['CompanyStructureEntity'], 'type CompanyStructureItem') !== false) {
-                    $lines = explode(PHP_EOL . PHP_EOL, $partialSchemaTypes['CompanyStructureEntity']);
-                    if (isset($lines[0], $lines[1]) && count($lines) === 2) {
-                        $partialSchemaTypes['CompanyStructureEntity'] = $lines[0];
-                        $partialSchemaTypes['CompanyStructureItem'] = $lines[1];
-                    }
-                    unset($lines);
-                }
-            }
+            $partialSchemaTypes = $this->parseTypesWithUnionHandling($partialSchemaContent);
 
             // Filter out duplicated ones and save them into a list to be retried
             $tmpTypes = $knownTypes;
@@ -223,6 +203,56 @@ class GraphQlReader implements ReaderInterface
         }
 
         return $this->removePlaceholderFromResults($partialResults);
+    }
+
+    /**
+     * Extract types as string from a larger string that represents the graphql schema using regular expressions
+     *
+     * The regex in parseTypes does not have the ability to split out the union data from the type below it for example
+     *
+     *  > union X = Y | Z
+     *  >
+     *  > type foo {}
+     *
+     * This would produce only type key from parseTypes, X, which would contain also the type foo entry.
+     *
+     * This wrapper does some post processing as a workaround to split out the union data from the type data below it
+     * which would give us two entries, X and foo
+     *
+     * @param string $graphQlSchemaContent
+     * @return string[] [$typeName => $typeDeclaration, ...]
+     */
+    private function parseTypesWithUnionHandling(string $graphQlSchemaContent): array
+    {
+        $types = $this->parseTypes($graphQlSchemaContent);
+
+        /*
+         * A union schema contains also the data from the schema below it
+         *
+         * If there are two newlines in this union schema then it has data below its definition, meaning it contains
+         * type information not relevant to its actual type
+         */
+        $unionTypes = array_filter(
+            $types,
+            function ($t) {
+                return (strpos($t, 'union ') !== false) && (strpos($t, PHP_EOL . PHP_EOL) !== false);
+            }
+        );
+
+        foreach ($unionTypes as $type => $schema) {
+            $splitSchema = explode(PHP_EOL . PHP_EOL, $schema);
+            // Get the type data at the bottom, this will be the additional type data not related to the union
+            $additionalTypeSchema = end($splitSchema);
+            // Parse the additional type from the bottom so we can have its type key => schema pair
+            $additionalTypeData = $this->parseTypes($additionalTypeSchema);
+            // Fix the union type schema so it does not contain the definition below it
+            $types[$type] = str_replace($additionalTypeSchema, '', $schema);
+            // Append the additional data to types array
+            $additionalTypeKey = array_key_first($additionalTypeData);
+            $types[$additionalTypeKey] = $additionalTypeData[$additionalTypeKey];
+        }
+
+        return $types;
     }
 
     /**
