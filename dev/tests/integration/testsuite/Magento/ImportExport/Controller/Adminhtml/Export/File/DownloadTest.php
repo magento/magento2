@@ -49,7 +49,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @var string
      */
-    private $sourceFilePath;
+    private string $sourceFilePath;
 
     /**
      * @inheritdoc
@@ -58,14 +58,15 @@ class DownloadTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->fileSystem = $this->_objectManager->get(Filesystem::class);
-        $auth = $this->_objectManager->get(Auth::class);
-        $auth->getAuthStorage()->setIsFirstPageAfterLogin(false);
+        $this->auth = $this->_objectManager->get(Auth::class);
+        $this->auth->getAuthStorage()->setIsFirstPageAfterLogin(false);
         $this->backendUrl = $this->_objectManager->get(BackendUrl::class);
         $this->backendUrl->turnOnSecretKey();
         $this->sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
+
+        $this->fileSystem = $this->_objectManager->get(Filesystem::class);
         //Refers to tests 'var' directory
-        $this->varDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $this->varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
@@ -121,12 +122,16 @@ class DownloadTest extends AbstractBackendController
      *
      * @param $destinationFilePath
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function copyFile($destinationFilePath): void
     {
-        //Refers to application root directory
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $rootDirectory->copyFile($this->sourceFilePath, $this->varDirectory->getAbsolutePath($destinationFilePath));
+        $driver = $this->varDirectory->getDriver();
+
+        $driver->filePutContents(
+            $this->varDirectory->getAbsolutePath($destinationFilePath),
+            file_get_contents($this->sourceFilePath)
+        );
     }
 
     /**
@@ -159,7 +164,7 @@ class DownloadTest extends AbstractBackendController
     {
         $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var WriteInterface $directory */
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         if ($directory->isExist('export')) {
             $directory->delete('export');
         }
