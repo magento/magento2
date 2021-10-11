@@ -147,7 +147,7 @@ class QuantityTest extends TestCase
         return [
             [
                 PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
-                ResetMethod::OPTION_BY_IP_OR_EMAIL
+                ResetMethod::OPTION_BY_IP_AND_EMAIL
             ],
             [
                 PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST,
@@ -159,7 +159,7 @@ class QuantityTest extends TestCase
             ],
             [
                 PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,
-                ResetMethod::OPTION_BY_IP_OR_EMAIL
+                ResetMethod::OPTION_BY_IP_AND_EMAIL
             ],
             [
                 PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST,
