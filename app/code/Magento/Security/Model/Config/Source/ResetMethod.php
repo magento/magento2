@@ -25,7 +25,7 @@ class ResetMethod implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => self::OPTION_BY_IP_OR_EMAIL, 'label' => __('By IP or Email')],
+            ['value' => self::OPTION_BY_IP_AND_EMAIL, 'label' => __('By IP and Email')],
             ['value' => self::OPTION_BY_IP, 'label' => __('By IP')],
             ['value' => self::OPTION_BY_EMAIL, 'label' => __('By Email')],
             ['value' => self::OPTION_NONE, 'label' => __('None')],
@@ -40,7 +40,7 @@ class ResetMethod implements \Magento\Framework\Option\ArrayInterface
     public function toArray()
     {
         return [
-            self::OPTION_BY_IP_OR_EMAIL => __('By IP or Email'),
+            self::OPTION_BY_IP_AND_EMAIL => __('By IP and Email'),
             self::OPTION_BY_IP => __('By IP'),
             self::OPTION_BY_EMAIL => __('By Email'),
             self::OPTION_NONE => __('None'),
