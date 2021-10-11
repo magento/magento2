@@ -9,9 +9,6 @@ namespace Magento\SalesRule\Model\Plugin;
 use Magento\Quote\Model\Quote\Config;
 use Magento\SalesRule\Model\ResourceModel\Rule as RuleResource;
 
-/**
- * Quote Config Product Attributes Class
- */
 class QuoteConfigProductAttributes
 {
     /**
