@@ -81,7 +81,7 @@ class CollectionFactory
                 case ResetMethod::OPTION_BY_IP:
                     $collection->filterByIp($longIp);
                     break;
-                case ResetMethod::OPTION_BY_IP_OR_EMAIL:
+                case ResetMethod::OPTION_BY_IP_AND_EMAIL:
                     $collection->filterByIpOrAccountReference($longIp, $accountReference);
                     break;
                 default:
