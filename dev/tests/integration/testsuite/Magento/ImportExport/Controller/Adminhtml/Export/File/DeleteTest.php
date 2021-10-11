@@ -89,11 +89,10 @@ class DeleteTest extends AbstractBackendController
     protected function copyFile($destinationFilePath): void
     {
         $driver = $this->varDirectory->getDriver();
+        $absolutePath = $this->varDirectory->getAbsolutePath($destinationFilePath);
 
-        $driver->filePutContents(
-            $this->varDirectory->getAbsolutePath($destinationFilePath),
-            file_get_contents($this->sourceFilePath)
-        );
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($absolutePath, file_get_contents($this->sourceFilePath));
     }
 
     /**

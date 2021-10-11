@@ -49,7 +49,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @var string
      */
-    private string $sourceFilePath;
+    private $sourceFilePath;
 
     /**
      * @inheritdoc
@@ -58,13 +58,12 @@ class DownloadTest extends AbstractBackendController
     {
         parent::setUp();
 
+        $this->fileSystem = $this->_objectManager->get(Filesystem::class);
         $this->auth = $this->_objectManager->get(Auth::class);
         $this->auth->getAuthStorage()->setIsFirstPageAfterLogin(false);
         $this->backendUrl = $this->_objectManager->get(BackendUrl::class);
         $this->backendUrl->turnOnSecretKey();
         $this->sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
-
-        $this->fileSystem = $this->_objectManager->get(Filesystem::class);
         //Refers to tests 'var' directory
         $this->varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
@@ -122,16 +121,14 @@ class DownloadTest extends AbstractBackendController
      *
      * @param $destinationFilePath
      * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function copyFile($destinationFilePath): void
     {
         $driver = $this->varDirectory->getDriver();
+        $absolutePath = $this->varDirectory->getAbsolutePath($destinationFilePath);
 
-        $driver->filePutContents(
-            $this->varDirectory->getAbsolutePath($destinationFilePath),
-            file_get_contents($this->sourceFilePath)
-        );
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($absolutePath, file_get_contents($this->sourceFilePath));
     }
 
     /**
