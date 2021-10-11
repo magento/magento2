@@ -12,7 +12,7 @@ namespace Magento\Security\Model\Config\Source;
  */
 class ResetMethod implements \Magento\Framework\Option\ArrayInterface
 {
-    const OPTION_BY_IP_OR_EMAIL = 1;
+    const OPTION_BY_IP_AND_EMAIL = 1;
     const OPTION_BY_IP = 2;
     const OPTION_BY_EMAIL = 3;
     const OPTION_NONE = 0;
