@@ -81,7 +81,7 @@ class Handler
     private $paramsOverrider;
 
     /**
-     * @var InputArraySizeLimitValue|null
+     * @var InputArraySizeLimitValue
      */
     private $inputArraySizeLimitValue;
 
