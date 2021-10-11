@@ -22,7 +22,7 @@
             <!-- Enable WYSIWYG editor -->
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
 
-            <!-- Enable TinyMCE 4 -->
+            <!-- Enable TinyMCE  -->
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
 
             <!-- Login as admin -->
@@ -100,7 +100,7 @@
         <!-- Created product attribute appear on product form -->
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(productTextEditorAttribute.attribute_code)}}" stepKey="seeAttributeLabelInProductForm"/>
 
-        <!-- TinyMCE 4 is displayed in WYSIWYG content area -->
+        <!-- TinyMCE is displayed in WYSIWYG content area -->
         <seeElement selector="{{TinyMCESection.TinyMCE}}" stepKey="seeTinyMCE"/>
 
         <!-- Verify toolbar menu -->

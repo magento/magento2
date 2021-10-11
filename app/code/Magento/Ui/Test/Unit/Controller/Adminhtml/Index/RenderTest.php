@@ -120,6 +120,9 @@ class RenderTest extends TestCase
      */
     private $escaperMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
@@ -208,12 +211,15 @@ class RenderTest extends TestCase
                 'contentTypeResolver' => $this->uiComponentTypeResolverMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'logger' => $this->loggerMock,
-                'escaper' => $this->escaperMock,
+                'escaper' => $this->escaperMock
             ]
         );
     }
 
-    public function testExecuteAjaxRequestException()
+    /**
+     * @return void
+     */
+    public function testExecuteAjaxRequestException(): void
     {
         $name = 'test-name';
         $renderedData = '<html>data</html>';
@@ -231,7 +237,7 @@ class RenderTest extends TestCase
 
         $jsonResultMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setData'])
+            ->onlyMethods(['setData'])
             ->getMock();
 
         $this->resultJsonFactoryMock->expects($this->once())
@@ -266,7 +272,10 @@ class RenderTest extends TestCase
         $this->render->executeAjaxRequest();
     }
 
-    public function testExecuteAjaxRequest()
+    /**
+     * @return void
+     */
+    public function testExecuteAjaxRequest(): void
     {
         $name = 'test-name';
         $renderedData = '<html>data</html>';
@@ -311,35 +320,35 @@ class RenderTest extends TestCase
      * @param array $dataProviderConfig
      * @param bool|null $isAllowed
      * @param int $authCallCount
+     *
+     * @return void
      * @dataProvider executeAjaxRequestWithoutPermissionsDataProvider
      */
-    public function testExecuteAjaxRequestWithoutPermissions(array $dataProviderConfig, $isAllowed, $authCallCount = 1)
-    {
+    public function testExecuteAjaxRequestWithoutPermissions(
+        array $dataProviderConfig,
+        ?bool $isAllowed,
+        int $authCallCount = 1
+    ): void {
         $name = 'test-name';
         $renderedData = '<html>data</html>';
 
         if (false === $isAllowed) {
             $jsonResultMock = $this->getMockBuilder(Json::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['setStatusHeader', 'setData'])
+                ->onlyMethods(['setStatusHeader', 'setData'])
                 ->getMock();
 
-            $jsonResultMock->expects($this->at(0))
+            $jsonResultMock
                 ->method('setStatusHeader')
-                ->with(
-                    Response::STATUS_CODE_403,
-                    AbstractMessage::VERSION_11,
-                    'Forbidden'
-                )
-                ->willReturnSelf();
-
-            $jsonResultMock->expects($this->at(1))
+                ->with(Response::STATUS_CODE_403, AbstractMessage::VERSION_11, 'Forbidden')
+                ->willReturn($jsonResultMock);
+            $jsonResultMock
                 ->method('setData')
                 ->with([
                     'error' => 'Forbidden',
                     'errorcode' => 403
                 ])
-                ->willReturnSelf();
+                ->willReturn($jsonResultMock);
 
             $this->resultJsonFactoryMock->expects($this->any())
                 ->method('create')
@@ -392,7 +401,7 @@ class RenderTest extends TestCase
     /**
      * @return array
      */
-    public function executeAjaxRequestWithoutPermissionsDataProvider()
+    public function executeAjaxRequestWithoutPermissionsDataProvider(): array
     {
         $aclResource = 'Magento_Test::index_index';
         return [
@@ -408,7 +417,7 @@ class RenderTest extends TestCase
                 'dataProviderConfig' => [],
                 'isAllowed' => null,
                 'authCallCount' => 0
-            ],
+            ]
         ];
     }
 }

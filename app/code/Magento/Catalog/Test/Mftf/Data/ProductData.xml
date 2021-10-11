@@ -35,6 +35,9 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductZeroQty" type="product">
+        <requiredEntity type="product_extension_attribute">EavStock0</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProductWithNoSpace" type="product" extends="ApiSimpleProduct">
         <data key="name">TestFooBar</data>
         <data key="sku" unique="suffix">foobar</data>

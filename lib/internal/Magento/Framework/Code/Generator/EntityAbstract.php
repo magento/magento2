@@ -257,9 +257,9 @@ abstract class EntityAbstract
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
         } elseif (/**
-             * If makeResultFileDirectory only fails because the file is already created,
-             * a competing process has generated the file, no exception should be thrown.
-             */
+         * If makeResultFileDirectory only fails because the file is already created,
+         * a competing process has generated the file, no exception should be thrown.
+         */
             !$this->_ioObject->makeResultFileDirectory($resultClassName)
             && !$this->_ioObject->fileExists($resultDir)
         ) {
@@ -401,9 +401,12 @@ abstract class EntityAbstract
     {
         $parameterInfo = [
             'name' => $parameter->getName(),
-            'passedByReference' => $parameter->isPassedByReference(),
-            'variadic' => $parameter->isVariadic()
+            'passedByReference' => $parameter->isPassedByReference()
         ];
+        if ($parameter->isVariadic()) {
+            $parameterInfo['variadic'] = $parameter->isVariadic();
+        }
+
         if ($type = $this->extractParameterType($parameter)) {
             $parameterInfo['type'] = $type;
         }
