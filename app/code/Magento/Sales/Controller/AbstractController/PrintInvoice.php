@@ -101,7 +101,7 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
             $order = $invoice->getOrder();
         } else {
             $orderId = (int)$this->getRequest()->getParam('order_id');
-            $order = $this->order->load($orderId);
+            $order = $this->order->get($orderId);
         }
 
         if ($this->orderAuthorization->canView($order)) {
