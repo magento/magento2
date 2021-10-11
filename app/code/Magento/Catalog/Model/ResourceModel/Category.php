@@ -518,9 +518,8 @@ class Category extends AbstractResource
                 $websiteId
             );
         }
-        $bind = ['category_id' => (int)$category->getId()];
 
-        return $this->getConnection()->fetchPairs($select, $bind);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**

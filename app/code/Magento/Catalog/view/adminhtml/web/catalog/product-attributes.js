@@ -26,7 +26,7 @@ define([
         _initModal: function () {
             var self = this;
 
-            this.modal = $('<div id="create_new_attribute"/>').modal({
+            this.modal = $('<div id="create_new_attribute"></div>').modal({
                 title: $.mage.__('New Attribute'),
                 type: 'slide',
                 buttons: [],
@@ -34,7 +34,7 @@ define([
                 /** @inheritdoc */
                 opened: function () {
                     $(this).parent().addClass('modal-content-new-attribute');
-                    self.iframe = $('<iframe id="create_new_attribute_container">').attr({
+                    self.iframe = $('<iframe id="create_new_attribute_container"></iframe>').attr({
                         src: self._prepareUrl(),
                         frameborder: 0
                     });

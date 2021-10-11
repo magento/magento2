@@ -9,7 +9,7 @@
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
 
-    <operation name="CreateCustomerCartItem" dataType="CustomerCartItem" type="create" auth="adminOauth" url="/V1/carts/mine/items" method="POST">
+    <operation name="CreateCustomerCartItem" dataType="CustomerCartItem" type="create" auth="adminOauth" url="/V1/carts/{quote_id}/items" method="POST">
         <contentType>application/json</contentType>
         <object key="cartItem" dataType="CustomerCartItem">
             <field key="quote_id" type="string">string</field>
