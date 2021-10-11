@@ -82,7 +82,7 @@ class CollectionFactoryTest extends TestCase
                 ->method('filterByIp')
                 ->with($longIp);
         }
-        if ($limitMethod == ResetMethod::OPTION_BY_IP_OR_EMAIL) {
+        if ($limitMethod == ResetMethod::OPTION_BY_IP_AND_EMAIL) {
             $collectionMcok->expects($this->once())
                 ->method('filterByIpOrAccountReference')
                 ->with($longIp, $accountReference);
@@ -99,7 +99,7 @@ class CollectionFactoryTest extends TestCase
             [null],
             [ResetMethod::OPTION_BY_EMAIL, 1, 'accountReference'],
             [ResetMethod::OPTION_BY_IP, 1, null, 'longIp'],
-            [ResetMethod::OPTION_BY_IP_OR_EMAIL, 1, 'accountReference', 'longIp'],
+            [ResetMethod::OPTION_BY_IP_AND_EMAIL, 1, 'accountReference', 'longIp'],
         ];
     }
 }
