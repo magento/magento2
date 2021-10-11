@@ -161,7 +161,7 @@ class SecurityManagerTest extends TestCase
     public function testPerformSecurityCheck()
     {
         $requestType = PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST;
-        $accountReference = ResetMethod::OPTION_BY_IP_OR_EMAIL;
+        $accountReference = ResetMethod::OPTION_BY_IP_AND_EMAIL;
         $longIp = 12345;
 
         $this->remoteAddressMock->expects($this->once())
