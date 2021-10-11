@@ -142,7 +142,8 @@ class Consumer implements ConsumerInterface
             $messageSchemaType = $this->configuration->getMessageSchemaType($topicName);
             if ($messageSchemaType == CommunicationConfig::TOPIC_REQUEST_TYPE_METHOD) {
                 foreach ($handlers as $callback) {
-                    $result = call_user_func_array($callback, $decodedMessage);
+                    // The `array_values` is a workaround to ensure the same behavior in PHP 7 and 8.
+                    $result = call_user_func_array($callback, array_values($decodedMessage));
                     return $this->processSyncResponse($topicName, $result);
                 }
             } else {
