@@ -219,6 +219,12 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customer->setAddresses($origAddresses);
         /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
+        if (!empty($prevCustomerDataArr)) {
+            foreach ($prevCustomerDataArr as $field => $value) {
+                $customerModel->setOrigData($field, $value);
+            }
+        }
+
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
         $storeId = $customerModel->getStoreId();
