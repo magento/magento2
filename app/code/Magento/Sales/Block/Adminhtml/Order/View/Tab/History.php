@@ -127,7 +127,8 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
                 $_invoice->getId(),
                 __('Invoice #%1 created', $_invoice->getIncrementId()),
                 $_invoice->getEmailSent(),
-                $this->getOrderAdminDate($_invoice->getCreatedAt())
+                $this->getOrderAdminDate($_invoice->getCreatedAt()),
+                'Invoice created'
             );
 
             foreach ($_invoice->getCommentsCollection() as $_comment) {
@@ -313,6 +314,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtB = $b['created_at'];
         
         if( $createdAtA->getTimestamp() === $createdAtB->getTimestamp() ) {
+            if( $a['comment'] == 'Invoice created' || $b['comment'] == 'Invoice created' ) {
+                return ( $a['comment'] == 'Invoice created' ? 1 : -1 );
+            }
             return $a['entity_id'] <=> $b['entity_id'];
         }
 
