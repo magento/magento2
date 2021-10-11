@@ -56,6 +56,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ['name' => 'Richard', 'age' => 24],
             ['name' => 'Jane', 'age' => 12],
             ['name' => 'Spot', 'age' => 7],
+            ['name' => 'Bill', 'age' => '25']
         ];
     }
 
@@ -89,28 +90,32 @@ TEMPLATE;
         2 name: Spot, lastname: , age: 7
     </li>
 
+    <li>
+        3 name: Bill, lastname: , age: 25
+    </li>
+
 </ul>
 EXPECTED_RESULT;
 
         $template2 = <<<TEMPLATE
 <ul>
-    {{for item in order.all_visible_items}}
+{{for item in order.all_visible_items}}
     <li>
         index: {{var loop.index}} sku: {{var item.sku}}
         name: {{var item.name}} price: {{var item.price}} quantity: {{var item.ordered_qty}}
     </li>
-    {{/for}}
+{{/for}}
 </ul>
 TEMPLATE;
 
         $expectedResult2 = <<<EXPECTED_RESULT
 <ul>
-    
+
     <li>
         index: 0 sku: ABC123
         name: Product ABC price: 123 quantity: 2
     </li>
-    
+
 </ul>
 EXPECTED_RESULT;
         return [

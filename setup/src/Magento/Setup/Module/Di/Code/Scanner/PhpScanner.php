@@ -199,6 +199,9 @@ class PhpScanner implements ScannerInterface
     {
         $namespaceParts = [];
         for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
+            if ($tokens[$tokenOffset][0] === T_NAME_QUALIFIED) {
+                $namespaceParts[] = $tokens[$tokenOffset][1];
+            }
             if ($tokens[$tokenOffset][0] === T_STRING) {
                 $namespaceParts[] = "\\";
                 $namespaceParts[] = $tokens[$tokenOffset][1];
@@ -206,7 +209,7 @@ class PhpScanner implements ScannerInterface
                 break;
             }
         }
-        return join('', $namespaceParts);
+        return implode('', $namespaceParts);
     }
 
     /**
