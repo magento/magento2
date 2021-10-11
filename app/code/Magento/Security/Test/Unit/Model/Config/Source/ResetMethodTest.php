@@ -41,8 +41,8 @@ class ResetMethodTest extends TestCase
     {
         $expected = [
             [
-                'value' => ResetMethod::OPTION_BY_IP_OR_EMAIL,
-                'label' => __('By IP or Email')
+                'value' => ResetMethod::OPTION_BY_IP_AND_EMAIL,
+                'label' => __('By IP and Email')
             ],
             [
                 'value' => ResetMethod::OPTION_BY_IP,
