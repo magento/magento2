@@ -15,7 +15,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
 {
@@ -27,7 +27,7 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     /**
      * @var Registry
      */
-    protected $coreRegistry;
+    protected $_coreRegistry;
 
     /**
      * @var PageFactory
@@ -45,7 +45,7 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
     protected $session;
 
     /**
-     * @var Order
+     * @var OrderRepositoryInterface
      */
     protected $order;
 
@@ -54,18 +54,21 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param Session $session
+     * @param OrderRepositoryInterface $order
      */
     public function __construct(
-        Context                         $context,
+        Context $context,
         OrderViewAuthorizationInterface $orderAuthorization,
-        Registry                        $registry,
-        PageFactory                     $resultPageFactory,
-        InvoiceRepositoryInterface      $invoiceRepository,
-        Session                         $session,
-        Order                           $order
+        Registry $registry,
+        PageFactory $resultPageFactory,
+        InvoiceRepositoryInterface $invoiceRepository,
+        Session $session,
+        OrderRepositoryInterface $order
     ) {
         $this->orderAuthorization = $orderAuthorization;
-        $this->coreRegistry = $registry;
+        $this->_coreRegistry = $registry;
         $this->resultPageFactory = $resultPageFactory;
         $this->invoiceRepository = $invoiceRepository;
         $this->session = $session;
@@ -102,9 +105,9 @@ abstract class PrintInvoice extends \Magento\Framework\App\Action\Action
         }
 
         if ($this->orderAuthorization->canView($order)) {
-            $this->coreRegistry->register('current_order', $order);
+            $this->_coreRegistry->register('current_order', $order);
             if (isset($invoice)) {
-                $this->coreRegistry->register('current_invoice', $invoice);
+                $this->_coreRegistry->register('current_invoice', $invoice);
             }
             /** @var Page $resultPage */
             $resultPage = $this->resultPageFactory->create();
