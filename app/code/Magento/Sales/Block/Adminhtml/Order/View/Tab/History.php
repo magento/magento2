@@ -313,7 +313,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
         
-        if( $createdAtA->getTimestamp() === $createdAtB->getTimestamp() ) {
+        if ($createdAtA->getTimestamp() === $createdAtB->getTimestamp()) {
             if( $a['comment'] == 'Invoice created' || $b['comment'] == 'Invoice created' ) {
                 return ( $a['comment'] == 'Invoice created' ? 1 : -1 );
             }
