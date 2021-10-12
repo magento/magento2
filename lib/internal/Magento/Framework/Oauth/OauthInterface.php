@@ -59,6 +59,10 @@ interface OauthInterface
     /**#@+
      * Signature Methods
      */
+    /**
+     * @deprecated SHA1 is deprecated
+     * @see SIGNATURE_SHA256
+     */
     const SIGNATURE_SHA1 = 'HMAC-SHA1';
 
     const SIGNATURE_SHA256 = 'HMAC-SHA256';
@@ -167,20 +171,15 @@ interface OauthInterface
      *   );
      * </pre>
      * @param string $requestUrl e.g 'http://www.example.com/endpoint'
-     * @param string $signatureMethod (default: 'HMAC-SHA1')
+     * @param string $signatureMethod (default: 'HMAC-SHA256')
      * @param string $httpMethod (default: 'POST')
      * @return string
-     * <pre>
-     * OAuth oauth_version="1.0", oauth_signature_method="HMAC-SHA1", oauth_nonce="5X1aWR2qzf2uFm1",
-     * oauth_timestamp="1381930661", oauth_consumer_key="34edf957ef88492f0a32eb7e1731e85d",
-     * oauth_token="7c0709f789e1f38a17aa4b9a28e1b06c", oauth_signature="agVxK0epXOOeQK4%2Bc7UAqUXoAok%3D"
-     * <pre>
      * @throws \Magento\Framework\Oauth\Exception
      */
     public function buildAuthorizationHeader(
         $params,
         $requestUrl,
-        $signatureMethod = self::SIGNATURE_SHA1,
+        $signatureMethod = self::SIGNATURE_SHA256,
         $httpMethod = 'POST'
     );
 }
