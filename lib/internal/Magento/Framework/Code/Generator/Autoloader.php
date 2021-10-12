@@ -40,6 +40,8 @@ class Autoloader
      * Load specified class name and generate it if necessary
      *
      * According to PSR-4 section 2.4 an autoloader MUST NOT throw an exception and SHOULD NOT return a value.
+     * We do throw an exception to improve the developer experience.  
+     * When code generation fails, it makes no sense to give other autoloaders a chance to load it.
      *
      * @see https://www.php-fig.org/psr/psr-4/
      *
@@ -53,6 +55,7 @@ class Autoloader
                 $this->_generator->generateClass($className);
             } catch (\Exception $exception) {
                 $this->tryToLogExceptionMessageIfNotDuplicate($exception);
+                throw $exception;
             }
         }
     }
