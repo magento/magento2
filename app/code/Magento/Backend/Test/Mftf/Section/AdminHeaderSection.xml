@@ -17,5 +17,6 @@
         <element name="pageHeading" type="text" selector=".page-content .page-heading"/>
         <!-- Used for page not found error -->
         <element name="pageNotFoundTitle" type="text" selector=".page-title span"/>
+        <element name="signOut" type="button" selector=".page-header .account-signout"/>
     </section>
 </sections>

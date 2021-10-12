@@ -24,24 +24,30 @@
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectParentFolderForDelete">
-                <argument name="name" value="parentFolder"/>
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteParentFolder"/>
             <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertParentFolderWasDeleted">
-                <argument name="name" value="parentFolder"/>
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
         </after>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openParentFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createParentFolder">
-            <argument name="name" value="parentFolder"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertParentFolderCreated">
-            <argument name="name" value="parentFolder"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForGridToLoadAfterParentFolderCreated"/>
+        <comment userInput="BIC workaround" stepKey="waitForGridToLoadAfterParentFolderCreated"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
@@ -51,7 +57,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadThirdImage">
             <argument name="image" value="ImageUpload1"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <comment userInput="BIC workaround" stepKey="waitForGridToLoad"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickSortActionGroup" stepKey="sortByDirectoryDescending">
             <argument name="sortName" value="directory_desc"/>
         </actionGroup>
