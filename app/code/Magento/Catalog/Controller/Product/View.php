@@ -162,7 +162,7 @@ class View extends ProductAction implements HttpGetActionInterface, HttpPostActi
                 return;
             }
             $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setRefererOrBaseUrl();
+            $resultRedirect->setUrl($this->_url->getCurrentUrl());
             return $resultRedirect;
         }
 

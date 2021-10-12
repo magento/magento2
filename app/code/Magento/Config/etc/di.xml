@@ -365,4 +365,9 @@
             <argument name="structure" xsi:type="object">adminhtmlConfigStructure</argument>
         </arguments>
     </type>
+    <type name="Magento\Config\Model\Config">
+        <arguments>
+            <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
+        </arguments>
+    </type>
 </config>

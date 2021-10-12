@@ -9,6 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerOrderViewSection">
         <element name="reorder" type="text" selector="a.action.order" timeout="30"/>
+        <element name="view" type="text" selector="a.action.view" timeout="30"/>
         <element name="orderTitle" type="text" selector=".page-title span"/>
         <element name="myOrdersTable" type="text" selector="#my-orders-table"/>
         <element name="subtotal" type="text" selector=".subtotal .amount"/>

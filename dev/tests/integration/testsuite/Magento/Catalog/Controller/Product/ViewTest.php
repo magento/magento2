@@ -327,13 +327,13 @@ class ViewTest extends AbstractController
     public function testViewWithRedirect(): void
     {
         $product = $this->productRepository->get('simple2');
-        $url = $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_LINK_URL);
+        $url = rtrim($this->config->getValue(Store::XML_PATH_UNSECURE_BASE_LINK_URL), '/');
         $this->getRequest()
             ->setParams([
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ])
             ->setMethod(HttpRequest::METHOD_POST);
-        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+        $this->dispatch(sprintf('/catalog/product/view/id/%s/', $product->getId()));
         $this->assertRedirect($this->stringContains($url));
     }
 
