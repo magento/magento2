@@ -13,8 +13,10 @@ use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Confugurable product view type
@@ -198,7 +200,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Retrieve current store
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
+     * @throws NoSuchEntityException
      */
     public function getCurrentStore()
     {
@@ -239,6 +242,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
+            'salable' => $options['salable'] ?? [],
+            'canDisplayShowOutOfStockStatus' => $options['canDisplayShowOutOfStockStatus'] ?? false
         ];
 
         if ($currentProduct->hasPreconfiguredValues() && !empty($attributesData['defaultValues'])) {

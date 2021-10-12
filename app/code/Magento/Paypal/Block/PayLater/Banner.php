@@ -82,6 +82,9 @@ class Banner extends Template
         $componentConfig = $this->jsLayout['components']['payLater']['config'] ?? [];
         $defaultConfig = ['sdkUrl' => $this->getPayPalSdkUrl()];
         $config = array_replace($defaultConfig, $componentConfig);
+        $displayAmount = $config['displayAmount'] ?? false;
+        $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
+            ? false : true;
 
         //Extend block component attributes with defaults
         $componentAttributes = $this->jsLayout['components']['payLater']['config']['attributes'] ?? [];

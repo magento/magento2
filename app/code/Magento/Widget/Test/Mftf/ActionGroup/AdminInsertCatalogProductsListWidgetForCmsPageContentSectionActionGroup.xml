@@ -20,7 +20,7 @@
             <argument name="cacheLifetime" type="string" defaultValue=""/>
             <argument name="categoryName" type="string" defaultValue="{{DefaultCategory.name}}"/>
         </arguments>
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
         <waitForPageLoad stepKey="waitForSlideOut"/>
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectWidgetType"/>
         <waitForPageLoad stepKey="waitForWidgetOptions"/>
