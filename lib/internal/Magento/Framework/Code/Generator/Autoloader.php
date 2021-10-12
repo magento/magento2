@@ -53,7 +53,6 @@ class Autoloader
                 $this->_generator->generateClass($className);
             } catch (\Exception $exception) {
                 $this->tryToLogExceptionMessageIfNotDuplicate($exception);
-                throw $exception;
             }
         }
     }
