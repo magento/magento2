@@ -9,7 +9,7 @@ backend default {
     .port = "/* {{ port }} */";
     .first_byte_timeout = 600s;
     .probe = {
-        .url = "/pub/health_check.php";
+        .url = "/health_check.php";
         .timeout = 2s;
         .interval = 5s;
         .window = 10;
