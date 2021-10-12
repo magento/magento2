@@ -20,6 +20,7 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
+    assignCustomerToGuestCart(cart_id: String!): Cart! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AssignCustomerToGuestCart") @doc(description:"Assign a logged in customer to the specified guest shopping cart.")
     mergeCarts(source_cart_id: String!, destination_cart_id: String): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
     addProductsToCart(cartId: String!, cartItems: [CartItemInput!]!): AddProductsToCartOutput @doc(description:"Add any type of product to the cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
