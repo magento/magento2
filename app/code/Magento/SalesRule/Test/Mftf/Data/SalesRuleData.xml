@@ -476,4 +476,11 @@
         <data key="discountAmount">one</data>
         <data key="maximumQtyDiscount">one</data>
     </entity>
+
+    <entity name="SalesRuleSpecificCouponAndByPercent25" extends="SalesRuleSpecificCouponAndByPercent">
+        <data key="discount_amount">25</data>
+        <data key="discount_qty">0</data>
+        <data key="discount_step">1</data>
+        <data key="stop_rules_processing">true</data>
+    </entity>
 </entities>

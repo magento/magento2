@@ -91,7 +91,7 @@ if ($isField) {
 
         <?php if ($element->hasAdvanced() && !$isField) : ?>
             <?= (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : '' ?>
-            <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?= /* @noEscape */ $id ?>">
+            <details class="details admin__collapsible-block-wrapper" id="details<?= /* @noEscape */ $id ?>">
                 <summary class="details-summary admin__collapsible-title" id="details-summary<?= /* @noEscape */ $id ?>">
                     <span><?= $block->escapeHtml($advancedLabel) ?></span>
                 </summary>
