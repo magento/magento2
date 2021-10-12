@@ -388,4 +388,28 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
         $this->token = $this->tokenService->createCustomerAccessToken($username, $password);
         $this->customerRegistry->remove($this->customerRepository->get($username)->getId());
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
+     */
+    public function testGetOtherCustomerInfo()
+    {
+        $this->_markTestAsRestOnly();
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => "/V1/customers/me?customerId=1",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $this->token,
+            ]
+        ];
+        $requestData = ['customer' => ["id" => "-1", "Id" => "1"]];
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+        } catch (\Throwable $exception) {
+            if ($restResponse = json_decode($exception->getMessage(), true)) {
+                $exceptionMessage = $restResponse['message'];
+            }
+        }
+        $this->assertEquals('The customer email is missing. Enter and try again.', $exceptionMessage);
+    }
 }
