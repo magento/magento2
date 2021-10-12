@@ -310,7 +310,7 @@ class Grid extends \Magento\Backend\Block\Widget
                 );
             } else {
                 $condition = $column->getFilter()->getCondition();
-                if ($field && isset($condition)) {
+                if ($field && $condition) {
                     $this->getCollection()->addFieldToFilter($field, $condition);
                 }
             }
