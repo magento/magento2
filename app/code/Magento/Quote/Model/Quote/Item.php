@@ -9,6 +9,8 @@ namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Item\Option\ComparatorInterface;
 
 /**
  * Sales Quote Item Model
@@ -185,6 +187,13 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     private $serializer;
 
     /**
+     * Item options comparator
+     *
+     * @var ComparatorInterface
+     */
+    private $itemOptionComparator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param ExtensionAttributesFactory $extensionFactory
@@ -196,11 +205,12 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param Item\OptionFactory $itemOptionFactory
      * @param Item\Compare $quoteItemCompare
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      *
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ComparatorInterface|null $itemOptionComparator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -218,15 +228,18 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?ComparatorInterface $itemOptionComparator = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->quoteItemCompare = $quoteItemCompare;
         $this->stockRegistry = $stockRegistry;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->itemOptionComparator = $itemOptionComparator
+            ?: ObjectManager::getInstance()->get(ComparatorInterface::class);
         parent::__construct(
             $context,
             $registry,
@@ -500,7 +513,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             if (in_array($code, $this->_notRepresentOptions)) {
                 continue;
             }
-            if (!isset($options2[$code]) || $options2[$code]->getValue() != $option->getValue()) {
+            if (!isset($options2[$code])
+                || !$this->itemOptionComparator->compare($options2[$code], $option)
+            ) {
                 return false;
             }
         }

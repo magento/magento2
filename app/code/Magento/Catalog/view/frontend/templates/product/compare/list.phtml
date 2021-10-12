@@ -73,12 +73,12 @@
                                               action="<?= $block->escapeUrl($this->helper(Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item)) ?>"
                                               method="post">
                                             <?= $block->getBlockHtml('formkey') ?>
-                                            <button type="submit" class="action tocart primary">
+                                            <button type="submit" class="action tocart primary" disabled>
                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>
                                     <?php else :?>
-                                        <?php if ($item->getIsSalable()) :?>
+                                        <?php if ($item->isAvailable()) :?>
                                             <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
                                         <?php else :?>
                                             <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
@@ -144,15 +144,13 @@
                 </tbody>
             </table>
         </div>
-        <?php if (!$block->isRedirectToCartEnabled()) :?>
-            <script type="text/x-magento-init">
-            {
-                "[data-role=tocart-form]": {
-                    "catalogAddToCart": {}
-                }
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form]": {
+                "catalogAddToCart": {}
             }
-            </script>
-        <?php endif; ?>
+        }
+        </script>
 <?php else :?>
     <div class="message info empty"><div><?= $block->escapeHtml(__('You have no items to compare.')) ?></div></div>
 <?php endif; ?>

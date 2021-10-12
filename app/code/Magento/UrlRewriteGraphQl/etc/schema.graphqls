@@ -2,7 +2,8 @@
 # See COPYING.txt for license details.
 
 type Query {
-    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "The urlResolver query returns the relative URL for a specified product, category or CMS page, using as input a url_key appended by the url_suffix, if one exists") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
+    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "The urlResolver query returns the relative URL for a specified product, category or CMS page, using as input a url_key appended by the url_suffix, if one exists") @deprecated(reason: "Use the 'route' query instead") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
+    route(url: String!): RoutableInterface @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\Route") @doc(description: "Return the full details for a specified product, category, or CMS page given the specified url_key, appended by the url_suffix, if one exists") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
 }
 
 type EntityUrl @doc(description: "EntityUrl is an output object containing the `id`, `relative_url`, and `type` attributes") {
@@ -25,4 +26,10 @@ type UrlRewrite @doc(description: "The object contains URL rewrite details") {
 type HttpQueryParameter @doc(description: "The object details of target path parameters") {
     name: String @doc(description: "Parameter name")
     value: String @doc(description: "Parameter value")
+}
+
+interface RoutableInterface @typeResolver(class: "Magento\\UrlRewriteGraphQl\\Model\\RoutableInterfaceTypeResolver") @doc(description: "Routable entities serve as the model for a rendered page") {
+    relative_url: String @doc(description: "The internal relative URL. If the specified URL is a redirect, the query returns the redirected URL, not the original")
+    redirect_code: Int! @doc(description: "Contains 0 when there is no redirect error. A value of 301 indicates the URL of the requested resource has been changed permanently, while a value of 302 indicates a temporary redirect")
+    type: UrlRewriteEntityTypeEnum @doc(description: "One of PRODUCT, CATEGORY, or CMS_PAGE.")
 }

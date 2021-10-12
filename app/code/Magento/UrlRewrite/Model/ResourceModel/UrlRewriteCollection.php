@@ -68,7 +68,7 @@ class UrlRewriteCollection extends \Magento\Framework\Model\ResourceModel\Db\Col
             $store[] = 0;
         }
 
-        $this->addFieldToFilter('store_id', ['in' => $store]);
+        $this->addFieldToFilter('main_table.store_id', ['in' => $store]);
 
         return $this;
     }

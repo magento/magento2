@@ -20,7 +20,7 @@ class FilterApplier
      */
     private $conditionTypesMap = [
         'eq' => ' = ?',
-        'in' => 'IN (?)'
+        'in' => ' IN (?)'
     ];
 
     /**
