@@ -11,7 +11,6 @@ var config = {
             'translateInline':        'mage/translate-inline',
             'sticky':                 'mage/sticky',
             'tabs':                   'mage/tabs',
-            'zoom':                   'mage/zoom',
             'collapsible':            'mage/collapsible',
             'dropdownDialog':         'mage/dropdown',
             'dropdown':               'mage/dropdowns',

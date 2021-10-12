@@ -52,6 +52,24 @@ class CurlClient
     }
 
     /**
+     * Perform a HTTP POST request and return the full response
+     *
+     * @param string $url
+     * @param array|string $data
+     * @param array $headers
+     * @return array
+     */
+    public function postWithFullResponse($url, $data, $headers = []): array
+    {
+        $curlOpts = [];
+        $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST;
+        $headers[] = 'Content-Length: ' . strlen($data);
+        $curlOpts[CURLOPT_POSTFIELDS] = $data;
+
+        return $this->invokeApi($url, $curlOpts, $headers);
+    }
+
+    /**
      * Perform HTTP DELETE request
      *
      * @param string $url

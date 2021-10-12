@@ -1037,7 +1037,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $available = $this->getData(self::KEY_AVAILABLE_SORT_BY);
         if (empty($available)) {
-            return [];
+            return null;
         }
         if ($available && !is_array($available)) {
             $available = explode(',', $available);
