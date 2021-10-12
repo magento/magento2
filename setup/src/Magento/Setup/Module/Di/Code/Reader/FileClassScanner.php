@@ -15,7 +15,10 @@ class FileClassScanner
     private const NAMESPACE_TOKENS = [
         T_WHITESPACE => true,
         T_STRING => true,
-        T_NS_SEPARATOR => true
+        T_NS_SEPARATOR => true,
+        // PHP 8 compatibility.
+        T_NAME_QUALIFIED => true,
+        T_NAME_FULLY_QUALIFIED => true,
     ];
 
     private const ALLOWED_OPEN_BRACES_TOKENS = [
@@ -109,6 +112,7 @@ class FileClassScanner
         $triggerNamespace = false;
         $braceLevel = 0;
         $bracedNamespace = false;
+        $namespace = '';
 
         // phpcs:ignore
         $this->tokens = token_get_all($this->getFileContents());
@@ -146,6 +150,15 @@ class FileClassScanner
                     $namespaceParts = [];
                     $bracedNamespace = $this->isBracedNamespace($index);
                     break;
+
+                // PHP 8
+                case T_NAME_QUALIFIED:
+                case T_NAME_FULLY_QUALIFIED:
+                    if ($triggerNamespace) {
+                        $namespace = $token[1];
+                    }
+                    break;
+
                 case T_TRAIT:
                 case T_CLASS:
                     // Current loop contains the class keyword. Next loop will have the class name itself.
@@ -157,7 +170,8 @@ class FileClassScanner
 
             // We have a class name, let's concatenate and return it!
             if ($class !== '') {
-                $fqClassName = trim(implode('', $namespaceParts)) . trim($class);
+                $fqClassName = $namespace ? (trim($namespace) . '\\' . trim($class))
+                    : (trim(implode('', $namespaceParts)) . trim($class));
                 return $fqClassName;
             }
         }
