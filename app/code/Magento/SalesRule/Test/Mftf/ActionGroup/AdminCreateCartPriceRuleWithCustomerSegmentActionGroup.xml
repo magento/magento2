@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleWithCustomerSegmentActionGroup">
+        <annotations>
+            <description>
+                Clicks on the 'Actions' section on the Admin Cart Price Rule creation with customer segment action.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="rule" type="entity"/>
+        </arguments>
+
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{rule.name}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{rule.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{rule.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{rule.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{rule.coupon_type}}" stepKey="selectCouponType"/>
+
+        <!-- Expand the conditions section and add required condition-->
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="clickToExpandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" time="240" stepKey="waitForSelectOptionVisible"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Customer Segment" stepKey="selectCondition1"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <waitForPageLoad time="20" stepKey="waitForOperator"/>
+        <click selector="{{AdminCartPriceRulesFormSection.openList}}" stepKey="openList"/>
+        <waitForPageLoad time="60" stepKey="waitForGrid"/>
+
+        <checkOption selector="{{AdminCartPriceRulesFormSection.selectAll}}" stepKey="checkAll"/>
+        <waitForPageLoad stepKey="waitForChecking"/>
+        <moveMouseOver selector="{{AdminCartPriceRulesFormSection.setSegment}}" stepKey="moveOnButton"/>
+        <click selector="{{AdminCartPriceRulesFormSection.setSegment}}" stepKey="setCustomerSegment"/>
+        <waitForPageLoad time="60" stepKey="waitForSelectCustomerSegment"/>
+        <click selector="{{AdminMainActionsSection.saveAndContinue}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+   </actionGroup>
+</actionGroups>
