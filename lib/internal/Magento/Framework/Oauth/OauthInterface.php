@@ -73,16 +73,6 @@ interface OauthInterface
      * Issue a pre-authorization request token to the caller.
      *
      * @param array $params - Array containing parameters necessary for requesting Request Token.
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
-     * )
-     * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
      * @return array - The request token/secret pair.
@@ -100,18 +90,6 @@ interface OauthInterface
      * Get access token for a pre-authorized request token.
      *
      * @param array $params - Array containing parameters necessary for requesting Access Token.
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_token' => 'a6aa81cc3e65e2960a487939244sssss',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D',
-     *         'oauth_verifier' => 'a6aa81cc3e65e2960a487939244vvvvv'
-     * )
-     * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
      * @return array - The access token/secret pair.
@@ -129,17 +107,6 @@ interface OauthInterface
      * Validate an access token request.
      *
      * @param array $params - Array containing parameters necessary for validating Access Token.
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_token' => 'a6aa81cc3e65e2960a487939244sssss',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
-     * )
-     * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
      * @return int Consumer ID.
