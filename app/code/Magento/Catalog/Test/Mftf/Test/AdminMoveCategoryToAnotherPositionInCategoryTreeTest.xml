@@ -56,7 +56,7 @@
         <waitForText selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessage"/>
         <click selector="{{AdminCategoryModalSection.cancel}}" stepKey="clickCancelButtonOnWarningPopup"/>
         <!-- Verify Category in store front page after clicking cancel button -->
-        <amOnPage url="/$$createDefaultCategory.name$$/{{FirstLevelSubCat.name}}/{{SecondLevelSubCat.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <amOnPage url="/$$createDefaultCategory.custom_attributes[url_key]$$/{{FirstLevelSubCat.urlKey}}/{{SecondLevelSubCat.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeDefaultCategoryOnStoreNavigationBar"/>
         <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSubCategoryOnStoreNavigationBar"/>
@@ -76,10 +76,10 @@
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitTheForPageToLoad"/>
         <waitForText selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
-        <amOnPage url="/{{SimpleSubCategory.name}}.html" stepKey="seeCategoryNameInStoreFrontPage"/>
+        <amOnPage url="/{{SimpleSubCategory.urlKey}}.html" stepKey="seeCategoryNameInStoreFrontPage"/>
         <waitForPageLoad  stepKey="waitForStoreFrontPageToLoad"/>
         <!-- Verify Category in store front after moving category to another position in category tree -->
-        <amOnPage url="{{StorefrontCategoryPage.url(SecondLevelSubCat.name)}}"  stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(SecondLevelSubCat.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.CategoryTitle(SecondLevelSubCat.name)}}" stepKey="seeCategoryInTitle"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(SecondLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBarAfterMove"/>
