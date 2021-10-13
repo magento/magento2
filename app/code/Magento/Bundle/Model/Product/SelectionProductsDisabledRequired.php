@@ -10,7 +10,6 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Bundle\Model\ResourceModel\Selection as BundleSelection;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\Product;
@@ -83,6 +82,7 @@ class SelectionProductsDisabledRequired
      * @param int $bundleId
      * @param int|null $websiteId
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getChildProductIds(int $bundleId, ?int $websiteId = null): array
     {
@@ -130,10 +130,11 @@ class SelectionProductsDisabledRequired
     {
         $productIds = [];
         $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
-        $defaultStoreId = $defaultStore ? $defaultStore->getId() : Store::DEFAULT_STORE_ID;
+        $defaultStoreId = $defaultStore ? $defaultStore->getId() : null;
         foreach ($selectionProductIds as $optionProductIds) {
-            $productIds = array_merge($productIds, $optionProductIds);
+            $productIds[] = $optionProductIds;
         }
+        $productIds = array_merge([], ...$productIds);
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->joinAttribute(
             ProductInterface::STATUS,
