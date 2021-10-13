@@ -54,13 +54,14 @@ class ConfigurableOptionsMetadata
         $availableSelections = [];
 
         foreach ($options as $attributeId => $option) {
-            if ($attributeId === 'index' || isset($selectedOptions[$attributeId])) {
+            if (in_array($attributeId, ['index','salable','canDisplayShowOutOfStockStatus'])
+                || isset($selectedOptions[$attributeId])) {
                 continue;
             }
 
             $availableSelections[] = $this->configurableOptionsFormatter->format(
                 $attributes[$attributeId],
-                $options[$attributeId] ?? []
+                $option ?? []
             );
         }
 

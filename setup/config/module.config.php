@@ -12,10 +12,5 @@ return [
         'template_path_stack' => [
             'setup' => __DIR__ . '/../view',
         ],
-    ],
-    'controllers' => [
-        'factories' => [
-            \Magento\Setup\Controller\Index::class => \Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class,
-        ],
-    ],
+    ]
 ];
