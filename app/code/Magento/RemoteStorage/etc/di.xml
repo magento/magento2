@@ -11,14 +11,22 @@
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProvider"/>
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactory"/>
     <preference for="Magento\Framework\Filesystem\DriverPool" type="Magento\RemoteStorage\Driver\DriverPool"/>
+    <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="remoteReadFactory" type="Magento\Framework\Filesystem\Directory\ReadFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\RemoteStorage\Filesystem">
         <arguments>
             <argument name="writeFactory" xsi:type="object">
                 Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory
             </argument>
-            <argument name="readFactory" xsi:type="object">
-                Magento\RemoteStorage\Model\Filesystem\Directory\ReaderFactory
-            </argument>
+            <argument name="readFactory" xsi:type="object">remoteReadFactory</argument>
         </arguments>
     </type>
     <virtualType name="customRemoteFilesystem" type="Magento\RemoteStorage\Filesystem">
