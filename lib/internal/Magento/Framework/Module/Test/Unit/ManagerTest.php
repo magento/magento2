@@ -47,32 +47,36 @@ class ManagerTest extends TestCase
                 [
                     ['Module_One', ['name' => 'One_Module', 'setup_version' => '1']],
                     ['Module_Two', ['name' => 'Two_Module', 'setup_version' => '2']],
-                    ['Module_Three', ['name' => 'Two_Three']],
+                    ['Module_Three', ['name' => 'Two_Three']]
                 ]
             );
         $this->_outputConfig = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->_model = new Manager(
             $this->_outputConfig,
             $this->_moduleList,
-            [
-                'Module_Two' => self::XML_PATH_OUTPUT_ENABLED,
-            ]
+            ['Module_Two' => self::XML_PATH_OUTPUT_ENABLED]
         );
     }
 
-    public function testIsEnabled()
+    /**
+     * @return void
+     */
+    public function testIsEnabled(): void
     {
         $this->_moduleList->expects($this->exactly(2))->method('has')->willReturnMap(
             [
                 ['Module_Exists', true],
-                ['Module_NotExists', false],
+                ['Module_NotExists', false]
             ]
         );
         $this->assertTrue($this->_model->isEnabled('Module_Exists'));
         $this->assertFalse($this->_model->isEnabled('Module_NotExists'));
     }
 
-    public function testIsOutputEnabledReturnsFalseForDisabledModule()
+    /**
+     * @return void
+     */
+    public function testIsOutputEnabledReturnsFalseForDisabledModule(): void
     {
         $this->_outputConfig->expects($this->any())->method('isSetFlag')->willReturn(true);
         $this->assertFalse($this->_model->isOutputEnabled('Disabled_Module'));
@@ -81,9 +85,11 @@ class ManagerTest extends TestCase
     /**
      * @param bool $configValue
      * @param bool $expectedResult
+     *
+     * @return void
      * @dataProvider isOutputEnabledGenericConfigPathDataProvider
      */
-    public function testIsOutputEnabledGenericConfigPath($configValue, $expectedResult)
+    public function testIsOutputEnabledGenericConfigPath($configValue, $expectedResult): void
     {
         $this->_moduleList->expects($this->once())->method('has')->willReturn(true);
         $this->_outputConfig->expects($this->once())
@@ -96,7 +102,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isOutputEnabledGenericConfigPathDataProvider()
+    public function isOutputEnabledGenericConfigPathDataProvider(): array
     {
         return ['output disabled' => [true, false], 'output enabled' => [false, true]];
     }
@@ -104,12 +110,14 @@ class ManagerTest extends TestCase
     /**
      * @param bool $configValue
      * @param bool $expectedResult
+     *
+     * @return void
      * @dataProvider isOutputEnabledCustomConfigPathDataProvider
      */
-    public function testIsOutputEnabledCustomConfigPath($configValue, $expectedResult)
+    public function testIsOutputEnabledCustomConfigPath($configValue, $expectedResult): void
     {
         $this->_moduleList->expects($this->once())->method('has')->willReturn(true);
-        $this->_outputConfig->expects($this->at(0))
+        $this->_outputConfig
             ->method('isSetFlag')
             ->with(self::XML_PATH_OUTPUT_ENABLED)
             ->willReturn($configValue);
@@ -119,11 +127,11 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function isOutputEnabledCustomConfigPathDataProvider()
+    public function isOutputEnabledCustomConfigPathDataProvider(): array
     {
         return [
             'path literal, output disabled' => [false, false],
-            'path literal, output enabled'  => [true, true],
+            'path literal, output enabled'  => [true, true]
         ];
     }
 }

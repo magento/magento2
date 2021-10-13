@@ -10,6 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderTotalSection">
         <element name="subTotal" type="text" selector=".order-subtotal-table tbody tr.col-0>td span.price"/>
+        <element name="discount" type="text" selector=".order-subtotal-table tbody tr.col-1>td span.price"/>
         <element name="grandTotal" type="text" selector=".order-subtotal-table tfoot tr.col-0>td span.price"/>
         <element name="shippingDescription" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[contains(text(), 'Shipping &amp; Handling')]"/>
         <element name="shippingAndHandling" type="text" selector="//table[contains(@class, 'order-subtotal-table')]//td[normalize-space(.)='Shipping &amp; Handling']/following-sibling::td//span[@class='price']"/>

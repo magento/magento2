@@ -14,6 +14,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class for upload customer file attribute
+ */
 class Upload extends Action
 {
     /**
@@ -37,6 +40,11 @@ class Upload extends Action
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var string
+     */
+    private $scope;
 
     /**
      * @param Context $context
@@ -65,15 +73,15 @@ class Upload extends Action
             if (empty($_FILES)) {
                 throw new \Exception('$_FILES array is empty.');
             }
-
-            $attributeCode = key($_FILES['customer']['name']);
+            $scope = array_key_first($_FILES);
+            $attributeCode = key($_FILES[$scope]['name']);
             $attributeMetadata = $this->customerMetadataService->getAttributeMetadata($attributeCode);
 
             /** @var FileUploader $fileUploader */
             $fileUploader = $this->fileUploaderFactory->create([
                 'attributeMetadata' => $attributeMetadata,
                 'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                'scope' => 'customer',
+                'scope' => $scope,
             ]);
 
             $errors = $fileUploader->validate();
