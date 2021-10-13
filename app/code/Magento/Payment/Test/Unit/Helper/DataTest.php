@@ -23,16 +23,24 @@ use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
 {
-    /** @var Data */
+    /**
+     * @var Data
+     */
     private $helper;
 
-    /**  @var MockObject */
+    /**
+     * @var MockObject
+     */
     private $scopeConfig;
 
-    /**  @var MockObject */
+    /**
+     * @var MockObject
+     */
     private $initialConfig;
 
-    /**  @var MockObject */
+    /**
+     * @var MockObject
+     */
     private $methodFactory;
 
     /**
@@ -50,6 +58,9 @@ class DataTest extends TestCase
      */
     private $layoutFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
@@ -68,7 +79,10 @@ class DataTest extends TestCase
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }
 
-    public function testGetMethodInstance()
+    /**
+     * @return void
+     */
+    public function testGetMethodInstance(): void
     {
         list($code, $class, $methodInstance) = ['method_code', 'method_class', 'method_instance'];
 
@@ -92,7 +106,10 @@ class DataTest extends TestCase
         $this->assertEquals($methodInstance, $this->helper->getMethodInstance($code));
     }
 
-    public function testGetMethodInstanceWithException()
+    /**
+     * @return void
+     */
+    public function testGetMethodInstanceWithException(): void
     {
         $this->expectException(\UnexpectedValueException::class);
         $this->scopeConfig->expects($this->once())
@@ -106,9 +123,10 @@ class DataTest extends TestCase
      * @param array $methodA
      * @param array $methodB
      *
+     * @return void
      * @dataProvider getSortMethodsDataProvider
      */
-    public function testSortMethods(array $methodA, array $methodB)
+    public function testSortMethods(array $methodA, array $methodB): void
     {
         $this->initialConfig->expects($this->once())
             ->method('getData')
@@ -117,8 +135,7 @@ class DataTest extends TestCase
                     Data::XML_PATH_PAYMENT_METHODS => [
                         $methodA['code'] => $methodA['data'],
                         $methodB['code'] => $methodB['data'],
-                        'empty' => [],
-
+                        'empty' => []
                     ]
                 ]
             );
@@ -158,13 +175,9 @@ class DataTest extends TestCase
             ->with('sort_order', null)
             ->willReturn($methodB['data']['sort_order']);
 
-        $this->methodFactory->expects($this->at(0))
+        $this->methodFactory
             ->method('create')
-            ->willReturn($methodInstanceMockA);
-
-        $this->methodFactory->expects($this->at(1))
-            ->method('create')
-            ->willReturn($methodInstanceMockB);
+            ->willReturnOnConsecutiveCalls($methodInstanceMockA, $methodInstanceMockB);
 
         $sortedMethods = $this->helper->getStoreMethods();
 
@@ -174,19 +187,21 @@ class DataTest extends TestCase
         );
     }
 
-    public function testGetMethodFormBlock()
+    /**
+     * @return void
+     */
+    public function testGetMethodFormBlock(): void
     {
         list($blockType, $methodCode) = ['method_block_type', 'method_code'];
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
+        $layoutMock = $this->getMockBuilder(LayoutInterface::class)->disableOriginalConstructor()
+            ->addMethods([])
             ->getMockForAbstractClass();
-        $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setMethod', 'toHtml'])
+        $blockMock = $this->getMockBuilder(BlockInterface::class)->disableOriginalConstructor()
+            ->onlyMethods(['toHtml'])
+            ->addMethods(['setMethod'])
             ->getMockForAbstractClass();
 
         $methodMock->expects($this->once())->method('getFormBlockType')->willReturn($blockType);
@@ -199,19 +214,21 @@ class DataTest extends TestCase
         $this->assertSame($blockMock, $this->helper->getMethodFormBlock($methodMock, $layoutMock));
     }
 
-    public function testGetInfoBlock()
+    /**
+     * @return void
+     */
+    public function testGetInfoBlock(): void
     {
         $blockType = 'method_block_type';
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
-        $infoMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
+        $infoMock = $this->getMockBuilder(Info::class)->disableOriginalConstructor()
+            ->onlyMethods(['getMethodInstance'])
             ->getMock();
-        $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setInfo', 'toHtml'])
+        $blockMock = $this->getMockBuilder(BlockInterface::class)->disableOriginalConstructor()
+            ->onlyMethods(['toHtml'])
+            ->addMethods(['setInfo'])
             ->getMockForAbstractClass();
 
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
@@ -225,24 +242,26 @@ class DataTest extends TestCase
         $this->assertSame($blockMock, $this->helper->getInfoBlock($infoMock));
     }
 
-    public function testGetInfoBlockHtml()
+    /**
+     * @return void
+     */
+    public function testGetInfoBlockHtml(): void
     {
         list($storeId, $blockHtml, $secureMode, $blockType) = [1, 'HTML MARKUP', true, 'method_block_type'];
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
-        $infoMock = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
+        $infoMock = $this->getMockBuilder(Info::class)->disableOriginalConstructor()
+            ->onlyMethods(['getMethodInstance'])
             ->getMock();
-        $paymentBlockMock = $this->getMockBuilder(BlockInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'toHtml', 'setInfo'])
+        $paymentBlockMock = $this->getMockBuilder(BlockInterface::class)->disableOriginalConstructor()
+            ->onlyMethods(['toHtml'])
+            ->addMethods(['setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'setInfo'])
             ->getMockForAbstractClass();
 
         $this->appEmulation->expects($this->once())
             ->method('startEnvironmentEmulation')
-            ->with($storeId, \Magento\Framework\App\Area::AREA_FRONTEND, true);
+            ->with($storeId, Area::AREA_FRONTEND, true);
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $methodMock->expects($this->once())->method('getInfoBlockType')->willReturn($blockType);
         $this->layoutMock->expects($this->once())->method('createBlock')
@@ -268,7 +287,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function getSortMethodsDataProvider()
+    public function getSortMethodsDataProvider(): array
     {
         return [
             [
@@ -277,7 +296,7 @@ class DataTest extends TestCase
             ],
             [
                 ['code' => 'methodA', 'data' => ['sort_order' => 2]],
-                ['code' => 'methodB', 'data' => ['sort_order' => 1]],
+                ['code' => 'methodB', 'data' => ['sort_order' => 1]]
             ]
         ];
     }

@@ -106,6 +106,12 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
         $helper = Bootstrap::getObjectManager()->get(\Magento\Payment\Helper\Data::class);
         $result = [];
         foreach ($helper->getPaymentMethods() as $code => $method) {
+            if (!isset($method['model'])) {
+                $this->addWarning(
+                    'The `model` node must be provided for payment method configuration with code: ' . $code
+                );
+                continue;
+            }
             $result[] = [$code, $method['model']];
         }
         return $result;
