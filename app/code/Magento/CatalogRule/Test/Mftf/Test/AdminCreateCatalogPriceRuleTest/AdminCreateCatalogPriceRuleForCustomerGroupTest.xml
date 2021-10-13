@@ -60,7 +60,7 @@
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProduct1">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct1Price">
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeDiscountedPrice1">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productPrice" value="$110.70"/>
         </actionGroup>
