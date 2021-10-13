@@ -512,7 +512,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
                 $cb = $callback;
                 array_unshift($params, $item);
             }
-            $results[$id] = call_user_func_array($cb, $params);
+            // The `array_values` is a workaround to ensure the same behavior in PHP 7 and 8.
+            $results[$id] = call_user_func_array($cb, array_values($params));
         }
         return $results;
     }
