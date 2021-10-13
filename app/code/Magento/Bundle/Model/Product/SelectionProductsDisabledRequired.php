@@ -10,6 +10,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Bundle\Model\ResourceModel\Selection as BundleSelection;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\Product;
@@ -128,7 +129,8 @@ class SelectionProductsDisabledRequired
     private function getProducts(array $selectionProductIds, int $websiteId): array
     {
         $productIds = [];
-        $defaultStoreId = $this->storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
+        $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
+        $defaultStoreId = $defaultStore ? $defaultStore->getId() : Store::DEFAULT_STORE_ID;
         foreach ($selectionProductIds as $optionProductIds) {
             $productIds = array_merge($productIds, $optionProductIds);
         }
