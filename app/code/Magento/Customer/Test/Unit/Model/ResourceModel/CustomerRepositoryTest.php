@@ -694,7 +694,7 @@ class CustomerRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
+     * @return void
     */
     public function testDeleteById(): void
     {
@@ -715,8 +715,8 @@ class CustomerRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDelete(): void
     {
         $customerId = 14;

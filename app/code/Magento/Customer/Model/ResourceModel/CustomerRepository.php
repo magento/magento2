@@ -219,11 +219,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $customer->setAddresses($origAddresses);
         /** @var CustomerModel $customerModel */
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
-        if (!empty($prevCustomerDataArr)) {
-            foreach ($prevCustomerDataArr as $field => $value) {
-                $customerModel->setOrigData($field, $value);
-            }
-        }
+        $this->populateWithOrigData($customerModel, $prevCustomerDataArr);
 
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
@@ -299,6 +295,19 @@ class CustomerRepository implements CustomerRepositoryInterface
             ]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * @param CustomerModel $customerModel
+     * @param array $prevCustomerDataArr
+     */
+    private function populateWithOrigData(CustomerModel $customerModel, array $prevCustomerDataArr)
+    {
+        if (!empty($prevCustomerDataArr)) {
+            foreach ($prevCustomerDataArr as $field => $value) {
+                $customerModel->setOrigData($field, $value);
+            }
+        }
     }
 
     /**
