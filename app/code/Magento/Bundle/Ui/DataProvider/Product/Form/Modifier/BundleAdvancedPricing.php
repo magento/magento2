@@ -49,7 +49,7 @@ class BundleAdvancedPricing extends AbstractModifier
             if (isset($parentNode['container_' . ProductAttributeInterface::CODE_SPECIAL_PRICE])) {
                 $currentNode = &$parentNode['container_' . ProductAttributeInterface::CODE_SPECIAL_PRICE]['children'];
                 $currentNode[ProductAttributeInterface::CODE_SPECIAL_PRICE]['arguments']['data']['config']['addbefore']
-                    = "$";
+                    = "%";
             }
             $parentNodeChildren = &$parentNode[ProductAttributeInterface::CODE_TIER_PRICE]['children'];
             if (isset($parentNodeChildren[self::CODE_RECORD]['children'][ProductAttributeInterface::CODE_PRICE])) {

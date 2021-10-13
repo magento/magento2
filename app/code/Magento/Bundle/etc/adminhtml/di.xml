@@ -49,4 +49,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
+        <plugin name="priceAttributes" type="Magento\Bundle\Ui\DataProvider\Product\Modifier\Plugin\PriceAttributes" sortOrder="60" />
+    </type>
 </config>
