@@ -118,8 +118,8 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <!--Navigate to order details page in custom account-->
         <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="amOnOrderPage">
-            <argument name="orderId" value="$orderNumber"/>
-            <argument name="orderNumber" value="$orderId"/>
+            <argument name="orderId" value="$orderId"/>
+            <argument name="orderNumber" value="$orderNumber"/>
         </actionGroup>
         <!--Verify bundle order items details-->
         <see selector="{{StorefrontCustomerOrderSection.orderItemOptionLabel('2')}}" userInput="$$createFirstBundleOption.title$$" stepKey="seeOptionLabelInCustomerOrderItems"/>

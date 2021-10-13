@@ -174,8 +174,8 @@
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
 
         <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="amOnOrderPage">
-            <argument name="orderId" value="$orderNumber"/>
-            <argument name="orderNumber" value="$orderId"/>
+            <argument name="orderId" value="$orderId"/>
+            <argument name="orderNumber" value="$orderNumber"/>
         </actionGroup>
 
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
