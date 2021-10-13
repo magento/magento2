@@ -32,6 +32,8 @@
     <php>
         <includePath>./testsuite</includePath>
         <const name="TESTS_INSTALL_CONFIG_FILE" value="config/install-config-mysql.php"/>
+        <!-- Local XML post installation configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
+        <const name="TESTS_POST_INSTALL_SETUP_COMMAND_CONFIG_FILE" value="config/post-install-setup-command-config.php"/>
         <const name="TESTS_GLOBAL_CONFIG_FILE" value="config/config-global.php"/>
         <!-- WebSerivice Type -->
         <const name="TESTS_WEB_API_ADAPTER" value="soap"/>
@@ -63,7 +65,7 @@
     <!-- Test listeners -->
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output folder -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->

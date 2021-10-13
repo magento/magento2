@@ -239,11 +239,26 @@ class Elasticsearch
         // prepare new index name and increase version
         $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
         $version = (int)(str_replace($indexPattern, '', $indexName));
-        $newIndexName = $indexPattern . (++$version);
 
-        // remove index if already exists
-        if ($this->client->indexExists($newIndexName)) {
-            $this->client->deleteIndex($newIndexName);
+        // compatibility with snapshotting collision
+        $deleteQueue = [];
+        do {
+            $newIndexName = $indexPattern . (++$version);
+            if ($this->client->indexExists($newIndexName)) {
+                $deleteQueue[]= $newIndexName;
+                $indexExists = true;
+            } else {
+                $indexExists = false;
+            }
+        } while ($indexExists);
+
+        foreach ($deleteQueue as $indexToDelete) {
+            // remove index if already exists, wildcard deletion may cause collisions
+            try {
+                $this->client->deleteIndex($indexToDelete);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
         }
 
         // prepare new index
@@ -372,7 +387,11 @@ class Elasticsearch
 
         // remove obsolete index
         if ($oldIndex) {
-            $this->client->deleteIndex($oldIndex);
+            try {
+                $this->client->deleteIndex($oldIndex);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
             unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
         }
 

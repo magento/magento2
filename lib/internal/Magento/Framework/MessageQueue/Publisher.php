@@ -83,6 +83,8 @@ class Publisher implements PublisherInterface
                 'body' => $data,
                 'properties' => [
                     'delivery_mode' => 2,
+                    // md5() here is not for cryptographic use.
+                    // phpcs:ignore Magento2.Security.InsecureFunction
                     'message_id' => md5(uniqid($topicName))
                 ]
             ]

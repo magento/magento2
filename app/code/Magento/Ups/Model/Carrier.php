@@ -376,27 +376,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destCountry = self::USA_COUNTRY_ID;
         }
 
-        //for UPS, puerto rico state for US will assume as puerto rico country
-        if ($destCountry == self::USA_COUNTRY_ID
-            && ($request->getDestPostcode() == '00912'
-                || $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
-        ) {
-            $destCountry = self::PUERTORICO_COUNTRY_ID;
-        }
-
-        // For UPS, Guam state of the USA will be represented by Guam country
-        if ($destCountry == self::USA_COUNTRY_ID && $request->getDestRegionCode() == self::GUAM_REGION_CODE) {
-            $destCountry = self::GUAM_COUNTRY_ID;
-        }
-
-        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
-        if ($destCountry === 'ES' &&
-            ($request->getDestRegionCode() === 'Las Palmas'
-                || $request->getDestRegionCode() === 'Santa Cruz de Tenerife')
-        ) {
-            $destCountry = 'IC';
-        }
-
         $country = $this->_countryFactory->create()->load($destCountry);
         $rowRequest->setDestCountry($country->getData('iso2_code') ?: $destCountry);
 
@@ -405,6 +384,22 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         if ($request->getDestPostcode()) {
             $rowRequest->setDestPostal($request->getDestPostcode());
         }
+
+        $rowRequest->setOrigCountry(
+            $this->getNormalizedCountryCode(
+                $rowRequest->getOrigCountry(),
+                $rowRequest->getOrigRegionCode(),
+                $rowRequest->getOrigPostal()
+            )
+        );
+
+        $rowRequest->setDestCountry(
+            $this->getNormalizedCountryCode(
+                $rowRequest->getDestCountry(),
+                $rowRequest->getDestRegionCode(),
+                $rowRequest->getDestPostal()
+            )
+        );
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
 
@@ -430,6 +425,40 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_rawRequest = $rowRequest;
 
         return $this;
+    }
+
+    /**
+     * Return country code according to UPS
+     *
+     * @param string $countryCode
+     * @param string $regionCode
+     * @param string $postCode
+     * @return string
+     */
+    private function getNormalizedCountryCode($countryCode, $regionCode, $postCode)
+    {
+        //for UPS, puerto rico state for US will assume as puerto rico country
+        if ($countryCode == self::USA_COUNTRY_ID
+            && ($postCode == '00912'
+                || $regionCode == self::PUERTORICO_COUNTRY_ID)
+        ) {
+            $countryCode = self::PUERTORICO_COUNTRY_ID;
+        }
+
+        // For UPS, Guam state of the USA will be represented by Guam country
+        if ($countryCode == self::USA_COUNTRY_ID && $regionCode == self::GUAM_REGION_CODE) {
+            $countryCode = self::GUAM_COUNTRY_ID;
+        }
+
+        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
+        if ($countryCode === 'ES' &&
+            ($regionCode === 'Las Palmas'
+                || $regionCode === 'Santa Cruz de Tenerife')
+        ) {
+            $countryCode = 'IC';
+        }
+
+        return $countryCode;
     }
 
     /**
@@ -1679,6 +1708,22 @@ XMLAuth;
      */
     private function requestQuotes(DataObject $request): array
     {
+        $request->setShipperAddressCountryCode(
+            $this->getNormalizedCountryCode(
+                $request->getShipperAddressCountryCode(),
+                $request->getShipperAddressStateOrProvinceCode(),
+                $request->getShipperAddressPostalCode(),
+            )
+        );
+
+        $request->setRecipientAddressCountryCode(
+            $this->getNormalizedCountryCode(
+                $request->getRecipientAddressCountryCode(),
+                $request->getRecipientAddressStateOrProvinceCode(),
+                $request->getRecipientAddressPostalCode(),
+            )
+        );
+
         /** @var HttpResponseDeferredInterface[] $quotesRequests */
         //Getting quotes
         $this->_prepareShipmentRequest($request);
