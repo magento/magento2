@@ -221,31 +221,8 @@ class TotalsCollector
      */
     protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)
     {
-        $quoteItems = $quote->getAllVisibleItems();
-        $quote->setItemsCount(0);
-        $quote->setItemsQty(0);
-        $quote->setVirtualItemsQty(0);
+        $this->quantityCollector->collectItemsQtys($quote);
 
-        foreach ($quoteItems as $item) {
-            if ($item->getParentItem()) {
-                continue;
-            }
-
-            $children = $item->getChildren();
-            if ($children && $item->isShipSeparately()) {
-                foreach ($children as $child) {
-                    if ($child->getProduct()->getIsVirtual()) {
-                        $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $child->getQty() * $item->getQty());
-                    }
-                }
-            }
-
-            if ($item->getProduct()->getIsVirtual()) {
-                $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $item->getQty());
-            }
-            $quote->setItemsCount($quote->getItemsCount() + 1);
-            $quote->setItemsQty((float)$quote->getItemsQty() + $item->getQty());
-        }
         return $this;
     }
 
