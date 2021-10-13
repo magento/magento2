@@ -59,16 +59,22 @@ class AddressConverterTest extends TestCase
     public function convertDataProvider(): array
     {
         return [
-            [
+            'regular email' => [
                 'email' => 'test@example.com',
                 'name' => 'Test',
                 'emailExpected' => 'test@example.com',
                 'nameExpected' => 'Test'
             ],
-            [
+            'email with non-ascii symbols' => [
                 'email' => 'tést@example.com',
                 'name' => 'Test',
                 'emailExpected' => 'xn--tst-bma@example.com',
+                'nameExpected' => 'Test'
+            ],
+            'email with hyphen' => [
+                'email' => 'first-lastname-@hotmail.com',
+                'name' => 'Test',
+                'emailExpected' => 'first-lastname-@hotmail.com',
                 'nameExpected' => 'Test'
             ]
         ];

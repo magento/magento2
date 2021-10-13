@@ -58,10 +58,9 @@ class AddressConverter
     private function convertEmailUserToAscii(string $email): string
     {
         if (preg_match('/^(.+)@([^@]+)$/', $email, $matches)) {
-            $user = $matches[1];
-            $hostname = $matches[2];
+            [, $user, $hostname] = $matches;
             $userEncoded = idn_to_ascii($user, IDNA_NONTRANSITIONAL_TO_ASCII, INTL_IDNA_VARIANT_UTS46);
-            if ($userEncoded == $user) {
+            if (!$userEncoded || $userEncoded === $user) {
                 return $email;
             }
             $email = sprintf('%s@%s', $userEncoded, $hostname);
