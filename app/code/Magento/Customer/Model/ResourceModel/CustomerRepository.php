@@ -299,9 +299,9 @@ class CustomerRepository implements CustomerRepositoryInterface
 
     /**
      * @param CustomerModel $customerModel
-     * @param array $prevCustomerDataArr
+     * @param ?array $prevCustomerDataArr
      */
-    private function populateWithOrigData(CustomerModel $customerModel, array $prevCustomerDataArr)
+    private function populateWithOrigData(CustomerModel $customerModel, ?array $prevCustomerDataArr)
     {
         if (!empty($prevCustomerDataArr)) {
             foreach ($prevCustomerDataArr as $field => $value) {
