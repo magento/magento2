@@ -7,13 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Ui\DataProvider\Product\Modifier\Plugin;
 
+use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Pricing\Price\SpecialPrice;
 use Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes as Subject;
+use Magento\Directory\Model\Currency as DirectoryCurrency;
 use Magento\Framework\Currency;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Directory\Model\Currency as DirectoryCurrency;
 use Zend_Currency;
 use Zend_Currency_Exception;
 
@@ -22,10 +24,6 @@ use Zend_Currency_Exception;
  */
 class PriceAttributes
 {
-    const PRICE_ATTRIBUTE = 'special_price';
-    const PRODUCT_TYPE = 'bundle';
-    const PRICE_ATTRIBUTE_SYMBOL = '%';
-
     /**
      * @var StoreManagerInterface
      */
@@ -59,22 +57,31 @@ class PriceAttributes
     }
 
     /**
-     * @inheritdoc
      * @param Subject $subject
-     * @param $result
+     * @param array $result
+     * @return array
      * @throws Zend_Currency_Exception
      * @throws NoSuchEntityException
      */
-    public function afterModifyData(Subject $subject, $result)
+    public function afterModifyData(Subject $subject, array $result): array
     {
         if (empty($result)) {
             return $result;
         }
 
         foreach ($result['items'] as &$item) {
-            if (isset($item[self::PRICE_ATTRIBUTE]) && $item['type_id'] == self::PRODUCT_TYPE) {
-                $item[self::PRICE_ATTRIBUTE] = $this->directoryCurrency->format($item[self::PRICE_ATTRIBUTE], ['display' => Zend_Currency::NO_SYMBOL], false);
-                $item[self::PRICE_ATTRIBUTE] = $this->getCurrency()->toCurrency(sprintf("%f", $item[self::PRICE_ATTRIBUTE]), ['symbol' => self::PRICE_ATTRIBUTE_SYMBOL]);
+            if (isset($item[SpecialPrice::PRICE_CODE]) && $item['type_id'] == Type::TYPE_CODE) {
+                $item[SpecialPrice::PRICE_CODE] =
+                    $this->directoryCurrency->format(
+                        $item[SpecialPrice::PRICE_CODE],
+                        ['display' => Zend_Currency::NO_SYMBOL],
+                        false
+                    );
+                $item[SpecialPrice::PRICE_CODE] =
+                    $this->getCurrency()->toCurrency(
+                        sprintf("%f", $item[SpecialPrice::PRICE_CODE]),
+                        ['symbol' => '%']
+                    );
             }
         }
 
