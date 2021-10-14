@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96691"/>
             <group value="captcha"/>
+            <group value="storefront_captcha_enabled"/>
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/guest_checkout 0" stepKey="disableGuestCheckout"/>

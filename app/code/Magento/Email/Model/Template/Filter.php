@@ -208,7 +208,6 @@ class Filter extends Template
      */
     private $storeInformation;
 
-
     /**
      * Filter constructor.
      * @param StringUtils $string
@@ -873,7 +872,7 @@ class Filter extends Template
     {
         return in_array(
             $variable,
-            array_column($this->configVariables->getData(), 'value')
+            $this->configVariables->getAvailableVars()
         );
     }
 
@@ -934,7 +933,7 @@ class Filter extends Template
             return '/*' . PHP_EOL . $exception->getMessage() . PHP_EOL . '*/';
         }
 
-        if (empty($css)){
+        if (empty($css)) {
             return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
 
@@ -1122,7 +1121,7 @@ class Filter extends Template
             $this->resetAfterFilterCallbacks();
 
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
-                $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
+                $value = sprintf(__('Error filtering template: %s')->render(), $e->getMessage());
             } else {
                 $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
