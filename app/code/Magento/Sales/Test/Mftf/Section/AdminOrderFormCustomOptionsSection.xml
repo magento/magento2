@@ -10,7 +10,7 @@
     <section name="AdminOrderFormCustomOptionsSection">
         <element name="quantity" type="input" selector="//input[@id='product_composite_configure_input_qty']"/>
         <element name="file" type="file" selector="//input[@type='file'][contains(@class, 'product-custom-option')]" />
-        <element name="buttonOk" type="button" selector="//button[contains(@class, 'action-primary')][@data-role='action']"/>
+        <element name="buttonOk" type="button" selector="//button[contains(@class, 'action-primary')][@data-role='action']" timeout="30"/>
         <element name="linkChange" type="text" selector="//div[contains(@class, 'entry-edit')]//a[contains(text(),'Change')]"/>
     </section>
 </sections>

@@ -51,4 +51,6 @@
     </type>
     <preference for="Magento\Checkout\Api\PaymentProcessingRateLimiterInterface"
                 type="Magento\Checkout\Model\CaptchaPaymentProcessingRateLimiter" />
+    <preference for="Magento\Checkout\Api\PaymentSavingRateLimiterInterface"
+                type="Magento\Checkout\Model\CaptchaPaymentSavingRateLimiter" />
 </config>

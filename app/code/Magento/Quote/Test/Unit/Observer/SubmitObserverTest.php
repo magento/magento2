@@ -22,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Test for sending order email during order place on frontend
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SubmitObserverTest extends TestCase
@@ -40,11 +42,6 @@ class SubmitObserverTest extends TestCase
      * @var OrderSender|MockObject
      */
     private $orderSenderMock;
-
-    /**
-     * @var InvoiceSender|MockObject
-     */
-    private $invoiceSender;
 
     /**
      * @var Observer|MockObject
@@ -66,6 +63,9 @@ class SubmitObserverTest extends TestCase
      */
     private $paymentMock;
 
+    /**
+     * @inheirtDoc
+     */
     protected function setUp(): void
     {
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -73,7 +73,6 @@ class SubmitObserverTest extends TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
-        $this->invoiceSender = $this->createMock(InvoiceSender::class);
         $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', 'getOrder'])
@@ -85,8 +84,7 @@ class SubmitObserverTest extends TestCase
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->model = new SubmitObserver(
             $this->loggerMock,
-            $this->orderSenderMock,
-            $this->invoiceSender
+            $this->orderSenderMock
         );
     }
 
@@ -106,10 +104,6 @@ class SubmitObserverTest extends TestCase
         $this->orderMock->method('getCanSendNewEmailFlag')->willReturn(true);
         $this->orderSenderMock->expects($this->once())
             ->method('send')->willReturn(true);
-        $this->invoiceSender->expects($this->once())
-            ->method('send')
-            ->with($invoice)
-            ->willReturn(true);
         $this->loggerMock->expects($this->never())
             ->method('critical');
 

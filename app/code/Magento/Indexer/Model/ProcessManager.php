@@ -111,9 +111,12 @@ class ProcessManager
                 $this->startChildProcess($userFunction);
             }
         }
-        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock,Magento2.Functions.DiscouragedFunction
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         while (pcntl_waitpid(0, $status) != -1) {
             //Waiting for the completion of child processes
+            if ($status > 0) {
+                $this->failInChildProcess = true;
+            }
         }
 
         if ($this->failInChildProcess) {

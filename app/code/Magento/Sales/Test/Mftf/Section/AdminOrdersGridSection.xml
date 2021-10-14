@@ -41,5 +41,6 @@
         <element name="viewLink" type="text" selector="//td/div[contains(.,'{{orderID}}')]/../..//a[@class='action-menu-item']" parameterized="true"/>
         <element name="selectOrderID" type="checkbox" selector="//td/div[text()='{{orderId}}']/../preceding-sibling::td//input" parameterized="true" timeout="60"/>
         <element name="orderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[contains(text(), '{{orderId}}')]" parameterized="true"/>
+        <element name="orderIdByIncrementId" type="text" selector="//input[@class='admin__control-checkbox' and @value={{incrId}}]/parent::label/parent::td/following-sibling::td"  parameterized="true"/>
     </section>
 </sections>
