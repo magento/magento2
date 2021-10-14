@@ -119,8 +119,18 @@ class GetDirectoryTree
         }
 
         foreach ($treeNode['children'] as &$tnode) {
-            if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
-                return $this->findParent($node, $tnode, $level + 1);
+            $tNodePathLength = count($tnode['path_array']);
+            $found = false;
+            while ($level < $tNodePathLength) {
+                if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
+                    $level ++;
+                    $found = true;
+                } else {
+                    break;
+                }
+            }
+            if ($found) {
+                return $this->findParent($node, $tnode, $level);
             }
         }
         return $result;

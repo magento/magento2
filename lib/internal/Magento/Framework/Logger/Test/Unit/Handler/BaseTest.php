@@ -61,11 +61,4 @@ class BaseTest extends TestCase
             $this->sanitizeMethod->invokeArgs($this->model, ['../../../var/hack/custom.log'])
         );
     }
-
-    public function testSanitizeFileException()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Filename expected to be a string');
-        $this->sanitizeMethod->invokeArgs($this->model, [['filename' => 'notValid']]);
-    }
 }

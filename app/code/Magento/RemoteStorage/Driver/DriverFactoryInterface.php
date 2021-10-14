@@ -35,7 +35,7 @@ interface DriverFactoryInterface
     public function createConfigured(
         array $config,
         string $prefix,
-        string $cacheAdapter,
-        array $cacheConfig
+        string $cacheAdapter = '',
+        array $cacheConfig = []
     ): RemoteDriverInterface;
 }
