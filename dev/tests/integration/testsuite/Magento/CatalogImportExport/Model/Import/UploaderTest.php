@@ -8,10 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import;
 
-use Magento\AwsS3\Driver\AwsS3;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Tests for the \Magento\CatalogImportExport\Model\Import\Uploader class.
@@ -63,7 +63,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->directory = $this->objectManager->get(TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
 
-        if ($this->directory->getDriver() instanceof AwsS3) {
+        if (!$this->directory->getDriver() instanceof File) {
             $mediaPath = 'media';
         } else {
             $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
@@ -110,6 +110,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $filePath = $this->directory->getAbsolutePath($this->uploader->getTmpDir() . '/' . $fileName);
         //phpcs:ignore
         $this->copyFile($testImagePath, $filePath);
+
         $this->uploader->move($fileName);
         $this->assertTrue($this->directory->isExist($this->uploader->getTmpDir() . '/' . $fileName));
     }

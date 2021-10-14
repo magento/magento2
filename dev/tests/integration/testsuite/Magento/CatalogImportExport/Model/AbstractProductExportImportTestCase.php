@@ -439,7 +439,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $importModel = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Import\Product::class
         );
-        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
