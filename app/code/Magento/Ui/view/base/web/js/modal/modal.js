@@ -14,11 +14,11 @@ define([
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/patches/z-index',
     'jquery-ui-modules/widget',
     'jquery-ui-modules/core',
-    'mage/translate'
-], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes, zIndex) {
+    'mage/translate',
+    'jquery/z-index'
+], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
 
     /**
@@ -342,17 +342,18 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndexValue = zIndex.getValue(this.modal),
-                baseIndex = zIndexValue + this._getVisibleCount();
+            var zIndex = this.modal.zIndex(),
+                baseIndex = zIndex + this._getVisibleCount();
 
             if (this.modal.data('active')) {
                 return;
             }
+
             this.modal.data('active', true);
 
-            this.overlay.css('z-index', ++baseIndex);
-            this.prevOverlayIndex = baseIndex;
-            this.modal.css('z-index', baseIndex + 1);
+            this.overlay.zIndex(++baseIndex);
+            this.prevOverlayIndex = this.overlay.zIndex();
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -367,7 +368,7 @@ define([
             this.modal.data('active', false);
 
             if (this.overlay) {
-                this.overlay.css('z-index', this.prevOverlayIndex - 1);
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 
