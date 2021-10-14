@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\MessageQueue;
 
 use Exception;
@@ -93,8 +94,7 @@ class Consumer implements ConsumerInterface
      * @param MessageController|null $messageController
      * @param MessageValidator|null $messageValidator
      * @param EnvelopeFactory|null $envelopeFactory
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CallbackInvokerInterface $invoker,
@@ -247,19 +247,23 @@ class Consumer implements ConsumerInterface
                 $queue->acknowledge($message);
             } catch (MessageLockException $exception) {
                 $queue->acknowledge($message);
-            } catch (ConnectionLostException $e) {
+            } catch (ConnectionLostException $exception) {
                 if ($lock) {
-                    $this->resource->getConnection()
-                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
+                    $this->resource->getConnection()->delete(
+                        $this->resource->getTableName('queue_lock'),
+                        ['id = ?' => $lock->getId()]
+                    );
                 }
-            } catch (NotFoundException $e) {
+            } catch (NotFoundException $exception) {
                 $queue->acknowledge($message);
-                $this->logger->warning($e->getMessage());
-            } catch (Exception $e) {
-                $queue->reject($message, false, $e->getMessage());
+                $this->logger->warning($exception->getMessage());
+            } catch (Exception $exception) {
+                $queue->reject($message, false, $exception->getMessage());
                 if ($lock) {
-                    $this->resource->getConnection()
-                        ->delete($this->resource->getTableName('queue_lock'), ['id = ?' => $lock->getId()]);
+                    $this->resource->getConnection()->delete(
+                        $this->resource->getTableName('queue_lock'),
+                        ['id = ?' => $lock->getId()]
+                    );
                 }
             }
         };
