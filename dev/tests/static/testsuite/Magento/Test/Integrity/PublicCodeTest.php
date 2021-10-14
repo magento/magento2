@@ -5,15 +5,19 @@
  */
 namespace Magento\Test\Integrity;
 
+use Exception;
 use Magento\Framework\App\Utility\Files;
+use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 use ReflectionParameter;
 
 /**
  * Tests @api annotated code integrity
  */
-class PublicCodeTest extends \PHPUnit\Framework\TestCase
+class PublicCodeTest extends TestCase
 {
     /**
      * List of simple return types that are used in docblocks.
@@ -87,7 +91,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      * Find all layout update files in magento modules and themes.
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function layoutFilesDataProvider()
     {
@@ -108,9 +112,9 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
     {
         $nonPublishedClasses = [];
         $reflection = new \ReflectionClass($class);
-        $filter = \ReflectionMethod::IS_PUBLIC;
+        $filter = ReflectionMethod::IS_PUBLIC;
         if ($reflection->isAbstract()) {
-            $filter = $filter | \ReflectionMethod::IS_PROTECTED;
+            $filter = $filter | ReflectionMethod::IS_PROTECTED;
         }
         $methods = $reflection->getMethods($filter);
         foreach ($methods as $method) {
@@ -122,8 +126,11 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
              is written on early php 7 when return types are not actively used */
             $returnTypes = [];
             if ($method->hasReturnType()) {
-                if (!$method->getReturnType()->isBuiltin()) {
-                    $returnTypes = [trim($method->getReturnType()->getName(), '?[]')];
+                $methodReturnType = $method->getReturnType();
+                // For PHP 8.0 - ReflectionUnionType doesn't have isBuiltin method.
+                if (method_exists($methodReturnType, 'isBuiltin')
+                    && !$methodReturnType->isBuiltin()) {
+                    $returnTypes = [trim($methodReturnType->getName(), '?[]')];
                 }
             } else {
                 $returnTypes = $this->getReturnTypesFromDocComment($method->getDocComment());
@@ -141,38 +148,28 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Retrieve list of all interfaces and classes in Magento codebase that are marked with @api annotation.
+     *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function publicPHPTypesDataProvider()
+    public function publicPHPTypesDataProvider(): array
     {
         $files = Files::init()->getPhpFiles(Files::INCLUDE_LIBS | Files::INCLUDE_APP_CODE);
         $result = [];
         foreach ($files as $file) {
             $fileContents = \file_get_contents($file);
             if (strpos($fileContents, '@api') !== false) {
-                foreach ($this->getDeclaredClassesAndInterfaces($file) as $class) {
-                    if (!in_array($class->getName(), $this->getWhitelist())
-                        && (class_exists($class->getName()) || interface_exists($class->getName()))
-                    ) {
-                        $result[$class->getName()] = [$class->getName()];
-                    }
+                $fileClassScanner = new FileClassScanner($file);
+                $className = $fileClassScanner->getClassName();
+
+                if (!in_array($className, $this->getWhitelist())
+                    && (class_exists($className) || interface_exists($className))
+                ) {
+                    $result[$className] = [$className];
                 }
             }
         }
         return $result;
-    }
-
-    /**
-     * Retrieve list of classes and interfaces declared in the file
-     *
-     * @param string $file
-     * @return \Laminas\Code\Scanner\ClassScanner[]
-     */
-    private function getDeclaredClassesAndInterfaces($file)
-    {
-        $fileScanner = new \Magento\Setup\Module\Di\Code\Reader\FileScanner($file);
-        return $fileScanner->getClasses();
     }
 
     /**
@@ -267,16 +264,20 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check if all method parameters are public
+     *
      * @param string $class
-     * @param \ReflectionMethod $method
+     * @param ReflectionMethod $method
      * @param array $nonPublishedClasses
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function checkParameters($class, \ReflectionMethod $method, array $nonPublishedClasses)
+    private function checkParameters($class, ReflectionMethod $method, array $nonPublishedClasses)
     {
         /* Ignoring docblocks for argument types */
         foreach ($method->getParameters() as $parameter) {
             if ($parameter->hasType()
+                && method_exists($parameter->getType(), 'isBuiltin')
                 && !$parameter->getType()->isBuiltin()
                 && !$this->isGenerated($parameter->getType()->getName())
             ) {

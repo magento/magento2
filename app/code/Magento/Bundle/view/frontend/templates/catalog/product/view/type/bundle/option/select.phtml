@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\Bundle\ViewModel\ValidateQuantity;
 ?>
-
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select */ ?>
 <?php $_option      = $block->getOption(); ?>
 <?php $_selections  = $_option->getSelections(); ?>
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
+<?php
+/** @var ValidateQuantity $viewModel */
+$viewModel = $block->getData('validateQuantityViewModel');
+?>
 <div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
     <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
@@ -57,6 +61,8 @@
                            id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
                            class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                            type="number"
+                           min="0"
+                           data-validate="<?= $block->escapeHtmlAttr($viewModel->getQuantityValidators()) ?>"
                            name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                            data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                            value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>
