@@ -51,6 +51,7 @@ class ValidatorTest extends TestCase
      */
     public function testValidateUserExpiresAt(string $locale): void
     {
+        $this->markTestSkipped('Test is blocked by issue AC-285');
         $this->localeResolver->setLocale($locale);
         $date = $this->timeZone->date()->modify('+10 day');
         $expireDate = $this->timeZone->formatDateTime($date, \IntlDateFormatter::MEDIUM, \IntlDateFormatter::MEDIUM);
