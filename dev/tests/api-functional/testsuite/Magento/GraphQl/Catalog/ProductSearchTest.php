@@ -66,6 +66,25 @@ QUERY;
     }
 
     /**
+     * Verify that filters id and uid can't be used at the same time
+     */
+    public function testUidAndIdUsageErrorOnProductFilteringCategory()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('`category_id` and `category_uid` can\'t be used at the same time');
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "99999999"}, category_uid: {eq: "OTk5OTk5OTk="}}) {
+    filters {
+      name
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
@@ -154,7 +173,6 @@ QUERY;
      */
     public function testLayeredNavigationForConfigurableProducts()
     {
-        CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
         /** @var Config $eavConfig */
@@ -180,6 +198,7 @@ QUERY;
                 'attribute_code' => $attribute->getAttributeCode(),
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'count' => 2,
+                'position' => 0,
                 'options' => [
                     [
                         'label' => 'Option 1',
@@ -237,6 +256,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options{
            label
            value
@@ -258,7 +278,7 @@ QUERY;
      */
     public function testFilterProductsByDropDownCustomAttribute()
     {
-        CacheCleaner::cleanAll();
+        CacheCleaner::clean(['eav']);
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
@@ -295,6 +315,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           label
@@ -343,6 +364,7 @@ QUERY;
                 'attribute_code' => $attribute->getAttributeCode(),
                 'count' => 1,
                 'label' => $attribute->getDefaultFrontendLabel(),
+                'position' => $attribute->getPosition(),
                 'options' => [
                     [
                         'label' => 'Option 3',
@@ -427,6 +449,7 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
+        $this->assertCount(2, $response['products']['aggregations']);
     }
 
     /**
@@ -497,6 +520,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           count
@@ -570,6 +594,7 @@ QUERY;
                 'attribute_code' => $attribute_code,
                 'count' => 1,
                 'label' => 'Second Test Configurable',
+                'position' => 1,
                 'options' => [
                     [
                         'count' => 3,
@@ -607,10 +632,11 @@ QUERY;
         $getCategoryByName = Bootstrap::getObjectManager()->get(GetCategoryByName::class);
         $category = $getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
+        $categoryUid = base64_encode($category->getId());
         $query = <<<QUERY
 {
   products(filter:{
-                   category_id : {eq:"{$category->getId()}"}
+                   category_uid : {eq:"{$categoryUid}"}
                    second_test_configurable: {eq: "{$optionValue}"}
                    },
                    pageSize: 3
@@ -644,6 +670,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           count
@@ -1081,7 +1108,6 @@ QUERY;
             weight
          }
          type_id
-         attribute_set_id
        }
         total_count
         page_info
@@ -1234,7 +1260,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1298,7 +1323,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1349,7 +1373,6 @@ QUERY;
      */
     public function testFilterProductsForExactMatchingName()
     {
-
         $query
             = <<<QUERY
 {
@@ -1502,17 +1525,20 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
+     * @dataProvider filterProductsBySingleCategoryIdDataProvider
      */
-    public function testFilterProductsBySingleCategoryId()
+    public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId)
     {
-        $queryCategoryId = 333;
+        if (is_numeric($queryCategoryId)) {
+            $queryCategoryId = (int) $queryCategoryId;
+        }
         $query
             = <<<QUERY
 {
   products(
         filter:
         {
-            category_id:{eq:"{$queryCategoryId}"}
+            {$fieldName}:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
 
@@ -1526,6 +1552,7 @@ QUERY;
        categories{
           name
           id
+          uid
           path
           children_count
           product_count
@@ -1545,7 +1572,9 @@ QUERY;
         /** @var CategoryRepositoryInterface $categoryRepository */
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
-        $links = $productLinks->getAssignedProducts($queryCategoryId);
+        $links = $productLinks->getAssignedProducts(
+            is_numeric($queryCategoryId) ? $queryCategoryId : base64_decode($queryCategoryId)
+        );
         $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
@@ -1574,6 +1603,7 @@ QUERY;
                     [
                         'name' => $category->getName(),
                         'id' => $category->getId(),
+                        'uid' => base64_encode($category->getId()),
                         'path' => $category->getPath(),
                         'children_count' => $category->getChildrenCount(),
                         'product_count' => $category->getProductCount(),
@@ -1586,11 +1616,16 @@ QUERY;
     /**
      * Sorting the search results by relevance (DESC => most relevant)
      *
+     * Sorting by relevance may return different results depending on the ES.
+     * To check that sorting works, we compare results with ASC and DESC relevance sorting
+     *
      * Search for products for a fuzzy match and checks if all matching results returned including
      * results based on matching keywords from description
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      * @return void
+     *
+     * @throws \Exception
      */
     public function testSearchAndSortByRelevance()
     {
@@ -1600,7 +1635,7 @@ QUERY;
 {
   products(
         search:"{$search_term}"
-        sort:{relevance:DESC}
+        sort:{relevance:%s}
         pageSize: 5
         currentPage: 1
        )
@@ -1641,16 +1676,16 @@ QUERY;
 
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count']);
-        $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
-        $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $this->assertCount(2, $response['products']['aggregations']);
-        $productsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
-        $count = count($response['products']['items']);
-        for ($i = 0; $i < $count; $i++) {
-            $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
-        }
+        $responseDesc = $this->graphQlQuery(sprintf($query, 'DESC'));
+        $responseAsc = $this->graphQlQuery(sprintf($query, 'ASC'));
+        $this->assertEquals(3, $responseDesc['products']['total_count']);
+        $this->assertNotEmpty($responseDesc['products']['filters'], 'Filters should have the Category layer');
+        $this->assertEquals('Colorful Category', $responseDesc['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertCount(2, $responseDesc['products']['aggregations']);
+        $expectedProductsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
+        $namesDesc = array_column($responseDesc['products']['items'], 'name');
+        $this->assertEqualsCanonicalizing($expectedProductsInResponse, $namesDesc);
+        $this->assertEquals($namesDesc, array_reverse(array_column($responseAsc['products']['items'], 'name')));
     }
 
     /**
@@ -1693,7 +1728,6 @@ QUERY;
             weight
         }
         type_id
-        attribute_set_id
       }
         total_count
         page_info
@@ -2119,7 +2153,6 @@ QUERY;
     {
       items
        {
-         attribute_set_id
          sku
          price {
             minimalPrice {
@@ -2219,7 +2252,6 @@ products(
         weight
        }
        type_id
-       attribute_set_id
      }
     total_count
     page_info
@@ -2276,7 +2308,6 @@ QUERY;
         ... on PhysicalProductInterface {
            weight
          }
-           attribute_set_id
          }
         total_count
         page_info
@@ -2309,12 +2340,9 @@ QUERY;
   {
        items{
            id
-           attribute_set_id
-           created_at
            name
            sku
            type_id
-           updated_at
            ... on PhysicalProductInterface {
                weight
            }
@@ -2457,7 +2485,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2484,7 +2511,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2513,5 +2539,24 @@ QUERY;
                 ]
             );
         }
+    }
+
+    /**
+     * Data provider for product single category filtering
+     *
+     * @return array[][]
+     */
+    public function filterProductsBySingleCategoryIdDataProvider(): array
+    {
+        return [
+            [
+                'fieldName' => 'category_id',
+                'categoryId' => '333',
+            ],
+            [
+                'fieldName' => 'category_uid',
+                'categoryId' => base64_encode('333'),
+            ],
+        ];
     }
 }

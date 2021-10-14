@@ -109,9 +109,11 @@
         <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggleAgain"/>
 
         <!--Apply Attribute Set-->
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabelTwo.label}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(ProductAttributeFrontendLabelTwo.label)}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
 
         <!--Product name and SKU-->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name2}}" stepKey="fillProductName"/>

@@ -59,9 +59,9 @@ class AddGroupedProductToWishlistTest extends GraphQlAbstract
         $this->assertEquals($wishlist->getItemsCount(), $response['items_count']);
         $this->assertEquals($wishlist->getSharingCode(), $response['sharing_code']);
         $this->assertEquals($wishlist->getUpdatedAt(), $response['updated_at']);
-        $this->assertEquals((int) $item->getQty(), $response['items_v2'][0]['quantity']);
-        $this->assertEquals($item->getAddedAt(), $response['items_v2'][0]['added_at']);
-        $this->assertEquals($productSku, $response['items_v2'][0]['product']['sku']);
+        $this->assertEquals((int) $item->getQty(), $response['items_v2']['items'][0]['quantity']);
+        $this->assertEquals($item->getAddedAt(), $response['items_v2']['items'][0]['added_at']);
+        $this->assertEquals($productSku, $response['items_v2']['items'][0]['product']['sku']);
     }
 
     private function getMutation(
@@ -90,13 +90,16 @@ mutation {
       items_count
       updated_at
       items_v2 {
-        id
+        items{
+          id
         description
         quantity
         added_at
         product {
           sku
         }
+        }
+
       }
     }
   }

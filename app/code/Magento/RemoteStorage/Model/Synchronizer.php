@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\RemoteStorage\Model;
 
 use Generator;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\Glob;
 use Magento\RemoteStorage\Driver\DriverPool as RemoteDriverPool;
 use Magento\RemoteStorage\Filesystem;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Synchronize files from local filesystem.
@@ -44,10 +45,12 @@ class Synchronizer
     public function execute(): Generator
     {
         foreach ($this->filesystem->getDirectoryCodes() as $directoryCode) {
-            $directory = $this->filesystem->getDirectoryWrite($directoryCode, DriverPool::FILE);
-            $remoteDirectory = $this->filesystem->getDirectoryWrite($directoryCode, RemoteDriverPool::REMOTE);
+            if ($this->isSynchronizationAllowed($directoryCode)) {
+                $directory = $this->filesystem->getDirectoryWrite($directoryCode, DriverPool::FILE);
+                $remoteDirectory = $this->filesystem->getDirectoryWrite($directoryCode, RemoteDriverPool::REMOTE);
 
-            yield from $this->copyRecursive($directory, $remoteDirectory, $directory->getAbsolutePath());
+                yield from $this->copyRecursive($directory, $remoteDirectory, $directory->getAbsolutePath());
+            }
         }
     }
 
@@ -100,5 +103,19 @@ class Synchronizer
 
             yield from $this->copyRecursive($directory, $remoteDirectory, $childDirectory, $pattern, $flags);
         }
+    }
+
+    /**
+     * Check if synchronization is allowed.
+     *
+     * @param string $directoryCode
+     * @return bool
+     * @deprecated This method should be removed when MC-39280 is fixed
+     * and import export functionality is allocated inside var/import_export directory
+     */
+    private function isSynchronizationAllowed(string $directoryCode): bool
+    {
+        // skip synchronization for import export
+        return $directoryCode !== DirectoryList::VAR_IMPORT_EXPORT;
     }
 }

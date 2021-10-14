@@ -17,26 +17,32 @@ class LikeQueryModifierTest extends TestCase
     /** @var ObjectManager */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
 
-    public function testModify()
+    /**
+     * @return void
+     */
+    public function testModify(): void
     {
         $values = [
             'field1' => 'pattern1',
-            'field2' => 'pattern2',
+            'field2' => 'pattern2'
         ];
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $selectMock->expects($this->at(0))
+        $selectMock
             ->method('where')
-            ->with('field1 LIKE (?)', 'pattern1');
-        $selectMock->expects($this->at(1))
-            ->method('where')
-            ->with('field2 LIKE (?)', 'pattern2');
+            ->withConsecutive(
+                ['field1 LIKE (?)', 'pattern1'],
+                ['field2 LIKE (?)', 'pattern2']
+            );
         $likeQueryModifier = $this->objectManager->getObject(
             LikeQueryModifier::class,
             ['values' => $values]

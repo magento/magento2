@@ -19,10 +19,7 @@
             <group value="checkout"/>
         </annotations>
         <before>
-            <!-- Flush cache -->
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
             <!-- Create two customers -->
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>

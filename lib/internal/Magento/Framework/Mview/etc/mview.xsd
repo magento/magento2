@@ -46,6 +46,7 @@
         <xs:attribute name="id" type="xs:string" use="required" />
         <xs:attribute name="class" type="classType" use="required" />
         <xs:attribute name="group" type="xs:string" use="required" />
+        <xs:attribute name="walker" type="classType" default="Magento\Framework\Mview\View\ChangeLogBatchWalker" />
     </xs:complexType>
 
     <xs:simpleType name="classType">
@@ -76,9 +77,25 @@
                 Table declaration.
             </xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" name="additionalColumns" type="additionalColumnsType" />
+        </xs:sequence>
         <xs:attribute name="name" type="tableNameType" use="required" />
         <xs:attribute name="entity_column" type="entityColumnType" use="required" />
         <xs:attribute name="subscription_model" type="subscriptionModelType" />
+        <xs:attribute name="processor" type="classType" default="Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor" />
+    </xs:complexType>
+
+    <xs:complexType name="additionalColumnsType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="column" type="additionalColumnAttributeType" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="additionalColumnAttributeType">
+        <xs:attribute name="name" type="xs:string" />
+        <xs:attribute name="cl_name" type="xs:string" />
+        <xs:attribute name="constant" type="xs:string" />
     </xs:complexType>
 
     <xs:simpleType name="entityColumnType">

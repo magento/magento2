@@ -19,13 +19,13 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <!--Create Custom Variable-->
         <actionGroup ref="CreateCustomVariableActionGroup" stepKey="createCustomVariable" />
         <!--Setup Store information-->
         <waitForPageLoad stepKey="wait" />
-        <amOnPage url="/admin/admin/system_config/" stepKey="goToConfigStoreInformation" />
+        <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreInformation" />
         <waitForPageLoad stepKey="waitForPageLoad1" />
         <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
         <fillField selector="{{StoreConfigSection.City}}" userInput="{{_defaultVariable.city}}" stepKey="fillCity" />
@@ -34,7 +34,7 @@
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="seeInsertVariableIcon" />
         <click selector="{{TinyMCESection.InsertVariableIcon}}" stepKey="clickInsertVariableIcon1" />
@@ -69,16 +69,16 @@
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <click selector="{{VariableSection.InsertVariableBtnEnabled}}" stepKey="save2" />
         <waitForElementNotVisible selector="{{VariableSection.VariableTitle}}" stepKey="waitForSlideOutClose" />
-        <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
-        <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
-        <seeElement selector="{{CmsWYSIWYGSection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="clickShowHideBtn"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="waitForInsertVariableBtn" />
+        <seeElement selector="{{TinyMCESection.InsertVariableBtn}}"  stepKey="InsertVariableBtn" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandButtonMenu"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSplitButtonMenuVisible"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
         <amOnPage url="{{_defaultCmsPage.identifier}}" stepKey="amOnPageTestPage"/>
         <!--see Default Variable on Storefront-->
         <see userInput="{{_defaultVariable.city}}" stepKey="seeDefaultVariable" />

@@ -27,7 +27,6 @@ use PHPUnit\Framework\TestCase;
  * Checks that product import with same images can be successfully done
  *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -202,7 +201,7 @@ class ImportWithSharedImagesTest extends TestCase
         $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
         $destDir = $rootDirectory->getRelativePath(
             $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH]
-            . DS . $this->mediaConfig->getBaseMediaPath()
+            . DIRECTORY_SEPARATOR . $this->mediaConfig->getBaseMediaPath()
         );
         $tmpDir = $rootDirectory->getRelativePath(
             $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH]
@@ -226,7 +225,7 @@ class ImportWithSharedImagesTest extends TestCase
             $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH]
         );
         $fixtureDir = realpath(__DIR__ . '/../../_files');
-        $tmpFilePath = $rootDirectory->getAbsolutePath($tmpDir . DS . $fileName);
+        $tmpFilePath = $rootDirectory->getAbsolutePath($tmpDir . DIRECTORY_SEPARATOR . $fileName);
         $this->fileDriver->createDirectory($tmpDir);
         $rootDirectory->getDriver()->copy(
             $fixtureDir . DIRECTORY_SEPARATOR . $fileName,

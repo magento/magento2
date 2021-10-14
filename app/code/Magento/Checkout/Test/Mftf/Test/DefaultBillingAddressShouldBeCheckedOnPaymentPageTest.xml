@@ -31,11 +31,12 @@
             </actionGroup>
         </before>
         <after>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <!--Logout from customer account-->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
         <!-- Add simple product to cart and go to checkout-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">

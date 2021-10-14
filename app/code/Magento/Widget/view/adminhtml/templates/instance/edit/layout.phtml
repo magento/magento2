@@ -38,7 +38,8 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
         '<label for="widget_instance[<%- data.id %>][page_group]">Display on <span class="required">*</span></label>'+
         '{$block->getDisplayOnSelectHtml()}'+
         '<div class="actions">'+
-        {$jsonHelper->jsonEncode($block->getRemoveLayoutButtonHtml())} +
+            '<button title="{$escaper->escapeHtmlAttr(__('Remove Layout Update'))}" type="button"'+
+            '    class="action-default scalable action-delete" onclick="WidgetInstance.removePageGroup(this)" />'+
         '</div>'+
     '</div>'+
     '<div class="fieldset-wrapper-content">'+

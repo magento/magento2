@@ -9,6 +9,7 @@
  */
 namespace Magento\Cron\Observer;
 
+use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
@@ -83,7 +84,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     const MAX_RETRIES = 5;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule\Collection
+     * @var ScheduleCollection
      */
     protected $_pendingSchedules;
 
@@ -278,12 +279,12 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * It should be taken by standalone (child) process, not by the parent process.
      *
-     * @param int $groupId
+     * @param string $groupId
      * @param callable $callback
      *
      * @return void
      */
-    private function lockGroup($groupId, callable $callback)
+    private function lockGroup(string $groupId, callable $callback): void
     {
         if (!$this->lockManager->lock(self::LOCK_PREFIX . $groupId, self::LOCK_TIMEOUT)) {
             $this->logger->warning(
@@ -399,7 +400,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $jobName
      * @return void
      */
-    private function startProfiling(string $jobName = '')
+    private function startProfiling(string $jobName = ''): void
     {
         $this->statProfiler->clear();
         $this->statProfiler->start(
@@ -416,7 +417,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $jobName
      * @return void
      */
-    private function stopProfiling(string $jobName = '')
+    private function stopProfiling(string $jobName = ''): void
     {
         $this->statProfiler->stop(
             sprintf(self::CRON_TIMERID, $jobName),
@@ -445,9 +446,9 @@ class ProcessCronQueueObserver implements ObserverInterface
      * Return job collection from data base with status 'pending'.
      *
      * @param string $groupId
-     * @return \Magento\Cron\Model\ResourceModel\Schedule\Collection
+     * @return ScheduleCollection
      */
-    private function getPendingSchedules($groupId)
+    private function getPendingSchedules(string $groupId): ScheduleCollection
     {
         $jobs = $this->_config->getJobs();
         $pendingJobs = $this->_scheduleFactory->create()->getCollection();
@@ -462,7 +463,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return $this
      */
-    private function generateSchedules($groupId)
+    private function generateSchedules(string $groupId): self
     {
         /**
          * check if schedule generation is needed
@@ -533,13 +534,13 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param int $currentTime
      * @return void
      */
-    private function cleanupJobs($groupId, $currentTime)
+    private function cleanupJobs(string $groupId, int $currentTime): void
     {
         // check if history cleanup is needed
         $lastCleanup = (int)$this->_cache->load(self::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . $groupId);
         $historyCleanUp = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_CLEANUP_EVERY);
         if ($lastCleanup > $this->dateTime->gmtTimestamp() - $historyCleanUp * self::SECONDS_IN_MINUTE) {
-            return $this;
+            return;
         }
         // save time history cleanup was ran with no expiration
         $this->_cache->save(
@@ -550,6 +551,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         );
 
         $this->cleanupDisabledJobs($groupId);
+        $this->cleanupRunningJobs($groupId);
 
         $historySuccess = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_SUCCESS);
         $historyFailure = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_FAILURE);
@@ -673,7 +675,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string $groupId
      * @return void
      */
-    private function cleanupDisabledJobs($groupId)
+    private function cleanupDisabledJobs(string $groupId): void
     {
         $jobs = $this->_config->getJobs();
         $jobsToCleanup = [];
@@ -694,6 +696,33 @@ class ProcessCronQueueObserver implements ObserverInterface
 
             $this->logger->info(sprintf('%d cron jobs were cleaned', $count));
         }
+    }
+
+    /**
+     * Cleanup jobs that were left in a running state due to an unexpected stop
+     *
+     * @param string $groupId
+     * @return void
+     */
+    private function cleanupRunningJobs(string $groupId): void
+    {
+        $scheduleResource = $this->_scheduleFactory->create()->getResource();
+        $connection = $scheduleResource->getConnection();
+
+        $jobs = $this->_config->getJobs();
+
+        $connection->update(
+            $scheduleResource->getTable('cron_schedule'),
+            [
+                'status' => \Magento\Cron\Model\Schedule::STATUS_ERROR,
+                'messages' => 'Time out'
+            ],
+            [
+                $connection->quoteInto('status = ?', \Magento\Cron\Model\Schedule::STATUS_RUNNING),
+                $connection->quoteInto('job_code IN (?)', array_keys($jobs[$groupId])),
+                'scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY'
+            ]
+        );
     }
 
     /**
@@ -773,13 +802,13 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param array $jobsRoot
      * @param int $currentTime
      */
-    private function processPendingJobs($groupId, $jobsRoot, $currentTime)
+    private function processPendingJobs(string $groupId, array $jobsRoot, int $currentTime): void
     {
-        $procesedJobs = [];
+        $processedJobs = [];
         $pendingJobs = $this->getPendingSchedules($groupId);
         /** @var Schedule $schedule */
         foreach ($pendingJobs as $schedule) {
-            if (isset($procesedJobs[$schedule->getJobCode()])) {
+            if (isset($processedJobs[$schedule->getJobCode()])) {
                 // process only on job per run
                 continue;
             }
@@ -796,7 +825,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             $this->tryRunJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
 
             if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {
-                $procesedJobs[$schedule->getJobCode()] = true;
+                $processedJobs[$schedule->getJobCode()] = true;
             }
 
             $this->retrier->execute(
@@ -821,7 +850,7 @@ class ProcessCronQueueObserver implements ObserverInterface
     {
         // use sha1 to limit length
         // phpcs:ignore Magento2.Security.InsecureFunction
-        $lockName =  self::LOCK_PREFIX . md5($groupId . '_' . $schedule->getJobCode());
+        $lockName = self::LOCK_PREFIX . md5($groupId . '_' . $schedule->getJobCode());
 
         try {
             for ($retries = self::MAX_RETRIES; $retries > 0; $retries--) {
