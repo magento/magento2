@@ -94,6 +94,9 @@ class SaveTest extends TestCase
      */
     private $session;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -101,7 +104,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPostValue'])
+            ->addMethods(['getPostValue'])
             ->getMockForAbstractClass();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -122,7 +125,7 @@ class SaveTest extends TestCase
             ->willReturn($this->resultRedirectMock);
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setFormData'])
+            ->addMethods(['setFormData'])
             ->getMock();
 
         $this->contextMock->expects($this->once())
@@ -158,7 +161,10 @@ class SaveTest extends TestCase
         );
     }
 
-    public function testSaveEmptyDataShouldRedirectToDefault()
+    /**
+     * @return void
+     */
+    public function testSaveEmptyDataShouldRedirectToDefault(): void
     {
         $this->requestMock->expects($this->once())
             ->method('getPostValue')
@@ -171,7 +177,10 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirectMock, $this->saveController->execute());
     }
 
-    public function testTryToSaveInvalidDataShouldFailWithErrors()
+    /**
+     * @return void
+     */
+    public function testTryToSaveInvalidDataShouldFailWithErrors(): void
     {
         $validPaths = [];
         $messages = ['message1', 'message2'];
@@ -207,13 +216,9 @@ class SaveTest extends TestCase
             ->with($data)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->at(0))
+        $this->messageManagerMock
             ->method('addErrorMessage')
-            ->withConsecutive(
-                [$messages[0]],
-                [$messages[1]]
-            )
-            ->willReturnSelf();
+            ->willReturn($this->messageManagerMock);
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
@@ -223,7 +228,10 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirectMock, $this->saveController->execute());
     }
 
-    public function testTryToSaveInvalidFileNameShouldFailWithErrors()
+    /**
+     * @return void
+     */
+    public function testTryToSaveInvalidFileNameShouldFailWithErrors(): void
     {
         $validPaths = [];
         $messages = ['message1', 'message2'];
@@ -264,13 +272,9 @@ class SaveTest extends TestCase
             ->with($data)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->at(0))
+        $this->messageManagerMock
             ->method('addErrorMessage')
-            ->withConsecutive(
-                [$messages[0]],
-                [$messages[1]]
-            )
-            ->willReturnSelf();
+            ->willReturn($this->messageManagerMock);
 
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
