@@ -93,10 +93,6 @@ class JwsManager
         $builder = $builder->withPayload($jws->getPayload()->getContent());
         for ($i = 0; $i < $signaturesCount; $i++) {
             $jwk = $encryptionSettings->getJwkSet()->getKeys()[$i];
-            $alg = $jwk->getAlgorithm();
-            if (!$alg) {
-                throw new EncryptionException('Algorithm is required for JWKs');
-            }
             $protected = [];
             if ($jws->getPayload()->getContentType()) {
                 $protected['cty'] = $jws->getPayload()->getContentType();
@@ -107,7 +103,10 @@ class JwsManager
             if ($jws->getProtectedHeaders()) {
                 $protected = array_merge($protected, $this->extractHeaderData($jws->getProtectedHeaders()[$i]));
             }
-            $protected['alg'] = $alg;
+            $protected['alg'] = $protected['alg'] ?? $jwk->getAlgorithm();
+            if (!$protected['alg']) {
+                throw new EncryptionException('Algorithm is required for JWKs');
+            }
             $unprotected = [];
             if ($jws->getUnprotectedHeaders()) {
                 $unprotected = $this->extractHeaderData($jws->getUnprotectedHeaders()[$i]);
