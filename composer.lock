@@ -2251,30 +2251,30 @@
         },
         {
             "name": "laminas/laminas-server",
-            "version": "2.11.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-server.git",
-                "reference": "7582832d56c5488dee4d4753bf3bf2d5f3dc5906"
+                "reference": "e1fd6853223feed7a00555144d661e0a914124cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-server/zipball/7582832d56c5488dee4d4753bf3bf2d5f3dc5906",
-                "reference": "7582832d56c5488dee4d4753bf3bf2d5f3dc5906",
+                "url": "https://api.github.com/repos/laminas/laminas-server/zipball/e1fd6853223feed7a00555144d661e0a914124cd",
+                "reference": "e1fd6853223feed7a00555144d661e0a914124cd",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-code": "^3.5.1 || ^4.0.0",
                 "laminas/laminas-stdlib": "^3.3.1",
                 "laminas/laminas-zendframework-bridge": "^1.2.0",
-                "php": "^7.3 || ~8.0.0 || ~8.1.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
                 "zendframework/zend-server": "^2.8.1"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^9.5.5",
+                "phpunit/phpunit": "^9.5.4",
                 "psalm/plugin-phpunit": "^0.15.1",
                 "vimeo/psalm": "^4.6.4"
             },
@@ -2294,21 +2294,7 @@
                 "laminas",
                 "server"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-server/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-server/issues",
-                "rss": "https://github.com/laminas/laminas-server/releases.atom",
-                "source": "https://github.com/laminas/laminas-server"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2021-10-08T07:49:59+00:00"
+            "time": "2021-04-16T11:56:04+00:00"
         },
         {
             "name": "laminas/laminas-servicemanager",
