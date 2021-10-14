@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\TestFramework\Annotation\TestCaseAnnotation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
@@ -67,7 +68,7 @@ class AdminConfigFixture
     protected function _assignConfigData(TestCase $test)
     {
         $resolver = Resolver::getInstance();
-        $annotations = $test->getAnnotations();
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
         $existingFixtures = $annotations['method'][self::ANNOTATION] ?? [];
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
         $testAnnotations = $resolver->applyConfigFixtures($test, $existingFixtures, self::ANNOTATION);

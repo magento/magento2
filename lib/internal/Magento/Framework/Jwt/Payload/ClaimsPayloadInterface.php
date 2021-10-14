@@ -17,7 +17,7 @@ use Magento\Framework\Jwt\PayloadInterface;
 interface ClaimsPayloadInterface extends PayloadInterface
 {
     /**
-     * Claims.
+     * Claims array with claim names as keys.
      *
      * @return ClaimInterface[]
      */

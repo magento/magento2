@@ -56,9 +56,14 @@ class Route extends AbstractEntityUrl implements ResolverInterface
             $value,
             $args
         );
-
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         if ($resultArray) {
-            $result = $this->entityDataProviderComposite->getData($resultArray['type'], (int)$resultArray['id'], $info);
+            $result = $this->entityDataProviderComposite->getData(
+                $resultArray['type'],
+                (int)$resultArray['id'],
+                $info,
+                $storeId
+            );
             $result['redirect_code'] = $resultArray['redirect_code'];
             $result['relative_url'] = $resultArray['relative_url'];
             $result['type'] = $resultArray['type'];

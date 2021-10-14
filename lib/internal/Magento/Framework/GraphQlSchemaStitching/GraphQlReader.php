@@ -7,9 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching;
 
+use GraphQL\GraphQL;
+use GraphQL\Type\Definition\ScalarType;
+use GraphQL\Type\Definition\Type as GraphQLType;
+use GraphQL\Utils\BuildSchema;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\GraphQl\Type\Definition\FloatType;
+use Magento\Framework\GraphQl\Type\Definition\IntType;
+use Magento\Framework\GraphQl\Type\Definition\StringType;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType;
 
@@ -26,8 +33,6 @@ class GraphQlReader implements ReaderInterface
     public const GRAPHQL_INTERFACE = 'graphql_interface';
 
     /**
-     * File locator
-     *
      * @var FileResolverInterface
      */
     private $fileResolver;
@@ -53,6 +58,11 @@ class GraphQlReader implements ReaderInterface
     private static $componentRegistrar;
 
     /**
+     * @var boolean
+     */
+    private static $typesOverridden = false;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReaderComposite $typeReader
      * @param string $fileName
@@ -68,19 +78,21 @@ class GraphQlReader implements ReaderInterface
         $this->typeReader = $typeReader;
         $this->defaultScope = $defaultScope;
         $this->fileName = $fileName;
+        $this->overrideStandardGraphQLTypes();
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      *
      * @param string|null $scope
      * @return array
      */
-    public function read($scope = null) : array
+    public function read($scope = null): array
     {
         $results = [];
         $scope = $scope ?: $this->defaultScope;
         $schemaFiles = $this->fileResolver->get($this->fileName, $scope);
+
         if (!count($schemaFiles)) {
             return $results;
         }
@@ -101,8 +113,7 @@ class GraphQlReader implements ReaderInterface
             $results = $this->addModuleNameToTypes($results, $filePath);
         }
 
-        $results = $this->copyInterfaceFieldsToConcreteTypes($results);
-        return $results;
+        return $this->copyInterfaceFieldsToConcreteTypes($results);
     }
 
     /**
@@ -111,17 +122,17 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function readPartialTypes(string $graphQlSchemaContent) : array
+    private function readPartialTypes(string $graphQlSchemaContent): array
     {
         $partialResults = [];
 
         $graphQlSchemaContent = $this->addPlaceHolderInSchema($graphQlSchemaContent);
 
-        $schema = \GraphQL\Utils\BuildSchema::build($graphQlSchemaContent);
+        $schema = BuildSchema::build($graphQlSchemaContent, null, ['assumeValid'=> true, 'assumeValidSDL' => true]);
 
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
-            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof \GraphQL\Type\Definition\ScalarType))) {
+            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof ScalarType))) {
                 $type = $this->typeReader->read($typeMeta);
                 if (!empty($type)) {
                     $partialResults[$typeName] = $type;
@@ -131,9 +142,7 @@ class GraphQlReader implements ReaderInterface
             }
         }
 
-        $partialResults = $this->removePlaceholderFromResults($partialResults);
-
-        return $partialResults;
+        return $this->removePlaceholderFromResults($partialResults);
     }
 
     /**
@@ -142,7 +151,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function parseTypes(string $graphQlSchemaContent) : array
+    private function parseTypes(string $graphQlSchemaContent): array
     {
         $typeKindsPattern = '(type|interface|union|enum|input)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
@@ -252,7 +261,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string
      */
-    private function addPlaceHolderInSchema(string $graphQlSchemaContent) :string
+    private function addPlaceHolderInSchema(string $graphQlSchemaContent): string
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
         $typesKindsPattern = '(type|interface|input|union)';
@@ -283,7 +292,7 @@ class GraphQlReader implements ReaderInterface
      * @param array $partialResults
      * @return array
      */
-    private function removePlaceholderFromResults(array $partialResults) : array
+    private function removePlaceholderFromResults(array $partialResults): array
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
         //remove parsed placeholders
@@ -342,5 +351,23 @@ class GraphQlReader implements ReaderInterface
         }
 
         return $source;
+    }
+
+    /**
+     * Replace the standard type definitions with ones that know how to cast input values
+     */
+    private function overrideStandardGraphQLTypes(): void
+    {
+        if (!self::$typesOverridden) {
+            $standardTypes = GraphQLType::getStandardTypes();
+
+            GraphQL::overrideStandardTypes([
+                GraphQLType::INT => new IntType($standardTypes[GraphQLType::INT]->config),
+                GraphQLType::FLOAT => new FloatType($standardTypes[GraphQLType::FLOAT]->config),
+                GraphQLType::STRING => new StringType($standardTypes[GraphQLType::STRING]->config)
+            ]);
+
+            self::$typesOverridden = true;
+        }
     }
 }

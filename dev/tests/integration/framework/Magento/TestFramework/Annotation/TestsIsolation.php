@@ -132,12 +132,16 @@ class TestsIsolation
         if (!$test->getTestResultObject()) {
             return $isRequired;
         }
+        $passedClasses = $test->getTestResultObject()->passedClasses();
 
-        $testFilename = $test->getTestResultObject()->topTestSuite()->getName();
-        foreach ($this->testTypesToCheckIsolation as $testType) {
-            if (false !== strpos($testFilename, \sprintf('/dev/tests/%s/', $testType))) {
-                $isRequired = true;
-                break;
+        if ($passedClasses) {
+            $testFilename = current($passedClasses);
+
+            foreach ($this->testTypesToCheckIsolation as $testType) {
+                if (false !== strpos($testFilename, \sprintf('/dev/tests/%s/', $testType))) {
+                    $isRequired = true;
+                    break;
+                }
             }
         }
 

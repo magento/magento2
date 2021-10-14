@@ -108,8 +108,8 @@
 
         <!-- Click update changes -->
         <checkOption selector="{{AdminCustomerActivitiesShoppingCartSection.addToOrder}}" stepKey="checkOptionAddToOrder"/>
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
-        <waitForPageLoad stepKey="waitForOrderUpdating"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderUpdating"/>
 
         <!-- Assert product in items ordered grid -->
         <see selector="{{AdminCustomerCreateNewOrderSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductName"/>

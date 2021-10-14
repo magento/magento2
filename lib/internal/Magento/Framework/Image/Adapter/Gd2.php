@@ -490,6 +490,17 @@ class Gd2 extends AbstractAdapter
             $watermark = $this->createWaterMark($watermark, $this->getWatermarkWidth(), $this->getWatermarkHeight());
         }
 
+        /**
+         * Fixes issue with watermark with transparent background and an image that is not truecolor (e.g GIF).
+         * blending mode is allowed for truecolor images only.
+         * @see imagealphablending()
+         */
+        if (!imageistruecolor($this->_imageHandler)) {
+            $newImage = $this->createTruecolorImageCopy();
+            $this->imageDestroy();
+            $this->_imageHandler = $newImage;
+        }
+
         if ($this->getWatermarkPosition() == self::POSITION_TILE) {
             $tile = true;
         } elseif ($this->getWatermarkPosition() == self::POSITION_STRETCH) {
@@ -871,6 +882,9 @@ class Gd2 extends AbstractAdapter
         $pct
     ) {
         if ($pct >= 100) {
+            if (false === imagealphablending($dst_im, true)) {
+                return false;
+            }
             return imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
         }
 
@@ -918,5 +932,25 @@ class Gd2 extends AbstractAdapter
         imagedestroy($tmpImg);
 
         return $result;
+    }
+
+    /**
+     * Create truecolor image copy of current image
+     *
+     * @return resource
+     */
+    private function createTruecolorImageCopy()
+    {
+        $this->_getTransparency($this->_imageHandler, $this->_fileType, $isAlpha);
+
+        $newImage = imagecreatetruecolor($this->_imageSrcWidth, $this->_imageSrcHeight);
+
+        if ($isAlpha) {
+            $this->_saveAlpha($newImage);
+        }
+
+        imagecopy($newImage, $this->_imageHandler, 0, 0, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight);
+
+        return $newImage;
     }
 }
