@@ -28,25 +28,21 @@ class TotalMinMaxTest extends TestCase
      * @dataProvider paymentMethodDataProvider
      * @param int $baseGrandTotal
      * @param bool $expectation
+     *
+     * @return void
      */
-    public function testIsApplicable($baseGrandTotal, $expectation)
+    public function testIsApplicable(int $baseGrandTotal, bool $expectation): void
     {
-        $paymentMethod = $this->getMockBuilder(
-            MethodInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods([])->getMock();
-        $paymentMethod->expects($this->at(0))->method('getConfigData')->with(
-            TotalMinMax::MIN_ORDER_TOTAL
-        )->willReturn(self::PAYMENT_MIN_TOTAL);
-        $paymentMethod->expects($this->at(1))->method('getConfigData')->with(
-            TotalMinMax::MAX_ORDER_TOTAL
-        )->willReturn(self::PAYMENT_MAX_TOTAL);
+        $paymentMethod = $this->getMockBuilder(MethodInterface::class)->disableOriginalConstructor()
+            ->addMethods([])->getMock();
+        $paymentMethod
+            ->method('getConfigData')
+            ->withConsecutive([TotalMinMax::MIN_ORDER_TOTAL], [TotalMinMax::MAX_ORDER_TOTAL])
+            ->willReturnOnConsecutiveCalls(self::PAYMENT_MIN_TOTAL, self::PAYMENT_MAX_TOTAL);
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                ['getBaseGrandTotal', '__wakeup']
-            )->getMock();
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
+            ->onlyMethods(['__wakeup'])
+            ->addMethods(['getBaseGrandTotal'])->getMock();
         $quote->expects($this->once())->method('getBaseGrandTotal')->willReturn($baseGrandTotal);
 
         $model = new TotalMinMax();
@@ -56,7 +52,7 @@ class TotalMinMaxTest extends TestCase
     /**
      * @return array
      */
-    public function paymentMethodDataProvider()
+    public function paymentMethodDataProvider(): array
     {
         return [[1, false], [6, false], [3, true]];
     }

@@ -119,13 +119,14 @@ class BulkManagement implements BulkManagementInterface
             $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
             $this->entityManager->save($bulkSummary);
 
+            $this->publishOperations($operations);
+
             $connection->commit();
         } catch (\Exception $exception) {
             $connection->rollBack();
             $this->logger->critical($exception->getMessage());
             return false;
         }
-        $this->publishOperations($operations);
 
         return true;
     }

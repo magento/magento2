@@ -11,7 +11,7 @@ namespace Magento\Checkout\Api\Exception;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Thrown when too many payment processing requests have been initiated by a user.
+ * Thrown when too many payment processing/saving requests have been initiated by a user.
  */
 class PaymentProcessingRateLimitExceededException extends LocalizedException
 {

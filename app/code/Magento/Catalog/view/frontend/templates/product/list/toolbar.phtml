@@ -10,27 +10,23 @@
  *
  * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
  */
-
-// phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
-// phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
 ?>
 <?php if ($block->getCollection()->getSize()) :?>
     <?php $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getWidgetOptionsJson());
         $widgetOptions = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['productListToolbarForm']);
     ?>
     <div class="toolbar toolbar-products" data-mage-init='{"productListToolbarForm":<?= /* @noEscape */ $widgetOptions ?>}'>
-        <?php if ($block->isExpanded()) :?>
-            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
-        <?php endif; ?>
-
-        <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml')) ?>
-
-        <?= $block->getPagerHtml() ?>
-
-        <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
-
-        <?php if ($block->isExpanded()) :?>
-            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
-        <?php endif; ?>
+        <?php if ($block->getIsBottom()): ?>
+            <?= $block->getPagerHtml() ?>
+            <?= $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
+        <?php else: ?>
+            <?php if ($block->isExpanded()): ?>
+                <?= $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
+            <?php endif ?>
+            <?= $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml')) ?>
+            <?php if ($block->isExpanded()): ?>
+                <?= $block->fetchView($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
+            <?php endif ?>
+        <?php endif ?>
     </div>
 <?php endif ?>

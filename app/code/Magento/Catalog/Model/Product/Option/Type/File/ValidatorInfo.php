@@ -6,13 +6,22 @@
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\Size;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File as IoFile;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+
 /**
  * Validator for existing files.
  */
 class ValidatorInfo extends Validator
 {
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
     protected $coreFileStorageDatabase;
 
@@ -37,23 +46,38 @@ class ValidatorInfo extends Validator
     protected $fileRelativePath;
 
     /**
+     * @var IoFile
+     */
+    private $ioFile;
+    /**
+     * @var NotProtectedExtension
+     */
+    private $fileValidator;
+
+    /**
      * Construct method
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\File\Size $fileSize
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Filesystem $filesystem
+     * @param Size $fileSize
+     * @param Database $coreFileStorageDatabase
      * @param ValidateFactory $validateFactory
+     * @param NotProtectedExtension $fileValidator
+     * @param IoFile $ioFile
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\File\Size $fileSize,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory $validateFactory
+        ScopeConfigInterface $scopeConfig,
+        Filesystem $filesystem,
+        Size $fileSize,
+        Database $coreFileStorageDatabase,
+        ValidateFactory $validateFactory,
+        NotProtectedExtension $fileValidator,
+        IoFile $ioFile
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->validateFactory = $validateFactory;
+        $this->fileValidator = $fileValidator;
+        $this->ioFile = $ioFile;
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
@@ -94,27 +118,42 @@ class ValidatorInfo extends Validator
         $validatorChain = $this->validateFactory->create();
         try {
             $validatorChain = $this->buildImageValidator($validatorChain, $option, $this->fileFullPath);
-        } catch (\Magento\Framework\Exception\InputException $notImage) {
+        } catch (InputException $notImage) {
             return false;
         }
 
-        $result = false;
-        if ($validatorChain->isValid($this->fileFullPath, $optionValue['title'])) {
-            $result = $this->rootDirectory->isReadable($this->fileRelativePath)
+        if ($this->validatePath($optionValue) && $validatorChain->isValid($this->fileFullPath, $optionValue['title'])) {
+            return $this->rootDirectory->isReadable($this->fileRelativePath)
                 && isset($optionValue['secret_key'])
                 && $this->buildSecretKey($this->fileRelativePath) == $optionValue['secret_key'];
-        } elseif ($validatorChain->getErrors()) {
-            $errors = $this->getValidatorErrors($validatorChain->getErrors(), $optionValue, $option);
-
-            if (count($errors) > 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(__(implode("\n", $errors)));
-            }
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            $errors = $this->getValidatorErrors($validatorChain->getErrors(), $optionValue, $option);
+            if (count($errors) > 0) {
+                throw new LocalizedException(__(implode("\n", $errors)));
+            }
+            throw new LocalizedException(
                 __("The product's required option(s) weren't entered. Make sure the options are entered and try again.")
             );
         }
-        return $result;
+    }
+
+    /**
+     * Validate quote_path and order_path.
+     *
+     * @param array $optionValuePath
+     * @return bool
+     */
+    private function validatePath(array $optionValuePath): bool
+    {
+        foreach ([$optionValuePath['quote_path'], $optionValuePath['order_path']] as $path) {
+            $pathInfo = $this->ioFile->getPathInfo($path);
+            if (isset($pathInfo['extension'])) {
+                if (!$this->fileValidator->isValid($pathInfo['extension'])) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -125,7 +164,7 @@ class ValidatorInfo extends Validator
      */
     protected function buildSecretKey($fileRelativePath)
     {
-        return substr(md5($this->rootDirectory->readFile($fileRelativePath)), 0, 20);
+        return substr(hash('sha256', $this->rootDirectory->readFile($fileRelativePath)), 0, 20);
     }
 
     /**

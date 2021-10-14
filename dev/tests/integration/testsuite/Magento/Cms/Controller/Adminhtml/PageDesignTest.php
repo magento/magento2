@@ -20,6 +20,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Model\UrlRewrite;
+use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
 
 /**
  * Test the saving CMS pages design via admin area interface.
@@ -65,14 +66,19 @@ class PageDesignTest extends AbstractBackendController
     private $pagesToDelete = [];
 
     /**
+     * @var PostDataProcessor
+     */
+    private $postDataProcessor;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
-                \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
-                    \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
+                CustomLayoutManagerInterface::class =>
+                    CustomLayoutManager::class
             ]
         ]);
         parent::setUp();
@@ -81,6 +87,7 @@ class PageDesignTest extends AbstractBackendController
         $this->pageRetriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
         $this->scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
         $this->pagesToDelete = [];
+        $this->postDataProcessor = Bootstrap::getObjectManager()->get(PostDataProcessor::class);
     }
 
     /**
@@ -108,7 +115,7 @@ class PageDesignTest extends AbstractBackendController
     {
         if (!empty($this->pagesToDelete)) {
             /** @var UrlRewriteCollectionFactory $urlRewriteCollectionFactory */
-            $urlRewriteCollectionFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            $urlRewriteCollectionFactory = Bootstrap::getObjectManager()->get(
                 UrlRewriteCollectionFactory::class
             );
             /** @var UrlRewriteCollection $urlRewriteCollection */
@@ -263,5 +270,54 @@ class PageDesignTest extends AbstractBackendController
         $this->assertEmpty($updated->getCustomLayoutUpdateXml());
         $this->assertEmpty($updated->getLayoutUpdateXml());
         $this->pagesToDelete = ['test_custom_layout_page_1'];
+    }
+
+    /**
+     * Test create CMS page with invalid URL
+     *
+     * @return void
+     */
+    public function testSaveWithInlavidIdentifier(): void
+    {
+        $identifier = 'admin';
+        $reservedWords = 'admin, soap, rest, graphql, standard';
+        //Expected list of sessions messages collected throughout the controller calls.
+        $sessionMessages = [sprintf(
+            'URL key "%s" matches a reserved endpoint name (%s). Use another URL key.',
+            $identifier,
+            $reservedWords
+        )];
+        $requestData = [
+            PageInterface::IDENTIFIER => $identifier,
+            PageInterface::TITLE => 'page title',
+            PageInterface::CUSTOM_THEME => '1',
+            PageInterface::PAGE_LAYOUT => 'empty',
+        ];
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($requestData);
+        $this->dispatch($this->uri);
+        $this->assertSessionMessages(
+            self::equalTo($sessionMessages),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Test create CMS page with invalid layout update
+     *
+     * @return void
+     */
+    public function testSaveWithCustomLayoutUpdate(): void
+    {
+        $requestData = [
+            PageInterface::IDENTIFIER => 'randomidentified',
+            PageInterface::TITLE => 'page title',
+            PageInterface::CUSTOM_THEME => '1',
+            PageInterface::PAGE_LAYOUT => 'empty',
+            PageInterface::CUSTOM_LAYOUT_UPDATE_XML => '<container />',
+            PageInterface::LAYOUT_UPDATE_XML => '<container />',
+        ];
+        $this->assertFalse($this->postDataProcessor->validate($requestData));
     }
 }
