@@ -120,8 +120,9 @@ define([
                         $.extend(true, {}, checkoutProvider.get('shippingAddress'), shippingAddressData)
                     );
                 }
-                checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
-                    if (shippingAddrsData.street) {
+                checkoutProvider.on('shippingAddress', function (shippingAddrsData, changes) {
+                    var oldValues = checkoutProvider.get('shippingAddress')
+                    if (shippingAddrsData.street && (!_.isEmpty(shippingAddrsData.street[0]) || !_.isEmpty(oldValues.street[0]))) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
                 });
