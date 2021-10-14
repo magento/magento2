@@ -44,6 +44,9 @@ class ProductVariationsBuilderTest extends TestCase
      */
     protected $product;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->customAttributeFactory = $this->createMock(AttributeValueFactory::class);
@@ -66,7 +69,10 @@ class ProductVariationsBuilderTest extends TestCase
         );
     }
 
-    public function testCreate()
+    /**
+     * @return void
+     */
+    public function testCreate(): void
     {
         $output = $this->createPartialMock(
             Product::class,
@@ -74,7 +80,7 @@ class ProductVariationsBuilderTest extends TestCase
         );
         $attributes = [10 => ['attribute_code' => 'sort_order']];
         $variations = [
-            [10 => ['value' => 15, 'price' => ['pricing_value' => 10]]],
+            [10 => ['value' => 15, 'price' => ['pricing_value' => 10]]]
         ];
         $this->variationMatrix->expects($this->once())
             ->method('getVariations')
@@ -87,8 +93,6 @@ class ProductVariationsBuilderTest extends TestCase
         $this->product->expects($this->once())->method('getName')->willReturn('simple');
         $this->product->expects($this->once())->method('getSku')->willReturn('simple-sku');
         $this->product->expects($this->once())->method('getPrice')->willReturn(10);
-
-        $output->expects($this->at(0))->method('setData')->with($productData);
 
         $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
         $attribute->expects($this->once())
@@ -107,7 +111,9 @@ class ProductVariationsBuilderTest extends TestCase
 
         $output->expects($this->once())->method('getCustomAttributes')->willReturn([]);
 
-        $output->expects($this->at(2))->method('setData')->with('custom_attributes', ['sort_order' => $attribute]);
+        $output
+            ->method('setData')
+            ->withConsecutive([$productData], ['custom_attributes', ['sort_order' => $attribute]]);
         $output->expects($this->once())->method('setPrice')->with(10);
         $output->expects($this->once())->method('setName')->with('simple-15');
         $output->expects($this->once())->method('setSku')->with('simple-sku-15');

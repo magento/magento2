@@ -8,6 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="StorefrontSwaggerPage" url="/swagger" area="storefront" module="Swagger">
+        <section name="SwaggerAuthorizeSection"/>
         <section name="SwaggerHeaderSection"/>
         <section name="SwaggerApiListSection"/>
     </page>
