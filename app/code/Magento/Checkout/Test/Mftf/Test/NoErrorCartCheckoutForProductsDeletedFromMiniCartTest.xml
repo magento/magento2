@@ -27,15 +27,13 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addProductToCart"/>

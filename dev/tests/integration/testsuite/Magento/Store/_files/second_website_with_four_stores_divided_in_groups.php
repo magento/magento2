@@ -38,6 +38,22 @@ $objectManager->get(GroupResource::class)->save($storeGroup);
 $storeManager->reinitStores();
 
 $store = $objectManager->create(Store::class);
+if (!$store->load('fixture_second_store', 'code')->getId()) {
+    $store->setGroupId(
+        $storeGroup->getId()
+    );
+    $store->save();
+}
+
+$store = $objectManager->create(Store::class);
+if (!$store->load('fixture_third_store', 'code')->getId()) {
+    $store->setGroupId(
+        $storeGroup->getId()
+    );
+    $store->save();
+}
+
+$store = $objectManager->create(Store::class);
 if (!$store->load('fixture_fourth_store', 'code')->getId()) {
     $store->setCode(
         'fixture_fourth_store'

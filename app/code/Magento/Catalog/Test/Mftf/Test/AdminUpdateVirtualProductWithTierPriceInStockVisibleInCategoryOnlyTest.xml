@@ -114,7 +114,7 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductWithTierPriceInStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductWithTierPriceInStock.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
 

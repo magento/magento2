@@ -111,7 +111,7 @@ class Fulltext implements
      * @param array $data
      * @param ProcessManager|null $processManager
      * @param int|null $batchSize
-     * @param DeploymentConfig $deploymentConfig
+     * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -182,7 +182,7 @@ class Fulltext implements
             $i = 0;
 
             $this->batchSize = $this->deploymentConfig->get(
-                self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . self::INDEXER_ID
+                self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . self::INDEXER_ID . '/partial_reindex'
             ) ?? $this->batchSize;
 
             foreach ($entityIds as $entityId) {

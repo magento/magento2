@@ -122,7 +122,7 @@
         </actionGroup>
 
         <!-- Customer placed the order with 20 products -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="scrollToLimiter"/>
         <selectOption userInput="36" selector="{{StorefrontCategoryMainSection.perPage}}" stepKey="selectLimitOnPage"/>

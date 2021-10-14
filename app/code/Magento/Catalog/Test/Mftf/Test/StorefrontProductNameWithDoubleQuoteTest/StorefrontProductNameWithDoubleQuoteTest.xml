@@ -42,7 +42,7 @@
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Check product in category listing-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goToCategoryPage"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByNameAndSrc(SimpleProductNameWithDoubleQuote.name, ProductImage.fileName)}}" stepKey="seeCorrectImageCategoryPage"/>
         <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectNameCategoryPage"/>
         <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(SimpleProductNameWithDoubleQuote.name)}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPriceCategoryPage"/>

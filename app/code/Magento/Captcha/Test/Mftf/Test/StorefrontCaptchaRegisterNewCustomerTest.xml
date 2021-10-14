@@ -18,6 +18,7 @@
             <testCaseId value="MC-14805" />
             <group value="captcha"/>
             <group value="mtf_migrated"/>
+            <group value="storefront_captcha_enabled"/>
         </annotations>
         <before>
             <!--  Enable captcha for customer. -->
@@ -31,7 +32,7 @@
         </before>
         <after>
             <!-- Set default configuration. -->
-            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="defaultCaptchaMode" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />

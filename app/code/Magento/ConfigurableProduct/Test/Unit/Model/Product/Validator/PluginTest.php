@@ -71,6 +71,9 @@ class PluginTest extends TestCase
      */
     protected $subjectMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->eventManagerMock = $this->createMock(Manager::class);
@@ -99,7 +102,10 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testBeforeValidate()
+    /**
+     * @return void
+     */
+    public function testBeforeValidate(): void
     {
         $this->requestMock->expects(static::once())->method('has')->with('attributes')->willReturn(true);
         $this->productMock->expects(static::once())->method('setTypeId')->willReturnSelf();
@@ -112,36 +118,33 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testAfterValidateWithVariationsValid()
+    /**
+     * @return void
+     */
+    public function testAfterValidateWithVariationsValid(): void
     {
         $matrix = ['products'];
 
         $plugin = $this->getMockBuilder(Plugin::class)
-            ->setMethods(['_validateProductVariations'])
-            ->setConstructorArgs([$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock])
+            ->onlyMethods(['_validateProductVariations'])
+            ->setConstructorArgs(
+                [
+                    $this->eventManagerMock,
+                    $this->productFactoryMock,
+                    $this->jsonHelperMock
+                ]
+            )
             ->getMock();
 
-        $plugin->expects(
-            $this->once()
-        )->method(
-            '_validateProductVariations'
-        )->with(
-            $this->productMock,
-            $matrix,
-            $this->requestMock
-        )->willReturn(
-            null
-        );
+        $plugin->expects($this->once())
+            ->method('_validateProductVariations')
+            ->with($this->productMock, $matrix, $this->requestMock)
+            ->willReturn(null);
 
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'variations-matrix'
-        )->willReturn(
-            $matrix
-        );
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('variations-matrix')
+            ->willReturn($matrix);
 
         $this->responseMock->expects($this->never())->method('setError');
 
@@ -157,36 +160,33 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testAfterValidateWithVariationsInvalid()
+    /**
+     * @return void
+     */
+    public function testAfterValidateWithVariationsInvalid(): void
     {
         $matrix = ['products'];
 
         $plugin = $this->getMockBuilder(Plugin::class)
-            ->setMethods(['_validateProductVariations'])
-            ->setConstructorArgs([$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock])
+            ->onlyMethods(['_validateProductVariations'])
+            ->setConstructorArgs(
+                [
+                    $this->eventManagerMock,
+                    $this->productFactoryMock,
+                    $this->jsonHelperMock
+                ]
+            )
             ->getMock();
 
-        $plugin->expects(
-            $this->once()
-        )->method(
-            '_validateProductVariations'
-        )->with(
-            $this->productMock,
-            $matrix,
-            $this->requestMock
-        )->willReturn(
-            true
-        );
+        $plugin->expects($this->once())
+            ->method('_validateProductVariations')
+            ->with($this->productMock, $matrix, $this->requestMock)
+            ->willReturn(true);
 
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'variations-matrix'
-        )->willReturn(
-            $matrix
-        );
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('variations-matrix')
+            ->willReturn($matrix);
 
         $this->responseMock->expects($this->once())->method('setError')->with(true)->willReturnSelf();
         $this->responseMock->expects($this->once())->method('setMessage')->willReturnSelf();
@@ -203,17 +203,15 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testAfterValidateIfVariationsNotExist()
+    /**
+     * @return void
+     */
+    public function testAfterValidateIfVariationsNotExist(): void
     {
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'variations-matrix'
-        )->willReturn(
-            null
-        );
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('variations-matrix')
+            ->willReturn(null);
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->plugin->afterValidate(
             $this->subjectMock,
@@ -224,12 +222,15 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testAfterValidateWithVariationsAndRequiredAttributes()
+    /**
+     * @return void
+     */
+    public function testAfterValidateWithVariationsAndRequiredAttributes(): void
     {
         $matrix = [
             ['data1', 'data2', 'configurable_attribute' => ['data1']],
             ['data3', 'data4', 'configurable_attribute' => ['data3']],
-            ['data5', 'data6', 'configurable_attribute' => ['data5']],
+            ['data5', 'data6', 'configurable_attribute' => ['data5']]
         ];
 
         $this->productMock->expects($this->any())
@@ -240,19 +241,14 @@ class PluginTest extends TestCase
                     ['code2', null, 'value_code_2'],
                     ['code3', null, 'value_code_3'],
                     ['code4', null, 'value_code_4'],
-                    ['code5', null, 'value_code_5'],
+                    ['code5', null, 'value_code_5']
                 ]
             );
 
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'variations-matrix'
-        )->willReturn(
-            $matrix
-        );
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('variations-matrix')
+            ->willReturn($matrix);
 
         $attribute1 = $this->createAttribute('code1', true, true);
         $attribute2 = $this->createAttribute('code2', true, false);
@@ -265,35 +261,31 @@ class PluginTest extends TestCase
             $attribute2,
             $attribute3,
             $attribute4,
-            $attribute5,
+            $attribute5
         ];
 
         $requiredAttributes = [
             'code1' => 'value_code_1',
-            'code5' => 'value_code_5',
+            'code5' => 'value_code_5'
         ];
 
-        $product1 = $this->createProduct(0, 1);
-        $product1->expects($this->at(1))
+        $product1 = $this->createProduct();
+        $product1
             ->method('addData')
-            ->with($requiredAttributes)->willReturnSelf();
-        $product1->expects($this->at(2))
+            ->withConsecutive([$requiredAttributes], [$matrix[0]])
+            ->willReturnOnConsecutiveCalls($product1, $product1);
+
+        $product2 = $this->createProduct();
+        $product2
             ->method('addData')
-            ->with($matrix[0])->willReturnSelf();
-        $product2 = $this->createProduct(1, 2);
-        $product2->expects($this->at(1))
+            ->withConsecutive([$requiredAttributes], [$matrix[1]])
+            ->willReturnOnConsecutiveCalls($product2, $product2);
+
+        $product3 = $this->createProduct();
+        $product3
             ->method('addData')
-            ->with($requiredAttributes)->willReturnSelf();
-        $product2->expects($this->at(2))
-            ->method('addData')
-            ->with($matrix[1])->willReturnSelf();
-        $product3 = $this->createProduct(2, 3);
-        $product3->expects($this->at(1))
-            ->method('addData')
-            ->with($requiredAttributes)->willReturnSelf();
-        $product3->expects($this->at(2))
-            ->method('addData')
-            ->with($matrix[2])->willReturnSelf();
+            ->withConsecutive([$requiredAttributes], [$matrix[2]])
+            ->willReturnOnConsecutiveCalls($product3, $product3);
 
         $this->productMock->expects($this->exactly(3))
             ->method('getAttributes')
@@ -308,32 +300,28 @@ class PluginTest extends TestCase
             $this->requestMock,
             $this->responseMock
         );
-        $this->assertEquals(
-            $this->proceedResult,
-            $result
-        );
+        $this->assertEquals($this->proceedResult, $result);
     }
 
     /**
-     * @param $index
-     * @param $id
-     * @param bool $isValid
-     * @internal param array $attributes
      * @return MockObject|Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @internal param array $attributes
      */
-    private function createProduct($index, $id, $isValid = true)
+    private function createProduct(): Product
     {
         $productMock = $this->createPartialMock(
             Product::class,
             ['getAttributes', 'addData', 'setAttributeSetId', 'validate']
         );
-        $this->productFactoryMock->expects($this->at($index))
+
+        $this->productFactoryMock
             ->method('create')
             ->willReturn($productMock);
-        $productMock->expects($this->once())
+
+        $productMock->expects($this->any())
             ->method('validate')
-            ->willReturn($isValid);
+            ->willReturn(true);
 
         return $productMock;
     }
@@ -342,13 +330,23 @@ class PluginTest extends TestCase
      * @param $attributeCode
      * @param $isUserDefined
      * @param $isRequired
+     *
      * @return MockObject|AbstractAttribute
      */
-    private function createAttribute($attributeCode, $isUserDefined, $isRequired)
-    {
+    private function createAttribute(
+        $attributeCode,
+        $isUserDefined,
+        $isRequired
+    ): AbstractAttribute {
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getIsUserDefined', 'getIsRequired'])
+            ->onlyMethods(
+                [
+                    'getAttributeCode',
+                    'getIsUserDefined',
+                    'getIsRequired'
+                ]
+            )
             ->getMock();
         $attribute->expects($this->any())
             ->method('getAttributeCode')

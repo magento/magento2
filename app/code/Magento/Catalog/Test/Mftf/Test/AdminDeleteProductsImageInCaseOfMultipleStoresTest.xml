@@ -66,9 +66,7 @@
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -95,9 +93,7 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Switch to 'Default Store View' scope and open product page-->
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreView">
             <argument name="storeViewName" value="'Default Store View'"/>
@@ -179,7 +175,7 @@
         <waitForPageLoad stepKey="waitForImagesLoad3"/>
         <dontSeeElement selector="{{AdminProductImagesSection.imageFile(TestImageNew.fileName)}}" stepKey="seeImageIsDeleted"/>
         <!--Open Storefront on Default store view and assert image existence-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad0"/>
         <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage"/>
         <assertStringContainsString stepKey="assertProductImageAbsence">

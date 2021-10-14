@@ -49,7 +49,7 @@
         <!-- Create order status -->
         <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderStatusPageLoad"/>
-        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill form and validate message -->
         <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
