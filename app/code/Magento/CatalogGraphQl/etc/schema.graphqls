@@ -474,6 +474,7 @@ type Aggregation @doc(description: "A bucket that contains information for each 
     label: String @doc(description: "The aggregation display name.")
     attribute_code: String! @doc(description: "Attribute code of the aggregation group.")
     options: [AggregationOption] @doc(description: "Array of options for the aggregation.")
+    position: Int @doc(description: "The relative position of the attribute in a layered navigation block")
 }
 
 interface AggregationOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\AggregationOptionTypeResolverComposite") {
