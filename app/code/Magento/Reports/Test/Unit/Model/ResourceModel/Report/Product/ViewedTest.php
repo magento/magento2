@@ -20,7 +20,7 @@ use Magento\Reports\Model\Flag;
 use Magento\Reports\Model\FlagFactory;
 use Magento\Reports\Model\ResourceModel\Helper;
 use Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -102,29 +102,28 @@ class ViewedTest extends TestCase
     protected $flagMock;
 
     /**
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @return void
      */
     protected function setUp(): void
     {
         $this->zendDbMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
         $this->zendDbMock->expects($this->any())->method('fetchColumn')->willReturn([]);
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
+        $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()
+            ->onlyMethods(
                 [
-                    'from',
                     'where',
-                    'joinInner',
-                    'joinLeft',
                     'having',
                     'useStraightJoin',
                     'insertFromSelect',
-                    '__toString'
+                    '__toString',
+                    'from',
+                    'joinInner',
+                    'joinLeft'
                 ]
-            )
-            ->getMock();
+            )->getMock();
         $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('joinInner')->willReturnSelf();
@@ -163,12 +162,13 @@ class ViewedTest extends TestCase
 
         $this->flagMock = $this->getMockBuilder(Flag::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'setLastUpdate', 'save'])
+            ->onlyMethods(['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'save'])
+            ->addMethods(['setLastUpdate'])
             ->getMock();
 
         $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->flagFactoryMock->expects($this->any())->method('create')->willReturn($this->flagMock);
 
@@ -197,7 +197,7 @@ class ViewedTest extends TestCase
                 'localeDate' => $this->timezoneMock,
                 'reportsFlagFactory' => $this->flagFactoryMock,
                 'productResource' => $this->productMock,
-                'resourceHelper' => $this->helperMock,
+                'resourceHelper' => $this->helperMock
             ]
         );
     }
@@ -207,47 +207,40 @@ class ViewedTest extends TestCase
      * @param mixed $to
      * @param InvokedCount $truncateCount
      * @param InvokedCount $deleteCount
-     * @dataProvider intervalsDataProvider
+     *
      * @return void
+     * @dataProvider intervalsDataProvider
      */
-    public function testAggregate($from, $to, $truncateCount, $deleteCount)
+    public function testAggregate($from, $to, InvokedCount $truncateCount, InvokedCount $deleteCount): void
     {
         $this->connectionMock->expects($truncateCount)->method('truncateTable');
         $this->connectionMock->expects($deleteCount)->method('delete');
 
         $this->helperMock
-            ->expects($this->at(0))
             ->method('updateReportRatingPos')
-            ->with(
-                $this->connectionMock,
-                'day',
-                'views_num',
-                'report_viewed_product_aggregated_daily',
-                'report_viewed_product_aggregated_daily'
-            )
-            ->willReturnSelf();
-        $this->helperMock
-            ->expects($this->at(1))
-            ->method('updateReportRatingPos')
-            ->with(
-                $this->connectionMock,
-                'month',
-                'views_num',
-                'report_viewed_product_aggregated_daily',
-                'report_viewed_product_aggregated_monthly'
-            )
-            ->willReturnSelf();
-        $this->helperMock
-            ->expects($this->at(2))
-            ->method('updateReportRatingPos')
-            ->with(
-                $this->connectionMock,
-                'year',
-                'views_num',
-                'report_viewed_product_aggregated_daily',
-                'report_viewed_product_aggregated_yearly'
-            )
-            ->willReturnSelf();
+            ->withConsecutive(
+                [
+                    $this->connectionMock,
+                    'day',
+                    'views_num',
+                    'report_viewed_product_aggregated_daily',
+                    'report_viewed_product_aggregated_daily'
+                ],
+                [
+                    $this->connectionMock,
+                    'month',
+                    'views_num',
+                    'report_viewed_product_aggregated_daily',
+                    'report_viewed_product_aggregated_monthly'
+                ],
+                [
+                    $this->connectionMock,
+                    'year',
+                    'views_num',
+                    'report_viewed_product_aggregated_daily',
+                    'report_viewed_product_aggregated_yearly'
+                ]
+            )->willReturnOnConsecutiveCalls($this->helperMock, $this->helperMock, $this->helperMock);
 
         $this->flagMock->expects($this->once())->method('unsetData')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('loadSelf')->willReturnSelf();
@@ -265,7 +258,7 @@ class ViewedTest extends TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider()
+    public function intervalsDataProvider(): array
     {
         return [
             [

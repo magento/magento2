@@ -80,7 +80,6 @@ class AddDataForIndia implements DataPatchInterface, PatchVersionInterface
             ['IN', 'JH', 'Jharkhand'],
             ['IN', 'KA', 'Karnataka'],
             ['IN', 'KL', 'Kerala'],
-            ['IN', 'LA', 'Ladakh'],
             ['IN', 'LD', 'Lakshadweep'],
             ['IN', 'MP', 'Madhya Pradesh'],
             ['IN', 'MH', 'Maharashtra'],
