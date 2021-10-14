@@ -133,11 +133,6 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\File\Uploader">
-        <arguments>
-            <argument name="filesystem" xsi:type="object">customRemoteFilesystem</argument>
-        </arguments>
-    </type>
     <type name="Magento\RemoteStorage\Model\Synchronizer">
         <arguments>
             <argument name="filesystem" xsi:type="object">customRemoteFilesystem</argument>
