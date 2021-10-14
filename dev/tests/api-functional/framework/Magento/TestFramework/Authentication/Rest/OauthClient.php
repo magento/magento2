@@ -278,4 +278,12 @@ class OauthClient extends AbstractService
 
         return json_decode($responseBody);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getSignatureMethod()
+    {
+        return 'HMAC-SHA256';
+    }
 }

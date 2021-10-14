@@ -61,10 +61,19 @@ class OauthTest extends TestCase
      */
     private $_loggerMock;
 
+    /**
+     * @var string
+     */
     private $_oauthToken;
 
+    /**
+     * @var string
+     */
     private $_oauthSecret;
 
+    /**
+     * @var string
+     */
     private $_oauthVerifier;
 
     const CONSUMER_ID = 1;

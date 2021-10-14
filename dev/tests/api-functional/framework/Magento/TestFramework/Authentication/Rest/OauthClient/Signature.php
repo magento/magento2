@@ -51,4 +51,17 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
 
         return base64_encode($this->hash($baseString));
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function hash($data)
+    {
+        switch (strtoupper($this->algorithm)) {
+            case 'HMAC-SHA256':
+                return hash_hmac('sha256', $data, $this->getSigningKey(), true);
+            default:
+                return parent::hash($data);
+        }
+    }
 }
