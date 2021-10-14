@@ -223,7 +223,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                                     !(event && event.type == 'keyup')
                                 ) {
                                     if (useConfigManageStockField.val() == 1) {
-                                        useConfigManageStockField.removeAttr('checked').val(0);
+                                        useConfigManageStockField.prop('checked', false).val(0);
                                     }
                                     manageStockField.toggleClass('disabled', false).prop('disabled', false);
                                     manageStockField.val(manageStockValue);
@@ -256,8 +256,8 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                         };
                         $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
                             $('#' + generalTabField + ', #' + advancedTabField)
-                                .bind('focus blur change keyup click', filler)
-                                .bind('keyup change blur', disabler)
+                                .on('focus blur change keyup click', filler)
+                                .on('keyup change blur', disabler)
                                 .trigger('change');
                         });
 

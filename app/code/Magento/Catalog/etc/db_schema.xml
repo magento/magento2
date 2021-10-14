@@ -13,7 +13,7 @@
         <column xsi:type="smallint" name="attribute_set_id" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="varchar" name="type_id" nullable="false" length="32" default="simple" comment="Type ID"/>
-        <column xsi:type="varchar" name="sku" nullable="true" length="64" comment="SKU"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="64" comment="SKU"/>
         <column xsi:type="smallint" name="has_options" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Has Options"/>
         <column xsi:type="smallint" name="required_options" unsigned="true" nullable="false"

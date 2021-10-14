@@ -145,6 +145,8 @@ class ImageProcessor implements ImageProcessorInterface
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $fileName = $this->getFileName($imageContent);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
         $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
