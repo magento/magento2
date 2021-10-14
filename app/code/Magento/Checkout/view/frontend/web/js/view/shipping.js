@@ -121,8 +121,13 @@ define([
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData, changes) {
-                    var oldValues = checkoutProvider.get('shippingAddress')
-                    if (shippingAddrsData.street && (!_.isEmpty(shippingAddrsData.street[0]) || !_.isEmpty(oldValues.street[0]))) {
+                    if (changes && changes.length > 0) {
+                        var change = changes.pop()
+                        if (change.path === "shippingAddress.street.0" && !_.isUndefined(change.value) && change.value.length === 0 && !_.isUndefined(change.oldValue) && change.oldValue.length > 0) {
+                            checkoutData.setShippingAddressFromData(shippingAddrsData);
+                        }
+                    }
+                    if (shippingAddrsData.street && (!_.isEmpty(shippingAddrsData.street[0]))) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
                 });
