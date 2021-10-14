@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\Data\OptionInterface;
-use Magento\Bundle\Model\Option\SaveAction;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
+use Magento\Bundle\Model\Option\SaveAction;
+use Magento\Bundle\Model\ProductRelationsProcessorComposite;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
@@ -49,25 +50,34 @@ class SaveHandler implements ExtensionInterface
     private $checkOptionLinkIfExist;
 
     /**
+     * @var ProductRelationsProcessorComposite
+     */
+    private $productRelationsProcessorComposite;
+
+    /**
      * @param OptionRepository $optionRepository
      * @param ProductLinkManagementInterface $productLinkManagement
      * @param SaveAction $optionSave
      * @param MetadataPool $metadataPool
      * @param CheckOptionLinkIfExist|null $checkOptionLinkIfExist
+     * @param ProductRelationsProcessorComposite|null $productRelationsProcessorComposite
      */
     public function __construct(
         OptionRepository $optionRepository,
         ProductLinkManagementInterface $productLinkManagement,
         SaveAction $optionSave,
         MetadataPool $metadataPool,
-        ?CheckOptionLinkIfExist $checkOptionLinkIfExist = null
+        ?CheckOptionLinkIfExist $checkOptionLinkIfExist = null,
+        ?ProductRelationsProcessorComposite $productRelationsProcessorComposite = null
     ) {
         $this->optionRepository = $optionRepository;
         $this->productLinkManagement = $productLinkManagement;
         $this->optionSave = $optionSave;
         $this->metadataPool = $metadataPool;
-        $this->checkOptionLinkIfExist = $checkOptionLinkIfExist ??
-            ObjectManager::getInstance()->get(CheckOptionLinkIfExist::class);
+        $this->checkOptionLinkIfExist = $checkOptionLinkIfExist
+            ?? ObjectManager::getInstance()->get(CheckOptionLinkIfExist::class);
+        $this->productRelationsProcessorComposite = $productRelationsProcessorComposite
+            ?? ObjectManager::getInstance()->get(ProductRelationsProcessorComposite::class);
     }
 
     /**
@@ -106,6 +116,12 @@ class SaveHandler implements ExtensionInterface
             $this->saveOptions($entity, $bundleProductOptions);
             $entity->setCopyFromView(false);
         }
+
+        $this->productRelationsProcessorComposite->process(
+            $entity,
+            $existingBundleProductOptions,
+            $bundleProductOptions
+        );
 
         return $entity;
     }

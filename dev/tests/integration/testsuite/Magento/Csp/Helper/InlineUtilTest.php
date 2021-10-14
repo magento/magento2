@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Cover CSP util use cases.
+ *
+ * @magentoAppArea frontend
  */
 class InlineUtilTest extends TestCase
 {
@@ -70,7 +72,18 @@ class InlineUtilTest extends TestCase
      * @param string $result Expected result.
      * @param PolicyInterface[] $policiesExpected
      * @return void
+     *
      * @dataProvider getTags
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/policy_id script-src
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/none 0
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/self 1
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/inline 0
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/eval 0
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/event_handlers 1
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/policy_id style-src
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/none 0
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/self 1
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/inline 0
      */
     public function testRenderTag(
         string $tagName,
@@ -96,7 +109,7 @@ class InlineUtilTest extends TestCase
                 'script',
                 ['src' => 'http://magento.com/static/some-script.js'],
                 null,
-                '<script src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;some-script.js"/>',
+                '<script src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;some-script.js"></script>',
                 [new FetchPolicy('script-src', false, ['http://magento.com'])]
             ],
             'inline-script' => [
@@ -209,7 +222,7 @@ class InlineUtilTest extends TestCase
                 'iframe',
                 ['src' => 'http://magento.com/some-page'],
                 null,
-                '<iframe src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;some-page"/>',
+                '<iframe src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;some-page"></iframe>',
                 [new FetchPolicy('frame-src', false, ['http://magento.com'])]
             ],
             'remote-track' => [
@@ -230,21 +243,21 @@ class InlineUtilTest extends TestCase
                 'video',
                 ['src' => 'https://magento.com/static/video.mp4'],
                 null,
-                '<video src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;video.mp4"/>',
+                '<video src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;video.mp4"></video>',
                 [new FetchPolicy('media-src', false, ['https://magento.com'])]
             ],
             'remote-audio' => [
                 'audio',
                 ['src' => 'https://magento.com/static/audio.mp3'],
                 null,
-                '<audio src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;audio.mp3"/>',
+                '<audio src="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;audio.mp3"></audio>',
                 [new FetchPolicy('media-src', false, ['https://magento.com'])]
             ],
             'remote-object' => [
                 'object',
                 ['data' => 'http://magento.com/static/flash.swf'],
                 null,
-                '<object data="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;flash.swf"/>',
+                '<object data="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;flash.swf"></object>',
                 [new FetchPolicy('object-src', false, ['http://magento.com'])]
             ],
             'remote-embed' => [
@@ -259,7 +272,7 @@ class InlineUtilTest extends TestCase
                 ['code' => 'SomeApplet.class', 'archive' => 'https://magento.com/applet/my-applet.jar'],
                 null,
                 '<applet code="SomeApplet.class" '
-                    . 'archive="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;applet&#x2F;my-applet.jar"/>',
+                    . 'archive="https&#x3A;&#x2F;&#x2F;magento.com&#x2F;applet&#x2F;my-applet.jar"></applet>',
                 [new FetchPolicy('object-src', false, ['https://magento.com'])]
             ]
         ];
@@ -294,7 +307,7 @@ class InlineUtilTest extends TestCase
         $eventListener = $this->secureHtmlRenderer->renderEventListener('onclick', 'alert()');
 
         $this->assertEquals(
-            '<script src="https&#x3A;&#x2F;&#x2F;test.magento.com&#x2F;static&#x2F;script.js"/>',
+            '<script src="https&#x3A;&#x2F;&#x2F;test.magento.com&#x2F;static&#x2F;script.js"></script>',
             $scriptTag
         );
         $this->assertEquals(
@@ -304,5 +317,30 @@ class InlineUtilTest extends TestCase
         $policies = $this->dynamicCollector->consumeAdded();
         $this->assertTrue(in_array(new FetchPolicy('script-src', false, ['https://test.magento.com']), $policies));
         $this->assertTrue(in_array(new FetchPolicy('script-src', false, [], [], false, true), $policies));
+    }
+
+    /**
+     * Verify that hashes are not calculated when inline sources are allowed.
+     *
+     * @return void
+     *
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/policy_id script-src
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/none 0
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/self 1
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/inline 1
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/eval 0
+     * @magentoConfigFixture default_store csp/policies/storefront/scripts/event_handlers 1
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/policy_id style-src
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/none 0
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/self 1
+     * @magentoConfigFixture default_store csp/policies/storefront/styles/inline 1
+     */
+    public function testRenderWithInline(): void
+    {
+        $this->assertEquals(
+            '<script>alert(1);</script>',
+            $this->util->renderTag('script', [], 'alert(1);')
+        );
+        $this->assertEmpty($this->dynamicCollector->consumeAdded());
     }
 }
