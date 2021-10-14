@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Customer\Model\Metadata\ElementFactory;
@@ -362,8 +363,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueIsAjax(): void
     {
         $model = $this->initialize(
@@ -378,8 +379,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueNoDelete(): void
     {
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(false));
@@ -388,7 +389,7 @@ class FileTest extends AbstractFormTestCase
             [
                 'value' => 'value',
                 'isAjax' => false,
-                'entityTypeCode' => self::ENTITY_TYPE
+                'entityTypeCode' => Customer::ENTITY
             ]
         );
 
@@ -401,8 +402,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueDelete(): void
     {
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue(false));
@@ -431,8 +432,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueTmpFile(): void
     {
         $value = ['tmp_name' => 'tmp.file', 'name' => 'new.file'];
@@ -486,8 +487,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRestoreValue(): void
     {
         $value = 'value';
@@ -537,8 +538,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testOutputValueJson(): void
     {
         $value = 'value';
@@ -591,8 +592,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExtractValueFileUploaderUIComponent(): void
     {
         $attributeCode = 'img1';
@@ -631,8 +632,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueRemoveUiComponentValue(): void
     {
         $value = 'value';
@@ -641,7 +642,7 @@ class FileTest extends AbstractFormTestCase
             [
                 'value' => $value,
                 'isAjax' => false,
-                'entityTypeCode' => self::ENTITY_TYPE
+                'entityTypeCode' => Customer::ENTITY
             ]
         );
 
@@ -654,8 +655,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueNoAction(): void
     {
         $value = 'value';
@@ -672,8 +673,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueUiComponent(): void
     {
         $value = [
@@ -697,8 +698,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueInputField(): void
     {
         $value = [
@@ -769,8 +770,8 @@ class FileTest extends AbstractFormTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCompactValueInputFieldWithException(): void
     {
         $value = [
