@@ -50,7 +50,7 @@
         "laminas/laminas-mime": "^2.8.0",
         "laminas/laminas-modulemanager": "^2.7",
         "laminas/laminas-mvc": "^3.2.0",
-        "laminas/laminas-server": "^2.11.0",
+        "laminas/laminas-server": "^2.6.1",
         "laminas/laminas-servicemanager": "^3.6.0",
         "laminas/laminas-session": "^2.10",
         "laminas/laminas-soap": "^2.9.0",
@@ -62,7 +62,6 @@
         "league/flysystem": "^2.0",
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.8.x-dev as 1.8.0",
-        "magento/composer-dependency-version-audit-plugin": "~0.1",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "dev-master as 1.14.6",
         "monolog/monolog": "^2.3",
@@ -78,7 +77,8 @@
         "tubalmartin/cssmin": "4.1.1",
         "web-token/jwt-framework": "^v2.2.7",
         "webonyx/graphql-php": "~14.9.0",
-        "wikimedia/less.php": "^3.0.0"
+        "wikimedia/less.php": "^3.0.0",
+        "magento/composer-dependency-version-audit-plugin": "~0.1"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.4.0",
