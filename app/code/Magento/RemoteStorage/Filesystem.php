@@ -86,7 +86,7 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
      */
     public function getDirectoryWrite($directoryCode, $driverCode = DriverPool::REMOTE)
     {
-        $hasCode = $this->directoryCodes && in_array($directoryCode, $this->directoryCodes, true);
+        $hasCode = !$this->directoryCodes || in_array($directoryCode, $this->directoryCodes, true);
 
         if ($driverCode === DriverPool::REMOTE && $hasCode && $this->isEnabled) {
             $code = $directoryCode . '_' . $driverCode;
