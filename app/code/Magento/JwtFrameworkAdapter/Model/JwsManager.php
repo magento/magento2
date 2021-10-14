@@ -26,6 +26,8 @@ use Magento\JwtFrameworkAdapter\Model\Data\Header;
 
 /**
  * Works with JWS.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JwsManager
 {
@@ -77,20 +79,11 @@ class JwsManager
      */
     public function build(JwsInterface $jws, EncryptionSettingsInterface $encryptionSettings): string
     {
-        if (!$encryptionSettings instanceof JwsSignatureJwks) {
-            throw new JwtException('Can only work with JWK encryption settings for JWS tokens');
-        }
-        $signaturesCount = count($encryptionSettings->getJwkSet()->getKeys());
-        if ($jws->getProtectedHeaders() && count($jws->getProtectedHeaders()) !== $signaturesCount) {
-            throw new MalformedTokenException('Number of headers must equal to number of JWKs');
-        }
-        if ($jws->getUnprotectedHeaders()
-            && count($jws->getUnprotectedHeaders()) !== $signaturesCount
-        ) {
-            throw new MalformedTokenException('There must be an equal number of protected and unprotected headers.');
-        }
+        $this->validate($jws, $encryptionSettings);
         $builder = $this->jwsBuilder->create();
         $builder = $builder->withPayload($jws->getPayload()->getContent());
+        $signaturesCount = count($encryptionSettings->getJwkSet()->getKeys());
+
         for ($i = 0; $i < $signaturesCount; $i++) {
             $jwk = $encryptionSettings->getJwkSet()->getKeys()[$i];
             $protected = [];
@@ -101,6 +94,7 @@ class JwsManager
                 $protected['kid'] = $jwk->getKeyId();
             }
             if ($jws->getProtectedHeaders()) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $protected = array_merge($protected, $this->extractHeaderData($jws->getProtectedHeaders()[$i]));
             }
             $protected['alg'] = $protected['alg'] ?? $jwk->getAlgorithm();
@@ -122,6 +116,28 @@ class JwsManager
             return $this->jwsSerializer->serialize('jws_json_flattened', $jwsCreated);
         }
         return $this->jwsSerializer->serialize('jws_compact', $jwsCreated);
+    }
+
+    /**
+     * Validate jws and encryption settings.
+     *
+     * @param JwsInterface $jws
+     * @param EncryptionSettingsInterface $encryptionSettings
+     */
+    private function validate(JwsInterface $jws, EncryptionSettingsInterface $encryptionSettings): void
+    {
+        if (!$encryptionSettings instanceof JwsSignatureJwks) {
+            throw new JwtException('Can only work with JWK encryption settings for JWS tokens');
+        }
+        $signaturesCount = count($encryptionSettings->getJwkSet()->getKeys());
+        if ($jws->getProtectedHeaders() && count($jws->getProtectedHeaders()) !== $signaturesCount) {
+            throw new MalformedTokenException('Number of headers must equal to number of JWKs');
+        }
+        if ($jws->getUnprotectedHeaders()
+            && count($jws->getUnprotectedHeaders()) !== $signaturesCount
+        ) {
+            throw new MalformedTokenException('There must be an equal number of protected and unprotected headers.');
+        }
     }
 
     /**
