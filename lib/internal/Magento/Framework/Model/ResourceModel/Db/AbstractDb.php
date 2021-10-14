@@ -306,7 +306,7 @@ abstract class AbstractDb extends AbstractResource
      * Get connection by resource name
      *
      * @param string $resourceName
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected function _getConnection($resourceName)
     {
@@ -325,7 +325,7 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Get connection
      *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function getConnection()
     {
