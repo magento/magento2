@@ -20,6 +20,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,6 +47,9 @@ class AbstractDbTest extends TestCase
      */
     protected $relationProcessorMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_resourcesMock = $this->createMock(ResourceConnection::class);
@@ -78,9 +82,11 @@ class AbstractDbTest extends TestCase
     /**
      * @param $fieldNameType
      * @param $expectedResult
+     *
+     * @return void
      * @dataProvider addUniqueFieldDataProvider
      */
-    public function testAddUniqueField($fieldNameType, $expectedResult)
+    public function testAddUniqueField($fieldNameType, $expectedResult): void
     {
         $this->_model->addUniqueField($fieldNameType);
         $this->assertEquals($expectedResult, $this->_model->getUniqueFields());
@@ -89,22 +95,22 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function addUniqueFieldDataProvider()
+    public function addUniqueFieldDataProvider(): array
     {
         return [
             [
                 'fieldNameString',
-                ['fieldNameString'],
+                ['fieldNameString']
             ],
             [
                 [
                     'fieldNameArray',
-                    'FieldNameArraySecond',
+                    'FieldNameArraySecond'
                 ],
                 [
                     [
                         'fieldNameArray',
-                        'FieldNameArraySecond',
+                        'FieldNameArraySecond'
                     ]
                 ]
             ],
@@ -115,7 +121,10 @@ class AbstractDbTest extends TestCase
         ];
     }
 
-    public function testAddUniqueFieldArray()
+    /**
+     * @return void
+     */
+    public function testAddUniqueFieldArray(): void
     {
         $this->assertInstanceOf(
             AbstractDb::class,
@@ -123,17 +132,23 @@ class AbstractDbTest extends TestCase
         );
     }
 
-    public function testGetIdFieldNameException()
+    /**
+     * @return void
+     */
+    public function testGetIdFieldNameException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Empty identifier field name');
         $this->_model->getIdFieldName();
     }
 
-    public function testGetIdFieldname()
+    /**
+     * @return void
+     */
+    public function testGetIdFieldname(): void
     {
         $data = 'MainTableName';
-        $idFieldNameProperty = new \ReflectionProperty(
+        $idFieldNameProperty = new ReflectionProperty(
             AbstractDb::class,
             '_idFieldName'
         );
@@ -142,7 +157,10 @@ class AbstractDbTest extends TestCase
         $this->assertEquals($data, $this->_model->getIdFieldName());
     }
 
-    public function testGetMainTableException()
+    /**
+     * @return void
+     */
+    public function testGetMainTableException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Empty main table name');
@@ -150,13 +168,15 @@ class AbstractDbTest extends TestCase
     }
 
     /**
-     * @dataProvider getTableDataProvider
      * @param $tableName
      * @param $expectedResult
+     *
+     * @return void
+     * @dataProvider getTableDataProvider
      */
-    public function testGetMainTable($tableName, $expectedResult)
+    public function testGetMainTable($tableName, $expectedResult): void
     {
-        $mainTableProperty = new \ReflectionProperty(
+        $mainTableProperty = new ReflectionProperty(
             AbstractDb::class,
             '_mainTable'
         );
@@ -172,30 +192,33 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function getTableDataProvider()
+    public function getTableDataProvider(): array
     {
         return [
             [
                 'tableName',
-                'tableName',
+                'tableName'
             ],
             [
                 [
                     'tableName',
-                    'entity_suffix',
+                    'entity_suffix'
                 ],
                 'tableName_entity_suffix'
             ]
         ];
     }
 
-    public function testGetTable()
+    /**
+     * @return void
+     */
+    public function testGetTable(): void
     {
         $data = 'tableName';
         $this->_resourcesMock->expects($this->once())->method('getTableName')->with($data)->willReturn(
             'tableName'
         );
-        $tablesProperty = new \ReflectionProperty(
+        $tablesProperty = new ReflectionProperty(
             AbstractDb::class,
             '_tables'
         );
@@ -204,17 +227,22 @@ class AbstractDbTest extends TestCase
         $this->assertEquals($data, $this->_model->getTable($data));
     }
 
-    public function testGetChecksumNegative()
+    /**
+     * @return void
+     */
+    public function testGetChecksumNegative(): void
     {
         $this->assertFalse($this->_model->getChecksum(null));
     }
 
     /**
-     * @dataProvider getChecksumProvider
      * @param $checksum
      * @param $expected
+     *
+     * @return void
+     * @dataProvider getChecksumProvider
      */
-    public function testGetChecksum($checksum, $expected)
+    public function testGetChecksum($checksum, $expected): void
     {
         $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->once())->method('getTablesChecksum')->with($checksum)->willReturn(
@@ -229,7 +257,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function getChecksumProvider()
+    public function getChecksumProvider(): array
     {
         return [
             [
@@ -243,9 +271,12 @@ class AbstractDbTest extends TestCase
         ];
     }
 
-    public function testResetUniqueField()
+    /**
+     * @return void
+     */
+    public function testResetUniqueField(): void
     {
-        $uniqueFields = new \ReflectionProperty(
+        $uniqueFields = new ReflectionProperty(
             AbstractDb::class,
             '_uniqueFields'
         );
@@ -255,9 +286,12 @@ class AbstractDbTest extends TestCase
         $this->assertEquals([], $this->_model->getUniqueFields());
     }
 
-    public function testGetUniqueFields()
+    /**
+     * @return void
+     */
+    public function testGetUniqueFields(): void
     {
-        $uniqueFieldsReflection = new \ReflectionProperty(
+        $uniqueFieldsReflection = new ReflectionProperty(
             AbstractDb::class,
             '_uniqueFields'
         );
@@ -266,14 +300,20 @@ class AbstractDbTest extends TestCase
         $this->assertEquals([], $this->_model->getUniqueFields());
     }
 
-    public function testGetValidationRulesBeforeSave()
+    /**
+     * @return void
+     */
+    public function testGetValidationRulesBeforeSave(): void
     {
         $this->assertNull($this->_model->getValidationRulesBeforeSave());
     }
 
-    public function testLoad()
+    /**
+     * @return void
+     */
+    public function testLoad(): void
     {
-        /** @var \Magento\Framework\Model\AbstractModel|MockObject $object */
+        /** @var AbstractModel|MockObject $object */
         $object = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -289,7 +329,10 @@ class AbstractDbTest extends TestCase
         );
     }
 
-    public function testDelete()
+    /**
+     * @return void
+     */
+    public function testDelete(): void
     {
         $connectionInterfaceMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
@@ -331,13 +374,13 @@ class AbstractDbTest extends TestCase
         $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->willReturn(
             'tableName'
         );
-        $mainTableReflection = new \ReflectionProperty(
+        $mainTableReflection = new ReflectionProperty(
             AbstractDb::class,
             '_mainTable'
         );
         $mainTableReflection->setAccessible(true);
         $mainTableReflection->setValue($this->_model, 'tableName');
-        $idFieldNameReflection = new \ReflectionProperty(
+        $idFieldNameReflection = new ReflectionProperty(
             AbstractDb::class,
             '_idFieldName'
         );
@@ -354,7 +397,10 @@ class AbstractDbTest extends TestCase
         );
     }
 
-    public function testHasDataChangedNegative()
+    /**
+     * @return void
+     */
+    public function testHasDataChangedNegative(): void
     {
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $registryMock = $this->createMock(Registry::class);
@@ -372,11 +418,13 @@ class AbstractDbTest extends TestCase
     }
 
     /**
-     * @dataProvider hasDataChangedDataProvider
      * @param string $getOriginData
      * @param bool $expected
+     *
+     * @return void
+     * @dataProvider hasDataChangedDataProvider
      */
-    public function testGetDataChanged($getOriginData, $expected)
+    public function testGetDataChanged($getOriginData, $expected): void
     {
         $connectionInterfaceMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->_resourcesMock->expects($this->any())->method('getConnection')->willReturn(
@@ -393,7 +441,7 @@ class AbstractDbTest extends TestCase
             true,
             ['__wakeup', 'getOrigData', 'getData']
         );
-        $mainTableProperty = new \ReflectionProperty(
+        $mainTableProperty = new ReflectionProperty(
             AbstractDb::class,
             '_mainTable'
         );
@@ -404,8 +452,9 @@ class AbstractDbTest extends TestCase
             ->method('getTableName')
             ->with('table')
             ->willReturn('tableName');
-        $abstractModelMock->expects($this->at(0))->method('getOrigData')->willReturn(true);
-        $abstractModelMock->expects($this->at(1))->method('getOrigData')->willReturn($getOriginData);
+        $abstractModelMock
+            ->method('getOrigData')
+            ->willReturnOnConsecutiveCalls(true, $getOriginData);
         $connectionInterfaceMock->expects($this->any())->method('describeTable')->with('tableName')->willReturn(
             ['tableName']
         );
@@ -415,7 +464,7 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function hasDataChangedDataProvider()
+    public function hasDataChangedDataProvider(): array
     {
         return [
             [true, true],
@@ -424,12 +473,14 @@ class AbstractDbTest extends TestCase
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testPrepareDataForUpdate()
+    public function testPrepareDataForUpdate(): void
     {
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['save'])
+            ->addMethods(['save'])
             ->getMockForAbstractClass();
 
         $context = (new ObjectManager($this))->getObject(
@@ -459,13 +510,13 @@ class AbstractDbTest extends TestCase
             'tableName'
         );
 
-        $mainTableReflection = new \ReflectionProperty(
+        $mainTableReflection = new ReflectionProperty(
             AbstractDb::class,
             '_mainTable'
         );
         $mainTableReflection->setAccessible(true);
         $mainTableReflection->setValue($this->_model, 'tableName');
-        $idFieldNameReflection = new \ReflectionProperty(
+        $idFieldNameReflection = new ReflectionProperty(
             AbstractDb::class,
             '_idFieldName'
         );
@@ -525,19 +576,21 @@ class AbstractDbTest extends TestCase
     }
 
     /**
-     * Test that we only set/override id on object if PK autoincrement is enabled
+     * Test that we only set/override id on object if PK autoincrement is enabled.
+     *
      * @param bool $pkIncrement
+     *
+     * @return void
      * @dataProvider saveNewObjectDataProvider
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function testSaveNewObject($pkIncrement)
+    public function testSaveNewObject($pkIncrement): void
     {
         /**
          * Mock SUT so as not to test extraneous logic
          */
-        $model = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['_prepareDataForSave', 'getIdFieldName', 'getConnection', 'getMainTable'])
+        $model = $this->getMockBuilder(AbstractDb::class)->disableOriginalConstructor()
+            ->onlyMethods(['_prepareDataForSave', 'getIdFieldName', 'getConnection', 'getMainTable'])
             ->getMockForAbstractClass();
         /**
          * Only testing the logic in a protected method and property, must use reflection to avoid dealing with large
@@ -547,14 +600,13 @@ class AbstractDbTest extends TestCase
          */
         $reflectionMethod = new \ReflectionMethod($model, 'saveNewObject');
         $reflectionMethod->setAccessible(true);
-        $reflectionProperty = new \ReflectionProperty($model, '_isPkAutoIncrement');
+        $reflectionProperty = new ReflectionProperty($model, '_isPkAutoIncrement');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($model, $pkIncrement);
 
         // Mocked behavior
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['lastInsertId'])
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)->disableOriginalConstructor()
+            ->addMethods(['lastInsertId'])
             ->getMockForAbstractClass();
         $getConnectionInvokedCount = $pkIncrement ? 2 : 1;
         $model->expects($this->exactly($getConnectionInvokedCount))
@@ -588,21 +640,23 @@ class AbstractDbTest extends TestCase
     /**
      * @return array
      */
-    public function saveNewObjectDataProvider()
+    public function saveNewObjectDataProvider(): array
     {
         return [[true], [false]];
     }
 
-    public function testDuplicateExceptionProcessingOnSave()
+    /**
+     * @return void
+     */
+    public function testDuplicateExceptionProcessingOnSave(): void
     {
         $this->expectException('Magento\Framework\Exception\AlreadyExistsException');
         $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 
         /** @var AbstractDb|MockObject $model */
-        $model = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
+        $model = $this->getMockBuilder(AbstractDb::class)->disableOriginalConstructor()
+            ->onlyMethods(['getConnection'])
             ->getMockForAbstractClass();
         $model->expects($this->any())->method('getConnection')->willReturn($connection);
 
