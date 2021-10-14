@@ -298,6 +298,8 @@ class CustomerRepository implements CustomerRepositoryInterface
     }
 
     /**
+     * Populate customer model with previous data
+     *
      * @param CustomerModel $customerModel
      * @param ?array $prevCustomerDataArr
      */
