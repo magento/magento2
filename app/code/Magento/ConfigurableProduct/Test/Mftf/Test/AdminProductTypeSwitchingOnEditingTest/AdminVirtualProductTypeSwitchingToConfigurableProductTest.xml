@@ -87,7 +87,7 @@
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearConfigurableProductFilters"/>
         <!--Assert configurable product on storefront-->
         <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigurableProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openConfigurableProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="openConfigurableProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontConfigurableProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertConfigurableProductInStock"/>
         <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickConfigurableAttributeDropDown"/>

@@ -67,7 +67,7 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFifthLevelCategory"/>
         <!-- Verify success message -->
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage4"/>
-        <amOnPage url="/{{FirstLevelSubCat.name}}/{{SecondLevelSubCat.name}}/{{ThirdLevelSubCat.name}}/{{FourthLevelSubCat.name}}/{{FifthLevelCat.name}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <amOnPage url="/{{FirstLevelSubCat.urlKey}}/{{SecondLevelSubCat.urlKey}}/{{ThirdLevelSubCat.urlKey}}/{{FourthLevelSubCat.urlKey}}/{{FifthLevelCat.urlKey}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
         <!--<Verify category displayed in store front page-->
         <grabMultiple selector=".breadcrumbs li"  stepKey="breadcrumbs"/>

@@ -21,7 +21,7 @@ $relatedOrders = $block->getRelatedOrders();
                         "cancelUrl" : "<?= $block->escapeUrl($block->getCancelUrl()) ?>"
                     }}'
                     type="button" title="<?= $block->escapeHtml(__('Cancel')) ?>"
-                    class="secondary action cancel" />
+                    class="secondary action cancel">
                 <span><?= $block->escapeHtml(__('Cancel')) ?></span>
             </button>
         <?php endif; ?>

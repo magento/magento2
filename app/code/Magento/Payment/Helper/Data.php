@@ -200,7 +200,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
-        $this->_appEmulation->startEnvironmentEmulation($storeId);
+        $this->_appEmulation->startEnvironmentEmulation($storeId, \Magento\Framework\App\Area::AREA_FRONTEND, true);
 
         try {
             // Retrieve specified view block from appropriate design package (depends on emulated store)

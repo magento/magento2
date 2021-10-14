@@ -1037,7 +1037,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $available = $this->getData(self::KEY_AVAILABLE_SORT_BY);
         if (empty($available)) {
-            return [];
+            return null;
         }
         if ($available && !is_array($available)) {
             $available = explode(',', $available);
@@ -1159,7 +1159,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function afterDeleteCommit()
     {
-        $this->reindex();
+        if ($this->getIsActive() || $this->getDeletedChildrenIds()) {
+            $this->reindex();
+        }
+
         return parent::afterDeleteCommit();
     }
 
