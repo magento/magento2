@@ -77,8 +77,8 @@ class Alert extends \Magento\Framework\App\Config\Value
         $frequency = $this->getData('groups/productalert_cron/fields/frequency/value');
 
         $cronExprArray = [
-            is_array($time) ? (int)$time[1] : 0, //Minute
-            is_array($time) ? (int)$time[0] : 0, //Hour
+            (int)($time[1] ?? 0), //Minute
+            (int)($time[0] ?? 0), //Hour
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY ? '1' : '*', //Day of the Month
             '*', //Month of the Year
             $frequency == \Magento\Cron\Model\Config\Source\Frequency::CRON_WEEKLY ? '1' : '*', //Day of the Week
