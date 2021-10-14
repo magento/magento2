@@ -8,6 +8,7 @@ namespace Magento\Framework\Oauth;
 
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
+use Magento\Framework\Oauth\Exception as AuthException;
 
 /**
  * Authorization service.
@@ -202,7 +203,7 @@ class Oauth implements OauthInterface
         );
 
         if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
-            throw new Exception(new Phrase('The signature is invalid. Verify and try again.'));
+            throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
     }
 

@@ -14,7 +14,7 @@ use OAuth\Common\Http\Uri\UriInterface;
 class Signature extends \OAuth\OAuth1\Signature\Signature
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * In addition to the original method, allows array parameters for filters.
      */
@@ -30,6 +30,7 @@ class Signature extends \OAuth\OAuth1\Signature\Signature
             []
         );
 
+        $signatureData = [];
         foreach (array_merge($queryStringData, $params) as $key => $value) {
             $signatureData[rawurlencode($key)] = rawurlencode($value);
         }
