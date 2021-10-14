@@ -144,10 +144,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         $categoryPostData = $this->stringToBoolConverting($categoryPostData);
         $categoryPostData = $this->imagePreprocessing($categoryPostData);
         $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
-        $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
+        $storeId = $categoryPostData['store_id'] ?? null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());
-        $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
+        $parentId = $categoryPostData['parent'] ?? null;
         if ($categoryPostData) {
             $category->addData($categoryPostData);
             if ($parentId) {
@@ -168,7 +168,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
             if (isset($categoryPostData['use_config']) && !empty($categoryPostData['use_config'])) {
                 foreach ($categoryPostData['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
-                        $useConfig[] = $attributeCode;
+                        $useConfig[] = $attributeValue;
                         $category->setData($attributeCode, null);
                     }
                 }
