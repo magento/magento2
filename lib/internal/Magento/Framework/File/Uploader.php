@@ -718,8 +718,12 @@ class Uploader
             $tmpName = trim($fileId['tmp_name']);
 
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+                $sysTmpFolder = sys_get_temp_dir();
+                $sysTmpFolderRealPath = realpath($sysTmpFolder);
+                
                 $allowedFolders = [
-                    sys_get_temp_dir(),
+                    $sysTmpFolder,
+                    $sysTmpFolderRealPath,
                     $this->directoryList->getPath(DirectoryList::MEDIA),
                     $this->directoryList->getPath(DirectoryList::VAR_DIR),
                     $this->directoryList->getPath(DirectoryList::TMP),
