@@ -126,7 +126,6 @@ class ImportWithNotExistImagesTest extends TestCase
     {
         $this->exportProducts();
         $this->assertTrue($this->directory->isExist($this->filePath), 'Products were not imported to file');
-        #$fileContent = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
         $fileContent = $this->getCsvData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $fileContent);
         $this->updateFileImagesToInvalidValues();
@@ -197,7 +196,7 @@ class ImportWithNotExistImagesTest extends TestCase
     private function assertImportErrors(): void
     {
         $validationErrors = $this->import->setSource($this->prepareFile($this->filePath))->validateData();
-        #$this->assertEmpty($validationErrors->getAllErrors());
+        $this->assertEmpty($validationErrors->getAllErrors());
         $this->import->getErrorAggregator()->clear();
         $this->import->importData();
         $importErrors = $this->import->getErrorAggregator()->getAllErrors();
