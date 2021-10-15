@@ -10,6 +10,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\App\Utility\ReflectionClassFactory;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 use Magento\Framework\Serialize\Serializer\Serialize;
@@ -58,6 +59,11 @@ class ActionList
     private $actionInterface;
 
     /**
+     * @var ReflectionClassFactory|null
+     */
+    private $classReflectionFactory;
+
+    /**
      * @param CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
@@ -71,7 +77,8 @@ class ActionList
         $actionInterface = ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = [],
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ReflectionClassFactory $reflectionClassFactory = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
@@ -98,6 +105,8 @@ class ActionList
                 $this->actions = $this->serializer->unserialize($data);
             }
         }
+        $this->classReflectionFactory = $reflectionClassFactory ?:
+            ObjectManager::getInstance()->get(ReflectionClassFactory::class);
     }
 
     /**
@@ -155,7 +164,7 @@ class ActionList
                 return false;
             }
             if (!$reflectionClass) {
-                $reflectionClass = new ReflectionClass($this->actions[$fullPath]);
+                $reflectionClass = $this->classReflectionFactory->create($this->actions[$fullPath]);
             }
             if ($reflectionClass->isInstantiable()) {
                 return true;
