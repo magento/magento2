@@ -130,6 +130,7 @@ class ImportWithNotExistImagesTest extends TestCase
         $this->assertCount(2, $fileContent);
         $this->updateFileImagesToInvalidValues();
         $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->create('import');
         $this->import->setParameters([
             'entity' => Product::ENTITY,
             'behavior' => ImportModel::BEHAVIOR_ADD_UPDATE,
