@@ -149,7 +149,7 @@ define([
                     if (isStreetAddressNotEmpty || isStreetAddressDeleted()) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
-                })
+                });
                 shippingRatesValidator.initFields(fieldsetName);
             });
 
