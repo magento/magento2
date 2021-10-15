@@ -14,6 +14,8 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class to retrieve action class.
@@ -106,8 +108,9 @@ class ActionList
      * @param string $namespace
      * @param string $action
      * @return null|string
+     * @throws ReflectionException
      */
-    public function get($module, $area, $namespace, $action)
+    public function get($module, $area, $namespace, $action, $reflectionClass = null)
     {
         if ($area) {
             $area = '\\' . $area;
@@ -126,11 +129,38 @@ class ActionList
                 $module . '\\controller' . $area . '\\' . $namespace . '\\' . $action
             )
         );
-        if (isset($this->actions[$fullPath])) {
-            return is_subclass_of($this->actions[$fullPath], $this->actionInterface)
-                ? $this->actions[$fullPath]
-                : null;
+        try {
+            if ($this->validateActionClass($fullPath, $reflectionClass)) {
+                return $this->actions[$fullPath];
+            }
+        } catch (ReflectionException $e) {
+            return null;
         }
+
         return null;
+    }
+
+    /**
+     * Validate Action Class
+     *
+     * @param string $fullPath
+     * @param ReflectionClass|null $reflectionClass
+     * @return bool
+     * @throws ReflectionException
+     */
+    private function validateActionClass(string $fullPath, $reflectionClass): bool
+    {
+        if (isset($this->actions[$fullPath])) {
+            if (!is_subclass_of($this->actions[$fullPath], $this->actionInterface)) {
+                return false;
+            }
+            if (!$reflectionClass) {
+                $reflectionClass = new ReflectionClass($this->actions[$fullPath]);
+            }
+            if ($reflectionClass->isInstantiable()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
