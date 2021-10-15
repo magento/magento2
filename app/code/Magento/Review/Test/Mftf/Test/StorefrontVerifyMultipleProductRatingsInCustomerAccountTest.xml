@@ -35,6 +35,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
         </before>
+
         <after>
             <!-- Delete reviews -->
             <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
@@ -132,14 +133,15 @@
 
         <!-- Checking that all 3 reviews on the My Product Reviews page have one star ratings  -->
         <actionGroup ref="StorefrontNavigateToMyProductReviewsPageActionGroup" stepKey="navigateToProductReviewsPage"/>
-        <seeElement selector="//tbody/tr[position()=1]/td/div/div/span[contains(@style,'width: 20%;')]" stepKey="seeFirstdOneStarReviewOnMyReviews"/>
-        <seeElement selector="//tbody/tr[position()=2]/td/div/div/span[contains(@style,'width: 20%;')]" stepKey="seeSecondOneStarReviewOnMyReviews"/>
-        <seeElement selector="//tbody/tr[position()=3]/td/div/div/span[contains(@style,'width: 20%;')]" stepKey="seeThirdOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('1', '20%')}}"  stepKey="seeFirstOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('2', '20%')}}"  stepKey="seeSecondOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('3', '20%')}}"  stepKey="seeThirdOneStarReviewOnMyReviews"/>
 
         <!-- Checking that all 3 reviews on the My Account page have one star ratings-->
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="openCustomerAccountPage"/>
-        <seeElement selector="//ol/li[position()=1]/div/div/span[contains(@style,'width: 20%;')]" stepKey="seeFirstOneStarReviewOnMyAccount"/>
-        <seeElement selector="//ol/li[position()=2]/div/div/span[contains(@style,'width: 20%;')]" stepKey="seeSecondOneStarReviewOnMyAccount"/>
-        <seeElement selector="//ol/li[position()=3]/div/div/span[contains(@style,'width: 20%;')]" stepKey="seeThirdOneStarReviewOnMyAccount"/>
+        <seeElement selector="{{StorefrontCustomerMyRecentReviewsSection.reviewRating('1', '20%')}}"  stepKey="seeFirstOneStarReviewOnMyAccount"/>
+        <seeElement selector="{{StorefrontCustomerMyRecentReviewsSection.reviewRating('2', '20%')}}"  stepKey="seeSecondOneStarReviewOnMyAccount"/>
+        <seeElement selector="{{StorefrontCustomerMyRecentReviewsSection.reviewRating('3', '20%')}}"  stepKey="seeThirdOneStarReviewOnMyAccount"/>
+
     </test>
 </tests>
