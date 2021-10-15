@@ -531,7 +531,7 @@ class StorageTest extends TestCase
     private function resetRequestMock(array $withArgs, array $willReturnArgs): void
     {
         array_unshift($withArgs, [Storage::PARAM_THEME_ID], [Storage::PARAM_CONTENT_TYPE]);
-        array_unshift($willReturnArgs, 6,  \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE);
+        array_unshift($willReturnArgs, 6, \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE);
         $this->request = $this->createMock(Http::class);
         $this->contextHelper = $this->createMock(Context::class);
         $this->contextHelper->expects($this->any())->method('getUrlEncoder')->willReturn($this->urlEncoder);

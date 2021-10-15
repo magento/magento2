@@ -16,6 +16,7 @@ class DependencyCheckerTest extends TestCase
 {
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCheckDependencies(): void
     {
@@ -59,6 +60,7 @@ class DependencyCheckerTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCheckDependenciesExcludeSelf(): void
     {

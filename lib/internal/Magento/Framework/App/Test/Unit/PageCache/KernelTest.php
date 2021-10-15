@@ -234,7 +234,7 @@ class KernelTest extends TestCase
      * @return void
      * @dataProvider testProcessSaveCacheDataProvider
      */
-    public function testProcessSaveCache($httpCode, $at): void
+    public function testProcessSaveCache($httpCode): void
     {
         $this->serializer->expects($this->once())
             ->method('serialize')
@@ -276,8 +276,8 @@ class KernelTest extends TestCase
     public function testProcessSaveCacheDataProvider(): array
     {
         return [
-            [200, [3, 4, 5]],
-            [404, [4, 5, 6]]
+            [200],
+            [404]
         ];
     }
 
