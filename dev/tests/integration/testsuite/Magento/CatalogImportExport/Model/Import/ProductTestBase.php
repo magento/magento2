@@ -419,7 +419,9 @@ class ProductTestBase extends TestCase
 
         $this->assertTrue($errors->getErrorsCount() === 0);
 
-        return $this->_model->importData();
+        $result = $this->_model->importData();
+        $source->destruct();
+        return $result;
     }
 
     /**
