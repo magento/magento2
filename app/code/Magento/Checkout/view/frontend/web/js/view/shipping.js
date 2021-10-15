@@ -121,16 +121,31 @@ define([
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData, changes) {
-                    if (changes && changes.length > 0) {
-                        var change = changes.pop()
-                        if (change.path === "shippingAddress.street.0" && !_.isUndefined(change.value) && change.value.length === 0 && !_.isUndefined(change.oldValue) && change.oldValue.length > 0) {
-                            checkoutData.setShippingAddressFromData(shippingAddrsData);
+                    var isStreetAddressDeleted = function (changes) {
+                        var change;
+
+                        if (!changes || changes.length === 0) {
+                            return false;
                         }
-                    }
-                    if (shippingAddrsData.street && (!_.isEmpty(shippingAddrsData.street[0]))) {
+
+                        change = changes.pop();
+
+                        if (!_.isUndefined(change.value) || !_.isUndefined(change.oldValue)) {
+                            return false;
+                        }
+
+                        if (change.path !== "shippingAddress.street.0") {
+                            return false;
+                        }
+
+                        return change.value.length === 0 && change.oldValue.length > 0;
+                    }, isStreetAddressNotEmpty = shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0]);
+
+
+                    if (isStreetAddressNotEmpty || isStreetAddressDeleted(changes)) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
-                });
+                })
                 shippingRatesValidator.initFields(fieldsetName);
             });
 
