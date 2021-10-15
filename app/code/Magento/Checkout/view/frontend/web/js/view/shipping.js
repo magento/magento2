@@ -130,7 +130,7 @@ define([
 
                         change = changes.pop();
 
-                        if (!_.isUndefined(change.value) || !_.isUndefined(change.oldValue)) {
+                        if (_.isUndefined(change.value) || _.isUndefined(change.oldValue)) {
                             return false;
                         }
 
