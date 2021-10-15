@@ -124,7 +124,6 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
-        $this->mviewConfig = $mviewConfigMock;
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
