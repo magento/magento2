@@ -71,7 +71,7 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
         $this->assertArrayHasKey('assignCustomerToGuestCart', $response);
         $this->assertArrayHasKey('items', $response['assignCustomerToGuestCart']);
         $items = $response['assignCustomerToGuestCart']['items'];
-        $this->assertCount(2,$items);
+        $this->assertCount(2, $items);
 
         $this->assertEquals($customerQuoteItem->getQty(), $items[1]['quantity']);
         $this->assertEquals($customerQuoteItem->getSku(), $items[1]['product']['sku']);
@@ -147,7 +147,9 @@ class AssignCustomerToGuestCartTest extends GraphQlAbstract
         $customerQuoteMaskedId = $this->quoteIdToMaskedId->execute((int)$customerQuote->getId());
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("The current user cannot perform operations on cart \"{$customerQuoteMaskedId}\"");
+        $this->expectExceptionMessage(
+            "The current user cannot perform operations on cart \"{$customerQuoteMaskedId}\""
+        );
 
         $this->graphQlMutation(
             $this->getAssignCustomerToGuestCartMutation($customerQuoteMaskedId),

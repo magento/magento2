@@ -30,8 +30,6 @@ class Url extends \Magento\Framework\DataObject
     protected $filter;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
