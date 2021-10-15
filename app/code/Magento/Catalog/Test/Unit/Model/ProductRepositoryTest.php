@@ -551,7 +551,6 @@ class ProductRepositoryTest extends TestCase
      */
     public function testGetByIdForCacheKeyGenerate($identifier, $editMode, $storeId): void
     {
-        $callIndex = 0;
         $this->productFactory
             ->expects($this->once())
             ->method('create')

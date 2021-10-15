@@ -113,10 +113,8 @@ class FinalPriceBoxTest extends TestCase
 
         $eventManager = $this->createMock(ManagerStub::class);
         $this->layout = $this->createMock(Layout::class);
-
         $this->priceBox = $this->createMock(PriceBox::class);
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-
         $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
         $cacheState = $this->getMockBuilder(StateInterface::class)

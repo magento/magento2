@@ -1510,6 +1510,7 @@ class AccountManagementTest extends TestCase
      * @param string $hash
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareInitiatePasswordReset(
         $email,

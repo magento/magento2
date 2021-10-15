@@ -26,6 +26,8 @@ use Magento\Framework\DataObject;
 
 /**
  * Tests for \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigureProductToAddTest extends TestCase
 {

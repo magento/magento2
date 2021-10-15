@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Implementation of the @magentoIndexerDimensionMode DocBlock annotation
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexerDimensionMode
 {

@@ -82,7 +82,6 @@ class FileIteratorTest extends TestCase
             '<template module="' . $moduleName . '" 321>'
         ];
         $index = 0;
-        $dirIndex = 0;
 
         $moduleDirResolverWithArgs = $moduleDirResolverWillReturnArgs = [];
         $fileReadFactoryWithArgs = $fileReadFactoryWillReturnArgs = [];
