@@ -121,7 +121,9 @@ define([
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData, changes) {
-                    var isStreetAddressDeleted = function (changes) {
+                    var isStreetAddressDeleted, isStreetAddressNotEmpty;
+
+                    isStreetAddressDeleted = function () {
                         var change;
 
                         if (!changes || changes.length === 0) {
@@ -139,10 +141,12 @@ define([
                         }
 
                         return change.value.length === 0 && change.oldValue.length > 0;
-                    }, isStreetAddressNotEmpty = shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0]);
+                    };
+
+                    isStreetAddressNotEmpty = shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0]);
 
 
-                    if (isStreetAddressNotEmpty || isStreetAddressDeleted(changes)) {
+                    if (isStreetAddressNotEmpty || isStreetAddressDeleted()) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
                 })
