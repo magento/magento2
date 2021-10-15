@@ -251,7 +251,7 @@ class KernelTest extends TestCase
         $this->responseMock
             ->method('getHeader')
             ->withConsecutive(['Cache-Control'], ['X-Magento-Tags'])
-            ->willReturn($cacheControlHeader,null);
+            ->willReturn($cacheControlHeader, null);
         $this->responseMock->expects(
             $this->any()
         )->method(

@@ -37,7 +37,7 @@ class FileIteratorTest extends TestCase
     protected $moduleDirResolverMock;
 
     /**
-     * Array of relative file paths
+     * Array of relative paths
      *
      * @var array
      */
@@ -71,8 +71,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIterator(): void
     {
         $moduleName = 'Filesystem';
@@ -116,8 +116,8 @@ class FileIteratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testIteratorNegative(): void
     {
         $filePath = $this->filePaths[0];

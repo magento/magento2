@@ -201,8 +201,8 @@ class CategoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testApply(): void
     {
         $categoryId = 123;

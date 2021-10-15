@@ -251,8 +251,8 @@ class CustomOptionPriceTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCustomOptionRange(): void
     {
         $option1Id = 1;

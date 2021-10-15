@@ -169,8 +169,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetStorageRoot(): void
     {
         $this->initializeDefaultRequestMock();
@@ -179,8 +179,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetThumbnailDirectory(): void
     {
         $this->initializeDefaultRequestMock();
@@ -194,8 +194,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetThumbnailPath(): void
     {
         $image = 'image_name.jpg';
@@ -222,8 +222,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRequestParams(): void
     {
         $withArgs = [
@@ -243,8 +243,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetAllowedExtensionsByType(): void
     {
         $withArgs = [
@@ -351,8 +351,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetSession(): void
     {
         $this->initializeDefaultRequestMock();
@@ -360,8 +360,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRelativeUrl(): void
     {
         $filename = base64_encode('filename.ext');
@@ -506,8 +506,8 @@ class StorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     private function initializeDefaultRequestMock(): void
     {
         $this->request

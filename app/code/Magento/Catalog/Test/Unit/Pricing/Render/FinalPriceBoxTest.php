@@ -201,8 +201,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderMsrpDisabled(): void
     {
         $priceType = $this->createMock(MsrpPrice::class);
@@ -227,8 +227,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testNotSalableItem(): void
     {
         $this->salableResolverMock
@@ -242,8 +242,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderMsrpEnabled(): void
     {
         $priceType = $this->createMock(MsrpPrice::class);
@@ -295,8 +295,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderMsrpNotRegisteredException(): void
     {
         $this->logger->expects($this->once())
@@ -322,8 +322,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderAmountMinimal(): void
     {
         $priceId = 'price_id';
@@ -410,8 +410,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testShowMinimalPrice(): void
     {
         $minimalPrice = 5.0;
@@ -441,8 +441,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testHidePrice(): void
     {
         $this->product->expects($this->any())
@@ -453,8 +453,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCacheKey(): void
     {
         $result = $this->object->getCacheKey();
@@ -462,8 +462,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCacheKeyInfoContainsDisplayMinimalPrice(): void
     {
         $this->assertArrayHasKey('display_minimal_price', $this->object->getCacheKeyInfo());

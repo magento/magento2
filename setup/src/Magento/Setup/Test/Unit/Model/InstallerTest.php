@@ -1314,7 +1314,6 @@ namespace Magento\Setup\Test\Unit\Model {
                     ['CREATE DATABASE IF NOT EXISTS `magento`']
                 );
 
-
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
             $this->object->cleanupDb();
         }

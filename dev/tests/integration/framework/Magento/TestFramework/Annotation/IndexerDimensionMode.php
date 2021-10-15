@@ -56,8 +56,12 @@ class IndexerDimensionMode
     }
 
     /**
+     * Tries to set a Dimension mode if it wasn't set.
+     *
      * @param string $mode
      * @param TestCase $test
+     *
+     * @return void
      * @throws \Exception
      */
     private function setDimensionMode(string $mode, TestCase $test)

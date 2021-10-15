@@ -379,11 +379,11 @@ class ProductRepositoryTest extends TestCase
             ->willReturn($productData);
         $this->resourceModel->method('getIdBySku')->willReturn(self::STUB_PRODUCT_ID);
         $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
+
+        $storeIdData = ['store_id', $productData['store_id']];
         $this->product
             ->method('setData')
-            ->withConsecutive(
-                [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-                ['store_id', $productData['store_id']]);
+            ->withConsecutive([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], $storeIdData);
 
         $this->model->save($this->product);
     }
@@ -421,12 +421,11 @@ class ProductRepositoryTest extends TestCase
             ->willReturn($this->productData);
         $this->resourceModel->method('getIdBySku')->willReturn(self::STUB_PRODUCT_ID);
         $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
+
+        $storeIdData = ['store_id', self::STUB_STORE_ID];
         $this->product
             ->method('setData')
-            ->withConsecutive(
-                [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [],
-                ['store_id', self::STUB_STORE_ID]
-            );
+            ->withConsecutive([], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], $storeIdData);
 
         $this->model->save($this->product);
     }
@@ -449,8 +448,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateCreatesProduct(): void
     {
         $sku = 'test_sku';
@@ -464,8 +463,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetProductInEditMode(): void
     {
         $sku = 'test_sku';
@@ -480,8 +479,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetBySkuWithSpace(): void
     {
         $trimmedSku = 'test_sku';
@@ -496,8 +495,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetWithSetStoreId(): void
     {
         $productId = 123;
@@ -513,8 +512,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetByIdAbsentProduct(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
@@ -529,8 +528,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetByIdProductInEditMode(): void
     {
         $productId = 123;
@@ -682,8 +681,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetByIdWithSetStoreId(): void
     {
         $productId = 123;
@@ -698,8 +697,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetBySkuFromCacheInitializedInGetById(): void
     {
         $productId = 123;
@@ -714,8 +713,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExisting(): void
     {
         $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn(100);
@@ -736,8 +735,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveNew(): void
     {
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
@@ -761,8 +760,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveUnableToSaveException(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
@@ -788,8 +787,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveException(): void
     {
         $this->expectException('Magento\Framework\Exception\InputException');
@@ -815,8 +814,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveInvalidProductException(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
@@ -840,8 +839,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveThrowsTemporaryStateExceptionIfDatabaseConnectionErrorOccurred(): void
     {
         $this->expectException('Magento\Framework\Exception\TemporaryState\CouldNotSaveException');
@@ -870,8 +869,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDelete(): void
     {
         $this->product->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
@@ -882,8 +881,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteException(): void
     {
         $this->expectException('Magento\Framework\Exception\StateException');
@@ -896,8 +895,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteById(): void
     {
         $sku = 'product-42';
@@ -911,8 +910,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetList(): void
     {
         $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
@@ -1342,8 +1341,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function setupProductMocksForSave(): void
     {
         $this->resourceModel->expects($this->any())->method('getIdBySku')->willReturn(100);
@@ -1358,8 +1357,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExistingWithNewMediaGalleryEntries(): void
     {
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
@@ -1460,8 +1459,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveWithDifferentWebsites(): void
     {
         $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
@@ -1498,8 +1497,8 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveExistingWithMediaGalleryEntries(): void
     {
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);

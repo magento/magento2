@@ -117,8 +117,10 @@ class MapperTest extends TestCase
     public function testGetQueryMatch($queries): void
     {
         $query = $queries[self::ROOT_QUERY];
-        $this->objectManager->expects($this->once())->method('create')
-            ->with(MatchQuery::class,
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->with(
+                MatchQuery::class,
                 [
                     'name' => $query['name'],
                     'value' => $query['value'],
@@ -324,9 +326,7 @@ class MapperTest extends TestCase
                         'someClause' => ['someQueryMatch' => $this->queryMatch]
                     ]
                 ]
-            )
-            ->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryBool);
-
+            )->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryBool);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -627,21 +627,21 @@ class MapperTest extends TestCase
         $this->objectManager
             ->method('create')
             ->withConsecutive(
-            [
-                Term::class,
                 [
-                    'name' => $someFilterTerm['name'],
-                    'field' => $someFilterTerm['field'],
-                    'value' => $someFilterTerm['value']
-                ]
-            ],
-            [
-                \Magento\Framework\Search\Request\Filter\BoolExpression::class,
+                    Term::class,
+                    [
+                        'name' => $someFilterTerm['name'],
+                        'field' => $someFilterTerm['field'],
+                        'value' => $someFilterTerm['value']
+                    ]
+                ],
                 [
-                    'name' => $someFilter['name'],
-                    'someClause' => ['someFilterTerm' => $this->filterTerm]
-                ]
-            ],
+                    \Magento\Framework\Search\Request\Filter\BoolExpression::class,
+                    [
+                        'name' => $someFilter['name'],
+                        'someClause' => ['someFilterTerm' => $this->filterTerm]
+                    ]
+                ],
                 [
                     Filter::class,
                     [
@@ -651,8 +651,7 @@ class MapperTest extends TestCase
                         'referenceType' => Filter::REFERENCE_FILTER
                     ]
                 ]
-            )
-            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->filterBool, $this->queryFilter);
+            )->willReturnOnConsecutiveCalls($this->filterTerm, $this->filterBool, $this->queryFilter);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(

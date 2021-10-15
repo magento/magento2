@@ -125,8 +125,8 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterSaveWithoutExtensionAttributes(): void
     {
         $this->groupExtensionMock->method('getExcludeWebsiteIds')->willReturn(null);
@@ -199,8 +199,8 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     private function getAllWebsites(): void
     {
         $websiteMock1 = $this->getMockBuilder(Website::class)

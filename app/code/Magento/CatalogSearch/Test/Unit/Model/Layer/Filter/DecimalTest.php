@@ -205,8 +205,8 @@ class DecimalTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testApply(): void
     {
         $filter = '10-150';

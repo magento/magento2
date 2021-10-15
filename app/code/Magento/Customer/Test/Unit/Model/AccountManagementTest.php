@@ -394,8 +394,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithExistingCustomer(): void
     {
         $this->expectException(InputException::class);
@@ -445,8 +445,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithCustomerWithoutStoreId(): void
     {
         $this->expectException(InputMismatchException::class);
@@ -525,8 +525,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithLocalizedException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -604,8 +604,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithAddressException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -703,8 +703,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithNewCustomerAndLocalizedException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -1732,8 +1732,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenBadCustomerId(): void
     {
         $this->expectException(InputException::class);
@@ -1743,8 +1743,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenBadResetPasswordLinkToken(): void
     {
         $this->expectException(InputException::class);
@@ -1754,8 +1754,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenTokenMismatch(): void
     {
         $this->expectException(InputMismatchException::class);
@@ -1769,8 +1769,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenTokenExpired(): void
     {
         $this->expectException(ExpiredException::class);
@@ -2192,8 +2192,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashForGuestException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -2509,8 +2509,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithStoreNotInWebsite(): void
     {
         $this->expectException(LocalizedException::class);

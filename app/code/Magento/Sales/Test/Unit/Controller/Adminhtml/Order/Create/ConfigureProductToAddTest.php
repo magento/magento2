@@ -25,7 +25,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\DataObject;
 
 /**
- * Class ConfigureProductToAddTest
+ * Tests for \Magento\Sales\Controller\Adminhtml\Order\Create\ConfigureProductToAdd
  */
 class ConfigureProductToAddTest extends TestCase
 {
