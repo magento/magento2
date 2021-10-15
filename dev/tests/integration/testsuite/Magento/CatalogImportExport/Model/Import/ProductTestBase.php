@@ -344,6 +344,7 @@ class ProductTestBase extends TestCase
                 ''
             )
         );
+        $source->destruct();
     }
 
     /**
