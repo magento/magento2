@@ -522,7 +522,7 @@ class ProductTestBase extends TestCase
      */
     private function getMediaDirPath(Filesystem\Directory\WriteInterface $directory): string
     {
-        if (!$directory instanceof Filesystem\Driver\File) {
+        if (!$directory->getDriver() instanceof Filesystem\Driver\File) {
             return 'media';
         }
 
