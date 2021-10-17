@@ -100,7 +100,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('value');
+                .observe(['value', 'content']);
 
             return this;
         },
@@ -137,7 +137,7 @@ define([
             if (this.$wysiwygEditorButton && disabled) {
                 this.$wysiwygEditorButton.prop('disabled', 'disabled');
             } else if (this.$wysiwygEditorButton) {
-                this.$wysiwygEditorButton.removeProp('disabled');
+                this.$wysiwygEditorButton.prop('disabled', false);
             }
 
             /* eslint-disable no-undef */
@@ -145,6 +145,15 @@ define([
                 this.currentWysiwyg.setEnabledStatus(!disabled);
                 this.currentWysiwyg.getPluginButtons().prop('disabled', disabled);
             }
+        },
+
+        /**
+         * Content getter
+         *
+         * @returns {String}
+         */
+        getContentUnsanitizedHtml: function () {
+            return this.content();
         }
     });
 });

@@ -92,7 +92,7 @@ define([
             if ($(table).is(this.mainTableSelector)) {
                 this.table = table;
                 this.tableWidth = $(table).outerWidth();
-                $(window).resize(this.checkAfterResize);
+                $(window).on('resize', this.checkAfterResize);
             }
 
             //TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
@@ -244,7 +244,7 @@ define([
 
             setTimeout(function () {
                 if (self.layoutFixedPolyfillIterator < 20) {
-                    $(window).resize();
+                    $(window).trigger('resize');
                     self.layoutFixedPolyfillIterator++;
                     self._layoutFixedPolyfill();
                 } else {
