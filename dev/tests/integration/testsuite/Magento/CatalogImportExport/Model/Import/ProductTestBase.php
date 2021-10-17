@@ -98,10 +98,6 @@ class ProductTestBase extends TestCase
      */
     protected function tearDown(): void
     {
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Filesystem::class);
-        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $mediaDirectory->delete('import/images');
-
         /* We rollback here the products created during the Import because they were
            created during test execution and we do not have the rollback for them */
         foreach ($this->importedProducts as $productSku) {
@@ -215,6 +211,7 @@ class ProductTestBase extends TestCase
         $varDirectory = $fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $varDirectory->delete('import');
         $mediaDirectory->delete('catalog');
+        $mediaDirectory->delete('import');
     }
 
     /**
