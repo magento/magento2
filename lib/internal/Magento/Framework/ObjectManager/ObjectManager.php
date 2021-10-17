@@ -12,7 +12,12 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-class ObjectManager implements \Magento\Framework\ObjectManagerInterface
+use Magento\Framework\ObjectManagerInterface;
+
+/**
+ * Base implementation Object Manager
+ */
+class ObjectManager implements ObjectManagerInterface
 {
     /**
      * @var \Magento\Framework\ObjectManager\FactoryInterface
@@ -34,14 +39,14 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     /**
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
-     * @param array &$sharedInstances
+     * @param array $sharedInstances
      */
     public function __construct(FactoryInterface $factory, ConfigInterface $config, &$sharedInstances = [])
     {
         $this->_config = $config;
         $this->_factory = $factory;
         $this->_sharedInstances = &$sharedInstances;
-        $this->_sharedInstances[\Magento\Framework\ObjectManagerInterface::class] = $this;
+        $this->_sharedInstances[ObjectManagerInterface::class] = $this;
     }
 
     /**
@@ -74,6 +79,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 
     /**
      * Configure di instance
+     *
      * Note: All arguments should be pre-processed (sort order, translations, etc) before passing to method configure.
      *
      * @param array $configuration
@@ -82,5 +88,16 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     public function configure(array $configuration)
     {
         $this->_config->extend($configuration);
+    }
+
+    /**
+     * Disable show ObjectManager internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

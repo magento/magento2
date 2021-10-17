@@ -183,8 +183,8 @@ class DataObject implements \ArrayAccess
     /**
      * Get value from _data array without parse key
      *
-     * @param   string $key
-     * @return  mixed
+     * @param string $key
+     * @return mixed
      */
     protected function _getData($key)
     {
@@ -263,7 +263,7 @@ class DataObject implements \ArrayAccess
     /**
      * The "__" style wrapper for toArray method
      *
-     * @param  array $keys
+     * @param array $keys
      * @return array
      */
     public function convertToArray(array $keys = [])
@@ -373,9 +373,9 @@ class DataObject implements \ArrayAccess
     /**
      * Set/Get attribute wrapper
      *
-     * @param   string $method
-     * @param   array $args
-     * @return  mixed
+     * @param string $method
+     * @param array $args
+     * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __call($method, $args)
@@ -438,11 +438,11 @@ class DataObject implements \ArrayAccess
      *
      * Example: key1="value1" key2="value2" ...
      *
-     * @param   array $keys array of accepted keys
-     * @param   string $valueSeparator separator between key and value
-     * @param   string $fieldSeparator separator between key/value pairs
-     * @param   string $quote quoting sign
-     * @return  string
+     * @param array $keys array of accepted keys
+     * @param string $valueSeparator separator between key and value
+     * @param string $fieldSeparator separator between key/value pairs
+     * @param string $quote quoting sign
+     * @return string
      */
     public function serialize($keys = [], $valueSeparator = '=', $fieldSeparator = ' ', $quote = '"')
     {
@@ -464,7 +464,7 @@ class DataObject implements \ArrayAccess
      * Present object data as string in debug mode
      *
      * @param mixed $data
-     * @param array &$objects
+     * @param array $objects
      * @return array
      */
     public function debug($data = null, &$objects = [])
@@ -540,5 +540,20 @@ class DataObject implements \ArrayAccess
             return $this->_data[$offset];
         }
         return null;
+    }
+
+    /**
+     * Export only scalar and arrays properties for var_dump
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return array_filter(
+            get_object_vars($this),
+            function ($v) {
+                return is_scalar($v) || is_array($v);
+            }
+        );
     }
 }
