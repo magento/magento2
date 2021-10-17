@@ -55,7 +55,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
      * @return array
      * @since 101.0.0
      */
-    public function getData(): array
+    public function getData()
     {
         $this->data = array_replace_recursive(
             $this->data,
@@ -83,7 +83,7 @@ class NewCategoryDataProvider extends AbstractDataProvider
      * @return array
      * @since 101.0.0
      */
-    public function getMeta(): array
+    public function getMeta()
     {
         $this->meta = [
             'data' => [
