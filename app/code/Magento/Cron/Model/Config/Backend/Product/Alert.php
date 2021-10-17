@@ -73,8 +73,16 @@ class Alert extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $time = $this->getData('groups/productalert_cron/fields/time/value');
-        $frequency = $this->getData('groups/productalert_cron/fields/frequency/value');
+        $time = $this->getData('groups/productalert_cron/fields/time/value') ?:
+            explode(
+                ',',
+                $this->_config->getValue(
+                    'catalog/productalert_cron/time',
+                    $this->getScope(),
+                    $this->getScopeId()
+                ) ?: '0,0,0'
+            );
+        $frequency = $this->getValue();
 
         $cronExprArray = [
             (int)($time[1] ?? 0), //Minute
