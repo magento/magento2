@@ -9,6 +9,7 @@ use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -67,11 +68,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     ];
 
     /**
-     * @var AbstractAdapter
-     */
-    private $writer;
-
-    /**
      * @var string
      */
     private $csvFile;
@@ -97,7 +93,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $this->executeFixtures($this->fixtures, true);
 
         if ($this->csvFile !== null) {
-            $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             $directoryWrite->delete($this->csvFile);
         }
     }
@@ -416,12 +412,13 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             Product::class
         );
-        $this->writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\ImportExport\Model\Export\Adapter\Csv::class,
             ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
         );
-        $exportProduct->setWriter($this->writer);
+        $exportProduct->setWriter($writer);
         $this->assertNotEmpty($exportProduct->export());
+        $writer->getFileHandler()->close();
 
         return $csvfile;
     }
@@ -451,19 +448,21 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
             ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
-        $uploader = $importModel->getUploader();
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $destDir = $rootDirectory->getRelativePath(
-            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product'
-        );
-        $tmpDir = $rootDirectory->getRelativePath(
-            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/import'
-        );
+        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
 
-        $rootDirectory->create($destDir);
-        $rootDirectory->create($tmpDir);
-        $this->assertTrue($uploader->setDestDir($destDir));
-        $this->assertTrue($uploader->setTmpDir($tmpDir));
+        $mediaDir = $mediaDirectory->getDriver() instanceof File ?
+            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] : 'media';
+
+        $mediaDirectory->create('catalog/product');
+        $mediaDirectory->create('import');
+        $importModel->setParameters(
+            [
+                \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR => $mediaDir . '/import'
+            ]
+        );
+        $uploader = $importModel->getUploader();
+        $this->assertTrue($uploader->setDestDir($mediaDir . '/catalog/product'));
+        $this->assertTrue($uploader->setTmpDir($mediaDir . '/import'));
 
         $errors = $importModel->setParameters(
             [
