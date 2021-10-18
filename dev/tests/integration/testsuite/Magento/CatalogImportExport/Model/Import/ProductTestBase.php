@@ -21,6 +21,7 @@ use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\RemoteStorage\Plugin\Image;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Indexer\TestCase;
@@ -109,6 +110,9 @@ class ProductTestBase extends TestCase
                 // nothing to delete
             }
         }
+        // Removing cached images from previous tests in cases when Remote storage is configured
+        $image = $this->objectManager->get(Image::class);
+        $image->__destruct();
     }
 
 
