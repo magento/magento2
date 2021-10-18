@@ -47,14 +47,13 @@ class Data extends AbstractHelper
 
     /**
      * Layout
+     *
      * @deprecated
      * @var LayoutInterface
      */
     protected $_layout;
 
     /**
-     * LayoutFactory
-     *
      * @var LayoutFactory
      */
     private $layoutFactory;
