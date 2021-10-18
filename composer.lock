@@ -2413,29 +2413,29 @@
         },
         {
             "name": "laminas/laminas-math",
-            "version": "3.3.2",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-math.git",
-                "reference": "188456530923a449470963837c25560f1fdd8a60"
+                "reference": "79f6453a47a5774cf3736c5c66cb4818486681da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-math/zipball/188456530923a449470963837c25560f1fdd8a60",
-                "reference": "188456530923a449470963837c25560f1fdd8a60",
+                "url": "https://api.github.com/repos/laminas/laminas-math/zipball/79f6453a47a5774cf3736c5c66cb4818486681da",
+                "reference": "79f6453a47a5774cf3736c5c66cb4818486681da",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
             },
             "replace": {
                 "zendframework/zend-math": "^3.2.0"
             },
             "require-dev": {
                 "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^9.3"
+                "phpunit/phpunit": "^9.5.5"
             },
             "suggest": {
                 "ext-bcmath": "If using the bcmath functionality",
@@ -2477,7 +2477,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-02-16T15:46:01+00:00"
+            "time": "2021-10-09T15:15:23+00:00"
         },
         {
             "name": "laminas/laminas-mime",
