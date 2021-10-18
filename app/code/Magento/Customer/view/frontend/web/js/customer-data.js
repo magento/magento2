@@ -102,7 +102,11 @@ define([
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
-                throw new Error(jqXHR);
+                if (jqXHR.statusText === "abort" || jqXHR.statusText ==="canceled") {
+                    console.log('Your ajax method was stopped');
+                } else {
+                    throw new Error(jqXHR);
+                }
             });
         }
     };
@@ -388,6 +392,9 @@ define([
                     if (_.isObject(jsonResponse) && !_.isEmpty(_.pick(jsonResponse, redirects))) { //eslint-disable-line
                         return;
                     }
+
+                    this.ajaxPrefilterCall();
+
                     this.reload(sections, true);
                 }
             }
@@ -407,6 +414,24 @@ define([
             invalidateCacheByCloseCookieSession();
             customerData.init();
             deferred.resolve();
+        },
+
+        /**
+         * Cancels duplicate ajax request to the server
+         */
+        ajaxPrefilterCall: function () {
+            var currentRequests = {};
+
+            $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+                if ( currentRequests[ options.url ] ) {
+                    currentRequests[ options.url ].abort();
+                    // prevent duplicate ajax call for cart quantity
+                    if (options.data === 'sections=messages&force_new_section_timestamp=true') {
+                        jqXHR.abort();
+                    }
+                }
+                currentRequests[ options.url ] = jqXHR;
+            });
         }
     };
 
