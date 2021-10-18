@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckTranslationForLoginAsCustomerButton">
+        <annotations>
+            <stories value="Allow translations for Login as Customer button"/>
+            <title value="Allow translations for Login as Customer button"/>
+            <description value="Login as Customer button should get translated if it is defined as translatable"/>
+            <testCaseId value="MC-42250"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Step 1: Set Admin "Interface Locale" to default (US) value-->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
+            <argument name="InterfaceLocaleByValue" value="en_US"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="navigateToCustomers"/>
+        <waitForPageLoad stepKey="waitForLoad1"/>
+
+        <!--Step 2: On Customers grid page search customer by keyword-->
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchCustomer">
+            <argument name="keyword" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <!--Step 3: Check if customer is placed in a first row and clear grid filter-->
+        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="checkCustomerInGrid">
+            <argument name="text" value="$$createCustomer.email$$"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridMainActionsSection.edit}}" stepKey="clickKeywordSearch"/>
+
+        <!--Step 4: See the button text for default locale (US) -->
+        <grabTextFrom selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="grabDefaultLocaleButtonLabel"/>
+
+        <!--Step 5: Set Admin "Interface Locale" to "Français (France) / français (France)"-->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
+            <argument name="InterfaceLocaleByValue" value="fr_FR"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="navigateToCustomersAndClearFilters"/>
+        <waitForPageLoad stepKey="waitForLoad2"/>
+
+        <!--Step 7: On Customers grid page search customer by keyword-->
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchCustomer2">
+            <argument name="keyword" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <!--Step 8: Check if customer is placed in a first row and clear grid filter-->
+        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="checkCustomerInGrid2">
+            <argument name="text" value="$$createCustomer.email$$"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridMainActionsSection.edit}}" stepKey="clickKeywordSearch2"/>
+
+        <!--Step 4: See the button text for French -->
+        <grabTextFrom selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="grabFranceLocaleButtonLabel"/>
+
+        <assertNotEquals message="The Login as Customer label is in not in Default Local (US)." stepKey="assertNotEquals">
+            <expectedResult type="string">grabDefaultLocaleButtonLabel</expectedResult>
+            <actualResult type="string">grabFranceLocaleButtonLabel</actualResult>
+        </assertNotEquals>
+    </test>
+</tests>
