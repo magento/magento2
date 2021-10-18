@@ -5,25 +5,29 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Bundle\Ui\DataProvider\Product\Modifier\Plugin;
+namespace Magento\Bundle\Ui\DataProvider\Product\Modifier;
 
-use Magento\Bundle\Model\Product\Type;
-use Magento\Catalog\Pricing\Price\SpecialPrice;
-use Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes as Subject;
 use Magento\Directory\Model\Currency as DirectoryCurrency;
 use Magento\Framework\Currency;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Bundle\Model\Product\Type;
 use Zend_Currency;
 use Zend_Currency_Exception;
 
 /**
  * Modify product listing price attributes
  */
-class PriceAttributes
+class SpecialPriceAttributes implements ModifierInterface
 {
+    /**
+     * @var array
+     */
+    private $priceAttributeList;
+
     /**
      * @var StoreManagerInterface
      */
@@ -45,50 +49,58 @@ class PriceAttributes
      * @param StoreManagerInterface $storeManager
      * @param CurrencyInterface $localeCurrency
      * @param DirectoryCurrency $directoryCurrency
+     * @param array $priceAttributeList
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         CurrencyInterface $localeCurrency,
-        DirectoryCurrency $directoryCurrency
+        DirectoryCurrency $directoryCurrency,
+        array $priceAttributeList = []
     ) {
         $this->storeManager = $storeManager;
         $this->localeCurrency = $localeCurrency;
+        $this->priceAttributeList = $priceAttributeList;
         $this->directoryCurrency = $directoryCurrency;
     }
 
     /**
-     * Added % symbol in front of special price for bundle products
-     *
-     * @param Subject $subject
-     * @param array $result
-     * @return array
-     * @throws Zend_Currency_Exception
+     * @inheritdoc
      * @throws NoSuchEntityException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws Zend_Currency_Exception
      */
-    public function afterModifyData(Subject $subject, array $result): array
+    public function modifyData(array $data): array
     {
-        if (empty($result)) {
-            return $result;
+        if (empty($data) || empty($this->priceAttributeList)) {
+            return $data;
         }
 
-        foreach ($result['items'] as &$item) {
-            if (isset($item[SpecialPrice::PRICE_CODE]) && $item['type_id'] == Type::TYPE_CODE) {
-                $item[SpecialPrice::PRICE_CODE] =
-                    $this->directoryCurrency->format(
-                        $item[SpecialPrice::PRICE_CODE],
-                        ['display' => Zend_Currency::NO_SYMBOL],
-                        false
-                    );
-                $item[SpecialPrice::PRICE_CODE] =
-                    $this->getCurrency()->toCurrency(
-                        sprintf("%f", $item[SpecialPrice::PRICE_CODE]),
-                        ['symbol' => '%']
-                    );
+        foreach ($data['items'] as &$item) {
+            foreach ($this->priceAttributeList as $priceAttribute) {
+                if (isset($item[$priceAttribute]) && $item['type_id'] == Type::TYPE_CODE) {
+                    $item[$priceAttribute] =
+                        $this->directoryCurrency->format(
+                            $item[$priceAttribute],
+                            ['display' => Zend_Currency::NO_SYMBOL],
+                            false
+                        );
+                    $item[$priceAttribute] =
+                        $this->getCurrency()->toCurrency(
+                            sprintf("%f", $item[$priceAttribute]),
+                            ['symbol' => '%']
+                        );
+                }
             }
         }
+        return $data;
 
-        return $result;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function modifyMeta(array $meta): array
+    {
+        return $meta;
     }
 
     /**

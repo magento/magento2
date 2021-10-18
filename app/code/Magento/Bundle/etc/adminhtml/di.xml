@@ -49,7 +49,21 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
-        <plugin name="priceAttributes" type="Magento\Bundle\Ui\DataProvider\Product\Modifier\Plugin\PriceAttributes" sortOrder="60" />
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="specialPriceAttributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Modifier\SpecialPriceAttributes</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Bundle\Ui\DataProvider\Product\Modifier\SpecialPriceAttributes">
+        <arguments>
+            <argument name="priceAttributeList" xsi:type="array">
+                <item name="special_price" xsi:type="string">special_price</item>
+            </argument>
+        </arguments>
     </type>
 </config>
