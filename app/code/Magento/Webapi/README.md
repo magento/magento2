@@ -6,7 +6,7 @@ The Magento_Webapi module also handles deserialization of requests and serializa
 
 ## Installation details
 
-Before installing this module, note that the Magento_VaultGraphQl is dependent on the following modules:
+The Magento_VaultGraphQl is dependent on the following modules:
 
 - Magento_Authorization
 - Magento_Backend
