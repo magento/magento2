@@ -13,15 +13,9 @@ use Magento\TestFramework\ObjectManager;
  */
 class StoreManager implements \Magento\Store\Model\StoreManagerInterface
 {
-    /**
-     * @var \Magento\Store\Model\StoreManager
-     */
-    protected $decoratedStoreManager;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
+    private \Magento\Store\Model\StoreManager $decoratedStoreManager;
+    private \Magento\Framework\Event\ManagerInterface $eventManager;
+    private \Magento\TestFramework\App\Config $config;
 
     /**
      * @var null|bool
@@ -34,10 +28,12 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
      */
     public function __construct(
         \Magento\Store\Model\StoreManager $decoratedStoreManager,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\TestFramework\App\Config $config
     ) {
         $this->decoratedStoreManager = $decoratedStoreManager;
         $this->eventManager = $eventManager;
+        $this->config = $config;
     }
 
     /**
@@ -124,8 +120,7 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
     public function reinitStores()
     {
         //In order to restore configFixture values
-        $testAppConfig = ObjectManager::getInstance()->get(Config::class);
-        $reflection = new \ReflectionClass($testAppConfig);
+        $reflection = new \ReflectionClass($this->config);
 
         if (\substr($reflection->getName(), -12) === '\Interceptor') {
             $dataProperty = $reflection->getParentClass()->getProperty('data');
@@ -134,11 +129,11 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         }
 
         $dataProperty->setAccessible(true);
-        $savedConfig = $dataProperty->getValue($testAppConfig);
+        $savedConfig = $dataProperty->getValue($this->config);
 
         $this->decoratedStoreManager->reinitStores();
 
-        $dataProperty->setValue($testAppConfig, $savedConfig);
+        $dataProperty->setValue($this->config, $savedConfig);
         $this->dispatchInitCurrentStoreAfterEvent();
     }
 
