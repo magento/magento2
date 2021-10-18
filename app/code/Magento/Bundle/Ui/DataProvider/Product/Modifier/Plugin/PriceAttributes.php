@@ -57,11 +57,14 @@ class PriceAttributes
     }
 
     /**
+     * Added % symbol in front of special price for bundle products
+     *
      * @param Subject $subject
      * @param array $result
      * @return array
      * @throws Zend_Currency_Exception
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterModifyData(Subject $subject, array $result): array
     {
