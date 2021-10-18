@@ -24,7 +24,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     /**
      * Translatable element name
      */
-    const LABEL_KEY = 'label';
+    private const LABEL_KEY = 'label';
 
     /**
      * @var AuthorizationInterface
@@ -73,8 +73,8 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
         }
 
         $data = $this->dataProvider->getData($customerId);
-        if (isset($data[static::LABEL_KEY]) && is_string($data[static::LABEL_KEY])) {
-            $data[static::LABEL_KEY] = __($data[static::LABEL_KEY]);
+        if (isset($data[self::LABEL_KEY]) && is_string($data[self::LABEL_KEY])) {
+            $data[self::LABEL_KEY] = __($data[self::LABEL_KEY]);
         }
 
         return $data;
