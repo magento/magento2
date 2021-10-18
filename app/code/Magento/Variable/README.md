@@ -1,10 +1,10 @@
 # Magento_Variable module
 
-The Magento_Variable module allows the creation of custom variables for use in email templates or in the WYSIWYG editor when editing description of system entities.
+The Magento_Variable module allows the creation of custom variables for use in email templates or in the WYSIWYG editor when editing descriptions of system entities.
 
 ## Installation details
 
-Before installing this module, note that the Magento_Variable is dependent on the following modules:
+The Magento_Variable module is dependent on the following modules:
 
 - Magento_Config
 - Magento_Store
