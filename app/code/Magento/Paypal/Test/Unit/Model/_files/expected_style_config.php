@@ -29,7 +29,7 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id'   => 'Magento_2_%s'
+                'data-partner-attribution-id' => 'Magento_2_%s'
             ]
         ]
     ],
@@ -56,7 +56,7 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id'   => 'Magento_2_%s'
+                'data-partner-attribution-id' => 'Magento_2_%s'
             ]
         ]
     ],
@@ -82,7 +82,7 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id'   => 'Magento_2_%s'
+                'data-partner-attribution-id' => 'Magento_2_%s'
             ]
         ]
     ],
@@ -108,7 +108,7 @@ return [
             'isGuestCheckoutAllowed' => true,
             'sdkUrl' => 'http://mock.url',
             'dataAttributes' => [
-                'data-partner-attribution-id'   => 'Magento_2_%s'
+                'data-partner-attribution-id' => 'Magento_2_%s'
             ]
         ]
     ],

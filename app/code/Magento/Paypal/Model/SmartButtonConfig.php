@@ -93,7 +93,7 @@ class SmartButtonConfig
             'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
             'sdkUrl' => $this->sdkUrl->getUrl(),
             'dataAttributes' => [
-                'data-partner-attribution-id'   => $config->getBuildNotationCode() != '' ?
+                'data-partner-attribution-id' => $config->getBuildNotationCode() != '' ?
                     $config->getBuildNotationCode() : ''
             ]
         ];
