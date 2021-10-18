@@ -1,10 +1,10 @@
 # Magento_Vault module
 
-The Magento_Vault module implements the integration with the Vault payment gateway and makes the latter available as a payment method in Magento.
+The Magento_Vault module implements the integration with the Vault payment gateway and makes it available as a payment method in Magento.
 
 ## Installation details
 
-Before installing this module, note that the Magento_Vault is dependent on the following modules:
+The Magento_Vault module is dependent on the following modules:
 
 - Magento_Checkout
 - Magento_Customer
@@ -54,6 +54,6 @@ For more information about a layout, see the [Layout documentation](https://devd
     - Contains methods to retrieve vault payment methods.
     - This interface is consistent with \Magento\Payment\Api\PaymentMethodListInterface
     
-[Learn detailed description of the Magento_Sales API.](https://devdocs.magento.com/guides/v2.4/mrg/ce/Sales/services.html)
+Read a detailed description of the [Magento_Sales API](https://devdocs.magento.com/guides/v2.4/mrg/ce/Sales/services.html).
  
 For information about a public API, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
