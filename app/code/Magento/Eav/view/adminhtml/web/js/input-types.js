@@ -71,7 +71,7 @@ define([
             // Check current type (allow only compatible types)
             if (~enabledTypes.indexOf(currentValue)) {
                 // Enable select and keep only available options (all other will be removed)
-                select.removeAttr('disabled').find('option').each(removeOption);
+                select.prop('disabled', false).find('option').each(removeOption);
                 // Add warning on page and event for show/hide it
                 select.after(warning).on('change', toggleWarning);
             }

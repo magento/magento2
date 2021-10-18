@@ -57,6 +57,7 @@ class GetMaskedQuoteIdByReservedOrderId
     public function execute(string $reservedOrderId): string
     {
         $quote = $this->quoteFactory->create();
+        $quote->setSharedStoreIds(['*']);
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
