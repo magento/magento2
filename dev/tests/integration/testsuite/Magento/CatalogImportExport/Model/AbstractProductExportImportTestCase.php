@@ -412,13 +412,14 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             Product::class
         );
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $directory->touch($csvfile);
         $writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\ImportExport\Model\Export\Adapter\Csv::class,
             ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
         );
         $exportProduct->setWriter($writer);
         $this->assertNotEmpty($exportProduct->export());
-        $writer->getFileHandler()->close();
 
         return $csvfile;
     }

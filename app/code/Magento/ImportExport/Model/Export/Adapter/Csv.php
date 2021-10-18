@@ -73,14 +73,6 @@ class Csv extends AbstractAdapter
     }
 
     /**
-     * @return Write
-     */
-    public function getFileHandler(): Write
-    {
-        return $this->_fileHandler;
-    }
-
-    /**
      * Method called as last step of object instance creation. Can be overridden in child classes.
      *
      * @return $this

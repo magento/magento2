@@ -273,25 +273,16 @@ class ProductTestBase extends TestCase
      */
     protected function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
     {
-        $rootDirectory = $this->objectManager->get(TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
         $filesystem = $this->objectManager->get(Filesystem::class);
-        $importExportDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
-
-        $dirPath = $importExportDirectory->getAbsolutePath('import');
-        $driver = $importExportDirectory->getDriver();
-        $driver->createDirectory($dirPath);
-        $driver->filePutContents(
-            $dirPath . DIRECTORY_SEPARATOR . $fileName,
-            file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $fileName)
-        );
-
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
-                'file' => $dirPath . DIRECTORY_SEPARATOR . $fileName,
-                'directory' => $importExportDirectory
+                'file' => __DIR__ . '/_files/' . $fileName,
+                'directory' => $directory
             ]
         );
+        $rootDirectory = $this->objectManager->get(TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
         $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
@@ -341,7 +332,6 @@ class ProductTestBase extends TestCase
                 ''
             )
         );
-        $source->destruct();
     }
 
     /**
@@ -387,28 +377,22 @@ class ProductTestBase extends TestCase
             ['importExportData' => $importExportData]
         );
         $filesystem = $this->objectManager->create(Filesystem::class);
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
-
-        $dirPath = $directory->getAbsolutePath('import');
-        $driver = $directory->getDriver();
-        $driver->createDirectory($dirPath);
-        $driver->filePutContents(
-            $dirPath . DIRECTORY_SEPARATOR . $fileName,
-            file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $fileName)
-        );
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
             Csv::class,
             [
-                'file' => $dirPath . DIRECTORY_SEPARATOR . $fileName,
+                'file' => __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $fileName,
                 'directory' => $directory,
             ]
         );
+        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->create('import');
         $errors = $this->_model->setParameters(
             [
                 'behavior' => Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
                 Import::FIELDS_ENCLOSURE => 1,
-                Import::FIELD_NAME_IMG_FILE_DIR => $this->getMediaDirPath($directory) . '/import'
+                Import::FIELD_NAME_IMG_FILE_DIR => $this->getMediaDirPath($mediaDirectory) . '/import'
             ]
         )
             ->setSource($source)
@@ -416,9 +400,7 @@ class ProductTestBase extends TestCase
 
         $this->assertTrue($errors->getErrorsCount() === 0);
 
-        $result = $this->_model->importData();
-        $source->destruct();
-        return $result;
+        return $this->_model->importData();
     }
 
     /**
