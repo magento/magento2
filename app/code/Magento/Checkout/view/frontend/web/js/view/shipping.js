@@ -123,6 +123,10 @@ define([
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData, changes) {
                     var isStreetAddressDeleted, isStreetAddressNotEmpty;
 
+                    /**
+                     * In last modifying operation street address was deleted.
+                     * @return {Boolean}
+                     */
                     isStreetAddressDeleted = function () {
                         var change;
 
