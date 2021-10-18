@@ -8,7 +8,7 @@ The Magento_VaultGraphQl module also provides mutations for modifying a payment 
 
 ## Installation details
 
-Before installing this module, note that the Magento_VaultGraphQl is dependent on the following modules:
+The Magento_VaultGraphQl is dependent on the following modules:
 
 - Magento_Vault
 - Magento_GraphQl
