@@ -128,7 +128,13 @@ class StoreManager implements \Magento\Store\Model\StoreManagerInterface
         //In order to restore configFixture values
         $testAppConfig = ObjectManager::getInstance()->get(Config::class);
         $reflection = new \ReflectionClass($testAppConfig);
-        $dataProperty = $reflection->getProperty('data');
+
+        if (\substr($reflection->getName(), -12) === '\Interceptor') {
+            $dataProperty = $reflection->getParentClass()->getProperty('data');
+        } else {
+            $dataProperty = $reflection->getProperty('data');
+        }
+
         $dataProperty->setAccessible(true);
         $savedConfig = $dataProperty->getValue($testAppConfig);
 
