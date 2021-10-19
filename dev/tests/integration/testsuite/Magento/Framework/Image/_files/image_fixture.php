@@ -10,8 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $targetDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class);
-/** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
-$mediaDirectory = $targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
+/** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+$rootDirectory = $targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
 
 $filesToCopy = [
     'empty.png',
@@ -28,10 +28,10 @@ $filesToCopy = [
 foreach ($filesToCopy as $fileName) {
     $subDir = 'image/test/';
     $filePath =  $subDir . $fileName;
-    if (!$mediaDirectory->isExist($filePath)) {
-        $mediaDirectory->create($subDir);
-        $mediaDirectory->getDriver()->filePutContents(
-            $mediaDirectory->getAbsolutePath($filePath),
+    if (!$rootDirectory->isExist($filePath)) {
+        $rootDirectory->create($subDir);
+        $rootDirectory->getDriver()->filePutContents(
+            $rootDirectory->getAbsolutePath($filePath),
             file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $fileName)
         );
     }

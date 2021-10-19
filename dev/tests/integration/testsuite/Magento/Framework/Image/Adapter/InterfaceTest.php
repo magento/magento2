@@ -88,11 +88,10 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             return null;
         }
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
-        //$mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)->getDirectoryWrite(DirectoryList::ROOT);
-        $mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
-        return $mediaDirectory->getRelativePath('image/test/' . $pattern);
+        /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        $rootDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
+            ->getDirectoryWrite(DirectoryList::ROOT);
+        return $rootDirectory->getRelativePath('image/test/' . $pattern);
     }
 
     /**
