@@ -422,15 +422,15 @@ define([
         ajaxPrefilterCall: function () {
             var currentRequests = {};
 
-            $.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
-                if ( currentRequests[ options.url ] ) {
-                    currentRequests[ options.url ].abort();
+            $.ajaxPrefilter(function( newOptions, originalOptions, jqXHR ) {
+                if ( currentRequests[ newOptions.url ] ) {
+                    currentRequests[ newOptions.url ].abort();
                     // prevent duplicate ajax call for cart quantity
-                    if (options.data === 'sections=messages&force_new_section_timestamp=true') {
+                    if (newOptions.data === 'sections=messages&force_new_section_timestamp=true') {
                         jqXHR.abort();
                     }
                 }
-                currentRequests[ options.url ] = jqXHR;
+                currentRequests[ newOptions.url ] = jqXHR;
             });
         }
     };
