@@ -237,7 +237,7 @@ class ImportWithNotExistImagesTest extends TestCase
     private function getCsvData(string $filePath): array
     {
         $driver = $this->directory->getDriver();
-        $fileResource = $driver->fileOpen($filePath, null);
+        $fileResource = $driver->fileOpen($filePath, 'r');
 
         $data = [];
         while ($rowData = $driver->fileGetCsv($fileResource, 100000)) {
@@ -258,7 +258,7 @@ class ImportWithNotExistImagesTest extends TestCase
     private function appendCsvData(string $filePath, array $csv): void
     {
         $driver = $this->directory->getDriver();
-        $fileResource = $driver->fileOpen($filePath, null);
+        $fileResource = $driver->fileOpen($filePath, 'w');
 
         foreach ($csv as $dataRow) {
             $driver->filePutCsv($fileResource, $dataRow);

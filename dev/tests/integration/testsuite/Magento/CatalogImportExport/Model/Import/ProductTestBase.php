@@ -288,35 +288,20 @@ class ProductTestBase extends TestCase
                 'directory' => $directory
             ]
         );
-        $rootDirectory = $this->objectManager->get(TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
+        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirPath = $this->getMediaDirPath($mediaDirectory);
+        $destDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product';
+        $tmpDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images';
+        $mediaDirectory->create('catalog' . DIRECTORY_SEPARATOR . 'product');
+        $mediaDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
+
         $this->_model->setParameters(
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
-                Import::FIELD_NAME_IMG_FILE_DIR => $this->getMediaDirPath($rootDirectory) . '/import'
+                Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import'
             ]
         );
-        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->getBootstrap()
-            ->getApplication()
-            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
-
-        if (!$rootDirectory->getDriver() instanceof Filesystem\Driver\File) {
-            $mediaPath = 'media';
-            $varPath = 'media';
-        } else {
-            $mediaPath = $appParams[DirectoryList::MEDIA][DirectoryList::PATH];
-            $varPath = $appParams[DirectoryList::VAR_DIR][DirectoryList::PATH];
-        }
-        $destDir = $rootDirectory->getRelativePath(
-            $mediaPath . DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product'
-        );
-        $tmpDir = $rootDirectory->getRelativePath(
-            $varPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images'
-        );
-        $rootDirectory->create($destDir);
-        $rootDirectory->create($tmpDir);
-
         $uploader = $this->_model->getUploader();
         $this->assertTrue($uploader->setDestDir($destDir));
         $this->assertTrue($uploader->setTmpDir($tmpDir));
