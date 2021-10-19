@@ -19,7 +19,7 @@ use Zend_Currency;
 use Zend_Currency_Exception;
 
 /**
- * Modify product listing price attributes
+ * Modify product listing special price attributes
  */
 class SpecialPriceAttributes implements ModifierInterface
 {
