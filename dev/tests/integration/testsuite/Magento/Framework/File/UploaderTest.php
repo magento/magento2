@@ -9,6 +9,7 @@ namespace Magento\Framework\File;
 
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Test for \Magento\Framework\File\Uploader
@@ -102,7 +103,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     public function testUploadFileWhenOldMediaGalleryDisabled(string $directoryCode): void
     {
         $destinationDirectory = $this->filesystem->getDirectoryWrite($directoryCode);
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP, DriverPool::FILE);
 
         $fileName = 'file.txt';
         $destinationDir = 'tmp';
