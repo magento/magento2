@@ -92,7 +92,6 @@ class SpecialPriceAttributes implements ModifierInterface
             }
         }
         return $data;
-
     }
 
     /**
