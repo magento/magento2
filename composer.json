@@ -58,7 +58,7 @@
         "laminas/laminas-text": "^2.6.0",
         "laminas/laminas-uri": "^2.5.1",
         "laminas/laminas-validator": "^2.6.0",
-        "laminas/laminas-view": "~2.12.0",
+        "laminas/laminas-view": "~2.13.0",
         "league/flysystem": "^2.0",
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.8.x-dev as 1.8.0",
