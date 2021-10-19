@@ -5,7 +5,11 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+
 /**
+ * @magentoDataFixture Magento/Framework/Image/_files/image_fixture.php
  * @magentoAppIsolation enabled
  */
 class InterfaceTest extends \PHPUnit\Framework\TestCase
@@ -79,14 +83,16 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getFixture($pattern)
     {
-        $dir = dirname(__DIR__) . '/_files/';
-        $data = glob($dir . $pattern);
 
-        if (!empty($data)) {
-            return $data[0];
+        if (!$pattern) {
+            return null;
         }
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        return null;
+        /** @var $mediaDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
+        //$mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)->getDirectoryWrite(DirectoryList::ROOT);
+        $mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)->getDirectoryWrite(DirectoryList::ROOT);
+        return $mediaDirectory->getRelativePath('image/test/' . $pattern);
     }
 
     /**
