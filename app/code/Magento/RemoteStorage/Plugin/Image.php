@@ -87,10 +87,7 @@ class Image
      */
     public function beforeOpen(AbstractAdapter $subject, $filename): array
     {
-        if (!$filename) {
-            throw new \InvalidArgumentException('Wrong file');
-        }
-        if ($this->isEnabled) {
+        if ($this->isEnabled && !empty($filename)) {
             $filename = $this->copyFileToTmp($filename);
         }
         return [$filename];
