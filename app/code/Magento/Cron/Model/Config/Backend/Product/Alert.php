@@ -17,12 +17,12 @@ namespace Magento\Cron\Model\Config\Backend\Product;
 class Alert extends \Magento\Framework\App\Config\Value
 {
     /**
-     * Cron string path
+     * Cron expression config path
      */
     const CRON_STRING_PATH = 'crontab/default/jobs/catalog_product_alert/schedule/cron_expr';
 
     /**
-     * Cron model path
+     * Cron model config path
      */
     const CRON_MODEL_PATH = 'crontab/default/jobs/catalog_product_alert/run/model';
 
@@ -71,8 +71,16 @@ class Alert extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        $time = $this->getData('groups/productalert_cron/fields/time/value');
-        $frequency = $this->getData('groups/productalert_cron/fields/frequency/value');
+        $time = $this->getData('groups/productalert_cron/fields/time/value') ?:
+            explode(
+                ',',
+                $this->_config->getValue(
+                    'catalog/productalert_cron/time',
+                    $this->getScope(),
+                    $this->getScopeId()
+                ) ?: '0,0,0'
+            );
+        $frequency = $this->getValue();
 
         $cronExprArray = [
             (int)$time[1], //Minute
@@ -102,6 +110,7 @@ class Alert extends \Magento\Framework\App\Config\Value
                 self::CRON_MODEL_PATH
             )->save();
         } catch (\Exception $e) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(__('We can\'t save the cron expression.'));
         }
 

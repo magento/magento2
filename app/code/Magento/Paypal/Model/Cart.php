@@ -126,7 +126,7 @@ class Cart extends \Magento\Payment\Model\Cart
             $subAggregatedLabel = '';
 
             // workaround in case if item subtotal precision is not compatible with PayPal (.2)
-            if ($amount - round($amount, 2)) {
+            if ($amount - round((float) $amount, 2)) {
                 $amount = $amount * $qty;
                 $subAggregatedLabel = ' x' . $qty;
                 $qty = 1;
