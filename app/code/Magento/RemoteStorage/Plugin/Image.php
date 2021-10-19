@@ -87,6 +87,9 @@ class Image
      */
     public function beforeOpen(AbstractAdapter $subject, $filename): array
     {
+        if (!$filename) {
+            throw new \InvalidArgumentException('Wrong file');
+        }
         if ($this->isEnabled) {
             $filename = $this->copyFileToTmp($filename);
         }
@@ -182,7 +185,7 @@ class Image
      * @return string
      * @throws FileSystemException
      */
-    private function copyFileToTmp(string $filePath): string
+    private function copyFileToTmp($filePath): string
     {
         if ($this->fileExistsInTmp($filePath)) {
             return $this->tmpFiles[$filePath];
