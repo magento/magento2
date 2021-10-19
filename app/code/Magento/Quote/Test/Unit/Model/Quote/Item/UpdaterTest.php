@@ -142,7 +142,7 @@ class UpdaterTest extends TestCase
             ->method('getProduct')
             ->willReturn($this->productMock);
 
-        $result = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $result = $this->object->update($this->itemMock, ['qty' => (double) $qty]);
         $this->assertEquals($result, $this->object);
     }
 
@@ -211,7 +211,7 @@ class UpdaterTest extends TestCase
             ->method('getProduct')
             ->willReturn($this->productMock);
 
-        $object = $this->object->update($this->itemMock, ['qty' => $qty]);
+        $object = $this->object->update($this->itemMock, ['qty' => (double) $qty]);
         $this->assertEquals($this->object, $object);
     }
 

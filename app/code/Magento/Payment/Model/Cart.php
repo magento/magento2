@@ -5,6 +5,12 @@
  */
 namespace Magento\Payment\Model;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Payment\Model\Cart\SalesModel\Factory;
+use Magento\Payment\Model\Cart\SalesModel\SalesModelInterface;
+use Magento\Quote\Api\Data\CartInterface;
+
 /**
  * Provide methods for collecting cart items information of specific sales model entity
  *
@@ -26,14 +32,14 @@ class Cart
     /**#@-*/
 
     /**
-     * @var $_salesModel
+     * @var SalesModelInterface
      */
     protected $_salesModel;
 
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager;
 
@@ -63,13 +69,13 @@ class Cart
     protected $_itemsCollectingRequired = true;
 
     /**
-     * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Quote\Api\Data\CartInterface $salesModel
+     * @param Factory $salesModelFactory
+     * @param ManagerInterface $eventManager
+     * @param CartInterface $salesModel
      */
     public function __construct(
-        \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        Factory $salesModelFactory,
+        ManagerInterface $eventManager,
         $salesModel
     ) {
         $this->_eventManager = $eventManager;
@@ -80,7 +86,7 @@ class Cart
     /**
      * Return payment cart sales model
      *
-     * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
+     * @return SalesModelInterface
      */
     public function getSalesModel()
     {
@@ -310,7 +316,7 @@ class Cart
         $this->addSubtotal($this->_salesModel->getBaseSubtotal());
         $this->addTax($this->_salesModel->getBaseTaxAmount());
         $this->addShipping($this->_salesModel->getBaseShippingAmount());
-        $this->addDiscount(abs($this->_salesModel->getBaseDiscountAmount()));
+        $this->addDiscount(abs((float) $this->_salesModel->getBaseDiscountAmount()));
     }
 
     /**
@@ -336,7 +342,7 @@ class Cart
     }
 
     /**
-     * Set transfer flag
+     * Method for set transfer flag.
      *
      * @param string $flagType
      * @param bool $value
@@ -349,7 +355,7 @@ class Cart
     }
 
     /**
-     * Set Amount
+     * Method for set amount.
      *
      * @param string $amountType
      * @param float $amount
@@ -361,7 +367,7 @@ class Cart
     }
 
     /**
-     * Add amount
+     * Method for add amount.
      *
      * @param string $amountType
      * @param float $amount
@@ -390,11 +396,11 @@ class Cart
      * @param int $qty
      * @param float $amount
      * @param null|string $identifier
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _createItemFromData($name, $qty, $amount, $identifier = null)
     {
-        $item = new \Magento\Framework\DataObject(['name' => $name, 'qty' => $qty, 'amount' => (double)$amount]);
+        $item = new DataObject(['name' => $name, 'qty' => $qty, 'amount' => (double)$amount]);
 
         if ($identifier) {
             $item->setData('id', $identifier);
