@@ -56,6 +56,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         $delimiter = ',',
         $enclosure = '"'
     ) {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         register_shutdown_function([$this, 'destruct']);
         try {
             $this->filePath = $directory->getRelativePath($file);

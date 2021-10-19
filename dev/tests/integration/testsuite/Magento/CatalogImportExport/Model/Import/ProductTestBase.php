@@ -42,7 +42,8 @@ use Psr\Log\LoggerInterface;
  */
 class ProductTestBase extends TestCase
 {
-    protected const LONG_FILE_NAME_IMAGE = 'magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg';
+    protected const LONG_FILE_NAME_IMAGE =
+        'magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg';
 
     /**
      * @var array
@@ -95,7 +96,7 @@ class ProductTestBase extends TestCase
     }
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function tearDown(): void
     {
@@ -115,8 +116,9 @@ class ProductTestBase extends TestCase
         $image->__destruct();
     }
 
-
     /**
+     * Creates import model based on given file
+     *
      * @param string $pathToFile
      * @param string $behavior
      * @return \Magento\CatalogImportExport\Model\Import\Product
@@ -299,7 +301,6 @@ class ProductTestBase extends TestCase
             ->getApplication()
             ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
 
-
         if (!$rootDirectory->getDriver() instanceof Filesystem\Driver\File) {
             $mediaPath = 'media';
             $varPath = 'media';
@@ -459,6 +460,8 @@ class ProductTestBase extends TestCase
     }
 
     /**
+     * Asserts expected errors count with actual
+     *
      * @param int $count
      * @param ProcessingErrorAggregatorInterface $errors
      */
@@ -496,8 +499,7 @@ class ProductTestBase extends TestCase
     }
 
     /**
-     * Returns path to media directory based on directory driver.
-     * Returns `media` for drivers different from File
+     * Returns path to media directory based on directory driver. Returns `media` for drivers different from File
      *
      * @param Filesystem\Directory\WriteInterface $directory
      * @return string

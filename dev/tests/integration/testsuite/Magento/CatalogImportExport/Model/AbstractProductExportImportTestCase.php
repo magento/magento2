@@ -42,7 +42,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     protected $fixtures;
 
     /**
-     * skipped attributes
+     * List of attributes which will be skipped
      *
      * @var array
      */
