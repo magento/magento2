@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Router;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Router\ActionList;
+use Magento\Framework\App\Utility\ReflectionClassFactory;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -49,15 +50,22 @@ class ActionListTest extends TestCase
      */
     private $reflectionClass;
 
+    /**
+     * @var ReflectionClassFactory|MockObject
+     */
+    private $reflectionClassFactory;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->readerMock = $this->createMock(Reader::class);
         $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
-        $this->reflectionClass = $this->getMockBuilder(ReflectionClass::class)
+        $this->reflectionClass = $this->createStub(ReflectionClass::class);
+        $this->reflectionClassFactory = $this->getMockBuilder(ReflectionClassFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->reflectionClassFactory->method('create')->willReturn($this->reflectionClass);
     }
 
     public function testConstructActionsCached()
@@ -101,6 +109,7 @@ class ActionListTest extends TestCase
     public function testGet($module, $area, $namespace, $action, $data, $isInstantiable, $expected)
     {
         $this->reflectionClass->method('isInstantiable')->willReturn($isInstantiable);
+
         $this->cacheMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
@@ -114,8 +123,7 @@ class ActionListTest extends TestCase
             $module,
             $area,
             $namespace,
-            $action,
-            $this->reflectionClass
+            $action
         ));
     }
 
@@ -198,6 +206,7 @@ class ActionListTest extends TestCase
                 'cache' => $this->cacheMock,
                 'moduleReader' => $this->readerMock,
                 'serializer' => $this->serializerMock,
+                'reflectionClassFactory' => $this->reflectionClassFactory
             ]
         );
     }
