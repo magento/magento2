@@ -326,7 +326,8 @@ class MapperTest extends TestCase
                         'someClause' => ['someQueryMatch' => $this->queryMatch]
                     ]
                 ]
-            )->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryBool);
+            )
+            ->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryBool);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -988,7 +989,7 @@ class MapperTest extends TestCase
     /**
      * @return void
      */
-    public function testGetBucketsTermBucket(): void
+    public function testGetBucketsInvalidBucket(): void
     {
         $queries = [
             self::ROOT_QUERY => [
@@ -998,127 +999,12 @@ class MapperTest extends TestCase
                 'match' => 'someMatches'
             ]
         ];
-
-        $bucket = [
-            "name" => "category_bucket",
-            "field" => "category",
-            "metric" => [
-                ["type" => "sum"],
-                ["type" => "count"],
-                ["type" => "min"],
-                ["type" => "max"],
-            ],
-            "type" => "termBucket"
-        ];
-        $metricClass = Metric::class;
-        $bucketClass = TermBucket::class;
-        $queryClass = MatchQuery::class;
-        $queryArguments = [
-            'name' => $queries[self::ROOT_QUERY]['name'],
-            'value' => $queries[self::ROOT_QUERY]['value'],
-            'boost' => 1,
-            'matches' => $queries[self::ROOT_QUERY]['match'],
-        ];
-        $arguments = [
-            'name' => $bucket['name'],
-            'field' => $bucket['field'],
-            'metrics' => [null, null, null, null]
-        ];
-        $this->objectManager->expects($this->any())->method('create')
-            ->withConsecutive(
-                [$this->equalTo($queryClass), $this->equalTo($queryArguments)],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][0]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][1]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][2]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][3]['type']])],
-                [$this->equalTo($bucketClass), $this->equalTo($arguments)]
-            )
-            ->willReturn(null);
-
-        /** @var Mapper $mapper */
-        $mapper = $this->helper->getObject(
-            Mapper::class,
-            [
-                'objectManager' => $this->objectManager,
-                'queries' => $queries,
-                'rootQueryName' => self::ROOT_QUERY,
-                'aggregation' => [$bucket]
-            ]
-        );
-        $mapper->getBuckets();
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetBucketsRangeBucket(): void
-    {
-        $queries = [
-            self::ROOT_QUERY => [
-                'type' => QueryInterface::TYPE_MATCH,
-                'value' => 'someValue',
-                'name' => 'someName',
-                'match' => 'someMatches'
-            ]
-        ];
-
         $bucket = [
             "name" => "price_bucket",
             "field" => "price",
-            "metric" => [
-                ["type" => "sum"],
-                ["type" => "count"],
-                ["type" => "min"],
-                ["type" => "max"]
-            ],
-            "range" => [
-                ["from" => "", "to" => "50"],
-                ["from" => "50", "to" => "100"],
-                ["from" => "100", "to" => ""]
-            ],
-            "type" => "rangeBucket"
+            "method" => "test",
+            "type" => "invalidBucket"
         ];
-        $metricClass = Metric::class;
-        $bucketClass = RangeBucket::class;
-        $rangeClass = \Magento\Framework\Search\Request\Aggregation\Range::class;
-        $queryClass = MatchQuery::class;
-        $queryArguments = [
-            'name' => $queries[self::ROOT_QUERY]['name'],
-            'value' => $queries[self::ROOT_QUERY]['value'],
-            'boost' => 1,
-            'matches' => $queries[self::ROOT_QUERY]['match']
-        ];
-        $arguments = [
-            'name' => $bucket['name'],
-            'field' => $bucket['field'],
-            'metrics' => [null, null, null, null],
-            'ranges' => [null, null, null]
-        ];
-        $this->objectManager->expects($this->any())->method('create')
-            ->withConsecutive(
-                [$this->equalTo($queryClass), $this->equalTo($queryArguments)],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][0]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][1]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][2]['type']])],
-                [$this->equalTo($metricClass), $this->equalTo(['type' => $bucket['metric'][3]['type']])],
-                [
-                    $this->equalTo($rangeClass),
-                    $this->equalTo(['from' => $bucket['range'][0]['from'], 'to' => $bucket['range'][0]['to']])
-                ],
-                [
-                    $this->equalTo($rangeClass),
-                    $this->equalTo(['from' => $bucket['range'][1]['from'], 'to' => $bucket['range'][1]['to']])
-                ],
-                [
-                    $this->equalTo($rangeClass),
-                    $this->equalTo(['from' => $bucket['range'][2]['from'], 'to' => $bucket['range'][2]['to']])
-                ],
-                [
-                    $this->equalTo($bucketClass),
-                    $this->equalTo($arguments)
-                ]
-            )
-            ->willReturn(null);
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -1127,9 +1013,12 @@ class MapperTest extends TestCase
                 'objectManager' => $this->objectManager,
                 'queries' => $queries,
                 'rootQueryName' => self::ROOT_QUERY,
-                'aggregation' => [$bucket]
+                'aggregations' => [$bucket]
             ]
         );
+
+        $this->expectException(StateException::class);
+        $this->expectExceptionMessage('The bucket type is invalid. Verify and try again.');
         $mapper->getBuckets();
     }
 }
