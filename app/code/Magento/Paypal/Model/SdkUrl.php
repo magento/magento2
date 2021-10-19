@@ -210,7 +210,7 @@ class SdkUrl
      *
      * @return string
      */
-    private function getAllowedFunding()
+    private function getAllowedFunding(): string
     {
         $payLaterActive = (boolean)$this->config->getPayLaterConfigValue('experience_active');
 
