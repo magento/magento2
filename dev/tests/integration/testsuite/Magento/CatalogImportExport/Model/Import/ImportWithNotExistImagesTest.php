@@ -18,7 +18,6 @@ use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\ImportExport\Model\Export\Consumer;
-use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Source\Csv as CsvSource;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
@@ -134,7 +133,7 @@ class ImportWithNotExistImagesTest extends TestCase
         $this->import->setParameters([
             'entity' => Product::ENTITY,
             'behavior' => ImportModel::BEHAVIOR_ADD_UPDATE,
-            Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirectory->getAbsolutePath('import')
+            ImportModel::FIELD_NAME_IMG_FILE_DIR => $mediaDirectory->getAbsolutePath('import')
         ]);
         $this->assertImportErrors();
         $this->assertProductImages('/m/a/magento_image.jpg', 'simple');

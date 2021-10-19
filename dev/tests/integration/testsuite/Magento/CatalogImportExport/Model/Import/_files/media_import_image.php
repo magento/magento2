@@ -14,4 +14,7 @@ $mediaDirectory->create('import/m/a');
 $dirPath = $mediaDirectory->getAbsolutePath('import/m/a');
 $driver = $mediaDirectory->getDriver();
 $driver->createDirectory($dirPath);
-$driver->filePutContents($dirPath . '/magento_image.jpg', file_get_contents(__DIR__ . '/../../../../../Magento/Catalog/_files/magento_image.jpg'));
+$driver->filePutContents(
+    $dirPath . '/magento_image.jpg',
+    file_get_contents(__DIR__ . '/../../../../../Magento/Catalog/_files/magento_image.jpg')
+);
