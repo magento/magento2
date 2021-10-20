@@ -140,7 +140,7 @@ define([
                             return false;
                         }
 
-                        if ('shippingAddress.street.0' !== change.path) {
+                        if (change.path !== 'shippingAddress.street.0') {
                             return false;
                         }
 
