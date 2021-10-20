@@ -175,7 +175,7 @@ class SdkUrl
      *
      * @return string
      */
-    private function getBuyerCountry()
+    private function getBuyerCountry(): string
     {
         return (int)$this->config->getValue('sandbox_flag') ?
             $this->config->getValue('buyer_country') :
