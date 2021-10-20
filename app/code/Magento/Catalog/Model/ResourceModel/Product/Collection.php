@@ -25,6 +25,7 @@ use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Zend_Db_Expr;
 
 /**
  * Product collection
@@ -613,7 +614,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 [self::MAIN_TABLE_ALIAS => $this->getEntity()->getFlatTableName()],
                 null
             )->columns(
-                ['status' => new \Zend_Db_Expr(ProductStatus::STATUS_ENABLED)]
+                ['status' => new Zend_Db_Expr(ProductStatus::STATUS_ENABLED)]
             );
             $this->addAttributeToSelect($this->getResource()->getDefaultAttributes());
             if ($this->_catalogProductFlatState->getFlatIndexerHelper()->isAddChildData()) {
@@ -998,7 +999,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select->join(
             [$tableAlias => $attribute->getBackend()->getTable()],
             $condition,
-            [$fieldAlias => new \Zend_Db_Expr('MAX(' . $tableAlias . '.value)')]
+            [$fieldAlias => new Zend_Db_Expr('MAX(' . $tableAlias . '.value)')]
         )->group(
             'e.entity_type_id'
         );
@@ -1035,8 +1036,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             [$tableAlias => $attribute->getBackend()->getTable()],
             $condition,
             [
-                'count_' . $attributeCode => new \Zend_Db_Expr('COUNT(DISTINCT e.entity_id)'),
-                'range_' . $attributeCode => new \Zend_Db_Expr('CEIL((' . $tableAlias . '.value+0.01)/' . $range . ')')
+                'count_' . $attributeCode => new Zend_Db_Expr('COUNT(DISTINCT e.entity_id)'),
+                'range_' . $attributeCode => new Zend_Db_Expr('CEIL((' . $tableAlias . '.value+0.01)/' . $range . ')')
             ]
         )->group(
             'range_' . $attributeCode
@@ -1074,8 +1075,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             [$tableAlias => $attribute->getBackend()->getTable()],
             $condition,
             [
-                'count_' . $attributeCode => new \Zend_Db_Expr('COUNT(DISTINCT e.entity_id)'),
-                'value_' . $attributeCode => new \Zend_Db_Expr($tableAlias . '.value')
+                'count_' . $attributeCode => new Zend_Db_Expr('COUNT(DISTINCT e.entity_id)'),
+                'value_' . $attributeCode => new Zend_Db_Expr($tableAlias . '.value')
             ]
         )->group(
             'value_' . $attributeCode
@@ -1281,7 +1282,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 'count_table.product_id = e.entity_id',
                 [
                     'count_table.category_id',
-                    'product_count' => new \Zend_Db_Expr('COUNT(DISTINCT count_table.product_id)')
+                    'product_count' => new Zend_Db_Expr('COUNT(DISTINCT count_table.product_id)')
                 ]
             )->where(
                 'count_table.store_id = ?',
@@ -2058,28 +2059,29 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected function _applyZeroStoreProductLimitations()
     {
-        $filters = $this->_productLimitationFilters;
+        $filters    = $this->_productLimitationFilters;
         $categories = $this->getChildrenCategories((int)$filters['category_id']);
 
         $categoryProductSelect = $this->getConnection()->select();
-        $categoryProductSelect->from("catalog_category_product");
-        $categoryProductSelect->reset(\Magento\Framework\DB\Select::ORDER);
-        $categoryProductSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
-        $categoryProductSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
-        $categoryProductSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $categoryProductSelect->from($this->getTable('catalog_category_product'))
+            ->reset(Select::ORDER)
+            ->reset(Select::LIMIT_COUNT)
+            ->reset(Select::LIMIT_OFFSET)
+            ->reset(Select::COLUMNS);
+
         $categoryProductSelect->columns([
             "product_id"   => "product_id",
-            "min_position" => new \Zend_Db_Expr("MIN(position)")
+            "min_position" => new Zend_Db_Expr("MIN(position)")
         ]);
         $categoryProductSelect->where("category_id IN (?)", $categories);
         $categoryProductSelect->group("product_id");
 
-        $joinCond = "cat_pro.product_id = e.entity_id";
+        $joinCond = 'cat_pro.product_id = e.entity_id';
 
-        $fromPart = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
+        $fromPart = $this->getSelect()->getPart(Select::FROM);
         if (isset($fromPart['cat_pro'])) {
             $fromPart['cat_pro']['joinCondition'] = $joinCond;
-            $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $fromPart);
+            $this->getSelect()->setPart(Select::FROM, $fromPart);
         } else {
             $this->getSelect()->join(
                 ['cat_pro' => $categoryProductSelect],
@@ -2527,7 +2529,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
             if ($alias == 'is_saleable') {
-                if ($column instanceof \Zend_Db_Expr) {
+                if ($column instanceof Zend_Db_Expr) {
                     $field = $column;
                 } else {
                     $connection = $this->getSelect()->getConnection();
