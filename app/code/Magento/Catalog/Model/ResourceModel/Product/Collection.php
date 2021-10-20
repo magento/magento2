@@ -2062,19 +2062,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $filters    = $this->_productLimitationFilters;
         $categories = $this->getChildrenCategories((int)$filters['category_id']);
 
-        $categoryProductSelect = $this->getConnection()->select();
-        $categoryProductSelect->from($this->getTable('catalog_category_product'))
+        $categoryProductSelect = $this->getConnection()->select()
+            ->from($this->getTable('catalog_category_product'))
             ->reset(Select::ORDER)
             ->reset(Select::LIMIT_COUNT)
             ->reset(Select::LIMIT_OFFSET)
-            ->reset(Select::COLUMNS);
-
-        $categoryProductSelect->columns([
-            "product_id"   => "product_id",
-            "min_position" => new Zend_Db_Expr("MIN(position)")
-        ]);
-        $categoryProductSelect->where("category_id IN (?)", $categories);
-        $categoryProductSelect->group("product_id");
+            ->reset(Select::COLUMNS)
+            ->columns([
+                "product_id"   => "product_id",
+                "min_position" => new Zend_Db_Expr("MIN(position)")
+            ])
+            ->where("category_id IN (?)", $categories)
+            ->group("product_id");
 
         $joinCond = 'cat_pro.product_id = e.entity_id';
 
