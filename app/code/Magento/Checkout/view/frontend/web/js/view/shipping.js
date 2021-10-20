@@ -149,7 +149,6 @@ define([
 
                     isStreetAddressNotEmpty = shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0]);
 
-
                     if (isStreetAddressNotEmpty || isStreetAddressDeleted()) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
