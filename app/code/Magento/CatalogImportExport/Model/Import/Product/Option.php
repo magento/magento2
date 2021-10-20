@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 use Magento\Store\Model\Store;
 
 /**
@@ -257,7 +258,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CollectionByPagesIterator
+     */
     protected $_byPagesIterator;
 
     /**
@@ -317,15 +320,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * Product entity link field
-     *
      * @var string
      */
     private $productEntityLinkField;
 
     /**
-     * Product entity identifier field
-     *
      * @var string
      */
     private $productEntityIdentifierField;
@@ -1783,7 +1782,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             'product_id' => $productId,
             'type' => $type,
             'is_require' => empty($rowData[self::COLUMN_IS_REQUIRED]) ? 0 : 1,
-            'sort_order' => empty($rowData[self::COLUMN_SORT_ORDER]) ? 0 : abs($rowData[self::COLUMN_SORT_ORDER]),
+            'sort_order' => empty($rowData[self::COLUMN_SORT_ORDER]) ? 0
+                : abs((int) $rowData[self::COLUMN_SORT_ORDER]),
         ];
 
         if (!$this->_isRowHasSpecificType($type)) {
@@ -1854,7 +1854,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {
             $valueData = [
                 'option_type_id' => $optionTypeId,
-                'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0 : abs($rowData[self::COLUMN_ROW_SORT]),
+                'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0
+                    : abs((int) $rowData[self::COLUMN_ROW_SORT]),
                 'sku' => !empty($rowData[self::COLUMN_ROW_SKU]) ? $rowData[self::COLUMN_ROW_SKU] : '',
             ];
             $data['value'] = $valueData;
