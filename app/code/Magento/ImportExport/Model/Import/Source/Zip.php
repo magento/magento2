@@ -23,9 +23,10 @@ class Zip extends Csv
     public function __construct(
         $file,
         \Magento\Framework\Filesystem\Directory\Write $directory,
-        $options
+        $options,
+        \Magento\Framework\Archive\Zip $zipArchive = null
     ) {
-        $zip = ObjectManager::getInstance()->create(\Magento\Framework\Archive\Zip::class);
+        $zip = $zipArchive ?? ObjectManager::getInstance()->get(\Magento\Framework\Archive\Zip::class);
         $csvFile = $zip->unpack(
             $file,
             preg_replace('/\.zip$/i', '.csv', $file)
