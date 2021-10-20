@@ -17,9 +17,9 @@ use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfig;
 
 return [
-    'di' => [
-        'instance' => [
-            'preference' => [
+    'dependencies' => [
+        'auto' => [
+            'preferences' => [
                 EventManagerInterface::class => 'EventManager',
                 ServiceLocatorInterface::class => ServiceManager::class,
                 LoggerInterface::class => Quiet::class,
@@ -27,14 +27,16 @@ return [
                 DriverInterface::class => \Magento\Framework\Filesystem\Driver\File::class,
                 ComponentRegistrarInterface::class => ComponentRegistrar::class,
             ],
-            SchemaConfig::class => [
-                'parameters' => [
-                    'connectionScopes' => [
-                        'default',
-                        'checkout',
-                        'sales'
+            'types' => [
+                SchemaConfig::class => [
+                    'parameters' => [
+                        'connectionScopes' => [
+                            'default',
+                            'checkout',
+                            'sales'
+                        ]
                     ]
-                ]
+                ],
             ],
         ],
     ],

@@ -70,4 +70,7 @@
     <type name="Magento\Framework\Indexer\ActionInterface">
         <plugin name="cache_cleaner_after_reindex" type="Magento\Indexer\Model\Indexer\CacheCleaner" />
     </type>
+    <type name="Magento\Framework\Indexer\CacheContext">
+        <plugin name="defer_cache_cleaning" type="Magento\Indexer\Model\Indexer\DeferCacheCleaning" />
+    </type>
 </config>

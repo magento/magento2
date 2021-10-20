@@ -139,7 +139,7 @@ class Address extends AbstractAddress implements
     const ADDRESS_TYPE_BILLING = 'billing';
 
     const ADDRESS_TYPE_SHIPPING = 'shipping';
-    
+
     private const CACHED_ITEMS_ALL = 'cached_items_all';
 
     /**
@@ -1115,7 +1115,13 @@ class Address extends AbstractAddress implements
      */
     public function getTotals()
     {
-        $totalsData = array_merge($this->getData(), ['address_quote_items' => $this->getAllItems()]);
+        $totalsData = array_merge(
+            $this->getData(),
+            [
+                'address_quote_items' => $this->getAllItems(),
+                'quote_items' => $this->getQuote()->getAllItems(),
+            ]
+        );
         $totals = $this->totalsReader->fetch($this->getQuote(), $totalsData);
         foreach ($totals as $total) {
             $this->addTotal($total);
@@ -1217,7 +1223,9 @@ class Address extends AbstractAddress implements
             $storeId
         );
 
-        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+        $taxes = $taxInclude
+            ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
+            : 0;
 
         return $includeDiscount ?
             ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
@@ -1653,7 +1661,7 @@ class Address extends AbstractAddress implements
     public function getEmail()
     {
         $email = $this->getData(self::KEY_EMAIL);
-        if (!$email && $this->getQuote()) {
+        if ($this->getQuote() && (!$email || $this->getQuote()->dataHasChangedFor('customer_email'))) {
             $email = $this->getQuote()->getCustomerEmail();
             $this->setEmail($email);
         }

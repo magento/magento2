@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -47,6 +48,11 @@ class MessagePluginTest extends TestCase
     /** @var InlineInterface|MockObject */
     private $inlineTranslateMock;
 
+    /**
+     * @var ConfigInterface|MockObject
+     */
+    protected $sessionConfigMock;
+
     protected function setUp(): void
     {
         $this->cookieManagerMock = $this->getMockBuilder(CookieManagerInterface::class)
@@ -62,6 +68,8 @@ class MessagePluginTest extends TestCase
             ->getMock();
         $this->inlineTranslateMock = $this->getMockBuilder(InlineInterface::class)
             ->getMockForAbstractClass();
+        $this->sessionConfigMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
 
         $this->model = new MessagePlugin(
             $this->cookieManagerMock,
@@ -69,7 +77,8 @@ class MessagePluginTest extends TestCase
             $this->managerMock,
             $this->interpretationStrategyMock,
             $this->serializerMock,
-            $this->inlineTranslateMock
+            $this->inlineTranslateMock,
+            $this->sessionConfigMock
         );
     }
 
@@ -548,5 +557,50 @@ class MessagePluginTest extends TestCase
             ->willReturn($collectionMock);
 
         $this->assertEquals($resultMock, $this->model->afterRenderResult($resultMock, $resultMock));
+    }
+
+    public function testSetCookieWithCookiePath()
+    {
+        /** @var Redirect|MockObject $resultMock */
+        $resultMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
+        $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->willReturn($cookieMetadataMock);
+
+        /** @var MessageInterface|MockObject $messageMock */
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
+            ->getMock();
+
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$messageMock]);
+
+        $this->managerMock->expects($this->once())
+            ->method('getMessages')
+            ->with(true, null)
+            ->willReturn($collectionMock);
+
+        /* Test that getCookiePath is called during cookie setup */
+        $this->sessionConfigMock->expects($this->once())
+            ->method('getCookiePath')
+            ->willReturn('/pub');
+        $cookieMetadataMock->expects($this->once())
+            ->method('setPath')
+            ->with('/pub')
+            ->willReturn($cookieMetadataMock);
+
+        $this->model->afterRenderResult($resultMock, $resultMock);
     }
 }

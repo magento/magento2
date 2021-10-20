@@ -22,7 +22,7 @@ class PluginTypesPolicyMerger implements MergerInterface
     {
         /** @var PluginTypesPolicy $policy1 */
         /** @var PluginTypesPolicy $policy2 */
-        return new PluginTypesPolicy(array_unique(array_merge($policy1->getTypes(), $policy2->getTypes())));
+        return new PluginTypesPolicy(array_merge($policy1->getTypes(), $policy2->getTypes()));
     }
 
     /**

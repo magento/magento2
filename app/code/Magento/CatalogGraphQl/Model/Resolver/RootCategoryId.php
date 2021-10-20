@@ -13,6 +13,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * Root category tree field resolver, used for GraphQL request processing.
+ *
+ * @deprecated Use the UID instead of a numeric id
+ * @see \Magento\CatalogGraphQl\Model\Resolver\RootCategoryUid
  */
 class RootCategoryId implements ResolverInterface
 {

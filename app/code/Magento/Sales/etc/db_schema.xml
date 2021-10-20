@@ -825,6 +825,9 @@
         <index referenceId="SALES_SHIPMENT_GRID_BILLING_NAME" indexType="btree">
             <column name="billing_name"/>
         </index>
+        <index referenceId="SALES_SHIPMENT_GRID_ORDER_ID" indexType="btree">
+            <column name="order_id"/>
+        </index>
         <index referenceId="FTI_086B40C8955F167B8EA76653437879B4" indexType="fulltext">
             <column name="increment_id"/>
             <column name="order_increment_id"/>

@@ -25,7 +25,7 @@ class PluginTypesPolicy implements SimplePolicyInterface
         if (!$types) {
             throw new \RuntimeException('PluginTypePolicy must be given at least 1 type.');
         }
-        $this->types = array_unique($types);
+        $this->types = array_values(array_unique($types));
     }
 
     /**

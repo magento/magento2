@@ -36,9 +36,7 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
             <!-- TODO: Remove this action when MC-37719 will be fixed -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
-                <argument name="indices" value="cataloginventory_stock"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>

@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Image adapter from ImageMagick.
@@ -88,6 +90,11 @@ class ImageMagick extends AbstractAdapter
      */
     public function open($filename)
     {
+        if (!file_exists($filename)) {
+            throw new FileSystemException(
+                new Phrase('File "%1" does not exist.', [$this->_fileName])
+            );
+        }
         if (!empty($filename) && !$this->validateURLScheme($filename)) {
             throw new \InvalidArgumentException('Wrong file');
         }

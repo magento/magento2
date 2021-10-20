@@ -20,6 +20,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
@@ -65,17 +66,33 @@ QUERY;
     }
 
     /**
+     * Verify that filters id and uid can't be used at the same time
+     */
+    public function testUidAndIdUsageErrorOnProductFilteringCategory()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('`category_id` and `category_uid` can\'t be used at the same time');
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "99999999"}, category_uid: {eq: "OTk5OTk5OTk="}}) {
+    filters {
+      name
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterLn()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
         $query = <<<QUERY
 {
     products (
@@ -150,15 +167,12 @@ QUERY;
      *  Layered navigation for Configurable products with out of stock options
      * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testLayeredNavigationForConfigurableProducts()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
-        CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
         /** @var Config $eavConfig */
@@ -184,6 +198,7 @@ QUERY;
                 'attribute_code' => $attribute->getAttributeCode(),
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'count' => 2,
+                'position' => 0,
                 'options' => [
                     [
                         'label' => 'Option 1',
@@ -241,6 +256,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options{
            label
            value
@@ -257,13 +273,12 @@ QUERY;
      * Filter products by custom attribute of dropdown type and filterTypeInput eq
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterProductsByDropDownCustomAttribute()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
-        CacheCleaner::cleanAll();
+        CacheCleaner::clean(['eav']);
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
@@ -300,6 +315,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           label
@@ -348,6 +364,7 @@ QUERY;
                 'attribute_code' => $attribute->getAttributeCode(),
                 'count' => 1,
                 'label' => $attribute->getDefaultFrontendLabel(),
+                'position' => $attribute->getPosition(),
                 'options' => [
                     [
                         'label' => 'Option 3',
@@ -432,6 +449,7 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
+        $this->assertCount(2, $response['products']['aggregations']);
     }
 
     /**
@@ -456,12 +474,11 @@ QUERY;
      * Full text search for Products and then filter the results by custom attribute (default sort is relevance)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSearchAndFilterByCustomAttribute()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
         $attribute_code = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attribute_code);
 
@@ -503,6 +520,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           count
@@ -576,6 +594,7 @@ QUERY;
                 'attribute_code' => $attribute_code,
                 'count' => 1,
                 'label' => 'Second Test Configurable',
+                'position' => 1,
                 'options' => [
                     [
                         'count' => 3,
@@ -604,18 +623,20 @@ QUERY;
      *  Filter by category and custom attribute
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterByCategoryIdAndCustomAttribute()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
-        $categoryId = 13;
+        /** @var GetCategoryByName $getCategoryByName */
+        $getCategoryByName = Bootstrap::getObjectManager()->get(GetCategoryByName::class);
+        $category = $getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
+        $categoryUid = base64_encode($category->getId());
         $query = <<<QUERY
 {
   products(filter:{
-                   category_id : {eq:"{$categoryId}"}
+                   category_uid : {eq:"{$categoryUid}"}
                    second_test_configurable: {eq: "{$optionValue}"}
                    },
                    pageSize: 3
@@ -649,6 +670,7 @@ QUERY;
         attribute_code
         count
         label
+        position
         options
         {
           count
@@ -1086,7 +1108,6 @@ QUERY;
             weight
          }
          type_id
-         attribute_set_id
        }
         total_count
         page_info
@@ -1239,7 +1260,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1303,7 +1323,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1354,7 +1373,6 @@ QUERY;
      */
     public function testFilterProductsForExactMatchingName()
     {
-
         $query
             = <<<QUERY
 {
@@ -1454,11 +1472,12 @@ QUERY;
      */
     public function testFilteringForProductsFromMultipleCategories()
     {
+        $categoriesIds = ["4","5","12"];
         $query
             = <<<QUERY
 {
    products(filter:{
-          category_id :{in:["4","5","12"]}
+          category_id :{in:["{$categoriesIds[0]}","{$categoriesIds[1]}","{$categoriesIds[2]}"]}
          })
  {
     items
@@ -1484,6 +1503,21 @@ QUERY;
         $response = $this->graphQlQuery($query);
         /** @var ProductRepositoryInterface $productRepository */
         $this->assertEquals(3, $response['products']['total_count']);
+        $actualProducts = [];
+        foreach ($categoriesIds as $categoriesId) {
+            /** @var CategoryLinkManagement $productLinks */
+            $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
+            $links = $productLinks->getAssignedProducts($categoriesId);
+            $links = array_reverse($links);
+            foreach ($links as $linkProduct) {
+                $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+                /** @var ProductInterface $product */
+                $product = $productRepository->get($linkProduct->getSku());
+                $actualProducts[$linkProduct->getSku()] = $product->getName();
+            }
+        }
+        $expectedProducts = array_column($response['products']['items'], "name", "sku");
+        $this->assertEquals($expectedProducts, $actualProducts);
     }
 
     /**
@@ -1491,17 +1525,20 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
+     * @dataProvider filterProductsBySingleCategoryIdDataProvider
      */
-    public function testFilterProductsBySingleCategoryId()
+    public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId)
     {
-        $queryCategoryId = 333;
+        if (is_numeric($queryCategoryId)) {
+            $queryCategoryId = (int) $queryCategoryId;
+        }
         $query
             = <<<QUERY
 {
   products(
         filter:
         {
-            category_id:{eq:"{$queryCategoryId}"}
+            {$fieldName}:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
 
@@ -1515,6 +1552,7 @@ QUERY;
        categories{
           name
           id
+          uid
           path
           children_count
           product_count
@@ -1534,7 +1572,9 @@ QUERY;
         /** @var CategoryRepositoryInterface $categoryRepository */
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
-        $links = $productLinks->getAssignedProducts($queryCategoryId);
+        $links = $productLinks->getAssignedProducts(
+            is_numeric($queryCategoryId) ? $queryCategoryId : base64_decode($queryCategoryId)
+        );
         $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
@@ -1563,6 +1603,7 @@ QUERY;
                     [
                         'name' => $category->getName(),
                         'id' => $category->getId(),
+                        'uid' => base64_encode($category->getId()),
                         'path' => $category->getPath(),
                         'children_count' => $category->getChildrenCount(),
                         'product_count' => $category->getProductCount(),
@@ -1575,11 +1616,16 @@ QUERY;
     /**
      * Sorting the search results by relevance (DESC => most relevant)
      *
+     * Sorting by relevance may return different results depending on the ES.
+     * To check that sorting works, we compare results with ASC and DESC relevance sorting
+     *
      * Search for products for a fuzzy match and checks if all matching results returned including
      * results based on matching keywords from description
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_relevance_sorting.php
      * @return void
+     *
+     * @throws \Exception
      */
     public function testSearchAndSortByRelevance()
     {
@@ -1589,7 +1635,7 @@ QUERY;
 {
   products(
         search:"{$search_term}"
-        sort:{relevance:DESC}
+        sort:{relevance:%s}
         pageSize: 5
         currentPage: 1
        )
@@ -1630,16 +1676,16 @@ QUERY;
 
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        $this->assertEquals(3, $response['products']['total_count']);
-        $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
-        $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
-        $this->assertCount(2, $response['products']['aggregations']);
-        $productsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
-        $count = count($response['products']['items']);
-        for ($i = 0; $i < $count; $i++) {
-            $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
-        }
+        $responseDesc = $this->graphQlQuery(sprintf($query, 'DESC'));
+        $responseAsc = $this->graphQlQuery(sprintf($query, 'ASC'));
+        $this->assertEquals(3, $responseDesc['products']['total_count']);
+        $this->assertNotEmpty($responseDesc['products']['filters'], 'Filters should have the Category layer');
+        $this->assertEquals('Colorful Category', $responseDesc['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertCount(2, $responseDesc['products']['aggregations']);
+        $expectedProductsInResponse = ['Blue briefs', 'Navy Blue Striped Shoes', 'Grey shorts'];
+        $namesDesc = array_column($responseDesc['products']['items'], 'name');
+        $this->assertEqualsCanonicalizing($expectedProductsInResponse, $namesDesc);
+        $this->assertEquals($namesDesc, array_reverse(array_column($responseAsc['products']['items'], 'name')));
     }
 
     /**
@@ -1682,7 +1728,6 @@ QUERY;
             weight
         }
         type_id
-        attribute_set_id
       }
         total_count
         page_info
@@ -2108,7 +2153,6 @@ QUERY;
     {
       items
        {
-         attribute_set_id
          sku
          price {
             minimalPrice {
@@ -2208,7 +2252,6 @@ products(
         weight
        }
        type_id
-       attribute_set_id
      }
     total_count
     page_info
@@ -2265,7 +2308,6 @@ QUERY;
         ... on PhysicalProductInterface {
            weight
          }
-           attribute_set_id
          }
         total_count
         page_info
@@ -2298,12 +2340,9 @@ QUERY;
   {
        items{
            id
-           attribute_set_id
-           created_at
            name
            sku
            type_id
-           updated_at
            ... on PhysicalProductInterface {
                weight
            }
@@ -2374,7 +2413,6 @@ QUERY;
     /**
      * Verify that invalid current page return an error
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
     public function testInvalidCurrentPage()
@@ -2405,7 +2443,6 @@ QUERY;
     /**
      * Verify that invalid page size returns an error.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
     public function testInvalidPageSize()
@@ -2448,7 +2485,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2475,7 +2511,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2504,5 +2539,24 @@ QUERY;
                 ]
             );
         }
+    }
+
+    /**
+     * Data provider for product single category filtering
+     *
+     * @return array[][]
+     */
+    public function filterProductsBySingleCategoryIdDataProvider(): array
+    {
+        return [
+            [
+                'fieldName' => 'category_id',
+                'categoryId' => '333',
+            ],
+            [
+                'fieldName' => 'category_uid',
+                'categoryId' => base64_encode('333'),
+            ],
+        ];
     }
 }

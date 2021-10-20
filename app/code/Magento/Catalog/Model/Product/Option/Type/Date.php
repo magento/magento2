@@ -72,6 +72,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $dateValid = true;
         if ($this->_dateExists()) {
             if ($this->useCalendar()) {
+                if (is_array($value) && $this->checkDateWithoutJSCalendar($value)) {
+                    $value['date'] = sprintf("%s/%s/%s", $value['day'], $value['month'], $value['year']);
+                }
                 /* Fixed validation if the date was not saved correctly after re-saved the order
                 for example: "09\/24\/2020,2020-09-24 00:00:00" */
                 if (is_string($value) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4},+(\w|\W)*$/', $value)) {
@@ -81,6 +84,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 }
                 $dateValid = isset($value['date']) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4}$/', $value['date']);
             } else {
+                if (is_array($value)) {
+                    $value = $this->prepareDateByDateInternal($value);
+                }
                 $dateValid = isset(
                     $value['day']
                 ) && isset(
@@ -410,5 +416,39 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 ProductCustomOptionInterface::OPTION_TYPE_TIME
             ]
         );
+    }
+
+    /**
+     * Check is date without JS Calendar
+     *
+     * @param array $value
+     *
+     * @return bool
+     */
+    private function checkDateWithoutJSCalendar(array $value): bool
+    {
+        return empty($value['date'])
+            && !empty($value['day'])
+            && !empty($value['month'])
+            && !empty($value['year']);
+    }
+
+    /**
+     * Prepare date by date internal
+     *
+     * @param array $value
+     * @return array
+     */
+    private function prepareDateByDateInternal(array $value): array
+    {
+        if (!empty($value['date']) && !empty($value['date_internal'])) {
+            $formatDate = explode(' ', $value['date_internal']);
+            $date = explode('-', $formatDate[0]);
+            $value['year'] = $date[0];
+            $value['month'] = $date[1];
+            $value['day'] = $date[2];
+        }
+
+        return $value;
     }
 }

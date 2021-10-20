@@ -140,8 +140,8 @@
             <argument name="billingAddress" value="US_Address_TX"/>
         </actionGroup>
         <!--Submit credit memo-->
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline" after="verifyOrderCreditMemoInformation"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the credit memo." stepKey="seeCreditMemoSuccess" after="clickRefundOffline"/>
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline" after="verifyOrderCreditMemoInformation"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCreditMemoSuccess" after="clickRefundOffline"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickOrderCreditMemosTab" after="seeCreditMemoSuccess"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCreditMemoTabLoadingMask" after="clickOrderCreditMemosTab"/>
         <see selector="{{AdminOrderCreditMemosTabSection.gridRow('1')}}" userInput="{{Simple_US_Customer.firstname}}" stepKey="seeOrderCreditMemoInTabGrid" after="waitForCreditMemoTabLoadingMask"/>

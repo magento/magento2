@@ -14,5 +14,6 @@
         <element name="checkbox" type="checkbox" selector="//label[@class='data-grid-checkbox-cell-inner']//input[@class='admin__control-checkbox']"/>
         <element name="select" type="select" selector="//tr[@class='data-row']//button[@class='action-select']"/>
         <element name="editInSelect" type="text" selector="//a[contains(text(), 'Edit')]"/>
+        <element name="gridDataRow" type="input" selector="//table[@data-role='grid']//tr/td"/>
     </section>
 </sections>

@@ -83,11 +83,9 @@
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="cataloginventory_stock"/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -135,8 +133,8 @@
         <waitForPageLoad stepKey="waitForPageToReload"/>
         <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.72" stepKey="seeTaxAmountAfterLoadPage"/>
         <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToProceedToCheckout" />
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="customerAddress" value="US_Address_NY_Default_Shipping"/>

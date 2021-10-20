@@ -90,6 +90,9 @@ class PrintLabelTest extends TestCase
      */
     protected $controller;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
@@ -155,29 +158,27 @@ class PrintLabelTest extends TestCase
      *
      * @return void
      */
-    protected function loadShipment()
+    protected function loadShipment(): void
     {
         $orderId = 1;
         $shipmentId = 1;
         $shipment = [];
         $tracking = [];
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('order_id')
-            ->willReturn($orderId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->willReturn($shipmentId);
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('shipment')
-            ->willReturn($shipment);
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with('tracking')
-            ->willReturn($tracking);
+            ->withConsecutive(
+                ['order_id'],
+                ['shipment_id'],
+                ['shipment'],
+                ['tracking']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $orderId,
+                $shipmentId,
+                $shipment,
+                $tracking
+            );
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -193,11 +194,11 @@ class PrintLabelTest extends TestCase
     }
 
     /**
-     * Run file create section
+     * Run file create section.
      *
      * @return string
      */
-    protected function fileCreate()
+    protected function fileCreate(): string
     {
         $resultContent = 'result-pdf-content';
         $incrementId = '1000001';
@@ -213,11 +214,11 @@ class PrintLabelTest extends TestCase
     }
 
     /**
-     * Redirect into response section
+     * Redirect into response section.
      *
      * @return void
      */
-    protected function redirectSection()
+    protected function redirectSection(): void
     {
         $this->actionFlag->expects($this->once())
             ->method('get')
@@ -229,9 +230,11 @@ class PrintLabelTest extends TestCase
     }
 
     /**
-     * Run test execute method
+     * Run test execute method.
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $labelContent = '%PDF-label-content';
 
@@ -246,9 +249,11 @@ class PrintLabelTest extends TestCase
     }
 
     /**
-     * Run test execute method (create new file for render)
+     * Run test execute method (create new file for render).
+     *
+     * @return void
      */
-    public function testExecuteFromImageString()
+    public function testExecuteFromImageString(): void
     {
         $labelContent = 'Label-content';
         $pdfPageMock = $this->createPartialMock(\Zend_Pdf_Page::class, ['render', 'getPageDictionary']);
@@ -277,12 +282,35 @@ class PrintLabelTest extends TestCase
     }
 
     /**
-     * Run test execute method (fail load page from image string)
+     * Run test execute method (fail load page from image string).
+     *
+     * @return void
      */
-    public function testExecuteImageStringFail()
+    public function testExecuteImageStringFail(): void
     {
         $labelContent = 'Label-content';
         $incrementId = '1000001';
+        $orderId = 1;
+        $shipmentId = 1;
+        $shipment = [];
+        $tracking = [];
+
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive(
+                ['order_id'],
+                ['shipment_id'],
+                ['shipment'],
+                ['tracking'],
+                ['shipment_id']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $orderId,
+                $shipmentId,
+                $shipment,
+                $tracking,
+                $shipmentId
+            );
 
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
@@ -299,32 +327,33 @@ class PrintLabelTest extends TestCase
             ->method('createPdfPageFromImageString')
             ->with($labelContent)
             ->willReturn(false);
-        $this->messageManagerMock->expects($this->at(0))
+        $this->messageManagerMock
             ->method('addError')
-            ->with(sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId))
-            ->willThrowException(new \Exception());
-        $this->messageManagerMock->expects($this->at(1))
-            ->method('addError')
-            ->with('An error occurred while creating shipping label.')->willReturnSelf();
+            ->withConsecutive(
+                [sprintf('We don\'t recognize or support the file extension in this shipment: %s.', $incrementId)],
+                ['An error occurred while creating shipping label.']
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new \Exception()),
+                $this->messageManagerMock
+            );
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(LoggerInterface::class)
             ->willReturn($loggerMock);
         $loggerMock->expects($this->once())
             ->method('critical');
-        $this->requestMock->expects($this->at(4))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->willReturn(1);
         $this->redirectSection();
 
         $this->assertNull($this->controller->execute());
     }
 
     /**
-     * Run test execute method (fail load shipment model)
+     * Run test execute method (fail load shipment model).
+     *
+     * @return void
      */
-    public function testExecuteLoadShipmentFail()
+    public function testExecuteLoadShipmentFail(): void
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

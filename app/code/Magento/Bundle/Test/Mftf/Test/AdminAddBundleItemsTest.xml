@@ -59,6 +59,18 @@
         </actionGroup>
         <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <!-- Check that Bundle Options initialized with default quantity -->
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
+        </assertEquals>
+
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
@@ -108,6 +120,17 @@
         </actionGroup>
         <checkOption selector="{{AdminProductFormBundleSection.firstProductOption}}" stepKey="selectNewFirstGridRow2"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddNewSelectedBundleProducts"/>
+        <!-- Check that existing Bundle Options do not loose user input quantity values  -->
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantityAfterUserInput"/>
+        <assertEquals stepKey="assertFirstBundleOptionDefaultQuantityAfterUserInput">
+            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
+            <actualResult type="string">$grabbedFirstBundleOptionQuantityAfterUserInput</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantityAfterUserInput"/>
+        <assertEquals stepKey="assertSecondBundleOptionDefaultQuantityAfterUserInput">
+            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
+            <actualResult type="string">$grabbedSecondBundleOptionQuantityAfterUserInput</actualResult>
+        </assertEquals>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '2')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillNewProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '3')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillNewProductDefaultQty2"/>
 

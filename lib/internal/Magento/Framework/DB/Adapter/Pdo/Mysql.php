@@ -56,7 +56,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public const DDL_CREATE            = 2;
     public const DDL_INDEX             = 3;
     public const DDL_FOREIGN_KEY       = 4;
-    public const DDL_EXISTS            = 5;
+    private const DDL_EXISTS           = 5;
     public const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
     public const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
 
@@ -665,11 +665,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         // Mixed bind is not supported - so remember whether it is named bind, to normalize later if required
-        $isNamedBind = false;
         if ($bind) {
             foreach ($bind as $k => $v) {
                 if (!is_int($k)) {
-                    $isNamedBind = true;
                     if ($k[0] != ':') {
                         $bind[":{$k}"] = $v;
                         unset($bind[$k]);
@@ -3074,8 +3072,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _prepareQuotedSqlCondition($text, $value, $fieldName)
     {
+        $text = str_replace('{{fieldName}}', $fieldName, $text);
         $sql = $this->quoteInto($text, $value);
-        $sql = str_replace('{{fieldName}}', $fieldName, $sql);
         return $sql;
     }
 
@@ -4082,7 +4080,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $indexName = $this->getPrimaryKeyName($tableName, $schemaName);
         $indexes = $this->getIndexList($tableName);
-        if ($indexName && count($indexes[$indexName]['COLUMNS_LIST']) == 1) {
+        if ($indexName && isset($indexes[$indexName]) && count($indexes[$indexName]['COLUMNS_LIST']) == 1) {
             return current($indexes[$indexName]['COLUMNS_LIST']);
         }
         return false;
