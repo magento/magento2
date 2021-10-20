@@ -210,7 +210,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $_httpClientFactory;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'SiteID', 'Password'
@@ -994,7 +994,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
                 if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
                     $debugPoint['info'] = sprintf(
-                        __("DHL service is not available at %s date"),
+                        __("DHL service is not available at %s date")->render(),
                         $responseData['date']
                     );
                     $unavailable = true;
@@ -1748,9 +1748,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $nodePiece->addChild('Weight', sprintf('%.3f', $package['params']['weight']));
             $params = $package['params'];
             if ($params['width'] && $params['length'] && $params['height']) {
-                $nodePiece->addChild('Width', round($params['width']));
-                $nodePiece->addChild('Height', round($params['height']));
-                $nodePiece->addChild('Depth', round($params['length']));
+                $nodePiece->addChild('Width', (string) round((float) $params['width']));
+                $nodePiece->addChild('Height', (string) round((float) $params['height']));
+                $nodePiece->addChild('Depth', (string) round((float) $params['length']));
             }
             $content = [];
             foreach ($package['items'] as $item) {

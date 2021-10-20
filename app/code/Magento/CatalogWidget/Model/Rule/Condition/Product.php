@@ -281,4 +281,17 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $this->addNotGlobalAttribute($attribute, $collection);
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBindArgumentValue()
+    {
+        $value = parent::getBindArgumentValue();
+        return is_array($value) && $this->getMappedSqlField() === 'e.entity_id'
+            ? new \Zend_Db_Expr(
+                $this->_productResource->getConnection()->quoteInto('?', $value, \Zend_Db::INT_TYPE)
+            )
+            : $value;
+    }
 }
