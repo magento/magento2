@@ -126,7 +126,7 @@ class Zip
     }
 
     /**
-     * Move files from storage to tmp folder
+     * Copies file from remote storage to tmp folder
      *
      * @param string $filePath
      * @return string
@@ -144,6 +144,7 @@ class Zip
                 ? $tmpPath
                 : $filePath;
         }
+
         return $filePath;
     }
 
