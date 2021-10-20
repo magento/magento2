@@ -65,7 +65,7 @@ class ProductRepositorySave
             $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
             $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
-            if (!empty($configurableLinks) && !empty($configurableOptions)) {
+            if (!empty($configurableLinks) || !empty($configurableOptions)) {
                 $attributeCodes = [];
                 /** @var OptionInterface $configurableOption */
                 foreach ($configurableOptions as $configurableOption) {
