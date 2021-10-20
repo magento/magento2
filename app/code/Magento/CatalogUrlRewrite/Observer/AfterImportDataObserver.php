@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
@@ -397,7 +398,7 @@ class AfterImportDataObserver implements ObserverInterface
      */
     private function isGlobalScope($storeId)
     {
-        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
+        return null === $storeId || Store::DEFAULT_STORE_ID === (int) $storeId;
     }
 
     /**

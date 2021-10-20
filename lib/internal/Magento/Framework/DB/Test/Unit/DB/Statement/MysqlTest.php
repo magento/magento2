@@ -114,8 +114,8 @@ class MysqlTest extends TestCase
     {
         $param1 = $this->createMock(Parameter::class);
         $param1Value = 'SomeValue';
-        $param1DataType = 'dataType';
-        $param1Length = '9';
+        $param1DataType = \PDO::PARAM_STR;
+        $param1Length = 9;
         $param1DriverOptions = 'some driver options';
         $param1->expects($this->once())
             ->method('getIsBlob')
@@ -145,7 +145,7 @@ class MysqlTest extends TestCase
             ->method('bindParam')
             ->withConsecutive(
                 [':param1', $param1Value, $param1DataType, $param1Length, $param1DriverOptions],
-                [':param2', 'value2', \PDO::PARAM_STR, null, null]
+                [':param2', 'value2', \PDO::PARAM_STR, 6, null]
             );
         $this->pdoStatementMock->expects($this->once())
             ->method('execute');
