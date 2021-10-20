@@ -11,6 +11,9 @@ namespace Magento\Framework\App\Utility;
 use ReflectionClass;
 use ReflectionException;
 
+/**
+ * Factory for \ReflectionClass
+ */
 class ReflectionClassFactory
 {
     /**
