@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Sender;
 
+use Exception;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
@@ -126,6 +127,8 @@ class EmailSenderTest extends TestCase
     private $senderBuilderFactoryMock;
 
     /**
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -135,7 +138,7 @@ class EmailSenderTest extends TestCase
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getStoreId'])
+            ->addMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,7 +151,7 @@ class EmailSenderTest extends TestCase
 
         $this->senderMock = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send', 'sendCopyTo'])
+            ->addMethods(['send', 'sendCopyTo'])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
@@ -157,7 +160,8 @@ class EmailSenderTest extends TestCase
 
         $this->shipmentMock = $this->getMockBuilder(Order\Shipment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setSendEmail', 'setEmailSent', 'getId'])
+            ->onlyMethods(['setEmailSent', 'getId'])
+            ->addMethods(['setSendEmail'])
             ->getMock();
 
         $this->commentMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
@@ -234,11 +238,9 @@ class EmailSenderTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->senderBuilderFactoryMock = $this->getMockBuilder(
-            SenderBuilderFactory::class
-        )
+        $this->senderBuilderFactoryMock = $this->getMockBuilder(SenderBuilderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->subject = new EmailSender(
@@ -261,15 +263,18 @@ class EmailSenderTest extends TestCase
      * @param bool $emailSendingResult
      * @param array $orderData
      *
-     * @dataProvider sendDataProvider
-     *
      * @return void
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @throws \Exception
+     * @throws Exception
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $isComment, $emailSendingResult, $orderData)
-    {
+    public function testSend(
+        int $configValue,
+        bool $forceSyncMode,
+        bool $isComment,
+        bool $emailSendingResult,
+        array $orderData
+    ): void {
         $this->globalConfigMock->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
@@ -318,7 +323,7 @@ class EmailSenderTest extends TestCase
                     'is_not_virtual' => $orderData['is_not_virtual'],
                     'email_customer_note' => $orderData['email_customer_note'],
                     'frontend_status_label' => $orderData['frontend_status_label']
-                ],
+                ]
             ];
             $transport = new DataObject($transport);
 
@@ -329,7 +334,7 @@ class EmailSenderTest extends TestCase
                     [
                         'sender' => $this->subject,
                         'transport' => $transport->getData(),
-                        'transportObject' => $transport,
+                        'transportObject' => $transport
                     ]
                 );
 
@@ -391,12 +396,12 @@ class EmailSenderTest extends TestCase
                 ->method('setEmailSent')
                 ->with(null);
 
-            $this->shipmentResourceMock->expects($this->at(0))
+            $this->shipmentResourceMock
                 ->method('saveAttribute')
-                ->with($this->shipmentMock, 'email_sent');
-            $this->shipmentResourceMock->expects($this->at(1))
-                ->method('saveAttribute')
-                ->with($this->shipmentMock, 'send_email');
+                ->withConsecutive(
+                    [$this->shipmentMock, 'email_sent'],
+                    [$this->shipmentMock, 'send_email']
+                );
 
             $this->assertFalse(
                 $this->subject->send(
@@ -411,10 +416,9 @@ class EmailSenderTest extends TestCase
 
     /**
      * @return array
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function sendDataProvider()
+    public function sendDataProvider(): array
     {
         return [
             'Successful sync sending with comment' => [
@@ -471,7 +475,7 @@ class EmailSenderTest extends TestCase
                     'email_customer_note' => 1,
                     'frontend_status_label' => 'send_email'
                 ]
-            ],
+            ]
         ];
     }
 }

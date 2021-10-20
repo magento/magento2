@@ -61,7 +61,7 @@ class ConfigTest extends TestCase
     private $serializerMock;
 
     /**
-     * setUp all mocks and data function
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -95,7 +95,7 @@ class ConfigTest extends TestCase
                     Config::XML_VARNISH_PAGECACHE_BACKEND_HOST,
                     ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
-                    'example.com',
+                    'example.com'
                 ],
                 [
                     Config::XML_VARNISH_PAGECACHE_BACKEND_PORT,
@@ -143,17 +143,15 @@ class ConfigTest extends TestCase
         $this->directoryList = $this->createMock(DirectoryList::class);
 
         /** @var MockObject $vclTemplateLocator */
-        $vclTemplateLocator = $this->getMockBuilder(VclTemplateLocator::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTemplate'])
+        $vclTemplateLocator = $this->getMockBuilder(VclTemplateLocator::class)->disableOriginalConstructor()
+            ->onlyMethods(['getTemplate'])
             ->getMock();
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
             ->willReturn(file_get_contents(__DIR__ . '/_files/test.vcl'));
         /** @var MockObject $vclTemplateLocator */
-        $vclGeneratorFactory = $this->getMockBuilder(VclGeneratorFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $vclGeneratorFactory = $this->getMockBuilder(VclGeneratorFactory::class)->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
         $expectedParams = [
             'backendHost' => 'example.com',
@@ -193,8 +191,10 @@ class ConfigTest extends TestCase
 
     /**
      * test for getVcl method
+     *
+     * @return void
      */
-    public function testGetVcl()
+    public function testGetVcl(): void
     {
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
@@ -207,7 +207,10 @@ class ConfigTest extends TestCase
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 
-    public function testGetTll()
+    /**
+     * @return void
+     */
+    public function testGetTll(): void
     {
         $this->coreConfigMock->expects($this->once())->method('getValue')->with(Config::XML_PAGECACHE_TTL);
         $this->config->getTtl();
@@ -215,17 +218,15 @@ class ConfigTest extends TestCase
 
     /**
      * Whether a cache type is enabled
+     *
+     * @return void
      */
-    public function testIsEnabled()
+    public function testIsEnabled(): void
     {
-        $this->cacheState->expects($this->at(0))
+        $this->cacheState
             ->method('isEnabled')
-            ->with(Type::TYPE_IDENTIFIER)
-            ->willReturn(true);
-        $this->cacheState->expects($this->at(1))
-            ->method('isEnabled')
-            ->with(Type::TYPE_IDENTIFIER)
-            ->willReturn(false);
+            ->withConsecutive([Type::TYPE_IDENTIFIER], [Type::TYPE_IDENTIFIER])
+            ->willReturnOnConsecutiveCalls(true, false);
         $this->assertTrue($this->config->isEnabled());
         $this->assertFalse($this->config->isEnabled());
     }
