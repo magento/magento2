@@ -36,7 +36,7 @@ class DeltaPriceRoundTest extends TestCase
         $this->priceCurrency->method('round')
             ->willReturnCallback(
                 function ($amount) {
-                    return round($amount, 2);
+                    return round((float) $amount, 2);
                 }
             );
 

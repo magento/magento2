@@ -129,7 +129,7 @@ class DiscountTest extends TestCase
             ->method('round')
             ->willReturnCallback(
                 function ($argument) {
-                    return round($argument, 2);
+                    return round((float) $argument, 2);
                 }
             );
 
