@@ -29,6 +29,9 @@ class AuthenticationTest extends TestCase
      */
     protected $plugin;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->auth = $this->createPartialMock(
@@ -42,13 +45,19 @@ class AuthenticationTest extends TestCase
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         $this->auth = null;
         $this->plugin = null;
     }
 
-    public function testAroundDispatchProlongStorage()
+    /**
+     * @return void
+     */
+    public function testAroundDispatchProlongStorage(): void
     {
         $subject = $this->createMock(Index::class);
         $request = $this->createPartialMock(Http::class, ['getActionName']);
@@ -76,9 +85,9 @@ class AuthenticationTest extends TestCase
         $user->expects($this->once())
             ->method('reload');
 
-        $storage->expects($this->at(0))
+        $storage
             ->method('prolong');
-        $storage->expects($this->at(1))
+        $storage
             ->method('refreshAcl');
 
         $proceed = function ($request) use ($expectedResult) {
@@ -89,12 +98,13 @@ class AuthenticationTest extends TestCase
     }
 
     /**
-     * Calls aroundDispatch to access protected method _processNotLoggedInUser
+     * Calls aroundDispatch to access protected method _processNotLoggedInUser.
      *
+     * @return void
      * Data provider supplies different possibilities of request parameters and properties
      * @dataProvider processNotLoggedInUserDataProvider
      */
-    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag)
+    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag): void
     {
         $subject = $this->getMockBuilder(Index::class)
             ->disableOriginalConstructor()
@@ -155,7 +165,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function processNotLoggedInUserDataProvider()
+    public function processNotLoggedInUserDataProvider(): array
     {
         return [
             'iFrame' => [true, false, false],

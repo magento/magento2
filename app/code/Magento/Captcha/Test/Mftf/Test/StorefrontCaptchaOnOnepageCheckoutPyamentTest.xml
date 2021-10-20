@@ -18,6 +18,7 @@
             <testCaseId value="MC-41461"/>
             <useCaseId value="MC-41281"/>
             <group value="captcha"/>
+            <group value="storefront_captcha_enabled"/>
         </annotations>
         <before>
             <!-- Create Simple Product -->
@@ -45,7 +46,7 @@
             <magentoCLI command="config:set {{BankTransferDisabledConfigData.path}} {{BankTransferDisabledConfigData.value}}" stepKey="disabledBankTransfer"/>
 
             <!-- Set default configuration for captcha -->
-            <magentoCLI command="config:set {{StorefrontCaptchaOnOnepageCheckoutConfigData.path}} {{StorefrontCaptchaOnOnepageCheckoutConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms"/>
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="defaultCaptchaMode" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
