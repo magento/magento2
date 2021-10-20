@@ -61,9 +61,7 @@ class CsvTest extends TestCase
         )->method(
             'openFile'
         )->willReturn(
-
             new Read($stream, new Http())
-
         );
         $this->_filesystem->expects(
             $this->any()
