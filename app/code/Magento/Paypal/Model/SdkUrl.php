@@ -217,10 +217,8 @@ class SdkUrl
         // If Pay Later is enabled, then only paylater parameter will go in enable-funding parameter list
         if ($payLaterActive == false) {
             unset($this->supportedPaymentMethods['paylater']);
-            return implode(',', $this->supportedPaymentMethods);
-        } else {
-            return implode(',', $this->supportedPaymentMethods);
         }
+        return implode(',', $this->supportedPaymentMethods);
     }
 
     /**
