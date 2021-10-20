@@ -14,6 +14,7 @@ use Magento\Cron\Model\Schedule;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\CronException;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
 use Magento\Cron\Model\DeadlockRetrierInterface;
@@ -822,10 +823,16 @@ class ProcessCronQueueObserver implements ObserverInterface
                 continue;
             }
 
-            $this->tryRunJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
-
-            if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {
-                $processedJobs[$schedule->getJobCode()] = true;
+            try {
+                $this->tryRunJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
+                if ($schedule->getStatus() === Schedule::STATUS_SUCCESS) {
+                    $processedJobs[$schedule->getJobCode()] = true;
+                }
+            } catch (CronException $e) {
+                $this->logger->warning($e->getMessage());
+                continue;
+            } catch (\Exception $e) {
+                $this->processError($schedule, $e);
             }
 
             $this->retrier->execute(
@@ -845,6 +852,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param string[] $jobConfig
      * @param Schedule $schedule
      * @param string $groupId
+     * @throws CronException
      */
     private function tryRunJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
     {
@@ -858,10 +866,8 @@ class ProcessCronQueueObserver implements ObserverInterface
                     $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                     break;
                 }
-                $this->logger->warning("Could not acquire lock for cron job: {$schedule->getJobCode()}");
+                throw new CronException(__('Could not acquire lock for cron job: %1', $schedule->getJobCode()));
             }
-        } catch (\Exception $e) {
-            $this->processError($schedule, $e);
         } finally {
             $this->lockManager->unlock($lockName);
         }
