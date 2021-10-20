@@ -322,6 +322,7 @@ type Products @doc(description: "Contains the results of a `products` query.") {
     filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.") @deprecated(reason: "Use `aggregations` instead.")
     aggregations: [Aggregation] @doc(description: "A bucket that contains the attribute code and label for each filterable option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
+    suggestions: [SearchSuggestion] @doc(description: "An array of search suggestions for case when search query have no results.")
 }
 
 type CategoryProducts @doc(description: "Contains details about the products assigned to a category.") {
@@ -475,6 +476,10 @@ type Aggregation @doc(description: "Contains information for each filterable opt
     attribute_code: String! @doc(description: "Attribute code of the aggregation group.")
     options: [AggregationOption] @doc(description: "Array of options for the aggregation.")
     position: Int @doc(description: "The relative position of the attribute in a layered navigation block.")
+}
+
+type SearchSuggestion @doc(description: "A string that contains search suggestion") {
+    search: String! @doc(description: "The search suggestion of existing product.")
 }
 
 interface AggregationOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\AggregationOptionTypeResolverComposite") @doc(description: "Defines aggregation option fields.") {
