@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Source;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -24,7 +25,7 @@ class Zip extends Csv
         \Magento\Framework\Filesystem\Directory\Write $directory,
         $options
     ) {
-        $zip = new \Magento\Framework\Archive\Zip();
+        $zip = ObjectManager::getInstance()->create(\Magento\Framework\Archive\Zip::class);
         $csvFile = $zip->unpack(
             $file,
             preg_replace('/\.zip$/i', '.csv', $file)
