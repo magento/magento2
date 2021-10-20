@@ -57,6 +57,7 @@ class UnitBaseCalculatorTest extends TestCase
     /** @var UnitBaseCalculator */
     protected $model;
 
+    /** @var DataObject */
     protected $addressRateRequest;
 
     /**
@@ -92,7 +93,7 @@ class UnitBaseCalculatorTest extends TestCase
             ->withAnyParameters()
             ->willReturnCallback(
                 function ($price) {
-                    return round($price, 2);
+                    return round((float) $price, 2);
                 }
             );
         $this->mockConfig = $this->getMockBuilder(Config::class)

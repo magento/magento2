@@ -294,4 +294,28 @@ class DataTest extends TestCase
             ['US,RU', ['US', 'RU']],
         ];
     }
+
+    /**
+     * Test private method `getCurrentScope`, if no request parameter `scope type` sent.
+     *
+     * @throws \ReflectionException
+     */
+    public function testGetCurrentScopeWithoutRequestParameters()
+    {
+        $storeId = 1;
+        $scope = [
+            'type' => ScopeInterface::SCOPE_STORE,
+            'value' => $storeId,
+        ];
+
+        $this->_store->expects($this->atLeastOnce())->method('getId')->willReturn($storeId);
+
+        $reflector = new \ReflectionClass($this->_object);
+        $method = $reflector->getMethod('getCurrentScope');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->_object);
+        $this->assertIsArray($result);
+        $this->assertEquals($scope, $result);
+    }
 }
