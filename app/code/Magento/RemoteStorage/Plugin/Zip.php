@@ -140,7 +140,7 @@ class Zip
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $tmpPath = $this->getTmpPath($filePath);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
+            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) >= 0
                 ? $tmpPath
                 : $filePath;
         }
