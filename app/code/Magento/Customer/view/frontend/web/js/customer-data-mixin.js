@@ -19,7 +19,7 @@ define([
             try {
                 originFn();
                 this.ajaxPrefilterCall();
-            } catch(err) {}
+            } catch (err) {}
         },
 
         /**
