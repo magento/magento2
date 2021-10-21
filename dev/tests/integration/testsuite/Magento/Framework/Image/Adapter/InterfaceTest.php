@@ -305,27 +305,27 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @dataProvider rotateDataProvider
      * @depends testOpen
      */
-//    public function testRotate($image, $angle, $pixel, $adapterType)
-//    {
-//        $adapter = $this->_getAdapter($adapterType);
-//        $adapter->open($image);
-//
-//        $size = [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()];
-//
-//        $colorBefore = $adapter->getColorAt($pixel['x'], $pixel['y']);
-//        $adapter->rotate($angle);
-//
-//        $newPixel = $this->_convertCoordinates(
-//            $pixel,
-//            $angle,
-//            $size,
-//            [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]
-//        );
-//        $colorAfter = $adapter->getColorAt($newPixel['x'], $newPixel['y']);
-//
-//        $result = $this->_compareColors($colorBefore, $colorAfter);
-//        $this->assertTrue($result, join(',', $colorBefore) . ' not equals ' . join(',', $colorAfter));
-//    }
+    public function testRotate($image, $angle, $pixel, $adapterType)
+    {
+        $adapter = $this->_getAdapter($adapterType);
+        $adapter->open($image);
+
+        $size = [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()];
+
+        $colorBefore = $adapter->getColorAt($pixel['x'], $pixel['y']);
+        $adapter->rotate($angle);
+
+        $newPixel = $this->_convertCoordinates(
+            $pixel,
+            $angle,
+            $size,
+            [$adapter->getOriginalWidth(), $adapter->getOriginalHeight()]
+        );
+        $colorAfter = $adapter->getColorAt($newPixel['x'], $newPixel['y']);
+
+        $result = $this->_compareColors($colorBefore, $colorAfter);
+        $this->assertTrue($result, join(',', $colorBefore) . ' not equals ' . join(',', $colorAfter));
+    }
 
     /**
      * Get pixel coordinates after rotation
