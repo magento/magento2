@@ -48,13 +48,11 @@ class SmartButtonConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->configMock = $this->getMockBuilder(Config::class)
+        $this->localeResolverMock   = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->configMock           = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->payflowproMock = $this->getMockBuilder(Payflowpro::class)
-            ->getMock();
+        $this->payflowproMock       = $this->createMock(Payflowpro::class);
 
         /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
@@ -76,8 +74,8 @@ class SmartButtonConfigTest extends TestCase
             $configFactoryMock,
             $scopeConfigMock,
             $sdkUrl,
-            $this->getDefaultStyles(),
-            $this->payflowproMock
+            $this->payflowproMock,
+            $this->getDefaultStyles()
         );
     }
 
