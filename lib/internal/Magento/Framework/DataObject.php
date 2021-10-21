@@ -51,6 +51,11 @@ class DataObject implements \ArrayAccess
      */
     public function addData(array $arr)
     {
+        if ($this->_data === []) {
+            $this->setData($arr);
+            return $this;
+        }
+
         foreach ($arr as $index => $value) {
             $this->setData($index, $value);
         }
