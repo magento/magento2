@@ -40,14 +40,6 @@ class NameTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     *
-     * @return void
-     * @magentoDataFixture Magento/Framework/File/_files/framework_file_name.php
-     *
-     * @dataProvider getNewFileNameDataProvider
-     */
-
-    /**
      * @param string $destinationFile
      * @param string $expectedFileName
      * @return void
@@ -63,6 +55,10 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedFileName, $name);
     }
 
+    /**
+     * Data provider for testGetNewFileName
+     * @return array
+     */
     public function getNewFileNameDataProvider()
     {
         return [

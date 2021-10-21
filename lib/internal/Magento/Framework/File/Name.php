@@ -21,6 +21,9 @@ class Name
      */
     private $targetDirectory;
 
+    /**
+     * @param TargetDirectory|null $targetDirectory
+     */
     public function __construct(TargetDirectory $targetDirectory = null)
     {
         $this->targetDirectory = $targetDirectory ?? ObjectManager::getInstance()->get(TargetDirectory::class);
