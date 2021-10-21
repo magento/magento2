@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 
 /**
  * Utility for generating a unique file name
@@ -17,18 +17,29 @@ use Magento\Framework\Validation\ValidationException;
 class Name
 {
     /**
+     * @var \Magento\Framework\Filesystem\Directory\TargetDirectory
+     */
+    private $targetDirectory;
+
+    public function __construct(TargetDirectory $targetDirectory = null)
+    {
+        $this->targetDirectory = $targetDirectory ?? ObjectManager::getInstance()->get(TargetDirectory::class);
+    }
+
+    /**
      * Get new file name if the given name is in use
      *
      * @param string $destinationFile
      * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getNewFileName(string $destinationFile)
     {
         $fileInfo = $this->getPathInfo($destinationFile);
-        if ($this->fileExist($destinationFile)) {
+        if ($this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT)->isExist($destinationFile)) {
             $index = 1;
             $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while ($this->fileExist($fileInfo['dirname'] . '/' . $baseName)) {
+            while ($this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT)->isExist($fileInfo['dirname'] . '/' . $baseName)) {
                 $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
                 $index++;
             }
@@ -49,16 +60,5 @@ class Name
     private function getPathInfo(string $destinationFile)
     {
         return pathinfo($destinationFile);
-    }
-
-    /**
-     * Check to see if a given file exists
-     *
-     * @param string $destinationFile
-     * @return bool
-     */
-    private function fileExist(string $destinationFile)
-    {
-        return file_exists($destinationFile);
     }
 }
