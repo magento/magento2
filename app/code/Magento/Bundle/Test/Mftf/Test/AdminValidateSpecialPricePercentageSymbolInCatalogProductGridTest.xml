@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateSpecialPricePercentageSymbolInCatalogProductGridTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle Products Special Price Column in admin Grid should have % sign not currency sign"/>
+            <title value="Admin to validate the bundle products special price column in grid should display percentage symbol instead of currency sign"/>
+            <description value="Admin to validate the bundle products special price column in grid should display percentage symbol instead of currency sign"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-1378"/>
+            <useCaseId value="ACP2E-64"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <!--Admin login-->
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <!--Logging out-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to bundle product creation page-->
+        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
+        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
+            <argument name="price" value="{{SimpleProductWithSpecialPrice.special_price}}"/>
+        </actionGroup>
+        <!-- Add single bundle item -->
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
+
+        <!--Create a bundle product with ancillary data-->
+        <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProduct">
+            <argument name="bundleProduct" value="BundleProduct"/>
+        </actionGroup>
+
+        <!--save the product/published by default-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownToReset"/>
+        <click selector="{{AdminProductGridFilterSection.resetGridColumns}}" stepKey="resetProductGridColumns"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownAfterReset"/>
+
+        <!--Reload the catalog product page -->
+        <reloadPage stepKey="reloadCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+
+        <!--Add Special Price column-->
+        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Special Price')}}" stepKey="dontSeeSpecialPriceColumn"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownSpecialPrice"/>
+        <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Special Price')}}" stepKey="showSpecialPriceColumn"/>
+        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownSpecialPrice"/>
+
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterBundleProductGridBySku">
+            <argument name="sku" value="{{BundleProduct.sku}}"/>
+        </actionGroup>
+
+        <seeElement selector="{{AdminProductGridSection.columnHeader('Special Price')}}" stepKey="seeSpecialPriceColumn"/>
+        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Special Price')}}" stepKey="getSpecialPrice"/>
+
+        <assertStringContainsString stepKey="assertSpecialPricePercentageSymbol">
+            <expectedResult type="string">%</expectedResult>
+            <actualResult type="variable">$getSpecialPrice</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>
