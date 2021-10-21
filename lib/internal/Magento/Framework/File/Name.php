@@ -39,10 +39,11 @@ class Name
     public function getNewFileName(string $destinationFile)
     {
         $fileInfo = $this->getPathInfo($destinationFile);
-        if ($this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT)->isExist($destinationFile)) {
+        $directory = $this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
+        if ($directory->isExist($destinationFile)) {
             $index = 1;
             $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while ($this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT)->isExist($fileInfo['dirname'] . '/' . $baseName)) {
+            while ($directory->isExist($fileInfo['dirname'] . '/' . $baseName)) {
                 $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
                 $index++;
             }
