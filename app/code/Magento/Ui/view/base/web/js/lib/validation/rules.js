@@ -1102,7 +1102,6 @@ define([
             },
             $.mage.__('The Date of Birth should not be greater than today.')
         ],
-        /* detect chars that would require more than 3 bytes */
         'validate-no-utf8mb4-characters': [
             function (value) {
                 var validator = this,
