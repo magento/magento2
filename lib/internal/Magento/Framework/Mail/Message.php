@@ -22,8 +22,6 @@ class Message implements MailMessageInterface
     protected $zendMessage;
 
     /**
-     * Message type
-     *
      * @var string
      */
     private $messageType = Mime::TYPE_TEXT;
