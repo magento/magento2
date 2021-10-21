@@ -49,18 +49,18 @@ class LayoutProcessor implements LayoutProcessorInterface
     {
         if (!$this->payLaterConfig->isEnabled(PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT)) {
             unset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
-                ['children']['payment']['children']['payments-list']['children']['before-place-order']['children']
+                ['children']['payment']['children']['payments-list']['children']['paypal-method-extra-content']['children']
                 ['paylater-place-order']);
 
             return $jsLayout;
         }
 
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
-            ['children']['payment']['children']['payments-list']['children']['before-place-order']['children']
+            ['children']['payment']['children']['payments-list']['children']['paypal-method-extra-content']['children']
             ['paylater-place-order'])
         ) {
             $payLaterPlaceOrder = &$jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
-            ['children']['payment']['children']['payments-list']['children']['before-place-order']['children']
+            ['children']['payment']['children']['payments-list']['children']['paypal-method-extra-content']['children']
             ['paylater-place-order'];
 
             $componentConfig = $payLaterPlaceOrder['config'] ?? [];
@@ -72,6 +72,9 @@ class LayoutProcessor implements LayoutProcessorInterface
                 ]
             ];
             $config = array_replace($defaultConfig, $componentConfig);
+            $displayAmount = $config['displayAmount'] ?? false;
+            $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
+                ? false : true;
 
             $attributes = $this->payLaterConfig->getSectionConfig(
                 PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT,

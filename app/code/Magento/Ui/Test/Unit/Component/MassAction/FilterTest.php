@@ -33,17 +33,17 @@ use PHPUnit\Framework\TestCase;
 class FilterTest extends TestCase
 {
     /**
-     * MockObject
+     * @var MockObject
      */
     private $requestMock;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $uiComponentFactoryMock;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $filterBuilderMock;
 
@@ -58,27 +58,27 @@ class FilterTest extends TestCase
     private $objectManager;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $dataProviderMock;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $abstractDbMock;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $searchResultMock;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $uiComponentMock;
 
     /**
-     * MockObject
+     * @var MockObject
      */
     private $contextMock;
 
@@ -88,7 +88,7 @@ class FilterTest extends TestCase
     private $resourceAbstractDbMock;
 
     /**
-     * Set up
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -139,19 +139,31 @@ class FilterTest extends TestCase
      * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
+     *
+     * @return void
      * @throws LocalizedException
      * @dataProvider applySelectionOnTargetProviderDataProvider
      */
-    public function testApplySelectionOnTargetProvider($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
-    {
-        $this->setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected);
+    public function testApplySelectionOnTargetProvider(
+        $selectedIds,
+        $excludedIds,
+        $filterExpected,
+        $conditionExpected
+    ): void {
+        $this->setUpApplySelection($filterExpected, $conditionExpected);
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive([Filter::SELECTED_PARAM], [Filter::EXCLUDED_PARAM])
+            ->willReturnOnConsecutiveCalls($selectedIds, $excludedIds);
         $this->filter->applySelectionOnTargetProvider();
     }
 
     /**
-     * Data provider for testApplySelectionOnTargetProvider
+     * Data provider for testApplySelectionOnTargetProvider.
+     *
+     * @return array
      */
-    public function applySelectionOnTargetProviderDataProvider()
+    public function applySelectionOnTargetProviderDataProvider(): array
     {
         return [
             [[1, 2, 3], 'false', 0, 'in'],
@@ -162,9 +174,9 @@ class FilterTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @return void
      */
-    public function testApplySelectionOnTargetProviderException()
+    public function testApplySelectionOnTargetProviderException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->contextMock->expects($this->any())
@@ -189,14 +201,10 @@ class FilterTest extends TestCase
         $this->filterBuilderMock->expects($this->any())
             ->method('setField')
             ->willReturn($this->filterBuilderMock);
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with(Filter::SELECTED_PARAM)
-            ->willReturn([1]);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with(Filter::EXCLUDED_PARAM)
-            ->willReturn([]);
+            ->withConsecutive([Filter::SELECTED_PARAM], [Filter::EXCLUDED_PARAM])
+            ->willReturnOnConsecutiveCalls([1], []);
         $this->dataProviderMock->expects($this->any())
             ->method('addFilter')
             ->with($filterMock)
@@ -205,30 +213,29 @@ class FilterTest extends TestCase
     }
 
     /**
-     * Run test for getCollection method with SearchResultInterface
+     * Run test for getCollection method with SearchResultInterface.
      *
      * @param int[]|bool $selectedIds
      * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
-     * @throws LocalizedException
+     *
+     * @return void
      * @dataProvider applySelectionOnTargetProviderDataProvider
      */
-    public function testGetCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
+    public function testGetCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected): void
     {
-        $this->setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected);
-        $this->requestMock->expects($this->at(4))
+        $this->setUpApplySelection($filterExpected, $conditionExpected);
+        $this->requestMock
             ->method('getParam')
-            ->with('namespace')
-            ->willReturn('');
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with(Filter::SELECTED_PARAM)
-            ->willReturn($selectedIds);
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with(Filter::EXCLUDED_PARAM)
-            ->willReturn($excludedIds);
+            ->withConsecutive(
+                [Filter::SELECTED_PARAM],
+                [Filter::EXCLUDED_PARAM],
+                [Filter::SELECTED_PARAM],
+                [Filter::EXCLUDED_PARAM],
+                ['namespace']
+            )
+            ->willReturnOnConsecutiveCalls($selectedIds, $excludedIds, $selectedIds, $excludedIds, '');
         $this->abstractDbMock->expects($this->once())
             ->method('getResource')
             ->willReturn($this->resourceAbstractDbMock);
@@ -245,11 +252,16 @@ class FilterTest extends TestCase
      * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
-     * @throws LocalizedException
+     *
+     * @return void
      * @dataProvider applySelectionOnTargetProviderDataProvider
      */
-    public function testGetCollectionWithCollection($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
-    {
+    public function testGetCollectionWithCollection(
+        $selectedIds,
+        $excludedIds,
+        $filterExpected,
+        $conditionExpected
+    ): void {
         $this->dataProviderMock = $this->createMock(AbstractDataProvider::class);
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
@@ -258,7 +270,7 @@ class FilterTest extends TestCase
             ->method('getAllIds')
             ->willReturn([1, 2, 3]);
 
-        $this->setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected);
+        $this->setUpApplySelection($filterExpected, $conditionExpected);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -281,20 +293,24 @@ class FilterTest extends TestCase
     }
 
     /**
-     * This tests the method prepareComponent()
+     * This tests the method prepareComponent().
+     *
+     * @return void
      */
-    public function testPrepareComponent()
+    public function testPrepareComponent(): void
     {
         $result = $this->filter->prepareComponent($this->uiComponentMock);
         $this->assertNull($result);
     }
 
     /**
-     * This tests the method getComponent()
+     * This tests the method getComponent().
+     *
+     * @return void
      */
-    public function testGetComponent()
+    public function testGetComponent(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
             ->with('namespace')
             ->willReturn('');
@@ -302,9 +318,11 @@ class FilterTest extends TestCase
     }
 
     /**
-     * This tests the method getComponentRefererUrl()
+     * This tests the method getComponentRefererUrl().
+     *
+     * @return void
      */
-    public function testGetComponentRefererUrlIsNotNull()
+    public function testGetComponentRefererUrlIsNotNull(): void
     {
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
@@ -319,9 +337,11 @@ class FilterTest extends TestCase
     }
 
     /**
-     * This tests the method getComponentRefererUrl()
+     * This tests the method getComponentRefererUrl().
+     *
+     * @return void
      */
-    public function testGetComponentRefererUrlIsNull()
+    public function testGetComponentRefererUrlIsNull(): void
     {
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
@@ -330,14 +350,14 @@ class FilterTest extends TestCase
     }
 
     /**
-     * Apply mocks for current parameters from datasource
+     * Apply mocks for current parameters from datasource.
      *
-     * @param int[]|bool $selectedIds
-     * @param int[]|bool $excludedIds
      * @param int $filterExpected
      * @param string $conditionExpected
+     *
+     * @return void
      */
-    private function setUpApplySelection($selectedIds, $excludedIds, $filterExpected, $conditionExpected)
+    private function setUpApplySelection($filterExpected, $conditionExpected): void
     {
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
@@ -351,14 +371,6 @@ class FilterTest extends TestCase
             ->method('getItems')
             ->willReturn([new DataObject(['id' => 1])]);
         $filterMock = $this->createMock(ApiFilter::class);
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with(Filter::SELECTED_PARAM)
-            ->willReturn($selectedIds);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with(Filter::EXCLUDED_PARAM)
-            ->willReturn($excludedIds);
         $this->dataProviderMock->expects($this->exactly($filterExpected))
             ->method('addFilter')
             ->with($filterMock);

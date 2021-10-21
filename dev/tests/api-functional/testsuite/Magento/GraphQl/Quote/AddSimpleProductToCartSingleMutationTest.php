@@ -200,6 +200,39 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     * @dataProvider addProductNotAssignedToWebsiteDataProvider
+     * @param string $reservedOrderId
+     * @param string $sku
+     * @param array $headerMap
+     */
+    public function testAddProductNotAssignedToWebsite(string $reservedOrderId, string $sku, array $headerMap)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        self::assertEmpty($response['addProductsToCart']['cart']['items']);
+        self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
+        self::assertCount(1, $response['addProductsToCart']['user_errors']);
+        self::assertStringContainsString($sku, $response['addProductsToCart']['user_errors'][0]['message']);
+        self::assertEquals('PRODUCT_NOT_FOUND', $response['addProductsToCart']['user_errors'][0]['code']);
+    }
+
+    /**
+     * @return array
+     */
+    public function addProductNotAssignedToWebsiteDataProvider(): array
+    {
+        return [
+            ['test_order_1', 'simple-2', []],
+            ['test_order_1', 'simple-2', ['Store' => 'default']],
+            ['test_order_2', 'simple-1', ['Store' => 'fixture_second_store']],
+        ];
+    }
+
+    /**
      * @return array
      */
     public function wrongSkuDataProvider(): array
@@ -246,7 +279,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         string $maskedQuoteId,
         int $qty,
         string $sku,
-        string $customizableOptions
+        string $customizableOptions = ''
     ): string {
         return <<<MUTATION
 mutation {
@@ -279,6 +312,7 @@ mutation {
             }
         },
         user_errors {
+            code
             message
         }
     }
