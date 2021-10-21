@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $targetDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class);
 /** @var $rootDirectory \Magento\Framework\Filesystem\Directory\WriteInterface */
-$rootDirectory = $targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
+$rootDirectory = $targetDirectory->getDirectoryWrite(DirectoryList::TMP);
 
 $filesToCopy = [
     'empty.png',
