@@ -29,7 +29,7 @@
         "laminas/laminas-code": "~4.4.3",
         "laminas/laminas-escaper": "~2.8.0",
         "laminas/laminas-http": "^2.6.0",
-        "laminas/laminas-mail": "^2.9.0",
+        "laminas/laminas-mail": "^2.11.0",
         "laminas/laminas-mime": "^2.8.0",
         "laminas/laminas-stdlib": "^3.2.1",
         "laminas/laminas-uri": "^2.5.1",
