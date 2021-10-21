@@ -212,10 +212,10 @@ class SdkUrl
      */
     private function getAllowedFunding(): string
     {
-        $payLaterActive = (boolean)$this->config->getPayLaterConfigValue('experience_active');
+        $payLaterActive = (bool)$this->config->getPayLaterConfigValue('experience_active');
 
         // If Pay Later is enabled, then only paylater parameter will go in enable-funding parameter list
-        if ($payLaterActive == false) {
+        if ($payLaterActive === false) {
             unset($this->supportedPaymentMethods['paylater']);
         }
         return implode(',', $this->supportedPaymentMethods);
