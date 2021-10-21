@@ -34,6 +34,9 @@ use Psr\Log\LoggerInterface;
  * Test for Elasticsearch client
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ElasticsearchTest extends TestCase
 {
@@ -159,6 +162,13 @@ class ElasticsearchTest extends TestCase
             ->willReturn($this->client);
         $this->fieldMapper->expects($this->any())
             ->method('getAllAttributesTypes')
+            ->with(
+                [
+                    'entityType' => 'product',
+                    'websiteId' => 1,
+                    'storeId' => 1,
+                ]
+            )
             ->willReturn(
                 [
                     'name' => [
