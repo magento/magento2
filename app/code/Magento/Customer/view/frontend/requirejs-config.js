@@ -16,5 +16,12 @@ var config = {
             'Magento_Customer/address': 'Magento_Customer/js/address',
             'Magento_Customer/change-email-password': 'Magento_Customer/js/change-email-password'
         }
+    },
+    config: {
+        mixins: {
+            'Magento_Customer/js/customer-data': {
+                'Magento_Customer/js/customer-data-mixin': true
+            }
+        }
     }
 };
