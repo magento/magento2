@@ -234,14 +234,16 @@ define([
                     tierPrice = this.options.priceConfig.tierPrices[i].price;
                 }
             }
-            prices = {
-                'prices': {
-                    'finalPrice': {
-                        'amount': tierPrice - originalPrice
+            if (tierPrice) {
+                prices = {
+                    'prices': {
+                        'finalPrice': {
+                            'amount': tierPrice - originalPrice
+                        }
                     }
-                }
-            };
-            this.updatePrice(prices);
+                };
+                this.updatePrice(prices);
+            }
         }
     });
 
