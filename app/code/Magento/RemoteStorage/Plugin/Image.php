@@ -192,7 +192,7 @@ class Image
             $this->tmpDirectoryWrite->create();
             $tmpPath = $this->storeTmpName($filePath);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
+            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) !== false
                 ? $tmpPath
                 : $filePath;
         }
