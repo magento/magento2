@@ -28,7 +28,7 @@ define([
         ajaxPrefilterCall: function () {
             var currentRequests = {};
 
-            $.ajaxPrefilter(function( newOptions, originalOptions, jqXHR ) {
+            $.ajaxPrefilter(function ( newOptions, originalOptions, jqXHR ) {
 
                 if ( currentRequests[ newOptions.url ] ) {
                     currentRequests[ newOptions.url ].abort();
