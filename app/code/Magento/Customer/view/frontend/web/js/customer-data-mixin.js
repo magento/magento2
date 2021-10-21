@@ -28,17 +28,17 @@ define([
         ajaxPrefilterCall: function () {
             var currentRequests = {};
 
-            $.ajaxPrefilter(function ( newOptions, originalOptions, jqXHR ) {
+            $.ajaxPrefilter(function (newOptions, originalOptions, jqXHR) {
 
-                if ( currentRequests[ newOptions.url ] ) {
-                    currentRequests[ newOptions.url ].abort();
+                if (currentRequests[newOptions.url]) {
+                    currentRequests[newOptions.url].abort();
 
                     // prevent duplicate ajax call for cart quantity
                     if (originalOptions.data.sections === 'messages') {
                         jqXHR.abort();
                     }
                 }
-                currentRequests[ newOptions.url ] = jqXHR;
+                currentRequests[newOptions.url] = jqXHR;
             });
         }
     };
