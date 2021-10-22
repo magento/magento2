@@ -83,6 +83,11 @@ class Configurable implements DimensionalIndexerInterface
     private $baseSelectProcessor;
 
     /**
+     * @var PopulateIndexTableInterface
+     */
+    private $populateOptionsIndexTable;
+
+    /**
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
@@ -91,9 +96,9 @@ class Configurable implements DimensionalIndexerInterface
      * @param BasePriceModifier $basePriceModifier
      * @param bool $fullReindexAction
      * @param string $connectionName
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param BaseSelectProcessorInterface|null $baseSelectProcessor
-     *
+     * @param PopulateIndexTableInterface|null $populateOptionsIndexTable
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,7 +111,8 @@ class Configurable implements DimensionalIndexerInterface
         $fullReindexAction = false,
         $connectionName = 'indexer',
         ScopeConfigInterface $scopeConfig = null,
-        ?BaseSelectProcessorInterface $baseSelectProcessor = null
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null,
+        ?PopulateIndexTableInterface $populateOptionsIndexTable = null
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
@@ -119,6 +125,8 @@ class Configurable implements DimensionalIndexerInterface
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->baseSelectProcessor = $baseSelectProcessor ?:
             ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
+        $this->populateOptionsIndexTable = $populateOptionsIndexTable
+            ?: ObjectManager::getInstance()->get(PopulateIndexTableInterface::class);
     }
 
     /**
@@ -228,7 +236,7 @@ class Configurable implements DimensionalIndexerInterface
         if ($entityIds !== null) {
             $select->where('le.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
         }
-        $this->tableMaintainer->insertFromSelect($select, $temporaryOptionsTableName, []);
+        $this->populateOptionsIndexTable->execute($select, $temporaryOptionsTableName);
     }
 
     /**
