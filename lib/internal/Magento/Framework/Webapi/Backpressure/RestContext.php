@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Webapi\Model\Backpressure;
+namespace Magento\Framework\Webapi\Backpressure;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\RequestInterface;

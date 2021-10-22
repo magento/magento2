@@ -53,4 +53,22 @@
                 type="Magento\Checkout\Model\CaptchaPaymentProcessingRateLimiter" />
     <preference for="Magento\Checkout\Api\PaymentSavingRateLimiterInterface"
                 type="Magento\Checkout\Model\CaptchaPaymentSavingRateLimiter" />
+    <type name="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="checkout" xsi:type="object">
+                    Magento\Checkout\Model\Backpressure\WebapiRequestTypeExtractor
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="checkout" xsi:type="object">
+                    Magento\Checkout\Model\Backpressure\CheckoutLimitConfigManager
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -1985,4 +1985,6 @@
                 type="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager"/>
     <preference for="Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface"
                 type="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor"/>
+    <preference for="Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface"
+                type="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor" />
 </config>
