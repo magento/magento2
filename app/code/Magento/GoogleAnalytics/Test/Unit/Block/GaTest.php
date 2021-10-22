@@ -150,10 +150,8 @@ class GaTest extends TestCase
             ],
             'currency' => 'USD'
         ];
-        echo json_encode($expectedResult);
         $this->gaBlock->setOrderIds([1, 2]);
         $tempResults = $this->gaBlock->getOrdersTrackingData();
-        echo json_encode($tempResults);
         $this->assertEquals($expectedResult, $tempResults);
     }
 
