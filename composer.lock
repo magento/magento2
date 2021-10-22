@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03cc7c377250d99d2ba423f06d1b836d",
+    "content-hash": "ae2765feb0e420fd5062ef9d649a63a7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3546,6 +3546,11 @@
         {
             "name": "magento/composer",
             "version": "1.8.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/composer.git",
+                "reference": "92b2180481996fd467af82947bd0ce17511512c0"
+            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/composer/zipball/92b2180481996fd467af82947bd0ce17511512c0",
@@ -3572,6 +3577,10 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "support": {
+                "issues": "https://github.com/magento/composer/issues",
+                "source": "https://github.com/magento/composer/tree/develop"
+            },
             "time": "2021-10-21T20:27:05+00:00"
         },
         {
@@ -3693,7 +3702,12 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "dev-master",
+            "version": "1.14.6-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/zf1.git",
+                "reference": "c8ab3657c6b5048c9956ac928c4274c023b3d0af"
+            },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/zf1/zipball/c8ab3657c6b5048c9956ac928c4274c023b3d0af",
@@ -3731,6 +3745,10 @@
                 "ZF1",
                 "framework"
             ],
+            "support": {
+                "issues": "https://github.com/magento/zf1/issues",
+                "source": "https://github.com/magento/zf1/tree/1.14.6-beta1"
+            },
             "time": "2021-09-15T19:21:56+00:00"
         },
         {
@@ -11471,6 +11489,10 @@
             ],
             "description": "Copy/Paste Detector (CPD) for PHP code.",
             "homepage": "https://github.com/sebastianbergmann/phpcpd",
+            "support": {
+                "issues": "https://github.com/sebastianbergmann/phpcpd/issues",
+                "source": "https://github.com/sebastianbergmann/phpcpd/tree/6.0.3"
+            },
             "funding": [
                 {
                     "url": "https://github.com/sebastianbergmann",
@@ -12484,22 +12506,22 @@
     ],
     "aliases": [
         {
-            "alias": "1.8.0",
-            "alias_normalized": "1.8.0.0",
+            "package": "magento/composer",
             "version": "1.8.9999999.9999999-dev",
-            "package": "magento/composer"
+            "alias": "1.8.0",
+            "alias_normalized": "1.8.0.0"
         },
         {
+            "package": "magento/zendframework1",
+            "version": "1.14.6.0-beta1",
             "alias": "1.14.6",
-            "alias_normalized": "1.14.6.0",
-            "version": "9999999-dev",
-            "package": "magento/zendframework1"
+            "alias_normalized": "1.14.6.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "magento/zendframework1": 20
+        "magento/zendframework1": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -12524,5 +12546,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
