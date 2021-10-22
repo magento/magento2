@@ -6,10 +6,13 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\App\BackpressureEnforcerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Webapi\Model\Backpressure\BackpressureContextFactory;
 
 /**
  * This class is responsible for validating the request
@@ -36,6 +39,10 @@ class RequestValidator
      */
     private $authorization;
 
+    private BackpressureContextFactory $backpressureContextFactory;
+
+    private BackpressureEnforcerInterface $backpressureEnforcer;
+
     /**
      * Initialize dependencies
      *
@@ -43,17 +50,25 @@ class RequestValidator
      * @param Router $router
      * @param StoreManagerInterface $storeManager
      * @param Authorization $authorization
+     * @param BackpressureContextFactory|null $backpressureContextFactory
+     * @param BackpressureEnforcerInterface|null $backpressureEnforcer
      */
     public function __construct(
         RestRequest $request,
         Router $router,
         StoreManagerInterface $storeManager,
-        Authorization $authorization
+        Authorization $authorization,
+        ?BackpressureContextFactory $backpressureContextFactory = null,
+        ?BackpressureEnforcerInterface $backpressureEnforcer = null
     ) {
         $this->request = $request;
         $this->router = $router;
         $this->storeManager = $storeManager;
         $this->authorization = $authorization;
+        $this->backpressureContextFactory = $backpressureContextFactory
+            ?? ObjectManager::getInstance()->get(BackpressureContextFactory::class);
+        $this->backpressureEnforcer = $backpressureEnforcer
+            ?? ObjectManager::getInstance()->get(BackpressureEnforcerInterface::class);
     }
 
     /**
@@ -69,6 +84,15 @@ class RequestValidator
         $route = $this->router->match($this->request);
         if ($route->isSecure() && !$this->request->isSecure()) {
             throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
+        }
+
+        $context = $this->backpressureContextFactory->create(
+            $route->getServiceClass(),
+            $route->getServiceMethod(),
+            $route->getRoutePath()
+        );
+        if ($context) {
+            $this->backpressureEnforcer->enforce($context);
         }
     }
 

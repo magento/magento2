@@ -111,4 +111,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="backpressureValidator" xsi:type="object">
+                    Magento\GraphQl\Model\Backpressure\BackpressureFieldValidator
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor"/>
 </config>

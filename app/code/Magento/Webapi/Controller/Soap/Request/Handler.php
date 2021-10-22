@@ -9,6 +9,7 @@ namespace Magento\Webapi\Controller\Soap\Request;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
@@ -17,6 +18,7 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Request as SoapRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
+use Magento\Webapi\Model\Backpressure\BackpressureContextFactory;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Webapi\Model\ServiceMetadata;
@@ -77,6 +79,10 @@ class Handler
      */
     private $paramsOverrider;
 
+    private BackpressureContextFactory $backpressureContextFactory;
+
+    private BackpressureEnforcerInterface $backpressureEnforcer;
+
     /**
      * Initialize dependencies.
      *
@@ -89,6 +95,8 @@ class Handler
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
      * @param ParamsOverrider|null $paramsOverrider
+     * @param BackpressureContextFactory|null $backpressureContextFactory
+     * @param BackpressureEnforcerInterface|null $backpressureEnforcer
      */
     public function __construct(
         SoapRequest $request,
@@ -99,7 +107,9 @@ class Handler
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
-        ?ParamsOverrider $paramsOverrider = null
+        ?ParamsOverrider $paramsOverrider = null,
+        ?BackpressureContextFactory $backpressureContextFactory = null,
+        ?BackpressureEnforcerInterface $backpressureEnforcer = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -110,6 +120,10 @@ class Handler
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->paramsOverrider = $paramsOverrider ?? ObjectManager::getInstance()->get(ParamsOverrider::class);
+        $this->backpressureContextFactory = $backpressureContextFactory
+            ?? ObjectManager::getInstance()->get(BackpressureContextFactory::class);
+        $this->backpressureEnforcer = $backpressureEnforcer
+            ?? ObjectManager::getInstance()->get(BackpressureEnforcerInterface::class);
     }
 
     /**
@@ -132,6 +146,16 @@ class Handler
         // check if the operation is a secure operation & whether the request was made in HTTPS
         if ($serviceMethodInfo[ServiceMetadata::KEY_IS_SECURE] && !$this->_request->isSecure()) {
             throw new WebapiException(__("Operation allowed only in HTTPS"));
+        }
+
+        //Backpressure enforcement
+        $context = $this->backpressureContextFactory->create(
+            $serviceMethodInfo['class'],
+            $serviceMethodInfo['method'],
+            $operation
+        );
+        if ($context) {
+            $this->backpressureEnforcer->enforce($context);
         }
 
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {

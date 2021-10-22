@@ -1783,6 +1783,9 @@
                 <item name="http_method_validator" xsi:type="object">
                     Magento\Framework\App\Request\HttpMethodValidator
                 </item>
+                <item name="backpressure" xsi:type="object">
+                    Magento\Framework\App\Request\BackpressureValidator
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -1958,7 +1961,9 @@
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
+                <item name="searchCriteriaValidator" xsi:type="object">
+                    Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator
+                </item>
             </argument>
         </arguments>
     </type>
@@ -1972,4 +1977,12 @@
             <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\App\BackpressureEnforcerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\SlidingWindowEnforcer"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\RequestLoggerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\CacheRequestLogger"/>
+    <preference for="Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface"
+                type="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager"/>
+    <preference for="Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface"
+                type="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor"/>
 </config>

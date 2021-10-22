@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\Framework\App\Backpressure\SlidingWindow;
+
+/**
+ * Limit configuration.
+ */
+class LimitConfig
+{
+    private int $limit;
+
+    private int $period;
+
+    /**
+     * @param int $limit
+     * @param int $period
+     */
+    public function __construct(int $limit, int $period)
+    {
+        $this->limit = $limit;
+        $this->period = $period;
+    }
+
+    /**
+     * Requests per period.
+     *
+     * @return int
+     */
+    public function getLimit(): int
+    {
+        return $this->limit;
+    }
+
+    /**
+     * Period in seconds.
+     *
+     * @return int
+     */
+    public function getPeriod(): int
+    {
+        return $this->period;
+    }
+}
