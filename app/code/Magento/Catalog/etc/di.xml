@@ -85,9 +85,6 @@
         </arguments>
         <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
     </type>
-    <type name="Magento\Catalog\Block\Product\Gallery">
-        <plugin name="galleryImageCopy" type="Magento\Catalog\Plugin\Block\Gallery\GalleryImageCopy" />
-    </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu" />
     </type>
