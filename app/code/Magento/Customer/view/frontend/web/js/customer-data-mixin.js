@@ -23,7 +23,7 @@ define([
         },
 
         /**
-         * Cancels duplicate ajax request to the server
+         * Cancels duplicate ajax request for customer/section/load
          */
         ajaxPrefilterCall: function () {
             var currentRequests = {};
