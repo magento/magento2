@@ -148,6 +148,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get conversion path to js src
+     * @deprecated
+     * @return string
+     */
+    public function getConversionJsSrc()
+    {
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
+    }
+
+    /**
      * Get conversion img src
      *
      * @return string
