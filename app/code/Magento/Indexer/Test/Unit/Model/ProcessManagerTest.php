@@ -35,6 +35,10 @@ class ProcessManagerTest extends TestCase
             $processManager->execute($userFunctions);
             $this->fail('Exception was not handled');
         } catch (\RuntimeException $exception) {
+            if (false !== strpos($exception->getMessage(), 'Warning: pcntl_fork(): Error 12')) {
+                $this->markTestSkipped('Cannot allocate memory during running pcntl_fork');
+            }
+
             $this->assertEquals('Fail in child process', $exception->getMessage());
         }
     }
@@ -117,6 +121,10 @@ class ProcessManagerTest extends TestCase
         try {
             $processManager->execute($userFunctions);
         } catch (\RuntimeException $exception) {
+            if (false !== strpos($exception->getMessage(), 'Warning: pcntl_fork(): Error 12')) {
+                $this->markTestSkipped('Cannot allocate memory during running pcntl_fork');
+            }
+
             $this->fail('Exception was not handled');
         }
     }
