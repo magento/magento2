@@ -159,6 +159,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Get conversion img src
+     * @deprecated
+     * @return string
+     */
+    public function getConversionImgSrc()
+    {
+        return sprintf(
+            $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
+            $this->getConversionId(),
+            $this->getConversionLabel()
+        );
+    }
+
+    /**
+     * Get conversion js src
      *
      * @return string
      */
