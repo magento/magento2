@@ -46,7 +46,7 @@
         "laminas/laminas-feed": "^2.13.0",
         "laminas/laminas-http": "^2.6.0",
         "laminas/laminas-json": "^3.2.0",
-        "laminas/laminas-mail": "^2.9.0",
+        "laminas/laminas-mail": "^2.11.0",
         "laminas/laminas-mime": "^2.8.0",
         "laminas/laminas-modulemanager": "^2.7",
         "laminas/laminas-mvc": "^3.2.0",
