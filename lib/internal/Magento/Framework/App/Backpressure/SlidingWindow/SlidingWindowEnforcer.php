@@ -48,7 +48,7 @@ class SlidingWindowEnforcer implements BackpressureEnforcerInterface
             $limit->getPeriod() * 3//keep data for at least last 3 time slots
         );
 
-        if ($count < $limit->getLimit()) {
+        if ($count <= $limit->getLimit()) {
             //Try to compare to a % of requests from previous time slot
             $prevCount = $this->logger->getFor($context, $timeSlot - $limit->getPeriod());
             if ($prevCount != null) {

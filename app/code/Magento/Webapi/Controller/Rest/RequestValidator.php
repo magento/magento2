@@ -6,6 +6,7 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
@@ -13,6 +14,7 @@ use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 /**
  * This class is responsible for validating the request
@@ -75,7 +77,7 @@ class RequestValidator
      * Validate request
      *
      * @throws AuthorizationException
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws WebapiException
      * @return void
      */
     public function validate()
@@ -83,7 +85,7 @@ class RequestValidator
         $this->checkPermissions();
         $route = $this->router->match($this->request);
         if ($route->isSecure() && !$this->request->isSecure()) {
-            throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
+            throw new WebapiException(__('Operation allowed only in HTTPS'));
         }
 
         $context = $this->backpressureContextFactory->create(
@@ -92,7 +94,11 @@ class RequestValidator
             $route->getRoutePath()
         );
         if ($context) {
-            $this->backpressureEnforcer->enforce($context);
+            try {
+                $this->backpressureEnforcer->enforce($context);
+            } catch (BackpressureExceededException $exception) {
+                throw new WebapiException(__('Something went wrong, please try again later'));
+            }
         }
     }
 

@@ -9,6 +9,7 @@ namespace Magento\Webapi\Controller\Soap\Request;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Webapi\Authorization;
@@ -155,7 +156,11 @@ class Handler
             $operation
         );
         if ($context) {
-            $this->backpressureEnforcer->enforce($context);
+            try {
+                $this->backpressureEnforcer->enforce($context);
+            } catch (BackpressureExceededException $exception) {
+                throw new WebapiException(__('Something went wrong, please try again later'));
+            }
         }
 
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {

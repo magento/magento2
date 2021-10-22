@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\BackpressureEnforcerInterface;
 use Magento\Framework\App\Request\Backpressure\ContextFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -61,7 +62,11 @@ class BackpressureValidator implements ValidatorInterface
         ) {
             $context = $this->contextFactory->create($action);
             if ($context) {
-                $this->enforcer->enforce($context);
+                try {
+                    $this->enforcer->enforce($context);
+                } catch (BackpressureExceededException $exception) {
+                    throw new LocalizedException(__('Something went wrong, please try again later'), $exception);
+                }
             }
         }
     }
