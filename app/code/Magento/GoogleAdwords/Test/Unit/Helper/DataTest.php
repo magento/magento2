@@ -130,6 +130,48 @@ class DataTest extends TestCase
         );
         $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
+    /**
+     * @deprecated
+     */
+    public function testGetConversionImgSrc()
+    {
+        $conversionId = 123;
+        $label = 'LabEl';
+        $imgSrc = sprintf(
+            'https://www.googleadservices.com/pagead/conversion/%s/?label=%s&amp;guid=ON&amp;script=0',
+            $conversionId,
+            $label
+        );
+        $this->_scopeConfigMock->expects(
+            $this->at(0)
+        )->method(
+            'getValue'
+        )->with(
+            Data::XML_PATH_CONVERSION_IMG_SRC,
+            'default'
+        )->willReturn(
+            $imgSrc
+        );
+        $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
+    }
+
+    /**
+     * @deprecated
+     */
+    public function testGetConversionJsSrc()
+    {
+        $jsSrc = 'some-js-src';
+        $this->_scopeConfigMock->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            Data::XML_PATH_CONVERSION_JS_SRC
+        )->willReturn(
+            $jsSrc
+        );
+        $this->assertEquals($jsSrc, $this->_helper->getConversionJsSrc());
+    }
 
     /**
      * @return array
