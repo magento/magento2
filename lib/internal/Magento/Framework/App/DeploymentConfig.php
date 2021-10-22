@@ -19,6 +19,9 @@ use Magento\Framework\Phrase;
  */
 class DeploymentConfig
 {
+    private const MAGENTO_ENV_PREFIX = 'MAGENTO_DC_';
+    private const ENV_NAME_PATTERN = '~^%env\(\s*(?<name>\w+)\s*(,\s*"(?<default>[^"]+)")?\)%$~';
+
     /**
      * Configuration reader
      *
@@ -141,6 +144,21 @@ class DeploymentConfig
     }
 
     /**
+     * Get additional configuration from env variable MAGENTO_DC__OVERRIDE
+     * Data should be JSON encoded
+     *
+     * @return array
+     */
+    private function getEnvOverride() : array
+    {
+        $env = getenv(self::MAGENTO_ENV_PREFIX . '_OVERRIDE');
+        if (!empty($env)) {
+            return json_decode($env, true) ?? [];
+        }
+        return [];
+    }
+
+    /**
      * Loads the configuration data
      *
      * @return void
@@ -150,10 +168,11 @@ class DeploymentConfig
     private function load()
     {
         if (empty($this->data)) {
-            $this->data = $this->reader->load();
-            if ($this->overrideData) {
-                $this->data = array_replace($this->data, $this->overrideData);
-            }
+            $this->data = array_replace(
+                $this->reader->load(),
+                $this->overrideData ?? [],
+                $this->getEnvOverride()
+            );
             // flatten data for config retrieval using get()
             $this->flatData = $this->flattenParams($this->data);
         }
@@ -187,9 +206,25 @@ class DeploymentConfig
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new RuntimeException(new Phrase("Key collision '%1' is already defined.", [$newPath]));
             }
-            $flattenResult[$newPath] = $param;
+
             if (is_array($param)) {
+                $flattenResult[$newPath] = $param;
                 $this->flattenParams($param, $newPath, $flattenResult);
+            } else  {
+                // allow reading values from env variables
+                // value need to be specified in %env(NAME, "default value")% format
+                // like %env(DB_PASSWORD)%, %env(DB_NAME, "test")%
+                if (preg_match(self::ENV_NAME_PATTERN, $param,$matches)) {
+                    $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
+                }
+
+                // allow reading values from env variables by convention
+                // MAGENTO_DC_{path}, like db/connection/default/host =>
+                // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+                $envName = self::MAGENTO_ENV_PREFIX . strtoupper(str_replace(['/'], ['__'], $newPath));
+                $param = getenv($envName) ?: $param;
+
+                $flattenResult[$newPath] = $param;
             }
         }
 
