@@ -104,6 +104,9 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Block\Product\Gallery">
+        <plugin name="galleryImageCopy" type="Magento\RemoteStorage\Plugin\GalleryImageCopy" />
+    </type>
     <type name="Magento\ImportExport\Model\Import">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
