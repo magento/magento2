@@ -87,8 +87,7 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($jsonBody['url'], $expectation['url']);
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertArrayNotHasKey('errorcode', $jsonBody);
-        $expectedFilePath = $this->mediaDirectory->getAbsolutePath(). $expectation['tmp_media_path'];
-        $this->mediaDirectory->isExist($expectedFilePath);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectory->getAbsolutePath()));
     }
 
     /**
@@ -285,6 +284,6 @@ class UploadTest extends AbstractBackendController
      */
     private function getFileAbsolutePath(string $tmpPath): string
     {
-        return $this->mediaDirectory->getAbsolutePath($this->config->getBaseTmpMediaPath() . $tmpPath);
+         return $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $tmpPath);;
     }
 }
