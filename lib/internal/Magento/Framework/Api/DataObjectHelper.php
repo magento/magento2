@@ -108,7 +108,7 @@ class DataObjectHelper
             }
             unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
         }
-        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel) {
+        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel && !isset($data['id'])) {// && !$dataObject instanceof ) {
             $simpleData = array_filter($data, function ($e) { return is_scalar($e) || is_null($e); });
             $dataObject->addData($simpleData);
             $data = array_filter(array_diff_key($data, $simpleData));
@@ -141,7 +141,6 @@ class DataObjectHelper
                 $dataObject->setCustomAttribute($key, $value);
             }
         }
-
         return $this;
     }
 
