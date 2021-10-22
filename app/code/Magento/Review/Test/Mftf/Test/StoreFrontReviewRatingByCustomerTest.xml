@@ -12,7 +12,7 @@
         <annotations>
             <features value="Review"/>
             <stories value="Review By Customers"/>
-            <title value="StoreFront Review Rating By Customers"/>
+            <title value="StoreFront Inconsistent product rating on category page"/>
             <description value="Check if product rating is the same at list, table view on PLP and customers account."/>
             <severity value="AVERAGE"/>
             <useCaseId value="ACP2E-111"/>
