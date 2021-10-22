@@ -100,6 +100,26 @@
                     <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
                 </field>
             </group>
+            <group id="backpressure" translate="label" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Rate limiting</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable rate limiting for placing orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="limit" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Requests limit per authenticated customer</label>
+                    <backend_model>Magento\Checkout\Model\Backpressure\Config\LimitValue</backend_model>
+                </field>
+                <field id="guest_limit" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Requests limit per guest</label>
+                    <backend_model>Magento\Checkout\Model\Backpressure\Config\LimitValue</backend_model>
+                </field>
+                <field id="period" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Counter resets in a ...</label>
+                    <source_model>Magento\Checkout\Model\Backpressure\Config\PeriodSource</source_model>
+                    <backend_model>Magento\Checkout\Model\Backpressure\Config\PeriodValue</backend_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>

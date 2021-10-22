@@ -18,13 +18,29 @@ use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
  */
 class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
 {
+    private CheckoutLimitConfigManager $config;
+
+    /**
+     * @param CheckoutLimitConfigManager $config
+     */
+    public function __construct(CheckoutLimitConfigManager $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @inheritDoc
      */
     public function extract(Field $field): ?string
     {
-        if ($field->getResolver() === SetPaymentAndPlaceOrder::class || $field->getResolver()  === PlaceOrder::class) {
+        if (($field->getResolver() === SetPaymentAndPlaceOrder::class
+                || $field->getResolver()  === PlaceOrder::class
+            )
+            && $this->config->isEnforcementEnabled()
+        ) {
             return CheckoutLimitConfigManager::REQUEST_TYPE_ID;
         }
+
+        return null;
     }
 }

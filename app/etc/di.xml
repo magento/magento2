@@ -1987,4 +1987,14 @@
                 type="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor"/>
     <preference for="Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface"
                 type="Magento\Framework\Webapi\Backpressure\CompositeRequestTypeExtractor" />
+    <type name="Magento\Framework\App\Request\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CacheRequestLogger">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
 </config>

@@ -15,12 +15,22 @@ use Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterf
  */
 class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInterface
 {
+    private CheckoutLimitConfigManager $config;
+
+    /**
+     * @param CheckoutLimitConfigManager $config
+     */
+    public function __construct(CheckoutLimitConfigManager $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @inheritDoc
      */
     public function extract(string $service, string $method, string $endpoint): ?string
     {
-        if ($method === 'savePaymentInformationAndPlaceOrder') {
+        if ($method === 'savePaymentInformationAndPlaceOrder' && $this->config->isEnforcementEnabled()) {
             return CheckoutLimitConfigManager::REQUEST_TYPE_ID;
         }
 

@@ -34,6 +34,12 @@
                 <receiver>general</receiver>
                 <template>checkout_payment_failed_template</template>
             </payment_failed>
+            <backpressure>
+                <enabled>0</enabled>
+                <limit>10</limit>
+                <guest_limit>50</guest_limit>
+                <period>60</period>
+            </backpressure>
         </checkout>
         <captcha>
             <frontend>

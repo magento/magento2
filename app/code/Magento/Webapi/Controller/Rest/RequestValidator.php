@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Webapi\Model\Backpressure\BackpressureContextFactory;
+use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
 
 /**
  * This class is responsible for validating the request
