@@ -1,7 +1,5 @@
 <?php
 /**
- * Google AdWords Data Helper
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -303,16 +301,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return (string) $this->_registry->registry(self::CONVERSION_VALUE_CURRENCY_REGISTRY_NAME);
         }
         return false;
-    }
-
-    /**
-     * Get Developer Id for Gtag
-     *
-     * @return string
-     */
-    public function getDeveloperId()
-    {
-        return self::DEVELOPER_ID;
     }
 
     /**
