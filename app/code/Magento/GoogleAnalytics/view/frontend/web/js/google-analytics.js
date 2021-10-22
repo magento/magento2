@@ -14,10 +14,6 @@ define([
      * @param {Object} config
      */
     return function (config) {
-        /**
-        *Magento Developer Id - Used for Gtag Configuration
-        */
-        var DEVELOPER_ID = 'dYjhlMD';
         var allowServices = false,
             allowedCookies,
             allowedWebsites,
@@ -61,7 +57,7 @@ define([
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('set', DEVELOPER_ID, true);
+                gtag('set', 'developer_id.dYjhlMD', true);
                 gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
                 // Purchase Event
                 if (config.ordersTrackingData.hasOwnProperty('currency')) {
