@@ -16,7 +16,6 @@ var config = {
     shim: {
         'jquery/jquery-migrate': ['jquery'],
         'jquery/jstree/jquery.hotkeys': ['jquery'],
-        'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
@@ -28,7 +27,6 @@ var config = {
     },
     paths: {
         'jquery/validate': 'jquery/jquery.validate',
-        'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
