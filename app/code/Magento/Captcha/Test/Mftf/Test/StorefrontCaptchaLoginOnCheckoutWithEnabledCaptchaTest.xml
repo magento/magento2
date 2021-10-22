@@ -12,7 +12,7 @@
         <annotations>
             <features value="Captcha"/>
             <stories value="Login on checkout With Enabled Captcha"/>
-            <title value="Captcha on checkout page"/>
+            <title value="Login on checkout page with enabled captcha"/>
             <description value="Customer should be able to login using Sign In link on checkout with enabled captcha"/>
             <severity value="MAJOR"/>
             <group value="captcha"/>
