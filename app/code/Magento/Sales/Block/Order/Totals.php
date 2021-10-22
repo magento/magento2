@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Block\Order;
 
+use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order;
 
 /**
@@ -144,18 +145,25 @@ class Totals extends \Magento\Framework\View\Element\Template
         /**
          * Add shipping
          */
-        if (!$source->getIsVirtual() && ((double)$source->getShippingAmount() || $source->getShippingDescription())) {
-            $label = __('Shipping & Handling');
-            if ($this->getSource()->getCouponCode() && !isset($this->_totals['discount'])) {
-                $label = __('Shipping & Handling (%1)', $this->getSource()->getCouponCode());
-            }
+        if (!$source->getIsVirtual()
+            && ($source->getShippingAmount() !== null
+                || $source->getShippingDescription())
+        ) {
+            $shippingLabel = __('Shipping & Handling');
 
-            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
+            if (!isset($this->_totals['discount'])) {
+                if ($source->getCouponCode() ) {
+                    $shippingLabel .= " ({$source->getCouponCode()})";
+                } else if ($source->getDiscountDescription()) {
+                    $shippingLabel .= " ({$source->getDiscountDescription()})";
+                }
+            }
+            $this->_totals['shipping'] = new DataObject(
                 [
                     'code' => 'shipping',
                     'field' => 'shipping_amount',
-                    'value' => $this->getSource()->getShippingAmount(),
-                    'label' => $label,
+                    'value' => $source->getShippingAmount(),
+                    'label' => $shippingLabel,
                 ]
             );
         }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 
 /**
  * @api
@@ -62,7 +62,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Get totals source object
      *
-     * @return Order
+     * @return Invoice
      */
     public function getSource()
     {

@@ -18,8 +18,6 @@ class Shipping extends AbstractTotal
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
-        $invoice->setShippingAmount(0);
-        $invoice->setBaseShippingAmount(0);
         $orderShippingAmount = $invoice->getOrder()->getShippingAmount();
         $baseOrderShippingAmount = $invoice->getOrder()->getBaseShippingAmount();
         $shippingInclTax = $invoice->getOrder()->getShippingInclTax();
@@ -29,7 +27,7 @@ class Shipping extends AbstractTotal
              * Check shipping amount in previous invoices
              */
             foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-                if ((double)$previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
+                if ((double)$previousInvoice->getShippingAmount() !== null && !$previousInvoice->isCanceled()) {
                     return $this;
                 }
             }
