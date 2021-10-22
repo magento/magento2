@@ -66,7 +66,7 @@
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "dev-master as 1.14.6",
         "monolog/monolog": "^2.3",
-        "pelago/emogrifier": "^5.0.0",
+        "pelago/emogrifier": "^6.0.0",
         "php-amqplib/php-amqplib": "~3.0.0",
         "phpseclib/mcrypt_compat": "2.0.0",
         "phpseclib/phpseclib": "~3.0.9",
