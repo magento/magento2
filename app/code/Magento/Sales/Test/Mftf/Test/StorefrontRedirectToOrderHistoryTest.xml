@@ -16,6 +16,9 @@
             <description value="Check while order printing URL with an id of not relevant order redirects to order history"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-28543"/>
+            <skip>
+                <issueId value="MQE-2834" />
+            </skip>
             <group value="sales"/>
         </annotations>
         <before>

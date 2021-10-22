@@ -13,6 +13,6 @@
         <element name="loginAsCustomerSettingsHead" type="text" selector="#login_as_customer_general-head" timeout="30"/>
         <element name="enableExtensionLabel" type="text" selector="//span[contains(text(),'Enable Extension') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
         <element name="disablePageCacheLabel" type="text" selector="//span[contains(text(),'Disable Page Cache For Admin User') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
-        <element name="storeViewToLoginToLabel" type="text" selector="//span[contains(text(),'Store View To Login To') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
+        <element name="storeViewToLoginToLabel" type="text" selector="//span[contains(text(),'Store To Login To') and contains(@data-config-scope,'[GLOBAL]')]" timeout="30"/>
     </section>
 </sections>

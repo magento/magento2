@@ -26,6 +26,11 @@
             <argument name="storage" xsi:type="object">Magento\Paypal\Model\PayflowSession\Storage</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Paypal\Model\Config\StructurePlugin">
+        <arguments>
+            <argument xsi:type="object" name="backendHelper">Magento\Paypal\Helper\Backend\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\Structure">
         <plugin name="paypal_system_configuration" type="Magento\Paypal\Model\Config\StructurePlugin"/>
     </type>
