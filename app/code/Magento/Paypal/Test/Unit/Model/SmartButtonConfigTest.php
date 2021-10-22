@@ -39,9 +39,9 @@ class SmartButtonConfigTest extends TestCase
     private $configMock;
 
     /**
-     * @var Payflowpro
+     * @var MockObject
      */
-    private $payflowpro;
+    private $payflowproMock;
 
     /**
      * @inheritDoc
@@ -124,7 +124,6 @@ class SmartButtonConfigTest extends TestCase
         );
 
         self::assertEquals($expected, $this->model->getConfig($page));
-
     }
 
     /**
