@@ -11,7 +11,7 @@ class Head extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\GoogleAdwords\Helper\Data
      */
-    protected $_googleAdwordsData;
+    protected $googleAdwordsData;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -23,7 +23,7 @@ class Head extends \Magento\Framework\View\Element\Template
         \Magento\GoogleAdwords\Helper\Data $googleAdwordsData,
         array $data = []
     ) {
-        $this->_googleAdwordsData = $googleAdwordsData;
+        $this->googleAdwordsData = $googleAdwordsData;
         parent::__construct($context, $data);
     }
 
@@ -34,7 +34,7 @@ class Head extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        return $this->_googleAdwordsData->isGoogleAdwordsActive() ? parent::_toHtml() : '';
+        return $this->googleAdwordsData->isGoogleAdwordsActive() ? parent::_toHtml() : '';
     }
 
     /**
@@ -42,6 +42,6 @@ class Head extends \Magento\Framework\View\Element\Template
      */
     public function getHelper()
     {
-        return $this->_googleAdwordsData;
+        return $this->googleAdwordsData;
     }
 }
