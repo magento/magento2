@@ -133,6 +133,9 @@ class MinifierTest extends TestCase
  */
 ?>
 <?php //one line comment ?>
+<?php //one line comment containing a <span> ?>
+<?php /** multi line comment containing a <span> */ ?>
+<?php echo 'test'; ?>
 <html>
     <head>
         <title>Test title</title>
@@ -150,8 +153,8 @@ class MinifierTest extends TestCase
             var i = 1;// comment
             var j = 1;// <?php echo 'hi' ?>
 //<?php ?> ')){
-// if (<?php echo __('hi')) { ?>
-// if (<?php )) {
+// if (<?php echo __('hi') ?>) {
+// if (<?php {}; ?>)) {
 // comment
             //<![CDATA[
             var someVar = 123;
@@ -170,7 +173,7 @@ class MinifierTest extends TestCase
         <?php echo '//some.link.com/' ?>
         <em>inline text</em>
         <a href="http://www.<?php echo 'hi' ?>"></a>
-        <?php// if (\$block->getSomeVariable() > 1):?>
+        <?php // if (\$block->getSomeVariable() > 1):?>
             <?php echo \$block->getChildHtml('someChildBlock'); ?>
         <?php //else:?>
             <?php // echo \$block->getChildHtml('anotherChildBlock'); ?>
@@ -180,13 +183,32 @@ class MinifierTest extends TestCase
     \$sometext = <<<SOMETEXT
     mytext
     mytextline2
+    <span>   </span>
 SOMETEXT;
+    ?>
+    <div>
+        // This is not a comment and should be preserved.
+        // This is not a comment <?= 'either.' ?>
+    </div>
+    <textarea>
+        Spaces in textareas
+        are significant and
+        should not be removed.
+    </textarea>
+    This is HTML : <?php//
+    <?php
+    \$someothertext = <<<SOMEOTHERTEXT
+    mytext
+    {\$block->getChildHtml('someChildBlock')}
+    <span>   </span>
+SOMEOTHERTEXT
+;
     ?>
 </html>
 TEXT;
 
         $expectedContent = <<<TEXT
-<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <img src="data:image/gif;base64,P///yH5BAEAAAA" data-component="main-image"><?= \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-component="main-image"><script>
+<?php /** * Copyright © Magento, Inc. All rights reserved. * See COPYING.txt for license details. */ /** multi line comment containing a <span> */ echo 'test';?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?= \$block->someMethod() ?> <img src="data:image/gif;base64,P///yH5BAEAAAA" data-component="main-image"><?= \$block->someMethod() ?> <div style="width: 800px" class="<?= \$block->getClass() ?>" /><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-component="main-image"><script>
             var i = 1;
             var j = 1;
 
@@ -199,15 +221,26 @@ TEXT;
                 return {
                     'someProperty': test,
                     'someMethod': function () {
-                        alert(<?php echo \$block->getJsAlert() ?>);
+                        alert(<?= \$block->getJsAlert() ?>);
                     }
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body><?php \$sometext = <<<SOMETEXT
+</script><?= "http://some.link.com/" ?> <?= "//some.link.com/" ?> <?= '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?= 'hi' ?>"></a> <?php ?> <?= \$block->getChildHtml('someChildBlock') ?> <?php ?> <?php ?> <?php ?></body><?php \$sometext = <<<SOMETEXT
     mytext
     mytextline2
-SOMETEXT; ?></html>
+    <span>   </span>
+SOMETEXT
+;?> <div> // This is not a comment and should be preserved. // This is not a comment <?= 'either.' ?></div><textarea>
+        Spaces in textareas
+        are significant and
+        should not be removed.
+    </textarea> This is HTML : <?php// <?php \$someothertext = <<<SOMEOTHERTEXT
+    mytext
+    {\$block->getChildHtml('someChildBlock')}
+    <span>   </span>
+SOMEOTHERTEXT
+;?></html>
 TEXT;
 
         $this->appDirectoryMock->expects($this->once())
