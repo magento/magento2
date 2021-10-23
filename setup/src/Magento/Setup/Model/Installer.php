@@ -37,7 +37,6 @@ use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\InstallSchemaInterface;
-use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Framework\Setup\Patch\PatchApplierFactory;
@@ -136,7 +135,7 @@ class Installer
     /**
      * Logger
      *
-     * @var LoggerInterface
+     * @var ConsoleLoggerInterface
      */
     private $log;
 
