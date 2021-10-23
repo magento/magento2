@@ -87,7 +87,9 @@
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton">
+            <argument name="value" value="New Invoice"/>
+        </actionGroup>
         <see selector="{{AdminInvoiceTotalSection.total('Subtotal')}}" userInput="$150.00" stepKey="seeCorrectGrandTotal"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessInvoiceMessage"/>
