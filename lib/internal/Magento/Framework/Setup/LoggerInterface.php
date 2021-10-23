@@ -10,7 +10,7 @@ namespace Magento\Framework\Setup;
  * Interface to Log Message in Setup
  *
  * @api
- * @deprecared
+ * @deprecated
  *
  * @since 100.0.2
  */
