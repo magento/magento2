@@ -183,9 +183,8 @@ define([
                 sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
-                // Don't hide initial message after multiple ajax request for page load
-                if (Object.keys(sections).length == 1) {
-                    if (!sectionData['messages'].length) {
+                if ( _.keys(sections).length === 1) {
+                    if (_.isEmpty(sectionData.messages)) {
                         return;
                     }
                 }
