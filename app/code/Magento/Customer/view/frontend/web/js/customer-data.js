@@ -183,7 +183,9 @@ define([
                 sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
-                if ( _.keys(sections).length === 1) {
+
+                if (_.keys(sections).length === 1) {
+
                     if (_.isEmpty(sectionData.messages)) {
                         return;
                     }
