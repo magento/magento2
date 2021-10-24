@@ -183,6 +183,12 @@ define([
                 sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
+                // Don't hide initial message after multiple ajax request for page load
+                if (Object.keys(sections).length == 1) {
+                    if (!sectionData['messages'].length) {
+                        return;
+                    }
+                }
                 buffer.notify(sectionName, sectionData);
             });
             $.cookieStorage.set('section_data_ids', sectionDataIds);
