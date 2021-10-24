@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
-use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order;
 
 /**
  * @api
@@ -33,6 +33,8 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     protected $_invoice = null;
 
     /**
+     * Get order
+     *
      * @return Order
      */
     public function getInvoice()
@@ -50,6 +52,8 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     }
 
     /**
+     * Set Order
+     *
      * @param Order $invoice
      * @return $this
      */

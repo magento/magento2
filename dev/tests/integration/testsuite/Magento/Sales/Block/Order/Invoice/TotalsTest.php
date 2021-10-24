@@ -44,7 +44,6 @@ class TotalsTest extends TestCase
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
     }
 
-
     /**
      * @magentoDataFixture Magento/Sales/_files/order_with_free_shipping_by_coupon_and_invoice.php
      *

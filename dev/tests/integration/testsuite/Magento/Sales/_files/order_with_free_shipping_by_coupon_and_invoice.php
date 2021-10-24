@@ -28,4 +28,3 @@ $order->setIsInProcess(true);
 $transactionSave = $objectManager
     ->create(\Magento\Framework\DB\Transaction::class);
 $transactionSave->addObject($invoice)->addObject($order)->save();
-

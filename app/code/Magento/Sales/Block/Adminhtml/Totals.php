@@ -97,9 +97,9 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             $shippingLabel = __('Shipping & Handling');
 
             if (!isset($this->_totals['discount'])) {
-                if ($order->getCouponCode() ) {
+                if ($order->getCouponCode()) {
                     $shippingLabel .= " ({$order->getCouponCode()})";
-                } else if ($order->getDiscountDescription()) {
+                } elseif ($order->getDiscountDescription()) {
                     $shippingLabel .= " ({$order->getDiscountDescription()})";
                 }
             }
