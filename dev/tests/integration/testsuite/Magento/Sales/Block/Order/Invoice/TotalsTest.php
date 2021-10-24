@@ -60,7 +60,7 @@ class TotalsTest extends TestCase
         $this->block->toHtml();
         $totals = $this->block->getTotals();
         $this->assertArrayHasKey('shipping', $totals);
-        $this->assertEquals('0.0000', $totals['shipping']['base_value']);
+        $this->assertEquals('0.0000', $totals['shipping']['value']);
         $this->assertEquals('Shipping & Handling (1234567890)', $totals['shipping']['label']);
     }
     /**
