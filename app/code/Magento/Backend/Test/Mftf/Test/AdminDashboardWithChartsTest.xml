@@ -64,8 +64,8 @@
         <comment userInput="Go to checkout" stepKey="goToCheckout"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingCheckoutPageWithShippingMethod"/>
-        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask1 action for preserving Backward Compatibility" stepKey="waitForLoadingMask1"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <comment userInput="Select Check/Money payment" stepKey="checkoutSelectCheckMoneyPayment"/>
