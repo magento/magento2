@@ -24,12 +24,12 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class UploadTest extends AbstractBackendController
 {
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $resource = 'Magento_Catalog::products';
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $uri = 'backend/catalog/product_gallery/upload';
 
@@ -284,6 +284,6 @@ class UploadTest extends AbstractBackendController
      */
     private function getFileAbsolutePath(string $tmpPath): string
     {
-         return $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $tmpPath);;
+         return $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $tmpPath);
     }
 }
