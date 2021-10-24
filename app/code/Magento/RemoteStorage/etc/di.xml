@@ -100,7 +100,7 @@
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\Archive\Zip">
-        <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Zip" sortOrder="10"/>
+        <plugin name="remoteZipArchive" type="Magento\RemoteStorage\Plugin\Zip" sortOrder="10"/>
     </type>
     <type name="Magento\Catalog\Model\Category\FileInfo">
         <arguments>
