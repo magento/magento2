@@ -118,7 +118,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve image width
      *
-     * @return bool|int|array
+     * @return bool|int
      */
     public function getImageWidth()
     {
