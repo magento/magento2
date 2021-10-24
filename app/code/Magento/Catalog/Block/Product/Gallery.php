@@ -12,7 +12,6 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Image;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\Collection;
 
@@ -123,6 +122,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
     public function getImageWidth()
     {
         $file = $this->getCurrentImage()->getPath();
+
         if ($this->_filesystem->getDirectoryRead(DirectoryList::MEDIA)->isFile($file)) {
             $size = getimagesize($file);
             if (isset($size[0])) {
