@@ -191,7 +191,7 @@ define([
 
                 if (_.keys(sections).length === 1) {
 
-                    if (_.isEmpty(sectionData.messages) && ($.cookieStorage.get('pdp_qty_error'))) {
+                    if (_.isEmpty(sectionData.messages) && $.cookieStorage.get('pdp_qty_error')) {
                         return;
                     }
                 }
@@ -447,7 +447,7 @@ define([
     /**
      * Place code to be executed on completion of last outstanding ajax call here
      */
-    $(document).ajaxStop(function() {
+    $(document).ajaxStop( function() {
         $.cookieStorage.set('pdp_qty_error', false);
     });
 
