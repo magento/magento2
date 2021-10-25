@@ -15,8 +15,9 @@ use PHPUnit\Framework\TestCase;
 class DependencyCheckerTest extends TestCase
 {
     /**
-    * @return void
-    */
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function testCheckDependencies(): void
     {
         $composerApp =
@@ -44,7 +45,7 @@ class DependencyCheckerTest extends TestCase
                         $buffer->writeln($output);
                     }
                 )
-        );
+            );
 
         $dependencyChecker = new DependencyChecker($composerApp, $directoryList);
         $expected = [
@@ -58,8 +59,9 @@ class DependencyCheckerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function testCheckDependenciesExcludeSelf(): void
     {
         $composerApp =
