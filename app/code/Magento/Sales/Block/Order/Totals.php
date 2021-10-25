@@ -171,7 +171,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * add shipping total
+     * Add shipping total
      *
      * @param Order|Order\Invoice $source
      * @retrurn void

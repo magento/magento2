@@ -66,7 +66,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Get totals source object
      *
-     * @return Invoice
+     * @return Order
      */
     public function getSource()
     {
