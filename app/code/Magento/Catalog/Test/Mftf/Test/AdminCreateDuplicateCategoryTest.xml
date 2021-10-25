@@ -36,7 +36,7 @@
         </actionGroup>
 
         <!-- Assert error message -->
-        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertErrorMessage">
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
             <argument name="messageType" value="error"/>
             <argument name="message" value="The value specified in the URL Key field would generate a URL that already exists."/>
         </actionGroup>
