@@ -1999,6 +1999,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
         //Clean duplicated fields
         $this->_resourceHelper->prepareColumnsList($select);
+        $this->groupByAttribute('entity_id');
 
         return $this;
     }

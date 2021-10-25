@@ -355,6 +355,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          * Prevent retrieval of duplicate records. This may occur when multiselect product attribute matches
          * several allowed values from condition simultaneously
          */
+        $collection->groupByAttribute('entity_id');
         $collection->distinct(true);
 
         return $collection;
