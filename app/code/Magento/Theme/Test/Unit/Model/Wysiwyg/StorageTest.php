@@ -315,10 +315,10 @@ class StorageTest extends TestCase
     {
         $dirs = [$this->storageRoot . '/dir1', $this->storageRoot . '/dir2'];
 
-        $this->directoryWrite->expects($this->any())
+        $this->directoryWrite
             ->method('isExist')
-            ->with($this->storageRoot
-            )->willReturn(true);
+            ->with($this->storageRoot)
+            ->willReturn(true);
 
         $this->directoryWrite->expects($this->once())->method('search')->willReturn($dirs);
 

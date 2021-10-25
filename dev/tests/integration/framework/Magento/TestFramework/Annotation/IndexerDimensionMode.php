@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Implementation of the @magentoIndexerDimensionMode DocBlock annotation
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexerDimensionMode
 {
@@ -56,8 +57,12 @@ class IndexerDimensionMode
     }
 
     /**
+     * Tries to set a Dimension mode if it wasn't set.
+     *
      * @param string $mode
      * @param TestCase $test
+     *
+     * @return void
      * @throws \Exception
      */
     private function setDimensionMode(string $mode, TestCase $test)

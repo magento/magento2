@@ -145,8 +145,8 @@ class EditTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testEditActionPageNoExists(): void
     {
         $pageId = 1;
