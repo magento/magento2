@@ -132,12 +132,12 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**
      * @var Environment
      */
-    protected Environment $environment;
+    private Environment $environment;
 
     /**
      * @var string
      */
-    protected string $originalProcessTitle;
+    private string $originalProcessTitle;
 
     /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
