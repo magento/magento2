@@ -26,6 +26,7 @@ use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Zend_Db_Expr;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
  * Product collection
@@ -310,6 +311,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param PriceTableResolver|null $priceTableResolver
      * @param DimensionFactory|null $dimensionFactory
      * @param Category|null $categoryResourceModel
+     * @param DbStorage|null $urlFinder
+     * @param GalleryReadHandler|null $productGalleryReadHandler
+     * @param Gallery|null $mediaGalleryResource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -339,7 +343,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         TableMaintainer $tableMaintainer = null,
         PriceTableResolver $priceTableResolver = null,
         DimensionFactory $dimensionFactory = null,
-        Category $categoryResourceModel = null
+        Category $categoryResourceModel = null,
+        DbStorage $urlFinder = null,
+        GalleryReadHandler $productGalleryReadHandler = null,
+        Gallery $mediaGalleryResource = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
@@ -369,25 +376,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $storeManager,
             $connection
         );
-        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
-        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()->get(PriceTableResolver::class);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()
+            ->get(TableMaintainer::class);
+        $this->priceTableResolver = $priceTableResolver ?: ObjectManager::getInstance()
+            ->get(PriceTableResolver::class);
         $this->dimensionFactory = $dimensionFactory
             ?: ObjectManager::getInstance()->get(DimensionFactory::class);
         $this->categoryResourceModel = $categoryResourceModel ?: ObjectManager::getInstance()
             ->get(Category::class);
-    }
-
-    /**
-     * Retrieve urlFinder
-     *
-     * @return GalleryReadHandler
-     */
-    private function getUrlFinder()
-    {
-        if ($this->urlFinder === null) {
-            $this->urlFinder = ObjectManager::getInstance()->get(DbStorage::class);
-        }
-        return $this->urlFinder;
+        $this->urlFinder = $urlFinder ?: ObjectManager::getInstance()->get(DbStorage::class);
+        $this->productGalleryReadHandler = $productGalleryReadHandler ?: ObjectManager::getInstance()
+            ->get(GalleryReadHandler::class);
+        $this->mediaGalleryResource = $mediaGalleryResource ?: ObjectManager::getInstance()
+            ->get(Gallery::class);
     }
 
     /**
@@ -1461,7 +1462,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $filter['metadata']['category_id'] = $this->_urlRewriteCategory;
         }
 
-        $rewrites = $this->getUrlFinder()->findAllByData($filter);
+        $rewrites = $this->urlFinder->findAllByData($filter);
         foreach ($rewrites as $rewrite) {
             if ($item = $this->getItemById($rewrite->getEntityId())) {
                 $item->setData('request_path', $rewrite->getRequestPath());
@@ -2347,7 +2348,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $items = $this->getItems();
         $linkField = $this->getProductEntityMetadata()->getLinkField();
 
-        $select = $this->getMediaGalleryResource()
+        $select = $this->mediaGalleryResource
             ->createBatchBaseSelect(
                 $this->getStoreId(),
                 $this->getAttribute('media_gallery')->getAttributeId()
@@ -2369,7 +2370,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         }
 
         foreach ($items as $item) {
-            $this->getGalleryReadHandler()
+            $this->productGalleryReadHandler
                 ->addMediaDataToProduct(
                     $item,
                     $mediaGalleries[$item->getOrigData($linkField)] ?? []
@@ -2389,35 +2390,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     public function getProductEntityMetadata()
     {
         return $this->metadataPool->getMetadata(ProductInterface::class);
-    }
-
-    /**
-     * Retrieve GalleryReadHandler
-     *
-     * @return GalleryReadHandler
-     * @deprecated 101.0.1
-     */
-    private function getGalleryReadHandler()
-    {
-        if ($this->productGalleryReadHandler === null) {
-            $this->productGalleryReadHandler = ObjectManager::getInstance()->get(GalleryReadHandler::class);
-        }
-        return $this->productGalleryReadHandler;
-    }
-
-    /**
-     * Retrieve Media gallery resource.
-     *
-     * @deprecated 101.0.1
-     *
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
-     */
-    private function getMediaGalleryResource()
-    {
-        if (null === $this->mediaGalleryResource) {
-            $this->mediaGalleryResource = ObjectManager::getInstance()->get(Gallery::class);
-        }
-        return $this->mediaGalleryResource;
     }
 
     /**
