@@ -13,15 +13,11 @@ namespace Magento\PageCache\Model;
 class DepersonalizeChecker
 {
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     private $request;
 
     /**
-     * Module manager
-     *
      * @var \Magento\Framework\Module\Manager
      */
     private $moduleManager;
