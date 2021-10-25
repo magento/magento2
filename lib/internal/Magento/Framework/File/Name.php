@@ -9,6 +9,7 @@ namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use \Magento\Framework\Filesystem\DriverInterface;
 
@@ -62,10 +63,13 @@ class Name
     }
 
     /**
+     * Generates new file name until file with provided name doesn't exists
+     *
      * @param DriverInterface $driver
      * @param string $fileInfo
      * @param int $index
      * @return string
+     * @throws FileSystemException
      */
     private function generateFileName($driver, $fileInfo, $index = 1)
     {
