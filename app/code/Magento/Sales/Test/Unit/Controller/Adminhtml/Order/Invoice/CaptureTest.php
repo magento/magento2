@@ -95,7 +95,7 @@ class CaptureTest extends TestCase
     protected $invoiceRepository;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -126,21 +126,18 @@ class CaptureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            RedirectFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->resultForwardFactoryMock = $this->getMockBuilder(
-            ForwardFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $this->resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
@@ -182,7 +179,7 @@ class CaptureTest extends TestCase
             Capture::class,
             [
                 'context' => $contextMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'resultForwardFactory' => $this->resultForwardFactoryMock
             ]
         );
 
@@ -196,7 +193,7 @@ class CaptureTest extends TestCase
     /**
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $invoiceId = 2;
 
@@ -207,7 +204,7 @@ class CaptureTest extends TestCase
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsInProcess'])
+            ->addMethods(['setIsInProcess'])
             ->getMock();
 
         $this->invoiceManagement->expects($this->once())
@@ -216,7 +213,6 @@ class CaptureTest extends TestCase
 
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('getEntityId')
@@ -227,16 +223,10 @@ class CaptureTest extends TestCase
 
         $transactionMock = $this->getMockBuilder(Transaction::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $transactionMock->expects($this->at(0))
-            ->method('addObject')
-            ->with($invoiceMock)->willReturnSelf();
-        $transactionMock->expects($this->at(1))
-            ->method('addObject')
-            ->with($orderMock)->willReturnSelf();
-        $transactionMock->expects($this->at(2))
-            ->method('save');
+        $transactionMock->method('addObject')
+            ->withConsecutive([$invoiceMock], [$orderMock])
+            ->willReturnOnConsecutiveCalls($transactionMock, $transactionMock);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
@@ -250,7 +240,7 @@ class CaptureTest extends TestCase
             ->method('get')
             ->willReturn($invoiceMock);
 
-        $this->objectManagerMock->expects($this->at(1))
+        $this->objectManagerMock
             ->method('create')
             ->with(Transaction::class)
             ->willReturn($transactionMock);
@@ -270,7 +260,7 @@ class CaptureTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteNoInvoice()
+    public function testExecuteNoInvoice(): void
     {
         $invoiceId = 2;
 
@@ -298,7 +288,7 @@ class CaptureTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteModelException()
+    public function testExecuteModelException(): void
     {
         $invoiceId = 2;
 
@@ -349,7 +339,7 @@ class CaptureTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteException()
+    public function testExecuteException(): void
     {
         $invoiceId = 2;
 
@@ -387,7 +377,6 @@ class CaptureTest extends TestCase
 
         $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $resultRedirect->expects($this->once())->method('setPath')->with('sales/*/view', ['invoice_id' => $invoiceId]);
 
