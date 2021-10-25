@@ -87,7 +87,7 @@ class Image
      */
     public function beforeOpen(AbstractAdapter $subject, $filename): array
     {
-        if ($this->isEnabled) {
+        if ($this->isEnabled && !empty($filename)) {
             $filename = $this->copyFileToTmp($filename);
         }
         return [$filename];
@@ -182,7 +182,7 @@ class Image
      * @return string
      * @throws FileSystemException
      */
-    private function copyFileToTmp(string $filePath): string
+    private function copyFileToTmp($filePath): string
     {
         if ($this->fileExistsInTmp($filePath)) {
             return $this->tmpFiles[$filePath];
@@ -192,7 +192,7 @@ class Image
             $this->tmpDirectoryWrite->create();
             $tmpPath = $this->storeTmpName($filePath);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
+            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) !== false
                 ? $tmpPath
                 : $filePath;
         }
