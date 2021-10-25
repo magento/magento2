@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\App\Test\Unit\Backpressure;
+namespace Magento\Framework\App\Test\Unit\Backpressure\SlidingWindow;
 
 use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\Backpressure\ContextInterface;
