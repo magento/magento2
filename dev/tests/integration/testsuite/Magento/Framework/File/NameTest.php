@@ -12,9 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Filesystem;
 
 /**
- * Test for \Magento\Framework\File\Uploader
- *
- * @magentoDataFixture Magento/Framework/File/_files/framework_file_name.php
+ * Test for \Magento\Framework\File\Name
  */
 class NameTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,6 +43,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      *
+     * @magentoDataFixture Magento/Framework/File/_files/framework_file_name.php
      * @dataProvider getNewFileNameDataProvider
      */
     public function testGetNewFileName($directory, $destinationFile, $expectedFileName)
