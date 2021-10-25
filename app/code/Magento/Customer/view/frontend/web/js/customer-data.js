@@ -447,7 +447,7 @@ define([
     /**
      * Place code to be executed on completion of last outstanding ajax call here
      */
-    $(document).ajaxStop( function() {
+    $(document).ajaxStop(function () {
         $.cookieStorage.set('pdp_qty_error', false);
     });
 
