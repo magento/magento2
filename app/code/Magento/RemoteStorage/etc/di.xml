@@ -100,9 +100,6 @@
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
     </type>
-    <type name="Magento\Framework\Archive\Zip">
-        <plugin name="remoteZipArchive" type="Magento\RemoteStorage\Plugin\Zip" sortOrder="10"/>
-    </type>
     <type name="Magento\Catalog\Model\Category\FileInfo">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
