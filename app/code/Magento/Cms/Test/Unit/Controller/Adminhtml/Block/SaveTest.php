@@ -181,8 +181,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveAction(): void
     {
         $postData = [
@@ -230,8 +230,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveActionWithoutData(): void
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
@@ -240,8 +240,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveActionNoId(): void
     {
         $postData = [
@@ -278,8 +278,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveAndDuplicate(): void
     {
         $postData = [
@@ -355,8 +355,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveAndClose(): void
     {
         $postData = [
@@ -404,8 +404,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveActionWithMarginalSpace(): void
     {
         $postData = [
@@ -459,8 +459,8 @@ class SaveTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveActionThrowsException(): void
     {
         $postData = [

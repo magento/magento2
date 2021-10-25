@@ -5,15 +5,15 @@
  */
 namespace Magento\Framework\Code\Reader;
 
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
+use Magento\Framework\GetParameterClassTrait;
 
 /**
  * The class arguments reader
  */
 class ArgumentsReader
 {
+    use GetParameterClassTrait;
+
     const NO_DEFAULT_VALUE = 'NO-DEFAULT';
 
     /**
@@ -125,22 +125,6 @@ class ArgumentsReader
         }
 
         return $type;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**
