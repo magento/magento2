@@ -11,6 +11,7 @@
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProvider"/>
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactory"/>
     <preference for="Magento\Framework\Filesystem\DriverPool" type="Magento\RemoteStorage\Driver\DriverPool"/>
+    <preference for="Magento\Framework\File\Uploader" type="Magento\RemoteStorage\Model\File\Uploader"/>
     <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">
         <arguments>
             <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
@@ -98,6 +99,9 @@
     </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\Archive\Zip">
+        <plugin name="remoteZipArchive" type="Magento\RemoteStorage\Plugin\Zip" sortOrder="10"/>
     </type>
     <type name="Magento\Catalog\Model\Category\FileInfo">
         <arguments>
