@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Filesystem;
 
 /**
  * Test for \Magento\Framework\File\Uploader
@@ -24,9 +24,9 @@ class NameTest extends \PHPUnit\Framework\TestCase
     private $nameModel;
 
     /**
-     * @var WriteInterface
+     * @var Filesystem
      */
-    private $mediaDirectory;
+    private $fileSystem;
 
     /**
      * @inheritdoc
@@ -34,8 +34,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->mediaDirectory = $objectManager->get(\Magento\Framework\Filesystem::class)
-            ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fileSystem = $objectManager->get(\Magento\Framework\Filesystem::class);
         $this->nameModel = $objectManager->get(Name::class);
     }
 
@@ -48,9 +47,10 @@ class NameTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider getNewFileNameDataProvider
      */
-    public function testGetNewFileName($destinationFile, $expectedFileName)
+    public function testGetNewFileName($directory, $destinationFile, $expectedFileName)
     {
-        $path = $this->mediaDirectory->getAbsolutePath('image/' . $destinationFile);
+        $directory = $this->fileSystem->getDirectoryWrite($directory);
+        $path = $directory->getAbsolutePath('image/' . $destinationFile);
         $name = $this->nameModel->getNewFileName($path);
         $this->assertEquals($expectedFileName, $name);
     }
@@ -62,9 +62,11 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function getNewFileNameDataProvider()
     {
         return [
-            ['image.jpg', 'image.jpg'],
-            ['image_one.jpg', 'image_one_1.jpg'],
-            ['image_two.jpg', 'image_two_2.jpg']
+            [DirectoryList::VAR_DIR, 'image.jpg', 'image.jpg'],
+            [DirectoryList::VAR_DIR, 'image_one.jpg', 'image_one_1.jpg'],
+            [DirectoryList::MEDIA, 'image.jpg', 'image.jpg'],
+            [DirectoryList::MEDIA, 'image_one.jpg', 'image_one_1.jpg'],
+            [DirectoryList::MEDIA, 'image_two.jpg', 'image_two_2.jpg']
         ];
     }
 }
