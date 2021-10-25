@@ -74,8 +74,8 @@ class ReindexRuleProductTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteIfRuleInactive(): void
     {
         $ruleMock = $this->createMock(Rule::class);
