@@ -138,8 +138,7 @@ class ImagesTest extends AbstractBackendController
         $this->assertEquals($expectation['small_image'], $product->getData('small_image'));
         $this->assertEquals($expectation['thumbnail'], $product->getData('thumbnail'));
         $this->assertEquals($expectation['swatch_image'], $product->getData('swatch_image'));
-        $this->assertFileExists(
-            $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $expectation['image'])
-        );
+        $pathExpected = $this->mediaDirectory->getAbsolutePath() . $expectation['image'];
+        $this->mediaDirectory->isExist($pathExpected);
     }
 }

@@ -113,7 +113,8 @@ class Write extends Read implements WriteInterface
     {
         $this->validatePath($path);
         $this->validatePath($newPath);
-        $this->assertIsFile($path);
+        $this->getRelativePath();
+        $this->getDriver()->isFile($path);
         $targetDirectory = $targetDirectory ?: $this;
         if (!$targetDirectory->isExist($this->driver->getParentDirectory($newPath))) {
             $targetDirectory->create($this->driver->getParentDirectory($newPath));
