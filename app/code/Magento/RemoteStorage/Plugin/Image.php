@@ -167,8 +167,9 @@ class Image
     public function __destruct()
     {
         try {
-            foreach ($this->tmpFiles as $tmpFile) {
+            foreach ($this->tmpFiles as $key => $tmpFile) {
                 $this->tmpDirectoryWrite->delete($tmpFile);
+                unset($this->tmpFiles[$key]);
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -182,7 +183,7 @@ class Image
      * @return string
      * @throws FileSystemException
      */
-    private function copyFileToTmp($filePath): string
+    private function copyFileToTmp(string $filePath): string
     {
         if ($this->fileExistsInTmp($filePath)) {
             return $this->tmpFiles[$filePath];
@@ -192,7 +193,7 @@ class Image
             $this->tmpDirectoryWrite->create();
             $tmpPath = $this->storeTmpName($filePath);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) !== false
+            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) >= 0
                 ? $tmpPath
                 : $filePath;
         }
