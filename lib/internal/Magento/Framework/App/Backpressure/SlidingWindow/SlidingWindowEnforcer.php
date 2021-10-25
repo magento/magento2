@@ -11,6 +11,7 @@ namespace Magento\Framework\App\Backpressure\SlidingWindow;
 use Magento\Framework\App\Backpressure\BackpressureExceededException;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\BackpressureEnforcerInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Uses Sliding Window approach to record request times and enforce limits.
@@ -21,14 +22,21 @@ class SlidingWindowEnforcer implements BackpressureEnforcerInterface
 
     private LimitConfigManagerInterface $configManager;
 
+    private DateTime $dateTime;
+
     /**
      * @param RequestLoggerInterface $logger
      * @param LimitConfigManagerInterface $configManager
+     * @param DateTime $dateTime
      */
-    public function __construct(RequestLoggerInterface $logger, LimitConfigManagerInterface $configManager)
-    {
+    public function __construct(
+        RequestLoggerInterface $logger,
+        LimitConfigManagerInterface $configManager,
+        DateTime $dateTime
+    ) {
         $this->logger = $logger;
         $this->configManager = $configManager;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -37,7 +45,7 @@ class SlidingWindowEnforcer implements BackpressureEnforcerInterface
     public function enforce(ContextInterface $context): void
     {
         $limit = $this->configManager->readLimit($context);
-        $time = time();
+        $time = $this->dateTime->gmtTimestamp();
         $remainder = $time % $limit->getPeriod();
         //Time slot is the ts of the beginning of the period
         $timeSlot = $time - $remainder;
