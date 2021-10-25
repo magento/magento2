@@ -27,7 +27,7 @@ define([
             disabled: false,
             title: '',
             buttonTextId: '',
-            ariLabelledby: '',
+            ariLabelledby: ''
         },
 
         /**
