@@ -19,8 +19,6 @@ class ConsoleLogger implements ConsoleLoggerInterface
     private $isInline = false;
 
     /**
-     * Console
-     *
      * @var OutputInterface
      */
     protected $console;
