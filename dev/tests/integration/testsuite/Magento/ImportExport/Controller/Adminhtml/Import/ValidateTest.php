@@ -109,6 +109,12 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 'delimiter' => ';',
             ],
             [
+                'file_name' => 'invalid_catalog_products.zip',
+                'mime-type' => 'application/zip',
+                'message' => 'Data validation failed.',
+                'delimiter' => ',',
+            ],
+            [
                 'file_name' => 'catalog_product.zip',
                 'mime-type' => 'application/zip',
                 'message' => 'File is valid',
