@@ -55,12 +55,10 @@ class Name
         }
 
         if ($driver->isExists($destinationFile)) {
-            $destFileName = $this->generateFileName($driver, $fileInfo);
+            return $this->generateFileName($driver, $fileInfo);
         } else {
             return $fileInfo['basename'];
         }
-
-        return $destFileName;
     }
 
     /**
