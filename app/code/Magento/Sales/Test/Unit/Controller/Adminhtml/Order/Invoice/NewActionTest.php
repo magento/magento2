@@ -125,9 +125,6 @@ class NewActionTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -185,7 +182,7 @@ class NewActionTest extends TestCase
                 'getMessageManager',
                 'getResultRedirectFactory',
                 'getView'
-            ])->addMethods(['getTitle'])
+            ])
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
@@ -193,9 +190,6 @@ class NewActionTest extends TestCase
         $contextMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
