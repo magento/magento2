@@ -366,7 +366,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param ScopeConfigInterface|null $scopeConfig
      * @param RegionFactory|null $regionFactory
      * @param RegionResource|null $regionResource
+     * @param StatusLabel|null $statusLabel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -707,7 +709,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
          * TotalPaid - contains amount, that were not rounded.
          */
         $totalRefunded = $this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded();
-        if (abs($this->getGrandTotal()) < .0001) {
+        if (abs((float) $this->getGrandTotal()) < .0001) {
             return $this->canCreditmemoForZeroTotal($totalRefunded);
         }
 
@@ -722,7 +724,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function canCreditmemoForZeroTotalRefunded($totalRefunded)
     {
-        $isRefundZero = abs($totalRefunded) < .0001;
+        $isRefundZero = abs((float) $totalRefunded) < .0001;
         // Case when Adjustment Fee (adjustment_negative) has been used for first creditmemo
         $hasAdjustmentFee = abs($totalRefunded - $this->getAdjustmentNegative()) < .0001;
         $hasActionFlag = $this->getActionFlag(self::ACTION_FLAG_EDIT) === false;
@@ -1326,8 +1328,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setShippingCanceled($this->getShippingAmount() - $this->getShippingInvoiced());
             $this->setBaseShippingCanceled($this->getBaseShippingAmount() - $this->getBaseShippingInvoiced());
 
-            $this->setDiscountCanceled(abs($this->getDiscountAmount()) - $this->getDiscountInvoiced());
-            $this->setBaseDiscountCanceled(abs($this->getBaseDiscountAmount()) - $this->getBaseDiscountInvoiced());
+            $this->setDiscountCanceled(abs((float) $this->getDiscountAmount()) - $this->getDiscountInvoiced());
+            $this->setBaseDiscountCanceled(
+                abs((float) $this->getBaseDiscountAmount()) - $this->getBaseDiscountInvoiced()
+            );
 
             $this->setTotalCanceled($this->getGrandTotal() - $this->getTotalPaid());
             $this->setBaseTotalCanceled($this->getBaseGrandTotal() - $this->getBaseTotalPaid());

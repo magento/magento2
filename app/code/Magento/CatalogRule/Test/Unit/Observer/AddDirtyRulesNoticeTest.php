@@ -45,8 +45,8 @@ class AddDirtyRulesNoticeTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $message = "test";

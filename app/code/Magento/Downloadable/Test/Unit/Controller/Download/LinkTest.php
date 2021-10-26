@@ -176,8 +176,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAbsentLinkId(): void
     {
         $this->objectManager->expects($this->once())
@@ -203,8 +203,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetLinkForGuestCustomer(): void
     {
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
@@ -245,8 +245,8 @@ class LinkTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetLinkForWrongCustomer(): void
     {
         $this->request->expects($this->once())->method('getParam')->with('id', 0)->willReturn('some_id');
