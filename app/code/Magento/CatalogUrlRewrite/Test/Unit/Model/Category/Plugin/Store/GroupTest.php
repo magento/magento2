@@ -165,10 +165,10 @@ class GroupTest extends TestCase
         $this->productCollectionMock->expects($this->once())
             ->method('addWebsiteFilter')
             ->willReturn($this->productCollectionMock);
-        $iterator = new \ArrayIterator([$this->productMock]);
+        $arrayIteratorMock = new \ArrayIterator([$this->productMock]);
         $this->productCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->willReturn($iterator);
+            ->willReturn($arrayIteratorMock);
         $this->productUrlRewriteGeneratorMock->expects($this->once())
             ->method('generate')
             ->with($this->productMock)
@@ -200,7 +200,6 @@ class GroupTest extends TestCase
         $this->productCollectionMock->expects($this->never())->method('addCategoryIds');
         $this->productCollectionMock->expects($this->never())            ->method('addAttributeToSelect');
         $this->productCollectionMock->expects($this->never())->method('addWebsiteFilter');
-        $iterator = new \ArrayIterator([$this->productMock]);
         $this->productCollectionMock->expects($this->never())->method('getIterator');
         $this->productUrlRewriteGeneratorMock->expects($this->never())->method('generate');
 
