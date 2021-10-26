@@ -13,6 +13,9 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ValidateFactory
 {
+    /**
+     * @var ObjectManagerInterface
+     */
     private ObjectManagerInterface $objectManager;
 
     /**
@@ -26,7 +29,7 @@ class ValidateFactory
     /**
      * Main factory method
      *
-     * @return \Zend_Validate
+     * @return ExistingValidate
      */
     public function create()
     {

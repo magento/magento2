@@ -71,7 +71,7 @@ class ExistingValidate
      * Copies file from the remote server to the tmp directory
      *
      * @param Subject $subject
-     * @param $value
+     * @param string $value
      * @param string|null $originalName
      * @return array
      * @throws FileSystemException
@@ -116,6 +116,7 @@ class ExistingValidate
         $absolutePath = $this->remoteDirectoryWrite->getAbsolutePath($filePath);
         if ($this->remoteDirectoryWrite->isFile($absolutePath)) {
             $this->tmpDirectoryWrite->create();
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath() . basename($filePath);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
             if ($this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) >= 0) {

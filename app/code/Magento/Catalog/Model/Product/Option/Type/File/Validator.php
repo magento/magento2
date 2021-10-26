@@ -133,6 +133,8 @@ abstract class Validator
     }
 
     /**
+     * Adds required validators to th $object
+     *
      * @param \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param array $fileFullPath
