@@ -32,7 +32,7 @@ class Name
     }
 
     /**
-     * Get new file name if the given name is in use
+     * Gets new file name if the given name is in use
      *
      * @param string $destinationFile
      * @return string
@@ -46,24 +46,23 @@ class Name
             Filesystem\DriverPool::FILE
         )->getDriver();
 
+        if ($driver->isExists($destinationFile)) {
+            return $this->generateFileName($driver, $fileInfo);
+        }
+
         /**
          * Try with non-local driver.
          */
-        if (!$driver->isExists($destinationFile)) {
-            $driver = $this->filesystem->getDirectoryWrite(
-                DirectoryList::ROOT
-            )->getDriver();
-        }
+        $driver = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT)->getDriver();
 
-        if ($driver->isExists($destinationFile)) {
-            return $this->generateFileName($driver, $fileInfo);
-        } else {
-            return $fileInfo['basename'];
-        }
+        return $driver->isExists($destinationFile)
+            ? $this->generateFileName($driver, $fileInfo)
+            : $fileInfo['basename'];
+
     }
 
     /**
-     * Generates new file name until file with provided name doesn't exists
+     * Generates new file name until file with provided name doesn't exist
      *
      * @param DriverInterface $driver
      * @param string $fileInfo
@@ -81,7 +80,7 @@ class Name
     }
 
     /**
-     * Get the path information from a given file
+     * Gets the path information from a given file
      *
      * @param string $destinationFile
      * @return string|string[]
