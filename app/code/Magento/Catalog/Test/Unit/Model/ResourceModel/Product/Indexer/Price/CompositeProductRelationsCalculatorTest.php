@@ -38,8 +38,8 @@ class CompositeProductRelationsCalculatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMaxRelationsCount(): void
     {
         $tableName = 'catalog_product_relation';
