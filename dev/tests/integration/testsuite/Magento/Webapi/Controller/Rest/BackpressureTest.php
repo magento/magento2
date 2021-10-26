@@ -43,6 +43,7 @@ class BackpressureTest extends AbstractController
         }
 
         //Some of the requests must have been throttled.
+        $this->assertGreaterThan(0, $this->testReadService->getCounter());
         $this->assertLessThan($nOfReqs, $this->testReadService->getCounter());
     }
 }
