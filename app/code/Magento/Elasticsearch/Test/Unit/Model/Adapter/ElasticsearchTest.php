@@ -107,6 +107,7 @@ class ElasticsearchTest extends TestCase
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
