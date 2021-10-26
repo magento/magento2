@@ -131,6 +131,8 @@ class GroupTest extends TestCase
             ->willReturn([]);
         $this->groupModel->expects($this->once())->method('setId')
             ->with($expectedId);
+        $this->groupModel->expects($this->once())->method('getCode')
+            ->willReturn('');
 
         $dbAdapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()

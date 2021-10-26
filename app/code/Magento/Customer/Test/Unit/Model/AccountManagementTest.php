@@ -2363,7 +2363,7 @@ class AccountManagementTest extends TestCase
     private function prepareDateTimeFactory(): string
     {
         $dateTime = '2017-10-25 18:57:08';
-        $timestamp = '1508983028';
+        $timestamp = 1508983028;
         $dateTimeMock = $this->createMock(\DateTime::class);
         $dateTimeMock->expects($this->any())
             ->method('format')

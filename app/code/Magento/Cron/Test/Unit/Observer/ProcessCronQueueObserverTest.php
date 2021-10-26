@@ -26,6 +26,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Process\PhpExecutableFinderFactory;
@@ -656,6 +657,7 @@ class ProcessCronQueueObserverTest extends TestCase
      * Test case, successfully run job.
      *
      * @return void
+     * @throws Exception
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDispatchRunJob(): void
@@ -761,6 +763,7 @@ class ProcessCronQueueObserverTest extends TestCase
      * Testing _generate(), iterate over saved cron jobs.
      *
      * @return void
+     * @throws Exception
      */
     public function testDispatchNotGenerate(): void
     {
@@ -814,6 +817,7 @@ class ProcessCronQueueObserverTest extends TestCase
      * Testing _generate(), iterate over saved cron jobs and generate jobs.
      *
      * @return void
+     * @throws Exception
      */
     public function testDispatchGenerate(): void
     {
@@ -890,6 +894,7 @@ class ProcessCronQueueObserverTest extends TestCase
      * Test case without saved cron jobs in data base.
      *
      * @return void
+     * @throws Exception
      */
     public function testDispatchCleanup(): void
     {
@@ -954,6 +959,7 @@ class ProcessCronQueueObserverTest extends TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
      */
     public function testMissedJobsCleanedInTime(): void
     {
