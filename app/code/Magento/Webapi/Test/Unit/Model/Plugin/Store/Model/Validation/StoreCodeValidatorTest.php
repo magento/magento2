@@ -12,9 +12,6 @@ use Magento\Webapi\Model\Plugin\Store\Model\Validation\StoreCodeValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * StoreCodeValidatorTest.
- */
 class StoreCodeValidatorTest extends TestCase
 {
     /**

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 declare(strict_types=1);
 
 namespace Magento\Webapi\Model\Plugin\Store\Model\Validation;
@@ -16,6 +21,8 @@ class StoreCodeValidator
     private string $invalidStoreCode;
 
     /**
+     * Initialize dependencies.
+     *
      * @param string $invalidStoreCode
      */
     public function __construct(string $invalidStoreCode)
@@ -24,6 +31,8 @@ class StoreCodeValidator
     }
 
     /**
+     * Validate if store code parsed incorrectly.
+     *
      * @param Subject $subject
      * @param bool $result
      * @param string $value
