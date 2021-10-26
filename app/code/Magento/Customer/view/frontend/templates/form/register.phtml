@@ -104,7 +104,7 @@ $formData = $block->getFormData();
                 </label>
                 <div class="control">
                     <input type="text"
-                           name="street[]"
+                           name="street[0]"
                            value="<?= $escaper->escapeHtmlAttr($formData->getStreet(0)) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?>"
                            id="street_1"
@@ -121,7 +121,7 @@ $formData = $block->getFormData();
                                 </label>
                                 <div class="control">
                                     <input type="text"
-                                           name="street[]"
+                                           name="street[<?= $_i ?>]"
                                            value="<?= $escaper->escapeHtml($formData->getStreetLine($_i - 1)) ?>"
                                            title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i)) ?>"
                                            id="street_<?= /* @noEscape */ $_i ?>"
