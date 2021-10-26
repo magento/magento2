@@ -58,7 +58,6 @@ class Name
         return $driver->isExists($destinationFile)
             ? $this->generateFileName($driver, $fileInfo)
             : $fileInfo['basename'];
-
     }
 
     /**
