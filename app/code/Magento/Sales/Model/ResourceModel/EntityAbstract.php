@@ -179,7 +179,9 @@ abstract class EntityAbstract extends AbstractDb
         $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
-        $this->getConnection()->update($this->getMainTable(), $data, $condition);
+        if (count($data) > 0) {
+            $this->getConnection()->update($this->getMainTable(), $data, $condition);
+        }
     }
 
     /**
