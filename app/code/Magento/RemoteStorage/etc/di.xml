@@ -26,6 +26,7 @@
             <argument name="writeFactory" xsi:type="object">
                 Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory
             </argument>
+            <argument name="readFactory" xsi:type="object">remoteReadFactory</argument>
         </arguments>
     </type>
     <virtualType name="customRemoteFilesystem" type="Magento\RemoteStorage\Filesystem">

@@ -9,9 +9,8 @@ namespace Magento\ImportExport\Model\Export;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\File\Csv;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\MysqlMq\Model\Driver\Queue;
@@ -40,10 +39,7 @@ class ConsumerTest extends TestCase
     /** @var Queue */
     private $queue;
 
-    /** @var Csv */
-    private $csvReader;
-
-    /** @var Write */
+    /** @var WriteInterface */
     private $directory;
 
     /** @var string */
@@ -60,8 +56,8 @@ class ConsumerTest extends TestCase
         $this->queue = $this->objectManager->create(Queue::class, ['queueName' => 'export']);
         $this->messageEncoder = $this->objectManager->get(MessageEncoder::class);
         $this->consumer = $this->objectManager->get(Consumer::class);
-        $this->directory = $this->objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->csvReader = $this->objectManager->get(Csv::class);
+        $filesystem = $this->objectManager->get(Filesystem::class);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
@@ -91,10 +87,51 @@ class ConsumerTest extends TestCase
         $this->consumer->process($decodedMessage);
         $this->filePath = 'export/' . $decodedMessage->getFileName();
         $this->assertTrue($this->directory->isExist($this->filePath));
-        $data = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
+        $data = $this->getCsvData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $data);
-        $skuPosition = array_search(ProductInterface::SKU, array_keys($data));
-        $this->assertNotFalse($skuPosition);
+        $skuPosition = $this->getSkuPosition($data);
+        $this->assertNotNull($skuPosition);
         $this->assertEquals('simple2', $data[1][$skuPosition]);
+    }
+
+    /**
+     * Get sku position from array.
+     *
+     * @param array $csvFileData
+     *
+     * @return int|null
+     */
+    private function getSkuPosition(array $csvFileData): ?int
+    {
+        foreach ($csvFileData as $data) {
+            $skuPosition = array_search(ProductInterface::SKU, $data);
+
+            if ($skuPosition !== false) {
+                return $skuPosition;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse csv file and return csv data as array
+     *
+     * @param string $filePath
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function getCsvData(string $filePath): array
+    {
+        $driver = $this->directory->getDriver();
+        $fileResource = $driver->fileOpen($filePath, 'r');
+
+        $data = [];
+        while ($rowData = $driver->fileGetCsv($fileResource, 100000)) {
+            $data[] = $rowData;
+        }
+        $driver->fileClose($fileResource);
+
+        return $data;
     }
 }
