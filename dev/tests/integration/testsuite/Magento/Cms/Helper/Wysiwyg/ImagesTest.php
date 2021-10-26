@@ -127,6 +127,7 @@ class ImagesTest extends TestCase
      * @param int $storeId
      * @return Images
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function generateHelper($isStaticUrlsAllowed = false, int $storeId = 1)
     {
