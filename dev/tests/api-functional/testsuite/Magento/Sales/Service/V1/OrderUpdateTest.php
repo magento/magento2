@@ -179,6 +179,10 @@ class OrderUpdateTest extends WebapiAbstract
             ->loadByIncrementId(self::ORDER_INCREMENT_ID);
 
         $entityData = $this->getOrderData($order);
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $this->markTestSkipped("Soap calls are more strict and contains attributes.");
+            return;
+        }
 
         $requestData = ['entity' => ['entity_id' => $entityData['entity_id']]];
 
