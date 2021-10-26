@@ -352,7 +352,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpressionForAttribute($range, $attribute)
     {
         $expression = $this->_getRangeExpression($range);
-        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), $expression);
+        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), (string) $expression);
     }
 
     /**
@@ -369,7 +369,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         return str_replace(
             '{{attribute}}',
             $this->_reportOrderFactory->create()->getStoreTZOffsetQuery($this->getMainTable(), $attribute, $from, $to),
-            $this->_getRangeExpression($range)
+            (string) $this->_getRangeExpression($range)
         );
     }
 
