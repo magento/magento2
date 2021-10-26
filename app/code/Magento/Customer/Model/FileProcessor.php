@@ -215,7 +215,9 @@ class FileProcessor
         );
 
         $result = $uploader->save($path);
-        unset($result['path']);
+        if ($result && isset($result['path'])) {
+            unset($result['path']);
+        }
         if (!$result) {
             throw new LocalizedException(
                 __('File can not be saved to the destination folder.')
