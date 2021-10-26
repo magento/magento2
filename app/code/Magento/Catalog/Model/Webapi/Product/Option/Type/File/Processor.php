@@ -40,8 +40,11 @@ class Processor
     }
 
     /**
+     * Saves file
+     *
      * @param ImageContentInterface $imageContent
      * @return string
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function saveFile(ImageContentInterface $imageContent)
     {
@@ -50,6 +53,8 @@ class Processor
     }
 
     /**
+     * Save file content and return file details
+     *
      * @param ImageContentInterface $imageContent
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
