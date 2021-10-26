@@ -152,10 +152,7 @@ class DeploymentConfig
     private function getEnvOverride() : array
     {
         $env = getenv(self::MAGENTO_ENV_PREFIX . '_OVERRIDE');
-        if (!empty($env)) {
-            return json_decode($env, true) ?? [];
-        }
-        return [];
+        return !empty($env) ? (json_decode($env, true) ?? []) : [];
     }
 
     /**
@@ -214,7 +211,7 @@ class DeploymentConfig
                 // allow reading values from env variables
                 // value need to be specified in %env(NAME, "default value")% format
                 // like %env(DB_PASSWORD)%, %env(DB_NAME, "test")%
-                if (preg_match(self::ENV_NAME_PATTERN, $param,$matches)) {
+                if (preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
                     $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
                 }
 
