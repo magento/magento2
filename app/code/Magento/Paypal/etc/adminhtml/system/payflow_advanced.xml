@@ -217,7 +217,7 @@
                 </group>
             </group>
             <group id="advanced_advertise_paylater" translate="label" showInDefault="1" showInWebsite="1" sortOrder="70">
-                <label>Advertise PayPal PayLater</label>
+                <label>Advertise PayPal Pay Later</label>
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>
                 </depends>
