@@ -193,10 +193,12 @@ abstract class Validator
         if (!$this->rootDirectory->isReadable($this->rootDirectory->getRelativePath($fileInfo))) {
             return false;
         }
-        $imageInfo = getimagesize($fileInfo);
-        if (!$imageInfo) {
+
+        $fileContent = $this->rootDirectory->readFile($fileInfo);
+        if (empty($fileContent) || !getimagesizefromstring($fileContent)) {
             return false;
         }
+
         return true;
     }
 }
