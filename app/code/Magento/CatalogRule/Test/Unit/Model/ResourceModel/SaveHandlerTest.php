@@ -46,8 +46,8 @@ class SaveHandlerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $linkedField = 'entity_id';
