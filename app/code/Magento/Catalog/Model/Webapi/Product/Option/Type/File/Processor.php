@@ -58,16 +58,19 @@ class Processor
     {
         $filePath = $this->saveFile($imageContent);
 
-        $fileAbsolutePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($filePath);
-        $fileHash = hash('sha256', $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->readFile($filePath));
-        $imageSize = getimagesize($fileAbsolutePath);
+        $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $fileAbsolutePath = $directory->getAbsolutePath($filePath);
+        $fileContent = $directory->readFile($filePath);
+        $fileHash = hash('sha256', $fileContent);
+        $imageSize = getimagesizefromstring($fileContent);
+        $stat = $directory->stat($fileAbsolutePath);
         $result = [
             'type' => $imageContent->getType(),
             'title' => $imageContent->getName(),
             'fullpath' => $fileAbsolutePath,
             'quote_path' => $filePath,
             'order_path' => $filePath,
-            'size' => filesize($fileAbsolutePath),
+            'size' => $stat['size'],
             'width' => $imageSize ? $imageSize[0] : 0,
             'height' => $imageSize ? $imageSize[1] : 0,
             'secret_key' => substr($fileHash, 0, 20),
