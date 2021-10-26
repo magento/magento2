@@ -109,6 +109,7 @@ class DataObjectHelper
             unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
         }
         if ($dataObject instanceof \Magento\Framework\Model\AbstractModel
+            && !$dataObject instanceof \Magento\Quote\Api\Data\AddressInterface
             && !isset($data['items'])?? $data['items'][0]['is_tax_included']) {
             $simpleData = array_filter($data, function ($e) {
                 return is_scalar($e) || is_null($e);
@@ -149,6 +150,7 @@ class DataObjectHelper
     }
 
     /**
+     *
      * @param mixed $dataObject
      * @param string $getterMethodName
      * @param string $methodName
