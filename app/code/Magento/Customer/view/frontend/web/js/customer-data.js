@@ -176,13 +176,25 @@ define([
          */
         update: function (sections) {
             var sectionId = 0,
-                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {},
+                pdpSectionsNames = ['cart', 'directory-data', 'messages'];
+
+            if (_.isArray(_.keys(sections)) && _.isEqual(pdpSectionsNames, _.keys(sections))) {
+                $.cookieStorage.set('pdp_qty_error', true);
+            }
 
             _.each(sections, function (sectionData, sectionName) {
                 sectionId = sectionData['data_id'];
                 sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
+
+                if (_.keys(sections).length === 1) {
+
+                    if (_.isEmpty(sectionData.messages) && $.cookieStorage.get('pdp_qty_error')) {
+                        return;
+                    }
+                }
                 buffer.notify(sectionName, sectionData);
             });
             $.cookieStorage.set('section_data_ids', sectionDataIds);
@@ -430,6 +442,13 @@ define([
                 customerData.invalidate(sections);
             }
         }
+    });
+
+    /**
+     * Place code to be executed on completion of last outstanding ajax call here
+     */
+    $(document).ajaxStop(function () {
+        $.cookieStorage.set('pdp_qty_error', false);
     });
 
     return customerData;
