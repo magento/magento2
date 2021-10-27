@@ -18,11 +18,11 @@
             </group>
         </section>
         <section id="sales">
-            <group id="backpressure" translate="label" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="backpressure" translate="label" type="text" sortOrder="1001" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Rate limiting</label>
                 <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable rate limiting for placing orders</label>
-                    <source_model>Magento\Quote\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="limit" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Requests limit per authenticated customer</label>
