@@ -41,12 +41,14 @@ class BackpressureFieldValidator implements ValidatorInterface
     public function validate(Field $field, $args): void
     {
         $context = $this->backpressureContextFactory->create($field);
-        try {
-            $this->backpressureEnforcer->enforce($context);
-        } catch (BackpressureExceededException $exception) {
-            throw new GraphQlInputException(
-                __('Something went wrong while processing the request. Try again later')
-            );
+        if ($context) {
+            try {
+                $this->backpressureEnforcer->enforce($context);
+            } catch (BackpressureExceededException $exception) {
+                throw new GraphQlInputException(
+                    __('Something went wrong while processing the request. Try again later')
+                );
+            }
         }
     }
 }
