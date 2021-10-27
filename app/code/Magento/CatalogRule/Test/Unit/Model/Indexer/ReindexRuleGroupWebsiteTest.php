@@ -71,8 +71,8 @@ class ReindexRuleGroupWebsiteTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $timeStamp = (int)gmdate('U');
