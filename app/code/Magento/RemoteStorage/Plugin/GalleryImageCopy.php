@@ -62,38 +62,41 @@ class GalleryImageCopy
      * @param callable $proceed
      * @return string
      * @throws FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetImageWidth(Gallery $subject, callable $proceed): string
     {
-        if($this->config->IsEnabled()){
-            $file = $subject->getCurrentImage()->getPath();
-            return $this->copyFileToTmp($file);
-        }
+        return $this->copyFileToTmp($subject,$proceed);
     }
 
     /**
      * Move files from storage to tmp folder
      *
-     * @param string $filePath
+     * @param Gallery $subject
+     * @param callable $proceed
      * @return string
      * @throws FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    private function copyFileToTmp(string $filePath): string
+    private function copyFileToTmp(Gallery $subject, callable $proceed): string
     {
-        if ($this->fileExistsInTmp($filePath)) {
-            return $this->tmpFiles[$filePath];
+        if ($this->config->IsEnabled()) {
+            $filePath = $subject->getCurrentImage()->getPath();
+            if ($this->fileExistsInTmp($filePath)) {
+                return $this->tmpFiles[$filePath];
+            }
+            $absolutePath = $this->remoteDirectoryWrite->getAbsolutePath($filePath);
+            if ($this->remoteDirectoryWrite->isFile($absolutePath)) {
+                $this->tmpDirectoryWrite->create();
+                $tmpPath = $this->storeTmpName($filePath);
+                $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
+                $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
+                    ? $tmpPath
+                    : $filePath;
+            }
+            return $filePath;
         }
-        $absolutePath = $this->remoteDirectoryWrite->getAbsolutePath($filePath);
-        if ($this->remoteDirectoryWrite->isFile($absolutePath)) {
-            $this->tmpDirectoryWrite->create();
-            $tmpPath = $this->storeTmpName($filePath);
-            $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-            $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
-                ? $tmpPath
-                : $filePath;
-        }
-        return $filePath;
     }
 
     /**
