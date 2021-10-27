@@ -59,7 +59,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
             'button_class' => '',
             'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
             'options' => $this->_getAddProductButtonOptions(),
-            'dropDownAriaLabel' => 'Add product of type'
+            'dropdown_button_aria_label' => __('Add product of type'),
         ];
         $this->buttonList->add('add_new', $addButtonProps);
 

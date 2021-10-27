@@ -168,7 +168,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
             'title' => $title,
             'class' => join(' ', $classes),
             'disabled' => $disabled,
-            'aria-label' => $this->getData('dropDownAriaLabel') ?: '',
+            'aria-label' => $this->getData('dropdown_button_aria_label') ?: '',
         ];
         $this->_getDataAttributes(['mage-init' => '{"dropdown": {}}', 'toggle' => 'dropdown'], $attributes);
 

@@ -38,7 +38,7 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
             'class_name' => Container::SPLIT_BUTTON,
             'options' => $this->getOptions(),
             'sort_order' => 90,
-            'dropDownAriaLabel' => 'Save options',
+            'dropdown_button_aria_label' => __('Save options'),
         ];
     }
 
