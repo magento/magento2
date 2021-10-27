@@ -45,7 +45,7 @@ var config = {
             'jquery-ui-modules/tabs': 'jquery/ui-modules/widgets/tabs',
             'jquery-ui-modules/tooltip': 'jquery/ui-modules/widgets/tooltip',
             'jquery-ui-modules/widget': 'jquery/ui-modules/widget',
-            'jquery-ui-modules/timepicker': 'jquery/jquery-ui-timepicker-addon'
+            'jquery-ui-modules/timepicker': 'jquery/timepicker'
         }
     },
     shim: {
