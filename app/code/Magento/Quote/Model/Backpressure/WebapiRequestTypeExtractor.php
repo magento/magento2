@@ -6,10 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\Checkout\Model\Backpressure;
+namespace Magento\Quote\Model\Backpressure;
 
 use Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface;
-use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
+use Magento\Quote\Api\CartManagementInterface;
 
 /**
  * Identifies which checkout related functionality needs backpressure management.
@@ -31,7 +31,10 @@ class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInte
      */
     public function extract(string $service, string $method, string $endpoint): ?string
     {
-        if ($method === 'savePaymentInformationAndPlaceOrder' && $this->config->isEnforcementEnabled()) {
+        if ($service === CartManagementInterface::class
+            && $method === 'placeOrder'
+            && $this->config->isEnforcementEnabled()
+        ) {
             return OrderLimitConfigManager::REQUEST_TYPE_ID;
         }
 

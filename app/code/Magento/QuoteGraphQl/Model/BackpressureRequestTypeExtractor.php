@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model;
 
-use Magento\Checkout\Model\Backpressure\CheckoutLimitConfigManager;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface;
+use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
 use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
 
@@ -18,12 +18,12 @@ use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
  */
 class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
 {
-    private CheckoutLimitConfigManager $config;
+    private OrderLimitConfigManager $config;
 
     /**
-     * @param CheckoutLimitConfigManager $config
+     * @param OrderLimitConfigManager $config
      */
-    public function __construct(CheckoutLimitConfigManager $config)
+    public function __construct(OrderLimitConfigManager $config)
     {
         $this->config = $config;
     }
@@ -38,7 +38,7 @@ class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
             )
             && $this->config->isEnforcementEnabled()
         ) {
-            return CheckoutLimitConfigManager::REQUEST_TYPE_ID;
+            return OrderLimitConfigManager::REQUEST_TYPE_ID;
         }
 
         return null;

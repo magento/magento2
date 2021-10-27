@@ -62,13 +62,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Backpressure\SlidingWindow\CompositeLimitConfigManager">
-        <arguments>
-            <argument name="configs" xsi:type="array">
-                <item name="checkout" xsi:type="object">
-                    Magento\Checkout\Model\Backpressure\CheckoutLimitConfigManager
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

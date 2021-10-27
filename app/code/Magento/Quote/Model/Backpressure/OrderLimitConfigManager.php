@@ -6,34 +6,29 @@
 
 declare(strict_types=1);
 
-namespace Magento\Checkout\Model\Backpressure;
+namespace Magento\Quote\Model\Backpressure;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfig;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Psr\Log\LoggerInterface;
 
 /**
- * provides limits for checkout functionality.
+ * Provides backpressure limits for ordering.
  */
-class CheckoutLimitConfigManager implements LimitConfigManagerInterface
+class OrderLimitConfigManager implements LimitConfigManagerInterface
 {
-    public const REQUEST_TYPE_ID = 'checkout';
+    public const REQUEST_TYPE_ID = 'quote-order';
 
     private ScopeConfigInterface $config;
 
-    private LoggerInterface $logger;
-
     /**
      * @param ScopeConfigInterface $config
-     * @param LoggerInterface $logger
      */
-    public function __construct(ScopeConfigInterface $config, LoggerInterface $logger)
+    public function __construct(ScopeConfigInterface $config)
     {
         $this->config = $config;
-        $this->logger = $logger;
     }
 
     /**
@@ -57,7 +52,7 @@ class CheckoutLimitConfigManager implements LimitConfigManagerInterface
      */
     public function isEnforcementEnabled(): bool
     {
-        $enabled = $this->config->isSetFlag('checkout/backpressure/enabled', ScopeInterface::SCOPE_STORE);
+        $enabled = $this->config->isSetFlag('sales/backpressure/enabled', ScopeInterface::SCOPE_STORE);
         if (!$enabled) {
             return false;
         }
@@ -80,9 +75,9 @@ class CheckoutLimitConfigManager implements LimitConfigManagerInterface
      */
     private function fetchAuthenticatedLimit(): int
     {
-        $value = (int) $this->config->getValue('checkout/backpressure/limit', ScopeInterface::SCOPE_STORE);
+        $value = (int) $this->config->getValue('sales/backpressure/limit', ScopeInterface::SCOPE_STORE);
         if ($value <= 0) {
-            throw new \RuntimeException("Invalid checkout backpressure config");
+            throw new \RuntimeException("Invalid order backpressure config");
         }
 
         return $value;
@@ -95,9 +90,9 @@ class CheckoutLimitConfigManager implements LimitConfigManagerInterface
      */
     private function fetchGuestLimit(): int
     {
-        $value = (int) $this->config->getValue('checkout/backpressure/guest_limit', ScopeInterface::SCOPE_STORE);
+        $value = (int) $this->config->getValue('sales/backpressure/guest_limit', ScopeInterface::SCOPE_STORE);
         if ($value <= 0) {
-            throw new \RuntimeException("Invalid checkout backpressure config");
+            throw new \RuntimeException("Invalid order backpressure config");
         }
 
         return $value;
@@ -110,9 +105,9 @@ class CheckoutLimitConfigManager implements LimitConfigManagerInterface
      */
     private function fetchPeriod(): int
     {
-        $value = (int) $this->config->getValue('checkout/backpressure/period', ScopeInterface::SCOPE_STORE);
+        $value = (int) $this->config->getValue('sales/backpressure/period', ScopeInterface::SCOPE_STORE);
         if ($value <= 0) {
-            throw new \RuntimeException("Invalid checkout backpressure config");
+            throw new \RuntimeException("Invalid order backpressure config");
         }
 
         return $value;
