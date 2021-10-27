@@ -14,7 +14,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * @magentoAppArea adminhtml
  */
-class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @dataProvider validationDataProvider
