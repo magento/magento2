@@ -121,7 +121,7 @@ class MaintenanceMode
     public function getAddressInfo()
     {
         if ($this->flagDir->isExist(self::IP_FILENAME)) {
-            $temp = $this->flagDir->readFile(self::IP_FILENAME);
+            $temp = (string) $this->flagDir->readFile(self::IP_FILENAME);
             return explode(',', trim($temp));
         } else {
             return [];

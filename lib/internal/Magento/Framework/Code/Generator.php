@@ -104,6 +104,7 @@ class Generator
     {
         $resultEntityType = null;
         $sourceClassName = null;
+        $className = $className ?? '';
         foreach ($this->_generatedEntities as $entityType => $generatorClass) {
             $suffixLen = strlen($entityType);
             $entitySuffix = ucfirst($entityType);

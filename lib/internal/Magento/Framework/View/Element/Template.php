@@ -80,8 +80,6 @@ class Template extends AbstractBlock
     protected $_template;
 
     /**
-     * Template engine pool
-     *
      * @var \Magento\Framework\View\TemplateEnginePool
      */
     protected $templateEnginePool;
@@ -115,8 +113,6 @@ class Template extends AbstractBlock
     private $mediaDirectory;
 
     /**
-     * Template context
-     *
      * @var \Magento\Framework\View\Element\BlockInterface
      */
     protected $templateContext;
@@ -268,7 +264,7 @@ class Template extends AbstractBlock
         );
 
         if ($this->validator->isValid($fileName)) {
-            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $extension = pathinfo((string) $fileName, PATHINFO_EXTENSION);
             $templateEngine = $this->templateEnginePool->get($extension);
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
         } else {

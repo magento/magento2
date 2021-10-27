@@ -226,6 +226,7 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\') ?: null;
+        $name = parent::getNamespaceName();
+        return $name ? ltrim($name, '\\') : null;
     }
 }

@@ -64,7 +64,7 @@ class Multiselect extends AbstractElement
      */
     public function getName()
     {
-        $name = parent::getName();
+        $name = (string) parent::getName();
         if (strpos($name, '[]') === false) {
             $name .= '[]';
         }
@@ -95,7 +95,7 @@ class Multiselect extends AbstractElement
 
         $value = $this->getValue();
         if (!is_array($value)) {
-            $value = explode(',', $value);
+            $value = explode(',', (string) $value);
         }
 
         $values = $this->getValues();

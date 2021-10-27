@@ -175,7 +175,7 @@ class Manager
      */
     protected function splitPath($path)
     {
-        if (strpos($path, '::') !== false) {
+        if (is_string($path) && strpos($path, '::') !== false) {
             list($excludedModule, $excludedPath) = explode('::', $path);
             return [
                 'excludedModule' => $excludedModule,
@@ -202,6 +202,8 @@ class Manager
     }
 
     /**
+     * Check for an asset's minified
+     *
      * @param LocalInterface $asset
      * @return bool
      */
@@ -221,14 +223,19 @@ class Manager
                 return false;
             }
         } else {
-            $this->excluded[] = $this->filesystem->getDirectoryRead(DirectoryList::APP)
-                ->getAbsolutePath(str_replace(".min.$extension", ".$extension", $asset->getPath()));
+            $this->excluded[] = $this->filesystem
+                ->getDirectoryRead(DirectoryList::APP)
+                ->getAbsolutePath(
+                    str_replace(".min.$extension", ".$extension", (string) $asset->getPath())
+                );
         }
 
         return true;
     }
 
     /**
+     * Validates asset
+     *
      * @param LocalInterface $asset
      * @return bool
      */
@@ -244,6 +251,8 @@ class Manager
     }
 
     /**
+     * Check if asset has valid type.
+     *
      * @param LocalInterface $asset
      * @return bool
      */

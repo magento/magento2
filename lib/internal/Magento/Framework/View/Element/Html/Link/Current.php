@@ -93,10 +93,12 @@ class Current extends Template
      */
     public function isCurrent()
     {
-        $urlByPath = preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()));
-        return $this->getCurrent() ||
-            ($urlByPath == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()))) ||
-            $this->isCurrentCmsUrl($urlByPath);
+        if ($this->getCurrent()) {
+            return $this->getCurrent();
+        }
+        $urlByPath = preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()) ?? '');
+        $mcaUrl = preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()) ?? '');
+        return ($urlByPath === $mcaUrl) || $this->isCurrentCmsUrl($urlByPath);
     }
 
     /**
@@ -117,7 +119,11 @@ class Current extends Template
      */
     private function isCurrentCmsUrl($urlByPath)
     {
-        return ($urlByPath == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getCurrentUrl()));
+        return $urlByPath == preg_replace(
+            self::REGEX_INDEX_URL_PATTERN,
+            '',
+            $this->getCurrentUrl() ?? ''
+        );
     }
 
     /**

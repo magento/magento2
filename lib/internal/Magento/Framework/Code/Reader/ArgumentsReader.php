@@ -110,7 +110,7 @@ class ArgumentsReader
 
         $type = $parameter->detectType();
 
-        if ($type === 'null') {
+        if ($type === 'null' || $type === null) {
             return null;
         }
 

@@ -89,7 +89,7 @@ class StringUtils
             }
         } else {
             // split smartly, keeping words
-            $split = preg_split('/(' . $wordSeparatorRegex . '+)/siu', $value, null, PREG_SPLIT_DELIM_CAPTURE);
+            $split = preg_split('/(' . $wordSeparatorRegex . '+)/siu', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
             $index = 0;
             $space = '';
             $spaceLen = 0;
@@ -160,6 +160,9 @@ class StringUtils
      */
     public function cleanString($string)
     {
+        if ($string === null) {
+            return '';
+        }
         return mb_convert_encoding($string, self::ICONV_CHARSET);
     }
 
@@ -207,7 +210,7 @@ class StringUtils
      * @param int $offset
      * @return int|bool
      */
-    public function strpos($haystack, $needle, $offset = null)
+    public function strpos($haystack, $needle, $offset = 0)
     {
         return mb_strpos($haystack, $needle, $offset, self::ICONV_CHARSET);
     }

@@ -86,7 +86,8 @@ abstract class EntityAbstract
             $this->definedClasses = new DefinedClasses();
         }
 
-        $this->_sourceClassName = $this->_getFullyQualifiedClassName($sourceClassName);
+        $this->_sourceClassName = $sourceClassName
+            ? $this->_getFullyQualifiedClassName($sourceClassName) : '';
         if ($resultClassName) {
             $this->_resultClassName = $this->_getFullyQualifiedClassName($resultClassName);
         } elseif ($this->_sourceClassName) {
@@ -288,7 +289,7 @@ abstract class EntityAbstract
     protected function _getGeneratedCode()
     {
         $sourceCode = $this->_classGenerator->generate();
-        return $this->_fixCodeStyle($sourceCode);
+        return $sourceCode ? $this->_fixCodeStyle($sourceCode) : '';
     }
 
     /**

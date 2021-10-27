@@ -219,7 +219,7 @@ class ConfiguredPriceTest extends TestCase
     {
         $resultPrice = rand(1, 9);
 
-        $this->price->expects($this->exactly(4))
+        $this->price->expects($this->exactly(2))
             ->method('getValue')
             ->willReturn($resultPrice);
 

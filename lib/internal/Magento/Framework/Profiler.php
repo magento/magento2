@@ -215,7 +215,8 @@ class Profiler
      */
     public static function clear($timerName = null)
     {
-        if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
+        if ($timerName !== null
+            && strpos($timerName, self::NESTING_SEPARATOR) !== false) {
             throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
         $timerId = self::_getTimerId($timerName);

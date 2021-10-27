@@ -962,7 +962,8 @@ class File implements DriverInterface
         // check if the path given is already an absolute path containing the
         // basepath. so if the basepath starts at position 0 in the path, we
         // must not concatinate them again because path is already absolute.
-        if (0 === strpos($path, $basePath)) {
+        if ($path !== null
+            && 0 === strpos($path, $basePath)) {
             return $this->getScheme($scheme) . $path;
         }
 
@@ -997,6 +998,10 @@ class File implements DriverInterface
      */
     protected function fixSeparator($path)
     {
+        if ($path === null) {
+            // emulate php < 8.1
+            return '';
+        }
         return str_replace('\\', '/', $path);
     }
 
