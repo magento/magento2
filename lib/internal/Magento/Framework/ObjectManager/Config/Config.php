@@ -10,6 +10,9 @@ use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
+/**
+ * The object manager config
+ */
 class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {
     /**
@@ -27,7 +30,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_definitions;
 
     /**
-     * Current cache key
+     * The current cache key
      *
      * @var string
      */
@@ -41,7 +44,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_preferences = [];
 
     /**
-     * Virtual types
+     * The list of virtual types
      *
      * @var array
      */

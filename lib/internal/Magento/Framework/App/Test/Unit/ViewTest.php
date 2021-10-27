@@ -155,6 +155,7 @@ class ViewTest extends TestCase
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Layout must be loaded only once.');
         $this->_view->setIsLayoutLoaded(true);
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout();
     }
 
@@ -167,6 +168,7 @@ class ViewTest extends TestCase
             ->method('addHandle')
             ->withConsecutive(['default']);
         $this->_requestMock->method('getFullActionName')->willReturn('action_name');
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout();
     }
 
@@ -176,6 +178,7 @@ class ViewTest extends TestCase
     public function testLoadLayoutWhenBlocksNotGenerated(): void
     {
         $this->_requestMock->method('getFullActionName')->willReturn('action_name');
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout('', false, true);
     }
 
@@ -185,6 +188,7 @@ class ViewTest extends TestCase
     public function testLoadLayoutWhenXmlNotGenerated(): void
     {
         $this->_requestMock->method('getFullActionName')->willReturn('action_name');
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->loadLayout('', true, false);
     }
 
@@ -270,6 +274,7 @@ class ViewTest extends TestCase
             ->with('', 'no-renderLayout')
             ->willReturn(true);
         $this->_eventManagerMock->expects($this->never())->method('dispatch');
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->renderLayout();
     }
 
@@ -284,6 +289,7 @@ class ViewTest extends TestCase
             ->willReturn(false);
         $this->_layoutMock->expects($this->once())->method('addOutputElement')->with('output');
         $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->renderLayout('output');
     }
 
@@ -299,6 +305,7 @@ class ViewTest extends TestCase
 
         $this->_layoutMock->expects($this->never())->method('addOutputElement');
         $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);
+        // phpcs:ignore Magento2.Legacy.ObsoleteResponse
         $this->_view->renderLayout();
     }
 }
