@@ -22,7 +22,7 @@ class ReservedAttributeCheckerAdapter implements ReservedAttributeCheckerInterfa
     /**
      * @var ReservedAttributeList
      */
-    protected $reservedAttributeList;
+    private $reservedAttributeList;
 
     /**
      * @param ReservedAttributeList $reservedAttributeList
