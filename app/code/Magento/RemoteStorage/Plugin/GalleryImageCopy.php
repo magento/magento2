@@ -60,14 +60,14 @@ class GalleryImageCopy
      *
      * @param Gallery $subject
      * @param callable $proceed
-     * @return string
+     * @return string|null
      * @throws FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetImageWidth(Gallery $subject, callable $proceed): string
     {
-        return $this->copyFileToTmp($subject,$proceed);
+        return $this->copyFileToTmp($subject, $proceed);
     }
 
     /**
@@ -75,9 +75,10 @@ class GalleryImageCopy
      *
      * @param Gallery $subject
      * @param callable $proceed
-     * @return string
+     * @return string|null
      * @throws FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function copyFileToTmp(Gallery $subject, callable $proceed): string
     {
@@ -91,11 +92,10 @@ class GalleryImageCopy
                 $this->tmpDirectoryWrite->create();
                 $tmpPath = $this->storeTmpName($filePath);
                 $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
-                $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
+                return $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
                     ? $tmpPath
                     : $filePath;
             }
-            return $filePath;
         }
     }
 
