@@ -166,7 +166,9 @@ class ViewTest extends TestCase
         $this->_layoutProcessor
             ->method('addHandle')
             ->withConsecutive(['default']);
-        $this->_requestMock->expects($this->any())->method('getFullActionName')->willReturn('action_name');
+        $this->_requestMock->expects($this->any())
+            ->method('getFullActionName')
+            ->willReturn('action_name');
         $this->_view->loadLayout();
     }
 
@@ -175,6 +177,9 @@ class ViewTest extends TestCase
      */
     public function testLoadLayoutWhenBlocksNotGenerated(): void
     {
+        $this->_requestMock->expects($this->any())
+            ->method('getFullActionName')
+            ->willReturn('action_name');
         $this->_view->loadLayout('', false, true);
     }
 
@@ -183,6 +188,9 @@ class ViewTest extends TestCase
      */
     public function testLoadLayoutWhenXmlNotGenerated(): void
     {
+        $this->_requestMock->expects($this->any())
+            ->method('getFullActionName')
+            ->willReturn('action_name');
         $this->_view->loadLayout('', true, false);
     }
 
