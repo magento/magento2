@@ -53,10 +53,14 @@ class ConfigTest extends TestCase
         $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
         $definitions->expects($this->once())->method('getClasses')->willReturn(['FooType']);
 
+        $serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializer->expects($this->any())
+            ->method('serialize')
+            ->willReturn('["custom_value"]');
         $cache = $this->getMockForAbstractClass(ConfigCacheInterface::class);
         $cache->expects($this->once())->method('get')->willReturn(false);
 
-        $config = new Config(null, $definitions);
+        $config = new Config(null, $definitions, $serializer);
         $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->exactly(2))
             ->method('serialize');
