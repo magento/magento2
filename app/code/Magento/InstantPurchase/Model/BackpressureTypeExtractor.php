@@ -19,12 +19,22 @@ use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
  */
 class BackpressureTypeExtractor implements RequestTypeExtractorInterface
 {
+    private OrderLimitConfigManager $configManager;
+
+    /**
+     * @param OrderLimitConfigManager $configManager
+     */
+    public function __construct(OrderLimitConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+    }
+
     /**
      * @inheritDoc
      */
     public function extract(RequestInterface $request, ActionInterface $action): ?string
     {
-        if ($action instanceof PlaceOrder) {
+        if ($action instanceof PlaceOrder && $this->configManager->isEnforcementEnabled()) {
             return OrderLimitConfigManager::REQUEST_TYPE_ID;
         }
 

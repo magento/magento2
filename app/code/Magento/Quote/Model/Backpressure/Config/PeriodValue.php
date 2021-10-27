@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Checkout\Model\Backpressure\Config;
+namespace Magento\Quote\Model\Backpressure\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
