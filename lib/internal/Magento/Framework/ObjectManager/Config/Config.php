@@ -245,7 +245,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
                             $this->_mergedArguments = [];
                         }
                         if (isset($this->_arguments[$key])) {
-                            $this->_arguments[$key] = array_replace($this->_arguments[$key], $curConfig['arguments']);
+                            $this->_arguments[$key] = array_replace_recursive($this->_arguments[$key], $curConfig['arguments']);
                         } else {
                             $this->_arguments[$key] = $curConfig['arguments'];
                         }
