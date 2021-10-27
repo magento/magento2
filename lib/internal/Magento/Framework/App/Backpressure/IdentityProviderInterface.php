@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\App\Request\Backpressure;
+namespace Magento\Framework\App\Backpressure;
 
 /**
  * Provides identity for context

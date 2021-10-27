@@ -12,7 +12,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Request\Backpressure\ContextFactory;
 use Magento\Framework\App\Request\Backpressure\ControllerContext;
-use Magento\Framework\App\Request\Backpressure\IdentityProviderInterface;
+use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface;
 use Magento\Framework\App\RequestInterface;
 use PHPUnit\Framework\MockObject\MockObject;

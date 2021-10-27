@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Model\Backpressure;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
+use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
@@ -21,27 +21,22 @@ class BackpressureContextFactory
 {
     private RequestTypeExtractorInterface $extractor;
 
-    private UserContextInterface $userContext;
-
-    private RemoteAddress $remoteAddress;
+    private IdentityProviderInterface $identityProvider;
 
     private RequestInterface $request;
 
     /**
      * @param RequestTypeExtractorInterface $extractor
-     * @param UserContextInterface $userContext
-     * @param RemoteAddress $remoteAddress
+     * @param IdentityProviderInterface $identityProvider
      * @param RequestInterface $request
      */
     public function __construct(
         RequestTypeExtractorInterface $extractor,
-        UserContextInterface $userContext,
-        RemoteAddress $remoteAddress,
+        IdentityProviderInterface $identityProvider,
         RequestInterface $request
     ) {
         $this->extractor = $extractor;
-        $this->userContext = $userContext;
-        $this->remoteAddress = $remoteAddress;
+        $this->identityProvider = $identityProvider;
         $this->request = $request;
     }
 
@@ -58,25 +53,10 @@ class BackpressureContextFactory
             return null;
         }
 
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-            && $this->userContext->getUserId()
-        ) {
-            $identityType = ContextInterface::IDENTITY_TYPE_CUSTOMER;
-            $identity = (string) $this->userContext->getUserId();
-        } elseif ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN
-            && $this->userContext->getUserId()
-        ) {
-            $identityType = ContextInterface::IDENTITY_TYPE_ADMIN;
-            $identity = (string) $this->userContext->getUserId();
-        } else {
-            $identityType = ContextInterface::IDENTITY_TYPE_IP;
-            $identity = (string) $this->remoteAddress->getRemoteAddress();
-        }
-
         return new GraphQlContext(
             $this->request,
-            $identity,
-            $identityType,
+            $this->identityProvider->fetchIdentity(),
+            $this->identityProvider->fetchIdentityType(),
             $typeId,
             $field->getResolver()
         );

@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi\Backpressure;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
+use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Creates backpressure context for a request.
@@ -20,27 +19,22 @@ class BackpressureContextFactory
 {
     private RequestInterface $request;
 
-    private UserContextInterface $userContext;
-
-    private RemoteAddress $remoteAddress;
+    private IdentityProviderInterface $identityProvider;
 
     private BackpressureRequestTypeExtractorInterface $extractor;
 
     /**
      * @param RequestInterface $request
-     * @param UserContextInterface $userContext
-     * @param RemoteAddress $remoteAddress
+     * @param IdentityProviderInterface $identityProvider
      * @param BackpressureRequestTypeExtractorInterface $extractor
      */
     public function __construct(
         RequestInterface $request,
-        UserContextInterface $userContext,
-        RemoteAddress $remoteAddress,
+        IdentityProviderInterface $identityProvider,
         BackpressureRequestTypeExtractorInterface $extractor
     ) {
         $this->request = $request;
-        $this->userContext = $userContext;
-        $this->remoteAddress = $remoteAddress;
+        $this->identityProvider = $identityProvider;
         $this->extractor = $extractor;
     }
 
@@ -59,25 +53,10 @@ class BackpressureContextFactory
             return null;
         }
 
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-            && $this->userContext->getUserId()
-        ) {
-            $identityType = ContextInterface::IDENTITY_TYPE_CUSTOMER;
-            $identity = (string) $this->userContext->getUserId();
-        } elseif ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN
-            && $this->userContext->getUserId()
-        ) {
-            $identityType = ContextInterface::IDENTITY_TYPE_ADMIN;
-            $identity = (string) $this->userContext->getUserId();
-        } else {
-            $identityType = ContextInterface::IDENTITY_TYPE_IP;
-            $identity = (string) $this->remoteAddress->getRemoteAddress();
-        }
-
         return new RestContext(
             $this->request,
-            $identity,
-            $identityType,
+            $this->identityProvider->fetchIdentity(),
+            $this->identityProvider->fetchIdentityType(),
             $typeId,
             $service,
             $method,

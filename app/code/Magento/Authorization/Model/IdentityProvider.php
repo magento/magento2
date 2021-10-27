@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Authorization\Model;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
-use Magento\Framework\App\Request\Backpressure\IdentityProviderInterface;
+use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**

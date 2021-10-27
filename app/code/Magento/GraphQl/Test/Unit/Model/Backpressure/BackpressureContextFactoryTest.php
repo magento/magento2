@@ -9,10 +9,9 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Test\Unit\Model\Backpressure;
 
 use Magento\Framework\App\Backpressure\ContextInterface;
+use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\GraphQl\Model\Backpressure\BackpressureContextFactory;
 use Magento\GraphQl\Model\Backpressure\GraphQlContext;
 use Magento\GraphQl\Model\Backpressure\RequestTypeExtractorInterface;
@@ -27,14 +26,9 @@ class BackpressureContextFactoryTest extends TestCase
     private $request;
 
     /**
-     * @var UserContextInterface|MockObject
+     * @var IdentityProviderInterface|MockObject
      */
-    private $userContext;
-
-    /**
-     * @var RemoteAddress|MockObject
-     */
-    private $remoteAddress;
+    private $identityProvider;
 
     /**
      * @var RequestTypeExtractorInterface|MockObject
@@ -54,14 +48,12 @@ class BackpressureContextFactoryTest extends TestCase
         parent::setUp();
 
         $this->request = $this->createMock(RequestInterface::class);
-        $this->userContext = $this->createMock(UserContextInterface::class);
-        $this->remoteAddress = $this->createMock(RemoteAddress::class);
+        $this->identityProvider = $this->createMock(IdentityProviderInterface::class);
         $this->requestTypeExtractor = $this->createMock(RequestTypeExtractorInterface::class);
 
         $this->model = new BackpressureContextFactory(
             $this->requestTypeExtractor,
-            $this->userContext,
-            $this->remoteAddress,
+            $this->identityProvider,
             $this->request
         );
     }
@@ -87,30 +79,14 @@ class BackpressureContextFactoryTest extends TestCase
     {
         return [
             'guest' => [
-                UserContextInterface::USER_TYPE_GUEST,
-                null,
-                '127.0.0.1',
-                ContextInterface::IDENTITY_TYPE_IP,
-                '127.0.0.1'
-            ],
-            'guest2' => [
-                null,
-                null,
-                '127.0.0.1',
                 ContextInterface::IDENTITY_TYPE_IP,
                 '127.0.0.1'
             ],
             'customer' => [
-                UserContextInterface::USER_TYPE_CUSTOMER,
-                42,
-                '127.0.0.1',
                 ContextInterface::IDENTITY_TYPE_CUSTOMER,
                 '42'
             ],
             'admin' => [
-                UserContextInterface::USER_TYPE_ADMIN,
-                42,
-                '127.0.0.1',
                 ContextInterface::IDENTITY_TYPE_ADMIN,
                 '42'
             ]
@@ -120,20 +96,16 @@ class BackpressureContextFactoryTest extends TestCase
     /**
      * Verify that identity is created for customers.
      *
+     * @param int $identityType
+     * @param string $identity
      * @return void
      * @dataProvider getIdentityCases
      */
-    public function testCreateForIdentity(
-        ?int $userType,
-        ?int $userId,
-        string $address,
-        int $identityType,
-        string $identity
-    ): void {
+    public function testCreateForIdentity(int $identityType, string $identity): void
+    {
         $this->requestTypeExtractor->method('extract')->willReturn($typeId = 'test');
-        $this->userContext->method('getUserType')->willReturn($userType);
-        $this->userContext->method('getUserId')->willReturn($userId);
-        $this->remoteAddress->method('getRemoteAddress')->willReturn($address);
+        $this->identityProvider->method('fetchIdentityType')->willReturn($identityType);
+        $this->identityProvider->method('fetchIdentity')->willReturn($identity);
 
         /** @var GraphQlContext $context */
         $context = $this->model->create($this->createField($resolver = 'TestResolver'));

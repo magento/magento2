@@ -8,10 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Webapi\Test\Unit\Backpressure;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
+use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
 use Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface;
 use Magento\Framework\Webapi\Backpressure\RestContext;
@@ -26,16 +25,6 @@ class BackpressureContextFactoryTest extends TestCase
     private $request;
 
     /**
-     * @var UserContextInterface|MockObject
-     */
-    private $userContext;
-
-    /**
-     * @var RemoteAddress|MockObject
-     */
-    private $remoteAddress;
-
-    /**
      * @var BackpressureRequestTypeExtractorInterface|MockObject
      */
     private $requestTypeExtractor;
@@ -46,6 +35,11 @@ class BackpressureContextFactoryTest extends TestCase
     private $model;
 
     /**
+     * @var IdentityProviderInterface|MockObject
+     */
+    private $identityProvider;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -53,14 +47,12 @@ class BackpressureContextFactoryTest extends TestCase
         parent::setUp();
 
         $this->request = $this->createMock(RequestInterface::class);
-        $this->userContext = $this->createMock(UserContextInterface::class);
-        $this->remoteAddress = $this->createMock(RemoteAddress::class);
+        $this->identityProvider = $this->createMock(IdentityProviderInterface::class);
         $this->requestTypeExtractor = $this->createMock(BackpressureRequestTypeExtractorInterface::class);
 
         $this->model = new BackpressureContextFactory(
             $this->request,
-            $this->userContext,
-            $this->remoteAddress,
+            $this->identityProvider,
             $this->requestTypeExtractor
         );
     }
@@ -86,30 +78,14 @@ class BackpressureContextFactoryTest extends TestCase
     {
         return [
             'guest' => [
-                UserContextInterface::USER_TYPE_GUEST,
-                null,
-                '127.0.0.1',
-                ContextInterface::IDENTITY_TYPE_IP,
-                '127.0.0.1'
-            ],
-            'guest2' => [
-                null,
-                null,
-                '127.0.0.1',
                 ContextInterface::IDENTITY_TYPE_IP,
                 '127.0.0.1'
             ],
             'customer' => [
-                UserContextInterface::USER_TYPE_CUSTOMER,
-                42,
-                '127.0.0.1',
                 ContextInterface::IDENTITY_TYPE_CUSTOMER,
                 '42'
             ],
             'admin' => [
-                UserContextInterface::USER_TYPE_ADMIN,
-                42,
-                '127.0.0.1',
                 ContextInterface::IDENTITY_TYPE_ADMIN,
                 '42'
             ]
@@ -119,20 +95,16 @@ class BackpressureContextFactoryTest extends TestCase
     /**
      * Verify that identity is created for customers.
      *
+     * @param int $identityType
+     * @param string $identity
      * @return void
      * @dataProvider getIdentityCases
      */
-    public function testCreateForIdentity(
-        ?int $userType,
-        ?int $userId,
-        string $address,
-        int $identityType,
-        string $identity
-    ): void {
+    public function testCreateForIdentity(int $identityType, string $identity): void
+    {
         $this->requestTypeExtractor->method('extract')->willReturn($typeId = 'test');
-        $this->userContext->method('getUserType')->willReturn($userType);
-        $this->userContext->method('getUserId')->willReturn($userId);
-        $this->remoteAddress->method('getRemoteAddress')->willReturn($address);
+        $this->identityProvider->method('fetchIdentityType')->willReturn($identityType);
+        $this->identityProvider->method('fetchIdentity')->willReturn($identity);
 
         /** @var RestContext $context */
         $context = $this->model->create($service ='SomeService', $method = 'method', $path = '/api/route');
