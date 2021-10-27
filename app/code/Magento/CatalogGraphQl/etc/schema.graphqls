@@ -320,8 +320,17 @@ type Products @doc(description: "The Products object is the top-level object ret
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
     total_count: Int @doc(description: "The number of products that are marked as visible. By default, in complex products, parent products are visible, but their child products are not.")
     filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.") @deprecated(reason: "Use aggregations instead")
-    aggregations: [Aggregation] @doc(description: "Layered navigation aggregations.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
+    aggregations (filter: AggregationsFilterInput): [Aggregation] @doc(description: "Layered navigation aggregations with filters.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
+    suggestions: [SearchSuggestion] @doc(description: "An array of search suggestions for case when search query have no results.")
+}
+
+input AggregationsFilterInput @doc(description: "An input object that specifies the filters used in product aggregations.") {
+    category: AggregationsCategoryFilterInput @doc(description: "Filter category aggregations in layered navigation.")
+}
+
+input AggregationsCategoryFilterInput @doc(description: "Filter category aggregations in layered navigation."){
+    includeDirectChildrenOnly: Boolean = false @doc(description: "Indicates whether to include only direct subcategories or all children categories at all levels.")
 }
 
 type CategoryProducts @doc(description: "The category products object returned in the Category query.") {
@@ -475,6 +484,10 @@ type Aggregation @doc(description: "A bucket that contains information for each 
     attribute_code: String! @doc(description: "Attribute code of the aggregation group.")
     options: [AggregationOption] @doc(description: "Array of options for the aggregation.")
     position: Int @doc(description: "The relative position of the attribute in a layered navigation block")
+}
+
+type SearchSuggestion @doc(description: "A string that contains search suggestion") {
+    search: String! @doc(description: "The search suggestion of existing product.")
 }
 
 interface AggregationOptionInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\AggregationOptionTypeResolverComposite") {
