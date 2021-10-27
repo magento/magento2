@@ -63,12 +63,12 @@ class Processor
     {
         $filePath = $this->saveFile($imageContent);
 
-        $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $fileAbsolutePath = $directory->getAbsolutePath($filePath);
-        $fileContent = $directory->readFile($filePath);
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $fileAbsolutePath = $mediaDirectory->getAbsolutePath($filePath);
+        $fileContent = $mediaDirectory->readFile($filePath);
         $fileHash = hash('sha256', $fileContent);
         $imageSize = getimagesizefromstring($fileContent);
-        $stat = $directory->stat($fileAbsolutePath);
+        $stat = $mediaDirectory->stat($fileAbsolutePath);
         $result = [
             'type' => $imageContent->getType(),
             'title' => $imageContent->getName(),

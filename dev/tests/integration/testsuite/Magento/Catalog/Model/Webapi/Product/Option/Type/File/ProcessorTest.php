@@ -35,6 +35,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             'size' => 212,
             'width' => 10,
             'height' => 10,
+            'secret_key' => 'bc9577055da436b9c116',
         ];
         $imageContent->setName('my_file');
         $imageContent->setType('image/png');
