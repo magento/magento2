@@ -2037,15 +2037,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         }
 
         $customerName = '';
-        if ($this->isVisibleCustomerPrefix() && strlen($this->getCustomerPrefix())) {
+        if ($this->isVisibleCustomerPrefix() && strlen($this->getCustomerPrefix() ?? '')) {
             $customerName .= $this->getCustomerPrefix() . ' ';
         }
         $customerName .= $this->getCustomerFirstname();
-        if ($this->isVisibleCustomerMiddlename() && strlen($this->getCustomerMiddlename())) {
+        if ($this->isVisibleCustomerMiddlename() && strlen($this->getCustomerMiddlename() ?? '')) {
             $customerName .= ' ' . $this->getCustomerMiddlename();
         }
         $customerName .= ' ' . $this->getCustomerLastname();
-        if ($this->isVisibleCustomerSuffix() && strlen($this->getCustomerSuffix())) {
+        if ($this->isVisibleCustomerSuffix() && strlen($this->getCustomerSuffix() ?? '')) {
             $customerName .= ' ' . $this->getCustomerSuffix();
         }
 
@@ -2074,7 +2074,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCreatedAtFormatted($format)
     {
         return $this->timezone->formatDateTime(
-            new \DateTime($this->getCreatedAt()),
+            new \DateTime($this->getCreatedAt() ?? 'now'),
             $format,
             $format,
             $this->localeResolver->getDefaultLocale(),

@@ -10,7 +10,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 class Weight extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -21,7 +21,7 @@ class Weight extends AbstractImportValidator implements RowValidatorInterface
             $this->_addMessages(
                 [
                     sprintf(
-                        $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
+                        (string) $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
                         'weight',
                         'decimal'
                     )

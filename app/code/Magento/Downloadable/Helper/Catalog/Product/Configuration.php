@@ -63,7 +63,7 @@ class Configuration extends \Magento\Framework\App\Helper\AbstractHelper impleme
      */
     public function getLinksTitle($product)
     {
-        $title = $product->getLinksTitle();
+        $title = (string) $product->getLinksTitle();
         if (strlen($title)) {
             return $title;
         }

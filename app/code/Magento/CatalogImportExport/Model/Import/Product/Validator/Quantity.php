@@ -8,12 +8,12 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
- * Class Quantity
+ * Quantity Validator
  */
 class Quantity extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($value)
     {
@@ -24,7 +24,7 @@ class Quantity extends AbstractImportValidator implements RowValidatorInterface
             $this->_addMessages(
                 [
                     sprintf(
-                        $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
+                        (string) $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
                         'qty',
                         'decimal'
                     ),

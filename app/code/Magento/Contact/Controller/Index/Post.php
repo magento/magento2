@@ -7,6 +7,7 @@
 
 namespace Magento\Contact\Controller\Index;
 
+use _PHPStan_76800bfb5\Nette\Neon\Exception;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Contact\Model\ConfigInterface;
 use Magento\Contact\Model\MailInterface;
@@ -91,7 +92,10 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     }
 
     /**
+     * Send contact form data.
+     *
      * @param array $post Post data from contact form
+     *
      * @return void
      */
     private function sendEmail($post)
@@ -103,22 +107,25 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     }
 
     /**
+     * Validates parameters from request.
+     *
      * @return array
      * @throws \Exception
      */
     private function validatedParams()
     {
         $request = $this->getRequest();
-        if (trim($request->getParam('name')) === '') {
+        if (trim((string) $request->getParam('name')) === '') {
             throw new LocalizedException(__('Enter the Name and try again.'));
         }
-        if (trim($request->getParam('comment')) === '') {
+        if (trim((string) $request->getParam('comment')) === '') {
             throw new LocalizedException(__('Enter the comment and try again.'));
         }
-        if (false === \strpos($request->getParam('email'), '@')) {
+        if (false === \strpos((string) $request->getParam('email'), '@')) {
             throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
         }
-        if (trim($request->getParam('hideit')) !== '') {
+        if (trim((string) $request->getParam('hideit')) !== '') {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception();
         }
 

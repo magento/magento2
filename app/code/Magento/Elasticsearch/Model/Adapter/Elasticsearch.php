@@ -236,10 +236,10 @@ class Elasticsearch
         unset($this->preparedIndex[$storeId]);
 
         $this->checkIndex($storeId, $mappedIndexerId, true);
-        $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
+        $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex) ?? '';
 
         // prepare new index name and increase version
-        $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId);
+        $indexPattern = $this->indexNameResolver->getIndexPattern($storeId, $mappedIndexerId) ?? '';
         $version = (int)(str_replace($indexPattern, '', $indexName));
 
         // compatibility with snapshotting collision

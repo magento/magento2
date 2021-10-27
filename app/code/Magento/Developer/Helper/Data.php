@@ -35,7 +35,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
         $remoteAddr = $this->_remoteAddress->getRemoteAddress();
         if (!empty($allowedIps) && !empty($remoteAddr)) {
-            $allowedIps = preg_split('#\s*,\s*#', $allowedIps, null, PREG_SPLIT_NO_EMPTY);
+            $allowedIps = preg_split('#\s*,\s*#', $allowedIps, -1, PREG_SPLIT_NO_EMPTY);
             if (array_search($remoteAddr, $allowedIps) === false
                 && array_search($this->_httpHeader->getHttpHost(), $allowedIps) === false
             ) {

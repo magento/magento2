@@ -30,7 +30,7 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
     const WYSIWYG_STATUS_CONFIG_PATH = 'cms/wysiwyg/enabled';
 
     /**
-     *
+     * Skin image identifier
      */
     const WYSIWYG_SKIN_IMAGE_PLACEHOLDER_ID = 'Magento_Cms::images/wysiwyg_skin_image.png';
 
@@ -197,7 +197,11 @@ class Config extends \Magento\Framework\DataObject implements ConfigInterface
             ]
         );
 
-        $config->setData('directives_url_quoted', preg_quote($config->getData('directives_url')));
+        $directivesUrl = $config->getData('directives_url');
+        $config->setData(
+            'directives_url_quoted',
+            $directivesUrl ? preg_quote($directivesUrl) : ''
+        );
 
         if (is_array($data)) {
             $config->addData($data);
