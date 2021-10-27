@@ -88,7 +88,7 @@ class CatalogPriceRulesFixture extends Fixture
                 ],
                 'from_date'             => '',
                 'to_date'               => '',
-                'sort_order'            => '',
+                'sort_order'            => '25',
                 'rule'                  => [
                     'conditions' => [
                         1 => [
