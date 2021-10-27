@@ -58,8 +58,7 @@ define([
                 activeView: true,
                 hasChanges: true,
                 customLabel: true,
-                customVisible: true,
-                autoselect: 'disabled'
+                customVisible: true
             },
             listens: {
                 activeIndex: 'onActiveIndexChange',
