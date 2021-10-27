@@ -373,9 +373,9 @@ class DataObject implements \ArrayAccess
     /**
      * Set/Get attribute wrapper
      *
-     * @param   string $method
-     * @param   array $args
-     * @return  mixed
+     * @param string $method
+     * @param array $args
+     * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __call($method, $args)
@@ -464,7 +464,7 @@ class DataObject implements \ArrayAccess
      * Present object data as string in debug mode
      *
      * @param mixed $data
-     * @param array &$objects
+     * @param array $objects
      * @return array
      */
     public function debug($data = null, &$objects = [])
