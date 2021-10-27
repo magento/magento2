@@ -125,8 +125,8 @@ class RenderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteNotAjax(): void
     {
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
@@ -155,8 +155,8 @@ class RenderTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $blocks = ['block1', 'block2'];

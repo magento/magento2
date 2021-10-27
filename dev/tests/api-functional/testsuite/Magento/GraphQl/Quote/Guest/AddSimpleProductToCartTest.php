@@ -196,8 +196,7 @@ QUERY;
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
-            'Product that you are trying to add is not available.'
+            'GraphQL response contains errors: Could not find a product with SKU "' . $sku . '"'
         );
 
         $this->graphQlMutation($query);
