@@ -45,8 +45,6 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Media directory path
-     *
      * @var string
      */
     private $mediaDirectoryPath;
@@ -184,10 +182,10 @@ class Media implements AppInterface
             /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
             $config->save();
-            $this->mediaDirectoryPath = $config->getMediaDirectory();
+            $this->mediaDirectoryPath = $config->getMediaDirectory() ?? '';
             $allowedResources = $config->getAllowedResources();
             $isAllowed = $this->isAllowed;
-            $fileAbsolutePath = $this->directoryPub->getAbsolutePath($this->relativeFileName);
+            $fileAbsolutePath = $this->directoryPub->getAbsolutePath($this->relativeFileName) ?? '';
             $fileRelativePath = str_replace(rtrim($this->mediaDirectoryPath, '/') . '/', '', $fileAbsolutePath);
             if (!$isAllowed($fileRelativePath, $allowedResources)) {
                 throw new LogicException('The path is not allowed: ' . $this->relativeFileName);
@@ -238,7 +236,8 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        $mediaPath = $this->mediaDirectoryPath ? rtrim($this->mediaDirectoryPath, '/') : $this->mediaDirectoryPath;
+        return $mediaPath !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
     }
 
     /**

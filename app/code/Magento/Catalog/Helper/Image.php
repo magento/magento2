@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Image extends AbstractHelper implements ArgumentInterface
@@ -787,7 +788,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      */
     protected function parseSize($string)
     {
-        $size = explode('x', strtolower($string));
+        $size = explode('x', strtolower((string) $string));
         if (count($size) == 2) {
             return ['width' => $size[0] > 0 ? $size[0] : null, 'height' => $size[1] > 0 ? $size[1] : null];
         }

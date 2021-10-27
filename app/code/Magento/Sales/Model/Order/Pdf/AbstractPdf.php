@@ -332,7 +332,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $top = 815;
         $values = explode(
             "\n",
-            $this->_scopeConfig->getValue(
+            (string) $this->_scopeConfig->getValue(
                 'sales/identity/address',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $store
@@ -476,6 +476,8 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         reset($payment);
 
         /* Shipping Address and Method */
+        $shippingAddress = [];
+        $shippingMethod = '';
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
             $shippingAddress = $this->_formatAddress(
@@ -495,7 +497,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         }
 
         $addressesHeight = $this->_calcAddressHeight($billingAddress);
-        if (isset($shippingAddress)) {
+        if (!empty($shippingAddress)) {
             $addressesHeight = max($addressesHeight, $this->_calcAddressHeight($shippingAddress));
         }
 

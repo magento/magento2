@@ -104,7 +104,8 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function setCronExpr($expr)
     {
-        $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
+        $expr = (string) $expr;
+        $e = preg_split('#\s+#', $expr, -1, PREG_SPLIT_NO_EMPTY);
         if (count($e) < 5 || count($e) > 6) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }

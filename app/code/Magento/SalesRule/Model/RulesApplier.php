@@ -153,7 +153,7 @@ class RulesApplier
         if ($ruleLabel) {
             $label = $ruleLabel;
         } else {
-            if (strlen($address->getCouponCode())) {
+            if (!empty($address->getCouponCode())) {
                 $label = $address->getCouponCode();
 
                 if ($rule->getDescription()) {

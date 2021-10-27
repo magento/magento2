@@ -72,7 +72,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
-    /**#@-*/
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -852,7 +854,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $ids = $this->getData('path_ids');
         if ($ids === null) {
-            $ids = explode('/', $this->getPath());
+            $ids = explode('/', (string) $this->getPath());
             $this->setData('path_ids', $ids);
         }
         return $ids;
@@ -866,7 +868,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getLevel()
     {
         if (!$this->hasLevel()) {
-            return count(explode('/', $this->getPath())) - 1;
+            return count(explode('/', (string) $this->getPath())) - 1;
         }
         return $this->getData(self::KEY_LEVEL);
     }

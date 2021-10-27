@@ -121,7 +121,10 @@ class SaveTest extends AttributeTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->filterManagerMock = $this->createMock(FilterManager::class);
+        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
+            ->setMethods(['stripTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productHelperMock = $this->createMock(ProductHelper::class);
         $this->attributeSetMock = $this->createMock(AttributeSetInterface::class);
         $this->builderMock = $this->createMock(Build::class);
@@ -173,6 +176,9 @@ class SaveTest extends AttributeTest
         $this->attributeFactoryMock
             ->method('create')
             ->willReturn($this->productAttributeMock);
+        $this->filterManagerMock
+            ->method('stripTags')
+            ->willReturn('');
     }
 
     /**

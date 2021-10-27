@@ -114,8 +114,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 }
                 $resultTime = microtime(true) - $startTime;
 
+                // cast to (int) added to emulate a behaviour from PHP < 8.1.
                 $output->writeln(
-                    __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
+                    __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', (int) $resultTime)])
                 );
             } catch (\Throwable $e) {
                 $output->writeln('process error during indexation process:');

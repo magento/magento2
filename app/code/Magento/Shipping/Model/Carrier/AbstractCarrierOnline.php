@@ -12,6 +12,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Framework\Xml\Security;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Abstract online shipping carrier model
  *
@@ -396,7 +397,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             );
         }
 
-        return crc32($requestParams);
+        return crc32($requestParams ?? '');
     }
 
     /**
@@ -438,6 +439,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = html_entity_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 

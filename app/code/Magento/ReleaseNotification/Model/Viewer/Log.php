@@ -39,6 +39,6 @@ class Log extends DataObject
      */
     public function getLastViewVersion()
     {
-        return $this->getData('last_view_version');
+        return (string) $this->getData('last_view_version');
     }
 }

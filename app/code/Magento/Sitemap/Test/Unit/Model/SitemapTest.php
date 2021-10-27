@@ -497,6 +497,10 @@ class SitemapTest extends TestCase
 
         $model = $this->getModelMock(true);
 
+        // to avoid issues with null in PHP 8.1
+        $model->method('_getBaseDir')
+            ->willReturn('');
+
         $this->store->expects($this->atLeastOnce())
             ->method('isFrontUrlSecure')
             ->willReturn(false);

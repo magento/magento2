@@ -100,6 +100,7 @@ HTML;
      */
     protected function _getSpecificCountryElementId()
     {
-        return substr($this->getId(), 0, strrpos($this->getId(), 'allowspecific')) . 'specificcountry';
+        $id = (string) $this->getId();
+        return substr($id, 0, strrpos($id, 'allowspecific')) . 'specificcountry';
     }
 }

@@ -116,7 +116,7 @@ class Elasticsearch implements ClientInterface
                 ->ping(['client' => ['timeout' => $this->clientOptions['timeout']]]);
         }
 
-        return $this->pingResult;
+        return (bool) $this->pingResult;
     }
 
     /**

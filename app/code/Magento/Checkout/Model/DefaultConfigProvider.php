@@ -97,7 +97,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $configurationPool;
 
     /**
-     * @param QuoteIdMaskFactory
+     * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
 
@@ -344,7 +344,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
                 ScopeInterface::SCOPE_STORE
             ),
             'shippingPolicyContent' => nl2br(
-                $this->scopeConfig->getValue(
+                (string) $this->scopeConfig->getValue(
                     'shipping/shipping_policy/shipping_policy_content',
                     ScopeInterface::SCOPE_STORE
                 )

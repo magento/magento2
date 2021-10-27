@@ -233,7 +233,8 @@ class WishlistTest extends TestCase
         $this->eventDispatcher->expects($this->any())
             ->method('dispatch');
         $this->resource->expects($this->any())
-            ->method('getCustomerIdFieldName');
+            ->method('getCustomerIdFieldName')
+            ->willReturn($customerIdFieldName);
         $this->resource->expects($this->once())
             ->method('load')
             ->with($this->logicalOr($this->wishlist, $customerId, $customerIdFieldName));
