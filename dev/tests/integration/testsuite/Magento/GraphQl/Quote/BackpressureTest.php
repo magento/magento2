@@ -6,25 +6,26 @@
 
 declare(strict_types=1);
 
-namespace Magento\Checkout\Model;
+namespace Magento\GraphQl\Quote;
 
-use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
-use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface;
-use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\GraphQl\Model\Backpressure\BackpressureContextFactory;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
+use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
 
 class BackpressureTest extends TestCase
 {
     /**
      * @var BackpressureContextFactory
      */
-    private $webapiContextFactory;
+    private $contextFactory;
 
     /**
      * @var LimitConfigManagerInterface
@@ -44,7 +45,7 @@ class BackpressureTest extends TestCase
         parent::setUp();
 
         $this->identityProvider = $this->createMock(IdentityProviderInterface::class);
-        $this->webapiContextFactory = Bootstrap::getObjectManager()->create(
+        $this->contextFactory = Bootstrap::getObjectManager()->create(
             BackpressureContextFactory::class,
             ['identityProvider' => $this->identityProvider]
         );
@@ -62,17 +63,13 @@ class BackpressureTest extends TestCase
             'guest' => [
                 ContextInterface::IDENTITY_TYPE_IP,
                 '127.0.0.1',
-                GuestPaymentInformationManagementInterface::class,
-                'savePaymentInformationAndPlaceOrder',
-                '/V1/guest-carts/:cartId/payment-information',
+                SetPaymentAndPlaceOrder::class,
                 50
             ],
             'customer' => [
                 ContextInterface::IDENTITY_TYPE_CUSTOMER,
                 '42',
-                PaymentInformationManagementInterface::class,
-                'savePaymentInformationAndPlaceOrder',
-                '/V1/carts/mine/payment-information',
+                PlaceOrder::class,
                 100
             ]
         ];
@@ -83,9 +80,7 @@ class BackpressureTest extends TestCase
      *
      * @param int $identityType
      * @param string $identity
-     * @param string $service
-     * @param string $method
-     * @param string $endpoint
+     * @param string $resolver
      * @param int $expectedLimit
      * @return void
      * @dataProvider getConfiguredCases
@@ -97,19 +92,15 @@ class BackpressureTest extends TestCase
     public function testConfigured(
         int $identityType,
         string $identity,
-        string $service,
-        string $method,
-        string $endpoint,
+        string $resolver,
         int $expectedLimit
     ): void {
         $this->identityProvider->method('fetchIdentityType')->willReturn($identityType);
         $this->identityProvider->method('fetchIdentity')->willReturn($identity);
 
-        $context = $this->webapiContextFactory->create(
-            $service,
-            $method,
-            $endpoint
-        );
+        $field = $this->createMock(Field::class);
+        $field->method('getResolver')->willReturn($resolver);
+        $context = $this->contextFactory->create($field);
         $this->assertEquals(OrderLimitConfigManager::REQUEST_TYPE_ID, $context->getTypeId());
 
         $limits = $this->limitConfigManager->readLimit($context);

@@ -10,6 +10,7 @@ namespace Magento\Quote\Model\Backpressure;
 
 use Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterface;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\GuestCartManagementInterface;
 
 /**
  * Identifies which checkout related functionality needs backpressure management.
@@ -31,7 +32,7 @@ class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInte
      */
     public function extract(string $service, string $method, string $endpoint): ?string
     {
-        if ($service === CartManagementInterface::class
+        if (($service === CartManagementInterface::class || $service === GuestCartManagementInterface::class)
             && $method === 'placeOrder'
             && $this->config->isEnforcementEnabled()
         ) {

@@ -6,14 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Magento\Checkout\Model;
+namespace Magento\Quote\Model;
 
-use Magento\Checkout\Api\GuestPaymentInformationManagementInterface;
-use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Framework\App\Backpressure\ContextInterface;
 use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\Backpressure\SlidingWindow\LimitConfigManagerInterface;
 use Magento\Framework\Webapi\Backpressure\BackpressureContextFactory;
+use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -62,17 +62,17 @@ class BackpressureTest extends TestCase
             'guest' => [
                 ContextInterface::IDENTITY_TYPE_IP,
                 '127.0.0.1',
-                GuestPaymentInformationManagementInterface::class,
-                'savePaymentInformationAndPlaceOrder',
-                '/V1/guest-carts/:cartId/payment-information',
+                GuestCartManagementInterface::class,
+                'placeOrder',
+                '/V1/guest-carts/:cartId/order',
                 50
             ],
             'customer' => [
                 ContextInterface::IDENTITY_TYPE_CUSTOMER,
                 '42',
-                PaymentInformationManagementInterface::class,
-                'savePaymentInformationAndPlaceOrder',
-                '/V1/carts/mine/payment-information',
+                CartManagementInterface::class,
+                'placeOrder',
+                '/V1/carts/mine/order',
                 100
             ]
         ];
