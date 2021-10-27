@@ -25,10 +25,10 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!--Create product and Category-->
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <createData stepKey="createProduct1" entity="SimpleProduct">
+            <createData entity="SimpleProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <createData stepKey="createProduct2" entity="SimpleProduct">
+            <createData entity="SimpleProduct" stepKey="createProduct2">
                 <requiredEntity createDataKey="category"/>
             </createData>
         </before>
@@ -76,7 +76,6 @@
         </actionGroup>
         <!-- Click on reviews and add  reviews with current user -->
         <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview1"/>
-
         <!-- Go to second product view page -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage2">
             <argument name="productUrl" value="$$createProduct2.custom_attributes[url_key]$$"/>
@@ -98,11 +97,9 @@
         </actionGroup>
         <!-- Add review -->
         <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addReview2"/>
-
         <!-- Approve all reviews -->
         <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openPendingReviewsPage"/>
         <actionGroup ref="AdminApproveAllReviewsActionGroup" stepKey="approveAllCustomerReview"/>
-
         <!--Start Checking reviews -->
         <!-- Navigate to PLP and check product rating for list and table views -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreViewHomePage"/>
@@ -110,7 +107,6 @@
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
             <argument name="categoryName" value="$$category.name$$" />
         </actionGroup>
-
         <!-- Grid Mode is default -->
         <!-- Check stars at grid view for first product -->
         <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductStarsAtGridView"/>
@@ -124,7 +120,6 @@
             <actualResult type="string">$getSecondProductStarsAtGridView</actualResult>
             <expectedResult type="string">width: 20%;</expectedResult>
         </assertEquals>
-
         <!-- Switch category view to List mode -->
         <actionGroup ref="StorefrontSwitchCategoryViewToListModeActionGroup" stepKey="switchCategoryViewToListMode"/>
         <!-- Check stars at list view for first product-->
@@ -138,7 +133,6 @@
             <actualResult type="string">$getSecondProductStarsAtListView</actualResult>
             <expectedResult type="string">width: 20%;</expectedResult>
         </assertEquals>
-
         <!-- Navigate to user account and check product ratings-->
         <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage"/>
         <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductResultStarsUnderProductName"/>
@@ -146,7 +140,6 @@
             <actualResult type="string">$getFirstProductResultStarsUnderProductName</actualResult>
             <expectedResult type="string">width: 80%;</expectedResult>
         </assertEquals>
-
         <click selector=".action.more" stepKey="amOnProductReviewDetailsPage"/>
         <!-- Check stars at rating result under the product name -->
         <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductResultStarsUnderProductName"/>
