@@ -72,6 +72,9 @@ class InvoiceSender extends Sender
      * @param InvoiceResource $invoiceResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param ManagerInterface $eventManager
+     * @param Emulation|null $appEmulation
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Template $templateContainer,

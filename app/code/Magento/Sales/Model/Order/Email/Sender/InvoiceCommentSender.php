@@ -17,9 +17,6 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\App\Emulation;
 
-/**
- * Class InvoiceCommentSender
- */
 class InvoiceCommentSender extends NotifySender
 {
     /**
@@ -46,6 +43,7 @@ class InvoiceCommentSender extends NotifySender
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
+     * @param Emulation|null $appEmulation
      */
     public function __construct(
         Template $templateContainer,

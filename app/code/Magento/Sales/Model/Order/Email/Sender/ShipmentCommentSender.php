@@ -17,9 +17,6 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\App\Emulation;
 
-/**
- * Class ShipmentCommentSender
- */
 class ShipmentCommentSender extends NotifySender
 {
     /**
