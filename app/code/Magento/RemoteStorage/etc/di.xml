@@ -96,6 +96,11 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\File\Name">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
     </type>
