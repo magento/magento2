@@ -11,16 +11,13 @@ define([
 ], function ($) {
     'use strict';
 
-    /*
-     * jQuery ui version 1.9.2 belongs to the adminhtml.
-     *
-     * This test will fail on frontend since mage/backend/form only belongs to backend.
-     */
     describe('Test for mage/form jQuery plugin', function () {
         var id = 'edit_form',
             elementId = '#' + id;
+
         beforeEach(function () {
             var element = $('<form id="' + id + '" action="action/url" method="GET" target="_self" ></form>');
+
             element.appendTo('body');
         });
         afterEach(function () {
@@ -28,12 +25,14 @@ define([
         });
         it('check if form can be initialized', function () {
             var form = $(elementId).form();
+
             expect(form.is(':mage-form')).toBeTruthy();
         });
         it('check get handlers', function () {
             var form = $(elementId).form(),
                 handlersData = form.form('option', 'handlersData'),
                 handlers = [];
+
             $.each(handlersData, function (key) {
                 handlers.push(key);
             });
@@ -46,6 +45,7 @@ define([
                     target: form.attr('target'),
                     method: form.attr('method')
                 };
+
             form.data('mageForm')._storeAttribute('action');
             form.data('mageForm')._storeAttribute('target');
             form.data('mageForm')._storeAttribute('method');
@@ -57,6 +57,7 @@ define([
             var form = $(elementId).form(),
                 submitted = false,
                 handlersData = form.form('option', 'handlersData');
+
             form.on('submit', function (e) {
                 submitted = true;
                 e.stopImmediatePropagation();
@@ -78,6 +79,7 @@ define([
                         arg: 'value'
                     }
                 };
+
             form.data('mageForm')._storeAttribute('action');
             expect(form.data('mageForm')._getActionUrl(testArgs)).toBe(action + '/arg/value/');
             expect(form.data('mageForm')._getActionUrl(testUrl)).toBe(testUrl);
@@ -103,6 +105,7 @@ define([
                     }
                 },
                 processedData = form.data('mageForm')._processData(testSimpleData);
+
             expect(form.data('mageForm').oldAttributes.action).toBe(initialFormAttrs.action);
             expect(form.data('mageForm').oldAttributes.target).toBe(initialFormAttrs.target);
             expect(form.data('mageForm').oldAttributes.method).toBe(initialFormAttrs.method);
@@ -140,6 +143,7 @@ define([
                     method: 'POST'
                 },
                 resultData = $.extend(true, {}, testHandler, beforeSubmitData, eventData);
+
             form.data('mageForm')._storeAttribute('action');
             resultData = form.data('mageForm')._processData(resultData);
             testForm.prop(resultData);
@@ -162,6 +166,7 @@ define([
                         save: {}
                     }
                 });
+
             form.data('mageForm')._storeAttribute('action');
             form.data('mageForm')._storeAttribute('target');
             form.data('mageForm')._storeAttribute('method');
@@ -218,7 +223,9 @@ define([
                 method = $.mage.form._proto._buildURL,
                 quantity = dataProvider.length,
                 i = 0;
+
             expect(quantity).toBeTruthy();
+
             for (i; i < quantity; i++) {
                 expect(dataProvider[i].expected).toBe(method.apply(null, dataProvider[i].params));
             }
