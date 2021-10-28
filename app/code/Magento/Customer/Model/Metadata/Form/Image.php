@@ -22,6 +22,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Io\File as IoFileSystem;
@@ -49,14 +50,14 @@ class Image extends File
     private $ioFileSystem;
 
     /**
-     * @var WriteInterface
+     * @var ReadInterface
      */
-    private $mediaEntityTmpDirectory;
+    private $mediaReadTmpDirectory;
 
     /**
-     * @var string
+     * @var WriteInterface
      */
-    private $path;
+    private $mediaWriteDirectory;
 
     /**
      * @param TimezoneInterface $localeDate
@@ -114,10 +115,11 @@ class Image extends File
             ->get(ImageContentInterfaceFactory::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
-        $writeFactory = $writeFactory ?? ObjectManager::getInstance()->get(WriteFactory::class);
-        $directoryList = $directoryList ?? ObjectManager::getInstance()->get(DirectoryList::class);
-        $this->mediaEntityTmpDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->path = $this->_entityTypeCode . DIRECTORY_SEPARATOR . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR;
+        $this->mediaReadTmpDirectory = $fileSystem->getDirectoryReadByPath(
+            DirectoryList::MEDIA . DIRECTORY_SEPARATOR
+            . $this->_entityTypeCode . DIRECTORY_SEPARATOR
+            . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR);
+        $this->mediaWriteDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
@@ -226,10 +228,10 @@ class Image extends File
      */
     protected function processCustomerAddressValue(array $value)
     {
-        $fileName = $this->mediaEntityTmpDirectory
+        $fileName = $this->mediaWriteDirectory
             ->getDriver()
             ->getRealPathSafety(
-                $this->mediaEntityTmpDirectory->getAbsolutePath(
+                $this->mediaReadTmpDirectory->getAbsolutePath(
                     ltrim(
                         $value['file'],
                         '/'
@@ -237,7 +239,7 @@ class Image extends File
                 )
             );
         return $this->getFileProcessor()->moveTemporaryFile(
-            $this->mediaEntityTmpDirectory->getRelativePath($fileName)
+            $this->mediaReadTmpDirectory->getRelativePath($fileName)
         );
     }
 
@@ -251,7 +253,7 @@ class Image extends File
     protected function processCustomerValue(array $value)
     {
         $file = ltrim($value['file'], '/');
-        if ($this->mediaEntityTmpDirectory->isExist($this->path . $file)) {
+        if ($this->mediaReadTmpDirectory->isExist($file)) {
             $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
             /** @var ImageContentInterface $imageContentDataObject */
