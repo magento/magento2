@@ -13,14 +13,29 @@ use Magento\Framework\App\RequestInterface;
 
 class GraphQlContext implements ContextInterface
 {
+    /**
+     * @var RequestInterface
+     */
     private RequestInterface $request;
 
+    /**
+     * @var string
+     */
     private string $identity;
 
+    /**
+     * @var int
+     */
     private int $identityType;
 
+    /**
+     * @var string
+     */
     private string $typeId;
 
+    /**
+     * @var string
+     */
     private string $resolverClass;
 
     /**

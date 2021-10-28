@@ -94,8 +94,7 @@ class IdentityProviderTest extends TestCase
         string $remoteAddr,
         int $expectedType,
         string $expectedIdentity
-    ): void
-    {
+    ): void {
         $this->userContext->method('getUserType')->willReturn($userType);
         $this->userContext->method('getUserId')->willReturn($userId);
         $this->remoteAddress->method('getRemoteAddress')->willReturn($remoteAddr);

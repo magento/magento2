@@ -14,14 +14,29 @@ use Magento\Framework\App\RequestInterface;
 
 class ControllerContext implements ContextInterface
 {
+    /**
+     * @var RequestInterface
+     */
     private RequestInterface $request;
 
+    /**
+     * @var string
+     */
     private string $identity;
 
+    /**
+     * @var int
+     */
     private int $identityType;
 
+    /**
+     * @var string
+     */
     private string $typeId;
 
+    /**
+     * @var ActionInterface
+     */
     private ActionInterface $action;
 
     /**

@@ -23,10 +23,19 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class BackpressureValidator implements ValidatorInterface
 {
+    /**
+     * @var ContextFactory
+     */
     private ContextFactory $contextFactory;
 
+    /**
+     * @var BackpressureEnforcerInterface
+     */
     private BackpressureEnforcerInterface $enforcer;
 
+    /**
+     * @var AppState
+     */
     private AppState $appState;
 
     /**

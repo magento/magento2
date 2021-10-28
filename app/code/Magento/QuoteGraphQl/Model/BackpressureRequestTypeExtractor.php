@@ -18,6 +18,9 @@ use Magento\QuoteGraphQl\Model\Resolver\SetPaymentAndPlaceOrder;
  */
 class BackpressureRequestTypeExtractor implements RequestTypeExtractorInterface
 {
+    /**
+     * @var OrderLimitConfigManager
+     */
     private OrderLimitConfigManager $config;
 
     /**

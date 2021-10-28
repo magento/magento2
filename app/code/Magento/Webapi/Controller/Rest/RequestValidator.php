@@ -41,8 +41,14 @@ class RequestValidator
      */
     private $authorization;
 
+    /**
+     * @var BackpressureContextFactory
+     */
     private BackpressureContextFactory $backpressureContextFactory;
 
+    /**
+     * @var BackpressureEnforcerInterface
+     */
     private BackpressureEnforcerInterface $backpressureEnforcer;
 
     /**

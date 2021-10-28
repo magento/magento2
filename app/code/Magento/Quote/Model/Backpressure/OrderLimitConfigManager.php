@@ -21,6 +21,9 @@ class OrderLimitConfigManager implements LimitConfigManagerInterface
 {
     public const REQUEST_TYPE_ID = 'quote-order';
 
+    /**
+     * @var ScopeConfigInterface
+     */
     private ScopeConfigInterface $config;
 
     /**

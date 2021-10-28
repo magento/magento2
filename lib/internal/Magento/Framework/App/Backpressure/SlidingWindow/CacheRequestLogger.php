@@ -17,6 +17,9 @@ use Magento\Framework\Cache\FrontendInterface;
  */
 class CacheRequestLogger implements RequestLoggerInterface
 {
+    /**
+     * @var FrontendInterface
+     */
     private FrontendInterface $cache;
 
     /**

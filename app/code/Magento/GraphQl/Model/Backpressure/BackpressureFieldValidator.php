@@ -19,8 +19,14 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface;
  */
 class BackpressureFieldValidator implements ValidatorInterface
 {
+    /**
+     * @var BackpressureContextFactory
+     */
     private BackpressureContextFactory $backpressureContextFactory;
 
+    /**
+     * @var BackpressureEnforcerInterface
+     */
     private BackpressureEnforcerInterface $backpressureEnforcer;
 
     /**

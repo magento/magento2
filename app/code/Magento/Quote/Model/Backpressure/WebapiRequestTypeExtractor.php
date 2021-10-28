@@ -17,6 +17,9 @@ use Magento\Quote\Api\GuestCartManagementInterface;
  */
 class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInterface
 {
+    /**
+     * @var OrderLimitConfigManager
+     */
     private OrderLimitConfigManager $config;
 
     /**

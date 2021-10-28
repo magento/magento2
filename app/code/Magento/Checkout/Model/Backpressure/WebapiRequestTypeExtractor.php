@@ -16,6 +16,9 @@ use Magento\Quote\Model\Backpressure\OrderLimitConfigManager;
  */
 class WebapiRequestTypeExtractor implements BackpressureRequestTypeExtractorInterface
 {
+    /**
+     * @var OrderLimitConfigManager
+     */
     private OrderLimitConfigManager $config;
 
     /**

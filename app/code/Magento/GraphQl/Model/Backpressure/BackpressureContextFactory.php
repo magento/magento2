@@ -19,10 +19,19 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
  */
 class BackpressureContextFactory
 {
+    /**
+     * @var RequestTypeExtractorInterface
+     */
     private RequestTypeExtractorInterface $extractor;
 
+    /**
+     * @var IdentityProviderInterface
+     */
     private IdentityProviderInterface $identityProvider;
 
+    /**
+     * @var RequestInterface
+     */
     private RequestInterface $request;
 
     /**

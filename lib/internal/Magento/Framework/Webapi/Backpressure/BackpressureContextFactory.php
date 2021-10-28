@@ -17,10 +17,19 @@ use Magento\Framework\App\RequestInterface;
  */
 class BackpressureContextFactory
 {
+    /**
+     * @var RequestInterface
+     */
     private RequestInterface $request;
 
+    /**
+     * @var IdentityProviderInterface
+     */
     private IdentityProviderInterface $identityProvider;
 
+    /**
+     * @var BackpressureRequestTypeExtractorInterface
+     */
     private BackpressureRequestTypeExtractorInterface $extractor;
 
     /**

@@ -13,8 +13,14 @@ namespace Magento\Framework\App\Backpressure\SlidingWindow;
  */
 class LimitConfig
 {
+    /**
+     * @var int
+     */
     private int $limit;
 
+    /**
+     * @var int
+     */
     private int $period;
 
     /**

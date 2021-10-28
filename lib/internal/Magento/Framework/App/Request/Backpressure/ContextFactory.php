@@ -18,10 +18,19 @@ use Magento\Framework\App\RequestInterface;
  */
 class ContextFactory
 {
+    /**
+     * @var RequestTypeExtractorInterface
+     */
     private RequestTypeExtractorInterface $extractor;
 
+    /**
+     * @var IdentityProviderInterface
+     */
     private IdentityProviderInterface $identityProvider;
 
+    /**
+     * @var RequestInterface
+     */
     private RequestInterface $request;
 
     /**

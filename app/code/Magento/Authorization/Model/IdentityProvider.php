@@ -17,8 +17,14 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
  */
 class IdentityProvider implements IdentityProviderInterface
 {
+    /**
+     * @var UserContextInterface
+     */
     private UserContextInterface $userContext;
 
+    /**
+     * @var RemoteAddress
+     */
     private RemoteAddress $remoteAddress;
 
     /**
@@ -60,5 +66,4 @@ class IdentityProvider implements IdentityProviderInterface
 
         return $this->remoteAddress->getRemoteAddress();
     }
-
 }

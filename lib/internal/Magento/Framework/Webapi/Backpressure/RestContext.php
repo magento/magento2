@@ -13,18 +13,39 @@ use Magento\Framework\App\RequestInterface;
 
 class RestContext implements ContextInterface
 {
+    /**
+     * @var RequestInterface
+     */
     private RequestInterface $request;
 
+    /**
+     * @var string
+     */
     private string $identity;
 
+    /**
+     * @var int
+     */
     private int $identityType;
 
+    /**
+     * @var string
+     */
     private string $typeId;
 
+    /**
+     * @var string
+     */
     private string $service;
 
+    /**
+     * @var string
+     */
     private string $method;
 
+    /**
+     * @var string
+     */
     private string $endpoint;
 
     /**

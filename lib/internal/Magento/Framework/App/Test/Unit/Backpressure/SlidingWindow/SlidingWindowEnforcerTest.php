@@ -36,7 +36,10 @@ class SlidingWindowEnforcerTest extends TestCase
      */
     private $dateTime;
 
-    private SlidingWindowEnforcer $model;
+    /**
+     * @var SlidingWindowEnforcer
+     */
+    private $model;
 
     /**
      * @inheritDoc

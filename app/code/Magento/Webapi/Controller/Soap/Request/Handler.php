@@ -80,8 +80,14 @@ class Handler
      */
     private $paramsOverrider;
 
+    /**
+     * @var BackpressureContextFactory
+     */
     private BackpressureContextFactory $backpressureContextFactory;
 
+    /**
+     * @var BackpressureEnforcerInterface
+     */
     private BackpressureEnforcerInterface $backpressureEnforcer;
 
     /**
@@ -98,6 +104,7 @@ class Handler
      * @param ParamsOverrider|null $paramsOverrider
      * @param BackpressureContextFactory|null $backpressureContextFactory
      * @param BackpressureEnforcerInterface|null $backpressureEnforcer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         SoapRequest $request,

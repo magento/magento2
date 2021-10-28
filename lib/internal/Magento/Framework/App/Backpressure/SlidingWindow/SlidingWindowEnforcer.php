@@ -18,10 +18,19 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
  */
 class SlidingWindowEnforcer implements BackpressureEnforcerInterface
 {
+    /**
+     * @var RequestLoggerInterface
+     */
     private RequestLoggerInterface $logger;
 
+    /**
+     * @var LimitConfigManagerInterface
+     */
     private LimitConfigManagerInterface $configManager;
 
+    /**
+     * @var DateTime
+     */
     private DateTime $dateTime;
 
     /**

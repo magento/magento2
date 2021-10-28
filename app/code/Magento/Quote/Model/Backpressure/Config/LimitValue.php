@@ -27,5 +27,7 @@ class LimitValue extends Value
                 throw new LocalizedException(__('Number above 0 is required for the limit'));
             }
         }
+
+        return $this;
     }
 }

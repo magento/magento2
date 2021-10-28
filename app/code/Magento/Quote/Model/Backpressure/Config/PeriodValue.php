@@ -17,6 +17,9 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class PeriodValue extends Value
 {
+    /**
+     * @var PeriodSource
+     */
     private PeriodSource $source;
 
     /**
@@ -55,5 +58,7 @@ class PeriodValue extends Value
                 throw new LocalizedException(__('Please select a valid rate limit period'));
             }
         }
+
+        return $this;
     }
 }
