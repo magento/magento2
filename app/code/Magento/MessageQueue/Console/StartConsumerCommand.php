@@ -23,6 +23,7 @@ class StartConsumerCommand extends Command
     const OPTION_BATCH_SIZE = 'batch-size';
     const OPTION_AREACODE = 'area-code';
     const OPTION_SINGLE_THREAD = 'single-thread';
+    const OPTION_MULTI_PROCESS = 'multi-process';
     const PID_FILE_PATH = 'pid-file-path';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
@@ -88,9 +89,7 @@ class StartConsumerCommand extends Command
 
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
-        if ($singleThread) {
-            $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
-        }
+        $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
@@ -134,6 +133,12 @@ class StartConsumerCommand extends Command
             'This option prevents running multiple copies of one consumer simultaneously.'
         );
         $this->addOption(
+            self::OPTION_MULTI_PROCESS,
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'The number of processes per consumer.'
+        );
+        $this->addOption(
             self::PID_FILE_PATH,
             null,
             InputOption::VALUE_REQUIRED,
@@ -166,6 +171,9 @@ To do not run multiple copies of one consumer simultaneously:
 To save PID enter path (This option is deprecated, use --single-thread instead):
 
     <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
+To define the number of processes per consumer:
+
+    <comment>%command.full_name% someConsumer --multi-process'</comment>
 HELP
         );
         parent::configure();
