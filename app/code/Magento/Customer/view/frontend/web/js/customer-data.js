@@ -176,10 +176,9 @@ define([
          */
         update: function (sections) {
             var sectionId = 0,
-                sectionDataIds = $.cookieStorage.get('section_data_ids') || {},
-                pdpSectionsNames = ['cart', 'directory-data', 'messages'];
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
-            if (_.isArray(_.keys(sections)) && _.isEqual(pdpSectionsNames, _.keys(sections))) {
+            if ($.inArray('cart', _.keys(sections)) !== -1) {
                 $.cookieStorage.set('pdp_qty_error', true);
             }
 
@@ -189,11 +188,8 @@ define([
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
 
-                if (_.keys(sections).length === 1) {
-
-                    if (_.isEmpty(sectionData.messages) && $.cookieStorage.get('pdp_qty_error')) {
-                        return;
-                    }
+                if (_.isEmpty(sectionData.messages) && $.cookieStorage.get('pdp_qty_error')) {
+                    return;
                 }
                 buffer.notify(sectionName, sectionData);
             });
