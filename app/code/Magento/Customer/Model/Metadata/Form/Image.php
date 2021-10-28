@@ -54,6 +54,11 @@ class Image extends File
     private $mediaEntityTmpDirectory;
 
     /**
+     * @var string
+     */
+    private $path;
+
+    /**
      * @param TimezoneInterface $localeDate
      * @param LoggerInterface $logger
      * @param AttributeMetadataInterface $attribute
@@ -111,11 +116,8 @@ class Image extends File
             ->get(IoFileSystem::class);
         $writeFactory = $writeFactory ?? ObjectManager::getInstance()->get(WriteFactory::class);
         $directoryList = $directoryList ?? ObjectManager::getInstance()->get(DirectoryList::class);
-        $this->mediaEntityTmpDirectory = $writeFactory->create(
-            $directoryList->getPath($directoryList::MEDIA)
-            . '/' . $this->_entityTypeCode
-            . '/' . FileProcessor::TMP_DIR
-        );
+        $this->mediaEntityTmpDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->path = $this->_entityTypeCode . DIRECTORY_SEPARATOR . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -249,7 +251,7 @@ class Image extends File
     protected function processCustomerValue(array $value)
     {
         $file = ltrim($value['file'], '/');
-        if ($this->mediaEntityTmpDirectory->isExist($file)) {
+        if ($this->mediaEntityTmpDirectory->isExist($this->path . $file)) {
             $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
             /** @var ImageContentInterface $imageContentDataObject */
