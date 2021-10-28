@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Model\Backpressure;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestModuleGraphQlBackpressure\Model\TestServiceResolver;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 class BackpressureTest extends AbstractController
 {
@@ -54,8 +54,9 @@ QUERY;
             'operationName' => null
         ];
         for ($i = 0; $i < $nOfReqs; $i++) {
-            /** @var HttpRequest $request */
+            /** @var Request $request */
             $request = $this->getRequest();
+            $request->getServer()->set('REMOTE_ADDR', '127.0.0.1');
             $request->setPathInfo('/graphql');
             $request->setMethod('POST');
             $request->setContent(json_encode($postData));

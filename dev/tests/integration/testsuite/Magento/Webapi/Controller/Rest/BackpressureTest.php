@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\TestModuleWebapiBackpressure\Model\TestReadService;
 
@@ -39,6 +40,9 @@ class BackpressureTest extends AbstractController
     {
         $nOfReqs = 6;
         for ($i = 0; $i < $nOfReqs; $i++) {
+            /** @var Request $request */
+            $request = $this->getRequest();
+            $request->getServer()->set('REMOTE_ADDR', '127.0.0.1');
             $this->dispatch('rest/V1/test-module-webapi-backpressure/read');
         }
 

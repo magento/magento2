@@ -33,7 +33,6 @@ class CacheRequestLoggerTest extends TestCase
         parent::setUp();
 
         $this->model = Bootstrap::getObjectManager()->get(CacheRequestLogger::class);
-        $this->contextCounter = 0;
     }
 
     /**

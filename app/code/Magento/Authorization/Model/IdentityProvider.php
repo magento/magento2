@@ -64,6 +64,11 @@ class IdentityProvider implements IdentityProviderInterface
             return (string) $this->userContext->getUserId();
         }
 
-        return $this->remoteAddress->getRemoteAddress();
+        $addr = $this->remoteAddress->getRemoteAddress();
+        if (!$addr) {
+            throw new \RuntimeException('Failed to extract remote address');
+        }
+
+        return $addr;
     }
 }
