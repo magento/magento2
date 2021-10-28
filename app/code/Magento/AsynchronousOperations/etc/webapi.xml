@@ -36,4 +36,11 @@
         </resources>
     </route>
 
+    <route url="/V1/bulk/:bulkId" method="DELETE">
+        <service class="Magento\Framework\Bulk\BulkManagementInterface" method="deleteBulk" />
+        <resources>
+            <resource ref="Magento_Logging::system_magento_logging_bulk_operations" />
+        </resources>
+    </route>
+
 </routes>
