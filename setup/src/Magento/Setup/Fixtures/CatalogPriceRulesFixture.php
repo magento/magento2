@@ -23,7 +23,8 @@ class CatalogPriceRulesFixture extends Fixture
     protected $priority = 90;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD)
      */
     public function execute()
@@ -141,7 +142,7 @@ class CatalogPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -149,7 +150,7 @@ class CatalogPriceRulesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
