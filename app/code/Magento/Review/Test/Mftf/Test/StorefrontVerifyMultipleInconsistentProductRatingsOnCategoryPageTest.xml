@@ -140,12 +140,30 @@
             <actualResult type="string">$getFirstProductResultStarsUnderProductName</actualResult>
             <expectedResult type="string">width: 80%;</expectedResult>
         </assertEquals>
-        <click selector=".action.more" stepKey="amOnProductReviewDetailsPage"/>
         <!-- Check stars at rating result under the product name -->
         <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductResultStarsUnderProductName"/>
         <assertEquals stepKey="checkSecondProductResultStarsUnderProductName">
             <actualResult type="string">$getSecondProductResultStarsUnderProductName</actualResult>
             <expectedResult type="string">width: 20%;</expectedResult>
+        </assertEquals>
+        <!--Click on See Details button of two reviews -->
+        <!-- Navigate to user account and check product ratings-->
+        <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage2"/>
+        <!--Click on Second Product review -->
+        <click selector="{{StorefrontMyProductReviewsSection.reviewFirstRowSeeDetails}}" stepKey="clickFirstReviewRow"/>
+        <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductResultStarsUnderProductName1"/>
+        <assertEquals stepKey="checkSecondProductResultStarsUnderProductName1">
+            <actualResult type="string">$getSecondProductResultStarsUnderProductName1</actualResult>
+            <expectedResult type="string">width: 20%;</expectedResult>
+        </assertEquals>
+        <!-- Navigate to user account and check product ratings-->
+        <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage3"/>
+        <!--Click on first product review -->
+        <click selector="{{StorefrontMyProductReviewsSection.reviewSecondRowSeeDetails}}" stepKey="clickSecondReviewRow"/>
+        <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductResultStarsUnderProductName2"/>
+        <assertEquals stepKey="checkFirstProductResultStarsUnderProductName2">
+            <actualResult type="string">$getFirstProductResultStarsUnderProductName2</actualResult>
+            <expectedResult type="string">width: 80%;</expectedResult>
         </assertEquals>
     </test>
 </tests>
