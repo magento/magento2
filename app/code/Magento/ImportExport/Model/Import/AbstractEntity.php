@@ -23,7 +23,6 @@ use Magento\Store\Model\ScopeInterface;
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -40,20 +39,24 @@ abstract class AbstractEntity
      */
     const COLUMN_ACTION_VALUE_DELETE = 'delete';
 
-    /**#@+
-     * XML paths to parameters
+    /**
+     * Path to bunch size configuration
      */
     const XML_PATH_BUNCH_SIZE = 'import/format_v2/bunch_size';
 
+    /**
+     * Path to page size configuration
+     */
     const XML_PATH_PAGE_SIZE = 'import/format_v2/page_size';
 
-    /**#@-*/
-
-    /**#@+
-     * Database constants
+    /**
+     * Size of varchar value
      */
     const DB_MAX_VARCHAR_LENGTH = 256;
 
+    /**
+     * Size of text value
+     */
     const DB_MAX_TEXT_LENGTH = 65536;
 
     const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
@@ -89,8 +92,6 @@ abstract class AbstractEntity
         self::ERROR_INVALID_ATTRIBUTE_OPTION => "Value for %s attribute contains incorrect value"
             . ", see acceptable values on settings specified for Admin",
     ];
-
-    /**#@-*/
 
     /**
      * @var AdapterInterface
@@ -311,21 +312,20 @@ abstract class AbstractEntity
         array $data = [],
         Json $serializer = null
     ) {
+        $this->string = $string;
         $this->_scopeConfig = $scopeConfig;
         $this->_dataSourceModel = $data['data_source_model'] ?? $importFactory->create()->getDataSourceModel();
+        $this->_maxDataSize = $data['max_data_size'] ?? $resourceHelper->getMaxDataSize();
         $this->_connection = $data['connection'] ?? $resource->getConnection();
-        $this->string = $string;
-        $this->_pageSize = $data['page_size'] ?? (static::XML_PATH_PAGE_SIZE ? (int)$this->_scopeConfig->getValue(
+        $this->errorAggregator = $errorAggregator;
+        $this->_pageSize = $data['page_size'] ?? ((int) $this->_scopeConfig->getValue(
             static::XML_PATH_PAGE_SIZE,
             ScopeInterface::SCOPE_STORE
-        ) : 0);
-        $this->_maxDataSize = $data['max_data_size'] ?? $resourceHelper->getMaxDataSize();
-        $this->_bunchSize = $data['bunch_size'] ?? (static::XML_PATH_BUNCH_SIZE ? (int)$this->_scopeConfig->getValue(
+        ) ?: 0);
+        $this->_bunchSize = $data['bunch_size'] ?? ((int) $this->_scopeConfig->getValue(
             static::XML_PATH_BUNCH_SIZE,
             ScopeInterface::SCOPE_STORE
-        ) : 0);
-
-        $this->errorAggregator = $errorAggregator;
+        ) ?: 0);
 
         foreach ($this->errorMessageTemplates as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);

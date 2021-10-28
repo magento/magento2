@@ -1311,10 +1311,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      */
     protected function _formatErrorMessage($errorCode, $shortErrorMessage, $longErrorMessage)
     {
-        $longErrorMessage  = $longErrorMessage ?
-            preg_replace('/\.$/', '', $longErrorMessage) : $longErrorMessage;
-        $shortErrorMessage = $shortErrorMessage ?
-            preg_replace('/\.$/', '', $shortErrorMessage) : $shortErrorMessage;
+        $longErrorMessage  = preg_replace('/\.$/', '', $longErrorMessage);
+        $shortErrorMessage = preg_replace('/\.$/', '', $shortErrorMessage);
 
         return $longErrorMessage ? sprintf('%s (#%s: %s).', $longErrorMessage, $errorCode, $shortErrorMessage)
             : sprintf('#%s: %s.', $errorCode, $shortErrorMessage);

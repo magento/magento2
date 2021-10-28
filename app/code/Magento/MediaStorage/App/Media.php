@@ -26,6 +26,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
+use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
 
@@ -44,7 +45,7 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Path to media directory
+     * Media directory path
      *
      * @var string
      */
@@ -237,10 +238,7 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return $this->mediaDirectoryPath ? false : rtrim($this->mediaDirectoryPath, '/') !== rtrim(
-            $this->directoryMedia->getAbsolutePath(),
-            '/'
-        );
+        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
     }
 
     /**

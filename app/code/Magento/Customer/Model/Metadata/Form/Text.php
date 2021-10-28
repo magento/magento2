@@ -126,7 +126,7 @@ class Text extends AbstractData
         // validate length
         $label = __($attribute->getStoreLabel());
 
-        $length = $this->_string->strlen(trim((string) $value));
+        $length = $this->_string->strlen(trim($value));
 
         $validateRules = $attribute->getValidationRules();
 

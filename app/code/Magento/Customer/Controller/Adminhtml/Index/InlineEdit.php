@@ -12,9 +12,9 @@ use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer inline edit action
@@ -179,7 +179,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         $addressKeys = preg_grep(
             '/^(' . AttributeRepository::BILLING_ADDRESS_PREFIX . '\w+)/',
             array_keys($data),
-            (int) $isCustomerData
+            $isCustomerData
         );
         $result = array_intersect_key($data, array_flip($addressKeys));
         if ($isCustomerData === null) {
