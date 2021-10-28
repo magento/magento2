@@ -93,6 +93,8 @@ class ControllerContext implements ContextInterface
     }
 
     /**
+     * Controller instance.
+     *
      * @return ActionInterface
      */
     public function getAction(): ActionInterface

@@ -143,6 +143,8 @@ class Handler
      * @throws WebapiException
      * @throws \LogicException
      * @throws AuthorizationException
+     * phpcs:disable Magento2.Functions.DiscouragedFunction
+     * phpcs:disable Generic.PHP.NoSilencedErrors
      */
     public function __call($operation, $arguments)
     {

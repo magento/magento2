@@ -81,6 +81,7 @@ class SlidingWindowEnforcerTest extends TestCase
                     return ((int) $limit / 2);
                 }
             );
+        //phpcs:disable
         $this->logger->method('getFor')
             ->willReturnCallback(
                 function (ContextInterface $context, int $slot) use ($prevSlot) {
@@ -89,6 +90,7 @@ class SlidingWindowEnforcerTest extends TestCase
                     return null;
                 }
             );
+        //phpcs:enable
 
         $this->model->enforce($this->createContext());
     }
@@ -128,6 +130,7 @@ class SlidingWindowEnforcerTest extends TestCase
 
         $this->initConfigMock($limit, $limitPeriod);
 
+        //phpcs:disable
         $this->logger->method('incrAndGetFor')
             ->willReturnCallback(
                 function (ContextInterface $context, int $slot, int $expireAfter) use ($limit) {
@@ -142,6 +145,7 @@ class SlidingWindowEnforcerTest extends TestCase
                     return $prevCounter;
                 }
             );
+        //phpcs:enable
 
         if ($expectException) {
             $this->expectException(BackpressureExceededException::class);

@@ -108,6 +108,8 @@ class RestContext implements ContextInterface
     }
 
     /**
+     * Service class name.
+     *
      * @return string
      */
     public function getService(): string
@@ -116,6 +118,8 @@ class RestContext implements ContextInterface
     }
 
     /**
+     * Service method.
+     *
      * @return string
      */
     public function getMethod(): string
@@ -124,6 +128,8 @@ class RestContext implements ContextInterface
     }
 
     /**
+     * Endpoint route.
+     *
      * @return string
      */
     public function getEndpoint(): string

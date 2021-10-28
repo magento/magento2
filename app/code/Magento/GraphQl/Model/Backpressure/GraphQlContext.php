@@ -92,6 +92,8 @@ class GraphQlContext implements ContextInterface
     }
 
     /**
+     * Field's resolver class name.
+     *
      * @return string
      */
     public function getResolverClass(): string

@@ -41,6 +41,7 @@ class BackpressureValidator implements ValidatorInterface
     /**
      * @param ContextFactory $contextFactory
      * @param BackpressureEnforcerInterface $enforcer
+     * @param AppState $appState
      */
     public function __construct(
         ContextFactory $contextFactory,
