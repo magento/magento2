@@ -264,7 +264,7 @@ class MediaTest extends TestCase
             $this->syncFactoryMock,
             $this->responseMock,
             $isAllowedCallback,
-            false,
+            self::MEDIA_DIRECTORY,
             self::CACHE_FILE_PATH,
             self::RELATIVE_FILE_PATH,
             $this->filesystemMock,
