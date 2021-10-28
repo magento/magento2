@@ -81,34 +81,25 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryStoreFrontPageToLoad"/>
 
         <!--Verify category is not visible in First Store View -->
-        <!--<click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>-->
-        <!--<click stepKey="selectForstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>-->
-        <!--<waitForPageLoad stepKey="waitForFirstStoreView"/>-->
-
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectForstStoreView">
             <argument name="storeView" value="customStoreEN"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForFirstStoreView"/>
-
-        <!--<dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="dontSeeCategoryOnNavigation"/>-->
         <seeElement selector="{{StorefrontBundledSection.pageNotFound}}" stepKey="seeWhoopsOurBadMessage"/>
         <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="dontSeeCategoryOnNavigation">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
 
         <!--Verify category is not visible in Second Store View -->
-        <!--<click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>-->
-        <!--<click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>-->
-        <!--<waitForPageLoad stepKey="waitForSecondstoreView"/>-->
-
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher1"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectSecondStoreView">
             <argument name="storeView" value="customStoreFR"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondstoreView"/>
-
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="dontSeeCategoryOnNavigation1"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="dontSeeCategoryOnNavigation1">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
         <seeElement selector="{{StorefrontBundledSection.pageNotFound}}" stepKey="seeWhoopsOurBadMessage1"/>
     </test>
 </tests>
