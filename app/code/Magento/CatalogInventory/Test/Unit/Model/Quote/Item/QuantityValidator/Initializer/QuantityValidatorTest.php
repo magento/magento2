@@ -603,8 +603,8 @@ class QuantityValidatorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     private function setUpStubForRemoveError(): void
     {
         $quoteItems = [$this->quoteItemMock];
