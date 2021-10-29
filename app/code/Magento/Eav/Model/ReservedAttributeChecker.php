@@ -26,7 +26,7 @@ class ReservedAttributeChecker implements ReservedAttributeCheckerInterface
      * @param array $validators
      */
     public function __construct(
-        $validators = []
+        array $validators = []
     ) {
         $this->validators = $validators;
     }
@@ -37,11 +37,6 @@ class ReservedAttributeChecker implements ReservedAttributeCheckerInterface
     public function isReservedAttribute(AbstractAttribute $attribute): bool
     {
         $isReserved = false;
-        try {
-            $attribute->getEntityType();
-        } catch (LocalizedException $exception) {
-            $isReserved = false;
-        }
         $validators = $this->validators[$attribute->getEntityType()->getEntityTypeCode()] ?? [];
         foreach ($validators as $validator) {
             $isReserved = $validator->isReservedAttribute($attribute);
