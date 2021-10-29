@@ -111,6 +111,7 @@ class SdkUrl
                 'client-id' => $this->getClientId(),
                 'locale' => $this->localeResolver->getLocale(),
                 'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
+                'enable-funding' => $this->getAllowedFunding()
             ];
 
             if ($this->areMessagesEnabled()) {
@@ -122,7 +123,6 @@ class SdkUrl
                 $params['intent'] = $this->getIntent();
                 $params['merchant-id'] = $this->config->getValue('merchant_id');
                 $params['disable-funding'] = $this->getDisallowedFunding();
-                $params['enable-funding'] = $this->getAllowedFunding();
                 $params = array_replace($params, $this->queryParams);
             }
             $params['components'] = implode(',', $components);
@@ -214,7 +214,7 @@ class SdkUrl
     {
         $payLaterActive = (bool)$this->config->getPayLaterConfigValue('experience_active');
 
-        // If Pay Later is enabled, then only paylater parameter will go in enable-funding parameter list
+        // If Pay Later is disabled, paylater parameter will be removed from enable-funding parameter list
         if ($payLaterActive === false) {
             unset($this->supportedPaymentMethods['paylater']);
         }
