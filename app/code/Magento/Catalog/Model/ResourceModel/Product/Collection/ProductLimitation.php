@@ -35,6 +35,7 @@ class ProductLimitation implements \ArrayAccess
      * @return bool
      * @since 101.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->productLimitationFilters);
@@ -45,6 +46,7 @@ class ProductLimitation implements \ArrayAccess
      * @return mixed
      * @since 101.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->productLimitationFilters[$offset];
@@ -56,6 +58,7 @@ class ProductLimitation implements \ArrayAccess
      * @return void
      * @since 101.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->productLimitationFilters[$offset] = $value;
@@ -66,6 +69,7 @@ class ProductLimitation implements \ArrayAccess
      * @return void
      * @since 101.0.0
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->productLimitationFilters[$offset]);
