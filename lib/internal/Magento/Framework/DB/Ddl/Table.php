@@ -381,7 +381,7 @@ class Table
                         $precision = $size[0];
                         $scale = $size[1];
                     }
-                } elseif (preg_match('#^(\d+),(\d+)$#', $size, $match)) {
+                } elseif ($size && preg_match('#^(\d+),(\d+)$#', $size, $match)) {
                     $precision = $match[1];
                     $scale = $match[2];
                 }

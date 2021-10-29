@@ -264,6 +264,8 @@ class Timezone implements TimezoneInterface
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
+        $dateFrom = $dateFrom ?: '';
+        $dateTo = $dateTo ?: '';
         if (!$scope instanceof ScopeInterface) {
             $scope = $this->_scopeResolver->getScope($scope);
         }
