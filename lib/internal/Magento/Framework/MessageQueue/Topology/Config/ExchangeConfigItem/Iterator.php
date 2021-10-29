@@ -46,6 +46,7 @@ class Iterator implements \Iterator, \ArrayAccess
      *
      * @return ExchangeConfigItem
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->object;
@@ -54,6 +55,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->data);
@@ -76,6 +78,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         key($this->data);
@@ -84,6 +87,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return (bool)current($this->data);
@@ -92,6 +96,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->data);
@@ -103,6 +108,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->data);
@@ -111,6 +117,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {
@@ -124,6 +131,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->data[$offset] = $value;
@@ -132,6 +140,7 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);

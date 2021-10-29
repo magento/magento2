@@ -92,6 +92,7 @@ class BatchIterator implements BatchIteratorInterface
      *
      * @return Select
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         if (null == $this->currentSelect) {
@@ -107,6 +108,7 @@ class BatchIterator implements BatchIteratorInterface
      *
      * @return Select
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if (null == $this->currentSelect) {
@@ -129,6 +131,7 @@ class BatchIterator implements BatchIteratorInterface
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->iteration;
@@ -139,6 +142,7 @@ class BatchIterator implements BatchIteratorInterface
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->isValid;
@@ -149,6 +153,7 @@ class BatchIterator implements BatchIteratorInterface
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->minValue = 0;

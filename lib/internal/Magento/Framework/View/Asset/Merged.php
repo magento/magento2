@@ -147,6 +147,7 @@ class Merged implements \Iterator
      *
      * @return AssetInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $this->initialize();
@@ -156,6 +157,7 @@ class Merged implements \Iterator
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         $this->initialize();
@@ -165,6 +167,7 @@ class Merged implements \Iterator
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->initialize();
@@ -174,6 +177,7 @@ class Merged implements \Iterator
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->initialize();
@@ -183,6 +187,7 @@ class Merged implements \Iterator
     /**
      * {@inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $this->initialize();
