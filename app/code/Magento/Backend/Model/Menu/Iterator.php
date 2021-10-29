@@ -17,7 +17,7 @@ class Iterator extends \ArrayIterator
      *
      * @return void
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->ksort();
         parent::rewind();

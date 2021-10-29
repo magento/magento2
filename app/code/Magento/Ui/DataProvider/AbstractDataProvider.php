@@ -267,6 +267,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->getCollection()->count();

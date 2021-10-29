@@ -29,6 +29,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return \Magento\Framework\DB\Select
      */
+    #[\ReturnTypeWillChange]
     public function current();
 
     /**
@@ -38,6 +39,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key();
 
     /**
@@ -48,6 +50,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return \Magento\Framework\DB\Select
      */
+    #[\ReturnTypeWillChange]
     public function next();
 
     /**
@@ -57,6 +60,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind();
 
     /**
@@ -64,5 +68,6 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid();
 }

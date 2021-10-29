@@ -52,6 +52,7 @@ class QueryResponse implements ResponseInterface
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->documents);
@@ -62,6 +63,7 @@ class QueryResponse implements ResponseInterface
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->documents);
@@ -70,6 +72,7 @@ class QueryResponse implements ResponseInterface
     /**
      * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function getAggregations()
     {
         return $this->aggregations;

@@ -27,6 +27,7 @@ class Iterator extends \FilterIterator
      *
      * @return bool true if the current element is acceptable, otherwise false.
      */
+    #[\ReturnTypeWillChange]
     public function accept()
     {
         return !($this->current()->isDisabled() || !$this->current()->isAllowed());

@@ -17,6 +17,7 @@ class Native extends \SessionHandler
      * @param string $sessionId
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function read($sessionId)
     {
         return (string)parent::read($sessionId);

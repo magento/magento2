@@ -76,6 +76,7 @@ class Redis implements \SessionHandlerInterface
      * @return bool
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName)
     {
         return $this->getConnection()->open($savePath, $sessionName);
@@ -89,6 +90,7 @@ class Redis implements \SessionHandlerInterface
      * @throws ConcurrentConnectionsExceededException
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function read($sessionId)
     {
         try {
@@ -106,6 +108,7 @@ class Redis implements \SessionHandlerInterface
      * @return boolean
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function write($sessionId, $sessionData)
     {
         return $this->getConnection()->write($sessionId, $sessionData);
@@ -118,6 +121,7 @@ class Redis implements \SessionHandlerInterface
      * @return boolean
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function destroy($sessionId)
     {
         return $this->getConnection()->destroy($sessionId);
@@ -129,6 +133,7 @@ class Redis implements \SessionHandlerInterface
      * @return bool
      * @throws SessionException
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return $this->getConnection()->close();
@@ -142,6 +147,7 @@ class Redis implements \SessionHandlerInterface
      * @throws SessionException
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxLifeTime)
     {
         return $this->getConnection()->gc($maxLifeTime);

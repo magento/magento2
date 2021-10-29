@@ -24,6 +24,7 @@ class SearchResultIterator implements \Iterator
     /**
      * @return array|mixed
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->items);
@@ -32,6 +33,7 @@ class SearchResultIterator implements \Iterator
     /**
      * @return int|mixed
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->items);
@@ -40,6 +42,7 @@ class SearchResultIterator implements \Iterator
     /**
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->items);
@@ -48,6 +51,7 @@ class SearchResultIterator implements \Iterator
     /**
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->items);
@@ -56,6 +60,7 @@ class SearchResultIterator implements \Iterator
     /**
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->key() !== null;

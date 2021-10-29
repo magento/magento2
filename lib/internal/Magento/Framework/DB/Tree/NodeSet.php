@@ -63,6 +63,7 @@ class NodeSet implements \Iterator, \Countable
      *
      * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->count;
@@ -73,6 +74,7 @@ class NodeSet implements \Iterator, \Countable
      *
      * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->_nodes[$this->_current]);
@@ -83,6 +85,7 @@ class NodeSet implements \Iterator, \Countable
      *
      * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ($this->_current > $this->_currentNode) {
@@ -97,6 +100,7 @@ class NodeSet implements \Iterator, \Countable
      *
      * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_current;
@@ -107,6 +111,7 @@ class NodeSet implements \Iterator, \Countable
      *
      * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_nodes[$this->_current];
@@ -117,6 +122,7 @@ class NodeSet implements \Iterator, \Countable
      *
      * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_current = 0;

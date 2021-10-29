@@ -144,6 +144,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * {inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         if (array_keys($this->array) != array_keys($this->objectsArray)) {
@@ -158,6 +159,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * {inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->array);
@@ -166,6 +168,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * {inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->array[$offset]) ? $this->initObject($offset) : null;
@@ -174,6 +177,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * {inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->assertValidTypeLazy($value, $offset);
@@ -189,6 +193,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * {inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if ($this->counter && isset($this->array[$offset])) {
@@ -204,6 +209,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * {inheritdoc}
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->counter;
