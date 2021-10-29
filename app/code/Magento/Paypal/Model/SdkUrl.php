@@ -103,6 +103,7 @@ class SdkUrl
                 'client-id' => $this->getClientId(),
                 'locale' => $this->localeResolver->getLocale(),
                 'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
+                'buyer-country' => $this->getBuyerCountry(),
             ];
 
             if ($this->areMessagesEnabled()) {
@@ -114,7 +115,6 @@ class SdkUrl
                 $params['intent'] = $this->getIntent();
                 $params['merchant-id'] = $this->config->getValue('merchant_id');
                 $params['disable-funding'] = $this->getDisallowedFunding();
-                $params['buyer-country'] = $this->getBuyerCountry();
                 $params = array_replace($params, $this->queryParams);
             }
             $params['components'] = implode(',', $components);

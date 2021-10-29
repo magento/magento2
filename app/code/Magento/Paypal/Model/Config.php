@@ -1586,6 +1586,7 @@ class Config extends AbstractConfig
             case 'api_signature':
             case 'api_cert':
             case 'sandbox_flag':
+            case 'buyer_country':
             case 'use_proxy':
             case 'proxy_host':
             case 'proxy_port':
@@ -1626,6 +1627,7 @@ class Config extends AbstractConfig
             case 'vendor':
             case 'pwd':
             case 'sandbox_flag':
+            case 'buyer_country':
             case 'use_proxy':
             case 'proxy_host':
             case 'proxy_port':

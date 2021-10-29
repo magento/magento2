@@ -104,8 +104,8 @@ class SdkUrlTest extends TestCase
                 ['merchant_id', null, 'merchant'],
                 ['sandbox_client_id', null, 'sb'],
                 ['sandbox_flag', null, true],
-                ['disable_funding_options', null, $disallowedFunding],
                 ['buyer_country', null, $isBuyerCountryEnabled ? 'US' : ''],
+                ['disable_funding_options', null, $disallowedFunding],
                 ['paymentAction', null, $intent],
                 ['in_context', null, true],
                 [

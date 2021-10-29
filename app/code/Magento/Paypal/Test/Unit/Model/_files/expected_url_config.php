@@ -172,6 +172,7 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'en_BR',
                     'currency' => 'USD',
+                    'buyer-country' => 'US',
                     'commit' => 'false',
                     'intent' => 'authorize',
                     'merchant-id' => 'merchant',
@@ -179,7 +180,6 @@ return [
                         ',',
                         ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'buyer-country' => 'US',
                     'components' => implode(',', ['messages', 'buttons'])
                 ]
             )
