@@ -12,7 +12,9 @@ $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
 $fullDirectoryPath = $filesystem->getDirectoryRead(Magento\Framework\App\Filesystem\DirectoryList::PUB)
         ->getAbsolutePath() . $directoryName;
 $mediaDirectory = $filesystem->getDirectoryWrite(Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
-
+if (!$mediaDirectory->getDriver() instanceof Magento\Framework\Filesystem\Driver\File) {
+    return;
+}
 $wysiwygDir = $mediaDirectory->getAbsolutePath() . 'wysiwyg';
 $mediaDirectory->delete($wysiwygDir);
 if (!is_dir($fullDirectoryPath)) {
