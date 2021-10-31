@@ -74,14 +74,13 @@ class SlidingWindowEnforcerTest extends TestCase
 
         $this->logger->method('incrAndGetFor')
             ->willReturnCallback(
-                function (ContextInterface $context, int $slot, int $expireAfter) use ($curSlot, $limitPeriod, $limit) {
-                    $this->assertEquals($curSlot, $slot);
-                    $this->assertGreaterThan($limitPeriod, $expireAfter);
+                function (...$args) use ($curSlot, $limitPeriod, $limit) {
+                    $this->assertEquals($curSlot, $args[1]);
+                    $this->assertGreaterThan($limitPeriod, $args[2]);
 
                     return ((int) $limit / 2);
                 }
             );
-        //phpcs:disable
         $this->logger->method('getFor')
             ->willReturnCallback(
                 function (ContextInterface $context, int $slot) use ($prevSlot) {
@@ -90,7 +89,6 @@ class SlidingWindowEnforcerTest extends TestCase
                     return null;
                 }
             );
-        //phpcs:enable
 
         $this->model->enforce($this->createContext());
     }
@@ -130,22 +128,20 @@ class SlidingWindowEnforcerTest extends TestCase
 
         $this->initConfigMock($limit, $limitPeriod);
 
-        //phpcs:disable
         $this->logger->method('incrAndGetFor')
             ->willReturnCallback(
-                function (ContextInterface $context, int $slot, int $expireAfter) use ($limit) {
+                function () use ($limit) {
                     return ((int) $limit / 2);
                 }
             );
         $this->logger->method('getFor')
             ->willReturnCallback(
-                function (ContextInterface $context, int $slot) use ($prevCounter, $prevSlot) {
-                    $this->assertEquals($prevSlot, $slot);
+                function (...$args) use ($prevCounter, $prevSlot) {
+                    $this->assertEquals($prevSlot, $args[1]);
 
                     return $prevCounter;
                 }
             );
-        //phpcs:enable
 
         if ($expectException) {
             $this->expectException(BackpressureExceededException::class);
