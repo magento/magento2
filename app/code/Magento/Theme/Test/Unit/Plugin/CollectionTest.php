@@ -12,11 +12,21 @@ use Magento\Theme\Plugin\Data\Collection as CollectionPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * This Unit Test covers a Plugin (not Collection), overriding the `curPage` (current page)
+ *
+ * @see \Magento\Framework\Data\Collection
+ */
 class CollectionTest extends TestCase
 {
-    /** @var MockObject|Collection */
+    /**
+     * @var Collection|MockObject
+     */
     private $dataCollectionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->dataCollectionMock = $this->getMockBuilder(Collection::class)
@@ -25,7 +35,12 @@ class CollectionTest extends TestCase
             ->getMock();
     }
 
-    public function testCurrentPageIsNotOverriddenIfFirstPage()
+    /**
+     * Test covers use-case for the first page of results. We don't expect calculation of the last page to be executed.
+     *
+     * @return void
+     */
+    public function testCurrentPageIsNotOverriddenIfFirstPage(): void
     {
         // Given
         $currentPagePlugin = new CollectionPlugin();
@@ -38,7 +53,12 @@ class CollectionTest extends TestCase
         $currentPagePlugin->afterGetCurPage($this->dataCollectionMock, 1);
     }
 
-    public function testCurrentPageIsOverriddenIfNotAFirstPage()
+    /**
+     * Test covers use-case for non-first page of results. We expect calculation of the last page to be executed.
+     *
+     * @return void
+     */
+    public function testCurrentPageIsOverriddenIfNotAFirstPage(): void
     {
         // Given
         $currentPagePlugin = new CollectionPlugin();
