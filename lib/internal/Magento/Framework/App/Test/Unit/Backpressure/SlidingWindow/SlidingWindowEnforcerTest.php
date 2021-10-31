@@ -83,8 +83,8 @@ class SlidingWindowEnforcerTest extends TestCase
             );
         $this->logger->method('getFor')
             ->willReturnCallback(
-                function (ContextInterface $context, int $slot) use ($prevSlot) {
-                    $this->assertEquals($prevSlot, $slot);
+                function (...$args) use ($prevSlot) {
+                    $this->assertEquals($prevSlot, $args[1]);
 
                     return null;
                 }
