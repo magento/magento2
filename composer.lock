@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fbe7da190a832052f5c07416416325c",
+    "content-hash": "381710326892b9ae121bbb4c5cf2bf3d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3623,17 +3623,11 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.2.1",
+            "version": "dev-php8-compatibility/change-composer-dependencies",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "b9f929f718ef93ed61b6410bad85d40c37fd5ed3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/b9f929f718ef93ed61b6410bad85d40c37fd5ed3",
-                "reference": "b9f929f718ef93ed61b6410bad85d40c37fd5ed3",
-                "shasum": ""
+                "url": "https://github.com/SilinMykola/magento-composer-installer.git",
+                "reference": "768541733efd41990989ab3d092faf9cd1955676"
             },
             "require": {
                 "composer-plugin-api": "^1.1 || ^2.0",
@@ -3643,11 +3637,9 @@
                 "magento-hackathon/magento-composer-installer": "*"
             },
             "require-dev": {
-                "firegento/phpcs": "~1.1.0",
                 "mikey179/vfsstream": "*",
                 "phpunit/phpunit": "*",
-                "phpunit/phpunit-mock-objects": "dev-master",
-                "squizlabs/php_codesniffer": "1.4.7",
+                "squizlabs/php_codesniffer": "3.6.1",
                 "symfony/process": "*"
             },
             "type": "composer-plugin",
@@ -3662,7 +3654,12 @@
                     "MagentoHackathon\\Composer\\Magento": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "archive": {
+                "exclude": [
+                    "vendor",
+                    "/tests/FullStackTest/"
+                ]
+            },
             "license": [
                 "OSL-3.0"
             ],
@@ -3698,7 +3695,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2021-03-04T20:05:10+00:00"
+            "time": "2021-10-29T10:44:56+00:00"
         },
         {
             "name": "magento/zendframework1",
@@ -12516,6 +12513,12 @@
             "alias_normalized": "1.8.0.0"
         },
         {
+            "package": "magento/magento-composer-installer",
+            "version": "dev-php8-compatibility/change-composer-dependencies",
+            "alias": "0.2.2",
+            "alias_normalized": "0.2.2.0"
+        },
+        {
             "package": "magento/zendframework1",
             "version": "1.14.6.0-beta1",
             "alias": "1.14.6",
@@ -12525,6 +12528,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
+        "magento/magento-composer-installer": 20,
         "magento/zendframework1": 10
     },
     "prefer-stable": true,

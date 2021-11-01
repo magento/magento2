@@ -63,7 +63,7 @@
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.8.x-dev as 1.8.0",
         "magento/composer-dependency-version-audit-plugin": "~0.1",
-        "magento/magento-composer-installer": ">=0.1.11",
+        "magento/magento-composer-installer": "dev-php8-compatibility/change-composer-dependencies as 0.2.2",
         "magento/zendframework1": "1.14.6-beta1 as 1.14.6",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^6.0.0",
@@ -382,5 +382,9 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [{
+            "type": "git",
+            "url": "https://github.com/SilinMykola/magento-composer-installer.git"
+        }]
 }
