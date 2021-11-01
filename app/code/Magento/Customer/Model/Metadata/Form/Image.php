@@ -116,9 +116,9 @@ class Image extends File
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
         $this->mediaEntityTmpReadDirectory = $fileSystem->getDirectoryReadByPath(
-            DirectoryList::MEDIA . DIRECTORY_SEPARATOR
-            . $this->_entityTypeCode . DIRECTORY_SEPARATOR
-            . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR);
+            DirectoryList::MEDIA . DIRECTORY_SEPARATOR . $this->_entityTypeCode
+            . DIRECTORY_SEPARATOR . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR
+        );
         $this->mediaWriteDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
