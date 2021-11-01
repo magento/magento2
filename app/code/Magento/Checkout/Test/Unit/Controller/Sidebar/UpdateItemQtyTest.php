@@ -96,8 +96,8 @@ class UpdateItemQtyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $this->requestMock
@@ -153,8 +153,8 @@ class UpdateItemQtyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithLocalizedException(): void
     {
         $this->requestMock
@@ -196,8 +196,8 @@ class UpdateItemQtyTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecuteWithException(): void
     {
         $this->requestMock

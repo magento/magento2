@@ -19,22 +19,16 @@ use PHPUnit\Framework\TestCase;
 class FileResolverTest extends TestCase
 {
     /**
-     * Files resolver
-     *
      * @var FileResolver
      */
     protected $model;
 
     /**
-     * Filesystem
-     *
      * @var \Magento\Framework\Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * File iterator factory
-     *
      * @var FileIteratorFactory|MockObject
      */
     protected $iteratorFactory;
