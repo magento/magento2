@@ -122,7 +122,7 @@ interface TimezoneInterface
      * @param string|null $dateTo
      * @return bool
      */
-    public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null);
+    public function isScopeDateInInterval($scope, $dateFrom = '', $dateTo = '');
 
     /**
      * Format date according to date and time formats, locale, timezone and pattern.

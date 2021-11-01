@@ -20,8 +20,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $namespace If specified, the namespace to which the attribute belongs.
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function addAttribute($name, $value = null, $namespace = null)
+    public function addAttribute($name, $value = null, $namespace = null): void
     {
         $value = $value !== null ? $this->xmlentities($value) : '';
         parent::addAttribute($name, $value, $namespace);
@@ -35,8 +34,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $namespace If specified, the namespace to which the child element belongs.
      * @return \Magento\Shipping\Model\Simplexml\Element
      */
-    #[\ReturnTypeWillChange]
-    public function addChild($name, $value = null, $namespace = null)
+    public function addChild($name, $value = null, $namespace = null): self
     {
         if ($value !== null) {
             $value = $this->xmlentities($value);

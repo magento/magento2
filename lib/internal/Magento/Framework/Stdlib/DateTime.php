@@ -70,7 +70,7 @@ class DateTime
      */
     public function isEmptyDate($date)
     {
-        return preg_replace('#[ 0:-]#', '', $date) === '';
+        return !$date || preg_replace('#[ 0:-]#', '', $date) === '';
     }
 
     /**

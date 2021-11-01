@@ -262,15 +262,15 @@ class Timezone implements TimezoneInterface
     /**
      * @inheritdoc
      */
-    public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
+    public function isScopeDateInInterval($scope, $dateFrom = '', $dateTo = '')
     {
         if (!$scope instanceof ScopeInterface) {
             $scope = $this->_scopeResolver->getScope($scope);
         }
 
         $scopeTimeStamp = $this->scopeTimeStamp($scope);
-        $fromTimeStamp = strtotime($dateFrom);
-        $toTimeStamp = strtotime($dateTo);
+        $fromTimeStamp = strtotime((string) $dateFrom);
+        $toTimeStamp = strtotime((string) $dateTo);
         if ($dateTo) {
             // fix date YYYY-MM-DD 00:00:00 to YYYY-MM-DD 23:59:59
             $toTimeStamp += 86400;

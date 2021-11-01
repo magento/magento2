@@ -56,7 +56,7 @@ class AdminUserAuthenticateBefore implements ObserverInterface
         /** @var \Magento\User\Model\User $user */
         $user->loadByUsername($username);
 
-        if ($user->getId() && $this->userExpirationManager->isUserExpired($user->getId())) {
+        if ($user->getId() && $this->userExpirationManager->isUserExpired((string) $user->getId())) {
             $this->userExpirationManager->deactivateExpiredUsersById([$user->getId()]);
             throw new AuthenticationException(
                 __(
