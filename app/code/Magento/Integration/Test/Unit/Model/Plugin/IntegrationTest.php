@@ -92,8 +92,8 @@ class IntegrationTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterDelete(): void
     {
         $integrationId = 1;
@@ -112,8 +112,8 @@ class IntegrationTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterCreateAllResources(): void
     {
         $integrationId = 1;
@@ -136,8 +136,8 @@ class IntegrationTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterCreateSomeResources(): void
     {
         $integrationId = 1;
@@ -160,8 +160,8 @@ class IntegrationTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterCreateNoResource(): void
     {
         $integrationId = 1;
@@ -184,8 +184,8 @@ class IntegrationTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterUpdateAllResources(): void
     {
         $integrationId = 1;
@@ -208,8 +208,8 @@ class IntegrationTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAfterGet(): void
     {
         $integrationId = 1;
