@@ -52,7 +52,7 @@ class Image extends File
     /**
      * @var ReadInterface
      */
-    private $mediaReadTmpDirectory;
+    private $mediaEntityTmpReadDirectory;
 
     /**
      * @var WriteInterface
@@ -115,7 +115,7 @@ class Image extends File
             ->get(ImageContentInterfaceFactory::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
-        $this->mediaReadTmpDirectory = $fileSystem->getDirectoryReadByPath(
+        $this->mediaEntityTmpReadDirectory = $fileSystem->getDirectoryReadByPath(
             DirectoryList::MEDIA . DIRECTORY_SEPARATOR
             . $this->_entityTypeCode . DIRECTORY_SEPARATOR
             . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR);
@@ -231,7 +231,7 @@ class Image extends File
         $fileName = $this->mediaWriteDirectory
             ->getDriver()
             ->getRealPathSafety(
-                $this->mediaReadTmpDirectory->getAbsolutePath(
+                $this->mediaEntityTmpReadDirectory->getAbsolutePath(
                     ltrim(
                         $value['file'],
                         '/'
@@ -239,7 +239,7 @@ class Image extends File
                 )
             );
         return $this->getFileProcessor()->moveTemporaryFile(
-            $this->mediaReadTmpDirectory->getRelativePath($fileName)
+            $this->mediaEntityTmpReadDirectory->getRelativePath($fileName)
         );
     }
 
@@ -253,7 +253,7 @@ class Image extends File
     protected function processCustomerValue(array $value)
     {
         $file = ltrim($value['file'], '/');
-        if ($this->mediaReadTmpDirectory->isExist($file)) {
+        if ($this->mediaEntityTmpReadDirectory->isExist($file)) {
             $temporaryFile = FileProcessor::TMP_DIR . '/' . $file;
             $base64EncodedData = $this->getFileProcessor()->getBase64EncodedData($temporaryFile);
             /** @var ImageContentInterface $imageContentDataObject */
