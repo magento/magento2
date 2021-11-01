@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <!-- Set in Stores > Configuration > Catalog > Catalog > > Recently Viewed/Compared Products > Synchronize Widget Products With Backend Storage = "Yes" -->
+            <!-- Set in Stores > Configuration > Catalog > Catalog > Recently Viewed/Compared Products > Synchronize Widget Products With Backend Storage = "Yes" -->
             <magentoCLI command="config:set {{EnableSynchronizeWidgetProductsWithBackendStorage.path}} {{EnableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setEnableSynchronizeWidgetProductsWithBackendStorage"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
