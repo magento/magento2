@@ -32,37 +32,9 @@ class StoreCodeValidatorTest extends TestCase
     /**
      * @return void
      */
-    public function testAfterIsValidStoreCodeParsedCorrectly(): void
+    public function testAfterIsValidStore(): void
     {
-        $invalidStoreCodeInUrl = "rest";
-        $parsedStoreCode = "us";
-        $storeCodeValidator = new StoreCodeValidator($invalidStoreCodeInUrl);
-        $this->assertTrue($storeCodeValidator->afterIsValid($this->subjectMock, true, $parsedStoreCode));
-    }
-
-    /**
-     * @return void
-     */
-    public function testAfterIsValidStoreCodeParsedIncorrectly(): void
-    {
-        $invalidStoreCodeInUrl = "rest";
-        $parsedStoreCode = "rest";
-        $storeCodeValidator = new StoreCodeValidator($invalidStoreCodeInUrl);
-        $this->assertFalse($storeCodeValidator->afterIsValid($this->subjectMock, true, $parsedStoreCode));
-        $invalidStoreCodeInUrl = "soap";
-        $parsedStoreCode = "soap";
-        $storeCodeValidator = new StoreCodeValidator($invalidStoreCodeInUrl);
-        $this->assertFalse($storeCodeValidator->afterIsValid($this->subjectMock, true, $parsedStoreCode));
-    }
-
-    /**
-     * @return void
-     */
-    public function testAfterValidIsFailedPreviousValidation(): void
-    {
-        $invalidStoreCodeInUrl = "rest";
-        $parsedStoreCode = "us";
-        $storeCodeValidator = new StoreCodeValidator($invalidStoreCodeInUrl);
-        $this->assertFalse($storeCodeValidator->afterIsValid($this->subjectMock, false, $parsedStoreCode));
+        $storeCodeValidator = new StoreCodeValidator();
+        $this->assertFalse($storeCodeValidator->afterIsValid($this->subjectMock, true, 'rest'));
     }
 }
