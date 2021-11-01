@@ -517,6 +517,9 @@ class StorageTest extends TestCase
                     [$thumbnailTargetPath, true],
                 ]
             );
+        $this->driverMock->expects(self::once())
+            ->method('fileGetContents')
+            ->willReturn('some content');
 
         $image = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()
