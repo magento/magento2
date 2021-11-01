@@ -16,7 +16,6 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Paypal\Model\Payflowpro;
 
 /**
  * Test for smart button config
@@ -39,11 +38,6 @@ class SmartButtonConfigTest extends TestCase
     private $configMock;
 
     /**
-     * @var MockObject
-     */
-    private $payflowproMock;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -52,7 +46,6 @@ class SmartButtonConfigTest extends TestCase
         $this->configMock           = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->payflowproMock       = $this->createMock(Payflowpro::class);
 
         /** @var ScopeConfigInterface|MockObject $scopeConfigMock */
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
@@ -74,7 +67,7 @@ class SmartButtonConfigTest extends TestCase
             $configFactoryMock,
             $scopeConfigMock,
             $sdkUrl,
-            $this->payflowproMock,
+            $this->configMock,
             $this->getDefaultStyles()
         );
     }
