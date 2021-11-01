@@ -80,11 +80,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Webapi\Model\Plugin\Store\Model\Validation\StoreCodeValidator">
-        <arguments>
-            <argument name="invalidStoreCode" xsi:type="string">rest</argument>
-        </arguments>
-    </type>
     <type name="Magento\Store\Model\Validation\StoreCodeValidator">
         <plugin name="check_if_parsed_store_code_is_valid" type="Magento\Webapi\Model\Plugin\Store\Model\Validation\StoreCodeValidator"/>
     </type>
