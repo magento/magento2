@@ -101,6 +101,9 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\File\ExistingValidate">
+        <plugin name="remoteValidatorInfo" type="Magento\RemoteStorage\Plugin\ExistingValidate" sortOrder="10"/>
+    </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
     </type>
