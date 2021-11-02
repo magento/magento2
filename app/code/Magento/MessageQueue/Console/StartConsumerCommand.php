@@ -43,9 +43,6 @@ class StartConsumerCommand extends Command
     private $lockManager;
 
     /**
-     * StartConsumerCommand constructor.
-     * {@inheritdoc}
-     *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
@@ -166,14 +163,15 @@ To specify the preferred area:
 
 To do not run multiple copies of one consumer simultaneously:
 
-    <comment>%command.full_name% someConsumer --single-thread'</comment>
+    <comment>%command.full_name% someConsumer --single-thread</comment>
 
 To save PID enter path (This option is deprecated, use --single-thread instead):
 
     <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
+
 To define the number of processes per consumer:
 
-    <comment>%command.full_name% someConsumer --multi-process'</comment>
+    <comment>%command.full_name% someConsumer --multi-process</comment>
 HELP
         );
         parent::configure();
