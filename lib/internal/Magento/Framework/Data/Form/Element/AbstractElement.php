@@ -62,8 +62,6 @@ abstract class AbstractElement extends AbstractForm
     protected $_escaper;
 
     /**
-     * Lock html attribute
-     *
      * @var string
      */
     private $lockHtmlAttribute = 'data-locked';
