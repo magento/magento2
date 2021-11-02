@@ -74,7 +74,7 @@ define([
                             [this.getNewFolderPath(folderName)]
                         ).then(function () {
                             this.directoryTree().reloadJsTree().then(function () {
-                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
+                                $(this.directoryTree().directoryTreeSelector).on('refresh.jstree', function () {
                                     this.directoryTree().locateNode(this.getNewFolderPath(folderName));
                                 }.bind(this));
                             }.bind(this));

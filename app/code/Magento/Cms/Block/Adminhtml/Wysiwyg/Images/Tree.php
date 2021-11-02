@@ -79,8 +79,8 @@ class Tree extends \Magento\Backend\Block\Template
             $hasNestedDirectories = $this->hasNestedDirectories($storageRoot, $item->getFilename());
 
             // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
-            if (!$hasNestedDirectories) {
-                $data['state'] = 'leaf';
+            if ($hasNestedDirectories) {
+                $data['children'] = true;
             }
 
             $jsonArray[] = $data;
