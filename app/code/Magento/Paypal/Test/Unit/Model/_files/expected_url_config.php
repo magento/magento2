@@ -47,7 +47,7 @@ return [
                             'sofort'
                         ]
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -71,7 +71,7 @@ return [
                         ',',
                         ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -95,7 +95,7 @@ return [
                         ',',
                         ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -131,7 +131,7 @@ return [
                             'sofort'
                         ]
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -155,7 +155,7 @@ return [
                         ',',
                         ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -204,7 +204,7 @@ return [
                         ',',
                         ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
