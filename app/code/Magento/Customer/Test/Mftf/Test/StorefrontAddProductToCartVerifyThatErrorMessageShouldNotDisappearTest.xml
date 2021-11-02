@@ -25,7 +25,8 @@
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron stepKey="runCronReindex" groups="index"/>
+            <!--Reindex and flush cache-->
+            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -33,6 +34,7 @@
             <magentoCLI command="config:set {{DisableSynchronizeWidgetProductsWithBackendStorage.path}} {{DisableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setDisableSynchronizeWidgetProductsWithBackendStorage"/>
         </after>
 
+        <waitForPageLoad time="60" stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>

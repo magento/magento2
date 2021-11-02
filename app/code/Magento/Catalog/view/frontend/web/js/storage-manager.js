@@ -240,7 +240,9 @@ define([
                     ids: data,
                     'type_id': typeId
                 }
-            }, params).done(this.requestHandler.bind(this, name));
+            }, params)
+                .done(this.requestHandler.bind(this, name))
+                .always(this.requestSent = 1);
         }
     });
 });
