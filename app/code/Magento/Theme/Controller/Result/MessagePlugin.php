@@ -101,7 +101,17 @@ class MessagePlugin
         ResultInterface $result
     ) {
         if (!($subject instanceof Json)) {
-            $this->setCookie($this->getMessages());
+            $newMessages = $this->messageManager->getMessages(true)->getItems();
+            if (!empty($newMessages)) {
+                $messages = $this->getCookiesMessages();
+                foreach ($newMessages as $message) {
+                    $messages[] = [
+                        'type' => $message->getType(),
+                        'text' => $this->interpretationStrategy->interpret($message),
+                    ];
+                }
+                $this->setCookie($messages);
+            }
         }
         return $result;
     }
@@ -164,24 +174,6 @@ class MessagePlugin
         }
 
         return $text;
-    }
-
-    /**
-     * Return messages array and clean message manager messages
-     *
-     * @return array
-     */
-    protected function getMessages()
-    {
-        $messages = $this->getCookiesMessages();
-        /** @var MessageInterface $message */
-        foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
-            $messages[] = [
-                'type' => $message->getType(),
-                'text' => $this->interpretationStrategy->interpret($message),
-            ];
-        }
-        return $messages;
     }
 
     /**
