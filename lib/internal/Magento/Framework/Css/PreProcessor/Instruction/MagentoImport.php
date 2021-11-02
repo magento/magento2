@@ -143,13 +143,15 @@ class MagentoImport implements PreProcessorInterface
                 if ($moduleName && !$deployOnlyEnabled && !$this->moduleManager->isEnabled($moduleName)) {
                     continue;
                 }
-
-                if ($moduleName && $deployOnlyEnabled && $this->moduleManager->isEnabled($moduleName)) {
-                    $referenceString = $isReference ? '(reference) ' : '';
-                    $importsContent .= $moduleName
-                        ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
-                        : "@import $referenceString'{$matchedFileId}';\n";
+                
+                if ($moduleName && $deployOnlyEnabled && !$this->moduleManager->isEnabled($moduleName)) {
+                    continue;
                 }
+
+                $referenceString = $isReference ? '(reference) ' : '';
+                $importsContent .= $moduleName
+                    ? "@import $referenceString'{$moduleName}::{$resolvedPath}';\n"
+                    : "@import $referenceString'{$matchedFileId}';\n";
             }
         } catch (\LogicException $e) {
             $this->errorHandler->processException($e);
