@@ -76,6 +76,12 @@ class StartConsumerCommand extends Command
         }
 
         $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
+        $multiProcess = $input->getOption(self::OPTION_MULTI_PROCESS);
+
+        if ($multiProcess && !$this->lockManager->lock(md5($consumerName . '-' . $multiProcess),0)) { //phpcs:ignore
+            $output->writeln('<error>Consumer with the same name is running</error>');
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
 
         if ($singleThread && !$this->lockManager->lock(md5($consumerName),0)) { //phpcs:ignore
             $output->writeln('<error>Consumer with the same name is running</error>');
@@ -86,7 +92,13 @@ class StartConsumerCommand extends Command
 
         $consumer = $this->consumerFactory->get($consumerName, $batchSize);
         $consumer->process($numberOfMessages);
-        $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
+
+        if ($singleThread) {
+            $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
+        }
+        if ($multiProcess) {
+            $this->lockManager->unlock(md5($consumerName . '-' . $multiProcess)); //phpcs:ignore
+        }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }

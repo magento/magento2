@@ -128,7 +128,7 @@ class ConsumersRunner
                 $numberOfProcesses = $multipleProcesses[$consumer->getName()];
 
                 for ($i = 1; $i <= $numberOfProcesses; $i++) {
-                    if ($this->lockManager->isLocked(md5($consumer->getName()))) { //phpcs:ignore
+                    if ($this->lockManager->isLocked(md5($consumer->getName() . '-' . $i))) { //phpcs:ignore
                         continue;
                     }
                     $arguments = [
@@ -146,7 +146,6 @@ class ConsumersRunner
 
                     $this->shellBackground->execute($command, $arguments);
                 }
-                $this->lockManager->lock(md5($consumer->getName()));
             } else {
                 if ($this->lockManager->isLocked(md5($consumer->getName()))) { //phpcs:ignore
                     return false;
