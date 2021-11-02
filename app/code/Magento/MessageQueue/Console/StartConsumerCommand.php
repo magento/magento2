@@ -171,7 +171,7 @@ To save PID enter path (This option is deprecated, use --single-thread instead):
 
 To define the number of processes per consumer:
 
-    <comment>%command.full_name% someConsumer --multi-process</comment>
+    <comment>%command.full_name% someConsumer --multi-process=4</comment>
 HELP
         );
         parent::configure();
