@@ -9,17 +9,14 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $directoryName = 'linked_media';
 /** @var \Magento\Framework\Filesystem $filesystem */
 $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
-$fullDirectoryPath = $filesystem->getDirectoryRead(Magento\Framework\App\Filesystem\DirectoryList::PUB)
-        ->getAbsolutePath() . $directoryName;
+
+$targetDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
+    ->getDirectoryWrite(Magento\Framework\App\Filesystem\DirectoryList::ROOT);
+$fullDirectoryPath = $targetDirectory->getAbsolutePath('pub/' . $directoryName);
+
 $mediaDirectory = $filesystem->getDirectoryWrite(Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
-if (!$mediaDirectory->getDriver() instanceof Magento\Framework\Filesystem\Driver\File) {
-    return;
-}
 $wysiwygDir = $mediaDirectory->getAbsolutePath() . 'wysiwyg';
 $mediaDirectory->delete($wysiwygDir);
-if (!is_dir($fullDirectoryPath)) {
-    mkdir($fullDirectoryPath);
-}
-if (is_dir($fullDirectoryPath) && !is_dir($wysiwygDir)) {
-    symlink($fullDirectoryPath, $wysiwygDir);
-}
+
+$targetDirectory->create($fullDirectoryPath);
+$targetDirectory->createSymlink($fullDirectoryPath, $wysiwygDir);

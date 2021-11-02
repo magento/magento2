@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Controller\Result\Json as JsonResponse;
 use Magento\Framework\App\Response\HttpFactory as ResponseFactory;
 use Magento\Framework\App\Response\Http as Response;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload class.
@@ -86,7 +87,8 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $directoryName;
+        $this->fullDirectoryPath = rtrim($this->imagesHelper->getStorageRoot(), '/')
+            . DIRECTORY_SEPARATOR . $directoryName;
         $this->fullExcludedDirectoryPath = $this->imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $excludedDirName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $this->responseFactory = $this->objectManager->get(ResponseFactory::class);
@@ -200,12 +202,12 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     {
         $directoryName = 'linked_media';
         $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
-                ->getAbsolutePath() . DIRECTORY_SEPARATOR . $directoryName;
+                ->getAbsolutePath() . $directoryName;
         $wysiwygDir = $this->mediaDirectory->getAbsolutePath() . '/wysiwyg';
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
         $this->model->execute();
-        $this->assertTrue(is_file($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
+        $this->assertTrue($this->mediaDirectory->isFile($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
     }
 
     /**

@@ -8,6 +8,7 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder class.
@@ -123,7 +124,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLinkedMedia()
     {
         $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
-                ->getAbsolutePath()  . 'linked_media';
+                ->getAbsolutePath() . 'linked_media';
         $this->model->getRequest()->setMethod('POST')
             ->setPostValue('name', $this->dirName);
         $this->model->getStorage()
@@ -131,7 +132,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
             ->setCurrentPath($this->imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . 'wysiwyg');
         $this->model->execute();
 
-        $this->assertTrue(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName));
+        $this->assertTrue($this->mediaDirectory->isDirectory($linkedDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName));
     }
 
     /**

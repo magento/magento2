@@ -9,6 +9,7 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\HttpFactory as ResponseFactory;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFolder class.
@@ -127,6 +128,10 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithLinkedMedia()
     {
+        if (!$this->mediaDirectory->getDriver() instanceof File) {
+            $this->markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+        }
+
         $linkedDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
         $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . 'linked_media';
