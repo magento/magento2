@@ -181,7 +181,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     {
         $entityTypeCode = 'customer';
         $this->mediaDirectory->delete($entityTypeCode);
-        $tmpFilePath = $this->mediaDirectory->getAbsolutePath($entityTypeCode . '/tmp/' . $this->fileName);
         $imageFile = $this->getImageValues();
         $params = [
             'entityTypeCode' => $entityTypeCode,
