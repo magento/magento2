@@ -86,6 +86,7 @@
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToStorefrontPage">
             <argument name="product" value="$createSimpleProduct$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToBeLoaded"/>
         <!--Verify product and category is visible in First Store View -->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreSwitcher"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectFirstStoreView">
