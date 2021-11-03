@@ -2,6 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     cart(cart_id: String! @doc(description: "The unique ID of the cart to query.")): Cart @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\Cart") @doc(description:"Return information about the specified shopping cart.") @cache(cacheable: false)
     customerCart: Cart! @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CustomerCart") @doc(description:"Return information about the customer's shopping cart.") @cache(cacheable: false)
 }
@@ -20,6 +21,9 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput @doc(description: "An input object that defines which payment method to apply to the cart.")): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart") @doc(description:"Apply a payment method to the cart.")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput @doc(description: "An input object that defines a guest email address.")): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart") @doc(description:"Assign the email address of a guest to the cart.")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder") @doc(description:"Set the cart payment method and convert the cart into an order.")
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
+    assignCustomerToGuestCart(cart_id: String!): Cart! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AssignCustomerToGuestCart") @doc(description:"Assign a logged-in customer to the specified guest shopping cart.")
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     mergeCarts(source_cart_id: String! @doc(description: "The guest's cart ID before they login."), destination_cart_id: String @doc(description: "The cart ID after the guest logs in.")): Cart! @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart ID.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
     addProductsToCart(cartId: String! @doc(description: "The cart ID of the shopper."), cartItems: [CartItemInput!]! @doc(description: "An array that defines the products to add to the cart.")): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")

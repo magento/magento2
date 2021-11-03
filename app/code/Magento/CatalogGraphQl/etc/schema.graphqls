@@ -320,9 +320,17 @@ type Products @doc(description: "Contains the results of a `products` query.") {
     page_info: SearchResultPageInfo @doc(description: "An object that includes the page_info and currentPage values specified in the query.")
     total_count: Int @doc(description: "The number of products that are marked as visible. By default, in complex products, parent products are visible, but their child products are not.")
     filters: [LayerFilter] @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\LayerFilters") @doc(description: "Layered navigation filters array.") @deprecated(reason: "Use `aggregations` instead.")
-    aggregations: [Aggregation] @doc(description: "A bucket that contains the attribute code and label for each filterable option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
+    aggregations (filter: AggregationsFilterInput): [Aggregation] @doc(description: "A bucket that contains the attribute code and label for each filterable option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Aggregations")
     sort_fields: SortFields @doc(description: "An object that includes the default sort field and all available sort fields.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\SortFields")
     suggestions: [SearchSuggestion] @doc(description: "An array of search suggestions for case when search query have no results.")
+}
+
+input AggregationsFilterInput @doc(description: "An input object that specifies the filters used in product aggregations.") {
+    category: AggregationsCategoryFilterInput @doc(description: "Filter category aggregations in layered navigation.")
+}
+
+input AggregationsCategoryFilterInput @doc(description: "Filter category aggregations in layered navigation."){
+    includeDirectChildrenOnly: Boolean = false @doc(description: "Indicates whether to include only direct subcategories or all children categories at all levels.")
 }
 
 type CategoryProducts @doc(description: "Contains details about the products assigned to a category.") {
