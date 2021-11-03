@@ -147,23 +147,21 @@ class ConsumersRunner
                     $this->shellBackground->execute($command, $arguments);
                 }
             } else {
-                if ($this->lockManager->isLocked(md5($consumer->getName()))) { //phpcs:ignore
-                    return false;
+                if (!$this->lockManager->isLocked(md5($consumer->getName()))) { //phpcs:ignore
+                    $arguments = [
+                        $consumer->getName(),
+                        '--single-thread'
+                    ];
+
+                    if ($maxMessages) {
+                        $arguments[] = '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
+                    }
+
+                    $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
+                        . ($maxMessages ? ' %s' : '');
+
+                    $this->shellBackground->execute($command, $arguments);
                 }
-
-                $arguments = [
-                    $consumer->getName(),
-                    '--single-thread'
-                ];
-
-                if ($maxMessages) {
-                    $arguments[] = '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
-                }
-
-                $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
-                    . ($maxMessages ? ' %s' : '');
-
-                $this->shellBackground->execute($command, $arguments);
             }
         }
     }
