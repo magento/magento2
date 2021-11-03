@@ -13,8 +13,6 @@ use Magento\RemoteStorage\Driver\Adapter\PathUtil;
 
 /**
  * Generic cache implementation for filesystem storage.
- *
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class Generic implements CacheInterface
 {
@@ -170,6 +168,7 @@ class Generic implements CacheInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings("unused")
      */
     public function deleteDir(string $dirname): void
     {
