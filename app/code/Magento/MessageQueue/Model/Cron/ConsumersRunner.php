@@ -105,8 +105,10 @@ class ConsumersRunner
 
     /**
      * Runs consumers processes
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function run()
+    public function run(): void
     {
         $runByCron = $this->deploymentConfig->get('cron_consumers_runner/cron_run', true);
         $multipleProcesses = $this->deploymentConfig->get('cron_consumers_runner/multiple_processes', []);
