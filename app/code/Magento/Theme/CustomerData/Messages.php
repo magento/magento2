@@ -105,7 +105,7 @@ class Messages implements SectionSourceInterface
 
         if ((bool) $this->appConfig->getValue($this->synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
             $sections = $this->request->getParam('sections');
-            $sectionNames = explode(", ", $sections);
+            $sectionNames = explode(",", $sections);
             if (!empty($sections) && in_array('cart', $sectionNames)) {
                 $forceNewSectionTimestampFlg = false;
                 $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp')
