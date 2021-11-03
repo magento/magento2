@@ -9368,16 +9368,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "13",
+            "version": "14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "2b58f92a98650e0d743aaf32c8c53e4127833eaa"
+                "reference": "daf56b857bec7add42108651365af3861dec290f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/2b58f92a98650e0d743aaf32c8c53e4127833eaa",
-                "reference": "2b58f92a98650e0d743aaf32c8c53e4127833eaa",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/daf56b857bec7add42108651365af3861dec290f",
+                "reference": "daf56b857bec7add42108651365af3861dec290f",
                 "shasum": ""
             },
             "require": {
@@ -9396,7 +9396,8 @@
                     "PHP_CodeSniffer/Tokenizers/"
                 ],
                 "psr-4": {
-                    "Magento2\\": "Magento2/"
+                    "Magento2\\": "Magento2/",
+                    "Magento2Framework\\": "Magento2Framework/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -9405,7 +9406,11 @@
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
-            "time": "2021-10-05T14:00:39+00:00"
+            "support": {
+                "issues": "https://github.com/magento/magento-coding-standard/issues",
+                "source": "https://github.com/magento/magento-coding-standard/tree/v14"
+            },
+            "time": "2021-11-02T12:16:53+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
