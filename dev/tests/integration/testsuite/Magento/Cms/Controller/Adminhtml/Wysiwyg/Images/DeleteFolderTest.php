@@ -93,6 +93,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->delete(
             $this->mediaDirectory->getRelativePath($this->imagesHelper->getStorageRoot() . '/' . $directoryName)
         );
+        $this->mediaDirectory->delete('secondDir');
         $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
         $scopeConfig->setValue(
             self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
@@ -129,7 +130,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLinkedMedia()
     {
         if (!$this->mediaDirectory->getDriver() instanceof File) {
-            $this->markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+            self::markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
         }
 
         $linkedDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::PUB);
@@ -156,14 +157,16 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithWrongDirectoryName()
     {
-        $directoryName = 'testDir/../../../etc/';
+        $secondDir = $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . 'secondDir');
+        $this->mediaDirectory->create($secondDir);
         $testDir = $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . 'testDir');
         $this->mediaDirectory->create($testDir);
-        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+        $directoryName = 'testDir/../secondDir/';
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . $directoryName));
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
         $this->model->execute();
 
-        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . $directoryName));
     }
 
     /**
@@ -178,7 +181,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
         $expectedResponseMessage = 'We cannot delete the selected directory.';
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create($directoryName);
-        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . $directoryName));
 
         $this->model->getRequest()->setParams(['node' => $this->imagesHelper->idEncode($directoryName)]);
         $this->model->getRequest()->setMethod('POST');
@@ -188,7 +191,7 @@ class DeleteFolderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($data['error']);
         $this->assertEquals($expectedResponseMessage, $data['message']);
-        $this->assertFileExists($this->fullDirectoryPath . $directoryName);
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . $directoryName));
     }
 
     /**

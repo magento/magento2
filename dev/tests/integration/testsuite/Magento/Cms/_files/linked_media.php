@@ -5,18 +5,24 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Filesystem\Driver\File;
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $directoryName = 'linked_media';
 /** @var \Magento\Framework\Filesystem $filesystem */
 $filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
-
-$targetDirectory = $objectManager->get(\Magento\Framework\Filesystem\Directory\TargetDirectory::class)
-    ->getDirectoryWrite(Magento\Framework\App\Filesystem\DirectoryList::ROOT);
-$fullDirectoryPath = $targetDirectory->getAbsolutePath('pub/' . $directoryName);
-
+$fullDirectoryPath = $filesystem->getDirectoryRead(Magento\Framework\App\Filesystem\DirectoryList::PUB)
+        ->getAbsolutePath() . $directoryName;
 $mediaDirectory = $filesystem->getDirectoryWrite(Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+if (!$mediaDirectory->getDriver() instanceof File) {
+    echo 'Remote storages like AWS S3 doesn\'t support symlinks';
+    return;
+}
 $wysiwygDir = $mediaDirectory->getAbsolutePath() . 'wysiwyg';
 $mediaDirectory->delete($wysiwygDir);
-
-$targetDirectory->create($fullDirectoryPath);
-$targetDirectory->createSymlink($fullDirectoryPath, $wysiwygDir);
+if (!is_dir($fullDirectoryPath)) {
+    mkdir($fullDirectoryPath);
+}
+if (is_dir($fullDirectoryPath) && !is_dir($wysiwygDir)) {
+    symlink($fullDirectoryPath, $wysiwygDir);
+}

@@ -123,6 +123,10 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithLinkedMedia()
     {
+        if (!$this->mediaDirectory->getDriver() instanceof File) {
+            self::markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+        }
+
         $linkedDirectoryPath =  $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . 'linked_media';
         $this->model->getRequest()->setMethod('POST')
@@ -132,7 +136,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
             ->setCurrentPath($this->imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . 'wysiwyg');
         $this->model->execute();
 
-        $this->assertTrue($this->mediaDirectory->isDirectory($linkedDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName));
+        $this->assertTrue(is_dir($linkedDirectoryPath . DIRECTORY_SEPARATOR . $this->dirName));
     }
 
     /**

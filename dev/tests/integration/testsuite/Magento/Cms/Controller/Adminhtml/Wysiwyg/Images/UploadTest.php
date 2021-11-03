@@ -200,6 +200,10 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithLinkedMedia()
     {
+        if (!$this->mediaDirectory->getDriver() instanceof File) {
+            self::markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+        }
+
         $directoryName = 'linked_media';
         $fullDirectoryPath = $this->filesystem->getDirectoryRead(DirectoryList::PUB)
                 ->getAbsolutePath() . $directoryName;
@@ -207,7 +211,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->model->getRequest()->setParams(['type' => 'image/png']);
         $this->model->getStorage()->getSession()->setCurrentPath($wysiwygDir);
         $this->model->execute();
-        $this->assertTrue($this->mediaDirectory->isFile($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
+        $this->assertTrue(is_file($fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName));
     }
 
     /**

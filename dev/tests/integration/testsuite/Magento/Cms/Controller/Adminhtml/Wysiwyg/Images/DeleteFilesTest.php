@@ -118,6 +118,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $this->mediaDirectory->delete('secondDir');
         $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
         $scopeConfig->setValue(
             self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
@@ -212,26 +213,20 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithWrongFileName()
     {
-        $tmpDirFromRoot = 'var/tmp_dir';
-        $driver = $this->rootDirectory->getDriver();
-        $driver->createDirectory($tmpDirFromRoot);
         $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
+        $this->mediaDirectory->create('secondDir');
+        $driver = $this->mediaDirectory->getDriver();
         $driver->filePutContents(
-            $this->rootDirectory->getAbsolutePath($tmpDirFromRoot . DIRECTORY_SEPARATOR . $this->fileName),
+            $this->mediaDirectory->getAbsolutePath('secondDir' . DIRECTORY_SEPARATOR . $this->fileName),
             file_get_contents($fixtureDir . '/' . $this->fileName)
         );
-
-        $fileName = '/../../var/tmp/' . $this->fileName;
-        $this->model->getRequest()
-            ->setMethod('POST')
+        $fileName = '/../secondDir/' . $this->fileName;
+        $this->model->getRequest()->setMethod('POST')
             ->setPostValue('files', [$this->imagesHelper->idEncode($fileName)]);
-        $this->model->getStorage()
-            ->getSession()
-            ->setCurrentPath($this->fullDirectoryPath);
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
-        $this->assertTrue($this->rootDirectory->isExist($tmpDirFromRoot . DIRECTORY_SEPARATOR . $this->fileName));
-        $this->rootDirectory->delete($tmpDirFromRoot);
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . $fileName));
     }
 
     /**
@@ -244,7 +239,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithLinkedMedia()
     {
         if (!$this->mediaDirectory->getDriver() instanceof File) {
-            $this->markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
+            self::markTestSkipped('Remote storages like AWS S3 doesn\'t support symlinks');
         }
 
         $directoryName = 'linked_media';
