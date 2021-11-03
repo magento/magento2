@@ -103,7 +103,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickOnCreateOrderButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
-        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <actionGroup ref="AdminSelectStoreViewOnCreateOrderPageIfRequestedActionGroup" stepKey="selectStoreViewIfAppears"/>
 
         <!--Add configurable product to order-->
         <actionGroup ref="AddConfigurableProductToOrderFromAdminActionGroup" stepKey="addConfigurableProductToOrder">
@@ -123,10 +123,19 @@
         </actionGroup>
 
         <!-- Move Products to the WishList -->
-        <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$simpleProduct.name$$)}}" userInput="Move to Wish List" stepKey="moveProductToWishList"/>
-        <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$createConfigProduct.name$$)}}" userInput="Move to Wish List" stepKey="moveConfigurableProductToWishList"/>
-        <click selector="{{OrdersGridSection.update}}" stepKey="clickOnUpdateItemsAndQuantity"/>
-        <waitForPageLoad stepKey="waitForAdminCreateOrderWishListSectionPageLoad"/>
+        <actionGroup ref="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="moveProductToWishList">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="option" value="Move to Wish List"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectValueFromActionSelectInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="moveConfigurableProductToWishList">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="option" value="Move to Wish List"/>
+        </actionGroup>
+
+        <!-- <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$simpleProduct.name$$)}}" userInput="Move to Wish List" stepKey="moveProductToWishList"/>
+        <selectOption selector="{{AdminOrderFormItemsOrderedSection.moveProduct($$createConfigProduct.name$$)}}" userInput="Move to Wish List" stepKey="moveConfigurableProductToWishList"/> -->
+        <actionGroup ref="AdminClickUpdateItemsAndQuantitesOnCreateOrderPageActionGroup" stepKey="clickOnUpdateItemsAndQuantity"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAdminCreateOrderWishListSectionPageLoad"/>
 
         <!-- Assert products in Wish List  section -->
         <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList"/>
