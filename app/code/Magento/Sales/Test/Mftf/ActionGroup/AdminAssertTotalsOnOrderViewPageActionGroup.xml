@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertTotalsOnOrderViewPageActionGroup">
+        <annotations>
+            <description>Asserts Totals on the Order View page</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="shippingAndHandling" type="string"/>
+            <argument name="grandTotal" type="string"/>
+        </arguments>
+        
+        <see selector="{{AdminOrderTotalSection.subTotal}}"  userInput="{{subtotal}}" stepKey="checkSubtotal"/>
+        <see selector="{{AdminOrderTotalSection.shippingAndHandling}}" userInput="{{shippingAndHandling}}" stepKey="checkShippingAndHandling"/>
+        <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="{{grandTotal}}" stepKey="checkGrandTotal"/>
+        
+    </actionGroup>
+</actionGroups>
