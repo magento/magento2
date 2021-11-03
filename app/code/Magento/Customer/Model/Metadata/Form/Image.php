@@ -77,6 +77,7 @@ class Image extends File
      * @param DirectoryList|null $directoryList
      * @param WriteFactory|null $writeFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws FileSystemException
      */
     public function __construct(
@@ -139,12 +140,13 @@ class Image extends File
         $rules = $this->getAttribute()->getValidationRules();
 
         try {
-            $imageProp = getimagesize($value['tmp_name']);
+            $fileContent = $this->mediaEntityTmpReadDirectory->readFile($value['tmp_name']);
+            $imageProp = getimagesizefromstring($fileContent);
         } catch (\Throwable $e) {
             $imageProp = false;
         }
 
-        if (!$this->_isUploadedFile($value['tmp_name']) || !$imageProp) {
+        if (!$imageProp || !$this->_isUploadedFile($value['tmp_name'])) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
