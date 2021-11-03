@@ -11,7 +11,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
-use Magento\Eav\Model\ReservedAttributeChecker;
+use Magento\Eav\Model\ReservedAttributeCheckerInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\App\CacheInterface;
@@ -81,7 +81,7 @@ class EavSetup
     private $attributeCodeValidator;
 
     /**
-     * @var ReservedAttributeChecker
+     * @var ReservedAttributeCheckerInterface
      */
     private $reservedAttributeChecker;
 
@@ -104,7 +104,7 @@ class EavSetup
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param Code|null $attributeCodeValidator
      * @param AddOptionToAttribute|null $addAttributeOption
-     * @param ReservedAttributeChecker|null $reservedAttributeChecker
+     * @param ReservedAttributeCheckerInterface|null $reservedAttributeChecker
      * @param AttributeFactory|null $attributeFactory
      * @param Config|null $eavConfig
      * @SuppressWarnings(PHPMD.LongVariable)
@@ -116,7 +116,7 @@ class EavSetup
         CollectionFactory $attrGroupCollectionFactory,
         Code $attributeCodeValidator = null,
         AddOptionToAttribute $addAttributeOption = null,
-        ReservedAttributeChecker $reservedAttributeChecker = null,
+        ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
         AttributeFactory $attributeFactory = null,
         Config $eavConfig = null
     ) {
@@ -128,7 +128,7 @@ class EavSetup
             ?? ObjectManager::getInstance()->get(AddOptionToAttribute::class);
         $this->attributeCodeValidator = $attributeCodeValidator ?? ObjectManager::getInstance()->get(Code::class);
         $this->reservedAttributeChecker = $reservedAttributeChecker
-            ?? ObjectManager::getInstance()->get(ReservedAttributeChecker::class);
+            ?? ObjectManager::getInstance()->get(ReservedAttributeCheckerInterface::class);
         $this->attributeFactory = $attributeFactory ?? ObjectManager::getInstance()->get(AttributeFactory::class);
         $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
@@ -250,6 +250,7 @@ class EavSetup
             $this->addAttributeSet($code, $this->_defaultAttributeSetName);
         }
         $this->addAttributeGroup($code, $this->_defaultGroupName, $this->_generalGroupName);
+        $this->eavConfig->clear();
 
         return $this;
     }
@@ -1375,7 +1376,7 @@ class EavSetup
 
         foreach ($entities as $entityName => $entity) {
             $this->addEntityType($entityName, $entity);
-            $this->eavConfig->clear();
+
             $frontendPrefix = isset($entity['frontend_prefix']) ? $entity['frontend_prefix'] : '';
             $backendPrefix = isset($entity['backend_prefix']) ? $entity['backend_prefix'] : '';
             $sourcePrefix = isset($entity['source_prefix']) ? $entity['source_prefix'] : '';
