@@ -104,5 +104,9 @@
             <path>Setup/Patch/Data/RemoveTinymceConfig.php</path>
             <word>tinymce4</word>
         </item>
+        <item>
+            <path>lib/web/jquery</path>
+            <word>overriden</word>
+        </item>
     </whitelist>
 </config>
