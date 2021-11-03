@@ -15,7 +15,6 @@ $fullDirectoryPath = $filesystem->getDirectoryRead(Magento\Framework\App\Filesys
         ->getAbsolutePath() . $directoryName;
 $mediaDirectory = $filesystem->getDirectoryWrite(Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
 if (!$mediaDirectory->getDriver() instanceof File) {
-    echo 'Remote storages like AWS S3 doesn\'t support symlinks';
     return;
 }
 $wysiwygDir = $mediaDirectory->getAbsolutePath() . 'wysiwyg';
