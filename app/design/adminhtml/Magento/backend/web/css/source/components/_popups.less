@@ -38,16 +38,13 @@
     }
 
     .ui-dialog-titlebar-close {
+        background-color: @color-white;
+        border-color: @color-white;
         cursor: pointer;
-        .lib-icon-font(
-        @_icon-font-content: @popup-close-icon__content,
-        @_icon-font: @popup-close-icon__font,
-        @_icon-font-size: @popup-close-icon__font-size,
-        @_icon-font-color: @popup-close-icon__color,
-        @_icon-font-color-hover: @popup-close-icon__hover__color
-        );
+        .lib-icon-font(@_icon-font-content: @popup-close-icon__content, @_icon-font: @popup-close-icon__font, @_icon-font-size: @popup-close-icon__font-size, @_icon-font-color: @popup-close-icon__color, @_icon-font-color-hover: @popup-close-icon__hover__color);
         position: absolute;
         right: @popup-close-icon__right;
+        text-shadow: none;
         top: @popup-close-icon__top - .3;
 
         .ui-icon {
@@ -56,6 +53,23 @@
 
         &.ui-state-hover {
             border: none;
+        }
+
+        &.ui-button-icon-only {
+            text-indent: -9999px;
+            white-space: nowrap;
+        }
+
+        &:before {
+            float: left;
+            text-indent: 0;
+        }
+
+        &:hover {
+            background-color: @color-white;
+            border-color: @color-white;
+            box-shadow: none;
+            text-shadow: none;
         }
     }
 
@@ -416,13 +430,14 @@
 //  Attribute Popup
 //  _____________________________________________
 
-.attribute-popup { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+//  ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+.attribute-popup {
     .page-content {
         padding: 0;
     }
 }
-
-.attribute-popup-actions { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+//  ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+.attribute-popup-actions {
     &:extend(.abs-clearfix all);
     background: @page-main-actions__background-color;
     border-bottom: 1px solid @page-main-actions__border-color;
@@ -433,7 +448,8 @@
         float: none;
     }
 
-    &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+    //  ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+    &.fixed {
         background: @color-white !important;
         border-bottom: 0 !important;
         left: 0 !important;
