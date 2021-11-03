@@ -135,7 +135,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
         if (!is_numeric($lastUpdatedTime)) {
             if($lastUpdatedTime === null) {
                 $lastUpdatedTime = 0;
-            }else {
+            } else {
                 $lastUpdatedTime = strtotime($lastUpdatedTime);
             }
         }
