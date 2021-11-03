@@ -45,6 +45,8 @@
 
         <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addProductToCart"/>
         <!-- Check that error remains -->
-        <see userInput="The requested qty is not available" stepKey="assertProductErrorRemains"/>
+        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertFailure">
+            <argument name="message" value="The requested qty is not available"/>
+        </actionGroup>
     </test>
 </tests>

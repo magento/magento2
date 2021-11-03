@@ -16,7 +16,8 @@
         "magento/module-require-js": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
-        "magento/module-widget": "*"
+        "magento/module-widget": "*",
+        "magento/module-catalog": "*"
     },
     "suggest": {
         "magento/module-theme-sample-data": "*",
