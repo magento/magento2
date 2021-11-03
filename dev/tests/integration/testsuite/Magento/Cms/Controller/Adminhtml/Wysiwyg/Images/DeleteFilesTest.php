@@ -21,6 +21,8 @@ use Magento\Framework\Filesystem\Driver\File;
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles class.
  *
  * @magentoAppArea adminhtml
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteFilesTest extends \PHPUnit\Framework\TestCase
 {

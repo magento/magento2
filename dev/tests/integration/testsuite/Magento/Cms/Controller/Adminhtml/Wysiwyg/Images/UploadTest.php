@@ -89,7 +89,8 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fullDirectoryPath = rtrim($this->imagesHelper->getStorageRoot(), '/')
             . DIRECTORY_SEPARATOR . $directoryName;
-        $this->fullExcludedDirectoryPath = $this->imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $excludedDirName;
+        $this->fullExcludedDirectoryPath = $this->imagesHelper->getStorageRoot()
+            . DIRECTORY_SEPARATOR . $excludedDirName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $this->responseFactory = $this->objectManager->get(ResponseFactory::class);
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload::class);

@@ -1000,7 +1000,7 @@ class Storage extends \Magento\Framework\DataObject
             );
             $regExp = '/^(';
             $or = '';
-            foreach($mediaGalleryImageFolders as $folder) {
+            foreach ($mediaGalleryImageFolders as $folder) {
                 $folderPattern = str_replace('/', '[\/]+', $folder);
                 $regExp .= $or . $folderPattern . '\b(?!-)(?:\/?[a-zA-Z0-9\-\_]+)*\/?$';
                 $or = '|';
@@ -1014,7 +1014,7 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Get allowed media gallery image folders
      *
-     * example:
+     * Example:
      *   [
      *     [0 => 'wysiwyg'],
      *     [0 => 'catalog', 1 => 'category']

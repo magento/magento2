@@ -141,6 +141,9 @@ class StorageTest extends TestCase
      */
     private $fileMock;
 
+    /**
+     * @var array
+     */
     private $allowedImageExtensions = [
         'jpg' => 'image/jpg',
         'jpeg' => 'image/jpeg',
@@ -366,10 +369,10 @@ class StorageTest extends TestCase
     }
 
     /**
-     * @param array $exclude
-     * @param array $include
-     * @param array $fileNames
-     * @param array $expectedRemoveKeys
+     * @param $path
+     * @param $callNum
+     * @param string $dirsFilter
+     * @throws \Exception
      * @dataProvider dirsCollectionDataProvider
      */
     public function testGetDirsCollection($path, $callNum, $dirsFilter='')
