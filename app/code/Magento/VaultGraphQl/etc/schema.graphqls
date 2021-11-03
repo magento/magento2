@@ -2,6 +2,7 @@
 # See COPYING.txt for license details.
 
 type Mutation {
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     deletePaymentToken(public_hash: String! @doc(description: "The reusable payment token securely stored in the vault.")): DeletePaymentTokenOutput @resolver(class: "\\Magento\\VaultGraphQl\\Model\\Resolver\\DeletePaymentToken") @doc(description:"Delete a customer's payment token.")
 }
 
@@ -26,6 +27,8 @@ type PaymentToken @doc(description: "The stored payment method available to the 
 }
 
 enum PaymentTokenTypeEnum @doc(description: "The list of available payment token types.") {
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     card
+    """phpcs:ignore Magento2.GraphQL.ValidArgumentName"""
     account
 }
