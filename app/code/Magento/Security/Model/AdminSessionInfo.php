@@ -10,7 +10,7 @@ namespace Magento\Security\Model;
 /**
  * Admin Session Info Model
  *
- * @method int getUserId() getUserId()
+ * @method int getUserId()
  * @method int getStatus()
  * @method string getUpdatedAt()
  * @method string getCreatedAt()
@@ -48,18 +48,18 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * All other open sessions were terminated
      * @since 100.1.0
      */
-    protected $isOtherSessionsTerminated = false;
+    protected bool $isOtherSessionsTerminated = false;
 
     /**
      * @var ConfigInterface
      * @since 100.1.0
      */
-    protected $securityConfig;
+    protected ConfigInterface $securityConfig;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    private $dateTime;
+    private \Magento\Framework\Stdlib\DateTime\DateTime $dateTime;
 
     /**
      * AdminSessionInfo constructor
@@ -103,7 +103,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @return bool
      * @since 100.1.0
      */
-    public function isLoggedInStatus()
+    public function isLoggedInStatus(): bool
     {
         $this->checkActivity();
         return $this->getData('status') == self::LOGGED_IN;
@@ -127,16 +127,16 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @return bool
      * @since 100.1.0
      */
-    public function isSessionExpired()
+    public function isSessionExpired(): bool
     {
         $lifetime = $this->securityConfig->getAdminSessionLifetime();
         $currentTime = $this->dateTime->gmtTimestamp();
-        $lastUpdatedTime = $this->getUpdatedAt();
-        if (is_string($lastUpdatedTime)) {
+        $lastUpdatedTime = $this->getUpdatedAt() ?? $currentTime;
+        if (!is_numeric($lastUpdatedTime)) {
             $lastUpdatedTime = strtotime($lastUpdatedTime);
         }
 
-        return $lastUpdatedTime <= ($currentTime - $lifetime) ? true : false;
+        return $lastUpdatedTime <= ($currentTime - $lifetime);
     }
 
     /**
@@ -145,7 +145,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @since 100.1.0
      */
-    public function getFormattedIp()
+    public function getFormattedIp(): string
     {
         return $this->getIp();
     }
@@ -156,7 +156,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @return bool
      * @since 100.1.0
      */
-    public function isOtherSessionsTerminated()
+    public function isOtherSessionsTerminated(): bool
     {
         return $this->isOtherSessionsTerminated;
     }
@@ -168,7 +168,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      * @return $this
      * @since 100.1.0
      */
-    public function setIsOtherSessionsTerminated($isOtherSessionsTerminated)
+    public function setIsOtherSessionsTerminated($isOtherSessionsTerminated): AdminSessionInfo
     {
         $this->isOtherSessionsTerminated = (bool) $isOtherSessionsTerminated;
         return $this;
