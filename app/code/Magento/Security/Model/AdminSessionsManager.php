@@ -336,7 +336,7 @@ class AdminSessionsManager
     private function lastProlongIsOldEnough()
     {
         $lastUpdatedTime = $this->getCurrentSession()->getUpdatedAt();
-        if($lastUpdatedTime === null || is_numeric($lastUpdatedTime)) {
+        if ($lastUpdatedTime === null || is_numeric($lastUpdatedTime)) {
             $lastUpdatedTime = "now";
         }
         $lastProlongTimestamp = strtotime($lastUpdatedTime);
