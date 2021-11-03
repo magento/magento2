@@ -43,23 +43,31 @@ class Messages implements SectionSourceInterface
     private $appConfig;
 
     /**
+     * @var Synchronizer
+     */
+    private $synchronizer;
+
+    /**
      * Constructor
      *
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
      * @param RequestInterface $request
      * @param Config $appConfig
+     * @param Synchronizer $synchronizer
      */
     public function __construct(
         MessageManager $messageManager,
         InterpretationStrategyInterface $interpretationStrategy,
         ?RequestInterface $request = null,
-        ?Config $appConfig = null
+        ?Config $appConfig = null,
+        ?Synchronizer $synchronizer = null
     ) {
         $this->messageManager = $messageManager;
         $this->interpretationStrategy = $interpretationStrategy;
         $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
         $this->appConfig = $appConfig ?: ObjectManager::getInstance()->get(Config::class);
+        $this->synchronizer = $synchronizer ?: ObjectManager::getInstance()->get(Synchronizer::class);
     }
 
     /**
@@ -95,13 +103,17 @@ class Messages implements SectionSourceInterface
     {
         $forceNewSectionTimestampFlg = true;
 
-        if ((bool) $this->appConfig->getValue(Synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
-            $forceNewSectionTimestampFlg = false;
-            $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp')
-                ?? $this->request->getParam('force_new_section_timestamp');
+        if ((bool) $this->appConfig->getValue($this->synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
+            $sections = $this->request->getParam('sections');
+            $sectionNames = explode(", ", $sections);
+            if (!empty($sections) && in_array('cart', $sectionNames)) {
+                $forceNewSectionTimestampFlg = false;
+                $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp')
+                    ?? $this->request->getParam('force_new_section_timestamp');
 
-            if ('true' === $forceNewSectionTimestamp) {
-                $forceNewSectionTimestampFlg = true;
+                if ('true' === $forceNewSectionTimestamp) {
+                    $forceNewSectionTimestampFlg = true;
+                }
             }
         }
         return $forceNewSectionTimestampFlg;
