@@ -108,16 +108,14 @@ class DataObjectHelper
             }
             unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
         }
-        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel
-            && !$dataObject instanceof \Magento\Quote\Api\Data\AddressInterface
-            //&& !isset($data['items'])?? $data['items'][0]['is_tax_included']) {
-            && !isset($data['items'])) {
+        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel//) {
+            && !$dataObject instanceof \Magento\Quote\Api\Data\AddressInterface) {
             $simpleData = array_filter($data, function ($e) {
                 return is_scalar($e) || is_null($e);
             });
             unset($simpleData['id']);
             $dataObject->addData($simpleData);
-            $data = array_filter(array_diff_key($data, $simpleData));
+            $data = array_diff_key($data, $simpleData);
             if (\count($data) === 0) {
                 return $this;
             }
