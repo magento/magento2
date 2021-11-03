@@ -194,14 +194,16 @@ class ImageTest extends AbstractFormTestCase
             'name' => 'realFileName',
         ];
 
+        $this->readDirectoryMock->expects($this->once())
+            ->method('readFile')
+            ->willReturn('');
+
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
 
-        $this->fileProcessorMock->expects($this->once())
-            ->method('isExist')
-            ->with(FileProcessor::TMP_DIR . '/' . $value['tmp_name'])
-            ->willReturn(true);
+        $this->fileProcessorMock->expects($this->never())
+            ->method('isExist');
 
         $model = $this->initialize([
             'value' => $value,
@@ -218,11 +220,16 @@ class ImageTest extends AbstractFormTestCase
      */
     public function testValidate()
     {
+        $tmpName = __DIR__ . '/_files/logo.gif';
         $value = [
-            'tmp_name' => __DIR__ . '/_files/logo.gif',
+            'tmp_name' => $tmpName,
             'name' => 'logo.gif',
         ];
 
+        $this->readDirectoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($tmpName)
+            ->willReturn(file_get_contents($tmpName));
         $this->ioFileSystemMock->expects($this->any())
             ->method('getPathInfo')
             ->with($value['name'])
@@ -260,11 +267,17 @@ class ImageTest extends AbstractFormTestCase
      */
     public function testValidateMaxFileSize()
     {
+        $tmpName = __DIR__ . '/_files/logo.gif';
         $value = [
-            'tmp_name' => __DIR__ . '/_files/logo.gif',
+            'tmp_name' => $tmpName,
             'name' => 'logo.gif',
             'size' => 2,
         ];
+
+        $this->readDirectoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($tmpName)
+            ->willReturn(file_get_contents($tmpName));
 
         $maxFileSize = 1;
 
@@ -318,10 +331,16 @@ class ImageTest extends AbstractFormTestCase
      */
     public function testValidateMaxImageWidth()
     {
+        $tmpName = __DIR__ . '/_files/logo.gif';
         $value = [
-            'tmp_name' => __DIR__ . '/_files/logo.gif',
+            'tmp_name' => $tmpName,
             'name' => 'logo.gif',
         ];
+
+        $this->readDirectoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($tmpName)
+            ->willReturn(file_get_contents($tmpName));
 
         $maxImageWidth = 1;
 
@@ -375,10 +394,17 @@ class ImageTest extends AbstractFormTestCase
      */
     public function testValidateMaxImageHeight()
     {
+        $tmpName = __DIR__ . '/_files/logo.gif';
         $value = [
-            'tmp_name' => __DIR__ . '/_files/logo.gif',
+            'tmp_name' => $tmpName,
             'name' => 'logo.gif',
+            'size' => 2,
         ];
+
+        $this->readDirectoryMock->expects($this->once())
+            ->method('readFile')
+            ->with($tmpName)
+            ->willReturn(file_get_contents($tmpName));
 
         $maxImageHeight = 1;
 
