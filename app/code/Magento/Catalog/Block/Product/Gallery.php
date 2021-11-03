@@ -24,7 +24,7 @@ use Magento\Framework\Data\Collection;
 class Gallery extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Core registry
+     * Framework class for Core Registry
      *
      * @var \Magento\Framework\Registry
      */
