@@ -168,7 +168,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
             if (isset($categoryPostData['use_config']) && !empty($categoryPostData['use_config'])) {
                 foreach ($categoryPostData['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
-                        $useConfig[] = $attributeValue;
+                        $useConfig[] = $attributeCode;
                         $category->setData($attributeCode, null);
                     }
                 }
