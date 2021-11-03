@@ -26,7 +26,6 @@
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
-        <!--<amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributesGrid"/>-->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesGrid"/>
 
         <!--Create new Product Attribute as TextField, with type_id code.-->
