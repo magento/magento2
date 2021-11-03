@@ -13,7 +13,6 @@
             <description>Goes to the Admin Product grid page. Clicks on Add. Fills the provided Product details (Name, SKU, Price and Quantity). Clicks on Save. Validates that the Product successfully created.</description>
         </annotations>
         <arguments>
-            <argument name="category"/>
             <argument name="simpleProduct"/>
         </arguments>
 
