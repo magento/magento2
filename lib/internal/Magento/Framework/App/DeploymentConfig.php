@@ -20,7 +20,8 @@ use Magento\Framework\Phrase;
 class DeploymentConfig
 {
     private const MAGENTO_ENV_PREFIX = 'MAGENTO_DC_';
-    private const ENV_NAME_PATTERN = '~^%env\(\s*(?<name>\w+)\s*(,\s*"(?<default>[^"]+)")?\)%$~';
+    private const ENV_NAME_PATTERN = '~^#env\(\s*(?<name>\w+)\s*(,\s*"(?<default>[^"]+)")?\)$~';
+    private const OVERRIDE_KEY = self::MAGENTO_ENV_PREFIX . '_OVERRIDE';
 
     /**
      * Configuration reader
@@ -151,7 +152,7 @@ class DeploymentConfig
      */
     private function getEnvOverride() : array
     {
-        $env = getenv(self::MAGENTO_ENV_PREFIX . '_OVERRIDE');
+        $env = getenv(self::OVERRIDE_KEY);
         return !empty($env) ? (json_decode($env, true) ?? []) : [];
     }
 
@@ -172,6 +173,19 @@ class DeploymentConfig
             );
             // flatten data for config retrieval using get()
             $this->flatData = $this->flattenParams($this->data);
+
+            // allow reading values from env variables by convention
+            // MAGENTO_DC_{path}, like db/connection/default/host =>
+            // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+            foreach (getenv() as $key => $value) {
+                if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
+                    && $key !== self::OVERRIDE_KEY
+                ) {
+                    // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
+                    $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
+                    $this->flatData[$flatKey] = $value;
+                }
+            }
         }
     }
 
@@ -210,16 +224,10 @@ class DeploymentConfig
             } else  {
                 // allow reading values from env variables
                 // value need to be specified in %env(NAME, "default value")% format
-                // like %env(DB_PASSWORD)%, %env(DB_NAME, "test")%
+                // like #env(DB_PASSWORD), #env(DB_NAME, "test")
                 if (preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
                     $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
                 }
-
-                // allow reading values from env variables by convention
-                // MAGENTO_DC_{path}, like db/connection/default/host =>
-                // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
-                $envName = self::MAGENTO_ENV_PREFIX . strtoupper(str_replace(['/'], ['__'], $newPath));
-                $param = getenv($envName) ?: $param;
 
                 $flattenResult[$newPath] = $param;
             }
