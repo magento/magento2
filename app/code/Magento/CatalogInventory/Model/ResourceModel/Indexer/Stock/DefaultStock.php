@@ -79,7 +79,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param StrategyInterface $tableStrategy
      * @param Config $eavConfig
      * @param ScopeConfigInterface $scopeConfig
-     * @param null $connectionName
+     * @param string $connectionName
      * @param GetStatusExpression|null $getStatusExpression
      * @param StockConfigurationInterface|null $stockConfiguration
      * @param QueryProcessorComposite|null $queryProcessorComposite
