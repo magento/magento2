@@ -351,7 +351,10 @@ class Product extends \Magento\Framework\Url\Helper\Data
          * @todo specify there all relations for properties depending on input type
          */
         $inputTypes = [
-            'multiselect' => ['backend_model' => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class],
+            'multiselect' => [
+                'backend_model' => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class,
+                'source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Table::class
+            ],
             'boolean' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
         ];
 
