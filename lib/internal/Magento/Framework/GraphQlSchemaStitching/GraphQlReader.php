@@ -54,11 +54,6 @@ class GraphQlReader implements ReaderInterface
     private static $componentRegistrar;
 
     /**
-     * @var boolean
-     */
-    private static $typesOverridden = false;
-
-    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReaderComposite $typeReader
      * @param string $fileName
