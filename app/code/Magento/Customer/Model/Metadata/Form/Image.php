@@ -116,11 +116,11 @@ class Image extends File
             ->get(ImageContentInterfaceFactory::class);
         $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()
             ->get(IoFileSystem::class);
+        $this->mediaWriteDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaEntityTmpReadDirectory = $fileSystem->getDirectoryReadByPath(
-            DirectoryList::MEDIA . DIRECTORY_SEPARATOR . $this->_entityTypeCode
+            $this->mediaWriteDirectory->getAbsolutePath() . $this->_entityTypeCode
             . DIRECTORY_SEPARATOR . FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR
         );
-        $this->mediaWriteDirectory = $fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
