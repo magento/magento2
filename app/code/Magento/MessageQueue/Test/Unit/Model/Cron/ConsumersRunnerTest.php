@@ -287,8 +287,7 @@ class ConsumersRunnerTest extends TestCase
         array  $returnMap,
         array  $allowedConsumers,
         int    $shellBackgroundExpects
-    ): void
-    {
+    ): void {
         $consumerName = 'consumerName';
 
         $this->deploymentConfigMock
