@@ -32,41 +32,41 @@ class AdminSessionsManager
      * @var ConfigInterface
      * @since 100.1.0
      */
-    protected ConfigInterface $securityConfig;
+    protected $securityConfig;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
      * @since 100.1.0
      */
-    protected \Magento\Backend\Model\Auth\Session $authSession;
+    protected $authSession;
 
     /**
      * @var AdminSessionInfoFactory
      * @since 100.1.0
      */
-    protected AdminSessionInfoFactory $adminSessionInfoFactory;
+    protected $adminSessionInfoFactory;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
      * @since 100.1.0
      */
-    protected CollectionFactory $adminSessionInfoCollectionFactory;
+    protected $adminSessionInfoCollectionFactory;
 
     /**
      * @var \Magento\Security\Model\AdminSessionInfo
      * @since 100.1.0
      */
-    protected AdminSessionInfo $currentSession;
+    protected $currentSession;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    private \Magento\Framework\Stdlib\DateTime\DateTime $dateTime;
+    private $dateTime;
 
     /**
      * @var RemoteAddress
      */
-    private RemoteAddress $remoteAddress;
+    private $remoteAddress;
 
     /**
      * Max lifetime for session prolong to be valid (sec)
@@ -74,7 +74,7 @@ class AdminSessionsManager
      * Means that after session was prolonged
      * all other prolongs will be ignored within this period
      */
-    private int $maxIntervalBetweenConsecutiveProlongs = 60;
+    private $maxIntervalBetweenConsecutiveProlongs = 60;
 
     /**
      * @param ConfigInterface $securityConfig
@@ -130,7 +130,6 @@ class AdminSessionsManager
      * Handle Prolong process
      *
      * @return $this
-     * @throws \Exception
      * @since 100.1.0
      */
     public function processProlong()
@@ -334,10 +333,9 @@ class AdminSessionsManager
      * @see getIntervalBetweenConsecutiveProlongs()
      * @return bool
      */
-    private function lastProlongIsOldEnough(): bool
+    private function lastProlongIsOldEnough()
     {
-        $updatedAt = $this->getCurrentSession()->getUpdatedAt() ?? 0;
-        $lastProlongTimestamp = strtotime($updatedAt);
+        $lastProlongTimestamp = strtotime($this->getCurrentSession()->getUpdatedAt());
         $nowTimestamp = $this->authSession->getUpdatedAt();
 
         $diff = $nowTimestamp - $lastProlongTimestamp;
@@ -354,7 +352,7 @@ class AdminSessionsManager
      *
      * @return float
      */
-    private function getIntervalBetweenConsecutiveProlongs(): float
+    private function getIntervalBetweenConsecutiveProlongs()
     {
         return (float) max(
             1,
