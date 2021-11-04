@@ -295,6 +295,13 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getRealPathSafety($path)
     {
+        //Removing redundant directory separators
+        $path = preg_replace(
+            '~(?<!:)\/\/+~',
+            '/',
+            $path
+        );
+
         if (strpos($path, '/.') === false) {
             return $path;
         }
@@ -302,12 +309,6 @@ class AwsS3 implements RemoteDriverInterface
         $isAbsolute = strpos($path, $this->normalizeAbsolutePath('')) === 0;
         $path = $this->normalizeRelativePath($path);
 
-        //Removing redundant directory separators.
-        $path = preg_replace(
-            '/\\/\\/+/',
-            '/',
-            $path
-        );
         $pathParts = explode('/', $path);
         if (end($pathParts) === '.') {
             $pathParts[count($pathParts) - 1] = '';
