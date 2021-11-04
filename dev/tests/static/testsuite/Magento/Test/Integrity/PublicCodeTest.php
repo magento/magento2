@@ -10,9 +10,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ReflectionException;
 use ReflectionMethod;
-use ReflectionParameter;
 
 /**
  * Tests @api annotated code integrity
@@ -73,7 +71,7 @@ class PublicCodeTest extends TestCase
         foreach ($elements as $node) {
             $class = (string) $node['class'];
             if ($class && \class_exists($class) && !in_array($class, $this->getWhitelist())) {
-                $reflection = (new \ReflectionClass($class));
+                $reflection = (new ReflectionClass($class));
                 if (strpos($reflection->getDocComment(), '@api') === false) {
                     $nonPublishedBlocks[] = $class;
                 }
@@ -111,7 +109,7 @@ class PublicCodeTest extends TestCase
     public function testAllPHPClassesReferencedFromPublicClassesArePublic($class)
     {
         $nonPublishedClasses = [];
-        $reflection = new \ReflectionClass($class);
+        $reflection = new ReflectionClass($class);
         $filter = ReflectionMethod::IS_PUBLIC;
         if ($reflection->isAbstract()) {
             $filter = $filter | ReflectionMethod::IS_PROTECTED;
@@ -175,10 +173,11 @@ class PublicCodeTest extends TestCase
     /**
      * Check if a class is @api annotated
      *
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
+     *
      * @return bool
      */
-    private function isPublished(\ReflectionClass $class)
+    private function isPublished(ReflectionClass $class)
     {
         return strpos($class->getDocComment(), '@api') !== false;
     }
@@ -250,7 +249,7 @@ class PublicCodeTest extends TestCase
                 && !$this->isGenerated($returnType)
                 && \class_exists($returnType)
             ) {
-                $returnTypeReflection = new \ReflectionClass($returnType);
+                $returnTypeReflection = new ReflectionClass($returnType);
                 if (!$returnTypeReflection->isInternal()
                     && $this->areClassesFromSameVendor($returnType, $class)
                     && !$this->isPublished($returnTypeReflection)
@@ -276,12 +275,13 @@ class PublicCodeTest extends TestCase
     {
         /* Ignoring docblocks for argument types */
         foreach ($method->getParameters() as $parameter) {
-            if ($parameter->hasType()
-                && method_exists($parameter->getType(), 'isBuiltin')
-                && !$parameter->getType()->isBuiltin()
-                && !$this->isGenerated($parameter->getType()->getName())
+            $parameterType = $parameter->getType();
+            if ($parameterType
+                && method_exists($parameterType, 'isBuiltin')
+                && !$parameterType->isBuiltin()
+                && !$this->isGenerated($parameterType->getName())
             ) {
-                $parameterClass = $this->getParameterClass($parameter);
+                $parameterClass = new ReflectionClass($parameterType->getName());
                 /*
                  * We don't want to check integrity of @api coverage of classes
                  * that belong to different vendors, because it is too complicated.
@@ -299,21 +299,5 @@ class PublicCodeTest extends TestCase
             }
         }
         return $nonPublishedClasses;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 }
