@@ -61,10 +61,19 @@ class OauthTest extends TestCase
      */
     private $_loggerMock;
 
+    /**
+     * @var string
+     */
     private $_oauthToken;
 
+    /**
+     * @var string
+     */
     private $_oauthSecret;
 
+    /**
+     * @var string
+     */
     private $_oauthVerifier;
 
     const CONSUMER_ID = 1;
@@ -187,7 +196,7 @@ class OauthTest extends TestCase
             ),
             'oauth_nonce' => '',
             'oauth_timestamp' => time(),
-            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA1,
+            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA256,
             'oauth_signature' => 'invalid_signature',
         ];
 
@@ -871,7 +880,7 @@ class OauthTest extends TestCase
                 Oauth::LENGTH_CONSUMER_KEY
             ),
             'oauth_signature' => '',
-            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA1,
+            'oauth_signature_method' => OauthInterface::SIGNATURE_SHA256,
             'oauth_nonce' => '',
             'oauth_timestamp' => (string)time(),
             'oauth_token' => $this->_generateRandomString(Oauth::LENGTH_TOKEN),
