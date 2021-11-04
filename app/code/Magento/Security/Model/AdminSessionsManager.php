@@ -336,7 +336,7 @@ class AdminSessionsManager
      */
     private function lastProlongIsOldEnough(): bool
     {
-        $updatedAt = $this->getCurrentSession()->getUpdatedAt() ?? "now";
+        $updatedAt = $this->getCurrentSession()->getUpdatedAt() ?? 0;
         $lastProlongTimestamp = strtotime($updatedAt);
         $nowTimestamp = $this->authSession->getUpdatedAt();
 
