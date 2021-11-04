@@ -127,6 +127,7 @@
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
 
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckBoxToVisible"/> 
         <actionGroup ref="AdminSelectAddToOrderCheckboxForSimpleProductInWishListSectionOnCreateOrderPageActionGroup" stepKey="selectProductToAddToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>    
