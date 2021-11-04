@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySearchFieldVisibilityWhenSuggestionDisabledTest">
+        <annotations>
+            <stories value="Search Term"/>
+            <title value="Mini search field appears if suggestions was disabled"/>
+            <description value="Mini search field appears if suggestions was disabled"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-39443"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Disable search suggestion -->
+            <magentoCLI command="config:set catalog/search/search_suggestion_enabled 0" stepKey="disableSearchSuggestion"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheFirst">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Enable search suggestion back -->
+            <magentoCLI command="config:set catalog/search/search_suggestion_enabled 1" stepKey="disableSearchSuggestion"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheSecond">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+
+        <resizeWindow width="767" height="720" stepKey="resizeWindowToMobileView"/>
+
+        <click selector="{{StorefrontQuickSearchSection.searchMagnifierIcon}}" stepKey="clickOnMagnifierSearchIcon"/>
+
+        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchPhrase}}" after="clickOnMagnifierSearchIcon" stepKey="seeInputSearchActive"/>
+
+    </test>
+</tests>

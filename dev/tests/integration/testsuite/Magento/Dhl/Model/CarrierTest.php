@@ -17,19 +17,22 @@ use Magento\Framework\Simplexml\Element;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
+use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
 use Magento\Shipping\Model\Tracking\Result\Status;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
-use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for DHL integration.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
+    private const PRODUCT_NAME_SPECIAL_CHARS = 'Φυστίκι Ψημένο με Αλάτι Συσκευασία';
+
     /**
      * @var Carrier
      */
@@ -254,10 +257,16 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $origCountryId
      * @param string $expectedRegionCode
      * @param string $destCountryId
+     * @param bool|null $isProductNameContainsSpecialChars
+     * @return void
      * @dataProvider requestToShipmentDataProvider
      */
-    public function testRequestToShip(string $origCountryId, string $expectedRegionCode, string $destCountryId): void
-    {
+    public function testRequestToShip(
+        string $origCountryId,
+        string $expectedRegionCode,
+        string $destCountryId,
+        bool $isProductNameContainsSpecialChars = false
+    ): void {
         $this->config->setValue(
             'shipping/origin/country_id',
             $origCountryId,
@@ -274,6 +283,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 )
             ]
         );
+        $productName = $isProductNameContainsSpecialChars ? self::PRODUCT_NAME_SPECIAL_CHARS : 'item_name';
+
         //phpcs:enable Magento2.Functions.DiscouragedFunction
         $request = new Request(
             [
@@ -291,7 +302,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                         ],
                         'items' => [
                             'item1' => [
-                                'name' => 'item_name',
+                                'name' => $productName,
                             ],
                         ],
                     ],
@@ -329,10 +340,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_SHIP_28TO32_Char_CHECKED';
         $requestElement->Request->ServiceHeader->MessageTime = 'currentTime';
         $requestElement->ShipmentDetails->Date = 'currentTime';
-        $this->assertXmlStringEqualsXmlString(
-            $this->getExpectedLabelRequestXml($origCountryId, $destCountryId, $expectedRegionCode),
-            $requestElement->asXML()
+
+        $expectedLabelRequest = $this->getExpectedLabelRequestXml(
+            $origCountryId,
+            $destCountryId,
+            $expectedRegionCode,
+            $isProductNameContainsSpecialChars
         );
+
+        $this->assertXmlStringEqualsXmlString($expectedLabelRequest, $requestElement->asXML());
     }
 
     /**
@@ -351,7 +367,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'DE', 'EU', 'DE'
-            ]
+            ],
+            [
+                'GB', 'EU', 'US', true
+            ],
         ];
     }
 
@@ -361,12 +380,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $origCountryId
      * @param string $destCountryId
      * @param string $regionCode
+     * @param bool $isProductNameContainsSpecialChars
      * @return string
      */
     private function getExpectedLabelRequestXml(
         string $origCountryId,
         string $destCountryId,
-        string $regionCode
+        string $regionCode,
+        bool $isProductNameContainsSpecialChars
     ): string {
         $countryNames = [
             'US' => 'United States Of America',
@@ -386,6 +407,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $expectedRequestElement->Shipper->CountryCode = $origCountryId;
         $expectedRequestElement->Shipper->CountryName = $countryNames[$origCountryId];
         $expectedRequestElement->RegionCode = $regionCode;
+
+        if ($isProductNameContainsSpecialChars) {
+            $expectedRequestElement->ShipmentDetails->Pieces->Piece->PieceContents = self::PRODUCT_NAME_SPECIAL_CHARS;
+        }
 
         return $expectedRequestElement->asXML();
     }
@@ -417,17 +442,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectRates()
     {
-        $requestData = $this->getRequestData();
-        //phpcs:disable Magento2.Functions.DiscouragedFunction
-        $response = new Response(
-            200,
-            [],
-            file_get_contents(__DIR__ . '/../_files/dhl_quote_response.xml')
-        );
-        //phpcs:enable Magento2.Functions.DiscouragedFunction
-        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
+        $request = $this->createRequest();
         $expectedRates = [
             ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 45.85, 'method' => 'E', 'price' => 45.85],
             ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 35.26, 'method' => 'Q', 'price' => 35.26],
@@ -462,11 +478,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testCollectRatesWithoutDimensions(?string $size, ?string $height, ?string $width, ?string $depth)
     {
-        $requestData = $this->getRequestData();
         $this->setDhlConfig(['size' => $size, 'height' => $height, 'width' => $width, 'depth' => $depth]);
 
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $request = $this->createRequest();
         $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
         $this->dhlCarrier->collectRates($request)->getAllRates();
 
@@ -486,15 +500,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     public function testGetRatesWithHttpException(): void
     {
         $this->setDhlConfig(['showmethod' => 1]);
-        $requestData = $this->getRequestData();
         $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
             ->onlyMethods(['get'])
             ->getMockForAbstractClass();
         $exception = new HttpException('Exception message');
         $deferredResponse->method('get')->willThrowException($exception);
         $this->httpClient->setDeferredResponseMock($deferredResponse);
-        /** @var RateRequest $request */
-        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $request = $this->createRequest();
         $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
         $resultRate = $this->dhlCarrier->collectRates($request)->getAllRates()[0];
         $error = Bootstrap::getObjectManager()->get(Error::class);
@@ -539,6 +551,77 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that the free rate is returned when sending a quotes request
+     *
+     * @param array $addRequestData
+     * @param bool $freeShippingExpects
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     * @magentoConfigFixture default_store carriers/dhl/id some ID
+     * @magentoConfigFixture default_store carriers/dhl/shipment_days Mon,Tue,Wed,Thu,Fri,Sat
+     * @magentoConfigFixture default_store carriers/dhl/intl_shipment_days Mon,Tue,Wed,Thu,Fri,Sat
+     * @magentoConfigFixture default_store carriers/dhl/allowed_methods IE
+     * @magentoConfigFixture default_store carriers/dhl/international_service IE
+     * @magentoConfigFixture default_store carriers/dhl/gateway_url https://xmlpi-ea.dhl.com/XMLShippingServlet
+     * @magentoConfigFixture default_store carriers/dhl/id some ID
+     * @magentoConfigFixture default_store carriers/dhl/password some password
+     * @magentoConfigFixture default_store carriers/dhl/content_type N
+     * @magentoConfigFixture default_store carriers/dhl/nondoc_methods 1,3,4,8,P,Q,E,F,H,J,M,V,Y
+     * @magentoConfigFixture default_store carriers/dhl/showmethod' => 1,
+     * @magentoConfigFixture default_store carriers/dhl/title DHL Title
+     * @magentoConfigFixture default_store carriers/dhl/specificerrmsg dhl error message
+     * @magentoConfigFixture default_store carriers/dhl/unit_of_measure K
+     * @magentoConfigFixture default_store carriers/dhl/size 1
+     * @magentoConfigFixture default_store carriers/dhl/height 1.6
+     * @magentoConfigFixture default_store carriers/dhl/width 1.6
+     * @magentoConfigFixture default_store carriers/dhl/depth 1.6
+     * @magentoConfigFixture default_store carriers/dhl/debug 1
+     * @magentoConfigFixture default_store carriers/dhl/free_method_nondoc P
+     * @magentoConfigFixture default_store carriers/dhl/free_shipping_enable 1
+     * @magentoConfigFixture default_store carriers/dhl/free_shipping_subtotal 25
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoAppIsolation enabled
+     * @dataProvider collectRatesWithFreeShippingDataProvider
+     */
+    public function testCollectRatesWithFreeShipping(array $addRequestData, bool $freeShippingExpects): void
+    {
+        $this->setNextResponse(__DIR__ . '/../_files/dhl_quote_response.xml');
+        $request = $this->createRequest($addRequestData);
+
+        $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
+        $freeRateExists = false;
+        foreach ($actualRates as $actualRate) {
+            $actualRate = $actualRate->getData();
+            if ($actualRate['method'] === 'P' && (float)$actualRate['price'] === 0.0) {
+                $freeRateExists = true;
+                break;
+            }
+        }
+
+        self::assertEquals($freeShippingExpects, $freeRateExists);
+    }
+
+    /**
+     * @return array
+     */
+    public function collectRatesWithFreeShippingDataProvider(): array
+    {
+        return [
+            [
+                ['package_value' => 25, 'package_value_with_discount' => 22],
+                false
+            ],
+            [
+                ['package_value' => 25, 'package_value_with_discount' => 25],
+                true
+            ],
+            [
+                ['package_value' => 28, 'package_value_with_discount' => 25],
+                true
+            ],
+        ];
+    }
+
+    /**
      * Returns request data.
      *
      * @return array
@@ -546,47 +629,80 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     private function getRequestData(): array
     {
         return [
-            'data' => [
-                'dest_country_id' => 'DE',
-                'dest_region_id' => '82',
-                'dest_region_code' => 'BER',
-                'dest_street' => 'Turmstraße 17',
-                'dest_city' => 'Berlin',
-                'dest_postcode' => '10559',
-                'dest_postal' => '10559',
-                'package_value' => '5',
-                'package_value_with_discount' => '5',
-                'package_weight' => '8.2657',
-                'package_qty' => '1',
-                'package_physical_value' => '5',
-                'free_method_weight' => '5',
-                'store_id' => '1',
-                'website_id' => '1',
-                'free_shipping' => '0',
-                'limit_carrier' => null,
-                'base_subtotal_incl_tax' => '5',
-                'orig_country_id' => 'US',
-                'orig_region_id' => '12',
-                'orig_city' => 'Fremont',
-                'orig_postcode' => '94538',
-                'dhl_id' => 'MAGEN_8501',
-                'dhl_password' => 'QR2GO1U74X',
-                'dhl_account' => '799909537',
-                'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
-                'girth' => null,
-                'height' => null,
-                'length' => null,
-                'width' => null,
-                'weight' => 1,
-                'dhl_shipment_type' => 'P',
-                'dhl_duitable' => 0,
-                'dhl_duty_payment_type' => 'R',
-                'dhl_content_desc' => 'Big Box',
-                'limit_method' => 'IE',
-                'ship_date' => '2014-01-09',
-                'action' => 'RateEstimate',
-                'all_items' => [],
-            ]
+            'dest_country_id' => 'DE',
+            'dest_region_id' => '82',
+            'dest_region_code' => 'BER',
+            'dest_street' => 'Turmstraße 17',
+            'dest_city' => 'Berlin',
+            'dest_postcode' => '10559',
+            'dest_postal' => '10559',
+            'package_value' => '5',
+            'package_value_with_discount' => '5',
+            'package_weight' => '8.2657',
+            'package_qty' => '1',
+            'package_physical_value' => '5',
+            'free_method_weight' => '5',
+            'store_id' => '1',
+            'website_id' => '1',
+            'free_shipping' => '0',
+            'limit_carrier' => null,
+            'base_subtotal_incl_tax' => '5',
+            'orig_country_id' => 'US',
+            'orig_region_id' => '12',
+            'orig_city' => 'Fremont',
+            'orig_postcode' => '94538',
+            'dhl_id' => 'MAGEN_8501',
+            'dhl_password' => 'QR2GO1U74X',
+            'dhl_account' => '799909537',
+            'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
+            'girth' => null,
+            'height' => null,
+            'length' => null,
+            'width' => null,
+            'weight' => 1,
+            'dhl_shipment_type' => 'P',
+            'dhl_duitable' => 0,
+            'dhl_duty_payment_type' => 'R',
+            'dhl_content_desc' => 'Big Box',
+            'limit_method' => 'IE',
+            'ship_date' => '2014-01-09',
+            'action' => 'RateEstimate',
+            'all_items' => [],
         ];
+    }
+
+    /**
+     * Set next response content from file
+     *
+     * @param string $file
+     */
+    private function setNextResponse(string $file): void
+    {
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $response = new Response(
+            200,
+            [],
+            file_get_contents($file)
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response)
+        );
+    }
+
+    /**
+     * Create Rate Request
+     *
+     * @param array $addRequestData
+     * @return RateRequest
+     */
+    private function createRequest(array $addRequestData = []): RateRequest
+    {
+        $requestData = $this->getRequestData();
+        if (!empty($addRequestData)) {
+            $requestData = array_merge($requestData, $addRequestData);
+        }
+
+        return Bootstrap::getObjectManager()->create(RateRequest::class, ['data' => $requestData]);
     }
 }

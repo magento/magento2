@@ -679,6 +679,11 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function isLast()
     {
         foreach ($this->getAllItems() as $item) {
+            $orderItem = $item->getOrderItem();
+            if ($orderItem->isDummy()) {
+                continue;
+            }
+
             if (!$item->isLast()) {
                 return false;
             }

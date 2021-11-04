@@ -1115,7 +1115,13 @@ class Address extends AbstractAddress implements
      */
     public function getTotals()
     {
-        $totalsData = array_merge($this->getData(), ['address_quote_items' => $this->getAllItems()]);
+        $totalsData = array_merge(
+            $this->getData(),
+            [
+                'address_quote_items' => $this->getAllItems(),
+                'quote_items' => $this->getQuote()->getAllItems(),
+            ]
+        );
         $totals = $this->totalsReader->fetch($this->getQuote(), $totalsData);
         foreach ($totals as $total) {
             $this->addTotal($total);
@@ -1217,7 +1223,9 @@ class Address extends AbstractAddress implements
             $storeId
         );
 
-        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+        $taxes = $taxInclude
+            ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
+            : 0;
 
         return $includeDiscount ?
             ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :

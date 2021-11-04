@@ -80,7 +80,7 @@ define([
                     },
                     expectedEequestData = 'area=test&test=test',
                     translateInline = $(translateSelector).translateInline(options),
-                    $submitButton = $('body').find('.action-primary'),
+                    $submitButton = $('.action-primary:contains(\'Submit\')'),
                     originalAjax = $.ajax;
 
                 $.ajax = jasmine.createSpy().and.callFake(function (request) {
@@ -89,7 +89,7 @@ define([
                     expect(request.data).toBe(expectedEequestData);
 
                     return {
-                        complete: jasmine.createSpy()
+                        always: jasmine.createSpy()
                     };
                 });
 

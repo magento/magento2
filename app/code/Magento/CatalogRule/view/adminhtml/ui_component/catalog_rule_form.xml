@@ -133,7 +133,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Websites</label>

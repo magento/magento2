@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Swatches"/>
+            <module name="Magento_ConfigurableProductGraphQl"/>
         </sequence>
     </module>
 </config>

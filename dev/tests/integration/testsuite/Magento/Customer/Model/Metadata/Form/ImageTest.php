@@ -76,7 +76,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->delete('customer_address');
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer_address/tmp/'));
         $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer_address/tmp/' . $this->fileName);
-        copy($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
+        $this->copyFile($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
 
         $imageFile = [
             'name' => $this->fileName,
@@ -106,8 +106,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $processCustomerAddressValueMethod->setAccessible(true);
         $actual = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertEquals($this->expectedFileName, $actual);
-        $this->assertFileExists($expectedPath);
-        $this->assertFileNotExists($tmpFilePath);
+        $this->assertTrue($this->mediaDirectory->isExist($expectedPath));
+        $this->assertFileDoesNotExist($tmpFilePath);
     }
 
     /**
@@ -122,7 +122,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->delete('customer');
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer/tmp/'));
         $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer/tmp/' . $this->fileName);
-        copy($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
+        $this->copyFile($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
 
         $imageFile = [
             'name' => $this->fileName,
@@ -150,7 +150,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $processCustomerAddressValueMethod->setAccessible(true);
         $result = $processCustomerAddressValueMethod->invoke($image, $imageFile);
         $this->assertInstanceOf('Magento\Framework\Api\ImageContent', $result);
-        $this->assertFileNotExists($tmpFilePath);
+        $this->assertFileDoesNotExist($tmpFilePath);
     }
 
     /**
@@ -170,7 +170,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory->delete('customer');
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath('customer/tmp/'));
         $tmpFilePath = $this->mediaDirectory->getAbsolutePath('customer/tmp/' . $this->fileName);
-        copy($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
+        $this->copyFile($this->imageFixtureDir . DIRECTORY_SEPARATOR . $this->fileName, $tmpFilePath);
 
         $imageFile = [
             'name' => $this->fileName,
@@ -213,5 +213,17 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete('customer');
         $mediaDirectory->delete('customer_address');
+    }
+
+    /**
+     * @param string $source
+     * @param string $destination
+     * @throws FileSystemException
+     */
+    private function copyFile(string $source, string $destination)
+    {
+        $driver = $this->mediaDirectory->getDriver();
+        $driver->createDirectory(dirname($destination));
+        $driver->filePutContents($destination, file_get_contents($source));
     }
 }

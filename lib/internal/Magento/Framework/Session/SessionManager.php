@@ -231,7 +231,10 @@ class SessionManager implements SessionManagerInterface
 
                 $this->_addHost();
                 Profiler::stop('session_start');
+            } else {
+                $this->validator->validate($this);
             }
+            // phpstan:ignore
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
         return $this;
@@ -258,6 +261,7 @@ class SessionManager implements SessionManagerInterface
             $metadata->setDuration($this->sessionConfig->getCookieLifetime());
             $metadata->setSecure($this->sessionConfig->getCookieSecure());
             $metadata->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+            $metadata->setSameSite($this->sessionConfig->getCookieSameSite());
 
             $this->cookieManager->setPublicCookie(
                 $this->getName(),
@@ -617,7 +621,7 @@ class SessionManager implements SessionManagerInterface
         } else {
             session_start();
         }
-
+        // phpstan:ignore
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {

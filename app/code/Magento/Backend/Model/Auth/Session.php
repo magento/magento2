@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Model\Auth;
 
 use Magento\Framework\App\ObjectManager;
@@ -210,7 +212,8 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 ->setPath($this->sessionConfig->getCookiePath())
                 ->setDomain($this->sessionConfig->getCookieDomain())
                 ->setSecure($this->sessionConfig->getCookieSecure())
-                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly())
+                ->setSameSite($this->sessionConfig->getCookieSameSite());
             $this->cookieManager->setPublicCookie($this->getName(), $cookieValue, $cookieMetadata);
         }
     }
