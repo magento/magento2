@@ -47,6 +47,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     /**
      * All other open sessions were terminated
      * @since 100.1.0
+     * @var bool
      */
     protected $isOtherSessionsTerminated = false;
 
