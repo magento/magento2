@@ -108,9 +108,6 @@ class RulesApplier
     {
         $address = $item->getAddress();
         $appliedRuleIds = [];
-        if ($item->getExtensionAttributes()) {
-            $item->getExtensionAttributes()->setDiscounts(null);
-        }
         /* @var $rule Rule */
         foreach ($rules as $rule) {
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {

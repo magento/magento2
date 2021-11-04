@@ -160,6 +160,9 @@ class Discount extends AbstractTotal
         $quote->setCartFixedRules([]);
         foreach ($items as $item) {
             $this->rulesApplier->setAppliedRuleIds($item, []);
+            if ($item->getExtensionAttributes()) {
+                $item->getExtensionAttributes()->setDiscounts(null);
+            }
             $item->setDiscountAmount(0);
             $item->setBaseDiscountAmount(0);
             $item->setDiscountPercent(0);
