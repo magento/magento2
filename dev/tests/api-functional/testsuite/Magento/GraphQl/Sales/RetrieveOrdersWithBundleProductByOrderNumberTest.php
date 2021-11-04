@@ -120,7 +120,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
     /**
      * Test customer order with bundle product and no telephone in address
      *
-     * @magentoConfigFixture customer/address/telephone_show opt
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_telephone_not_required_address.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
      */
