@@ -59,7 +59,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_skipActionsValidation = false;
 
     /**
-     * Catalog data
+     * Catalog data helper
      *
      * @var \Magento\Catalog\Helper\Data|null
      */

@@ -231,12 +231,13 @@ class DiscountTest extends TestCase
     {
         $itemWithParentId = $this->getMockBuilder(Item::class)
             ->addMethods(['getNoDiscount'])
-            ->onlyMethods(['getParentItem', 'getId'])
+            ->onlyMethods(['getParentItem', 'getId', 'getExtensionAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemWithParentId->expects($this->once())->method('getNoDiscount')->willReturn(false);
         $itemWithParentId->expects($this->any())->method('getId')->willReturn(1);
         $itemWithParentId->expects($this->any())->method('getParentItem')->willReturn(true);
+        $itemWithParentId->expects($this->any())->method('getExtensionAttributes')->willReturn(false);
 
         $this->validatorMock->expects($this->any())->method('canApplyDiscount')->willReturn(true);
         $this->validatorMock->expects($this->any())->method('sortItemsByPriority')
