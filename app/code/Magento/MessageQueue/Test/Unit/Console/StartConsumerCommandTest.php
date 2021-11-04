@@ -109,8 +109,7 @@ class StartConsumerCommandTest extends TestCase
         int     $unlockExpects,
         int     $runProcessExpects,
         int $expectedReturn
-    ): void
-    {
+    ): void {
         $areaCode = 'area_code';
         $numberOfMessages = 10;
         $batchSize = null;
