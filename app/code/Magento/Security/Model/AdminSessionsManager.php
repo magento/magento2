@@ -18,6 +18,7 @@ use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
  *
  * @api
  * @since 100.1.0
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AdminSessionsManager
 {
