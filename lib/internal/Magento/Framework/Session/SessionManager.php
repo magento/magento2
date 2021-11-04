@@ -192,8 +192,6 @@ class SessionManager implements SessionManagerInterface
      */
     public function start()
     {
-        $this->sessionStarted = true;
-
         if ($this->sessionStartChecker->check()) {
             if (!$this->isSessionExists()) {
                 Profiler::start('session_start');
@@ -237,6 +235,9 @@ class SessionManager implements SessionManagerInterface
             // phpstan:ignore
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
+        
+        $this->sessionStarted = true;
+
         return $this;
     }
 
@@ -297,10 +298,6 @@ class SessionManager implements SessionManagerInterface
      */
     public function isSessionExists()
     {
-        if (!$this->sessionStarted) {
-            $this->start();
-        }
-
         if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
             return false;
         }
@@ -380,10 +377,6 @@ class SessionManager implements SessionManagerInterface
      */
     public function destroy(array $options = null)
     {
-        if (!$this->sessionStarted) {
-            $this->start();
-        }
-
         $options = $options ?? [];
         $options = array_merge($this->defaultDestroyOptions, $options);
 
@@ -536,10 +529,6 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _addHost()
     {
-        if (!$this->sessionStarted) {
-            $this->start();
-        }
-
         $host = $this->request->getHttpHost();
         if (!$host) {
             return $this;
@@ -558,10 +547,6 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _getHosts()
     {
-        if (!$this->sessionStarted) {
-            $this->start();
-        }
-
         return $_SESSION[self::HOST_KEY] ?? [];
     }
 
@@ -572,10 +557,6 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _cleanHosts()
     {
-        if (!$this->sessionStarted) {
-            $this->start();
-        }
-
         unset($_SESSION[self::HOST_KEY]);
         return $this;
     }
@@ -637,10 +618,6 @@ class SessionManager implements SessionManagerInterface
      */
     protected function clearSubDomainSessionCookie()
     {
-        if (!$this->sessionStarted) {
-            $this->start();
-        }
-
         foreach (array_keys($this->_getHosts()) as $host) {
             // Delete cookies with the same name for parent domains
             if ($this->sessionConfig->getCookieDomain() !== $host) {
