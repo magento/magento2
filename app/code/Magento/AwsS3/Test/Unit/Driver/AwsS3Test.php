@@ -413,12 +413,12 @@ class AwsS3Test extends TestCase
                 'test/test.txt'
             ],
             [
-                'test///test/../test.txt',
-                'test/test.txt'
+                'test1///test2/..//test3//test.txt',
+                'test1/test3/test.txt'
             ],
             [
-                self::URL . 'test//test.txt',
-                self::URL . 'test/test.txt'
+                self::URL . '/test1///test2/..//test3//test.txt',
+                self::URL . 'test1/test3/test.txt'
             ]
         ];
     }
