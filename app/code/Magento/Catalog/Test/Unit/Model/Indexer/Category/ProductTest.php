@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\Action\RowsFactory;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\IndexMutexInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -81,10 +82,21 @@ class ProductTest extends TestCase
             ['get']
         );
 
+        $indexMutexMock = $this->createMock(IndexMutexInterface::class);
+        $indexMutexMock->method('execute')
+            ->willReturnCallback(
+                function (string $indexerName, callable $callback) {
+                    if ($indexerName) {
+                        $callback();
+                    }
+                }
+            );
+
         $this->model = new Product(
             $this->fullMock,
             $this->rowsMock,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $indexMutexMock
         );
 
         $this->cacheContextMock = $this->createMock(CacheContext::class);
