@@ -22,7 +22,7 @@ class Select extends AbstractFilter
     const COMPONENT = 'select';
 
     /**
-     * Wrapped component
+     * UI Component
      *
      * @var ElementSelect
      */

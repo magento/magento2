@@ -19,7 +19,7 @@ class Column extends AbstractComponent implements ColumnInterface
     const NAME = 'column';
 
     /**
-     * Wrapped component
+     * UI component
      *
      * @var UiComponentInterface
      */
