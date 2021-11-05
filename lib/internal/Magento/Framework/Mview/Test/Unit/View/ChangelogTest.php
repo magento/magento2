@@ -111,7 +111,6 @@ class ChangelogTest extends TestCase
     {
         $this->expectException('DomainException');
         $this->expectExceptionMessage('View\'s identifier is not set');
-        $this->model->setViewId('');
         $this->model->getName();
     }
 

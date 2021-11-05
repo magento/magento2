@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
@@ -93,7 +92,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     ) {
         $this->_relations = $relations ?: new \Magento\Framework\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->serializer = $serializer ?: new \Magento\Framework\Serialize\Serializer\Json();
     }
 
     /**
