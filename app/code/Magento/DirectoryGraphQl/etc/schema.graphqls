@@ -15,7 +15,15 @@ type Currency {
     default_display_currecy_symbol: String @deprecated(reason: "Symbol was missed. Use `default_display_currency_symbol`.")
     default_display_currency_symbol: String
     available_currency_codes: [String]
+    available_currencies: [CurrencyOutput] @doc(description: "The list of allowed currencies for the store.")
     exchange_rates: [ExchangeRate]
+}
+
+type CurrencyOutput {
+    code: String
+    value: String
+    name: String
+    symbol: String
 }
 
 type ExchangeRate {

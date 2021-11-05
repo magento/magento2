@@ -89,6 +89,21 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
     public function setAvailableCurrencyCodes(array $codes = null);
 
     /**
+     * Get the list of allowed currencies for the store.
+     *
+     * @return \Magento\Directory\Api\Data\AvailableCurrencyInterface[]
+     */
+    public function getAvailableCurrencies();
+
+    /**
+     * Set the list of allowed currencies for the store.
+     *
+     * @param \Magento\Directory\Api\Data\AvailableCurrencyInterface[] $availableCurrencies
+     * @return $this
+     */
+    public function setAvailableCurrencies(array $availableCurrencies = null);
+
+    /**
      * Get the list of exchange rate information for the store.
      *
      * @return \Magento\Directory\Api\Data\ExchangeRateInterface[]
