@@ -14,7 +14,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * @magentoAppArea adminhtml
  */
-class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class ValidateImportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @dataProvider validationDataProvider
@@ -107,6 +107,12 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 'mime-type' => 'text/csv',
                 'message' => 'Download full report',
                 'delimiter' => ';',
+            ],
+            [
+                'file_name' => 'invalid_catalog_products.zip',
+                'mime-type' => 'application/zip',
+                'message' => 'Data validation failed.',
+                'delimiter' => ',',
             ],
             [
                 'file_name' => 'catalog_product.zip',
