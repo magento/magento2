@@ -38,6 +38,9 @@ class BuilderTest extends TestCase
      */
     protected $builder;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -55,8 +58,7 @@ class BuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider createDataProvider
-     * @param string|null $transactionId
+     * @param int $transactionId
      * @param int $orderId
      * @param int $paymentId
      * @param bool $failSafe
@@ -65,19 +67,22 @@ class BuilderTest extends TestCase
      * @param array $additionalInfo
      * @param bool $document
      * @param bool $isTransactionExists
+     *
+     * @return void
+     * @dataProvider createDataProvider
      */
     public function testCreate(
-        $transactionId,
-        $orderId,
-        $paymentId,
-        $failSafe,
-        $type,
-        $isPaymentTransactionClosed,
-        $additionalInfo,
-        $document,
-        $isTransactionExists
-    ) {
-        $parentTransactionId = "12";
+        int $transactionId,
+        int $orderId,
+        int $paymentId,
+        bool $failSafe,
+        string $type,
+        bool $isPaymentTransactionClosed,
+        array $additionalInfo,
+        bool $document,
+        bool $isTransactionExists
+    ): void {
+        $parentTransactionId = '12';
         $shouldCloseParentTransaction = true;
         $parentTransactionIsClosed = false;
         if ($document) {
@@ -145,18 +150,20 @@ class BuilderTest extends TestCase
 
     /**
      * @param MockObject $transaction
-     * @param string|null $parentTransactionId
+     * @param string $parentTransactionId
      * @param bool $shouldCloseParentTransaction
      * @param MockObject $parentTransaction
      * @param bool $parentTransactionIsClosed
+     *
+     * @return void
      */
     protected function expectsLinkWithParentTransaction(
-        $transaction,
-        $parentTransactionId,
-        $shouldCloseParentTransaction,
-        $parentTransaction,
-        $parentTransactionIsClosed
-    ) {
+        MockObject $transaction,
+        string $parentTransactionId,
+        bool $shouldCloseParentTransaction,
+        MockObject $parentTransaction,
+        bool $parentTransactionIsClosed
+    ): void {
         $this->paymentMock->method('getParentTransactionId')->willReturn($parentTransactionId);
         if ($parentTransactionId) {
             $transaction->expects($this->once())->method('setParentTxnId')->with($parentTransactionId);
@@ -177,7 +184,9 @@ class BuilderTest extends TestCase
                         ->with(false)
                         ->willReturnSelf();
                 }
-                $this->orderMock->expects($this->at(2))->method('addRelatedObject')->with($parentTransaction);
+                $this->orderMock
+                    ->method('addRelatedObject')
+                    ->with($parentTransaction);
             }
         }
     }
@@ -185,9 +194,10 @@ class BuilderTest extends TestCase
     /**
      * @param int $orderId
      * @param int $paymentId
+     *
      * @return MockObject
      */
-    protected function expectTransaction($orderId, $paymentId)
+    protected function expectTransaction(int $orderId, int $paymentId): MockObject
     {
         $newTransaction = $this->getMockBuilder(Transaction::class)
             ->addMethods(['loadByTxnId', 'setPayment'])
@@ -219,10 +229,11 @@ class BuilderTest extends TestCase
     }
 
     /**
-     * @param string $transactionId
+     * @param int $transactionId
+     *
      * @return MockObject
      */
-    protected function expectDocument($transactionId)
+    protected function expectDocument(int $transactionId): MockObject
     {
         $document = $this->getMockBuilder(Order::class)
             ->addMethods(['setTransactionId'])
@@ -237,9 +248,14 @@ class BuilderTest extends TestCase
      * @param MockObject $newTransaction
      * @param string $type
      * @param bool $failSafe
+     *
+     * @return void
      */
-    protected function expectSetPaymentObject($newTransaction, $type, $failSafe)
-    {
+    protected function expectSetPaymentObject(
+        MockObject $newTransaction,
+        string $type,
+        bool $failSafe
+    ): void {
         $newTransaction->expects($this->once())->method('setOrderId')
             ->willReturnSelf();
         $newTransaction->expects($this->once())->method('setPaymentId')
@@ -255,9 +271,13 @@ class BuilderTest extends TestCase
     /**
      * @param bool $isPaymentTransactionClosed
      * @param MockObject $newTransaction
+     *
+     * @return void
      */
-    protected function expectsIsPaymentTransactionClosed($isPaymentTransactionClosed, $newTransaction)
-    {
+    protected function expectsIsPaymentTransactionClosed(
+        bool $isPaymentTransactionClosed,
+        MockObject $newTransaction
+    ): void {
         $this->paymentMock->expects($this->once())
             ->method('hasIsTransactionClosed')
             ->willReturn($isPaymentTransactionClosed);
@@ -271,7 +291,7 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public function createDataProvider(): array
     {
         return [
             'transactionNotExists' => [
