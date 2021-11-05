@@ -140,13 +140,12 @@ class Image extends File
         $rules = $this->getAttribute()->getValidationRules();
 
         try {
-            $fileContent = $this->mediaEntityTmpReadDirectory->readFile($value['tmp_name']);
-            $imageProp = getimagesizefromstring($fileContent);
+            $imageProp = getimagesize($value['tmp_name']);
         } catch (\Throwable $e) {
             $imageProp = false;
         }
 
-        if (!$imageProp || !$this->_isUploadedFile($value['tmp_name'])) {
+        if (!$this->_isUploadedFile($value['tmp_name']) || !$imageProp) {
             return [__('"%1" is not a valid file.', $label)];
         }
 

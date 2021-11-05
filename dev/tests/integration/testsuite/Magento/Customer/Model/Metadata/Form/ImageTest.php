@@ -200,35 +200,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for _validateByRules method with correct data
-     *
-     * @magentoAppIsolation enabled
-     *
-     * @throws FileSystemException
-     * @throws \ReflectionException
-     */
-    public function testValidateByRules()
-    {
-        $entityTypeCode = 'customer';
-        $this->prepareImageForTest($entityTypeCode);
-        $imageFile = $this->getImageValues();
-        $params = [
-            'entityTypeCode' => $entityTypeCode,
-            'formCode' => 'customer_edit',
-            'isAjax' => false,
-            'value' => $imageFile
-        ];
-
-        $image = $this->objectManager->create(\Magento\Customer\Model\Metadata\Form\Image::class, $params);
-        $processValidateMethod = new \ReflectionMethod(
-            \Magento\Customer\Model\Metadata\Form\Image::class,
-            '_validateByRules'
-        );
-        $processValidateMethod->setAccessible(true);
-        $this->assertEquals([], $processValidateMethod->invoke($image, $imageFile));
-    }
-
-    /**
      * @inheritdoc
      * @throws FileSystemException
      */
