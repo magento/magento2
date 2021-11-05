@@ -89,6 +89,6 @@ var config = {
         'mage/adminhtml/globals'
     ],
     'paths': {
-        'jquery/ui': 'jquery/jquery-ui-1.9.2'
+        'jquery/ui': 'jquery/jquery-ui'
     }
 };
