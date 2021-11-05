@@ -26,7 +26,7 @@ class Column extends AbstractComponent implements ColumnInterface
     protected $wrappedComponent;
 
     /**
-     * UI component factory
+     * Factory for UI Component
      *
      * @var UiComponentFactory
      */
