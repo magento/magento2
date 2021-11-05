@@ -375,7 +375,7 @@ class StorageTest extends TestCase
      * @throws \Exception
      * @dataProvider dirsCollectionDataProvider
      */
-    public function testGetDirsCollection($path, $callNum, $dirsFilter='')
+    public function testGetDirsCollection($path, $callNum, $dirsFilter = '')
     {
         $this->generalTestGetDirsCollection($path, $callNum, $dirsFilter);
     }
