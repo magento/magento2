@@ -12,10 +12,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Directory\DenyListPathValidator;
-use Magento\Framework\Filesystem\Directory\TargetDirectory;
-use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\RemoteStorage\Driver\DriverPool;
+use Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles class.
@@ -80,11 +80,6 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     private $bypassDenyListWrite;
 
     /**
-     * @var WriteInterface
-     */
-    private $rootDirectory;
-
-    /**
      * @inheritdoc
      * @throws FileSystemException
      */
@@ -97,8 +92,6 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->rootDirectory = $this->objectManager->get(TargetDirectory::class)
-            ->getDirectoryWrite(DirectoryList::ROOT);
         $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . $directoryName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName;
@@ -190,8 +183,13 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
         $bypassDenyListWriteFactory = $this->objectManager->create(WriteFactory::class, [
             'denyListPathValidator' => $denyListPathValidator
         ]);
-        $this->bypassDenyListWrite = $bypassDenyListWriteFactory
-            ->create($this->directoryList->getPath(DirectoryList::MEDIA));
+        $this->bypassDenyListWrite = $bypassDenyListWriteFactory->create(
+            $this->mediaDirectory->getAbsolutePath(),
+            $this->mediaDirectory->getDriver() instanceof File ? DriverPool::FILE : DriverPool::REMOTE,
+            null,
+            DirectoryList::MEDIA
+        );
+
         if (!$this->bypassDenyListWrite->isFile($path)) {
             $this->bypassDenyListWrite->writeFile($path, "Order deny,allow\nDeny from all");
         }
@@ -205,6 +203,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
                 $this->bypassDenyListWrite->getRelativePath($testDir . '/' . '.htaccess')
             )
         );
+        $this->bypassDenyListWrite->delete($testDir);
     }
 
     /**
