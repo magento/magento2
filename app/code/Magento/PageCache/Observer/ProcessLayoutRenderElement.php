@@ -120,7 +120,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
     private function isVarnishEnabled()
     {
         if ($this->isVarnishEnabled === null) {
-            $this->isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
+            $this->isVarnishEnabled = ($this->_config->getType() === \Magento\PageCache\Model\Config::VARNISH);
         }
         return $this->isVarnishEnabled;
     }
