@@ -97,6 +97,18 @@ class DataObjectHelper
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
+        if (empty($data)) {
+            return $this;
+        }
+        $dataObjectMethods = get_class_methods(get_class($dataObject));
+
+        $setMethods = array_filter($dataObjectMethods, static function ($e) {
+            return 0 === strncmp($e, 'set', 3);
+        });
+        $setMethods = array_flip(array_map(static function ($e) {
+            return SimpleDataObjectConverter::camelCaseToSnakeCase(substr($e, 3));
+        }, $setMethods));
+
         if ($dataObject instanceof ExtensibleDataInterface
             && !empty($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])
         ) {
@@ -108,40 +120,37 @@ class DataObjectHelper
             }
             unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
         }
-        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel//) {
-            && !$dataObject instanceof \Magento\Quote\Api\Data\AddressInterface) {
-            $simpleData = array_filter($data, function ($e) {
+        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel) {
+            $simpleData = array_filter($data, static function ($e) {
                 return is_scalar($e) || is_null($e);
             });
-            unset($simpleData['id']);
+            if (isset($simpleData['id'])) {
+                $dataObject->setId($simpleData['id']);
+                unset($simpleData['id']);
+            }
+            $simpleData = array_intersect_key($simpleData, $setMethods);
             $dataObject->addData($simpleData);
             $data = array_diff_key($data, $simpleData);
             if (\count($data) === 0) {
                 return $this;
             }
         }
+        foreach (array_intersect_key($data, $setMethods) as $key => $value) {
+            $methodName = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
 
-        $dataObjectMethods = get_class_methods(get_class($dataObject));
-        foreach ($data as $key => $value) {
-            /* First, verify is there any setter for the key on the Service Data Object */
-            $camelCaseKey = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
-            $possibleMethods = [
-                'set' . $camelCaseKey,
-                'setIs' . $camelCaseKey,
-            ];
-            if ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
-                $methodName = array_values($methodNames)[0];
-                if (!is_array($value)) {
-                    if ($methodName === 'setExtensionAttributes' && $value === null) {
-                        // Cannot pass a null value to a method with a typed parameter
-                    } else {
-                        $dataObject->$methodName($value);
-                    }
-                } else {
-                    $getterMethodName = 'get' . $camelCaseKey;
-                    $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
+            if (!is_array($value)) {
+                if ($methodName !== 'setExtensionAttributes' || $value !== null) {
+                    $dataObject->{'set' . $methodName}($value);
                 }
-            } elseif ($dataObject instanceof CustomAttributesDataInterface) {
+            } else {
+                $getterMethodName = 'get' . $methodName;
+                $this->setComplexValue($dataObject, $getterMethodName, 'set' . $methodName, $value, $interfaceName);
+            }
+            unset($data[$key]);
+        }
+
+        foreach ($data as $key => $value) {
+            if ($dataObject instanceof CustomAttributesDataInterface) {
                 $dataObject->setCustomAttribute($key, $value);
             }
         }
@@ -192,7 +201,7 @@ class DataObjectHelper
         } elseif (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
-                    = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
+                    = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
                         $extensionAttributeKey
                     );
                 $methodReturnType = $this->methodsMapProcessor->getMethodReturnType(
