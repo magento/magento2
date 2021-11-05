@@ -1,0 +1,17 @@
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickAddNewAddressButtonOnCustomerAddressesTabActionGroup">
+        <annotations>
+            <description>Clicks the "Add New Address" button on the Customer->Addresses Tab.</description>
+        </annotations>
+
+        <click selector="{{AdminCustomerAddressesSection.addNewAddress}}" stepKey="clickAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForAddUpdateCustomerAddressForm"/>
+    </actionGroup>
+</actionGroups>

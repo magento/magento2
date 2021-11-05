@@ -79,10 +79,17 @@
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
 
+<<<<<<< HEAD
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
+=======
+        <!-- Search and open customer -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+>>>>>>> 2.4-develop
         </actionGroup>
-        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterCreatedCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
         <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
 
