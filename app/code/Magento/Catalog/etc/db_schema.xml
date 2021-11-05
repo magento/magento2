@@ -213,6 +213,10 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_VARCHAR_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_VARCHAR_ATTRIBUTE_ID_VALUE" indexType="btree">
+           <column name="attribute_id"/>
+           <column name="value"/>
+        </index>
     </table>
     <table name="catalog_product_entity_gallery" resource="default" engine="innodb"
            comment="Catalog Product Gallery Attribute Backend Table">
