@@ -44,7 +44,7 @@
             <argument name="numOfProductsPerPage" value="12"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.name$$)}}" stepKey="navigateToCategory2Page"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$defaultCategory2.custom_attributes[url_key]$$)}}" stepKey="navigateToCategory2Page"/>
         <waitForPageLoad stepKey="waitForCategory2PageToLoad"/>
 
         <actionGroup ref="VerifyCategoryPageParametersActionGroup" stepKey="verifyCategory2PageParameters">
@@ -61,10 +61,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="defaultCategory2" stepKey="deleteCategory2"/>
 
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
-
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
     </test>
 </tests>

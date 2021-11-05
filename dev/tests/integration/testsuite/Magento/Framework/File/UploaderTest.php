@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\File;
 
+use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Test for \Magento\Framework\File\Uploader
@@ -42,27 +44,15 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     public function testUploadFileFromAllowedFolder(): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-
         $fileName = 'text.txt';
-        $tmpDir = 'tmp';
-        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+        $uploader = $this->createUploader($fileName);
 
-        $tmpDirectory->writeFile($fileName, 'just a text');
+        $uploader->save($mediaDirectory->getAbsolutePath(FileProcessor::TMP_DIR));
 
-        $type = [
-            'tmp_name' => $filePath,
-            'name' => $fileName,
-        ];
-
-        $uploader = $this->uploaderFactory->create(['fileId' => $type]);
-        $uploader->save($mediaDirectory->getAbsolutePath($tmpDir));
-
-        $this->assertTrue($mediaDirectory->isFile($tmpDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->assertTrue($mediaDirectory->isFile(FileProcessor::TMP_DIR . DIRECTORY_SEPARATOR . $fileName));
     }
 
     /**
-     *
      * @return void
      */
     public function testUploadFileFromNotAllowedFolder(): void
@@ -86,6 +76,21 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testUploadFileWithExcessiveFolderName(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Destination folder path is too long; must be 255 characters or less');
+
+        $uploader = $this->createUploader('text.txt');
+        $longStringFilePath = __DIR__ . '/_files/fixture_with_long_string.txt';
+        $longDirectoryFolderName = file_get_contents($longStringFilePath);
+
+        $uploader->save($longDirectoryFolderName);
+    }
+
+    /**
      * Upload file test when `Old Media Gallery` is disabled
      *
      * @magentoConfigFixture system/media_gallery/enabled 1
@@ -98,7 +103,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     public function testUploadFileWhenOldMediaGalleryDisabled(string $directoryCode): void
     {
         $destinationDirectory = $this->filesystem->getDirectoryWrite($directoryCode);
-        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP, DriverPool::FILE);
 
         $fileName = 'file.txt';
         $destinationDir = 'tmp';
@@ -143,5 +148,28 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
 
         $logDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
         $logDirectory->delete($tmpDir);
+    }
+
+    /**
+     * Create uploader instance for testing purposes.
+     *
+     * @param string $fileName
+     *
+     * @return Uploader
+     */
+    private function createUploader(string $fileName): Uploader
+    {
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+
+        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+
+        $tmpDirectory->writeFile($fileName, 'just a text');
+
+        $type = [
+            'tmp_name' => $filePath,
+            'name' => $fileName,
+        ];
+
+        return $this->uploaderFactory->create(['fileId' => $type]);
     }
 }

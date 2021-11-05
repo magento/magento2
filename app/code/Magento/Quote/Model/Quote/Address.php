@@ -1115,7 +1115,13 @@ class Address extends AbstractAddress implements
      */
     public function getTotals()
     {
-        $totalsData = array_merge($this->getData(), ['address_quote_items' => $this->getAllItems()]);
+        $totalsData = array_merge(
+            $this->getData(),
+            [
+                'address_quote_items' => $this->getAllItems(),
+                'quote_items' => $this->getQuote()->getAllItems(),
+            ]
+        );
         $totals = $this->totalsReader->fetch($this->getQuote(), $totalsData);
         foreach ($totals as $total) {
             $this->addTotal($total);
