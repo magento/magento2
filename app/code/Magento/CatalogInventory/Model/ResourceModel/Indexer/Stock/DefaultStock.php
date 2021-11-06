@@ -275,7 +275,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->joinLeft(
-            ['css' => 'cataloginventory_stock_status'],
+            ['css' => $this->getTable('cataloginventory_stock_status')],
             'css.product_id = e.entity_id',
             []
         )->columns(
