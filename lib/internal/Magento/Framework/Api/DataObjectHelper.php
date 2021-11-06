@@ -9,7 +9,7 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**
- * Data object helper.
+ * Service class allow populating object from array data
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -154,6 +154,7 @@ class DataObjectHelper
     }
 
     /**
+     * Set complex (like object) value using $methodName based on return type of $getterMethodName
      *
      * @param mixed $dataObject
      * @param string $getterMethodName
