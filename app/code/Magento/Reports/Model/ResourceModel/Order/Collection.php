@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
@@ -10,7 +11,6 @@ use Magento\Framework\DB\Select;
 /**
  * Reports orders collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -18,14 +18,12 @@ use Magento\Framework\DB\Select;
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
     /**
-     * Is live
-     *
      * @var bool
      */
     protected $_isLive = false;
 
     /**
-     * Sales amount expression
+     * The sales amount expression
      *
      * @var string
      */

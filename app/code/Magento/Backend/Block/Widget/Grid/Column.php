@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\Backend\Block\Widget;
@@ -46,7 +47,7 @@ class Column extends Widget
     protected $_cssClass = null;
 
     /**
-     * Renderer types
+     * The renderer types
      *
      * @var array
      */
@@ -74,7 +75,7 @@ class Column extends Widget
     ];
 
     /**
-     * Filter types
+     * The filter types
      *
      * @var array
      */
@@ -422,11 +423,7 @@ class Column extends Widget
     protected function _getRendererByType()
     {
         $type = strtolower((string) $this->getType());
-        $rendererClass = isset(
-            $this->_rendererTypes[$type]
-        ) ? $this->_rendererTypes[$type] : $this->_rendererTypes['default'];
-
-        return $rendererClass;
+        return $this->_rendererTypes[$type] ?? $this->_rendererTypes['default'];
     }
 
     /**
@@ -479,9 +476,7 @@ class Column extends Widget
     protected function _getFilterByType()
     {
         $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower((string) $this->getType());
-        $filterClass = isset($this->_filterTypes[$type]) ? $this->_filterTypes[$type] : $this->_filterTypes['default'];
-
-        return $filterClass;
+        return $this->_filterTypes[$type] ?? $this->_filterTypes['default'];
     }
 
     /**

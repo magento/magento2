@@ -109,7 +109,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_customizableContainerTypes = ['VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR'];
 
     /**
-     * Carrier helper
+     * The carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
      */
