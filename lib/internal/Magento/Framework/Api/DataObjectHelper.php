@@ -105,10 +105,19 @@ class DataObjectHelper
         $setMethods = array_filter($dataObjectMethods, static function ($e) {
             return 0 === strncmp($e, 'set', 3);
         });
-        $setMethods = array_flip(array_map(static function ($e) {
+        $setMethods = array_map(static function ($e) {
             return SimpleDataObjectConverter::camelCaseToSnakeCase(substr($e, 3));
-        }, $setMethods));
-
+        }, $setMethods);
+        $setMethods = array_merge(
+            $setMethods,
+            array_map(
+                function ($e) {
+                    return str_replace('is_', '', $e);
+                },
+                $setMethods
+            )
+        );
+        $setMethods = array_flip($setMethods);
         if ($dataObject instanceof ExtensibleDataInterface
             && !empty($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])
         ) {
@@ -140,7 +149,11 @@ class DataObjectHelper
 
             if (!is_array($value)) {
                 if ($methodName !== 'setExtensionAttributes' || $value !== null) {
-                    $dataObject->{'set' . $methodName}($value);
+                    if (method_exists($dataObject, 'set' . $methodName)) {
+                        $dataObject->{'set' . $methodName}($value);
+                    } else {
+                        $dataObject->{'setIs' . $methodName}($value);
+                    }
                 }
             } else {
                 $getterMethodName = 'get' . $methodName;
@@ -149,8 +162,8 @@ class DataObjectHelper
             unset($data[$key]);
         }
 
-        foreach ($data as $key => $value) {
-            if ($dataObject instanceof CustomAttributesDataInterface) {
+        if ($dataObject instanceof CustomAttributesDataInterface) {
+            foreach ($data as $key => $value) {
                 $dataObject->setCustomAttribute($key, $value);
             }
         }
