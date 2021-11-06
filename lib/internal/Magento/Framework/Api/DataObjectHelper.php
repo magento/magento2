@@ -100,24 +100,7 @@ class DataObjectHelper
         if (empty($data)) {
             return $this;
         }
-        $dataObjectMethods = get_class_methods(get_class($dataObject));
-
-        $setMethods = array_filter($dataObjectMethods, static function ($e) {
-            return 0 === strncmp($e, 'set', 3);
-        });
-        $setMethods = array_map(static function ($e) {
-            return SimpleDataObjectConverter::camelCaseToSnakeCase(substr($e, 3));
-        }, $setMethods);
-        $setMethods = array_merge(
-            $setMethods,
-            array_map(
-                function ($e) {
-                    return str_replace('is_', '', $e);
-                },
-                $setMethods
-            )
-        );
-        $setMethods = array_flip($setMethods);
+        $setMethods = $this->getSetters($dataObject);
         if ($dataObject instanceof ExtensibleDataInterface
             && !empty($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])
         ) {
@@ -148,7 +131,7 @@ class DataObjectHelper
             $methodName = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
 
             if (!is_array($value)) {
-                if ($methodName !== 'setExtensionAttributes' || $value !== null) {
+                if ($methodName !== 'ExtensionAttributes' || $value !== null) {
                     if (method_exists($dataObject, 'set' . $methodName)) {
                         $dataObject->{'set' . $methodName}($value);
                     } else {
@@ -294,5 +277,39 @@ class DataObjectHelper
             }
         }
         return $attributeValueArray;
+    }
+
+    /** @var array  */
+    private $settersCache = [];
+
+    /**
+     * Get list of setters for object
+     *
+     * @param object $dataObject
+     * @return array
+     */
+    private function getSetters(object $dataObject): array
+    {
+        $class = get_class($dataObject);
+        if (!isset($this->settersCache[$class])) {
+            $dataObjectMethods = get_class_methods($class);
+            // use regexp to manipulate with method list as it use jit starting with PHP 7.3
+            $setters = explode(
+                ',',
+                strtolower(
+                    // (0) remove all not setter
+                    // (1) add _ before upper letter
+                    // (2) remove set_ in start of name
+                    // (3) add name without is_ prefix
+                    preg_replace(
+                        ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
+                        ['', '$1_$2', '$1', '$1$2,is_$2'],
+                        implode(',', $dataObjectMethods)
+                    )
+                )
+            );
+            $this->settersCache[$class] = array_flip($setters);
+        }
+        return $this->settersCache[$class];
     }
 }
