@@ -93,6 +93,7 @@ enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bun
 
 type BundleOrderItem implements OrderItemInterface {
     bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+    parent_sku: String @doc(description: "The SKU of parent product.")
 }
 
 type BundleInvoiceItem implements InvoiceItemInterface{

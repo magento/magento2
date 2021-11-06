@@ -47,7 +47,13 @@
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <plugin name="used_products_cache_graphql" type="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache" />
     </type>
-
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="configurable" xsi:type="string">ConfigurableOrderItem</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface">
         <plugin name="Magento_ConfigurableProduct_Plugin_Model_ResourceModel_Attribute_InStockOptionSelectBuilder_GraphQl" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\InStockOptionSelectBuilder"/>
         <plugin name="option_select_website_filter" type="Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute\ScopedOptionSelectBuilder"/>
