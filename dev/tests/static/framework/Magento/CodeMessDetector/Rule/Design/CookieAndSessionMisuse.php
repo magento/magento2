@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\CodeMessDetector\Rule\Design;
 
+use Magento\Framework\GetParameterClassTrait;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use PDepend\Source\AST\ASTClass;
@@ -15,9 +16,6 @@ use PHPMD\AbstractNode;
 use PHPMD\AbstractRule;
 use PHPMD\Node\ClassNode;
 use PHPMD\Rule\ClassAware;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
 
 /**
  * Session and Cookies must be used only in HTML Presentation layer.
@@ -26,6 +24,8 @@ use ReflectionParameter;
  */
 class CookieAndSessionMisuse extends AbstractRule implements ClassAware
 {
+    use GetParameterClassTrait;
+
     /**
      * Is given class a controller?
      *
@@ -196,22 +196,6 @@ class CookieAndSessionMisuse extends AbstractRule implements ClassAware
         }
 
         return false;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**
