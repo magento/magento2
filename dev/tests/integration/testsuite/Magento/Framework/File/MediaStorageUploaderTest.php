@@ -130,7 +130,7 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'media destination' => [DirectoryList::MEDIA],
-            'non-media destination' => [DirectoryList::VAR_DIR],
+            'non-media destination' => [DirectoryList::VAR_IMPORT_EXPORT],
         ];
     }
 
