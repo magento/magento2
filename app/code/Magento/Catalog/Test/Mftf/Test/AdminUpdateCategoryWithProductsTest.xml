@@ -69,7 +69,7 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Verify Category in store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}" stepKey="seeDefaultProductPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.urlKey)}}" stepKey="seeDefaultProductPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>

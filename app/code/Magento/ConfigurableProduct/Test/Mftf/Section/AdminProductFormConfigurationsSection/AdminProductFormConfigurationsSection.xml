@@ -17,6 +17,7 @@
         <element name="currentVariationsPriceCells" type="textarea" selector=".admin__control-fields[data-index='price_container']"/>
         <element name="currentVariationsQuantityCells" type="textarea" selector=".admin__control-fields[data-index='quantity_container']"/>
         <element name="currentVariationsAttributesCells" type="textarea" selector=".admin__control-fields[data-index='attributes']"/>
+        <element name="currentVariationsCells" type="textarea" selector=".admin__control-fields[data-index='{{var}}']" parameterized="true"/>
         <element name="currentVariationsStatusCells" type="textarea" selector="._no-header[data-index='status']"/>
         <element name="currentVariationsAllRows" type="text" selector="[data-index=configurable-matrix] .data-row"/>
         <element name="currentVariationsProductImage" type="text" parameterized="true" selector="[data-index=configurable-matrix] .data-row:nth-of-type({{index}}) td[data-index=thumbnail_image_container] img"/>

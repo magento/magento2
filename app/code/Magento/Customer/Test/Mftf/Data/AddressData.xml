@@ -159,6 +159,7 @@
         </array>
         <data key="city">London</data>
         <data key="country_id">GB</data>
+        <data key="country">United Kingdom</data>
         <data key="telephone">512-345-6789</data>
         <data key="province">JS</data>
     </entity>
@@ -243,7 +244,7 @@
         <data key="postcode">12345</data>
     </entity>
     <entity name="updateCustomerFranceAddress" type="address">
-        <data key="firstname">Jaen</data>
+        <data key="firstname">Jean</data>
         <data key="lastname">Reno</data>
         <data key="company">Magento</data>
         <data key="telephone">555-888-111-999</data>

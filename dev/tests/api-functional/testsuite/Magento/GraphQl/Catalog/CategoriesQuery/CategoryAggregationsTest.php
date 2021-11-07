@@ -52,5 +52,17 @@ QUERY;
         $this->assertCount(2, $customAggregation);
         $this->assertEquals('test_attribute_2', $customAggregation[0]['attribute_code']);
         $this->assertEquals('test_attribute_1', $customAggregation[1]['attribute_code']);
+
+        /**
+         * Check sorting options
+         */
+        $optionsAttribute1 = $customAggregation[0]['options'];
+        $this->assertCount(3, $optionsAttribute1);
+        $this->assertEquals('Option 1', $optionsAttribute1[0]['label']);
+        $this->assertEquals('Option 2', $optionsAttribute1[1]['label']);
+        $this->assertEquals('Option 3', $optionsAttribute1[2]['label']);
+        $this->assertEquals(1, $optionsAttribute1[0]['count']);
+        $this->assertEquals(2, $optionsAttribute1[1]['count']);
+        $this->assertEquals(3, $optionsAttribute1[2]['count']);
     }
 }

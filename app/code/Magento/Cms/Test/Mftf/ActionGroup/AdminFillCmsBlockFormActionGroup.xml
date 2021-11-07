@@ -20,6 +20,6 @@
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{cmsBlockDataTitle}}" stepKey="fillFieldTitle1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{cmsBlockDataIdentifier}}" stepKey="fillFieldIdentifier"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView"/>
-        <fillField selector="{{BlockContentSection.TextArea}}" userInput="{{cmsBlockDataContent}}" stepKey="fillContentField"/>
+        <fillField selector="{{TinyMCESection.Content}}" userInput="{{cmsBlockDataContent}}" stepKey="fillContentField"/>
     </actionGroup>
 </actionGroups>

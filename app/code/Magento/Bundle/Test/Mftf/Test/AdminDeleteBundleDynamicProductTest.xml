@@ -37,7 +37,7 @@
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
         <!-- Verify product on Product Page -->
-        <amOnPage url="{{StorefrontProductPage.url($$createDynamicBundleProduct.name$$)}}" stepKey="amOnBundleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createDynamicBundleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnBundleProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
         <!-- Search for the product by sku -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
@@ -47,7 +47,7 @@
         <dontSee userInput="$$createDynamicBundleProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
         <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>
         <!-- Go to the category page that we created in the before block -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
         <!-- Should not see the product -->
         <dontSee userInput="$$createDynamicBundleProduct.name$$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
         <see selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" userInput="We can't find products matching the selection." stepKey="seeEmptyProductMessage"/>

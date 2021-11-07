@@ -22,6 +22,8 @@ use Magento\Catalog\Model\Product;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 
 /**
  * Test class for Product adminhtml actions
@@ -47,6 +49,11 @@ class ProductTest extends AbstractBackendController
     private $resourceModel;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -62,6 +69,7 @@ class ProductTest extends AbstractBackendController
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
         $this->repositoryFactory = Bootstrap::getObjectManager()->get(ProductRepositoryFactory::class);
         $this->resourceModel = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -676,5 +684,25 @@ class ProductTest extends AbstractBackendController
             $message->getText()
         );
         $this->assertRedirect($this->stringContains('/backend/catalog/product/new'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     */
+    public function testSaveProductWithDeletedCategory(): void
+    {
+        $category = $this->_objectManager->get(Category::class);
+        $category->load(333);
+        $category->delete();
+        $product = $this->productRepository->get('simple333');
+        $this->productRepository->save($product);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You saved the product.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 }

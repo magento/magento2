@@ -87,6 +87,12 @@ $_helper = $block->getData('outputHelper');
                                               data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
                                               action="<?= $escaper->escapeUrl($postParams['action']) ?>"
                                               method="post">
+                                            <?php $optionsData = $block->getData('viewModel')->getOptionsData($_product); ?>
+                                            <?php foreach ($optionsData as $optionItem): ?>
+                                                <input type="hidden"
+                                                       name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
+                                                       value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
+                                            <?php endforeach; ?>
                                             <input type="hidden"
                                                    name="product"
                                                    value="<?= /* @noEscape */ $postParams['data']['product'] ?>">

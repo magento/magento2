@@ -30,7 +30,7 @@ type DownloadableCartItem implements CartItemInterface @doc(description: "Downlo
     samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableCartItem\\Samples") @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product")
 }
 
-type DownloadableProduct implements ProductInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the customer downloads") {
+type DownloadableProduct implements ProductInterface, RoutableInterface, CustomizableProductInterface @doc(description: "DownloadableProduct defines a product that the shopper downloads") {
     downloadable_product_samples: [DownloadableProductSamples] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples") @doc(description: "An array containing information about samples of this downloadable product.")
     downloadable_product_links: [DownloadableProductLinks] @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Links") @doc(description: "An array containing information about the links for this downloadable product")
     links_purchased_separately: Int @doc(description: "A value of 1 indicates that each link in the array must be purchased separately")
