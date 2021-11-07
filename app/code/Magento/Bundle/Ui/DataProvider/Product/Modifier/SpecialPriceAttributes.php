@@ -40,17 +40,17 @@ class SpecialPriceAttributes implements ModifierInterface
      * PriceAttributes constructor.
      *
      * @param DirectoryCurrency $directoryCurrency
-     * @param array $priceAttributeList
      * @param ResolverInterface $localeResolver
+     * @param array $priceAttributeList
      */
     public function __construct(
         DirectoryCurrency $directoryCurrency,
-        array $priceAttributeList = [],
-        ResolverInterface $localeResolver
+        ResolverInterface $localeResolver,
+        array $priceAttributeList = []
     ) {
-        $this->priceAttributeList = $priceAttributeList;
         $this->directoryCurrency = $directoryCurrency;
         $this->localeResolver = $localeResolver;
+        $this->priceAttributeList = $priceAttributeList;
     }
 
     /**
