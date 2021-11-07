@@ -158,7 +158,8 @@ class BundleTest extends AbstractImportTestCase
                     'delete',
                     'quoteInto',
                     'fetchAssoc'
-            ])
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->select = $this->createMock(Select::class);

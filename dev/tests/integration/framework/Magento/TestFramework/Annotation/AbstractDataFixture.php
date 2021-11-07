@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractDataFixture
 {
     /**
-     * Fixtures that have been applied
-     *
      * @var array
      */
     protected $_appliedFixtures = [];

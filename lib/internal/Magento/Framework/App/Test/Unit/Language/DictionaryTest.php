@@ -53,8 +53,8 @@ class DictionaryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDictionaryGetter(): void
     {
         $csvFileName = 'abc.csv';
