@@ -70,16 +70,18 @@ class ObserverTest extends TestCase
      */
     private $emailNotificationMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
-        $this->collectionFactoryMock = $this->getMockBuilder(
-            CollectionFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
         $this->sitemapCollectionMock = $this->createPartialMock(
             Collection::class,
@@ -105,7 +107,10 @@ class ObserverTest extends TestCase
         );
     }
 
-    public function testScheduledGenerateSitemapsSendsExceptionEmail()
+    /**
+     * @return void
+     */
+    public function testScheduledGenerateSitemapsSendsExceptionEmail(): void
     {
         $exception = 'Sitemap Exception';
         $storeId = 1;
@@ -120,7 +125,7 @@ class ObserverTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->sitemapMock]));
 
-        $this->sitemapMock->expects($this->at(0))
+        $this->sitemapMock
             ->method('getStoreId')
             ->willReturn($storeId);
 
@@ -128,12 +133,9 @@ class ObserverTest extends TestCase
             ->method('generateXml')
             ->willThrowException(new \Exception($exception));
 
-        $this->scopeConfigMock->expects($this->at(0))
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with(
-                Observer::XML_PATH_ERROR_RECIPIENT,
-                ScopeInterface::SCOPE_STORE
-            )
+            ->with(Observer::XML_PATH_ERROR_RECIPIENT, ScopeInterface::SCOPE_STORE)
             ->willReturn('error-recipient@example.com');
 
         $this->emailNotificationMock->expects($this->once())
@@ -146,9 +148,10 @@ class ObserverTest extends TestCase
     /**
      * Test if cron scheduled XML sitemap generation will start and stop the store environment emulation
      *
+     * @return void
      * @throws \Exception
      */
-    public function testCronGenerateSitemapEnvironmentEmulation()
+    public function testCronGenerateSitemapEnvironmentEmulation(): void
     {
         $storeId = 1;
 
@@ -162,7 +165,7 @@ class ObserverTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->sitemapMock]));
 
-        $this->sitemapMock->expects($this->at(0))
+        $this->sitemapMock
             ->method('getStoreId')
             ->willReturn($storeId);
 
