@@ -301,11 +301,11 @@
         <actionGroup ref="StorefrontAssertProductSubtotalInTheCartActionGroup" stepKey="assertSubtotalField6">
             <argument name="expectedSubtotal" value="$1,500.00"/>
         </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad10"/>
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage2">
             <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup" stepKey="assertProductTierPriceByForTextLabelForFirstRow21">
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad10"/>
+        <actionGroup ref="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup" stepKey="assertProductTierPriceByForTextLabelForFirstRow2">
             <argument name="priceIndex" value="1"/>
             <argument name="X" value="15"/>
             <argument name="Y" value="90"/>
@@ -321,7 +321,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceAmountForSecondRow2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="navigateToProductIndex5"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openEditProduct5">
             <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
