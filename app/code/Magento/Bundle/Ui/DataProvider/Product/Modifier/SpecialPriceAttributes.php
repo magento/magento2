@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Ui\DataProvider\Product\Modifier;
 
-use Magento\Directory\Model\Currency as DirectoryCurrency;
-use Magento\Framework\Currency;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Locale\CurrencyInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Bundle\Model\Product\Type;
+use Magento\Directory\Model\Currency as DirectoryCurrency;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use NumberFormatter;
 use Zend_Currency;
 use Zend_Currency_Exception;
 
@@ -24,19 +22,14 @@ use Zend_Currency_Exception;
 class SpecialPriceAttributes implements ModifierInterface
 {
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @var array
      */
     private $priceAttributeList;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var CurrencyInterface
-     */
-    private $localeCurrency;
 
     /**
      * @var DirectoryCurrency
@@ -46,21 +39,18 @@ class SpecialPriceAttributes implements ModifierInterface
     /**
      * PriceAttributes constructor.
      *
-     * @param StoreManagerInterface $storeManager
-     * @param CurrencyInterface $localeCurrency
      * @param DirectoryCurrency $directoryCurrency
      * @param array $priceAttributeList
+     * @param ResolverInterface $localeResolver
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
-        CurrencyInterface $localeCurrency,
         DirectoryCurrency $directoryCurrency,
-        array $priceAttributeList = []
+        array $priceAttributeList = [],
+        ResolverInterface $localeResolver
     ) {
-        $this->storeManager = $storeManager;
-        $this->localeCurrency = $localeCurrency;
         $this->priceAttributeList = $priceAttributeList;
         $this->directoryCurrency = $directoryCurrency;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -73,7 +63,11 @@ class SpecialPriceAttributes implements ModifierInterface
         if (empty($data) || empty($this->priceAttributeList)) {
             return $data;
         }
-
+        $numberFormatter = new NumberFormatter(
+            $this->localeResolver->getLocale(),
+            NumberFormatter::PERCENT
+        );
+        $numberFormatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, 2);
         foreach ($data['items'] as &$item) {
             foreach ($this->priceAttributeList as $priceAttribute) {
                 if (isset($item[$priceAttribute]) && $item['type_id'] == Type::TYPE_CODE) {
@@ -83,11 +77,7 @@ class SpecialPriceAttributes implements ModifierInterface
                             ['display' => Zend_Currency::NO_SYMBOL],
                             false
                         );
-                    $item[$priceAttribute] =
-                        $this->getCurrency()->toCurrency(
-                            sprintf("%f", $item[$priceAttribute]),
-                            ['symbol' => '%']
-                        );
+                    $item[$priceAttribute] = $numberFormatter->format($item[$priceAttribute] / 100);
                 }
             }
         }
@@ -100,29 +90,5 @@ class SpecialPriceAttributes implements ModifierInterface
     public function modifyMeta(array $meta): array
     {
         return $meta;
-    }
-
-    /**
-     * Retrieve store
-     *
-     * @return StoreInterface
-     * @throws NoSuchEntityException
-     */
-    private function getStore(): StoreInterface
-    {
-        return $this->storeManager->getStore();
-    }
-
-    /**
-     * Retrieve currency
-     *
-     * @return Currency
-     * @throws NoSuchEntityException
-     */
-    private function getCurrency(): Currency
-    {
-        $baseCurrencyCode = $this->getStore()->getBaseCurrencyCode();
-
-        return $this->localeCurrency->getCurrency($baseCurrencyCode);
     }
 }

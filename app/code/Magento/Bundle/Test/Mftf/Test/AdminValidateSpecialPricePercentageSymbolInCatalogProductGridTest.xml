@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminValidateSpecialPricePercentageSymbolInCatalogProductGridTest">
+    <test name="AdminBundleProductPriceSymbolValidationInGridTest">
         <annotations>
             <features value="Bundle"/>
             <stories value="Bundle Products Special Price Column in admin Grid should have % sign not currency sign"/>
@@ -20,71 +20,85 @@
             <group value="Bundle"/>
         </annotations>
         <before>
+            <!-- Create a simple product -->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
-            <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+            <!-- Admin login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <!-- Navigate to catalog product index page -->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <!-- Clear all the search filter -->
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
+            <!-- Set product grid to default columns -->
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
+            <!-- Open the column dropdown to reset the default columns from the catalog product grid -->
+            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownToReset"/>
+            <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetProductGridColumns"/>
+            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownAfterReset"/>
+            <!-- Delete all the products from the catalog product grid -->
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
-            <!--Logging out-->
+            <!-- Logging out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <!-- Go to bundle product creation page -->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewBundleProductPage">
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+        </actionGroup>
+        <!-- Sets the provided Special Price on the Admin Product creation/edit page. -->
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
             <argument name="price" value="{{SimpleProductWithSpecialPrice.special_price}}"/>
         </actionGroup>
-        <!-- Add single bundle item -->
-        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
-        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
-            <argument name="product" value="$$simpleProduct1$$"/>
+        <!-- Add the bundle option to the product -->
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
+            <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
-
-        <!--Create a bundle product with ancillary data-->
+        <!-- Add the default attribute value for the bundle product creation page-->
         <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProduct">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
+        <!-- Save the bundle product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
-        <!--save the product/published by default-->
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+        <!-- Navigate to catalog product grid page -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
 
-        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownToReset"/>
-        <click selector="{{AdminProductGridFilterSection.resetGridColumns}}" stepKey="resetProductGridColumns"/>
-        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownAfterReset"/>
+        <!-- Set product grid to default columns -->
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
+        <!-- Open the column dropdown to reset the default columns from the catalog product grid -->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openToResetColumnsDropdown"/>
+        <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetAdminProductGridColumns"/>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownAfterReset"/>
 
-        <!--Reload the catalog product page -->
-        <reloadPage stepKey="reloadCatalogProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoaded"/>
-
-        <!--Add Special Price column-->
+        <!-- Check the special price attribute column is present or not -->
         <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Special Price')}}" stepKey="dontSeeSpecialPriceColumn"/>
-        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdownSpecialPrice"/>
-        <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Special Price')}}" stepKey="showSpecialPriceColumn"/>
-        <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdownSpecialPrice"/>
+        <!-- Open the column dropdown to add the special price from the catalog product grid -->
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownSpecialPrice"/>
+        <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkSpecialPriceOption">
+            <argument name="optionName" value="Special Price"/>
+        </actionGroup>
+        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownSpecialPrice"/>
 
+        <!-- Search the created bundle product with sku -->
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterBundleProductGridBySku">
             <argument name="sku" value="{{BundleProduct.sku}}"/>
         </actionGroup>
 
+        <!-- Check the special price column are present in catalog product grid -->
         <seeElement selector="{{AdminProductGridSection.columnHeader('Special Price')}}" stepKey="seeSpecialPriceColumn"/>
+        <!-- Grab the special price value from the catalog product grid -->
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Special Price')}}" stepKey="getSpecialPrice"/>
 
-        <assertStringContainsString stepKey="assertSpecialPricePercentageSymbol">
-            <expectedResult type="string">%</expectedResult>
-            <actualResult type="variable">$getSpecialPrice</actualResult>
-        </assertStringContainsString>
+        <!-- Asserting with the special price value contains the percentage value -->
+        <actionGroup ref="AdminAssertSpecialPriceAttributeValueOnProductGridPageActionGroup" stepKey="assertSpecialPricePercentageSymbol">
+            <argument name="expectedValue" value="90.00%"/>
+            <argument name="actualValue" value="$getSpecialPrice"/>
+        </actionGroup>
     </test>
 </tests>
