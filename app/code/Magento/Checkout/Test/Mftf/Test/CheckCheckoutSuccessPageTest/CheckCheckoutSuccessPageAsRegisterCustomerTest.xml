@@ -63,8 +63,8 @@
         </actionGroup>
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadingMask2"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask2 action for preserving Backward Compatibility" stepKey="waitForLoadingMask2"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
@@ -85,8 +85,8 @@
         </actionGroup>
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
-        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFirstShippingMethod2"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadingMask3"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod2"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask3 action for preserving Backward Compatibility" stepKey="waitForLoadingMask3"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext2"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder2"/>
@@ -105,8 +105,8 @@
         </actionGroup>
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart3"/>
-        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFirstShippingMethod3"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadingMask4"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod3"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask4 action for preserving Backward Compatibility" stepKey="waitForLoadingMask4"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext3"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment3"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder3"/>

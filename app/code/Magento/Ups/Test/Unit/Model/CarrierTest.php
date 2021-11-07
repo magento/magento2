@@ -41,8 +41,6 @@ class CarrierTest extends TestCase
     const PAID_METHOD_NAME = 'paid_method';
 
     /**
-     * Model under test
-     *
      * @var Error|MockObject
      */
     private $error;
@@ -53,8 +51,6 @@ class CarrierTest extends TestCase
     private $helper;
 
     /**
-     * Model under test
-     *
      * @var Carrier|MockObject
      */
     private $model;
@@ -445,8 +441,25 @@ class CarrierTest extends TestCase
     {
         /** @var \Magento\Shipping\Model\Shipment\Request $request */
         $request = $this->helper->getObject(\Magento\Shipping\Model\Shipment\Request::class);
+        $shipmentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipment::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getOrder'])
+            ->getMock();
+        $orderMock =  $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIncrementId'])
+            ->getMock();
+
+        $shipmentMock->expects($this->any())
+            ->method('getOrder')
+            ->willReturn($orderMock);
+        $orderMock->expects($this->any())
+            ->method('getIncrementId')
+            ->willReturn('100000001');
+
+        $requestData['order_shipment'] = $shipmentMock;
         $request->setData($requestData);
-        $request->setPackages([['items' => []]]);
+        $request->setPackages([['items' => [], 'params' => ['container' => '']]]);
         $this->model->requestToShipment($request);
         $this->assertEquals($expectedRequestData, array_intersect_key($request->getData(), $expectedRequestData));
     }
@@ -629,6 +642,10 @@ class CarrierTest extends TestCase
             ->willReturnCallback(
                 function ($data) {
                     $helper = new ObjectManager($this);
+
+                    if (empty($data['data'])) {
+                        $data['data'] = '<?xml version = "1.0" ?><ShipmentAcceptRequest/>';
+                    }
 
                     return $helper->getObject(
                         Element::class,
