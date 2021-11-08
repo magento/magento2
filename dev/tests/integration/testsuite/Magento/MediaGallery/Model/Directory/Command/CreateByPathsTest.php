@@ -19,6 +19,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for CreateDirectoriesByPathsInterface
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateByPathsTest extends \PHPUnit\Framework\TestCase
 {
