@@ -38,6 +38,9 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * Absolute path to the media directory
      */
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
     private $mediaDirectoryPath;
 
     /**
