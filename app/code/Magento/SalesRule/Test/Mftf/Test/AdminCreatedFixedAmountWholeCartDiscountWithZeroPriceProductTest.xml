@@ -23,7 +23,7 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        </before>
+        </before> 
 
         <after>
             <!-- Delete the cart price rule we made during the test -->
