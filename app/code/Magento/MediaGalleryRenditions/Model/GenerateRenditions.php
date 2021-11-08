@@ -19,6 +19,9 @@ use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GenerateRenditions implements GenerateRenditionsInterface
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
