@@ -93,8 +93,8 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if (empty($optionId)) {
             throw new InputException(__('The option id is empty. Enter the value and try again.'));
         }
-        $label = trim($option->getLabel() ?: '');
-        if (empty($label)) {
+        $label = trim((string) $option->getLabel());
+        if ($label === '') {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
         if ($attribute->getSource()->getOptionText($optionId) === false) {
