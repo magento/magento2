@@ -51,8 +51,8 @@
             </group>
             <group id="payments_pro_hosted_solution_without_bml_and_paylater" extends="payments_pro_hosted_solution_without_bml">
                 <group id="pphs_required_settings">
-                    <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                    <group id="pphs_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                    <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
+                    <group id="pphs_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                 </group>
             </group>
             <include path="Magento_Paypal::system/payments_pro_hosted_solution_with_express_checkout.xml"/>
@@ -204,9 +204,9 @@
                         </field>
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_ec" translate="label">
                         <label>Basic Settings - PayPal Website Payments Standard</label>
@@ -327,8 +327,8 @@
                             <config_path>payment/paypal_payment_pro/active</config_path>
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
                         </field>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                        <group id="paypal_payflow_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
+                        <group id="paypal_payflow_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_paypal_payflow">
                         <label>Basic Settings - PayPal Payments Pro</label>
@@ -336,17 +336,17 @@
                 </group>
                 <group id="paypal_payflowpro_ca" extends="payment_all_paypal/paypal_payflowpro" sortOrder="40">
                     <group id="paypal_payflow_required">
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                        <group id="paypal_payflow_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
+                        <group id="paypal_payflow_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                 </group>
                 <group id="payflow_link_ca" extends="payment_all_paypal/payflow_link" sortOrder="50">
                     <group id="payflow_link_required">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                         <group id="payflow_link_advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="payflow_link_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <group id="payflow_link_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                 </group>
             </group>
