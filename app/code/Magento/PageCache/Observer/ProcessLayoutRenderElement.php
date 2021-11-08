@@ -126,8 +126,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
     }
 
     /**
-     * Add comment cache containers to private blocks
-     * Blocks are wrapped only if page is cacheable
+     * Add comment cache containers to private blocks. Blocks are wrapped only if page is cacheable
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
