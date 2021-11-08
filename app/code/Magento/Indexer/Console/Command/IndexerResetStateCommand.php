@@ -36,9 +36,7 @@ class IndexerResetStateCommand extends AbstractIndexerManageCommand
         $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {
             try {
-                $indexer->getState()
-                    ->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
-                    ->save();
+                $indexer->invalidate();
                 $output->writeln($indexer->getTitle() . ' indexer has been invalidated.');
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage());
