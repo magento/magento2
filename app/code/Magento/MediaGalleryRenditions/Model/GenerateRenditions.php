@@ -205,7 +205,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
      */
     private function shouldFileBeResized(string $absolutePath): bool
     {
-        [$width, $height] = getimagesize($absolutePath);
+        [$width, $height] = getimagesizefromstring($this->getMediaDirectory()->readFile($absolutePath));
         return $width > $this->config->getWidth() || $height > $this->config->getHeight();
     }
 
