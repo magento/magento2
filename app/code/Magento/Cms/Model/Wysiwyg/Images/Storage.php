@@ -734,8 +734,7 @@ class Storage extends \Magento\Framework\DataObject
         $configHeight = $this->_resizeParameters['height'];
 
         $driver = $this->_directory->getDriver();
-        //phpcs:ignore Generic.PHP.NoSilencedErrors
-        [$imageWidth, $imageHeight] = @getimagesizefromstring($driver->fileGetContents($source));
+        [$imageWidth, $imageHeight] = getimagesizefromstring($driver->fileGetContents($source));
 
         if ($imageWidth && $imageHeight) {
             $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
