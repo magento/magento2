@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\App\ObjectManager;
@@ -11,6 +12,7 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * Plugin for putting messages to cookies
@@ -55,12 +57,18 @@ class MessagePlugin
     private $inlineTranslate;
 
     /**
+     * @var ConfigInterface
+     */
+    protected $sessionConfig;
+
+    /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param InlineInterface|null $inlineTranslate
+     * @param ConfigInterface|null $sessionConfig
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -68,7 +76,8 @@ class MessagePlugin
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        InlineInterface $inlineTranslate = null
+        InlineInterface $inlineTranslate = null,
+        ConfigInterface $sessionConfig = null
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
@@ -77,6 +86,7 @@ class MessagePlugin
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->interpretationStrategy = $interpretationStrategy;
         $this->inlineTranslate = $inlineTranslate ?: ObjectManager::getInstance()->get(InlineInterface::class);
+        $this->sessionConfig = $sessionConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
     /**
@@ -132,7 +142,7 @@ class MessagePlugin
 
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
             $publicCookieMetadata->setDurationOneYear();
-            $publicCookieMetadata->setPath('/');
+            $publicCookieMetadata->setPath($this->sessionConfig->getCookiePath());
             $publicCookieMetadata->setHttpOnly(false);
             $publicCookieMetadata->setSameSite('Strict');
 
