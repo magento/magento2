@@ -28,8 +28,6 @@ class Dob extends AbstractWidget
     const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
-     * Date inputs
-     *
      * @var array
      */
     protected $_dateInputs = [];
