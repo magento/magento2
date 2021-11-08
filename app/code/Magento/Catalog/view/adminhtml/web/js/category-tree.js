@@ -33,24 +33,7 @@ define([
                     options.tree,
                     {
                         core: {
-                            data: {
-                                url: options.url,
-                                type: 'POST',
-                                dataFilter: $.proxy(function (data) {
-                                    return this._convertDataNodes(JSON.parse(data));
-                                }, this),
-
-                                /**
-                                 * @param {HTMLElement} node
-                                 * @return {Object}
-                                 */
-                                data: function (node) {
-                                    return {
-                                        id: node.id === '#' ? null : node.id,
-                                        'form_key': window.FORM_KEY
-                                    };
-                                }
-                            }
+                            data: this._convertData(this.options.data).children
                         }
                     }
                 );
