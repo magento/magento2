@@ -10,6 +10,7 @@ use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Console\Cli;
 
 /**
  * Command for invalidating indexers.
@@ -17,7 +18,7 @@ use Magento\Framework\Indexer\ConfigInterface;
 class IndexerResetStateCommand extends AbstractIndexerManageCommand
 {
     /**
-     * {@inheritdoc}
+     * Configures the current command.
      */
     protected function configure()
     {
@@ -29,7 +30,7 @@ class IndexerResetStateCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * Invalidate / reset the indexer
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -45,5 +46,6 @@ class IndexerResetStateCommand extends AbstractIndexerManageCommand
                 $output->writeln($e->getMessage());
             }
         }
+        return Cli::RETURN_SUCCESS;
     }
 }
