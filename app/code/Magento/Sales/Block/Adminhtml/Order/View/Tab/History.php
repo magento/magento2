@@ -13,6 +13,15 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  */
 class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
+    private const HISTORY_TYPE_INVOICE = 1;
+    private const HISTORY_TYPE_INVOICE_COMMENT = 2;
+    private const HISTORY_TYPE_ORDER = 3;
+    private const HISTORY_TYPE_CREDIT_MEMO = 4;
+    private const HISTORY_TYPE_CREDIT_MEMO_COMMENT = 5;
+    private const HISTORY_TYPE_SHIPMENT = 6;
+    private const HISTORY_TYPE_SHIPMENT_COMMENT = 7;
+    private const HISTORY_TYPE_TRACKING_NUM = 8;
+
     /**
      * Template
      *
@@ -75,83 +84,93 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
         $history = [];
         foreach ($order->getAllStatusHistory() as $orderComment) {
-            $history[] = $this->_prepareHistoryItem(
+            $history[] = $this->_prepareHistoryItemWithId(
                 $orderComment->getId(),
                 $orderComment->getStatusLabel(),
                 $orderComment->getIsCustomerNotified(),
                 $this->getOrderAdminDate($orderComment->getCreatedAt()),
-                $orderComment->getComment()
+                $orderComment->getComment(),
+                self::HISTORY_TYPE_ORDER
             );
         }
 
         foreach ($order->getCreditmemosCollection() as $_memo) {
-            $history[] = $this->_prepareHistoryItem(
+            $history[] = $this->_prepareHistoryItemWithId(
                 $_memo->getId(),
                 __('Credit memo #%1 created', $_memo->getIncrementId()),
                 $_memo->getEmailSent(),
-                $this->getOrderAdminDate($_memo->getCreatedAt())
+                $this->getOrderAdminDate($_memo->getCreatedAt()),
+                'Credit memo created',
+                self::HISTORY_TYPE_CREDIT_MEMO
             );
 
             foreach ($_memo->getCommentsCollection() as $_comment) {
-                $history[] = $this->_prepareHistoryItem(
+                $history[] = $this->_prepareHistoryItemWithId(
                     $_comment->getId(),
                     __('Credit memo #%1 comment added', $_memo->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
                     $this->getOrderAdminDate($_comment->getCreatedAt()),
-                    $_comment->getComment()
+                    $_comment->getComment(),
+                    self::HISTORY_TYPE_CREDIT_MEMO_COMMENT
                 );
             }
         }
 
         foreach ($order->getShipmentsCollection() as $_shipment) {
-            $history[] = $this->_prepareHistoryItem(
+            $history[] = $this->_prepareHistoryItemWithId(
                 $_shipment->getId(),
                 __('Shipment #%1 created', $_shipment->getIncrementId()),
                 $_shipment->getEmailSent(),
-                $this->getOrderAdminDate($_shipment->getCreatedAt())
+                $this->getOrderAdminDate($_shipment->getCreatedAt()),
+                self::HISTORY_TYPE_SHIPMENT
             );
 
             foreach ($_shipment->getCommentsCollection() as $_comment) {
-                $history[] = $this->_prepareHistoryItem(
+                $history[] = $this->_prepareHistoryItemWithId(
                     $_comment->getId(),
                     __('Shipment #%1 comment added', $_shipment->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
                     $this->getOrderAdminDate($_comment->getCreatedAt()),
-                    $_comment->getComment()
+                    $_comment->getComment(),
+                    self::HISTORY_TYPE_SHIPMENT_COMMENT
                 );
             }
         }
 
         foreach ($order->getInvoiceCollection() as $_invoice) {
-            $history[] = $this->_prepareHistoryItem(
+            $history[] = $this->_prepareHistoryItemWithId(
                 $_invoice->getId(),
                 __('Invoice #%1 created', $_invoice->getIncrementId()),
                 $_invoice->getEmailSent(),
                 $this->getOrderAdminDate($_invoice->getCreatedAt()),
-                'Invoice created'
+                'Invoice created',
+                self::HISTORY_TYPE_INVOICE
             );
 
             foreach ($_invoice->getCommentsCollection() as $_comment) {
-                $history[] = $this->_prepareHistoryItem(
+                $history[] = $this->_prepareHistoryItemWithId(
                     $_comment->getId(),
                     __('Invoice #%1 comment added', $_invoice->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
                     $this->getOrderAdminDate($_comment->getCreatedAt()),
-                    $_comment->getComment()
+                    $_comment->getComment(),
+                    self::HISTORY_TYPE_INVOICE_COMMENT
                 );
             }
         }
 
         foreach ($order->getTracksCollection() as $_track) {
-            $history[] = $this->_prepareHistoryItem(
+            $history[] = $this->_prepareHistoryItemWithId(
                 $_track->getId(),
                 __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
                 false,
-                $this->getOrderAdminDate($_track->getCreatedAt())
+                $this->getOrderAdminDate($_track->getCreatedAt()),
+                'Tracking number assigned',
+                self::HISTORY_TYPE_TRACKING_NUM
             );
         }
 
-        usort($history, [__CLASS__, 'sortHistoryByTimestamp']);
+        usort($history, [__CLASS__, 'sortHistory']);
         return $history;
     }
 
@@ -220,6 +239,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param bool $notified
      * @param \DateTimeInterface $created
      * @param string $comment
+     * @param int $type
      * @return array
      */
     protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
@@ -227,6 +247,22 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         return ['title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created];
     }
 
+    /**
+     * Map history items as array with id and type
+     *
+     * @param int $id
+     * @param string $label
+     * @param bool $notified
+     * @param \DateTimeInterface $created
+     * @param string $comment
+     * @param int $type
+     * @return array
+     */
+    protected function _prepareHistoryItemWithId($id, $label, $notified, $created, $comment = '', $type = 0)
+    {
+        return ['entity_id' => $id, 'title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created, 'type' => $type];
+    }
+    
     /**
      * @inheritdoc
      */
@@ -314,15 +350,37 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         $createdAtB = $b['created_at'];
         
         if ($createdAtA->getTimestamp() === $createdAtB->getTimestamp()) {
-            if( $a['comment'] == 'Invoice created' || $b['comment'] == 'Invoice created' ) {
-                return ( $a['comment'] == 'Invoice created' ? 1 : -1 );
-            }
             return $a['entity_id'] <=> $b['entity_id'];
         }
 
         return $createdAtA->getTimestamp() <=> $createdAtB->getTimestamp();
     }
 
+    /**
+     * Comparison For Sorting History By Timestamp and entity_id
+     *
+     * @param mixed $a
+     * @param mixed $b
+     * @return int
+     */    
+    private function sortHistory($a, $b)
+    {
+        $createdAtA = $a['created_at'];
+        $createdAtB = $b['created_at'];
+        
+        if ($createdAtA->getTimestamp() === $createdAtB->getTimestamp()) {
+            if ($a['type'] < $b['type']) {
+                return 1;
+            } elseif ($a['type'] > $b['type']) {
+                return -1;
+            } else {
+                return $a['entity_id'] <=> $b['entity_id'];
+            }
+        }
+
+        return $createdAtA->getTimestamp() <=> $createdAtB->getTimestamp();
+    }
+    
     /**
      * Get order admin date
      *
