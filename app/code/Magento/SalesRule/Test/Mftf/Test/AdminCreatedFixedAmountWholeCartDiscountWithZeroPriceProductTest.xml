@@ -49,7 +49,8 @@
         <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="50" stepKey="fillDiscountAmount"/>
         <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
-        
+        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
+
         <!-- Create a product to check the storefront -->
         <actionGroup ref="FillAdminSimpleProductFormWithZeroPriceActionGroup" stepKey="fillProductFieldsInAdmin">
             <argument name="simpleProduct" value="_defaultProduct"/>
