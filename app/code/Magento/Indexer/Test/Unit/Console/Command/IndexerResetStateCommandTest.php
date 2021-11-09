@@ -22,7 +22,7 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    public function testExecuter()
+    public function testExecute()
     {
         $this->configureAdminArea();
         $indexerOne = $this->getIndexerMock(
