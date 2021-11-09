@@ -23,7 +23,7 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
     /**
      * @var int
      */
-    private $complexArrayItemLimit;
+    private int $complexArrayItemLimit;
 
     /**
      * @var IOLimitConfigProvider
@@ -52,9 +52,9 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
     }
 
     /**
-     * @{inheritDoc}
-     * @throws FileSystemException
-     * @throws RuntimeException
+     * {@inheritDoc}
+     *
+     * @throws FileSystemException|RuntimeException
      */
     public function validateComplexArrayType(string $className, array $items): void
     {
@@ -76,7 +76,7 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function validateEntityValue(object $entity, string $propertyName, $value): void
