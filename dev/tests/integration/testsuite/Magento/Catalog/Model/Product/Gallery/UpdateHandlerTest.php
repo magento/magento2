@@ -515,7 +515,7 @@ class UpdateHandlerTest extends TestCase
         $this->assertNotEmpty($product->getMediaGalleryEntries());
         $image = $product->getImage();
         $path = $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $image);
-        $this->assertFileExists($path);
+        $this->assertTrue($this->mediaDirectory->isExist($path));
         // Assign product to default and second website and save changes
         $product->setWebsiteIds([$defaultWebsiteId, $secondWebsiteId]);
         $this->productRepository->save($product);
@@ -548,7 +548,7 @@ class UpdateHandlerTest extends TestCase
         $product = $this->getProduct($globalScopeId);
         // Assert that image was not deleted as it has roles in second store
         $this->assertNotEmpty($product->getMediaGalleryEntries());
-        $this->assertFileExists($path);
+        $this->assertTrue($this->mediaDirectory->isExist($path));
         // Unlink second website, delete existing images and save changes
         $product->setWebsiteIds([$defaultWebsiteId]);
         $product->setMediaGalleryEntries([]);
@@ -592,7 +592,7 @@ class UpdateHandlerTest extends TestCase
         $this->assertEquals($oldImage['file'], $product->getThumbnail());
         $path = $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $oldImage['file']);
         $tmpPath = $this->mediaDirectory->getAbsolutePath($this->config->getBaseTmpMediaPath() . $oldImage['file']);
-        $this->assertFileExists($path);
+        $this->assertTrue($this->mediaDirectory->isExist($path));
         $this->mediaDirectory->getDriver()->copy($path, $tmpPath);
         if (!$exist) {
             $this->mediaDirectory->getDriver()->deleteFile($path);
@@ -625,7 +625,7 @@ class UpdateHandlerTest extends TestCase
         $this->assertEquals($newImageRoles['thumbnail'], $product->getThumbnail());
         $path = $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $product->getImage());
         // Assert that the image exists on disk.
-        $this->assertFileExists($path);
+        $this->assertTrue($this->mediaDirectory->isExist($path));
     }
 
     /**
