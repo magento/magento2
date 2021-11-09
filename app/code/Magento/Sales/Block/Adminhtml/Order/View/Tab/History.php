@@ -359,8 +359,8 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     /**
      * Comparison For Sorting History By Timestamp and entity_id
      *
-     * @param mixed $a
-     * @param mixed $b
+     * @param array $a
+     * @param array $b
      * @return int
      */    
     private function sortHistory($a, $b)
