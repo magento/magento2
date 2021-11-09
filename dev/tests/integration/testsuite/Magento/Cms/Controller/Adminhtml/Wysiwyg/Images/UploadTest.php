@@ -87,7 +87,8 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->fullDirectoryPath = $this->imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $directoryName;
+        $this->fullDirectoryPath = rtrim($this->imagesHelper->getStorageRoot(), '/')
+            . DIRECTORY_SEPARATOR . $directoryName;
         $this->fullExcludedDirectoryPath = $this->imagesHelper->getStorageRoot()
             . DIRECTORY_SEPARATOR . $excludedDirName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
