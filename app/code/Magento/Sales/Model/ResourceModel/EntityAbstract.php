@@ -29,8 +29,6 @@ abstract class EntityAbstract extends AbstractDb
     protected $_eventPrefix = 'sales_order_resource';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'resource';
