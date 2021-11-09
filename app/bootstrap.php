@@ -7,7 +7,7 @@
 /**
  * Environment initialization
  */
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED);
 if (in_array('phar', \stream_get_wrappers())) {
     stream_wrapper_unregister('phar');
 }

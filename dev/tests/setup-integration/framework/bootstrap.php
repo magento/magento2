@@ -12,6 +12,7 @@ require_once __DIR__ . '/autoload.php';
 //to handle different types of errors on CI
 require __DIR__ . '/../../error_handler.php';
 
+error_reporting(E_ALL & ~E_DEPRECATED);
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
 $fixtureBaseDir = $integrationTestsDir . '/testsuite';
