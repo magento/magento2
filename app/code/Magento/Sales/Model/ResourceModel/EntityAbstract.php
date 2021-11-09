@@ -24,8 +24,6 @@ use Magento\Sales\Model\EntityInterface;
 abstract class EntityAbstract extends AbstractDb
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_resource';
