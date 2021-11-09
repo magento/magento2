@@ -58,9 +58,7 @@ class AdminSessionsManagerTest extends TestCase
     /** @var  ObjectManager */
     protected $objectManager;
 
-    /*
-     * @var RemoteAddress
-     */
+    /** @var RemoteAddress */
     protected $remoteAddressMock;
 
     /**
