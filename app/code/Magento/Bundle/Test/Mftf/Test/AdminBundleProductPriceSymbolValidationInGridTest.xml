@@ -28,8 +28,6 @@
         <after>
             <!-- Navigate to catalog product index page -->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-            <!-- Clear all the search filter -->
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
             <!-- Set product grid to default columns -->
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
             <!-- Open the column dropdown to reset the default columns from the catalog product grid -->
@@ -76,8 +74,6 @@
         <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetAdminProductGridColumns"/>
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownAfterReset"/>
 
-        <!-- Check the special price attribute column is present or not -->
-        <dontSeeElement selector="{{AdminProductGridSection.columnHeader('Special Price')}}" stepKey="dontSeeSpecialPriceColumn"/>
         <!-- Open the column dropdown to add the special price from the catalog product grid -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownSpecialPrice"/>
         <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkSpecialPriceOption">
@@ -90,15 +86,10 @@
             <argument name="sku" value="{{BundleProduct.sku}}"/>
         </actionGroup>
 
-        <!-- Check the special price column are present in catalog product grid -->
-        <seeElement selector="{{AdminProductGridSection.columnHeader('Special Price')}}" stepKey="seeSpecialPriceColumn"/>
-        <!-- Grab the special price value from the catalog product grid -->
-        <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Special Price')}}" stepKey="getSpecialPrice"/>
-
         <!-- Asserting with the special price value contains the percentage value -->
         <actionGroup ref="AdminAssertSpecialPriceAttributeValueOnProductGridPageActionGroup" stepKey="assertSpecialPricePercentageSymbol">
+            <argument name="specialPriceColumn" value="Special Price"/>
             <argument name="expectedValue" value="90.00%"/>
-            <argument name="actualValue" value="$getSpecialPrice"/>
         </actionGroup>
     </test>
 </tests>
