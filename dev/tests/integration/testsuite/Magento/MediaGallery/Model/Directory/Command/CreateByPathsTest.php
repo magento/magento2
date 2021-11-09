@@ -111,9 +111,9 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     public function testCreateDirectory(): void
     {
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
-        $this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME));
         $this->deleteByPaths->execute([self::TEST_DIRECTORY_NAME]);
-        $this->assertFileDoesNotExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->assertFalse($this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME));
     }
 
     /**
@@ -157,11 +157,11 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
         $childPath = $dir . '/testCreateDirectory';
 
         $this->createByPaths->execute([$dir]);
-        $this->mediaDirectory->isExist($this->mediaDirectoryPath . $dir);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . $dir));
         $this->createByPaths->execute([$childPath]);
-        $this->mediaDirectory->isExist($this->mediaDirectoryPath . $childPath);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . $childPath));
         $this->deleteByPaths->execute([$dir]);
-        $this->assertFileDoesNotExist($this->mediaDirectoryPath . $dir);
+        $this->assertFalse($this->mediaDirectory->isExist($this->mediaDirectoryPath . $dir));
     }
 
     /**
@@ -172,7 +172,7 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(CouldNotSaveException::class);
 
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
-        $this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
+        $this->assertTrue($this->mediaDirectory->isExist($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME));
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
     }
 
