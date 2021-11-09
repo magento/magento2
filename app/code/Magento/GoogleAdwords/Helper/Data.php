@@ -148,6 +148,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get conversion path to js src
      * @deprecated
+     * @see getConversionGtagGlobalSiteTagSrc()
      * @return string
      */
     public function getConversionJsSrc()
@@ -159,6 +160,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get conversion img src
      * @deprecated
+     * @see getConversionGtagGlobalSiteTagSrc()
      * @return string
      */
     public function getConversionImgSrc()
