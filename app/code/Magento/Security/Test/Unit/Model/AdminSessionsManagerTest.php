@@ -70,7 +70,15 @@ class AdminSessionsManagerTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['isActive', 'getStatus', 'getUser', 'getId', 'getUpdatedAt', 'getAdminSessionInfoId', 'setAdminSessionInfoId'])
+            ->addMethods([
+                'isActive',
+                'getStatus',
+                'getUser',
+                'getId',
+                'getUpdatedAt',
+                'getAdminSessionInfoId',
+                'setAdminSessionInfoId'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
