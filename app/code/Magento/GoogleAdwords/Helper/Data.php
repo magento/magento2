@@ -75,8 +75,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const CONVERSION_VALUE_TYPE_CONSTANT = 0;
 
-    const DEVELOPER_ID = 'dYjhlMD';
-
     /**#@-*/
 
     /**#@-*/
