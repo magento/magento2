@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Webapi\Model;
 
 use Magento\Framework\App\ObjectManager;
@@ -37,6 +40,8 @@ class ServiceMetadata
     const KEY_ROUTE_PARAMS = 'parameters';
 
     const KEY_METHOD_ALIAS = 'methodAlias';
+
+    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
 
     const SERVICES_CONFIG_CACHE_ID = 'services-services-config';
 
@@ -123,7 +128,8 @@ class ServiceMetadata
                         self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
                         self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
                         self::KEY_METHOD_ALIAS => $methodName,
-                        self::KEY_ROUTE_PARAMS => $methodMetadata[Converter::KEY_DATA_PARAMETERS]
+                        self::KEY_ROUTE_PARAMS => $methodMetadata[Converter::KEY_DATA_PARAMETERS],
+                        self::KEY_INPUT_ARRAY_SIZE_LIMIT => $methodMetadata[Converter::KEY_INPUT_ARRAY_SIZE_LIMIT],
                     ];
                     $services[$serviceName][self::KEY_CLASS] = $serviceClass;
                     $methods[] = $methodMetadata[Converter::KEY_REAL_SERVICE_METHOD];
@@ -311,9 +317,11 @@ class ServiceMetadata
                 $version = explode('/', ltrim($url, '/'))[0];
                 $serviceName = $this->getServiceName($serviceClass, $version);
                 $methodName = $data[Converter::KEY_SERVICE][Converter::KEY_METHOD];
+                $limit = $data[Converter::KEY_INPUT_ARRAY_SIZE_LIMIT];
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_METHOD] = $methodName;
                 $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_PARAMS]
                     = $data[Converter::KEY_DATA_PARAMETERS];
+                $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_INPUT_ARRAY_SIZE_LIMIT] = $limit;
             }
         }
         return $routes;

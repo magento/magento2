@@ -21,6 +21,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_METHODS = 'methods';
     const KEY_SYNCHRONOUS_INVOCATION_ONLY = 'synchronousInvocationOnly';
     const KEY_ROUTES = 'routes';
+    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
     private $allowedRouteMethods = [
@@ -183,11 +184,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $routeUrl = $this->getRouteUrl($route);
             $routeMethod = $this->getRouteMethod($route);
             $routeAlias = $this->getRouteAlias($route);
+            $inputArraySizeLimit =$this->getInputArraySizeLimit($route);
             if ($routeUrl && $routeMethod && $routeAlias) {
                 if (!isset($customRoutes[$routeAlias])) {
                     $customRoutes[$routeAlias] = [];
                 }
                 $customRoutes[$routeAlias][$routeMethod] = $routeUrl;
+                $customRoutes[$routeAlias][self::KEY_INPUT_ARRAY_SIZE_LIMIT] = $inputArraySizeLimit;
             }
         }
         return $customRoutes;
@@ -231,5 +234,27 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private function validateRouteMethod($method)
     {
         return in_array($method, $this->allowedRouteMethods);
+    }
+
+    /**
+     * Returns array size limit of input data
+     *
+     * @param \DOMElement $routeDOMElement
+     * @return int|null
+     */
+    private function getInputArraySizeLimit(\DOMElement $routeDOMElement): ?int
+    {
+        /** @var \DOMElement $dataDOMElement */
+        foreach ($routeDOMElement->getElementsByTagName('data') as $dataDOMElement) {
+            if ($dataDOMElement->nodeType === XML_ELEMENT_NODE) {
+                $inputArraySizeLimitDOMNode = $dataDOMElement->attributes
+                    ->getNamedItem(self::KEY_INPUT_ARRAY_SIZE_LIMIT);
+                return ($inputArraySizeLimitDOMNode instanceof \DOMNode)
+                    ? (int)$inputArraySizeLimitDOMNode->nodeValue
+                    : null;
+            }
+        }
+
+        return null;
     }
 }
