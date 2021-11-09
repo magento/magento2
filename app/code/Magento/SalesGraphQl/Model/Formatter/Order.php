@@ -54,7 +54,6 @@ class Order
             'number' => $orderModel->getIncrementId(),
             'order_date' => $orderModel->getCreatedAt(),
             'order_number' => $orderModel->getIncrementId(),
-            'status' => $orderModel->getStatusLabel(),
             'shipping_method' => $orderModel->getShippingDescription(),
             'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
             'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),

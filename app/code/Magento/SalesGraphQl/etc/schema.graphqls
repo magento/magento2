@@ -41,7 +41,7 @@ type CustomerOrders @doc(description: "The collection of orders that match the c
 type CustomerOrder @doc(description: "Contains details about each of the customer's orders") {
     id: ID! @doc(description: "The unique ID for a `CustomerOrder` object")
     order_date: String! @doc(description: "The date the order was placed")
-    status: String! @doc(description: "The current status of the order")
+    status: String! @doc(description: "The current status of the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderStatus")
     number: String! @doc(description: "The order number")
     items: [OrderItemInterface] @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItems")
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
