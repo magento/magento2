@@ -183,25 +183,30 @@ class Vat
         $requesterCountryCodeForVatNumber = $this->getCountryCodeForVatNumber($requesterCountryCode);
 
         try {
-            $soapClient = $this->createVatNumberValidationSoapClient();
+            if ($this->isExEuCountry($countryCode, $vatNumber)) {
+                $gatewayResponse->setIsValid(true);
+                $gatewayResponse->setRequestDate((string)date('Y-m-dP'));
+            } else {
+                $soapClient = $this->createVatNumberValidationSoapClient();
 
-            $requestParams = [];
-            $requestParams['countryCode'] = $countryCodeForVatNumber;
-            $vatNumberSanitized = $this->isCountryInEU($countryCode)
-                ? str_replace([' ', '-', $countryCodeForVatNumber], ['', '', ''], $vatNumber)
-                : str_replace([' ', '-'], ['', ''], $vatNumber);
-            $requestParams['vatNumber'] = $vatNumberSanitized;
-            $requestParams['requesterCountryCode'] = $requesterCountryCodeForVatNumber;
-            $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode)
-                ? str_replace([' ', '-', $requesterCountryCodeForVatNumber], ['', '', ''], $requesterVatNumber)
-                : str_replace([' ', '-'], ['', ''], $requesterVatNumber);
-            $requestParams['requesterVatNumber'] = $reqVatNumSanitized;
-            // Send request to service
-            $result = $soapClient->checkVatApprox($requestParams);
+                $requestParams = [];
+                $requestParams['countryCode'] = $countryCodeForVatNumber;
+                $vatNumberSanitized = $this->isCountryInEU($countryCode)
+                    ? str_replace([' ', '-', $countryCodeForVatNumber], ['', '', ''], $vatNumber)
+                    : str_replace([' ', '-'], ['', ''], $vatNumber);
+                $requestParams['vatNumber'] = $vatNumberSanitized;
+                $requestParams['requesterCountryCode'] = $requesterCountryCodeForVatNumber;
+                $reqVatNumSanitized = $this->isCountryInEU($requesterCountryCode)
+                    ? str_replace([' ', '-', $requesterCountryCodeForVatNumber], ['', '', ''], $requesterVatNumber)
+                    : str_replace([' ', '-'], ['', ''], $requesterVatNumber);
+                $requestParams['requesterVatNumber'] = $reqVatNumSanitized;
+                // Send request to service
+                $result = $soapClient->checkVatApprox($requestParams);
 
-            $gatewayResponse->setIsValid((bool)$result->valid);
-            $gatewayResponse->setRequestDate((string)$result->requestDate);
-            $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
+                $gatewayResponse->setIsValid((bool)$result->valid);
+                $gatewayResponse->setRequestDate((string)$result->requestDate);
+                $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
+            }
             $gatewayResponse->setRequestSuccess(true);
 
             if ($gatewayResponse->getIsValid()) {
@@ -248,11 +253,12 @@ class Vat
             || !is_string($requesterCountryCode)
             || !is_string($requesterVatNumber)
             || empty($countryCode)
-            || !$this->isCountryInEU($countryCode)
+            || !($this->isCountryInEU($countryCode) || $this->isExEuCountry($countryCode, $vatNumber))
             || empty($vatNumber)
-            || empty($requesterCountryCode) && !empty($requesterVatNumber)
-            || !empty($requesterCountryCode) && empty($requesterVatNumber)
-            || !empty($requesterCountryCode) && !$this->isCountryInEU($requesterCountryCode)
+            || (empty($requesterCountryCode) && !empty($requesterVatNumber))
+            || (!empty($requesterCountryCode) && empty($requesterVatNumber))
+            || (!empty($requesterCountryCode)
+                && !($this->isCountryInEU($requesterCountryCode) || $this->isExEuCountry($countryCode, $vatNumber)))
         );
     }
 
@@ -321,5 +327,50 @@ class Vat
         // instead of its ISO 3166-1 alpha-2 country code GR)"
 
         return $countryCode === 'GR' ? 'EL' : $countryCode;
+    }
+
+    /**
+     * A checksum logic to validate a VAT number for the United Kingdom after Brexit.
+     * Further can be extended to specific countries by adding new switch-cases.
+     *
+     * @param string $countryCode
+     * @param string $vatNumber
+     * @return bool
+     */
+    private function isExEuCountry(string $countryCode, string $vatNumber): bool
+    {
+        $str = (string) preg_replace('/[^a-zA-Z]+/', '', $vatNumber);
+
+        if ($str && $str !== $countryCode) {
+            return false;
+        }
+
+        switch ($countryCode) {
+            case 'GB':
+                $int = (int) filter_var($vatNumber, FILTER_SANITIZE_NUMBER_INT);
+
+                if (preg_match('/^[1-9]{1}[\d]{8}$/', $int) === false) {
+                    return false;
+                }
+
+                $arrMultipliers = [8, 7, 6, 5, 4, 3, 2];
+                $arrMultiplicand = str_split(substr($int, 0, 7));
+                $reminder = substr($int, -2);
+                $subtrahend = 97;
+
+                $total = 0;
+                foreach ($arrMultiplicand as $key => $price) {
+                    $total += ($price * $arrMultipliers[$key]);
+                }
+
+                while ($total > 0) {
+                    $total -= $subtrahend;
+                }
+
+                return (string) $reminder === (string) abs($total);
+
+            default:
+                return false;
+        }
     }
 }
