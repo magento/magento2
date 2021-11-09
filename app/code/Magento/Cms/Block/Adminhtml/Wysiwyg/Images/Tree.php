@@ -14,15 +14,11 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 class Tree extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Cms wysiwyg images
-     *
      * @var \Magento\Cms\Helper\Wysiwyg\Images
      */
     protected $_cmsWysiwygImages = null;

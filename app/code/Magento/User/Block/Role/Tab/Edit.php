@@ -29,8 +29,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     protected $_rootResource;
 
     /**
-     * Rules collection factory
-     *
      * @var \Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory
      */
     protected $_rulesCollectionFactory;
@@ -43,8 +41,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     protected $_aclRetriever;
 
     /**
-     * Acl resource provider
-     *
      * @var \Magento\Framework\Acl\AclResource\ProviderInterface
      */
     protected $_aclResourceProvider;
