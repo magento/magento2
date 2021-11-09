@@ -32,7 +32,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     protected $_order = null;
 
     /**
-     * Core registry
+     * Core registry object
      *
      * @var \Magento\Framework\Registry
      */
