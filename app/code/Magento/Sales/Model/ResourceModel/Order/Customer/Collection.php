@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer Grid Collection
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -23,7 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Customer collection
+ * Customer Grid Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
