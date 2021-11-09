@@ -361,20 +361,17 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      */    
     private function sortHistory(array $a, array $b): int
     {
-        $createdAtA = $a['created_at'];
-        $createdAtB = $b['created_at'];
-        
-        if ($createdAtA->getTimestamp() === $createdAtB->getTimestamp()) {
-            if ($a['type'] < $b['type']) {
-                return 1;
-            } elseif ($a['type'] > $b['type']) {
-                return -1;
-            } else {
-                return $a['entity_id'] <=> $b['entity_id'];
-            }
+        $result = $this->sortHistoryByTimestamp($a, $b);
+        if (0 !== $result) {
+            return $result;
         }
-
-        return $createdAtA->getTimestamp() <=> $createdAtB->getTimestamp();
+        
+        $result = $a['type'] <=> $b['type'];
+        if (0 !== $result) {
+            return $result;
+        }
+        
+        return $a['entity_id'] <=> $b['entity_id'];
     }
     
     /**
