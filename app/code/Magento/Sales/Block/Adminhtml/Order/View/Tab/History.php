@@ -359,7 +359,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param array $b
      * @return int
      */    
-    private function sortHistory($a, $b)
+    private function sortHistory(array $a, array $b): int
     {
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
