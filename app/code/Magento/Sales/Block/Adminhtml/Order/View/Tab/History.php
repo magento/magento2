@@ -258,7 +258,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param int $type
      * @return array
      */
-    protected function _prepareHistoryItemWithId($id, $label, $notified, $created, $comment = '', $type = 0)
+    private function _prepareHistoryItemWithId(int $id, string $label, bool $notified, \DateTimeInterface $created, string $comment = '', int $type = 0): array
     {
         return ['entity_id' => $id, 'title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created, 'type' => $type];
     }
