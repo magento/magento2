@@ -233,6 +233,7 @@ define([
 
             delete params.typeId;
             delete params.url;
+            this.requestSent = 1;
 
             return utils.ajaxSubmit({
                 url: url,
@@ -240,9 +241,7 @@ define([
                     ids: data,
                     'type_id': typeId
                 }
-            }, params)
-                .done(this.requestHandler.bind(this, name))
-                .always(this.requestSent = 1);
+            }, params).done(this.requestHandler.bind(this, name));
         }
     });
 });

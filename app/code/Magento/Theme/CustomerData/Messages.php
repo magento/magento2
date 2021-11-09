@@ -6,7 +6,6 @@
 
 namespace Magento\Theme\CustomerData;
 
-use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\RequestInterface;
@@ -43,31 +42,23 @@ class Messages implements SectionSourceInterface
     private $appConfig;
 
     /**
-     * @var Synchronizer
-     */
-    private $synchronizer;
-
-    /**
      * Constructor
      *
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
      * @param RequestInterface $request
      * @param Config $appConfig
-     * @param Synchronizer $synchronizer
      */
     public function __construct(
         MessageManager $messageManager,
         InterpretationStrategyInterface $interpretationStrategy,
         ?RequestInterface $request = null,
-        ?Config $appConfig = null,
-        ?Synchronizer $synchronizer = null
+        ?Config $appConfig = null
     ) {
         $this->messageManager = $messageManager;
         $this->interpretationStrategy = $interpretationStrategy;
         $this->request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
         $this->appConfig = $appConfig ?: ObjectManager::getInstance()->get(Config::class);
-        $this->synchronizer = $synchronizer ?: ObjectManager::getInstance()->get(Synchronizer::class);
     }
 
     /**
@@ -103,18 +94,13 @@ class Messages implements SectionSourceInterface
     {
         $forceNewSectionTimestampFlg = true;
 
-        if ((bool) $this->appConfig->getValue($this->synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
-            $sections = $this->request->getParam('sections') ?? null;
-            $sectionNames = $sections ? explode(',', $sections) : [];
+        if ((bool) $this->appConfig->getValue('catalog/recently_products/synchronize_with_backend')) {
+            $forceNewSectionTimestampFlg = false;
+            $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp')
+                ?? null;
 
-            if (in_array('cart', $sectionNames)) {
-                $forceNewSectionTimestampFlg = false;
-                $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp')
-                    ?? null;
-
-                if ('true' === $forceNewSectionTimestamp) {
-                    $forceNewSectionTimestampFlg = true;
-                }
+            if ('true' === $forceNewSectionTimestamp) {
+                $forceNewSectionTimestampFlg = true;
             }
         }
         return $forceNewSectionTimestampFlg;
