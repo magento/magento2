@@ -13,7 +13,7 @@ use Magento\Framework\DataObject;
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
-     * Admin helper
+     * Sales admin helper object
      *
      * @var \Magento\Sales\Helper\Admin
      */
