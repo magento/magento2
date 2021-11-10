@@ -52,7 +52,7 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @throws FileSystemException|RuntimeException
      */
@@ -76,7 +76,7 @@ class EntityArrayValidator implements ServiceInputValidatorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function validateEntityValue(object $entity, string $propertyName, $value): void

@@ -51,7 +51,9 @@ class ServiceMetadata
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var array
+     */
     protected $services;
 
     /**

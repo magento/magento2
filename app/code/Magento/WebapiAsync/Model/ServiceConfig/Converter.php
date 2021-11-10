@@ -24,6 +24,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
+    /**
+     * @var array
+     */
     private $allowedRouteMethods = [
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
         \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
@@ -33,7 +36,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -82,7 +86,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Checks if xml node can be converted
+     *
      * @param \DOMElement $node
+     *
      * @return bool
      */
     private function canConvertXmlNode(\DOMElement $node)
@@ -121,7 +128,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Returns service class
+     *
      * @param \DOMElement $service
+     *
      * @return null|string
      */
     private function getServiceClass(\DOMElement $service)
@@ -132,7 +142,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Returns service method
+     *
      * @param \DOMElement $service
+     *
      * @return null|string
      */
     private function getServiceMethod(\DOMElement $service)
@@ -143,7 +156,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Checks if synchronous method invocation only
+     *
      * @param \DOMElement $serviceNode
+     *
      * @return bool
      */
     private function isSynchronousMethodInvocationOnly(\DOMElement $serviceNode)
@@ -154,7 +170,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Checks if synchronous invocation only true
+     *
      * @param \DOMElement $synchronousInvocationOnlyNode
+     *
      * @return bool|mixed
      */
     private function isSynchronousInvocationOnlyTrue(\DOMElement $synchronousInvocationOnlyNode = null)
@@ -172,7 +191,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * Convert and merge "route" nodes, which represent route customizations
+     *
      * @param \DOMDocument $source
+     *
      * @return array
      */
     private function convertRouteCustomizations($source)
@@ -197,7 +218,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Returns route url
+     *
      * @param \DOMElement $route
+     *
      * @return null|string
      */
     private function getRouteUrl($route)
@@ -207,7 +231,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Returns route alias
+     *
      * @param \DOMElement $route
+     *
      * @return null|string
      */
     private function getRouteAlias($route)
@@ -217,7 +244,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Returns route method
+     *
      * @param \DOMElement $route
+     *
      * @return null|string
      */
     private function getRouteMethod($route)
@@ -228,7 +258,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Validates method of route
+     *
      * @param string $method
+     *
      * @return bool
      */
     private function validateRouteMethod($method)

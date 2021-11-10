@@ -39,7 +39,9 @@ class Config
     const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /*#@-*/
 
-    /*#@-*/
+    /**
+     * @var ModelConfigInterface
+     */
     protected $_config;
 
     /**
