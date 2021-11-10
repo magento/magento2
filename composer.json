@@ -67,7 +67,7 @@
         "magento/zendframework1": "1.14.6-beta1 as 1.14.6",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^6.0.0",
-        "php-amqplib/php-amqplib": "~3.0.0",
+        "php-amqplib/php-amqplib": "~3.1.0",
         "phpseclib/mcrypt_compat": "2.0.0",
         "phpseclib/phpseclib": "~3.0.9",
         "ramsey/uuid": "~4.2.0",
