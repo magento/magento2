@@ -87,8 +87,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_hasResources = true;
 
     /**
-     * User data
-     *
      * @var \Magento\User\Helper\Data
      */
     protected $_userData = null;
