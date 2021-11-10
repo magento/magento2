@@ -142,7 +142,7 @@ class HttpTest extends TestCase
     public function testGetBasePathWithoutPath()
     {
         $this->model = $this->getModel();
-        $this->model->setBasePath(null);
+        $this->model->setBasePath('');
         $this->assertEquals('/', $this->model->getBasePath());
     }
 
