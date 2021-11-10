@@ -156,8 +156,23 @@ class Handler
         }
         $service = $this->_objectManager->get($serviceClass);
         $inputData = $this->prepareOperationInput($serviceClass, $serviceMethodInfo, $arguments);
-        $outputData = call_user_func_array([$service, $serviceMethod], $inputData);
+        $outputData = $this->runServiceMethod($service, $serviceMethod, $inputData);
         return $this->_prepareResponseData($outputData, $serviceClass, $serviceMethod);
+    }
+
+    /**
+     * Runs service method
+     *
+     * @param $service
+     * @param $serviceMethod
+     * @param $inputData
+     *
+     * @return false|mixed
+     *
+     */
+    private function runServiceMethod($service, $serviceMethod, $inputData)
+    {
+     return call_user_func_array([$service, $serviceMethod], $inputData);
     }
 
     /**

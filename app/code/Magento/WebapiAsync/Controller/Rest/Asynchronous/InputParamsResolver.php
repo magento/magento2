@@ -91,7 +91,6 @@ class InputParamsResolver
         $this->isBulk = $isBulk;
         $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
             ->get(InputArraySizeLimitValue::class);
-
     }
 
     /**
