@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
@@ -19,7 +21,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
  */
 class CustomAttributes implements ResolverInterface
 {
-     /**
+    /**
      * @var AttributesCollection
      */
     private $attributesCollection;
