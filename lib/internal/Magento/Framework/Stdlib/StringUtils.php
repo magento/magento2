@@ -89,7 +89,7 @@ class StringUtils
             }
         } else {
             // split smartly, keeping words
-            $split = preg_split('/(' . $wordSeparatorRegex . '+)/siu', $value, null, PREG_SPLIT_DELIM_CAPTURE);
+            $split = preg_split('/(' . $wordSeparatorRegex . '+)/siu', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
             $index = 0;
             $space = '';
             $spaceLen = 0;
