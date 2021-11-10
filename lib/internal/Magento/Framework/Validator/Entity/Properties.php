@@ -1,7 +1,5 @@
 <?php
 /**
- * Validates properties of entity (\Magento\Framework\DataObject).
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +9,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Model\AbstractModel;
 
 /**
+ * Validates properties of entity (\Magento\Framework\DataObject).
+ *
  * @api
  */
 class Properties extends \Magento\Framework\Validator\AbstractValidator

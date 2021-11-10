@@ -1,13 +1,13 @@
 <?php
 /**
- * Validator constraint delegates validation to wrapped validator.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
 
 /**
+ * Validator constraint delegates validation to wrapped validator.
+ *
  * @api
  * @since 100.0.2
  */

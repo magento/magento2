@@ -67,6 +67,7 @@ class Render extends AbstractBlock
     protected function _prepareLayout()
     {
         $this->priceLayout->addHandle($this->getPriceRenderHandle());
+        //phpcs:ignore
         $this->priceLayout->loadLayout();
         return parent::_prepareLayout();
     }

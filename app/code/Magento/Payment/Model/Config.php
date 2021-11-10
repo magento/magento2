@@ -46,8 +46,6 @@ class Config
     protected $localeResolver;
 
     /**
-     * Payment method factory
-     *
      * @var \Magento\Payment\Model\Method\Factory
      */
     protected $_paymentMethodFactory;

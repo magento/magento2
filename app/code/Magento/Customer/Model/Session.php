@@ -48,15 +48,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_isCustomerIdChecked = null;
 
     /**
-     * Customer URL
-     *
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
 
     /**
-     * Core url
-     *
      * @var \Magento\Framework\Url\Helper\Data|null
      */
     protected $_coreUrl = null;

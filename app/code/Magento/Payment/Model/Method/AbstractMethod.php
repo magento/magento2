@@ -147,8 +147,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected $_debugReplacePrivateDataKeys = [];
 
     /**
-     * Payment data
-     *
      * @var \Magento\Payment\Helper\Data
      */
     protected $_paymentData;

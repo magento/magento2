@@ -45,8 +45,6 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $_loadExpired = false;
 
     /**
-     * Persistent data
-     *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData;
@@ -62,22 +60,16 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $_coreConfig;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Cookie manager
-     *
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManager;
 
     /**
-     * Cookie metadata factory
-     *
      * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     protected $_cookieMetadataFactory;
