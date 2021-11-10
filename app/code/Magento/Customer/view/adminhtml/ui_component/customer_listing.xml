@@ -225,7 +225,6 @@
         </column>
         <column name="dob" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date" sortOrder="170">
             <settings>
-                <timezone>false</timezone>
                 <dateFormat>MMM d, y</dateFormat>
                 <skipTimeZoneConversion>true</skipTimeZoneConversion>
                 <filter>dateRange</filter>

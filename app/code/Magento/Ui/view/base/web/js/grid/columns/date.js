@@ -48,7 +48,7 @@ define([
 
             date = moment.utc(this._super());
 
-            if (!_.isUndefined(this.timezone)) {
+            if (!_.isUndefined(this.timezone) && typeof this.timezone === 'string') {
                 date = date.tz(this.timezone);
             }
 
