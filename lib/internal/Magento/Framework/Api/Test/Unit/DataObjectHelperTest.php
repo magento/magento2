@@ -320,7 +320,6 @@ class DataObjectHelperTest extends TestCase
         $cc_ss_start_month = "0";
         $cc_ss_start_year = "0";
 
-
         /** @var OrderPaymentInterface $orderPaymentObject */
         $orderPaymentObject = $this->objectManager->getObject(
             Payment::class,
@@ -355,7 +354,7 @@ class DataObjectHelperTest extends TestCase
         $this->assertEquals($cc_exp_year, $orderPaymentObject->getCcExpYear());
         $this->assertEquals($cc_last_4, $orderPaymentObject->getCcLast4());
         $this->assertEquals($cc_owner, $orderPaymentObject->getCcOwner());
-        $this->assertEquals($cc_number_enc,$orderPaymentObject->getCcNumberEnc());
+        $this->assertEquals($cc_number_enc, $orderPaymentObject->getCcNumberEnc());
         $this->assertEquals($poNumber, $orderPaymentObject->getPoNumber());
         $this->assertEquals($cc_type, $orderPaymentObject->getCcType());
     }
