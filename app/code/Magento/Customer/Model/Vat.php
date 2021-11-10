@@ -330,8 +330,8 @@ class Vat
     }
 
     /**
-     * A checksum logic to validate a VAT number for the United Kingdom after Brexit.
-     * Further can be extended to specific countries by adding new switch-cases.
+     * A checksum logic to validate a VAT number for the United Kingdom after Brexit. Further it can be extended to
+     * specific countries by adding new switch-cases.
      *
      * @param string $countryCode
      * @param string $vatNumber
