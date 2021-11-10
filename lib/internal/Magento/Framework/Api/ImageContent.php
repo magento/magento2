@@ -58,6 +58,18 @@ class ImageContent extends AbstractSimpleObject implements ImageContentInterface
 
     /**
      * {@inheritdoc}
+     */
+    public function setData($key, $value)
+    {
+        if ($key === 'base_64_encoded_data') {
+            return parent::setData(self::BASE64_ENCODED_DATA, $value);
+        }
+
+        return parent::setData($key, $value);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @param string $mimeType
      * @return $this
