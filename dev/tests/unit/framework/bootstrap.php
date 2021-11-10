@@ -26,7 +26,7 @@ setCustomErrorHandler();
 
 \Magento\Framework\Phrase::setRenderer(new \Magento\Framework\Phrase\Renderer\Placeholder());
 
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set('display_errors', 1);
 
 /*  For data consistency between displaying (printing) and serialization a float number */
