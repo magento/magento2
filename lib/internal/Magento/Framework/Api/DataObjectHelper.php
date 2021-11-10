@@ -299,11 +299,11 @@ class DataObjectHelper
                 ',',
                 strtolower(
                     // (0) remove all not setter
-                    // (1) add _ before upper letter
+                    // (1) add _ before upper letter or digits
                     // (2) remove set_ in start of name
                     // (3) add name without is_ prefix
                     preg_replace(
-                        ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
+                        ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z]|[0-9]+)/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
                         ['', '$1_$2', '$1', '$1$2,is_$2'],
                         implode(',', $dataObjectMethods)
                     )
