@@ -858,7 +858,10 @@ class ProcessCronQueueObserver implements ObserverInterface
                     $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                     break;
                 }
-                $this->logger->warning("Could not acquire lock for cron job: {$schedule->getJobCode()}");
+            }
+
+            if ($retries === 0) {
+                $this->logger->critical("Could not acquire lock for cron job: {$schedule->getJobCode()}");
             }
         } catch (\Exception $e) {
             $this->processError($schedule, $e);
