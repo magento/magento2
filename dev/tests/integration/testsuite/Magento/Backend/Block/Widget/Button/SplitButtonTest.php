@@ -84,7 +84,10 @@ class SplitButtonTest extends TestCase
         $this->assertStringContainsString('<span>A button</span>', $html);
         $this->assertStringNotContainsString('onclick=', $html);
         $this->assertStringNotContainsString('style=', $html);
-        $this->assertMatchesRegularExpression('/\<script.*?\>.*?' . preg_quote($onclick) . '.*?\<\/script\>/ims', $html);
+        $this->assertMatchesRegularExpression(
+            '/\<script.*?\>.*?' . preg_quote($onclick) . '.*?\<\/script\>/ims',
+            $html
+        );
         $this->assertStringContainsString('width', $html);
         $this->assertStringContainsString('100px', $html);
         $this->assertStringContainsString('aria-label="Split button options"', $html);
