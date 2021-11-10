@@ -59,13 +59,14 @@ class OptionManagementTest extends TestCase
 
     /**
      * Test to add attribute option
+     *
+     * @dataProvider optionLabelDataProvider
      */
-    public function testAdd()
+    public function testAdd($label)
     {
         $entityType = 42;
         $storeId = 4;
         $attributeCode = 'atrCde';
-        $label = 'optionLabel';
         $storeLabel = 'labelLabel';
         $sortOder = 'optionSortOrder';
         $option = [
@@ -119,6 +120,17 @@ class OptionManagementTest extends TestCase
             $newOptionId,
             $this->model->add($entityType, $attributeCode, $optionMock)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function optionLabelDataProvider(): array
+    {
+        return [
+            ['optionLabel'],
+            ['0']
+        ];
     }
 
     /**
