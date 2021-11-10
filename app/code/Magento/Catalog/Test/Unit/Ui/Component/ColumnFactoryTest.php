@@ -181,7 +181,7 @@ class ColumnFactoryTest extends TestCase
                     'visible' => true,
                     'filter' => 'dateRange',
                     'component' => 'Magento_Ui/js/grid/columns/date',
-                    'timezone' => $expectedTimezone,
+                    'timeZone' => $expectedTimezone,
                     'dateFormat' => $expectedDateFormat,
                     'options' => [
                         'showsTime' => $showsTime

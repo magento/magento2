@@ -136,7 +136,7 @@ class ColumnFactory
             : $this->timezone->getDefaultTimezone();
 
         return [
-            'timezone' => $timezone,
+            'timeZone' => $timezone,
             'dateFormat' => $dateFormat,
             'options' => ['showsTime' => $isDatetime],
         ];
