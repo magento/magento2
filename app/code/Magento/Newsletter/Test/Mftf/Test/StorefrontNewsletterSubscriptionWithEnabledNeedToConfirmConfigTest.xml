@@ -11,8 +11,8 @@
     <test name="StorefrontNewsletterSubscriptionWithEnabledNeedToConfirmConfigTest">
         <annotations>
             <features value="Newsletter Subscription"/>
-            <stories value="Subscribe To Newsletter Subscription on StoreFront With Enabled Need To Confirm Config"/>
-            <title value="StoreFront Customer Newsletter Subscription"/>
+            <stories value="Subscribe To Newsletter Subscription on Storefront With Enabled Need To Confirm Config"/>
+            <title value="Storefront Newsletter Subscription with enabled Need To Confirm Config"/>
             <description value="Customers and guests should receive correct notification if Need To Confirm Config is enabled for newsletter subscription"/>
             <severity value="MINOR"/>
             <group value="newsletter"/>
