@@ -128,6 +128,7 @@
             <actualResult type="string">$getFirstProductStarsAtListView</actualResult>
             <expectedResult type="string">width: 80%;</expectedResult>
         </assertEquals>
+        <!-- Check stars at list view for second product -->
         <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductStarsAtListView"/>
         <assertEquals stepKey="checkSecondProductStarsAtListView">
             <actualResult type="string">$getSecondProductStarsAtListView</actualResult>
