@@ -20,6 +20,7 @@ return [
         'es_MX',
         'Authorization',
         'CREDIT,ELV,CARD',
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -46,7 +47,7 @@ return [
                             'sofort'
                         ]
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -55,6 +56,7 @@ return [
         'en_BR',
         'Sale',
         null,
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -69,7 +71,7 @@ return [
                         ',',
                         ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -78,6 +80,7 @@ return [
         'en_US',
         'Order',
         null,
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -92,7 +95,7 @@ return [
                         ',',
                         ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -101,6 +104,7 @@ return [
         'en_BR',
         'Authorization',
         'CREDIT,ELV',
+        false,
         false,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -127,7 +131,7 @@ return [
                             'sofort'
                         ]
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -136,6 +140,7 @@ return [
         'en_BR',
         'Authorization',
         'CREDIT,ELV',
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -150,7 +155,56 @@ return [
                         ',',
                         ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
+                    'components' => implode(',', ['messages', 'buttons']),
+                ]
+            )
+        ]
+    ],
+    'buyer_country_enabled' => [
+        'en_BR',
+        'Authorization',
+        'CREDIT,ELV',
+        true,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_BR',
+                    'currency' => 'USD',
+                    'buyer-country' => 'US',
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    ),
                     'components' => implode(',', ['messages', 'buttons'])
+                ]
+            )
+        ]
+    ],
+    'buyer_country_disabled' => [
+        'en_BR',
+        'Authorization',
+        'CREDIT,ELV',
+        false,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_BR',
+                    'currency' => 'USD',
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    ),
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]

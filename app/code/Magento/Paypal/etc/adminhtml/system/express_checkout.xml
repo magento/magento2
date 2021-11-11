@@ -103,6 +103,15 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
                 </field>
+                <field id="buyer_country" translate="label" type="select" sortOrder="85" showInDefault="1" showInWebsite="1">
+                    <label>Buyer Country</label>
+                    <config_path>payment/paypal_express/buyer_country</config_path>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <attribute type="shared">1</attribute>
+                    <depends>
+                        <field id="sandbox_flag">1</field>
+                    </depends>
+                </field>
                 <field id="use_proxy" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1">
                     <label>API Uses Proxy</label>
                     <config_path>paypal/wpp/use_proxy</config_path>

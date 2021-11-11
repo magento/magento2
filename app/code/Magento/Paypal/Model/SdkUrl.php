@@ -42,7 +42,6 @@ class SdkUrl
     private $queryParams = [];
 
     /**
-     * Maps the old checkout SDK configuration values to the current ones
      *
      * @var array
      */
@@ -61,7 +60,6 @@ class SdkUrl
     private $localeResolver;
 
     /**
-     * Generated Url to PayPAl SDK
      *
      * @var string
      */
@@ -105,6 +103,7 @@ class SdkUrl
                 'client-id' => $this->getClientId(),
                 'locale' => $this->localeResolver->getLocale(),
                 'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
+                'buyer-country' => $this->getBuyerCountry(),
             ];
 
             if ($this->areMessagesEnabled()) {
@@ -156,7 +155,7 @@ class SdkUrl
      */
     private function areButtonsEnabled()
     {
-        return (bool)(int) $this->config->getValue('in_context');
+        return (bool)(int)$this->config->getValue('in_context');
     }
 
     /**
@@ -169,6 +168,16 @@ class SdkUrl
         return (int)$this->config->getValue('sandbox_flag') ?
             $this->config->getValue('sandbox_client_id') :
             $this->config->getValue('client_id');
+    }
+
+    /**
+     * Get Configured value for paypal buyer country
+     *
+     * @return string
+     */
+    private function getBuyerCountry(): ?string
+    {
+        return (int)$this->config->getValue('sandbox_flag') ? $this->config->getValue('buyer_country') : '';
     }
 
     /**
