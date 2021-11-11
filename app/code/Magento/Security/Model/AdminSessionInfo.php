@@ -46,6 +46,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     /**
      * All other open sessions were terminated
      * @since 100.1.0
+     * @var bool
      */
     protected $isOtherSessionsTerminated = false;
 
@@ -132,10 +133,10 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
         $currentTime = $this->dateTime->gmtTimestamp();
         $lastUpdatedTime = $this->getUpdatedAt();
         if (!is_numeric($lastUpdatedTime)) {
-            $lastUpdatedTime = strtotime($lastUpdatedTime);
+            $lastUpdatedTime = $lastUpdatedTime === null ? 0 : strtotime($lastUpdatedTime);
         }
 
-        return $lastUpdatedTime <= ($currentTime - $lifetime) ? true : false;
+        return $lastUpdatedTime <= ($currentTime - $lifetime);
     }
 
     /**
