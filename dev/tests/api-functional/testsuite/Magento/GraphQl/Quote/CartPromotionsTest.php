@@ -434,7 +434,10 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
-        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], $sumOfPricesForBothProducts);
+        $this->assertEquals(
+            $response['cart']['prices']['discounts'][0]['amount']['value'],
+            $sumOfPricesForBothProducts
+        );
     }
 
     /**
