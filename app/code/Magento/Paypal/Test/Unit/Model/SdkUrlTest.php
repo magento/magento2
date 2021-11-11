@@ -75,7 +75,8 @@ class SdkUrlTest extends TestCase
             $scopeConfigMock,
             $storeManagerMock,
             $this->getDisallowedFundingMap(),
-            $this->getUnsupportedPaymentMethods()
+            $this->getUnsupportedPaymentMethods(),
+            $this->getSupportedPaymentMethods()
         );
     }
 
@@ -115,6 +116,11 @@ class SdkUrlTest extends TestCase
                 ],
             ]
         );
+
+        $this->configMock->method('getPayLaterConfigValue')
+            ->with('experience_active')
+            ->willReturn(true);
+
         self::assertEquals($expected['sdkUrl'], $this->model->getUrl());
     }
 
@@ -152,14 +158,27 @@ class SdkUrlTest extends TestCase
     private function getUnsupportedPaymentMethods()
     {
         return [
-            'venmo' => 'venmo',
             'bancontact' => 'bancontact',
             'eps' => 'eps',
             'giropay' => 'giropay',
             'ideal' => 'ideal',
             'mybank' => 'mybank',
             'p24' => 'p24',
-            'sofort' => 'sofort'
+            'sofort' => 'sofort',
+        ];
+    }
+
+    /**
+     * Get supported payment methods
+     * See app/code/Magento/Paypal/etc/frontend/di.xml
+     *
+     * @return string[]
+     */
+    private function getSupportedPaymentMethods()
+    {
+        return [
+            'venmo'=> 'venmo',
+            'paylater'=> 'paylater',
         ];
     }
 }
