@@ -5,7 +5,12 @@
  */
 namespace Magento\Downloadable\Helper;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * Downloadable Products File Helper
@@ -16,11 +21,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class File extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
+
+    /**
+     * @var DriverInterface
+     */
+    private $driver;
 
     /**
      * Filesystem object.
@@ -41,12 +49,15 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $mimeTypes
+     * @param DriverInterface|null $driver
+     * @throws FileSystemException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
-        array $mimeTypes = []
+        array $mimeTypes = [],
+        DriverInterface $driver = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
@@ -57,20 +68,24 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 self::$_mimeTypes[$key] = $value;
             }
         }
+        $this->driver = $driver ?: ObjectManager::getInstance()
+            ->create(DriverInterface::class);
     }
 
     /**
      * Upload file from temporary folder.
+     *
      * @param string $tmpPath
-     * @param \Magento\MediaStorage\Model\File\Uploader $uploader
+     * @param Uploader $uploader
+     *
      * @return array
      */
-    public function uploadFromTmp($tmpPath, \Magento\MediaStorage\Model\File\Uploader $uploader)
+    public function uploadFromTmp($tmpPath, Uploader $uploader)
     {
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(true);
         $absoluteTmpPath = $this->_mediaDirectory->getAbsolutePath($tmpPath);
-        $result = $uploader->save($absoluteTmpPath);
+        $result = $uploader->save($absoluteTmpPath) ?: [];
         unset($result['path']);
 
         return $result;
@@ -78,11 +93,13 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Checking file for moving and move it
+     *
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string $file
+     *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
@@ -92,7 +109,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 try {
                     $fileName = $this->_moveFileFromTmp($baseTmpPath, $basePath, $file[0]['file']);
                 } catch (\Exception $e) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
+                    throw new LocalizedException(
                         __('Something went wrong while saving the file(s).')
                     );
                 }
@@ -104,6 +121,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if file exist in filesystem and try to re-create it from database record if negative.
+     *
      * @param string $file
      * @return bool|int
      */
@@ -131,9 +149,9 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             $file = substr($file, 0, strlen($file) - 4);
         }
 
-        $destFile = dirname(
+        $destFile = $this->driver->getParentDirectory(
             $file
-        ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+        ) . '/' . Uploader::getNewFileName(
             $this->getFilePath($basePath, $file)
         );
 
@@ -180,6 +198,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Get filesize in bytes.
+     *
      * @param string $file
      * @return int
      */
@@ -189,6 +208,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get file type
+     *
      * @param string $filePath
      * @return string
      */
@@ -199,6 +220,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get file type by ext
+     *
      * @param string $ext
      * @return string
      */
@@ -212,6 +235,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get all file types
+     *
      * @return array
      */
     public function getAllFileTypes()
@@ -220,6 +245,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get all mine types
+     *
      * @return array
      */
     public function getAllMineTypes()

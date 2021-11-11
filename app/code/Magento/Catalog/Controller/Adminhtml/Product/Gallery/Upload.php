@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class Upload
+ * The product gallery upload controller
  */
 class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -20,7 +20,7 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -98,6 +98,9 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
 
+            if ($result === false) {
+                throw new LocalizedException(__('Something went wrong while saving the file(s).'));
+            }
             $this->_eventManager->dispatch(
                 'catalog_product_gallery_upload_image_after',
                 ['result' => $result, 'action' => $this]
