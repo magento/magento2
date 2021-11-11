@@ -28,14 +28,18 @@
         </after>
 
         <!--Open Category Page-->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openAdminCategoryIndexPage"/>
 
         <!--Update Category name,description, urlKey, meta title and disable Include in Menu-->
-        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillCategoryName"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="selectCreatedCategory">
+            <argument name="category" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillCategoryName">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIncludeInMenu"/>
+        <actionGroup ref="AdminDisableIncludeInMenuConfigActionGroup" stepKey="disableIncludeInMenu"/>
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
         <scrollTo selector="{{AdminCategoryContentSection.description}}" x="0" y="-80" stepKey="scrollToDescription"/>
@@ -46,28 +50,40 @@
         <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillUpdatedMetaTitle"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />
 
         <!--Open UrlRewrite Page-->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
-        <waitForPageLoad stepKey="waitForUrlRewritePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openUrlRewriteIndexPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUrlRewritePage"/>
 
         <!--Verify Updated Category UrlKey-->
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedCategoryUrlKey"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see stepKey="seeCategoryUrlKey" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{SimpleRootSubCategory.url_key}}.html" />
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openUrlRewriteGridFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillUpdatedCategoryUrlKey"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOrderApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="seeCategoryUrlKey">
+            <argument name="redirectPath" value="{{SimpleRootSubCategory.url_key}}.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+
         <!--Verify Updated Category UrlKey directs to category Store Front-->
-        <amOnPage url="{{SimpleRootSubCategory.url_key}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
-        <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleRootSubCategory.name)}}" stepKey="seeUpdatedCategoryInStoreFrontPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeTheCategoryInStoreFrontPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontPageLoad"/>
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="seeUpdatedCategoryInStoreFrontPage">
+            <argument name="categoryEntity" value="SimpleRootSubCategory"/>
+        </actionGroup>
 
         <!--Verify Updated fields in Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCreatedCategory1"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory1">
+            <argument name="category" value="SimpleRootSubCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
+        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seeUpdatedCategoryTitle">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
         <seeInField  selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryName"/>
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent1"/>
