@@ -194,7 +194,8 @@ class ServiceInputProcessorTest extends TestCase
                     $this->inputArraySizeLimitValue
                 ),
                 'defaultPageSizeSetter' => $this->defaultPageSizeSetter,
-                'defaultPageSize' => 123
+                'defaultPageSize' => 123,
+                'inputArraySizeLimitValue' => $this->inputArraySizeLimitValue
             ]
         );
 

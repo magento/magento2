@@ -15,6 +15,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -24,6 +25,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
@@ -99,9 +101,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSize;
 
     /**
-     * @var DefaultPageSizeSetter|null
+     * @var DefaultPageSizeSetter
      */
     private $defaultPageSizeSetter;
+
+    /**
+     * @var InputArraySizeLimitValue
+     */
+    private $inputArraySizeLimitValue;
 
     /**
      * Initialize dependencies.
@@ -117,6 +124,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param ServiceInputValidatorInterface|null $serviceInputValidator
      * @param int $defaultPageSize
      * @param DefaultPageSizeSetter|null $defaultPageSizeSetter
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -130,7 +138,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         array $customAttributePreprocessors = [],
         ServiceInputValidatorInterface $serviceInputValidator = null,
         int $defaultPageSize = 20,
-        ?DefaultPageSizeSetter $defaultPageSizeSetter = null
+        ?DefaultPageSizeSetter $defaultPageSizeSetter = null,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -147,6 +156,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->defaultPageSize = $defaultPageSize >= 10 ? $defaultPageSize : 10;
         $this->defaultPageSizeSetter = $defaultPageSizeSetter ?? ObjectManager::getInstance()
             ->get(DefaultPageSizeSetter::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -177,20 +188,21 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceClassName name of the service class that we are trying to call
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
+     * @param int|null $inputArraySizeLimit size limit for input array
      * @return array list of parameters that can be used to call the service method
-     * @throws WebapiException
+     * @throws Exception
+     * @throws LocalizedException
      */
-    public function process($serviceClassName, $serviceMethodName, array $inputArray)
+    public function process($serviceClassName, $serviceMethodName, array $inputArray, ?int $inputArraySizeLimit = null)
     {
         $inputData = [];
         $inputError = [];
+
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
             $paramName = $param[MethodsMap::METHOD_META_NAME];
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
-                $paramValue = isset($inputArray[$paramName])
-                    ? $inputArray[$paramName]
-                    : $inputArray[$snakeCaseParamName];
+                $paramValue = $inputArray[$paramName] ?? $inputArray[$snakeCaseParamName];
 
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
@@ -205,7 +217,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 }
             }
         }
+
         $this->processInputError($inputError);
+        $this->inputArraySizeLimitValue->set($inputArraySizeLimit);
+
         return $inputData;
     }
 
@@ -216,7 +231,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return array
      * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
@@ -490,7 +505,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function convertValue($data, $type)
     {

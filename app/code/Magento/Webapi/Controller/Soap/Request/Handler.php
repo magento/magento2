@@ -18,7 +18,6 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Request as SoapRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
-use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
@@ -81,11 +80,6 @@ class Handler
     private $paramsOverrider;
 
     /**
-     * @var InputArraySizeLimitValue
-     */
-    private $inputArraySizeLimitValue;
-
-    /**
      * Initialize dependencies.
      *
      * @param SoapRequest $request
@@ -97,7 +91,6 @@ class Handler
      * @param DataObjectProcessor $dataObjectProcessor
      * @param MethodsMap $methodsMapProcessor
      * @param ParamsOverrider|null $paramsOverrider
-     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         SoapRequest $request,
@@ -108,8 +101,7 @@ class Handler
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
         MethodsMap $methodsMapProcessor,
-        ?ParamsOverrider $paramsOverrider = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        ?ParamsOverrider $paramsOverrider = null
     ) {
         $this->_request = $request;
         $this->_objectManager = $objectManager;
@@ -120,8 +112,6 @@ class Handler
         $this->_dataObjectProcessor = $dataObjectProcessor;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->paramsOverrider = $paramsOverrider ?? ObjectManager::getInstance()->get(ParamsOverrider::class);
-        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
-                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -183,7 +173,6 @@ class Handler
      * @param array $arguments
      * @return array
      * @throws WebapiException
-     * @throws \Magento\Framework\Exception\InputException
      */
     private function prepareOperationInput(string $serviceClass, array $methodMetadata, array $arguments): array
     {
@@ -191,12 +180,12 @@ class Handler
         $arguments = reset($arguments);
         $arguments = $this->_dataObjectConverter->convertStdObjectToArray($arguments, true);
         $arguments = $this->paramsOverrider->override($arguments, $methodMetadata[ServiceMetadata::KEY_ROUTE_PARAMS]);
-        $this->inputArraySizeLimitValue->set($methodMetadata[ServiceMetadata::KEY_INPUT_ARRAY_SIZE_LIMIT]);
 
         return $this->serviceInputProcessor->process(
             $serviceClass,
             $methodMetadata[ServiceMetadata::KEY_METHOD],
-            $arguments
+            $arguments,
+            $methodMetadata[ServiceMetadata::KEY_INPUT_ARRAY_SIZE_LIMIT]
         );
     }
 

@@ -44,6 +44,7 @@ class Config
      * @param Request $request
      * @return Route[]
      * @throws InputException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function afterGetRestRoutes(RestConfig $restConfig, array $routes, Request $request): array
     {

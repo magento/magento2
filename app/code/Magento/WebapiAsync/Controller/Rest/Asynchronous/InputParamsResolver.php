@@ -8,13 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Controller\Rest\Asynchronous;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\InputParamsResolver as WebapiInputParamsResolver;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\RequestValidator;
@@ -56,11 +54,6 @@ class InputParamsResolver
     private $isBulk;
 
     /**
-     * @var InputArraySizeLimitValue|null
-     */
-    private $inputArraySizeLimitValue;
-
-    /**
      * Initialize dependencies.
      *
      * @param RestRequest $request
@@ -70,7 +63,6 @@ class InputParamsResolver
      * @param RequestValidator $requestValidator
      * @param WebapiInputParamsResolver $inputParamsResolver
      * @param bool $isBulk
-     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,
@@ -79,8 +71,7 @@ class InputParamsResolver
         Router $router,
         RequestValidator $requestValidator,
         WebapiInputParamsResolver $inputParamsResolver,
-        $isBulk = false,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        $isBulk = false
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -89,8 +80,6 @@ class InputParamsResolver
         $this->requestValidator = $requestValidator;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->isBulk = $isBulk;
-        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
-            ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -112,7 +101,6 @@ class InputParamsResolver
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
         $route = $this->getRoute();
-        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
         foreach ($this->getInputData() as $key => $singleEntityParams) {
             $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams, $route);
@@ -169,7 +157,8 @@ class InputParamsResolver
         return $this->serviceInputProcessor->process(
             $route->getServiceClass(),
             $route->getServiceMethod(),
-            $inputData
+            $inputData,
+            $route->getInputArraySizeLimit()
         );
     }
 }

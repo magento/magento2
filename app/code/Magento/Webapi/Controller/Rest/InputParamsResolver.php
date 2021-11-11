@@ -10,11 +10,11 @@ namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
@@ -58,11 +58,6 @@ class InputParamsResolver
     private $methodsMap;
 
     /**
-     * @var InputArraySizeLimitValue
-     */
-    private $inputArraySizeLimitValue;
-
-    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -71,7 +66,6 @@ class InputParamsResolver
      * @param Router $router
      * @param RequestValidator $requestValidator
      * @param MethodsMap|null $methodsMap
-     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,
@@ -80,7 +74,6 @@ class InputParamsResolver
         Router $router,
         RequestValidator $requestValidator,
         MethodsMap $methodsMap = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -89,26 +82,25 @@ class InputParamsResolver
         $this->requestValidator = $requestValidator;
         $this->methodsMap = $methodsMap ?: ObjectManager::getInstance()
             ->get(MethodsMap::class);
-        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?: ObjectManager::getInstance()
-            ->get(InputArraySizeLimitValue::class);
     }
 
     /**
      * Process and resolve input parameters
      *
      * @return array
-     * @throws Exception
+     * @throws Exception|AuthorizationException
      */
     public function resolve()
     {
         $this->requestValidator->validate();
         $route = $this->getRoute();
-        $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
-        $inputData = $this->getInputData();
-        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
-        return $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
+        return $this->serviceInputProcessor->process(
+            $route->getServiceClass(),
+            $route->getServiceMethod(),
+            $this->getInputData(),
+            $route->getInputArraySizeLimit()
+        );
     }
 
     /**
