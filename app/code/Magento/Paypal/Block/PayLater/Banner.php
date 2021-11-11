@@ -48,15 +48,15 @@ class Banner extends Template
      * @param Template\Context $context
      * @param PayLaterConfig $payLaterConfig
      * @param SdkUrl $sdkUrl
-     * @param array $data
      * @param PaypalConfig $paypalConfig
+     * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PayLaterConfig $payLaterConfig,
         SdkUrl $sdkUrl,
-        array $data = [],
-        PaypalConfig $paypalConfig
+        PaypalConfig $paypalConfig,
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->payLaterConfig = $payLaterConfig;
