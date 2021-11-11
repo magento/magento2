@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Webapi\Model\Authorization;
+namespace Magento\Integration\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -19,7 +19,7 @@ class AuthorizationConfig
     /**
      * XML Path for Enable Integration as Bearer
      */
-    const CONFIG_PATH_INTEGRATION_BEARER = 'webapi/authorization/enable_integration_as_bearer';
+    const CONFIG_PATH_INTEGRATION_BEARER = 'oauth/consumer/enable_integration_as_bearer';
 
     /**
      * @var ScopeConfigInterface

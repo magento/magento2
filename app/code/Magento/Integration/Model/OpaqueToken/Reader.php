@@ -13,11 +13,11 @@ use Magento\Integration\Api\Data\UserToken;
 use Magento\Integration\Api\Exception\UserTokenException;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Api\UserTokenReaderInterface;
+use Magento\Integration\Model\Config\AuthorizationConfig;
 use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Helper\Oauth\Data as OauthHelper;
-use Magento\Webapi\Model\Authorization\AuthorizationConfig;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -147,6 +147,6 @@ class Reader implements UserTokenReaderInterface
             throw new UserTokenException('Invalid token found');
         }
 
-        return $userId;
+        return (int)$userId;
     }
 }
