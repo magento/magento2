@@ -140,6 +140,7 @@ class Image extends File
         $rules = $this->getAttribute()->getValidationRules();
 
         try {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $imageProp = getimagesize($value['tmp_name']);
         } catch (\Throwable $e) {
             $imageProp = false;
