@@ -133,10 +133,10 @@ class UserExpirationManager
     /**
      * Check if the given user is expired.
      *
-     * @param string $userId
+     * @param int $userId
      * @return bool
      */
-    public function isUserExpired(string $userId): bool
+    public function isUserExpired(int $userId): bool
     {
         $isExpired = false;
         /** @var \Magento\Security\Api\Data\UserExpirationInterface $expiredRecord */

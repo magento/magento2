@@ -64,10 +64,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get any expired records for the given user.
      *
-     * @param string $userId
+     * @param int $userId
      * @return Collection
      */
-    public function addExpiredRecordsForUserFilter(string $userId): Collection
+    public function addExpiredRecordsForUserFilter(int $userId): Collection
     {
         return $this->addActiveExpiredUsersFilter()
             ->addFieldToFilter('main_table.user_id', (int)$userId);
