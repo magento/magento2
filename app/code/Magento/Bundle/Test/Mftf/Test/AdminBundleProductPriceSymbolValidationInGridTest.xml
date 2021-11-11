@@ -26,7 +26,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
-            <!-- Navigate to catalog product index page -->
+            <!-- Navigate to catalog product grid page -->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
             <!-- Set product grid to default columns -->
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
@@ -57,7 +57,7 @@
             <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
             <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
         </actionGroup>
-        <!-- Add the default attribute value for the bundle product creation page-->
+        <!-- Add the default attribute value for the bundle product creation page -->
         <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProduct">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
