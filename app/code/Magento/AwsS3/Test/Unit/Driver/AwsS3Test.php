@@ -64,6 +64,7 @@ class AwsS3Test extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getAbsolutePathDataProvider(): array
     {
