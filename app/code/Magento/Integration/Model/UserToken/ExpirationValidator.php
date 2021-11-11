@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Model\UserToken;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Integration\Api\Data\UserToken;
 use Magento\Integration\Api\UserTokenValidatorInterface;
@@ -33,7 +34,9 @@ class ExpirationValidator implements UserTokenValidatorInterface
      */
     public function validate(UserToken $token): void
     {
-        if ($token->getData()->getExpires()->getTimestamp() <= $this->datetimeUtil->gmtTimestamp()) {
+        if ($token->getUserContext()->getUserType() !== UserContextInterface::USER_TYPE_INTEGRATION
+            && $token->getData()->getExpires()->getTimestamp() <= $this->datetimeUtil->gmtTimestamp()
+        ) {
             throw new AuthorizationException(__('Consumer key has expired'));
         }
     }
