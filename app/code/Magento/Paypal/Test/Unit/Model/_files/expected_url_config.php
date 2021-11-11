@@ -175,15 +175,16 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'en_BR',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'buyer-country' => 'US',
                     'commit' => 'false',
                     'intent' => 'authorize',
                     'merchant-id' => 'merchant',
                     'disable-funding' => implode(
                         ',',
-                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                        ['credit', 'sepa', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -200,12 +201,13 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'en_BR',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'commit' => 'false',
                     'intent' => 'authorize',
                     'merchant-id' => 'merchant',
                     'disable-funding' => implode(
                         ',',
-                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                        ['credit', 'sepa', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
                     'components' => implode(',', ['messages', 'buttons']),
                 ]
