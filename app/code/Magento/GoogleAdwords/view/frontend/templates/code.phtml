@@ -5,13 +5,16 @@
  */
 ?>
 <?php
+/** @var \Magento\GoogleAdwords\Block\Code $block */
+/** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\GoogleAdwords\Helper\Data $helper */
 $helper = $block->getHelper();
-if ($helper->isGoogleAdwordsConfigurable()) {
-    ?>
-<script>
-if (<?= $helper->isGoogleAdwordsActive() ?>) {
-    gtag('event', 'conversion', {'send_to': '<?= $helper->getConversionId() ?>' + '/' + '<?= $helper->getConversionLabel() ?>'});
-}
-</script>
-<?php } ?>
+?>
+
+<?php if ($helper->isGoogleAdwordsConfigurable() && $helper->isGoogleAdwordsActive()) : ?>
+    <?php $conversionId = $this->escapeHtml($helper->getConversionId()); ?>
+    <?php $conversionLabel = $this->escapeHtml($helper->getConversionLabel()); ?>
+    <script>
+        gtag('event', 'conversion', {'send_to': '<?= $conversionId ?>' + '/' + '<?= $conversionLabel ?>'});
+    </script>
+<?php endif ?>
