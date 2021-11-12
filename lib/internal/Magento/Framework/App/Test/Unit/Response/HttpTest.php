@@ -245,7 +245,7 @@ class HttpTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Time to live is a mandatory parameter for set public headers');
-        $this->model->setPublicHeaders('');
+        $this->model->setPublicHeaders(null);
     }
 
     /**

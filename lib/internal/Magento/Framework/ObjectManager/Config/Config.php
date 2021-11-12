@@ -5,14 +5,11 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManager\ConfigCacheInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 
-/**
- * The object manager config
- */
 class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {
     /**
@@ -30,7 +27,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_definitions;
 
     /**
-     * The current cache key
+     * Current cache key
      *
      * @var string
      */
@@ -44,7 +41,7 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_preferences = [];
 
     /**
-     * The list of virtual types
+     * Virtual types
      *
      * @var array
      */
@@ -79,23 +76,18 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     protected $_mergedArguments;
 
     /**
-     * @var SerializerInterface
+     * @var \Magento\Framework\Serialize\SerializerInterface
      */
     private $serializer;
 
     /**
-     * @param RelationsInterface|null $relations
-     * @param DefinitionInterface|null $definitions
-     * @param SerializerInterface|null $serializer
+     * @param RelationsInterface $relations
+     * @param DefinitionInterface $definitions
      */
-    public function __construct(
-        RelationsInterface $relations = null,
-        DefinitionInterface $definitions = null,
-        SerializerInterface $serializer = null
-    ) {
+    public function __construct(RelationsInterface $relations = null, DefinitionInterface $definitions = null)
+    {
         $this->_relations = $relations ?: new \Magento\Framework\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
-        $this->serializer = $serializer ?: new \Magento\Framework\Serialize\Serializer\Json();
     }
 
     /**
@@ -283,14 +275,14 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
                 // md5() here is not for cryptographic use.
                 // phpcs:ignore Magento2.Security.InsecureFunction
                 $this->_currentCacheKey = md5(
-                    $this->serializer->serialize(
+                    $this->getSerializer()->serialize(
                         [$this->_arguments, $this->_nonShared, $this->_preferences, $this->_virtualTypes]
                     )
                 );
             }
             // md5() here is not for cryptographic use.
             // phpcs:ignore Magento2.Security.InsecureFunction
-            $key = md5($this->_currentCacheKey . $this->serializer->serialize($configuration));
+            $key = md5($this->_currentCacheKey . $this->getSerializer()->serialize($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
                 list(
@@ -342,5 +334,20 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
     public function getPreferences()
     {
         return $this->_preferences;
+    }
+
+    /**
+     * Get serializer
+     *
+     * @return \Magento\Framework\Serialize\SerializerInterface
+     * @deprecated 101.0.0
+     */
+    private function getSerializer()
+    {
+        if ($this->serializer === null) {
+            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SerializerInterface::class);
+        }
+        return $this->serializer;
     }
 }
