@@ -135,18 +135,10 @@
             <expectedResult type="string">width: 20%;</expectedResult>
         </assertEquals>
         <!-- Navigate to user account and check product ratings -->
-        <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage"/>
-        <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductResultStarsUnderProductName"/>
-        <assertEquals stepKey="checkFirstProductResultStarsUnderProductName">
-            <actualResult type="string">$getFirstProductResultStarsUnderProductName</actualResult>
-            <expectedResult type="string">width: 80%;</expectedResult>
-        </assertEquals>
-        <!-- Check stars at rating result under the product name -->
-        <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductResultStarsUnderProductName"/>
-        <assertEquals stepKey="checkSecondProductResultStarsUnderProductName">
-            <actualResult type="string">$getSecondProductResultStarsUnderProductName</actualResult>
-            <expectedResult type="string">width: 20%;</expectedResult>
-        </assertEquals>
+        <!-- Checking that all 3 reviews on the My Product Reviews page have one star ratings  -->
+        <actionGroup ref="StorefrontNavigateToMyProductReviewsPageActionGroup" stepKey="navigateToProductReviewsPage"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('2', '80%')}}"  stepKey="seeFirstOneStarReviewOnMyReviews"/>
+        <seeElement selector="{{StorefrontMyProductReviewsSection.reviewRating('1', '20%')}}"  stepKey="seeSecondOneStarReviewOnMyReviews"/>
         <!-- Click on see details button of two reviews -->
         <!-- Navigate to user account and check product ratings -->
         <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage2"/>
