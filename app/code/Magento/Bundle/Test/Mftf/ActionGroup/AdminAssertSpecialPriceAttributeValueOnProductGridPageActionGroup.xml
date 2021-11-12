@@ -13,8 +13,8 @@
             <description>Assert special price attribute value from the catalog product grid page</description>
         </annotations>
         <arguments>
-            <argument name="specialPriceColumn" type="string"/>
-            <argument name="expectedValue" type="string"/>
+            <argument name="specialPriceColumn" type="string" defaultValue="Special Price"/>
+            <argument name="expectedValue" type="string" defaultValue=""/>
         </arguments>
         <!-- Check the special price column are present in catalog product grid -->
         <seeElement selector="{{AdminProductGridSection.columnHeader(specialPriceColumn)}}" stepKey="seeSpecialPriceColumn"/>
