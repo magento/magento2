@@ -175,6 +175,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $index = 0;
         $ids = [];
         $origPricingData = [];
+        $skus = ['simple'];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getId();
             $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
