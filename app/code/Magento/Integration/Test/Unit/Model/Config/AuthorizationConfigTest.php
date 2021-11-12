@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Integration\Test\Unit\Model\Config\Authorization;
+namespace Magento\Integration\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Model\Config\AuthorizationConfig;
