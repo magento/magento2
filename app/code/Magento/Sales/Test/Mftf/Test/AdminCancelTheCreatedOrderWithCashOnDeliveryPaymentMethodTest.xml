@@ -67,11 +67,11 @@
         </actionGroup>
 
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
-    
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$$simpleCustomer$$"/>
         </actionGroup>
-    
+
         <getData entity="GetOrderData" stepKey="getOrderData">
             <requiredEntity createDataKey="createCustomerCart"/>
         </getData>
