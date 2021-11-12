@@ -20,7 +20,7 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
         <div class="rating-summary">
              <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
              <div class="rating-result"
-                  id="rating-result_<?= /* @noEscape */ $block->getProduct()->getId() ?>"
+                  id="rating-result_<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>"
                   title="<?= $block->escapeHtmlAttr($rating) ?>%"
              >
                  <span>
