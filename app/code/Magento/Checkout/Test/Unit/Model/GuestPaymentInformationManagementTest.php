@@ -180,6 +180,7 @@ class GuestPaymentInformationManagementTest extends TestCase
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
         $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->expects($this->any())->method('getItemsQty')->willReturn(1);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
 
@@ -210,6 +211,7 @@ class GuestPaymentInformationManagementTest extends TestCase
 
         $quoteMock = $this->createMock(Quote::class);
         $quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);
+        $quoteMock->expects($this->any())->method('getItemsQty')->willReturn(1);
         $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
 
         $quoteIdMask = $this->getMockBuilder(QuoteIdMask::class)
@@ -266,6 +268,9 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->cartRepositoryMock->method('getActive')
             ->with($cartId)
             ->willReturn($quote);
+        $quote->expects($this->any())
+            ->method('getItemsQty')
+            ->willReturn(1);
         $quote->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($quoteBillingAddress);
