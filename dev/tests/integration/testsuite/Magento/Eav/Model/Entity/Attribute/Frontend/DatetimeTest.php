@@ -101,4 +101,19 @@ class DatetimeTest extends TestCase
             'The difference between values per different timezones is incorrect'
         );
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
+    }
 }

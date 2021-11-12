@@ -432,7 +432,9 @@ define([
                 allowedOptions = [],
                 indexKey,
                 allowedProductMinPrice,
-                allowedProductsAllMinPrice;
+                allowedProductsAllMinPrice,
+                canDisplayOutOfStockProducts = false,
+                filteredSalableProducts;
 
             this._clearSelect(element);
             element.options[0] = new Option('', '');
@@ -506,11 +508,17 @@ define([
                         options[i].allowedProducts = allowedProducts;
                         element.options[index] = new Option(this._getOptionLabel(options[i]), options[i].id);
 
+                        if (this.options.spConfig.canDisplayShowOutOfStockStatus) {
+                            filteredSalableProducts = $(this.options.spConfig.salable[attributeId][options[i].id]).
+                            filter(options[i].allowedProducts);
+                            canDisplayOutOfStockProducts = filteredSalableProducts.length === 0;
+                        }
+
                         if (typeof options[i].price !== 'undefined') {
                             element.options[index].setAttribute('price', options[i].price);
                         }
 
-                        if (allowedProducts.length === 0) {
+                        if (allowedProducts.length === 0 || canDisplayOutOfStockProducts) {
                             element.options[index].disabled = true;
                         }
 

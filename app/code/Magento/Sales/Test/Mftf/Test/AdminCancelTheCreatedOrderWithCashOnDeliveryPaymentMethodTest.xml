@@ -77,6 +77,6 @@
         </getData>
         <actionGroup ref="StorefrontOpenMyOrdersPageActionGroup" stepKey="clickOnMyOrders"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderDetailsToLoad"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$createCustomerCart.increment_id$', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$getOrderData.increment_id$', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
     </test>
 </tests>

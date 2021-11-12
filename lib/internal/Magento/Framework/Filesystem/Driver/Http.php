@@ -246,7 +246,7 @@ class Http extends File
      * @param string $hostname
      * @param int $port
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @return array
+     * @return resource|bool
      */
     protected function open($hostname, $port)
     {
