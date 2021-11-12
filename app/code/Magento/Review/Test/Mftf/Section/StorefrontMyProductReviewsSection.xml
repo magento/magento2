@@ -11,7 +11,6 @@
     <section name="StorefrontMyProductReviewsSection">
         <element name="reviewDescription" type="text" selector="//td[@data-th='Review']"/>
         <element name="reviewRating" type="text" selector="//tbody/tr[position()='{{reviewNumber}}']/td/div/div/span[contains(@style,'width: {{reviewValue}};')]" parameterized="true"/>
-        <element name="reviewFirstRowSeeDetails" type="text" selector="#my-reviews-table > tbody > tr:nth-child(1) > td.col.actions > a" />
-        <element name="reviewSecondRowSeeDetails" type="text" selector="#my-reviews-table > tbody > tr:nth-child(2) > td.col.actions > a" />
+        <element name="reviewSeeDetails" type="text" selector="#my-reviews-table > tbody > tr:nth-child({{row}}) > td.col.actions > a" parameterized="true" />
     </section>
 </sections>

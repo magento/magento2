@@ -151,7 +151,7 @@
         <!-- Navigate to user account and check product ratings -->
         <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage2"/>
         <!-- Click on second product review -->
-        <click selector="{{StorefrontMyProductReviewsSection.reviewFirstRowSeeDetails}}" stepKey="clickFirstReviewRow"/>
+        <click selector="{{StorefrontMyProductReviewsSection.reviewSeeDetails('1')}}" stepKey="clickFirstReviewRow"/>
         <grabAttributeFrom selector="#rating-result_$$createProduct2.id$$ span" userInput="style" stepKey="getSecondProductResultStarsUnderProductName1"/>
         <assertEquals stepKey="checkSecondProductResultStarsUnderProductName1">
             <actualResult type="string">$getSecondProductResultStarsUnderProductName1</actualResult>
@@ -160,7 +160,7 @@
         <!-- Navigate to user account and check product ratings -->
         <amOnPage url="review/customer/" stepKey="amOnCustomerReviewPage3"/>
         <!-- Click on first product review -->
-        <click selector="{{StorefrontMyProductReviewsSection.reviewSecondRowSeeDetails}}" stepKey="clickSecondReviewRow"/>
+        <click selector="{{StorefrontMyProductReviewsSection.reviewSeeDetails('2')}}" stepKey="clickSecondReviewRow"/>
         <grabAttributeFrom selector="#rating-result_$$createProduct1.id$$ span" userInput="style" stepKey="getFirstProductResultStarsUnderProductName2"/>
         <assertEquals stepKey="checkFirstProductResultStarsUnderProductName2">
             <actualResult type="string">$getFirstProductResultStarsUnderProductName2</actualResult>
