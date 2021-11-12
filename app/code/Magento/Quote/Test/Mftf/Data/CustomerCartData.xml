@@ -31,7 +31,6 @@
         <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
     </entity>
 
-<<<<<<< HEAD
     <entity name="BankTransferPaymentMethod" type="CustomerPaymentInformation">
         <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
         <requiredEntity type="payment_method">BankTransferPaymentMethod</requiredEntity>
@@ -41,10 +40,4 @@
     <entity name="GetOrderData" type="CustomerCart">
         <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
     </entity>
-=======
-    <entity name="GetOrderData" type="CustomerCart">
-        <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
-    </entity>
-    
->>>>>>> 2.4-develop
 </entities>
