@@ -308,7 +308,7 @@ class AdminSessionsManager
     /**
      * Retrieve new instance of admin session info collection
      *
-     * @return Collection
+     * @return \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
      * @since 100.1.0
      */
     protected function createAdminSessionInfoCollection()
