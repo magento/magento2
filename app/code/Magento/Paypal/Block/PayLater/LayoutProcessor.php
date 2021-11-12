@@ -11,6 +11,7 @@ namespace Magento\Paypal\Block\PayLater;
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Paypal\Model\PayLaterConfig;
 use Magento\Paypal\Model\SdkUrl;
+use Magento\Paypal\Model\Config as PaypalConfig;
 
 /**
  * PayLater Layout Processor
@@ -33,13 +34,23 @@ class LayoutProcessor implements LayoutProcessorInterface
     private $sdkUrl;
 
     /**
+     * @var PaypalConfig
+     */
+    private $paypalConfig;
+
+    /**
      * @param PayLaterConfig $payLaterConfig
      * @param SdkUrl $sdkUrl
+     * @param PaypalConfig $paypalConfig
      */
-    public function __construct(PayLaterConfig $payLaterConfig, SdkUrl $sdkUrl)
-    {
-        $this->payLaterConfig = $payLaterConfig;
-        $this->sdkUrl = $sdkUrl;
+    public function __construct(
+        PayLaterConfig $payLaterConfig,
+        SdkUrl $sdkUrl,
+        PaypalConfig $paypalConfig
+    ) {
+        $this->payLaterConfig   = $payLaterConfig;
+        $this->sdkUrl           = $sdkUrl;
+        $this->paypalConfig     = $paypalConfig;
     }
 
     /**
@@ -75,6 +86,9 @@ class LayoutProcessor implements LayoutProcessorInterface
             $displayAmount = $config['displayAmount'] ?? false;
             $config['displayAmount'] = !$displayAmount || $this->payLaterConfig->isPPBillingAgreementEnabled()
                 ? false : true;
+            $config['dataAttributes'] = [
+                'data-partner-attribution-id' => $this->paypalConfig->getBuildNotationCode()
+            ];
 
             $attributes = $this->payLaterConfig->getSectionConfig(
                 PayLaterConfig::CHECKOUT_PAYMENT_PLACEMENT,

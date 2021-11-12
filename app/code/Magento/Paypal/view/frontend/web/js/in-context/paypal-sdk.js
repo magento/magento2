@@ -12,8 +12,9 @@ define([
     /**
      * Loads the PayPal SDK object
      * @param {String} paypalUrl - the url of the PayPal SDK
+     * @param {Array} dataAttributes - Array of the Attributes for PayPal SDK Script tag
      */
-    return function loadPaypalScript(paypalUrl) {
+    return function loadPaypalScript(paypalUrl, dataAttributes) {
         //configuration for loaded PayPal script
         require.config({
             paths: {
@@ -23,6 +24,15 @@ define([
                 paypalSdk: {
                     exports: 'paypal'
                 }
+            },
+
+            /**
+             * Add attributes under Paypal SDK Script tag
+             */
+            onNodeCreated: function (node) {
+                $.each(dataAttributes, function (index, elem) {
+                    node.setAttribute(index, elem);
+                });
             }
         });
 
