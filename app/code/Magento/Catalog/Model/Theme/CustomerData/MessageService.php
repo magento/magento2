@@ -16,6 +16,7 @@ use Magento\Theme\CustomerData\MessageServiceInterface;
 class MessageService implements MessageServiceInterface
 {
     /**
+     *
      * @var Config
      */
     private $appConfig;
@@ -51,6 +52,7 @@ class MessageService implements MessageServiceInterface
 
     /**
      * Verify flag value for synchronize product actions with backend or not
+     *
      * @return object
      */
     public function getMessages(): object

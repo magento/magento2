@@ -10,6 +10,8 @@ namespace Magento\Theme\CustomerData;
 interface MessageServiceInterface
 {
     /**
+     *  Get the messages stored in session before session clear
+     *
      * @return object
      */
     public function getMessages();
