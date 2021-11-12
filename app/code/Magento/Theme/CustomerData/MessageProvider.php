@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Theme\CustomerData;
 
+use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
-class MessageService implements MessageServiceInterface
+class MessageProvider implements MessagesProviderInterface
 {
     /**
      * Manager messages
@@ -30,9 +31,9 @@ class MessageService implements MessageServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * @return Collection
      */
-    public function getMessages()
+    public function getMessages() : Collection
     {
         return $this->messageManager->getMessages(true);
     }

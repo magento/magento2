@@ -7,6 +7,7 @@
 namespace Magento\Theme\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
@@ -29,25 +30,25 @@ class Messages implements SectionSourceInterface
     private $interpretationStrategy;
 
     /**
-     * @var MessageServiceInterface
+     * @var MessagesProviderInterface
      */
-    private $messageService;
+    private $messageProvider;
 
     /**
      * Constructor
      *
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
-     * @param MessageServiceInterface $messageService
+     * @param MessagesProviderInterface $messageProvider
      */
     public function __construct(
         MessageManager $messageManager,
         InterpretationStrategyInterface $interpretationStrategy,
-        MessageServiceInterface $messageService
+        ?MessagesProviderInterface $messageProvider = null
     ) {
         $this->messageManager = $messageManager;
         $this->interpretationStrategy = $interpretationStrategy;
-        $this->messageService = $messageService;
+        $this->messageProvider = $messageProvider ?? ObjectManager::getInstance()->get(MessagesProviderInterface::class);
     }
 
     /**
@@ -55,7 +56,7 @@ class Messages implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        $messages = $this->messageService->getMessages();
+        $messages = $this->messageProvider->getMessages();
         $messageResponse = array_reduce(
             $messages->getItems(),
             function (array $result, MessageInterface $message) {

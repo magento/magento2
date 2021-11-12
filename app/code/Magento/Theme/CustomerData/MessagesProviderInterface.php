@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Theme\CustomerData;
 
-interface MessageServiceInterface
+use Magento\Framework\Message\Collection;
+
+interface MessagesProviderInterface
 {
     /**
      *  Get the messages stored in session before session clear
      *
-     * @return object
+     * @return Collection
      */
-    public function getMessages();
+    public function getMessages(): Collection;
 }

@@ -10,10 +10,11 @@ namespace Magento\Catalog\Model\Theme\CustomerData;
 use Magento\Catalog\Model\Product\ProductFrontendAction\Synchronizer;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
-use Magento\Theme\CustomerData\MessageServiceInterface;
+use Magento\Theme\CustomerData\MessagesProviderInterface;
 
-class MessageService implements MessageServiceInterface
+class MessageProvider implements MessagesProviderInterface
 {
     /**
      *
@@ -53,9 +54,9 @@ class MessageService implements MessageServiceInterface
     /**
      * Verify flag value for synchronize product actions with backend or not
      *
-     * @return object
+     * @return Collection
      */
-    public function getMessages(): object
+    public function getMessages(): Collection
     {
         $clearSessionMessages = true;
 
