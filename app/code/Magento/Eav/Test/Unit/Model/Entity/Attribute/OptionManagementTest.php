@@ -61,9 +61,10 @@ class OptionManagementTest extends TestCase
     /**
      * Test to add attribute option
      *
+     * @param string $label
      * @dataProvider optionLabelDataProvider
      */
-    public function testAdd($label)
+    public function testAdd(string $label): void
     {
         $entityType = 42;
         $storeId = 4;
@@ -232,9 +233,10 @@ class OptionManagementTest extends TestCase
     /**
      * Test to update attribute option
      *
+     * @param string $label
      * @dataProvider optionLabelDataProvider
      */
-    public function testUpdate($label)
+    public function testUpdate(string $label): void
     {
         $entityType = Product::ENTITY;
         $storeId = 4;

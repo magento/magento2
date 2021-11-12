@@ -60,7 +60,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
 
-        $label = trim((string) $option->getLabel());
+        $label = trim((string)$option->getLabel());
         if ($label === '') {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
@@ -93,7 +93,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         if (empty($optionId)) {
             throw new InputException(__('The option id is empty. Enter the value and try again.'));
         }
-        $label = trim((string) $option->getLabel());
+        $label = trim((string)$option->getLabel());
         if ($label === '') {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
