@@ -48,7 +48,8 @@ class Messages implements SectionSourceInterface
     ) {
         $this->messageManager = $messageManager;
         $this->interpretationStrategy = $interpretationStrategy;
-        $this->messageProvider = $messageProvider ?? ObjectManager::getInstance()->get(MessagesProviderInterface::class);
+        $this->messageProvider = $messageProvider
+            ?? ObjectManager::getInstance()->get(MessagesProviderInterface::class);
     }
 
     /**

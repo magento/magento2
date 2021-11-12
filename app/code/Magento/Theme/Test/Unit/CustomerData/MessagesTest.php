@@ -47,7 +47,11 @@ class MessagesTest extends TestCase
         $this->messageInterpretationStrategy = $this->createMock(
             InterpretationStrategyInterface::class
         );
-        $this->object = new Messages($this->messageManager, $this->messageInterpretationStrategy, $this->messageProvider);
+        $this->object = new Messages(
+            $this->messageManager,
+            $this->messageInterpretationStrategy,
+            $this->messageProvider
+        );
     }
 
     public function testGetSectionData()
