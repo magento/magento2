@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Paypal\Model\PayLaterConfig;
 use Magento\Paypal\Model\SdkUrl;
 use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * PayPal PayLater component block
@@ -56,14 +57,15 @@ class Banner extends Template
         PayLaterConfig $payLaterConfig,
         SdkUrl $sdkUrl,
         array $data = [],
-        PaypalConfig $paypalConfig
+        PaypalConfig $paypalConfig = null
     ) {
         parent::__construct($context, $data);
         $this->payLaterConfig = $payLaterConfig;
         $this->sdkUrl = $sdkUrl;
         $this->placement = $data['placement'] ??  '';
         $this->position = $data['position'] ??  '';
-        $this->paypalConfig = $paypalConfig;
+        $this->paypalConfig = $paypalConfig ?: ObjectManager::getInstance()
+            ->get(PaypalConfig::class);
     }
 
     /**
