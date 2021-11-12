@@ -11,6 +11,8 @@ namespace Magento\Webapi\Controller\Rest;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\ServiceInputProcessor;
@@ -19,6 +21,7 @@ use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
  * This class is responsible for retrieving resolved input data
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InputParamsResolver
 {
@@ -73,7 +76,7 @@ class InputParamsResolver
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
         RequestValidator $requestValidator,
-        MethodsMap $methodsMap = null,
+        MethodsMap $methodsMap = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -88,7 +91,7 @@ class InputParamsResolver
      * Process and resolve input parameters
      *
      * @return array
-     * @throws Exception|AuthorizationException
+     * @throws Exception|AuthorizationException|LocalizedException
      */
     public function resolve()
     {
@@ -107,6 +110,7 @@ class InputParamsResolver
      * Get API input data
      *
      * @return array
+     * @throws InputException|Exception
      */
     public function getInputData()
     {
@@ -136,6 +140,7 @@ class InputParamsResolver
      * Retrieve current route.
      *
      * @return Route
+     * @throws Exception
      */
     public function getRoute()
     {
