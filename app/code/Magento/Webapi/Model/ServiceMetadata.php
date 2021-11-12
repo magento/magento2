@@ -142,6 +142,7 @@ class ServiceMetadata
                     $methods
                 );
                 foreach ($services[$serviceName][self::KEY_SERVICE_METHODS] as $methodName => &$methodMetadata) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $methodMetadata = array_merge(
                         $methodMetadata,
                         $reflectedMethodsMetadata[$methodMetadata[self::KEY_METHOD]]

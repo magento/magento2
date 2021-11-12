@@ -156,13 +156,12 @@ class Handler
      * @param object $service
      * @param string $serviceMethod
      * @param array $inputData
-     *
      * @return false|mixed
-     *
      */
     private function runServiceMethod($service, $serviceMethod, $inputData)
     {
-     return call_user_func_array([$service, $serviceMethod], $inputData);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return call_user_func_array([$service, $serviceMethod], $inputData);
     }
 
     /**
