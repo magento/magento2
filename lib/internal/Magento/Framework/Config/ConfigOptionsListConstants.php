@@ -92,8 +92,6 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_BACKEND_OPTIONS = 'backend_options';
 
     /**
-     * @deprecated
-     *
      * Definition format constant.
      */
     const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';

@@ -153,9 +153,9 @@ class Handler
     /**
      * Runs service method
      *
-     * @param $service
-     * @param $serviceMethod
-     * @param $inputData
+     * @param object $service
+     * @param string $serviceMethod
+     * @param array $inputData
      *
      * @return false|mixed
      *
