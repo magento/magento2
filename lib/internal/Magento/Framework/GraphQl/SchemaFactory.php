@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\GraphQl\Type\TypeManagement;
-
 /**
  * Factory for @see Schema
  */
@@ -22,8 +20,6 @@ class SchemaFactory
      */
     public function create(array $config) : Schema
     {
-        $typeManagement = new TypeManagement();
-        $typeManagement->overrideStandardGraphQLTypes();
         return new Schema($config);
     }
 }
