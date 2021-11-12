@@ -42,7 +42,7 @@
                         <field id="*/*/account_type">1</field>
                     </depends>
                 </field>
-                <field id="anonymize_default_yes" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="anonymize_default_yes" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Anonymize IP</label>
                     <source_model>Magento\GoogleAnalytics\Model\Config\Source\DefaultYes</source_model>
                     <depends>

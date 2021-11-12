@@ -5,11 +5,9 @@
  */
 ?>
 <?php /** @var $block \Magento\GoogleAnalytics\Block\Ga */ ?>
-<?php
-/** @var \Magento\GoogleAnalytics\Helper\Data $helper */
-$helper = $block->getHelper();
-$accountId = $helper->getAccountId();
-?>
+<?php /** @var \Magento\GoogleAnalytics\Helper\Data $helper */ ?>
+<?php  $helper = $block->getHelper() ?>
+<?php  $accountId = $helper->getAccountId() ?>
 <!-- BEGIN GOOGLE ANALYTICS CODE -->
 <script type="text/x-magento-init">
 {
