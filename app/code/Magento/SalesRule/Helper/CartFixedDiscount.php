@@ -82,10 +82,7 @@ class CartFixedDiscount
         float $baseRuleTotals,
         string $discountType
     ): float {
-        $ratio = 0;
-        if ($baseRuleTotals != 0) {
-            $ratio = $baseItemPrice * $qty / $baseRuleTotals;
-        }
+        $ratio = $baseRuleTotals != 0 ? $baseItemPrice * $qty / $baseRuleTotals : 0;
         return $this->deltaPriceRound->round(
             $ruleDiscount * $ratio,
             $discountType

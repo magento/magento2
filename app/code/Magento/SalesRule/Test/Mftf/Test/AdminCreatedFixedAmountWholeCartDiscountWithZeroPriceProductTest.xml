@@ -8,59 +8,55 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreatedFixedAmountWholeCartDiscountWithZeroPriceProductTest">
+    <test name="StoreFrontAddZeroPriceProductToCardWithFixedAmountPriceRule">
         <annotations>
             <features value="SalesRule"/>
             <stories value="Zero price product added to cart while cart price rule is Fixed amount discount for whole cart"/>
-            <title value="Admin should be able to create a cart price rule of type Fixed amount discount for whole cart and add to cart when cart total is zero"/>
-            <description value="Admin should be able to create a cart price rule of type Fixed amount discount for whole cart and add to cart when cart total is zero"/>
+            <title value="Add zero price product to cart when fixed amount discount for the whole cart rule is active"/>
+            <description value="Customers should be able to add a zero price product from the storefront when the cart price rule of type Fixed amount discount for the whole cart is configured"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-1618"/>
             <useCaseId value="ACP2E-285"/>
             <group value="SalesRule"/>
-        </annotations> 
+        </annotations>
 
         <before>
+            <!--Create Simple Product and Category -->
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct_zero" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create cart price rule -->
+            <actionGroup ref="AdminCreateCartPriceRuleActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="PriceRuleWithCondition"/>
+            </actionGroup>
         </before>
 
         <after>
             <!-- Delete the cart price rule we made during the test -->
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
-                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
+                <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
             </actionGroup>
-            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
-            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
-                <argument name="sku" value="{{_defaultProduct.sku}}"/>
-            </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <!-- Create a cart price rule for Fixed amount discount for whole cart -->
-        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
-        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" userInput="NOT LOGGED IN" stepKey="selectCustomerGroup"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="No Coupon" stepKey="selectCoupon"/>
-        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
-        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount for whole cart" stepKey="selectActionType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="50" stepKey="fillDiscountAmount"/>
-        <click selector="{{AdminCartPriceRulesFormSection.save}}" stepKey="clickSaveButton"/>
-        <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
-
-        <!-- Create a product to check the storefront -->
-        <actionGroup ref="FillAdminSimpleProductFormWithZeroPriceActionGroup" stepKey="fillProductFieldsInAdmin">
-            <argument name="simpleProduct" value="_defaultProduct"/>
+        <!-- Go to the storefront and add the product to the cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="gotoAndAddProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
 
-        <!-- Spot check the storefront -->
-        <actionGroup ref="VerifyProductInCartActionGroup" stepKey="verifyStorefront">
-            <argument name="productUrl" value="{{_defaultProduct.urlKey}}.html"/>
-            <argument name="quantity" value="1"/>
-            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        <!-- Go to the cart page and verify we see the product -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productPrice" value="$$createSimpleProduct.price$$"/>
+            <argument name="subtotal" value="$$createSimpleProduct.price$$" />
+            <argument name="qty" value="1"/>
         </actionGroup>
     </test>
 </tests>
