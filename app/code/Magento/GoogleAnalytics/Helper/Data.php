@@ -91,19 +91,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAccountId()
     {
-        if ($this->isGoogleAnalytics4Account()) {
-            return (string)$this->scopeConfig->getValue(
-                self::XML_PATH_MEASUREMENT_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-        } else {
-            return (string)$this->scopeConfig->getValue(
-                self::XML_PATH_TRACKING_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-
-        }
-
+        return ($this->isGoogleAnalytics4Account() ? (string)$this->scopeConfig->getValue(self::XML_PATH_MEASUREMENT_ID,
+           \Magento\Store\Model\ScopeInterface::SCOPE_STORE) : (string)$this->scopeConfig->getValue(self::XML_PATH_TRACKING_ID,
+           \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
     }
 
     /**
