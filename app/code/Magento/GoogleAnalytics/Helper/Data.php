@@ -71,8 +71,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isGoogleAnalytics4Account()
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_ACCOUNT_TYPE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS4;
+        return $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT_TYPE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_GOOGLE_ANALYTICS4;
     }
 
     /**
@@ -82,8 +81,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isUniversalAnalyticsAccount()
     {
-        return $this->scopeConfig->getValue(
-            self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS;
+        return $this->scopeConfig->getValue(self::XML_PATH_ACCOUNT_TYPE,\Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::ACCOUNT_TYPE_UNIVERSAL_ANALYTICS;
     }
 
     /**
