@@ -61,12 +61,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAnonymizedIpActive($store = null)
     {
-        if ($this->isGoogleAnalytics4Account()) {
-            return true;
-        } else {
-            return (bool)$this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
-        }
-
+        return $this->isGoogleAnalytics4Account() ?? (bool)$this->scopeConfig->getValue(self::XML_PATH_ANONYMIZE, ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
