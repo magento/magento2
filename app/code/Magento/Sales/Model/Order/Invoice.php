@@ -260,7 +260,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getBillingAddress()
     {
-        return $this->getOrder()->getBillingAddress();
+        return $this->_findAddress($this->getBillingAddressId()) ?: $this->getOrder()->getBillingAddress();
     }
 
     /**
@@ -270,7 +270,20 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getShippingAddress()
     {
-        return $this->getOrder()->getShippingAddress();
+        return $this->_findAddress($this->getShippingAddressId()) ?: $this->getOrder()->getShippingAddress();
+    }
+
+    /**
+     * Fetch order address by id
+     *
+     * @return Address|null
+     */
+    protected function _findAddress($addressId) {
+        foreach($this->getOrder()->getAddresses() as $address) {
+            if($address->getId() == $addressId) {
+                return $address;
+            }
+        }
     }
 
     /**

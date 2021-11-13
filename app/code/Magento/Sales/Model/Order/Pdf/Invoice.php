@@ -110,6 +110,20 @@ class Invoice extends AbstractPdf
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function _getBillingAddress($order, $invoice) {
+        return $invoice->getBillingAddress();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getShippingAddress($order, $invoice) {
+        return $invoice->getShippingAddress();
+    }
+
+    /**
      * Return PDF document
      *
      * @param array|Collection $invoices
@@ -148,7 +162,8 @@ class Invoice extends AbstractPdf
                     self::XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $order->getStoreId()
-                )
+                ),
+                $invoice
             );
             /* Add document text and number */
             $this->insertDocumentNumber($page, __('Invoice # ') . $invoice->getIncrementId());

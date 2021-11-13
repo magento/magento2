@@ -400,17 +400,51 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     }
 
     /**
+     * Fetch billing address from order or context. This may be overridden in a subclass
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param mixed $context
+     * @return \Magento\Sales\Api\Data\OrderAddressInterface
+     */
+    protected function _getBillingAddress($order, $context) {
+        return $order->getBillingAddress();
+    }
+
+    /**
+     * Fetch shipping address from order or context. This may be overridden in a subclass
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param mixed $context
+     * @return \Magento\Sales\Api\Data\OrderAddressInterface
+     */
+    protected function _getShippingAddress($order, $context) {
+        return $order->getShippingAddress();
+    }
+
+    /**
+     * Fetch payment details from order or context. This may be overridden in a subclass
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param mixed $context
+     * @return \Magento\Sales\Api\Data\OrderPaymentInterface|null
+     */
+    protected function _getPayment($order, $context) {
+        return $order->getPayment();
+    }
+
+    /**
      * Insert order to pdf page.
      *
      * @param \Zend_Pdf_Page $page
      * @param \Magento\Sales\Model\Order $obj
      * @param bool $putOrderId
+     * @param mixed $context
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function insertOrder(&$page, $obj, $putOrderId = true)
+    protected function insertOrder(&$page, $obj, $putOrderId = true, $context = null)
     {
         if ($obj instanceof \Magento\Sales\Model\Order) {
             $shipment = null;
@@ -462,10 +496,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         /* Calculate blocks info */
 
         /* Billing Address */
-        $billingAddress = $this->_formatAddress($this->addressRenderer->format($order->getBillingAddress(), 'pdf'));
+        $billingAddress = $this->_formatAddress($this->addressRenderer->format($this->_getBillingAddress($order, $context), 'pdf'));
 
         /* Payment */
-        $paymentInfo = $this->_paymentData->getInfoBlock($order->getPayment())->setIsSecureMode(true)->toPdf();
+        $paymentInfo = $this->_paymentData->getInfoBlock($this->_getPayment($order, $context))->setIsSecureMode(true)->toPdf();
         $paymentInfo = htmlspecialchars_decode($paymentInfo, ENT_QUOTES);
         $payment = explode('{{pdf_row_separator}}', $paymentInfo);
         foreach ($payment as $key => $value) {
@@ -479,7 +513,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
             $shippingAddress = $this->_formatAddress(
-                $this->addressRenderer->format($order->getShippingAddress(), 'pdf')
+                $this->addressRenderer->format($this->_getShippingAddress($order, $context), 'pdf')
             );
             $shippingMethod = $order->getShippingDescription();
         }
