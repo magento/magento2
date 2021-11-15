@@ -259,8 +259,6 @@ class GuestPaymentInformationManagementTest extends TestCase
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
 
         $this->paymentMethodManagementMock->expects($this->never())->method('set')->with($cartId, $paymentMock);
-        $phrase = new Phrase(__('Some of the products are disabled.'));
-        $exception = new CouldNotSaveException($phrase);
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
     }
 
