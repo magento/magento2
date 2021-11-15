@@ -101,7 +101,7 @@ class SynchronizeFilesTest extends TestCase
         return [
             [
                 '/magento.jpg',
-                'magento.jpg',
+                'magento',
                 'Local',
             ],
         ];
