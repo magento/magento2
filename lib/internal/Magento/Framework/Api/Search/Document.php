@@ -70,6 +70,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
      * @return \ArrayIterator
      * @since 100.1.0
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $attributes = (array)$this->getCustomAttributes();

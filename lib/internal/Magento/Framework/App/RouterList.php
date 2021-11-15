@@ -60,6 +60,7 @@ class RouterList implements RouterListInterface
      * @link http://php.net/manual/en/iterator.current.php
      * @return RouterInterface
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->getRouterInstance($this->key());
@@ -71,6 +72,7 @@ class RouterList implements RouterListInterface
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->routerList);
@@ -82,6 +84,7 @@ class RouterList implements RouterListInterface
      * @link http://php.net/manual/en/iterator.key.php
      * @return string|int|null
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->routerList);
@@ -94,6 +97,7 @@ class RouterList implements RouterListInterface
      * @return boolean The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return !!current($this->routerList);
@@ -105,6 +109,7 @@ class RouterList implements RouterListInterface
      * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->routerList);

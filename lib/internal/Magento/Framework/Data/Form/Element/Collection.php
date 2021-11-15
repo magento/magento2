@@ -45,6 +45,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->_elements);
@@ -57,6 +58,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         $this->_elements[$key] = $value;
@@ -68,6 +70,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $key
      * @return AbstractElement
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->_elements[$key];
@@ -79,6 +82,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $key
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->_elements[$key]);
@@ -90,6 +94,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @param mixed $key
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return isset($this->_elements[$key]);
@@ -167,6 +172,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->_elements);

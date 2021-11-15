@@ -122,6 +122,7 @@ class Phrase implements \JsonSerializable
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->render();
