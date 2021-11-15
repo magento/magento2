@@ -120,14 +120,6 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
             //Have to do this hack because of savePaymentInformation() plugins.
             $this->saveRateLimitDisabled = true;
             $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
-        } catch (\Magento\Framework\Exception\CouldNotSaveException $e) {
-            $this->getLogger()->critical(
-                'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
-            );
-            throw new CouldNotSaveException(
-                __($e->getMessage()),
-                $e
-            );
         } finally {
             $this->saveRateLimitDisabled = false;
         }
