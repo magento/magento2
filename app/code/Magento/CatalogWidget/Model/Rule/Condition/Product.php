@@ -22,7 +22,7 @@ use Magento\Store\Model\Store;
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $elementName = 'parameters';
 
@@ -32,8 +32,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $joinedAttributes = [];
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
