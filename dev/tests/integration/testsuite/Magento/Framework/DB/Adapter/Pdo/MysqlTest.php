@@ -37,7 +37,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     /**
      * Check PDO stringify fetches options
      */
-    public function testStringifyFetches(): void
+    public function testStringifyFetchesTrue(): void
     {
         $tableName = $this->resourceConnection->getTableName('table_with_int_column');
         $columnId = 'integer_column';
@@ -54,14 +54,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             ->columns([$columnId])
             ->limit(1);
         $result = $adapter->fetchOne($select);
-
-        $isStringify = $adapter->getConfig()['driver_options'][\PDO::ATTR_STRINGIFY_FETCHES] ?? null;
-        if ($isStringify || $isStringify === null) {
-            $this->assertIsString($result);
-        } else { // option is set to False
-            $this->assertIsInt($result);
-        }
-
+        $this->assertIsString($result);
         $adapter->dropTable($tableName);
     }
 
