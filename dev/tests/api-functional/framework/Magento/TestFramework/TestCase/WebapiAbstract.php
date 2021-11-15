@@ -567,9 +567,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     {
         $error = json_decode($e->getMessage(), true);
         //Remove line breaks and replace with space
-        $error['message'] = isset($error['message'])
-            ? trim(preg_replace('/\s+/', ' ', $error['message']))
-            : '';
+        $error['message'] = trim(preg_replace('/\s+/', ' ', $error['message']));
         // remove trace and type, will only be present if server is in dev mode
         unset($error['trace']);
         unset($error['type']);
