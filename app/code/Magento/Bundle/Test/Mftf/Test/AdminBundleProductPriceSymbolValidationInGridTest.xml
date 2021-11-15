@@ -24,18 +24,27 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <!-- Admin login -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!-- Navigate to catalog product grid page -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <!-- Open the column dropdown to add the special price from the catalog product grid -->
+            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownSpecialPrice"/>
+            <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkSpecialPriceOption">
+                <argument name="optionName" value="Special Price"/>
+            </actionGroup>
+            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownSpecialPrice"/>
+            <!-- It takes a few seconds for column update to be saved -->
+            <!-- waitForPageLoad won't work here since saving is happening with a short delay -->
+            <wait time="5" stepKey="waitForColumnUpdateToSave"/>
         </before>
         <after>
             <!-- Navigate to catalog product grid page -->
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-            <!-- Set product grid to default columns -->
-            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
-            <!-- Open the column dropdown to reset the default columns from the catalog product grid -->
-            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownToReset"/>
-            <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetProductGridColumns"/>
-            <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownAfterReset"/>
+            <!-- Clean applied product filters before delete -->
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearAppliedFilters"/>
             <!-- Delete all the products from the catalog product grid -->
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
+            <!-- Set product grid to default columns -->
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
             <!-- Logging out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -48,6 +57,10 @@
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPrice">
             <argument name="price" value="{{SimpleProductWithSpecialPrice.special_price}}"/>
         </actionGroup>
+        <!-- Fill up the new product form with data -->
+        <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProduct">
+            <argument name="bundleProduct" value="BundleProduct"/>
+        </actionGroup>
         <!-- Add the bundle option to the product -->
         <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption">
             <argument name="x" value="0"/>
@@ -57,38 +70,16 @@
             <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
             <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
         </actionGroup>
-        <!-- Add the default attribute value for the bundle product creation page -->
-        <actionGroup ref="CreateBasicBundleProductActionGroup" stepKey="createBundledProduct">
-            <argument name="bundleProduct" value="BundleProduct"/>
-        </actionGroup>
         <!-- Save the bundle product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
-
         <!-- Navigate to catalog product grid page -->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-
-        <!-- Set product grid to default columns -->
-        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
-        <!-- Open the column dropdown to reset the default columns from the catalog product grid -->
-        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openToResetColumnsDropdown"/>
-        <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetAdminProductGridColumns"/>
-        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownAfterReset"/>
-
-        <!-- Open the column dropdown to add the special price from the catalog product grid -->
-        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdownSpecialPrice"/>
-        <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkSpecialPriceOption">
-            <argument name="optionName" value="Special Price"/>
-        </actionGroup>
-        <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownSpecialPrice"/>
-
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPageAfterProdSave"/>
         <!-- Search the created bundle product with sku -->
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterBundleProductGridBySku">
             <argument name="sku" value="{{BundleProduct.sku}}"/>
         </actionGroup>
-
         <!-- Asserting with the special price value contains the percentage value -->
         <actionGroup ref="AdminAssertSpecialPriceAttributeValueOnProductGridPageActionGroup" stepKey="assertSpecialPricePercentageSymbol">
-            <argument name="specialPriceColumn" value="Special Price"/>
             <argument name="expectedValue" value="90.00%"/>
         </actionGroup>
     </test>
