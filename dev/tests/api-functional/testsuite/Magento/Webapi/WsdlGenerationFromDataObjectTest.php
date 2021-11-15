@@ -71,7 +71,10 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
         $responseContent = curl_exec($connection);
         $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
-        $this->assertStringContainsString("The consumer isn't authorized to access %resources.", $responseContent);
+        $this->assertStringContainsString(
+            "The consumer isn't authorized to access %resources.",
+            htmlspecialchars_decode($responseContent, ENT_QUOTES)
+        );
     }
 
     public function testInvalidWsdlUrlNoServices()
