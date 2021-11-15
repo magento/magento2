@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <!--Create Simple Product and Category -->
+            <!-- Create Simple Product and Category -->
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct_zero" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createPreReqCategory"/>
@@ -53,7 +53,6 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
-            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
             <argument name="productPrice" value="$$createSimpleProduct.price$$"/>
             <argument name="subtotal" value="$$createSimpleProduct.price$$" />
             <argument name="qty" value="1"/>
