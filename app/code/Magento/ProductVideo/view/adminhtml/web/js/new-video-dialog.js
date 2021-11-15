@@ -628,7 +628,7 @@ define([
             }).css('display', 'none');
             fu.parent().append(tmpInput);
             fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).success(function (result, textStatus, jqXHR) {
+            fileUploader.fileupload('send', data).done(function (result, textStatus, jqXHR) {
                 tmpInput.remove();
                 callback.call(null, result, textStatus, jqXHR);
             });

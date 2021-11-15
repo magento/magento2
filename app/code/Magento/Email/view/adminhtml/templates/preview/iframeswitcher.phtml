@@ -31,7 +31,7 @@ require([
     'jquery'
 ], function($) {
     $(document).ready(function() {
-        $('#preview_form').submit();
+        $('#preview_form').trigger('submit');
     });
 
     $('#preview_iframe').load(function() {

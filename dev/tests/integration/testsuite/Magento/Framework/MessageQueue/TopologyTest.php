@@ -83,11 +83,12 @@ class TopologyTest extends TestCase
      */
     public function exchangeDataProvider(): array
     {
+        $virtualHost = defined('RABBITMQ_VIRTUALHOST') ? RABBITMQ_VIRTUALHOST : Amqp::DEFAULT_VIRTUALHOST;
         return [
             'magento-topic-based-exchange1' => [
                 'exchangeConfig' => [
                     'name' => 'magento-topic-based-exchange1',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => true,
                     'auto_delete' => false,
@@ -99,7 +100,7 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [
                     [
                         'source' => 'magento-topic-based-exchange1',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue1',
                         'destination_type' => 'queue',
                         'routing_key' => 'anotherTopic1',
@@ -112,7 +113,7 @@ class TopologyTest extends TestCase
             'magento-topic-based-exchange2' => [
                 'exchangeConfig' => [
                     'name' => 'magento-topic-based-exchange2',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => true,
                     'auto_delete' => false,
@@ -125,7 +126,7 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [
                     [
                         'source' => 'magento-topic-based-exchange2',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue2',
                         'destination_type' => 'queue',
                         'routing_key' => 'anotherTopic2',
@@ -140,7 +141,7 @@ class TopologyTest extends TestCase
             'magento-topic-based-exchange3' => [
                 'exchangeConfig' => [
                     'name' => 'magento-topic-based-exchange3',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => false,
                     'auto_delete' => true,
@@ -152,7 +153,7 @@ class TopologyTest extends TestCase
             'magento-topic-based-exchange4' => [
                 'exchangeConfig' => [
                     'name' => 'magento-topic-based-exchange4',
-                    'vhost' => '/',
+                    'vhost' => $virtualHost,
                     'type' => 'topic',
                     'durable' => true,
                     'auto_delete' => false,
@@ -162,7 +163,7 @@ class TopologyTest extends TestCase
                 'bindingConfig' => [
                     [
                         'source' => 'magento-topic-based-exchange4',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue1',
                         'destination_type' => 'queue',
                         'routing_key' => '#',
@@ -172,7 +173,7 @@ class TopologyTest extends TestCase
                     ],
                     [
                         'source' => 'magento-topic-based-exchange4',
-                        'vhost' => '/',
+                        'vhost' => $virtualHost,
                         'destination' => 'topic-queue2',
                         'destination_type' => 'queue',
                         'routing_key' => '*.*.*',

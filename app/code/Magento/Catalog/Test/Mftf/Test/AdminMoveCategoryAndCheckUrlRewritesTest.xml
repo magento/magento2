@@ -16,16 +16,13 @@
             <features value="Catalog"/>
             <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-40816"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
                 <field key="is_active">true</field>
             </createData>
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -113,7 +110,7 @@
         <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
 
         <!--Verify before move Redirect Path directs to the category page-->
-        <amOnPage url="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="{{FirstLevelSubCat.urlKey}}2/{{SubCategory.urlKey}}/{{SimpleSubCategory.urlKey}}.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(FirstLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>

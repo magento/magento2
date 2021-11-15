@@ -18,8 +18,7 @@
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
         </annotations>
-
-        <before>  
+        <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProductApi">
                 <requiredEntity createDataKey="createCategory"/>
@@ -34,33 +33,31 @@
             </createData>
             <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
                 <requiredEntity createDataKey="createGuestCart"/>
-            </updateData>   
+            </updateData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            
         </before>
-
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-      
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
             <argument name="entityId" value="$createGuestCart.return$"/>
-        </actionGroup>    
+        </actionGroup>
+
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
 
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
 
          <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
-            <argument name="orderId" value="$createGuestCart.return$"/>
+            <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>
 
         <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="openInvoiceFromGrid"/>
 
         <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkIfOrderStatusIsProcessing">
             <argument name="status" value="Processing"/>
-        </actionGroup>    
-
+        </actionGroup>
     </test>
 </tests>

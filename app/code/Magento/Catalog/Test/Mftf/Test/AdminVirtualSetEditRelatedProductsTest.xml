@@ -15,13 +15,9 @@
             <title value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
             <description value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-3415"/>
-            <group value="Catalog"/>
-            <skip>
-                <issueId value="MC-194"/>
-            </skip>
+            <testCaseId value="MC-25532"/>
+            <group value="catalog"/>
         </annotations>
-        <before></before>
         <after>
             <!-- Delete virtual product -->
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
@@ -38,6 +34,6 @@
         </actionGroup>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url(defaultVirtualProduct.urlKey)}}" stepKey="goToStorefront"/>
     </test>
 </tests>

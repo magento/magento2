@@ -35,9 +35,7 @@
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <createData entity="MinimumOrderAmount90" stepKey="minimumOrderAmount90"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createCartPriceRule">
                 <argument name="ruleName" value="CatPriceRule"/>
                 <argument name="couponCode" value="CatPriceRule.coupon_code"/>
@@ -45,7 +43,7 @@
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStoreFront">
                 <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
             </actionGroup>
-            <amOnPage url="$$simpleProduct.name$$.html" stepKey="navigateToProductPage"/>
+            <amOnPage url="$$simpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
             <waitForPageLoad stepKey="waitForProductPage"/>
         </before>
         <after>
@@ -54,10 +52,7 @@
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
-
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{CatPriceRule.name}}"/>
             </actionGroup>

@@ -26,7 +26,10 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
+     * This method check is valid value.
+     *
      * @param \Magento\Bundle\Model\Option $value
+     *
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
@@ -38,10 +41,12 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
+     * This method  validate required fields.
+     *
      * @param \Magento\Bundle\Model\Option $value
+     *
      * @return void
-     * @throws Zend_Validate_Exception
-     * @throws \Exception
+     * @throws \Exception|Zend_Validate_Exception
      */
     protected function validateRequiredFields($value)
     {
@@ -51,7 +56,7 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
             'type' => $value->getType()
         ];
         foreach ($requiredFields as $requiredField => $requiredValue) {
-            if (!$this->notEmpty->isValid(trim($requiredValue))) {
+            if (!$this->notEmpty->isValid(trim((string) $requiredValue))) {
                 $messages[$requiredField] =
                     __('"%fieldName" is required. Enter and try again.', ['fieldName' => $requiredField]);
             }

@@ -192,7 +192,7 @@ define([
             }
 
             this.selectedFolder(folderId);
-            $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
+            $(this.deleteButtonSelector).prop('disabled', false).removeClass('disabled');
         }
     });
 });
