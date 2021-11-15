@@ -91,6 +91,7 @@ class StoreTest extends TestCase
             'getDistroBaseUrl',
             'isSecure',
             'getServer',
+            'getOriginalPathInfo'
         ]);
 
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
@@ -402,9 +403,49 @@ class StoreTest extends TestCase
                 return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
             });
         $this->requestMock->expects($this->once())
+            ->method('getOriginalPathInfo')
+            ->willReturn('web/unsecure/base_link_url/test_script.php/');
+        $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
             ->willReturn('test_script.php');
+
+        /** @var Store $model */
+        $model = $this->objectManagerHelper->getObject(
+            Store::class,
+            [
+                'config' => $configMock,
+                'isCustomEntryPoint' => false,
+                'request' => $this->requestMock
+            ]
+        );
+        $model->setCode('scopeCode');
+
+        $this->setUrlModifier($model);
+
+        $this->assertEquals(
+            $expectedBaseUrl,
+            $model->getBaseUrl(UrlInterface::URL_TYPE_LINK, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBaseUrlFromCli()
+    {
+        $expectedPath = 'web/unsecure/base_link_url';
+        $expectedBaseUrl = 'http://domain.com/web/unsecure/base_link_url/';
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $configMock */
+        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $configMock->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
+                return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
+            });
+        $this->requestMock->expects($this->once())
+            ->method('getOriginalPathInfo')
+            ->willReturn('');
 
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
