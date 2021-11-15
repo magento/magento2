@@ -5,18 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Fixture;
+namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Api\ProductAttributeManagementInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
-use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\Fixture\DataFixtureInterface;
 
 /**
- * Add product attribute to attribute set fixture
+ * Add product attribute to attribute set
  */
-class AddProductAttributeToAttributeSet implements RevertibleDataFixtureInterface
+class AddAttributeToAttributeSet implements DataFixtureInterface
 {
     /**
      * @var ServiceFactory
@@ -61,19 +61,5 @@ class AddProductAttributeToAttributeSet implements RevertibleDataFixtureInterfac
         $service->execute($data);
 
         return $data;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function revert(array $data = []): void
-    {
-        $service = $this->serviceFactory->create(ProductAttributeManagementInterface::class, 'unassign');
-        $service->execute(
-            [
-                'attribute_set_id' => $data['attribute_set_id'],
-                'attribute_code' => $data['attribute_code'],
-            ]
-        );
     }
 }

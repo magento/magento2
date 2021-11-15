@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Fixture;
+namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
@@ -13,9 +13,9 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
 /**
- * Create product attribute fixture
+ * Creates product attribute fixture
  */
-class CreateProductAttribute implements RevertibleDataFixtureInterface
+class Attribute implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
         'is_wysiwyg_enabled' => false,
