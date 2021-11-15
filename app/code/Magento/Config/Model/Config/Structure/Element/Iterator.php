@@ -149,7 +149,6 @@ class Iterator implements \Iterator
      * @param \Magento\Config\Model\Config\Structure\ElementInterface $element
      * @return bool
      */
-    #[\ReturnTypeWillChange]
     public function isLast(\Magento\Config\Model\Config\Structure\ElementInterface $element)
     {
         return $element->getId() == $this->_lastId;

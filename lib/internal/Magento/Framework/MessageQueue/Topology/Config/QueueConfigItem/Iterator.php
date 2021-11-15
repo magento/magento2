@@ -69,7 +69,6 @@ class Iterator implements \Iterator, \ArrayAccess
      * @param array $data
      * @return void
      */
-    #[\ReturnTypeWillChange]
     private function initObject(array $data)
     {
         $this->object->setData($data);
