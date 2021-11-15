@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Model\Config\Source\Date;
 
+use IntlDateFormatter;
+
 /**
  * @api
  * @since 100.0.2
@@ -12,16 +14,40 @@ namespace Magento\Config\Model\Config\Source\Date;
 class Short implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * @var IntlDateFormatter
+     */
+    private $dateFormatter;
+
+    /**
      * @return array
      */
     public function toOptionArray()
     {
         $arr = [];
         $arr[] = ['label' => '', 'value' => ''];
-        $arr[] = ['label' => strftime('MM/DD/YY (%m/%d/%y)'), 'value' => '%m/%d/%y'];
-        $arr[] = ['label' => strftime('MM/DD/YYYY (%m/%d/%Y)'), 'value' => '%m/%d/%Y'];
-        $arr[] = ['label' => strftime('DD/MM/YY (%d/%m/%y)'), 'value' => '%d/%m/%y'];
-        $arr[] = ['label' => strftime('DD/MM/YYYY (%d/%m/%Y)'), 'value' => '%d/%m/%Y'];
+        $arr[] = ['label' => 'MM/DD/YY ' . $this->getTimeFormat(time(), '(M/d/y)'), 'value' => 'M/d/y'];
+        $arr[] = ['label' => 'MM/DD/YYYY '. $this->getTimeFormat(time(), '(M/d/Y)'), 'value' => 'M/d/Y'];
+        $arr[] = ['label' => 'DD/MM/YY ' . $this->getTimeFormat(time(), '(d/m/y)'), 'value' => 'd/M/y'];
+        $arr[] = ['label' => 'DD/MM/YYYY ' . $this->getTimeFormat(time(), '(d/m/Y)'), 'value' => 'd/M/Y'];
         return $arr;
+    }
+
+    /**
+     * This method format timestamp value.
+     *
+     * @param int $datetime
+     * @param string $format
+     *
+     * @return string
+     */
+    private function getTimeFormat(int $datetime, string $format = 'Y/M/d'): string
+    {
+        if (!$this->dateFormatter) {
+            $locale = \Locale::getDefault();
+            $this->dateFormatter = new \IntlDateFormatter($locale, IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+        }
+        $this->dateFormatter->setPattern($format);
+
+        return $this->dateFormatter->format($datetime);
     }
 }

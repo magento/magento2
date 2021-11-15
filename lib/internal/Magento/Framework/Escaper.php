@@ -309,7 +309,7 @@ class Escaper
             $string = (string) $string;
         }
 
-        if ($string === '' || ctype_digit($string)) {
+        if ($string === '' || (is_string($string) && ctype_digit($string))) {
             return $string;
         }
 
