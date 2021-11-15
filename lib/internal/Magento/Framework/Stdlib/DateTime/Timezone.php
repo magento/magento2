@@ -200,7 +200,7 @@ class Timezone implements TimezoneInterface
                 break;
         }
 
-        return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
+        return (new \DateTime('now', new \DateTimeZone($timezone)))->setTimestamp($date);
     }
 
     /**

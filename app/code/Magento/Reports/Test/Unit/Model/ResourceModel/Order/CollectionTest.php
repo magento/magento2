@@ -261,6 +261,11 @@ class CollectionTest extends TestCase
             ->expects($getIfNullSqlResult)
             ->method('getIfNullSql');
 
+        $this->connectionMock->expects($this->once())
+            ->method('getDateFormatSql')
+            ->with('{{attribute}}', '%Y-%m')
+            ->willReturn(new \Zend_Db_Expr('DATE_FORMAT(%2021-%10, %Y-%m)'));
+
         $this->collection->prepareSummary($range, $customStart, $customEnd, $isFilter);
     }
 
