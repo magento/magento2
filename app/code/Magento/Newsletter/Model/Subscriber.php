@@ -565,8 +565,8 @@ class Subscriber extends AbstractModel
             ]
         )->setTemplateVars(
             $templateVars
-        )->setFrom(
-            $identity
+        )->setFromByScope(
+            $identity, $this->getStoreId()
         )->addTo(
             $this->getEmail(),
             $this->getName()
