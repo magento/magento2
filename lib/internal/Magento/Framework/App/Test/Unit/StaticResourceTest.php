@@ -328,6 +328,9 @@ class StaticResourceTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(404);
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
