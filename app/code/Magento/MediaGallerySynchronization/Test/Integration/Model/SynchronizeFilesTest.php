@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SynchronizeFiles.
+ *
+ * @internal
+ * @coversNothing
  */
 class SynchronizeFilesTest extends TestCase
 {
@@ -44,24 +47,25 @@ class SynchronizeFilesTest extends TestCase
     private $mediaDirectory;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->synchronizeFiles = Bootstrap::getObjectManager()->get(SynchronizeFilesInterface::class);
         $this->getAssetsByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryWrite(DirectoryList::MEDIA);
+            ->getDirectoryWrite(
+                DirectoryList::MEDIA
+            )
+        ;
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
-     * Test for SynchronizeFiles::execute
+     * Test for SynchronizeFiles::execute.
      *
      * @dataProvider filesProvider
-     * @param string $file
-     * @param string $title
-     * @param string $source
+     *
      * @throws FileSystemException
      * @throws LocalizedException
      */
@@ -70,11 +74,11 @@ class SynchronizeFilesTest extends TestCase
         string $title,
         string $source
     ): void {
-        $path = realpath(__DIR__ . '/../_files/' . $file);
+        $path = realpath(__DIR__.'/../_files/'.$file);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($file);
-        $this->driver->copy(
-            $path,
-            $modifiableFilePath
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($path)
         );
 
         $this->synchronizeFiles->execute([$file]);
@@ -88,7 +92,7 @@ class SynchronizeFilesTest extends TestCase
     }
 
     /**
-     * Data provider for testExecute
+     * Data provider for testExecute.
      *
      * @return array[]
      */
@@ -97,9 +101,9 @@ class SynchronizeFilesTest extends TestCase
         return [
             [
                 '/magento.jpg',
-                'magento',
-                'Local'
-            ]
+                'magento.jpg',
+                'Local',
+            ],
         ];
     }
 }
