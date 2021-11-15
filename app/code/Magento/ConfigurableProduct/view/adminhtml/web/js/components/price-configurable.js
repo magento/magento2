@@ -53,6 +53,7 @@ define([
             this.disabled(!!this.isUseDefault() || isConfigurable);
 
             if (isConfigurable) {
+                this.required(false);
                 this.clear();
             }
         }
