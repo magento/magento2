@@ -233,6 +233,37 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
     }
 
+    public function testSavePaymentInformationAndPlaceOrderWithDisabledProduct()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Some of the products are disabled.');
+        $cartId = 100;
+        $email = 'email@magento.com';
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);
+        $quoteMock->expects($this->any())->method('getItemsQty')->willReturn(0);
+        $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
+
+        $quoteIdMask = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteIdMaskFactoryMock->method('create')->willReturn($quoteIdMask);
+        $quoteIdMask->method('load')->with($cartId, 'masked_id')->willReturnSelf();
+        $quoteIdMask->method('getQuoteId')->willReturn($cartId);
+
+        $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $this->paymentMethodManagementMock->expects($this->never())->method('set')->with($cartId, $paymentMock);
+        $phrase = new Phrase(__('Some of the products are disabled.'));
+        $exception = new CouldNotSaveException($phrase);
+        $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
+    }
+
     /**
      * @param int $cartId
      * @param MockObject $billingAddressMock
