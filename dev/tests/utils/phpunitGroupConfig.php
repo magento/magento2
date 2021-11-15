@@ -89,7 +89,7 @@ try {
         $generateConfig = false;
     } else {
         assertUsage(
-            (empty($options['get-group']) || !ctype_digit($options['get-group']))
+            (empty($options['get-group']) || !(is_string($options['get-group']) && ctype_digit($options['get-group'])))
             && strtolower($options['get-group']) != 'all',
             "Option --get-group: must be a positive integer or 'all'\n"
         );
