@@ -19,8 +19,6 @@ use Magento\Framework\ObjectManagerInterface;
 class WriteFactory extends BaseWriteFactory
 {
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -33,18 +31,28 @@ class WriteFactory extends BaseWriteFactory
     private $driverPool;
 
     /**
+     * Deny List Validator
+     *
+     * @var DenyListPathValidator
+     */
+    private $denyListPathValidator;
+
+    /**
      * WriteFactory constructor.
      *
      * @param ObjectManagerInterface $objectManager
      * @param BaseDriverPool $driverPool
+     * @param DenyListPathValidator|null $denyListPathValidator
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        BaseDriverPool $driverPool
+        BaseDriverPool $driverPool,
+        ?DenyListPathValidator $denyListPathValidator = null
     ) {
         $this->objectManager = $objectManager;
         $this->driverPool = $driverPool;
-        parent::__construct($driverPool);
+        $this->denyListPathValidator = $denyListPathValidator;
+        parent::__construct($driverPool, $denyListPathValidator);
     }
 
     /**
@@ -64,7 +72,7 @@ class WriteFactory extends BaseWriteFactory
 
             $validators = [
                 'pathValidator' => new PathValidator($driver),
-                'denyListPathValidator' => new DenyListPathValidator($driver)
+                'denyListPathValidator' => $this->denyListPathValidator ?: new DenyListPathValidator($driver)
             ];
 
             $pathValidator = new CompositePathValidator($validators);
@@ -82,6 +90,5 @@ class WriteFactory extends BaseWriteFactory
         } else {
             return parent::create($path, $driverCode, $createPermissions);
         }
-
     }
 }
