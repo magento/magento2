@@ -264,7 +264,7 @@ class GraphQlReader implements ReaderInterface
     private function addPlaceHolderInSchema(string $graphQlSchemaContent): string
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
-        $typesKindsPattern = '(type|interface|input|union)';
+        $typesKindsPattern = '(type|interface|input|union|scalar)';
         $enumKindsPattern = '(enum)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
         $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
