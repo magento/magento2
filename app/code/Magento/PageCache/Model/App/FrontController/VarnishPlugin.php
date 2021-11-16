@@ -56,7 +56,7 @@ class VarnishPlugin
      */
     public function afterDispatch(FrontControllerInterface $subject, $result)
     {
-        if ($this->config->getType() == Config::VARNISH && $this->config->isEnabled()
+        if ($this->config->getType() === Config::VARNISH && $this->config->isEnabled()
             && $result instanceof ResponseHttp
         ) {
             $this->version->process();
