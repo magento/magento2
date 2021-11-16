@@ -48,7 +48,7 @@ class ScalarType implements TypeMetaReaderInterface
 
             $typeResolver = $this->getTypeResolver($typeMeta);
             if (!empty($typeResolver)) {
-                $result['definition'] = $typeResolver;
+                $result['implementation'] = $typeResolver;
             }
             return $result;
 
@@ -67,7 +67,7 @@ class ScalarType implements TypeMetaReaderInterface
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $interfaceTypeMeta->astNode->directives;
         foreach ($directives as $directive) {
-            if ($directive->name->value == 'def') {
+            if ($directive->name->value == 'implementation') {
                 foreach ($directive->arguments as $directiveArgument) {
                     if ($directiveArgument->name->value == 'class') {
                         return $directiveArgument->value->value;
