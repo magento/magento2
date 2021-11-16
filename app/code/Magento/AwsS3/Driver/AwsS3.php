@@ -25,6 +25,7 @@ use Magento\RemoteStorage\Driver\RemoteDriverInterface;
  * Driver for AWS S3 IO operations.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AwsS3 implements RemoteDriverInterface
 {
@@ -258,6 +259,7 @@ class AwsS3 implements RemoteDriverInterface
         $path = $this->normalizeRelativePath($path, true);
         $config = self::CONFIG;
 
+        // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged
         if (false !== ($imageSize = @getimagesizefromstring($content))) {
             $config['Metadata'] = [
                 'image-width' => $imageSize[0],
@@ -295,6 +297,13 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getRealPathSafety($path)
     {
+        //Removing redundant directory separators
+        $path = preg_replace(
+            '~(?<!:)\/\/+~',
+            '/',
+            $path
+        );
+
         if (strpos($path, '/.') === false) {
             return $path;
         }
@@ -302,12 +311,6 @@ class AwsS3 implements RemoteDriverInterface
         $isAbsolute = strpos($path, $this->normalizeAbsolutePath('')) === 0;
         $path = $this->normalizeRelativePath($path);
 
-        //Removing redundant directory separators.
-        $path = preg_replace(
-            '/\\/\\/+/',
-            '/',
-            $path
-        );
         $pathParts = explode('/', $path);
         if (end($pathParts) === '.') {
             $pathParts[count($pathParts) - 1] = '';
@@ -488,8 +491,7 @@ class AwsS3 implements RemoteDriverInterface
         $basePath = (string)$basePath;
         $path = (string)$path;
 
-        if (
-            ($basePath && $path)
+        if ($basePath && $path
             && ($basePath === $path . '/' || strpos($path, $basePath) === 0)
         ) {
             $result = substr($path, strlen($basePath));
@@ -722,6 +724,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileTell($resource): int
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction, Generic.PHP.NoSilencedErrors.Discouraged
         $result = @ftell($resource);
         if ($result === null) {
             throw new FileSystemException(
@@ -737,6 +740,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileSeek($resource, $offset, $whence = SEEK_SET): int
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction, Generic.PHP.NoSilencedErrors.Discouraged
         $result = @fseek($resource, $offset, $whence);
         if ($result === -1) {
             throw new FileSystemException(
@@ -755,6 +759,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function endOfFile($resource): bool
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
         return feof($resource);
     }
 
@@ -772,6 +777,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileFlush($resource): bool
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction, Generic.PHP.NoSilencedErrors.Discouraged
         $result = @fflush($resource);
         if (!$result) {
             throw new FileSystemException(
@@ -790,6 +796,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileLock($resource, $lockMode = LOCK_EX): bool
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction, Generic.PHP.NoSilencedErrors.Discouraged
         $result = @flock($resource, $lockMode);
         if (!$result) {
             throw new FileSystemException(
@@ -808,6 +815,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileUnlock($resource): bool
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction, Generic.PHP.NoSilencedErrors.Discouraged
         $result = @flock($resource, LOCK_UN);
         if (!$result) {
             throw new FileSystemException(
@@ -851,13 +859,14 @@ class AwsS3 implements RemoteDriverInterface
         //phpcs:enable
 
         foreach ($this->streams as $path => $stream) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore
             if (stream_get_meta_data($stream)['uri'] === $resourcePath) {
                 $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
 
                 // Remove path from streams after
                 unset($this->streams[$path]);
 
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
                 return fclose($stream);
             }
         }
@@ -931,6 +940,7 @@ class AwsS3 implements RemoteDriverInterface
             if (!empty($path)
                 && $path !== $relativePath
                 && (!$relativePath || strpos($path, $relativePath) === 0)) {
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $itemsList[] = $this->getAbsolutePath(dirname($path), $path);
             }
         }

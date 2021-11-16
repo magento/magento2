@@ -56,10 +56,11 @@ class ConfigTest extends TestCase
         $cache = $this->getMockForAbstractClass(ConfigCacheInterface::class);
         $cache->expects($this->once())->method('get')->willReturn(false);
 
-        $config = new Config(null, $definitions);
         $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
-        $serializerMock->expects($this->exactly(2))
-            ->method('serialize');
+        $serializerMock->expects($this->atLeast(2))
+            ->method('serialize')
+            ->willReturn('[[],[],[],[]]');
+        $config = new Config(null, $definitions, $serializerMock);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $config,
             'serializer',

@@ -112,7 +112,7 @@ class RemoveTest extends TestCase
     }
 
     /**
-     * @inheritdoc 
+     * @inheritdoc
      */
     protected function tearDown(): void
     {
