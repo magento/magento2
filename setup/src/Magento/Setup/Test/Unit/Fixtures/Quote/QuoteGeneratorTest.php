@@ -119,8 +119,11 @@ class QuoteGeneratorTest extends TestCase
             ->setMethods(
                 [
                     'getSimpleCountTo',
+                    'getSimpleCountFrom',
                     'getConfigurableCountTo',
+                    'getConfigurableCountFrom',
                     'getBigConfigurableCountTo',
+                    'getBigConfigurableCountFrom',
                     'getRequiredQuoteQuantity',
                     'getFixtureDataFilename',
                     'getExistsQuoteQuantity',
@@ -173,8 +176,11 @@ class QuoteGeneratorTest extends TestCase
         $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->config->expects($this->atLeastOnce())->method('getSimpleCountFrom')->willReturn(0);
         $this->config->expects($this->atLeastOnce())->method('getSimpleCountTo')->willReturn(2);
+        $this->config->expects($this->atLeastOnce())->method('getConfigurableCountFrom')->willReturn(0);
         $this->config->expects($this->atLeastOnce())->method('getConfigurableCountTo')->willReturn(1);
+        $this->config->expects($this->atLeastOnce())->method('getBigConfigurableCountFrom')->willReturn(0);
         $this->config->expects($this->atLeastOnce())->method('getBigConfigurableCountTo')->willReturn(1);
         $this->config->expects($this->atLeastOnce())->method('getRequiredQuoteQuantity')->willReturn(1);
         $this->config->expects($this->atLeastOnce())->method('getExistsQuoteQuantity')->willReturn(0);

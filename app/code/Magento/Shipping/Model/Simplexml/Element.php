@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Shipping\Model\Simplexml;
 
 /**
@@ -21,9 +22,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      */
     public function addAttribute($name, $value = null, $namespace = null)
     {
-        if ($value !== null) {
-            $value = $this->xmlentities($value);
-        }
+        $value = $value !== null ? $this->xmlentities($value) : '';
         parent::addAttribute($name, $value, $namespace);
     }
 
