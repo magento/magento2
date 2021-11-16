@@ -91,8 +91,8 @@
             <deleteData createDataKey="createConfigSecondChildProduct" stepKey="deleteConfigSecondChildProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
-                <argument name="path">var/export</argument>
+            <helper class="\Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">{"local":"var/export","s3":"import_export/export"}</argument>
             </helper>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -120,27 +120,27 @@
         </actionGroup>
 
         <!-- Validate Export File on File System: Product with Custom Options -->
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
             <argument name="text">$$createConfigProduct.name$$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildSimpleProductOption">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildSimpleProductOption">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
             <argument name="text">sku=$$createConfigFirstChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option1</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildSimpleProductOption">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildSimpleProductOption">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
             <argument name="text">sku=$$createConfigSecondChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option2</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainFirstSimpleProduct">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainFirstSimpleProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
             <argument name="text">$$createConfigFirstChildProduct.name$$</argument>
         </helper>
-        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainSecondSimpleProduct">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainSecondSimpleProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
             <argument name="text">$$createConfigSecondChildProduct.name$$</argument>
         </helper>
 
@@ -176,8 +176,8 @@
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
             <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
-        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
-            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        <helper class="\Magento\FunctionalTestingFramework\Filesystem\Helper\FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
         </helper>
     </test>
 </tests>
