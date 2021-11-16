@@ -32,8 +32,8 @@ define([
             /**
              * Add attributes under Paypal SDK Script tag
              */
-            onNodeCreated: function(node, config, name){
-                if(config.attributes && config.attributes[name]){
+            onNodeCreated: function (node, config, name) {
+                if(config.attributes && config.attributes[name]) {
                     $.each(dataAttributes, function (index, elem) {
                         node.setAttribute(index, elem);
                     });
