@@ -55,12 +55,12 @@ class SynchronizeFilesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->synchronizeFiles = Bootstrap::getObjectManager()->get(SynchronizeFilesInterface::class);
         $this->getAssetsByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
         $this->getAssetKeywords = Bootstrap::getObjectManager()->get(GetAssetsKeywordsInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
@@ -80,19 +80,19 @@ class SynchronizeFilesTest extends TestCase
         ?string $description,
         ?array $keywords
     ): void {
-        $path = realpath(__DIR__ . '/../_files/' . $file);
+        $path = realpath(__DIR__.'/../_files/'.$file);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($file);
-        $this->driver->copy(
-            $path,
-            $modifiableFilePath
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($path)
         );
 
         $this->synchronizeFiles->execute([$file]);
 
         $loadedAssets = $this->getAssetsByPath->execute([$file])[0];
         $loadedKeywords = $this->getKeywords($loadedAssets) ?: null;
-
-        $this->assertEquals($title, $loadedAssets->getTitle());
+        pathinfo($loadedAssets->getTitle(), PATHINFO_FILENAME);
+        $this->assertEquals($title, pathinfo($loadedAssets->getTitle(), PATHINFO_FILENAME));
         $this->assertEquals($description, $loadedAssets->getDescription());
         $this->assertEquals($keywords, $loadedKeywords);
 

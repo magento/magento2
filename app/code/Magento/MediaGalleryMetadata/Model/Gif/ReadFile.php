@@ -9,6 +9,7 @@ namespace Magento\MediaGalleryMetadata\Model\Gif;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
@@ -17,6 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem;
 
 /**
  * File segments reader
@@ -27,6 +29,11 @@ class ReadFile implements ReadFileInterface
      * @var DriverInterface
      */
     private $driver;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @var SegmentInterfaceFactory
@@ -48,17 +55,20 @@ class ReadFile implements ReadFileInterface
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param SegmentNames $segmentNames
+     * @param Filesystem $filesystem
      */
     public function __construct(
-        DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        SegmentNames $segmentNames
+        SegmentNames $segmentNames,
+        Filesystem $filesystem
     ) {
-        $this->driver = $driver;
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->segmentNames = $segmentNames;
+        $this->filesystem = $filesystem;
+        $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+
     }
 
     /**

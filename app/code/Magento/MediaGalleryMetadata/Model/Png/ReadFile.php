@@ -9,7 +9,9 @@ namespace Magento\MediaGalleryMetadata\Model\Png;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
@@ -30,6 +32,11 @@ class ReadFile implements ReadFileInterface
     private $driver;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var SegmentInterfaceFactory
      */
     private $segmentFactory;
@@ -40,18 +47,19 @@ class ReadFile implements ReadFileInterface
     private $fileFactory;
 
     /**
-     * @param DriverInterface $driver
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
+     * @param Filesystem $filesystem
      */
     public function __construct(
-        DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
-        SegmentInterfaceFactory $segmentFactory
+        SegmentInterfaceFactory $segmentFactory,
+        Filesystem $filesystem
     ) {
-        $this->driver = $driver;
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
+        $this->filesystem = $filesystem;
+        $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
     }
 
     /**
