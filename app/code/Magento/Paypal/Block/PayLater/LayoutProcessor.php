@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Block\PayLater;
 
 use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Paypal\Model\PayLaterConfig;
 use Magento\Paypal\Model\SdkUrl;
 use Magento\Paypal\Model\Config as PaypalConfig;
@@ -48,9 +49,9 @@ class LayoutProcessor implements LayoutProcessorInterface
         SdkUrl $sdkUrl,
         PaypalConfig $paypalConfig
     ) {
-        $this->payLaterConfig   = $payLaterConfig;
-        $this->sdkUrl           = $sdkUrl;
-        $this->paypalConfig     = $paypalConfig;
+        $this->payLaterConfig = $payLaterConfig;
+        $this->sdkUrl = $sdkUrl;
+        $this->paypalConfig = $paypalConfig;
     }
 
     /**
