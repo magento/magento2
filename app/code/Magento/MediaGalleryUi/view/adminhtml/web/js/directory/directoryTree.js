@@ -425,7 +425,7 @@ define([
 
             this.getJsonTree().then(function (data) {
                 $(this.directoryTreeSelector).jstree(true).settings.core.data = data;
-                $(this.directoryTreeSelector).jstree(true).refresh();
+                $(this.directoryTreeSelector).jstree(true).refresh(false, true);
                 this.setJsTreeReloaded(true);
                 deferred.resolve();
             }.bind(this));
