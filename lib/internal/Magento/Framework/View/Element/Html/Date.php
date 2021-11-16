@@ -6,6 +6,8 @@
 namespace Magento\Framework\View\Element\Html;
 
 use IntlDateFormatter;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Date element block
@@ -78,8 +80,12 @@ class Date extends \Magento\Framework\View\Element\Template
     public function getEscapedValue()
     {
         if ($this->getFormat() && $this->getValue()) {
-            $locale = \Locale::getDefault();
-            $dateFormatter = new IntlDateFormatter($locale, IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+            $localeResolver = ObjectManager::getInstance()->get(ResolverInterface::class);
+            $dateFormatter = new IntlDateFormatter(
+                $localeResolver->getLocale(),
+                IntlDateFormatter::SHORT,
+                IntlDateFormatter::SHORT
+            );
             $dateFormatter->setPattern($this->getFormat());
 
             return $dateFormatter->format(strtotime($this->getValue()));

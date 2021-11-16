@@ -6,6 +6,8 @@
 namespace Magento\Config\Model\Config\Source\Date;
 
 use IntlDateFormatter;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * @api
@@ -43,8 +45,12 @@ class Short implements \Magento\Framework\Option\ArrayInterface
     private function getTimeFormat(int $datetime, string $format = 'Y/M/d'): string
     {
         if (!$this->dateFormatter) {
-            $locale = \Locale::getDefault();
-            $this->dateFormatter = new \IntlDateFormatter($locale, IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+            $localeResolver = ObjectManager::getInstance()->get(ResolverInterface::class);
+            $this->dateFormatter = new \IntlDateFormatter(
+                $localeResolver->getLocale(),
+                IntlDateFormatter::SHORT,
+                IntlDateFormatter::SHORT
+            );
         }
         $this->dateFormatter->setPattern($format);
 

@@ -6,6 +6,7 @@
 namespace Magento\Cron\Model;
 
 use IntlDateFormatter;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use \Magento\TestFramework\Helper\Bootstrap;
 
@@ -76,8 +77,8 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->setJobCode("test_job")
             ->setStatus(Schedule::STATUS_RUNNING)
             ->setCreatedAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast))
-            ->setScheduledAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast + 60, 'Y-M-d H:m'))
-            ->setExecutedAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast + 61, 'Y-M-d H:m'));
+            ->setScheduledAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast + 60, 'Y-M-d HH:mm'))
+            ->setExecutedAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast + 61, 'Y-M-d HH:mm'));
         $oldSchedule->save();
 
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
@@ -124,7 +125,7 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
             ->setJobCode($jobCode)
             ->setStatus($status)
             ->setCreatedAt($this->getTimeFormat($gmtTimestamp))
-            ->setScheduledAt($this->getTimeFormat($gmtTimestamp + $timeOffset, 'Y-M-d H:m'));
+            ->setScheduledAt($this->getTimeFormat($gmtTimestamp + $timeOffset, 'Y-M-d HH:mm'));
         $schedule->save();
 
         return $schedule;
@@ -138,11 +139,15 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      *
      * @return string
      */
-    private function getTimeFormat(int $datetime, string $format = 'Y-M-d H:m:s'): string
+    private function getTimeFormat(int $datetime, string $format = 'Y-M-d HH:mm:ss'): string
     {
         if (!$this->dateFormatter) {
-            $locale = \Locale::getDefault();
-            $this->dateFormatter = new IntlDateFormatter($locale, IntlDateFormatter::SHORT, IntlDateFormatter::SHORT);
+            $localeResolver = Bootstrap::getObjectManager()->create(ResolverInterface::class);
+            $this->dateFormatter = new IntlDateFormatter(
+                $localeResolver->getLocale(),
+                IntlDateFormatter::SHORT,
+                IntlDateFormatter::SHORT
+            );
         }
         $this->dateFormatter->setPattern($format);
 
