@@ -640,6 +640,11 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        //File extensions should only be allowed to contain alphanumeric characters
+        if (preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
+
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }
