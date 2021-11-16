@@ -83,6 +83,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             } else {
                 $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] =
                     array_unique(
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         array_merge(
                             $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES],
                             $resourcePermissionSet
@@ -138,7 +139,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             $name = $parameter->attributes->getNamedItem('name')->nodeValue;
             $forceNode = $parameter->attributes->getNamedItem('force');
-            $force = $forceNode ? (bool)$forceNode->nodeValue : false;
+            $force = $forceNode ? filter_var($forceNode->nodeValue, FILTER_VALIDATE_BOOLEAN) : false;
             $value = $parameter->nodeValue;
             $data[$name] = [
                 self::KEY_FORCE => $force,

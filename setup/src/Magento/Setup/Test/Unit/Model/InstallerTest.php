@@ -549,6 +549,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
@@ -732,6 +733,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithUnresolvableRemoteStorageValidator()
         {
@@ -911,6 +913,7 @@ namespace Magento\Setup\Test\Unit\Model {
          * @throws \Magento\Framework\Exception\FileSystemException
          * @throws \Magento\Framework\Exception\LocalizedException
          * @throws \Magento\Framework\Exception\RuntimeException
+         * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
@@ -1313,7 +1316,6 @@ namespace Magento\Setup\Test\Unit\Model {
                     ['DROP DATABASE IF EXISTS `magento`'],
                     ['CREATE DATABASE IF NOT EXISTS `magento`']
                 );
-
 
             $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
             $this->object->cleanupDb();

@@ -134,7 +134,9 @@
         <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
         <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
-        <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
-        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToGrandTotal"/>
+        <actionGroup ref="StorefrontCheckRefundGrandTotalActionGroup" stepKey="seeGrandTotal">
+            <argument name="grandTotal" value="555.00"/>
+        </actionGroup>
     </test>
 </tests>
