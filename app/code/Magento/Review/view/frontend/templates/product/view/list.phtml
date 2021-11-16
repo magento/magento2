@@ -49,7 +49,7 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                              title="<?= $escaper->escapeHtmlAttr($_vote->getPercent()) ?>%">
                                             <meta itemprop="worstRating" content="1"/>
                                             <meta itemprop="bestRating" content="100"/>
-                                            <span style="width:<?= $block->escapeHtmlAttr($rating); ?>%">
+                                            <span style="width:<?= $escaper->escapeHtml($_vote->getPercent()) ?>%">
                                                 <span itemprop="ratingValue">
                                                     <?= $escaper->escapeHtml($_vote->getPercent()) ?>%
                                                 </span>
