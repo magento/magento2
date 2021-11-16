@@ -31,6 +31,8 @@ class MessageProvider implements MessagesProviderInterface
     }
 
     /**
+     * Return collection object of messages from session
+     *
      * @return Collection
      */
     public function getMessages() : Collection
