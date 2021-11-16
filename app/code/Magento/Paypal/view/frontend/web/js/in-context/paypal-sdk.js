@@ -26,7 +26,7 @@ define([
                 }
             },
             attributes: {
-                "paypalSdk": dataAttributes
+                'paypalSdk': dataAttributes
             },
 
             /**
