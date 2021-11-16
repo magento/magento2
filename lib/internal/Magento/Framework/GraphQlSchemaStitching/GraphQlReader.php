@@ -132,7 +132,7 @@ class GraphQlReader implements ReaderInterface
 
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
-            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof ScalarType))) {
+            if (!\GraphQL\Type\Definition\Type::isBuiltInType($typeMeta)) {
                 $type = $this->typeReader->read($typeMeta);
                 if (!empty($type)) {
                     $partialResults[$typeName] = $type;
@@ -153,7 +153,7 @@ class GraphQlReader implements ReaderInterface
      */
     private function parseTypes(string $graphQlSchemaContent): array
     {
-        $typeKindsPattern = '(type|interface|union|enum|input)';
+        $typeKindsPattern = '(type|interface|union|enum|input|scalar)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
         $typeDefinitionPattern = '([^\{]*)(\{[^\}]*\})';
         $spacePattern = '[\s\t\n\r]+';

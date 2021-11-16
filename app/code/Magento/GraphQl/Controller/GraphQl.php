@@ -161,12 +161,11 @@ class GraphQl implements FrontControllerInterface
         $data = $this->getDataFromRequest($request);
         $result = [];
 
-        $schema = null;
+        $query = $data['query'] ?? '';
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
 
-            $query = $data['query'] ?? '';
             $variables = $data['variables'] ?? null;
 
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
@@ -191,7 +190,7 @@ class GraphQl implements FrontControllerInterface
         $jsonResult->renderResult($this->httpResponse);
 
         // log information about the query, unless it is an introspection query
-        if (strpos($data['query'], 'IntrospectionQuery') === false) {
+        if (strpos($query, 'IntrospectionQuery') === false) {
             $queryInformation = $this->logDataHelper->getLogData($request, $data, $schema, $this->httpResponse);
             $this->loggerPool->execute($queryInformation);
         }
