@@ -566,6 +566,10 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     public function processRestExceptionResult(\Exception $e)
     {
         $error = json_decode($e->getMessage(), true);
+        if(empty($error) && json_last_error() !== JSON_ERROR_NONE){
+            $error['message'] = $e->getMessage();
+        }
+
         //Remove line breaks and replace with space
         $error['message'] = trim(preg_replace('/\s+/', ' ', $error['message']));
         // remove trace and type, will only be present if server is in dev mode
