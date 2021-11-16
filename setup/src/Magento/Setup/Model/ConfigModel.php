@@ -134,9 +134,12 @@ class ConfigModel
         $options = $this->getAvailableOptions();
         foreach ($options as $option) {
             try {
-                if ($inputOptions[$option->getName()] !== null) {
-                    $option->validate($inputOptions[$option->getName()]);
+                $inputValue = $inputOptions[$option->getName()] ?? null;
+
+                if ($inputValue !== null) {
+                    $option->validate($inputValue);
                 }
+
             } catch (\InvalidArgumentException $e) {
                 $errors[] = $e->getMessage();
             }

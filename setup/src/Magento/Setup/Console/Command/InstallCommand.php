@@ -117,6 +117,11 @@ class InstallCommand extends AbstractSetupCommand
     protected $searchConfigOptionsList;
 
     /**
+     * @var array
+     */
+    protected $interactiveSetupUserInput;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
@@ -228,7 +233,8 @@ class InstallCommand extends AbstractSetupCommand
     {
         $consoleLogger = new ConsoleLogger($output);
         $installer = $this->installerFactory->create($consoleLogger);
-        $installer->install($input->getOptions());
+        $isInteractiveSetup = $input->getOption(self::INPUT_KEY_INTERACTIVE_SETUP) ?? false;
+        $installer->install($isInteractiveSetup ? $this->interactiveSetupUserInput : $input->getOptions());
 
         $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
         $arrayInput = new ArrayInput([]);
@@ -260,6 +266,7 @@ class InstallCommand extends AbstractSetupCommand
                 $command .= " --{$key}={$value}";
             }
             $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
+            $this->interactiveSetupUserInput = $configOptionsToValidate;
         }
 
         $errors = $this->configModel->validate($configOptionsToValidate);
@@ -409,7 +416,7 @@ class InstallCommand extends AbstractSetupCommand
             if ($answer == null) {
                 $answer = '';
             } else {
-                $answer = trim($answer);
+                $answer = is_string($answer) ? trim($answer) : $answer;
             }
 
             if ($validateInline) {

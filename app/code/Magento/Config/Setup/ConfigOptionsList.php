@@ -61,14 +61,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new SelectConfigOption(
                 self::INPUT_KEY_DEBUG_LOGGING,
                 SelectConfigOption::FRONTEND_WIZARD_RADIO,
-                [true, false, 1, 0],
+                ['true', 'false', 1, 0],
                 self::CONFIG_PATH_DEBUG_LOGGING,
                 'Enable debug logging'
             ),
             new SelectConfigOption(
                 self::INPUT_KEY_SYSLOG_LOGGING,
                 SelectConfigOption::FRONTEND_WIZARD_RADIO,
-                [true, false, 1, 0],
+                ['true', 'false', 1, 0],
                 self::CONFIG_PATH_SYSLOG_LOGGING,
                 'Enable syslog logging'
             ),
