@@ -17,11 +17,6 @@ use Magento\Framework\App\ObjectManager;
 class UploaderTest extends TestCase
 {
     /**
-     * @var Magento\Framework\File\Uploader
-     */
-    private $model;
-
-    /**
      * @var Uploader
      */
     private $uploader;
