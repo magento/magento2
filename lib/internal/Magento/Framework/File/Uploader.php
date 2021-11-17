@@ -848,8 +848,8 @@ class Uploader
                 $dispersionPath = '/' . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             } else {
                 $dispersionPath = self::_addDirSeparator(
-                        $dispersionPath
-                    ) . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
+                    $dispersionPath
+                ) . ('.' == $fileName[$char] ? '_' : $fileName[$char]);
             }
             $char++;
         }
