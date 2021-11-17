@@ -27,6 +27,7 @@
         <fillField selector ="{{PayPalExpressCheckoutConfigSection.signature(countryCode)}}" userInput="{{credentials.paypal_express_api_signature}}" stepKey="inputAPISignature"/>
         <selectOption selector ="{{PayPalExpressCheckoutConfigSection.sandboxMode(countryCode)}}" userInput="Yes" stepKey="enableSandboxMode"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableInContext(countryCode)}}" userInput="Yes" stepKey="enableInContext"/>
         <fillField selector ="{{PayPalExpressCheckoutConfigSection.merchantID(countryCode)}}" userInput="{{credentials.paypal_express_merchantID}}" stepKey="inputMerchantID"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
