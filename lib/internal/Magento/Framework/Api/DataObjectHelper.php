@@ -9,7 +9,7 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**
- * Data object helper.
+ * Service class allow populating object from array data
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -94,49 +94,69 @@ class DataObjectHelper
      * @param string $interfaceName
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _setDataValues($dataObject, array $data, $interfaceName)
     {
-        $dataObjectMethods = get_class_methods(get_class($dataObject));
-        foreach ($data as $key => $value) {
-            /* First, verify is there any setter for the key on the Service Data Object */
-            $camelCaseKey = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
-            $possibleMethods = [
-                'set' . $camelCaseKey,
-                'setIs' . $camelCaseKey,
-            ];
-            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES
-                && ($dataObject instanceof ExtensibleDataInterface)
-                && is_array($data[$key])
-                && !empty($data[$key])
-            ) {
-                foreach ($data[$key] as $customAttribute) {
-                    $dataObject->setCustomAttribute(
-                        $customAttribute[AttributeInterface::ATTRIBUTE_CODE],
-                        $customAttribute[AttributeInterface::VALUE]
-                    );
-                }
-            } elseif ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
-                $methodName = array_values($methodNames)[0];
-                if (!is_array($value)) {
-                    if ($methodName === 'setExtensionAttributes' && $value === null) {
-                        // Cannot pass a null value to a method with a typed parameter
+        if (empty($data)) {
+            return $this;
+        }
+        $setMethods = $this->getSetters($dataObject);
+        if ($dataObject instanceof ExtensibleDataInterface
+            && !empty($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES])
+        ) {
+            foreach ($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES] as $customAttribute) {
+                $dataObject->setCustomAttribute(
+                    $customAttribute[AttributeInterface::ATTRIBUTE_CODE],
+                    $customAttribute[AttributeInterface::VALUE]
+                );
+            }
+            unset($data[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]);
+        }
+        if ($dataObject instanceof \Magento\Framework\Model\AbstractModel) {
+            $simpleData = array_filter($data, static function ($e) {
+                return is_scalar($e) || is_null($e);
+            });
+            if (isset($simpleData['id'])) {
+                $dataObject->setId($simpleData['id']);
+                unset($simpleData['id']);
+            }
+            $simpleData = array_intersect_key($simpleData, $setMethods);
+            $dataObject->addData($simpleData);
+            $data = array_diff_key($data, $simpleData);
+            if (\count($data) === 0) {
+                return $this;
+            }
+        }
+        foreach (array_intersect_key($data, $setMethods) as $key => $value) {
+            $methodName = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
+
+            if (!is_array($value)) {
+                if ($methodName !== 'ExtensionAttributes' || $value !== null) {
+                    if (method_exists($dataObject, 'set' . $methodName)) {
+                        $dataObject->{'set' . $methodName}($value);
                     } else {
-                        $dataObject->$methodName($value);
+                        $dataObject->{'setIs' . $methodName}($value);
                     }
-                } else {
-                    $getterMethodName = 'get' . $camelCaseKey;
-                    $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
                 }
-            } elseif ($dataObject instanceof CustomAttributesDataInterface) {
+            } else {
+                $getterMethodName = 'get' . $methodName;
+                $this->setComplexValue($dataObject, $getterMethodName, 'set' . $methodName, $value, $interfaceName);
+            }
+            unset($data[$key]);
+        }
+
+        if ($dataObject instanceof CustomAttributesDataInterface) {
+            foreach ($data as $key => $value) {
                 $dataObject->setCustomAttribute($key, $value);
             }
         }
-
         return $this;
     }
 
     /**
+     * Set complex (like object) value using $methodName based on return type of $getterMethodName
+     *
      * @param mixed $dataObject
      * @param string $getterMethodName
      * @param string $methodName
@@ -179,7 +199,7 @@ class DataObjectHelper
         } elseif (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
             foreach ($value as $extensionAttributeKey => $extensionAttributeValue) {
                 $extensionAttributeGetterMethodName
-                    = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
+                    = 'get' . SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
                         $extensionAttributeKey
                     );
                 $methodReturnType = $this->methodsMapProcessor->getMethodReturnType(
@@ -259,5 +279,41 @@ class DataObjectHelper
             }
         }
         return $attributeValueArray;
+    }
+
+    /** @var array  */
+    private array $settersCache = [];
+
+    /**
+     * Get list of setters for object
+     *
+     * @param object $dataObject
+     * @return array
+     */
+    private function getSetters(object $dataObject): array
+    {
+        $class = get_class($dataObject);
+        if (!isset($this->settersCache[$class])) {
+            $dataObjectMethods = get_class_methods($class);
+            // use regexp to manipulate with method list as it use jit starting with PHP 7.3
+            $setters = array_filter(
+                explode(
+                    ',',
+                    strtolower(
+                        // (0) remove all not setter
+                        // (1) add _ before upper letter
+                        // (2) remove set_ in start of name
+                        // (3) add name without is_ prefix
+                        preg_replace(
+                            ['/(^|,)(?!set)[^,]*/S','/(.)([A-Z])/S', '/(^|,)set_/iS', '/(^|,)is_([^,]+)/is'],
+                            ['', '$1_$2', '$1', '$1$2,is_$2'],
+                            implode(',', $dataObjectMethods)
+                        )
+                    )
+                )
+            );
+            $this->settersCache[$class] = array_flip($setters);
+        }
+        return $this->settersCache[$class];
     }
 }
