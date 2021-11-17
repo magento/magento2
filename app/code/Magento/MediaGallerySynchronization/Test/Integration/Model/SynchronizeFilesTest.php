@@ -44,7 +44,7 @@ class SynchronizeFilesTest extends TestCase
     private $mediaDirectory;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -70,7 +70,7 @@ class SynchronizeFilesTest extends TestCase
         string $title,
         string $source
     ): void {
-        $path = realpath(__DIR__.'/../_files/'.$file);
+        $path = realpath(__DIR__ . '/../_files/' . $file);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($file);
         $this->driver->filePutContents(
             $modifiableFilePath,

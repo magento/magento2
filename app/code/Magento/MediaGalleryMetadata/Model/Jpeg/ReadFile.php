@@ -191,7 +191,6 @@ class ReadFile implements ReadFileInterface
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $segmentSize = unpack('nsize', $this->read($resource, 2))['size'] - 2;
-
         return $this->segmentFactory->create([
             'name' => $this->segmentNames->getSegmentName($segmentType),
             'data' => $this->read($resource, $segmentSize)
