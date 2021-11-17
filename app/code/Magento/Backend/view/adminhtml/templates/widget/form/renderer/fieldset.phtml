@@ -53,7 +53,7 @@ if ($isField) {
 
     <?php if (!$element->getNoContainer()): ?>
         <fieldset class="<?=  $block->escapeHtmlAttr($cssClass) ?>" id="<?=  $block->escapeHtmlAttr($id) ?>">
-        <?php if (strlen(is_string($element->getBeforeElementHtml())) ? $element->getBeforeElementHtml() : ''): ?>
+        <?php if (is_string($element->getBeforeElementHtml()) && strlen($element->getBeforeElementHtml())): ?>
             <?= $element->getBeforeElementHtml() ?>
         <?php endif ?>
         <?php if ($element->getLegend() && !$isWrapped): ?>
