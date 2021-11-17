@@ -127,7 +127,7 @@ class CartFixedDiscount
         float $shippingAmount,
         float $quoteBaseSubtotal
     ): float {
-        $ratio = $shippingAmount / $quoteBaseSubtotal;
+        $ratio = $quoteBaseSubtotal != 0 ? $shippingAmount / $quoteBaseSubtotal : 0;
         return $this->priceCurrency
             ->roundPrice(
                 $rule->getDiscountAmount() * $ratio
