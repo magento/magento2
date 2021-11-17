@@ -16,6 +16,7 @@
             <description value="Currency symbols should be disabled by default"/>
             <severity value="MINOR"/>
             <group value="currency"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}},{{SetAllowedCurrenciesConfigForRUB.value}}" stepKey="setAllowedCurrencyWebsites_EUR_RUB_USD"/>
