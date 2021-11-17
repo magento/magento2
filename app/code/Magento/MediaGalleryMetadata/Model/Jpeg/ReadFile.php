@@ -112,7 +112,6 @@ class ReadFile implements ReadFileInterface
 
         if ($marker != self::MARKER_IMAGE_FILE_START) {
             $this->driver->fileClose($resource);
-
             throw new ValidatorException(__('Not a JPEG image'));
         }
 
@@ -151,7 +150,6 @@ class ReadFile implements ReadFileInterface
 
         if ($data[0] != self::MARKER_PREFIX) {
             $this->driver->fileClose($resource);
-
             throw new LocalizedException(__('File is corrupted'));
         }
 
@@ -172,7 +170,7 @@ class ReadFile implements ReadFileInterface
             $compressedImage .= $this->read($resource, self::ONE_MEGABYTE);
         } while (!$this->driver->endOfFile($resource));
 
-        $endOfImageMarkerPosition = strpos($compressedImage, self::MARKER_PREFIX.self::MARKER_IMAGE_END);
+        $endOfImageMarkerPosition = strpos($compressedImage, self::MARKER_PREFIX . self::MARKER_IMAGE_END);
 
         if ($endOfImageMarkerPosition !== false) {
             $compressedImage = substr($compressedImage, 0, $endOfImageMarkerPosition);

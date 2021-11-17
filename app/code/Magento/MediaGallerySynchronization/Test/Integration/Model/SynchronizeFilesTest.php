@@ -20,9 +20,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SynchronizeFiles.
- *
- * @internal
- * @coversNothing
  */
 class SynchronizeFilesTest extends TestCase
 {
@@ -54,18 +51,17 @@ class SynchronizeFilesTest extends TestCase
         $this->synchronizeFiles = Bootstrap::getObjectManager()->get(SynchronizeFilesInterface::class);
         $this->getAssetsByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
-            ->getDirectoryWrite(
-                DirectoryList::MEDIA
-            )
-        ;
+            ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
-     * Test for SynchronizeFiles::execute.
+     * Test for SynchronizeFiles::execute
      *
      * @dataProvider filesProvider
-     *
+     * @param string $file
+     * @param string $title
+     * @param string $source
      * @throws FileSystemException
      * @throws LocalizedException
      */
@@ -84,13 +80,14 @@ class SynchronizeFilesTest extends TestCase
         $this->synchronizeFiles->execute([$file]);
 
         $loadedAsset = $this->getAssetsByPath->execute([$file])[0];
+
         $this->assertEquals($title, pathinfo($loadedAsset->getTitle(), PATHINFO_FILENAME));
         $this->assertEquals($source, $loadedAsset->getSource());
         $this->driver->deleteFile($modifiableFilePath);
     }
 
     /**
-     * Data provider for testExecute.
+     * Data provider for testExecute
      *
      * @return array[]
      */
@@ -100,8 +97,8 @@ class SynchronizeFilesTest extends TestCase
             [
                 '/magento.jpg',
                 'magento',
-                'Local',
-            ],
+                'Local'
+            ]
         ];
     }
 }
