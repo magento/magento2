@@ -95,6 +95,7 @@ class SynchronizeFilesTest extends TestCase
         $this->assertEquals($title, pathinfo($loadedAssets->getTitle(), PATHINFO_FILENAME));
         $this->assertEquals($description, $loadedAssets->getDescription());
         $this->assertEquals($keywords, $loadedKeywords);
+        $this->driver->deleteFile($modifiableFilePath);
     }
 
     /**
@@ -145,13 +146,5 @@ class SynchronizeFilesTest extends TestCase
             },
             $keywords
         );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function tearDown(): void
-    {
-        $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath());
     }
 }
