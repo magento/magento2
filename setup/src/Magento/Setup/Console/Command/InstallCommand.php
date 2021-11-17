@@ -363,7 +363,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * Runs interactive questions
      *
-     * It will ask users for interactive questionst regarding setup configuration.
+     * It will ask users for interactive questions regarding setup configuration.
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -410,14 +410,11 @@ class InstallCommand extends AbstractSetupCommand
         $question->setValidator(function ($answer) use ($option, $validateInline) {
 
             if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
-                $answer = $option->getSelectOptions()[$answer];
+                //If user doesn't provide an input & default value for question is not set, take first option as input.
+                $answer = $option->getSelectOptions()[$answer] ?? current($option->getSelectOptions());
             }
 
-            if ($answer == null) {
-                $answer = '';
-            } else {
-                $answer = is_string($answer) ? trim($answer) : $answer;
-            }
+            $answer = $answer === null ? '' : (is_string($answer) ? trim($answer) : $answer);
 
             if ($validateInline) {
                 $option->validate($answer);
