@@ -234,7 +234,8 @@ class InstallCommand extends AbstractSetupCommand
         $consoleLogger = new ConsoleLogger($output);
         $installer = $this->installerFactory->create($consoleLogger);
         $isInteractiveSetup = $input->getOption(self::INPUT_KEY_INTERACTIVE_SETUP) ?? false;
-        $installer->install($isInteractiveSetup ? $this->interactiveSetupUserInput : $input->getOptions());
+        $installer->install($isInteractiveSetup ? array_merge($input->getOptions(), $this->interactiveSetupUserInput) :
+            $input->getOptions());
 
         $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
         $arrayInput = new ArrayInput([]);
