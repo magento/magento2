@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Ui\Component;
 
+use IntlDateFormatter;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -129,8 +131,8 @@ class ColumnFactory
     {
         $isDatetime = $attribute->getFrontendInput() === 'datetime';
         $dateFormat = $isDatetime
-            ? $this->timezone->getDateTimeFormat(\IntlDateFormatter::MEDIUM)
-            : $this->timezone->getDateFormat(\IntlDateFormatter::MEDIUM);
+            ? $this->timezone->getDateTimeFormat(IntlDateFormatter::MEDIUM)
+            : $this->timezone->getDateFormat(IntlDateFormatter::MEDIUM);
         $timezone = $isDatetime
             ? $this->timezone->getConfigTimezone()
             : $this->timezone->getDefaultTimezone();
@@ -138,7 +140,10 @@ class ColumnFactory
         return [
             'timezone' => $timezone,
             'dateFormat' => $dateFormat,
-            'options' => ['showsTime' => $isDatetime],
+            'options' => [
+                'showsTime' => $isDatetime,
+                'dateFormat' => $this->timezone->getDateFormat()
+            ]
         ];
     }
 

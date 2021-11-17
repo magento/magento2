@@ -155,6 +155,7 @@
                 <dataType>date</dataType>
                 <label translate="true">Purchase Date</label>
                 <sorting>desc</sorting>
+                <dateFormat>MM/d/y</dateFormat>
             </settings>
         </column>
         <column name="billing_name">

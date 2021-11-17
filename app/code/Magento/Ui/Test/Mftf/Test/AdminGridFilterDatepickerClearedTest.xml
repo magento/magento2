@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridFilterDatepickerClearedTest">
+        <annotations>
+            <stories value="Clear Grid Filter"/>
+            <title value="Grid Filter Clear and Verify Date Picker Cleared"/>
+            <description value="Verify Date Picker values are cleared after 'Clear all' action executed."/>
+            <severity value="MAJOR"/>
+            <group value="UI"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Navigate to Login as Customer Log page -->
+        <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
+
+        <!-- Set 'from date' and 'to date' filter fields -->
+        <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addFromFilter">
+            <argument name="filterInputName" value="time[from]"/>
+            <argument name="filterValue" value="{$yesterdayDate}"/>
+        </actionGroup>
+        <generateDate date="now" format="m/d/Y" stepKey="todayDate"/>
+        <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addToFilter">
+            <argument name="filterInputName" value="time[to]"/>
+            <argument name="filterValue" value="{$todayDate}"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilters"/>
+
+        <!-- Check if 'from date' and 'to date' filter fields are filled -->
+        <actionGroup ref="AdminGridFilterCheckInputFieldActionGroup" stepKey="checkFromFilterBeforeClear">
+            <argument name="filterInputName" value="time[from]"/>
+            <argument name="filterValue" value="{$yesterdayDate}"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterCheckInputFieldActionGroup" stepKey="checkToFilterBeforeClear">
+            <argument name="filterInputName" value="time[to]"/>
+            <argument name="filterValue" value="{$todayDate}"/>
+        </actionGroup>
+
+        <!-- Clear all filter values -->
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearAllFilters"/>
+
+        <!-- Check if 'from date' and 'to date' fields are cleared -->
+        <actionGroup ref="AdminGridFilterCheckInputFieldActionGroup" stepKey="checkFromFilterAfterClear">
+            <argument name="filterInputName" value="time[from]"/>
+            <argument name="filterValue" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminGridFilterCheckInputFieldActionGroup" stepKey="checkToFilterAfterClear">
+            <argument name="filterInputName" value="time[to]"/>
+            <argument name="filterValue" value=""/>
+        </actionGroup>
+    </test>
+</tests>

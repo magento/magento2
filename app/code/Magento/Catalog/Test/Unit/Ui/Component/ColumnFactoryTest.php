@@ -184,7 +184,8 @@ class ColumnFactoryTest extends TestCase
                     'timezone' => $expectedTimezone,
                     'dateFormat' => $expectedDateFormat,
                     'options' => [
-                        'showsTime' => $showsTime
+                        'showsTime' => $showsTime,
+                        'dateFormat' => $dateFormat
                     ]
                 ],
             ],
@@ -202,8 +203,8 @@ class ColumnFactoryTest extends TestCase
         $this->attribute->method('getFrontendInput')
             ->willReturn($frontendInput);
 
-        $this->timezone->method('getDateFormat')
-            ->with(\IntlDateFormatter::MEDIUM)
+        $this->timezone->expects($this->atLeastOnce())
+            ->method('getDateFormat')
             ->willReturn($dateFormat);
         $this->timezone->method('getDateTimeFormat')
             ->with(\IntlDateFormatter::MEDIUM)
