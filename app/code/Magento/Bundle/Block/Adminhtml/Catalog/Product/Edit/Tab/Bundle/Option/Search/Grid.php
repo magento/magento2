@@ -44,6 +44,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -190,18 +192,22 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get selected products
+     *
      * @return mixed
      */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost(
             'selected_products',
-            explode(',', $this->getRequest()->getParam('productss'))
+            explode(',', $this->getRequest()->getParam('productss') ?? '')
         );
         return $products;
     }
 
     /**
+     * Get products
+     *
      * @return array
      */
     protected function _getProducts()

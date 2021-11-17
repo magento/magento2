@@ -17,8 +17,6 @@ use Magento\Store\Model\ScopeInterface;
 class Wishlist implements DataProviderInterface
 {
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
@@ -165,7 +163,7 @@ class Wishlist implements DataProviderInterface
                 }
                 $description .= '</p>';
 
-                if (trim($product->getDescription()) != '') {
+                if ($product->getDescription() && trim($product->getDescription()) != '') {
                     $description .= '<p>' . __('Comment:') . ' '
                         . $this->outputHelper->productAttribute(
                             $product,

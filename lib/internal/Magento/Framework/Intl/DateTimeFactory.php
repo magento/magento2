@@ -5,10 +5,6 @@
  */
 namespace Magento\Framework\Intl;
 
-/**
- * Class DateTimeFactory
- * @package Magento\Framework
- */
 class DateTimeFactory
 {
     /**
@@ -20,6 +16,6 @@ class DateTimeFactory
      */
     public function create($time = 'now', \DateTimeZone $timezone = null)
     {
-        return new \DateTime($time, $timezone);
+        return new \DateTime($time ?? 'now', $timezone);
     }
 }
