@@ -209,6 +209,7 @@ class Uploader
      * @param DriverPool|null $driverPool
      * @param TargetDirectory|null $targetDirectory
      * @param Filesystem|null $filesystem
+     * @param LoggerInterface|null $logger
      * @throws \DomainException
      */
     public function __construct(
@@ -217,7 +218,8 @@ class Uploader
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
         TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null
+        Filesystem $filesystem = null,
+        LoggerInterface $logger = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
@@ -232,6 +234,7 @@ class Uploader
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
         $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -323,7 +326,7 @@ class Uploader
         }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
-        } elseif (!$this->getTargetDirectory()
+        } elseif (!$this->targetDirectory
             ->getDirectoryWrite(DirectoryList::ROOT)
             ->isWritable($destinationFolder)
         ) {
@@ -356,12 +359,12 @@ class Uploader
         $rootCode = DirectoryList::PUB;
 
         try {
-            if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+            if (strpos($destPath, $this->directoryList->getPath($rootCode)) !== 0) {
                 $rootCode = DirectoryList::ROOT;
             }
 
-            $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
-            $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
+            $destPath = str_replace($this->directoryList->getPath($rootCode), '', $destPath);
+            $directory = $this->targetDirectory->getDirectoryWrite($rootCode);
 
             return $this->getFileDriver()->rename(
                 $tmpPath,
@@ -369,51 +372,9 @@ class Uploader
                 $directory->getDriver()
             );
         } catch (FileSystemException $exception) {
-            $this->getLogger()->critical($exception->getMessage());
+            $this->logger->critical($exception->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Get logger instance.
-     *
-     * @deprecated
-     * @return LoggerInterface
-     */
-    private function getLogger(): LoggerInterface
-    {
-        if (!$this->logger) {
-            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
-        }
-        return $this->logger;
-    }
-
-    /**
-     * Retrieves target directory.
-     *
-     * @return TargetDirectory
-     */
-    private function getTargetDirectory(): TargetDirectory
-    {
-        if (!isset($this->targetDirectory)) {
-            $this->targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
-        }
-
-        return $this->targetDirectory;
-    }
-
-    /**
-     * Retrieves directory list.
-     *
-     * @return DirectoryList
-     */
-    private function getDirectoryList(): DirectoryList
-    {
-        if (!isset($this->directoryList)) {
-            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
-        }
-
-        return $this->directoryList;
     }
 
     /**
@@ -779,7 +740,7 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        $rootDirectory = $this->getTargetDirectory()->getDirectoryWrite(DirectoryList::ROOT);
+        $rootDirectory = $this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
 
         if (!$rootDirectory->isDirectory($destinationFolder)) {
             $result = $rootDirectory->getDriver()->createDirectory($destinationFolder);
