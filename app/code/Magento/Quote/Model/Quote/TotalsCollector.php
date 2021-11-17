@@ -194,7 +194,7 @@ class TotalsCollector
     protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
     {
         $code = $quote->getData('coupon_code');
-        if (strlen($code)) {
+        if ($code !== null && strlen($code)) {
             $addressHasCoupon = false;
             $addresses = $quote->getAllAddresses();
             if (count($addresses) > 0) {

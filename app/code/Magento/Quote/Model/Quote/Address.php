@@ -1452,6 +1452,9 @@ class Address extends AbstractAddress implements
     public function getStreet()
     {
         $street = $this->getData(self::KEY_STREET);
+        if (!$street) {
+            return [''];
+        }
         return is_array($street) ? $street : explode("\n", $street);
     }
 
