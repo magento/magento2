@@ -602,7 +602,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 foreach ($productAttributes as $attribute) {
                     $attributeCode = $attribute->getAttributeCode();
                     $value = $product->getData($attributeCode);
-                    if ($existingProduct->getData($attributeCode) === $value
+                    if ($existingProduct->getData($attributeCode) !== $value
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && !is_array($value)
                         && $attribute->getData('frontend_input') !== 'media_image'
