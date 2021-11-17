@@ -379,6 +379,7 @@ class TypeProcessor
      * @param string $type
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function isTypeAny($type)
     {
         return ($this->getNormalizedType($type) == self::NORMALIZED_ANY_TYPE);
@@ -397,7 +398,7 @@ class TypeProcessor
      */
     public function isArrayType($type)
     {
-        return (bool)preg_match('/(\[\]$|^ArrayOf)/', $type);
+        return $type && preg_match('/(\[\]$|^ArrayOf)/', $type);
     }
 
     /**
