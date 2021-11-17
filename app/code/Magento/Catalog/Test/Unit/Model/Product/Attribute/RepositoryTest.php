@@ -20,6 +20,7 @@ use Magento\Eav\Api\Data\AttributeFrontendLabelInterface;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
+use Magento\Eav\Model\Validator\Attribute\Code;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
@@ -84,6 +85,11 @@ class RepositoryTest extends TestCase
     protected $searchResultMock;
 
     /**
+     * @var MockObject
+     */
+    protected $attributeCodeValidatorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -111,6 +117,7 @@ class RepositoryTest extends TestCase
                     ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
                 )
                 ->getMockForAbstractClass();
+        $this->attributeCodeValidatorMock = $this->createMock(Code::class);
 
         $this->model = new Repository(
             $this->attributeResourceMock,
@@ -119,7 +126,8 @@ class RepositoryTest extends TestCase
             $this->eavAttributeRepositoryMock,
             $this->eavConfigMock,
             $this->validatorFactoryMock,
-            $this->searchCriteriaBuilderMock
+            $this->searchCriteriaBuilderMock,
+            $this->attributeCodeValidatorMock
         );
     }
 
