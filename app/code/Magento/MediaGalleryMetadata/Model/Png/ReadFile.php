@@ -50,6 +50,7 @@ class ReadFile implements ReadFileInterface
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param Filesystem $filesystem
+     * @throws FileSystemException
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,

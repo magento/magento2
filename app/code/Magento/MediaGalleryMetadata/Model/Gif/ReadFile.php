@@ -11,7 +11,6 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
@@ -46,25 +45,18 @@ class ReadFile implements ReadFileInterface
     private $fileFactory;
 
     /**
-     * @var SegmentNames
-     */
-    private $segmentNames;
-
-    /**
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
-     * @param SegmentNames $segmentNames
      * @param Filesystem $filesystem
+     * @throws FileSystemException
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        SegmentNames $segmentNames,
         Filesystem $filesystem
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
-        $this->segmentNames = $segmentNames;
         $this->filesystem = $filesystem;
         $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
     }

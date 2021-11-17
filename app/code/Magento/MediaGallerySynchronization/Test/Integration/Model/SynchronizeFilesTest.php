@@ -83,7 +83,6 @@ class SynchronizeFilesTest extends TestCase
 
         $this->assertEquals($title, pathinfo($loadedAsset->getTitle(), PATHINFO_FILENAME));
         $this->assertEquals($source, $loadedAsset->getSource());
-        $this->driver->deleteFile($modifiableFilePath);
     }
 
     /**
@@ -100,5 +99,13 @@ class SynchronizeFilesTest extends TestCase
                 'Local'
             ]
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function tearDown(): void
+    {
+        $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath());
     }
 }
