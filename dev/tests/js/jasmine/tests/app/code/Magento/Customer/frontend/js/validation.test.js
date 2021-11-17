@@ -16,12 +16,12 @@ define([
 
         dataProvider = [
             {
-                format: 'M/d/Y',
+                format: 'M/d/YY',
                 date: '09/2/18',
                 expects: true
             },
             {
-                format: 'M/DD/Y',
+                format: 'M/DD/YY',
                 date: '09/2/18',
                 expects: false
             }

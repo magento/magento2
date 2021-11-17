@@ -70,7 +70,7 @@ define([
             model.options.timeFormat = 'h:mm a';
             model.prepareDateTimeFormats();
             model.value('02:43:58');
-            expect(model.getPreview()).toBe('2:43 am');
+            expect(model.getPreview()).toBe('2:43 AM');
 
             model.options.timeFormat = 'HH:mm:ss';
             model.prepareDateTimeFormats();

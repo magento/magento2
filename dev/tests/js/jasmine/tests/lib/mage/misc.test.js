@@ -49,7 +49,7 @@ define([
         it('Check convertToMomentFormat function', function () {
             var format, momentFormat;
 
-            format = 'M/d/yy';
+            format = 'M/dd/yyyy';
             momentFormat = 'M/DD/YYYY';
             expect(utils.convertToMomentFormat(format)).toBe(momentFormat);
         });
@@ -89,42 +89,42 @@ define([
                 'az_Latn_AZ': {
                     'locale': 'az_Latn_AZ',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'id_ID': {
                     'locale': 'id_ID',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'ms_Latn_MY': {
                     'locale': 'ms_Latn_MY',
                     'localeInfo': {
-                        'format': 'd/MM/yy',
+                        'format': 'd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'bs_Latn_BA': {
                     'locale': 'bs_Latn_BA',
                     'localeInfo': {
-                        'format': 'dd.MM.yy.',
+                        'format': 'dd.MM.yyyy.',
                         'expectedValue': '17.11.2016.'
                     }
                 },
                 'ca_ES': {
                     'locale': 'ca_ES',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'cy_GB': {
                     'locale': 'cy_GB',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -138,28 +138,28 @@ define([
                 'de_DE': {
                     'locale': 'de_DE',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'de_CH': {
                     'locale': 'de_CH',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'de_AT': {
                     'locale': 'de_AT',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'et_EE': {
                     'locale': 'et_EE',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
@@ -187,7 +187,7 @@ define([
                 'en_NZ': {
                     'locale': 'en_NZ',
                     'localeInfo': {
-                        'format': 'd/MM/yy',
+                        'format': 'd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -201,70 +201,70 @@ define([
                 'en_US': {
                     'locale': 'en_US',
                     'localeInfo': {
-                        'format': 'M/d/yy',
+                        'format': 'M/d/yyyy',
                         'expectedValue': '11/17/2016'
                     }
                 },
                 'es_AR': {
                     'locale': 'es_AR',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'es_CL': {
                     'locale': 'es_CL',
                     'localeInfo': {
-                        'format': 'dd-MM-yy',
+                        'format': 'dd-MM-yyyy',
                         'expectedValue': '17-11-2016'
                     }
                 },
                 'es_CO': {
                     'locale': 'es_CO',
                     'localeInfo': {
-                        'format': 'd/MM/yy',
+                        'format': 'd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'es_CR': {
                     'locale': 'es_CR',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'es_ES': {
                     'locale': 'es_ES',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'es_MX': {
                     'locale': 'es_MX',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'es_PA': {
                     'locale': 'es_PA',
                     'localeInfo': {
-                        'format': 'MM/dd/yy',
+                        'format': 'MM/dd/yyyy',
                         'expectedValue': '11/17/2016'
                     }
                 },
                 'es_PE': {
                     'locale': 'es_PE',
                     'localeInfo': {
-                        'format': 'd/MM/yy',
+                        'format': 'd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'es_VE': {
                     'locale': 'es_VE',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -278,21 +278,21 @@ define([
                 'fil_PH': {
                     'locale': 'fil_PH',
                     'localeInfo': {
-                        'format': 'M/d/yy',
+                        'format': 'M/d/yyyy',
                         'expectedValue': '11/17/2016'
                     }
                 },
                 'fr_BE': {
                     'locale': 'fr_BE',
                     'localeInfo': {
-                        'format': 'd/MM/yy',
+                        'format': 'd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'fr_CA': {
                     'locale': 'fr_CA',
                     'localeInfo': {
-                        'format': 'yy-MM-dd',
+                        'format': 'yyyy-MM-dd',
                         'expectedValue': '2016-11-17'
                     }
                 },
@@ -306,7 +306,7 @@ define([
                 'gl_ES': {
                     'locale': 'gl_ES',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -320,14 +320,14 @@ define([
                 'it_IT': {
                     'locale': 'it_IT',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'it_CH': {
                     'locale': 'it_CH',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
@@ -341,7 +341,7 @@ define([
                 'lv_LV': {
                     'locale': 'lv_LV',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
@@ -362,14 +362,14 @@ define([
                 'nl_BE': {
                     'locale': 'nl_BE',
                     'localeInfo': {
-                        'format': 'd/MM/yy',
+                        'format': 'd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'nl_NL': {
                     'locale': 'nl_NL',
                     'localeInfo': {
-                        'format': 'dd-MM-yy',
+                        'format': 'dd-MM-yyyy',
                         'expectedValue': '17-11-2016'
                     }
                 },
@@ -397,14 +397,14 @@ define([
                 'pt_BR': {
                     'locale': 'pt_BR',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'pt_PT': {
                     'locale': 'pt_PT',
                     'localeInfo': {
-                        'format': 'dd/MM/yy',
+                        'format': 'dd/MM/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -418,21 +418,21 @@ define([
                 'sq_AL': {
                     'locale': 'sq_AL',
                     'localeInfo': {
-                        'format': 'd.M.yy',
+                        'format': 'd.M.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'sk_SK': {
                     'locale': 'sk_SK',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'sl_SI': {
                     'locale': 'sl_SI',
                     'localeInfo': {
-                        'format': 'd. MM. yy',
+                        'format': 'd. MM. yyyy',
                         'expectedValue': '17. 11. 2016'
                     }
                 },
@@ -474,35 +474,35 @@ define([
                 'cs_CZ': {
                     'locale': 'cs_CZ',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'el_GR': {
                     'locale': 'el_GR',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'be_BY': {
                     'locale': 'be_BY',
                     'localeInfo': {
-                        'format': 'd.M.yy',
+                        'format': 'd.M.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'bg_BG': {
                     'locale': 'bg_BG',
                     'localeInfo': {
-                        'format': 'd.MM.yy г.',
+                        'format': 'd.MM.yyyy г.',
                         'expectedValue': '17.11.2016 г.'
                     }
                 },
                 'mk_MK': {
                     'locale': 'mk_MK',
                     'localeInfo': {
-                        'format': 'dd.M.yy',
+                        'format': 'dd.M.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
@@ -516,21 +516,21 @@ define([
                 'ru_RU': {
                     'locale': 'ru_RU',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'sr_Cyrl_RS': {
                     'locale': 'sr_Cyrl_RS',
                     'localeInfo': {
-                        'format': 'd.M.yy.',
+                        'format': 'd.M.yyyy.',
                         'expectedValue': '17.11.2016.'
                     }
                 },
                 'uk_UA': {
                     'locale': 'uk_UA',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
@@ -586,28 +586,28 @@ define([
                 'hi_IN': {
                     'locale': 'hi_IN',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'bn_BD': {
                     'locale': 'bn_BD',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'gu_IN': {
                     'locale': 'gu_IN',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'th_TH': {
                     'locale': 'th_TH',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -621,28 +621,28 @@ define([
                 'ka_GE': {
                     'locale': 'ka_GE',
                     'localeInfo': {
-                        'format': 'dd.MM.yy',
+                        'format': 'dd.MM.yyyy',
                         'expectedValue': '17.11.2016'
                     }
                 },
                 'km_KH': {
                     'locale': 'km_KH',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
                 'zh_Hans_CN': {
                     'locale': 'zh_Hans_CN',
                     'localeInfo': {
-                        'format': 'yy/M/d',
+                        'format': 'yyyy/M/d',
                         'expectedValue': '2016/11/17'
                     }
                 },
                 'zh_Hant_HK': {
                     'locale': 'zh_Hant_HK',
                     'localeInfo': {
-                        'format': 'd/M/yy',
+                        'format': 'd/M/yyyy',
                         'expectedValue': '17/11/2016'
                     }
                 },
@@ -663,7 +663,7 @@ define([
                 'ko_KR': {
                     'locale': 'ko_KR',
                     'localeInfo': {
-                        'format': 'yy. M. d.',
+                        'format': 'yyyy. M. d.',
                         'expectedValue': '2016. 11. 17.'
                     }
                 }
