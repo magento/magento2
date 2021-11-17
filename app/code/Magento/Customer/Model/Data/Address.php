@@ -11,7 +11,7 @@ use Magento\Customer\Api\Data\RegionInterface;
 use \Magento\Framework\Api\AttributeValueFactory;
 
 /**
- * Class Address
+ * Class Address Data Model
  *
  *
  * @api
@@ -327,7 +327,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      */
     public function setTelephone($telephone)
     {
-        return $this->setData(self::TELEPHONE, trim($telephone));
+        return $this->setData(self::TELEPHONE, $telephone ? trim($telephone) : $telephone);
     }
 
     /**

@@ -14,6 +14,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -30,8 +31,6 @@ class AbstractAction
     const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
     /**
-     * Attribute codes
-     *
      * @var array
      */
     protected $attributeCodes;
@@ -81,16 +80,23 @@ class AbstractAction
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Helper $resourceHelper
+     * @param MetadataPool|null $categoryMetadata
+     * @param SkipStaticColumnsProvider|null $provider
      */
     public function __construct(
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
-        Helper $resourceHelper
+        Helper $resourceHelper,
+        MetadataPool $categoryMetadata = null,
+        SkipStaticColumnsProvider $provider = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->resourceHelper = $resourceHelper;
+        $this->categoryMetadata = $categoryMetadata ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $skipProvider = $provider ?: ObjectManager::getInstance()->get(SkipStaticColumnsProvider::class);
+        $this->skipStaticColumns = $skipProvider->get();
         $this->columns = array_merge($this->getStaticColumns(), $this->getEavColumns());
     }
 
@@ -207,13 +213,13 @@ class AbstractAction
         );
 
         foreach ($describe as $column) {
-            if (in_array($column['COLUMN_NAME'], $this->getSkipStaticColumns())) {
+            if (in_array($column['COLUMN_NAME'], $this->skipStaticColumns)) {
                 continue;
             }
             $isUnsigned = '';
             $options = null;
             $ddlType = $this->resourceHelper->getDdlTypeByColumnType($column['DATA_TYPE']);
-            $column['DEFAULT'] = trim($column['DEFAULT'], "' ");
+            $column['DEFAULT'] = $column['DEFAULT'] ? trim($column['DEFAULT'], "' ") : '';
             switch ($ddlType) {
                 case Table::TYPE_SMALLINT:
                 case Table::TYPE_INTEGER:
@@ -388,7 +394,7 @@ class AbstractAction
 
         $attributes = $this->getAttributes();
         $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
-        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $linkField = $this->categoryMetadata->getLinkField();
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
                 if (isset($row[$linkField], $row['attribute_id'])) {
@@ -414,7 +420,7 @@ class AbstractAction
      */
     private function getLinkIds(array $entityIds)
     {
-        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $linkField = $this->categoryMetadata->getLinkField();
         if ($linkField === 'entity_id') {
             return $entityIds;
         }
@@ -441,7 +447,7 @@ class AbstractAction
      */
     protected function getAttributeTypeValues($type, $entityIds, $storeId)
     {
-        $linkField = $this->getCategoryMetadata()->getLinkField();
+        $linkField = $this->categoryMetadata->getLinkField();
         $select = $this->connection->select()->from(
             [
                 'def' => $this->connection->getTableName($this->getTableName('catalog_category_entity_' . $type)),
@@ -509,35 +515,5 @@ class AbstractAction
     protected function getTableName($name)
     {
         return $this->resource->getTableName($name);
-    }
-
-    /**
-     * Get category metadata instance.
-     *
-     * @return EntityMetadata
-     */
-    private function getCategoryMetadata()
-    {
-        if (null === $this->categoryMetadata) {
-            $metadataPool = ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-            $this->categoryMetadata = $metadataPool->getMetadata(CategoryInterface::class);
-        }
-        return $this->categoryMetadata;
-    }
-
-    /**
-     * Get skip static columns instance.
-     *
-     * @return array
-     */
-    private function getSkipStaticColumns()
-    {
-        if (null === $this->skipStaticColumns) {
-            $provider = ObjectManager::getInstance()
-                ->get(SkipStaticColumnsProvider::class);
-            $this->skipStaticColumns = $provider->get();
-        }
-        return $this->skipStaticColumns;
     }
 }
