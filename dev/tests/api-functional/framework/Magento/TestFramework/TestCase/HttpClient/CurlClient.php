@@ -118,8 +118,17 @@ class CurlClient
         $curlOpts[CURLOPT_CUSTOMREQUEST] = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT;
         $headers[] = 'Content-Length: ' . strlen($data);
         $curlOpts[CURLOPT_POSTFIELDS] = $data;
-
-        $resp = $this->invokeApi($url, $curlOpts, $headers);
+        try{
+            $resp = $this->invokeApi($url, $curlOpts, $headers);
+        }catch (\Exception $e){
+            var_dump([
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'traceAsString' => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
         return $resp["body"];
     }
 

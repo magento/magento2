@@ -103,7 +103,18 @@ class RestClient
                 $data = '';
             }
         }
-        $responseBody = $this->curlClient->put($url, $data, $headers);
+        try{
+            $responseBody = $this->curlClient->put($url, $data, $headers);
+        }catch (\Exception $e){
+            var_dump([
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'traceAsString' => $e->getTraceAsString(),
+            ]);
+            throw $e;
+        }
+
         return $this->jsonSerializer->jsonDecode($responseBody);
     }
 

@@ -99,7 +99,17 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
                 $response = $this->restClient->post($resourcePath, $arguments, $authHeader);
                 break;
             case Request::HTTP_METHOD_PUT:
-                $response = $this->restClient->put($resourcePath, $arguments, $authHeader);
+                try{
+                    $response = $this->restClient->put($resourcePath, $arguments, $authHeader);
+                }catch (\Exception $e){
+                    var_dump([
+                        'message' => $e->getMessage(),
+                        'code' => $e->getCode(),
+                        'file' => $e->getFile(),
+                        'traceAsString' => $e->getTraceAsString(),
+                    ]);
+                    throw $e;
+                }
                 break;
             case Request::HTTP_METHOD_DELETE:
                 $response = $this->restClient->delete($resourcePath, $authHeader);
