@@ -131,6 +131,7 @@ define([
                 uid: uid,
                 noticeId: 'notice-' + uid,
                 errorId: 'error-' + uid,
+                tooltipId: 'tooltip-' + uid,
                 inputName: utils.serializeName(name.join('.')),
                 valueUpdate: valueUpdate
             });
