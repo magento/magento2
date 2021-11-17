@@ -24,7 +24,6 @@ use Psr\Log\LoggerInterface;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
@@ -150,28 +149,28 @@ class Uploader
     /**#@+
      * File upload type (multiple or single)
      */
-    const SINGLE_STYLE = 0;
+    private const SINGLE_STYLE = 0;
 
-    const MULTIPLE_STYLE = 1;
+    private const MULTIPLE_STYLE = 1;
 
     /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    const TMP_NAME_EMPTY = 666;
+    private const TMP_NAME_EMPTY = 666;
 
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    const MAX_IMAGE_WIDTH = 1920;
+    private const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    const MAX_IMAGE_HEIGHT = 1200;
+    private const MAX_IMAGE_HEIGHT = 1200;
 
     /**
      * Resulting of uploaded file
