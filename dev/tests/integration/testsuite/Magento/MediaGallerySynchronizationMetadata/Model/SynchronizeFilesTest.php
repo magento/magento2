@@ -91,7 +91,6 @@ class SynchronizeFilesTest extends TestCase
 
         $loadedAssets = $this->getAssetsByPath->execute([$file])[0];
         $loadedKeywords = $this->getKeywords($loadedAssets) ?: null;
-        pathinfo($loadedAssets->getTitle(), PATHINFO_FILENAME);
         $this->assertEquals($title, pathinfo($loadedAssets->getTitle(), PATHINFO_FILENAME));
         $this->assertEquals($description, $loadedAssets->getDescription());
         $this->assertEquals($keywords, $loadedKeywords);

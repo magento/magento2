@@ -21,7 +21,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterfaceFactory;
 
 /**
- * Jpeg file reader.
+ * Jpeg file reader
  */
 class ReadFile implements ReadFileInterface
 {
@@ -79,7 +79,27 @@ class ReadFile implements ReadFileInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Is reader applicable
+     *
+     * @param string $path
+     * @return bool
+     * @throws FileSystemException
+     */
+    private function isApplicable(string $path): bool
+    {
+        $resource = $this->driver->fileOpen($path, 'rb');
+        try {
+            $marker = $this->readMarker($resource);
+        } catch (LocalizedException $exception) {
+            return false;
+        }
+        $this->driver->fileClose($resource);
+
+        return $marker == self::MARKER_IMAGE_FILE_START;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function execute(string $path): FileInterface
     {
@@ -90,7 +110,7 @@ class ReadFile implements ReadFileInterface
         $resource = $this->driver->fileOpen($path, 'rb');
         $marker = $this->readMarker($resource);
 
-        if (self::MARKER_IMAGE_FILE_START != $marker) {
+        if ($marker != self::MARKER_IMAGE_FILE_START) {
             $this->driver->fileClose($resource);
 
             throw new ValidatorException(__('Not a JPEG image'));
@@ -99,56 +119,37 @@ class ReadFile implements ReadFileInterface
         do {
             $marker = $this->readMarker($resource);
             $segments[] = $this->readSegment($resource, ord($marker));
-        } while ((self::MARKER_IMAGE_START != $marker) && (!$this->driver->endOfFile($resource)));
+        } while (($marker != self::MARKER_IMAGE_START) && (!$this->driver->endOfFile($resource)));
 
-        if (self::MARKER_IMAGE_START != $marker) {
+        if ($marker != self::MARKER_IMAGE_START) {
             throw new LocalizedException(__('File is corrupted'));
         }
 
         $segments[] = $this->segmentFactory->create([
             'name' => 'CompressedImage',
-            'data' => $this->readCompressedImage($resource),
+            'data' => $this->readCompressedImage($resource)
         ]);
 
         $this->driver->fileClose($resource);
 
         return $this->fileFactory->create([
             'path' => $path,
-            'segments' => $segments,
+            'segments' => $segments
         ]);
     }
 
     /**
-     * Is reader applicable.
-     *
-     * @throws FileSystemException
-     */
-    private function isApplicable(string $path): bool
-    {
-        $resource = $this->driver->fileOpen($path, 'rb');
-
-        try {
-            $marker = $this->readMarker($resource);
-        } catch (LocalizedException $exception) {
-            return false;
-        }
-        $this->driver->fileClose($resource);
-
-        return self::MARKER_IMAGE_FILE_START == $marker;
-    }
-
-    /**
-     * Read jpeg marker.
+     * Read jpeg marker
      *
      * @param resource $resource
-     *
+     * @return string
      * @throws FileSystemException
      */
     private function readMarker($resource): string
     {
         $data = $this->read($resource, self::TWO_BYTES);
 
-        if (self::MARKER_PREFIX != $data[0]) {
+        if ($data[0] != self::MARKER_PREFIX) {
             $this->driver->fileClose($resource);
 
             throw new LocalizedException(__('File is corrupted'));
@@ -158,10 +159,10 @@ class ReadFile implements ReadFileInterface
     }
 
     /**
-     * Read compressed image.
+     * Read compressed image
      *
      * @param resource $resource
-     *
+     * @return string
      * @throws FileSystemException
      */
     private function readCompressedImage($resource): string
@@ -173,7 +174,7 @@ class ReadFile implements ReadFileInterface
 
         $endOfImageMarkerPosition = strpos($compressedImage, self::MARKER_PREFIX.self::MARKER_IMAGE_END);
 
-        if (false !== $endOfImageMarkerPosition) {
+        if ($endOfImageMarkerPosition !== false) {
             $compressedImage = substr($compressedImage, 0, $endOfImageMarkerPosition);
         }
 
@@ -181,10 +182,11 @@ class ReadFile implements ReadFileInterface
     }
 
     /**
-     * Read jpeg segment.
+     * Read jpeg segment
      *
      * @param resource $resource
-     *
+     * @param int $segmentType
+     * @return SegmentInterface
      * @throws FileSystemException
      */
     private function readSegment($resource, int $segmentType): SegmentInterface
@@ -194,15 +196,16 @@ class ReadFile implements ReadFileInterface
 
         return $this->segmentFactory->create([
             'name' => $this->segmentNames->getSegmentName($segmentType),
-            'data' => $this->read($resource, $segmentSize),
+            'data' => $this->read($resource, $segmentSize)
         ]);
     }
 
     /**
-     * Read wrapper.
+     * Read wrapper
      *
      * @param resource $resource
-     *
+     * @param int $length
+     * @return string
      * @throws FileSystemException
      */
     private function read($resource, int $length): string

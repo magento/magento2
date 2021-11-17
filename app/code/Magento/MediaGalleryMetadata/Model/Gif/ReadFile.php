@@ -51,7 +51,6 @@ class ReadFile implements ReadFileInterface
     private $segmentNames;
 
     /**
-     * @param DriverInterface $driver
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param SegmentNames $segmentNames
@@ -68,7 +67,6 @@ class ReadFile implements ReadFileInterface
         $this->segmentNames = $segmentNames;
         $this->filesystem = $filesystem;
         $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
-
     }
 
     /**
