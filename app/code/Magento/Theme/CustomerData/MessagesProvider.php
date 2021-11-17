@@ -10,7 +10,7 @@ namespace Magento\Theme\CustomerData;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
-class MessageProvider implements MessagesProviderInterface
+class MessagesProvider implements MessagesProviderInterface
 {
     /**
      * Manager messages

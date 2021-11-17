@@ -14,7 +14,7 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Theme\CustomerData\MessagesProviderInterface;
 
-class MessageProvider implements MessagesProviderInterface
+class MessagesProvider implements MessagesProviderInterface
 {
     /**
      *
@@ -61,12 +61,7 @@ class MessageProvider implements MessagesProviderInterface
         $clearSessionMessages = true;
 
         if ((bool) $this->appConfig->getValue(Synchronizer::ALLOW_SYNC_WITH_BACKEND_PATH)) {
-
-            $forceNewSectionTimestamp = $this->request->getParam('force_new_section_timestamp') ?? null;
-
-            if ('true' !== $forceNewSectionTimestamp) {
-                $clearSessionMessages = false;
-            }
+            $clearSessionMessages = $this->request->getParam('force_new_section_timestamp') === 'true';
         }
 
         return $this->messageManager->getMessages($clearSessionMessages);

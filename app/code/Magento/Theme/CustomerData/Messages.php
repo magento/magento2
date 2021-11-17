@@ -39,7 +39,7 @@ class Messages implements SectionSourceInterface
      *
      * @param MessageManager $messageManager
      * @param InterpretationStrategyInterface $interpretationStrategy
-     * @param MessagesProviderInterface $messageProvider
+     * @param MessagesProviderInterface|null $messageProvider
      */
     public function __construct(
         MessageManager $messageManager,
