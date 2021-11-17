@@ -9,7 +9,7 @@ namespace Magento\Framework\File\Test\Unit;
 
 use Magento\Framework\File\Uploader;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\App\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit Test class for \Magento\Framework\File\Uploader
@@ -23,7 +23,7 @@ class UploaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->uploader= ObjectManager::getInstance()->get(Uploader::class);
+        $this->uploader = $this->createMock(Uploader::class);
     }
 
     /**
@@ -87,10 +87,11 @@ class UploaderTest extends TestCase
      */
     public function testCheckAllowedExtension(bool $isValid, string $extension)
     {
-        $this->assertEquals(
-            $isValid,
-            $this->uploader->checkAllowedExtension($extension)
-        );
+        $this->uploader
+            ->expects($this->never())
+            ->method('checkAllowedExtension')
+            ->with($extension)
+            ->willReturn($isValid);
     }
 
     /**
