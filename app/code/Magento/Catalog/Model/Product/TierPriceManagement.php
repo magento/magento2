@@ -98,7 +98,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         ) {
             throw new InputException(__('The data was invalid. Verify the data and try again.'));
         }
-        $product = $this->productRepository->get($sku, ['edit_mode' => true]);
+        $product = $this->productRepository->get($sku, ['edit_mode' => true, 'force_reload' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
         $value = $this->config->getValue('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE);
@@ -107,49 +107,51 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         }
         $found = false;
 
-        foreach ($tierPrices as &$item) {
-            if ('all' == $customerGroupId) {
-                $isGroupValid = ($item['all_groups'] == 1);
-            } else {
-                $isGroupValid = ($item['cust_group'] == $customerGroupId);
+        if ($tierPrices !== null) {
+            foreach ($tierPrices as &$item) {
+                if ('all' == $customerGroupId) {
+                    $isGroupValid = ($item['all_groups'] == 1);
+                } else {
+                    $isGroupValid = ($item['cust_group'] == $customerGroupId);
+                }
+
+                if ($isGroupValid && $item['website_id'] == $websiteIdentifier && $item['price_qty'] == $qty) {
+                    $item['price'] = $price;
+                    $found         = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $mappedCustomerGroupId = 'all' == $customerGroupId
+                    ? $this->groupManagement->getAllCustomersGroup()->getId()
+                    : $this->groupRepository->getById($customerGroupId)->getId();
+
+                $tierPrices[] = [
+                    'cust_group'    => $mappedCustomerGroupId,
+                    'price'         => $price,
+                    'website_price' => $price,
+                    'website_id'    => $websiteIdentifier,
+                    'price_qty'     => $qty,
+                ];
             }
 
-            if ($isGroupValid && $item['website_id'] == $websiteIdentifier && $item['price_qty'] == $qty) {
-                $item['price'] = $price;
-                $found = true;
-                break;
+            $product->setData('tier_price', $tierPrices);
+            $errors = $product->validate();
+            if (is_array($errors) && count($errors)) {
+                $errorAttributeCodes = implode(', ', array_keys($errors));
+                throw new InputException(
+                    __('Values in the %1 attributes are invalid. Verify the values and try again.', $errorAttributeCodes)
+                );
             }
-        }
-        if (!$found) {
-            $mappedCustomerGroupId = 'all' == $customerGroupId
-                ? $this->groupManagement->getAllCustomersGroup()->getId()
-                : $this->groupRepository->getById($customerGroupId)->getId();
-
-            $tierPrices[] = [
-                'cust_group' => $mappedCustomerGroupId,
-                'price' => $price,
-                'website_price' => $price,
-                'website_id' => $websiteIdentifier,
-                'price_qty' => $qty,
-            ];
-        }
-
-        $product->setData('tier_price', $tierPrices);
-        $errors = $product->validate();
-        if (is_array($errors) && count($errors)) {
-            $errorAttributeCodes = implode(', ', array_keys($errors));
-            throw new InputException(
-                __('Values in the %1 attributes are invalid. Verify the values and try again.', $errorAttributeCodes)
-            );
-        }
-        try {
-            $this->productRepository->save($product);
-        } catch (\Exception $e) {
-            if ($e instanceof TemporaryStateExceptionInterface) {
-                // temporary state exception must be already localized
-                throw $e;
+            try {
+                $this->productRepository->save($product);
+            } catch (\Exception $e) {
+                if ($e instanceof TemporaryStateExceptionInterface) {
+                    // temporary state exception must be already localized
+                    throw $e;
+                }
+                throw new CouldNotSaveException(__("The group price couldn't be saved."));
             }
-            throw new CouldNotSaveException(__("The group price couldn't be saved."));
         }
         return true;
     }
