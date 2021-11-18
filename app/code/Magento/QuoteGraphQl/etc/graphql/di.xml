@@ -20,4 +20,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Config">
+        <plugin name="append_requested_graphql_attributes" type="Magento\QuoteGraphQl\Plugin\ProductAttributesExtender"/>
+    </type>
 </config>
