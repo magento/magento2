@@ -146,6 +146,7 @@ class DeploymentConfig
 
     /**
      * Get additional configuration from env variable MAGENTO_DC__OVERRIDE
+     *
      * Data should be JSON encoded
      *
      * @return array
@@ -221,7 +222,7 @@ class DeploymentConfig
             if (is_array($param)) {
                 $flattenResult[$newPath] = $param;
                 $this->flattenParams($param, $newPath, $flattenResult);
-            } else  {
+            } else {
                 // allow reading values from env variables
                 // value need to be specified in %env(NAME, "default value")% format
                 // like #env(DB_PASSWORD), #env(DB_NAME, "test")
