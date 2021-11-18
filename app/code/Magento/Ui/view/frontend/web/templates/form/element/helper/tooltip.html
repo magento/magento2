@@ -13,15 +13,16 @@
        data-bind="attr: {href: tooltip.link}, mageInit: {'dropdown':{'activeClass': '_active'}}"></a>
      <!-- /ko -->
 
-     <span id="tooltip-label" class="label"><!-- ko i18n: 'Tooltip' --><!-- /ko --></span>
+     <span class="label" data-bind="attr: { id: $data.tooltipId ? $data.tooltipId : 'tooltip-label' }"><!-- ko i18n: 'Tooltip' --><!-- /ko --></span>
      <!-- ko if: (!tooltip.link)-->
          <span
-             id="tooltip"
              class="field-tooltip-action action-help"
              tabindex="0"
              data-toggle="dropdown"
-             data-bind="mageInit: {'dropdown':{'activeClass': '_active', 'parent': '.field-tooltip.toggle'}}"
-             aria-labelledby="tooltip-label"
+             data-bind="
+                mageInit: {'dropdown':{'activeClass': '_active', 'parent': '.field-tooltip.toggle'}},
+                attr: { 'aria-labelledby': $data.tooltipId ? $data.tooltipId : 'tooltip-label' }
+            "
          >
          </span>
      <!-- /ko -->
