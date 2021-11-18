@@ -328,14 +328,4 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
         return false;
     }
-
-    /**
-     * Get Gtag send_to value (i.e. conversionId/conversionLabel)
-     *
-     * @return string
-     */
-    public function getSendToValue()
-    {
-        return $this->getConversionId() . '/' . $this->getConversionLabel();
-    }
 }
