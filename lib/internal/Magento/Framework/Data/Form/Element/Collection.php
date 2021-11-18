@@ -126,6 +126,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
                 if ($currElement->getId() == $after) {
                     $newOrderElements[] = $currElement;
                     $newOrderElements[] = $element;
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $this->_elements = array_merge($newOrderElements, array_slice($this->_elements, $index + 1));
                     return $element;
                 }

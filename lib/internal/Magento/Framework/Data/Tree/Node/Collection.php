@@ -3,18 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Tree node collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Framework\Data\Tree\Node;
 
 use Magento\Framework\Data\Tree;
 use Magento\Framework\Data\Tree\Node;
 
 /**
+ * Tree node collection
+ *
  * @api
  * @since 100.0.2
  */
@@ -75,6 +71,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Implementation of \ArrayAccess:offsetGet()
+     *
      * @param string $key
      * @return mixed
      */
@@ -86,6 +83,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Implementation of \ArrayAccess:offsetUnset()
+     *
      * @param string $key
      * @return void
      */
@@ -97,6 +95,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Implementation of \ArrayAccess:offsetExists()
+     *
      * @param string $key
      * @return bool
      */
@@ -108,6 +107,7 @@ class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Adds a node to this node
+     *
      * @param Node $node
      * @return Node
      */

@@ -10,29 +10,22 @@ use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
- * Class FileIterator
  * @api
  * @since 100.0.2
  */
 class FileIterator implements \Iterator, \Countable
 {
     /**
-     * Paths
-     *
      * @var array
      */
     protected $paths = [];
 
     /**
-     * Position
-     *
      * @var int
      */
     protected $position;
 
     /**
-     * File read factory
-     *
      * @var ReadFactory
      */
     protected $fileReadFactory;

@@ -7,9 +7,6 @@ namespace Magento\Framework\Data;
 
 use Magento\Framework\DB\QueryInterface;
 
-/**
- * Class SearchResultIterator
- */
 class SearchResultIterator implements \Iterator
 {
     /**
@@ -43,6 +40,8 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
+     * @inheritdoc
+     *
      * @return array|mixed
      */
     #[\ReturnTypeWillChange]
@@ -52,7 +51,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function next()
@@ -62,6 +61,8 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
+     * @inheritdoc
+     *
      * @return int|mixed
      */
     #[\ReturnTypeWillChange]
@@ -71,7 +72,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function valid()
@@ -80,7 +81,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function rewind()

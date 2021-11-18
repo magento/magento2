@@ -89,6 +89,8 @@ class Redis implements \SessionHandlerInterface
      * @return string
      * @throws ConcurrentConnectionsExceededException
      * @throws SessionException
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
     #[\ReturnTypeWillChange]
     public function read($sessionId)
