@@ -168,7 +168,7 @@ class Structure
      * Get existing element
      *
      * @param string $elementId
-     * @return array|bool
+     * @return array|false
      */
     public function getElement($elementId)
     {
@@ -446,7 +446,7 @@ class Structure
      *
      * @param string $parentId
      * @param string $alias
-     * @return string|bool
+     * @return string|false
      */
     public function getChildId($parentId, $alias)
     {
@@ -473,7 +473,7 @@ class Structure
      * Get name of parent element
      *
      * @param string $childId
-     * @return string|bool
+     * @return string|false
      */
     public function getParentId($childId)
     {
@@ -485,7 +485,7 @@ class Structure
      *
      * @param string $parentId
      * @param string $childId
-     * @return string|bool
+     * @return string|false
      */
     public function getChildAlias($parentId, $childId)
     {

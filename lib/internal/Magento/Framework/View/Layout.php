@@ -389,7 +389,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $parentName
      * @param string $alias
-     * @return bool|\Magento\Framework\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock|false
      */
     public function getChildBlock($parentName, $alias)
     {
@@ -487,7 +487,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $parentName
      * @param string $alias
-     * @return bool|string
+     * @return string|false
      */
     public function getChildName($parentName, $alias)
     {
@@ -889,7 +889,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Get block object by name
      *
      * @param string $name
-     * @return \Magento\Framework\View\Element\AbstractBlock|bool
+     * @return \Magento\Framework\View\Element\AbstractBlock|false
      */
     public function getBlock($name)
     {
@@ -905,7 +905,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Get Ui Component object by name
      *
      * @param string $name
-     * @return \Magento\Framework\View\Element\AbstractBlock|bool
+     * @return \Magento\Framework\View\Element\AbstractBlock|false
      */
     public function getUiComponent($name)
     {
@@ -916,7 +916,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Gets parent name of an element with specified name
      *
      * @param string $childName
-     * @return bool|string
+     * @return string|false
      */
     public function getParentName($childName)
     {
@@ -928,7 +928,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Get element alias by name
      *
      * @param string $name
-     * @return bool|string
+     * @return string|false
      */
     public function getElementAlias($name)
     {
