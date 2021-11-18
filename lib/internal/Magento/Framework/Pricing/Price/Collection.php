@@ -9,7 +9,7 @@ namespace Magento\Framework\Pricing\Price;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
- * Class Collection
+ * The Price Collection
  *
  * @api
  * @since 100.0.2

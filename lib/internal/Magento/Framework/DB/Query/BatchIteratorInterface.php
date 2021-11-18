@@ -6,7 +6,7 @@
 namespace Magento\Framework\DB\Query;
 
 /**
- * Batch Iterator interface
+ * The batch queries iterator interface
  */
 interface BatchIteratorInterface extends \Iterator
 {

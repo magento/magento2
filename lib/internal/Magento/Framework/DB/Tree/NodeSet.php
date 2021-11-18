@@ -46,6 +46,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Adds a node to node list.
+     *
      * @param Node $node
      * @return int
      *
@@ -59,6 +61,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Retrieves count elements in node list.
+     *
      * @return int
      *
      * @deprecated 102.0.0
@@ -70,6 +74,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Checks if current position is valid.
+     *
      * @return bool
      *
      * @deprecated 102.0.0
@@ -81,6 +87,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Move forward to next element.
+     *
      * @return false|int
      *
      * @deprecated 102.0.0
@@ -96,6 +104,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Retrieves the key of the current element.
+     *
      * @return int
      *
      * @deprecated 102.0.0
@@ -107,6 +117,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Retrieves the current node.
+     *
      * @return Node
      *
      * @deprecated 102.0.0
@@ -118,6 +130,8 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Rewinds the Iterator to the first element.
+     *
      * @return void
      *
      * @deprecated 102.0.0

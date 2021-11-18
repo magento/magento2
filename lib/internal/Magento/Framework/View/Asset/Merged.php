@@ -143,7 +143,7 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return AssetInterface
      */
@@ -155,7 +155,7 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function key()
@@ -165,7 +165,7 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function next()
@@ -175,7 +175,7 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function rewind()
@@ -185,7 +185,7 @@ class Merged implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function valid()

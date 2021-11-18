@@ -7,7 +7,7 @@
 namespace Magento\Framework\Pricing\Price;
 
 /**
- * Class Pool
+ * The price pool
  *
  * @api
  * @since 100.0.2

@@ -52,7 +52,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function next()
@@ -75,7 +75,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function key()
@@ -84,7 +84,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function valid()
@@ -93,7 +93,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function rewind()
@@ -105,7 +105,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function offsetExists($offset)
@@ -114,7 +114,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -128,7 +128,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
@@ -137,7 +137,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
