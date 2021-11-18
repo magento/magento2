@@ -64,6 +64,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'local_backend_custom_naming' => true,
         'local_backend_autoload' => true,
         'use_stale_cache' => false,
+        'cleanup_percentage' => 95,
     ];
 
     /**
@@ -264,7 +265,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function checkIfLocalCacheSpaceExceeded()
     {
-        return $this->getFillingPercentage() >= 95;
+        return $this->getFillingPercentage() >= ($this->_options['cleanup_percentage'] ?? 95);
     }
 
     /**
