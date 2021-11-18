@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Data source with columns for Magento_ImportExport
  *

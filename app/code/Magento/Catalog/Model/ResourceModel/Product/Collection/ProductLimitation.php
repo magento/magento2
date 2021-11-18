@@ -6,8 +6,6 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
- * Class ProductLimitation
- *
  * @api
  * @since 101.0.0
  */
@@ -31,6 +29,8 @@ class ProductLimitation implements \ArrayAccess
     private $productLimitationFilters = [];
 
     /**
+     * Check if the value is set for the given offset.
+     *
      * @param string $offset
      * @return bool
      * @since 101.0.0
@@ -42,6 +42,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Get the value by provided offset.
+     *
      * @param string $offset
      * @return mixed
      * @since 101.0.0
@@ -53,6 +55,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Set the given offset to filters.
+     *
      * @param string $offset
      * @param mixed $value
      * @return void
@@ -65,6 +69,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Unset the given offset from filters.
+     *
      * @param string $offset
      * @return void
      * @since 101.0.0
@@ -76,6 +82,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Returns Store ID.
+     *
      * @return int|null
      * @since 101.0.0
      */
@@ -85,6 +93,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Returns category ID.
+     *
      * @return int|null
      * @since 101.0.0
      */
@@ -94,6 +104,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Returns is category an anchor.
+     *
      * @return int|null
      * @since 101.0.0
      */
@@ -103,6 +115,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Returns visibility value.
+     *
      * @return array|int|null
      * @since 101.0.0
      */
@@ -112,6 +126,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Returns website IDs.
+     *
      * @return array|int|null
      * @since 101.0.0
      */
@@ -121,6 +137,8 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Returns Store table.
+     *
      * @return string|null
      * @since 101.0.0
      */
@@ -141,13 +159,15 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
+     * Sets 'Use Price' index flaf.
+     *
      * @param bool $value
      * @return void
      * @since 101.0.0
      */
     public function setUsePriceIndex($value)
     {
-        $this->offsetSet('use_price_index', (bool)$value);
+        $this->offsetSet('use_price_index', (bool) $value);
     }
 
     /**

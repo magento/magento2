@@ -8,7 +8,7 @@ namespace Magento\Ui\DataProvider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
- // phpcs:disable Magento2.Classes.AbstractApi
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * @inheritdoc
  *
@@ -162,6 +162,8 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
 
     /**
      * @inheritdoc
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
