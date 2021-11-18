@@ -76,6 +76,7 @@ originModel.prototype = {
 script;
 
 $scriptString .= 'this.regionsUrl = "' . $block->escapeJs($block->getUrl('directory/json/countryRegion')) . '";';
+$scriptString .= 'this.euCountryUrl = "' . $block->escapeJs($block->getUrl('directory/json/isEuCountry')) . '";';
 $scriptString .= <<<script
 
         this.bindCountryRegionRelation();
@@ -136,6 +137,11 @@ $scriptString .= <<<script
             if (regionElement) {
                 this.regionElement = regionElement;
                 if (countryElement.value.length) {
+                    var objThis = this;
+                    setTimeout(function(){
+                        var euUrl = objThis.euCountryUrl+'countryCode/'+countryElement.value;
+                        objThis.loader.load(euUrl, {}, objThis.validateVatNumber.bind(objThis));
+                    }, 1000);
                     var url = this.regionsUrl+'parent/'+countryElement.value;
                     this.loader.load(url, {}, this.refreshRegionField.bind(this));
                 } else {
@@ -197,6 +203,26 @@ $scriptString .= <<<script
         var regionElementId = this.regionElement.id;
         parentNode.innerHTML = text.outerHTML;
         this.regionElement = $(regionElementId);
+    },
+    validateVatNumber: function(serverResponse){
+        document.getElementById(this.regionElement.id.replace(/region_id/, 'merchant_vat_number')).value = '';
+        var resultElement = document.getElementById("validation_result");
+        var btnVatNumber  = document.getElementById(this.regionElement.id.replace(/region_id/, 'validate_vat_number'));
+
+        if (serverResponse === 'true') {
+            btnVatNumber.classList.remove('disabled');
+            if (resultElement) {
+                resultElement.style.display = "block";
+                resultElement.innerHTML = '';
+                if ( resultElement.classList.contains('admin__field-error') )
+                resultElement.classList.remove('admin__field-error');
+            }
+        } else {
+            btnVatNumber.classList.add('disabled');
+            if (resultElement) {
+                resultElement.style.display = "none";
+            }
+        }
     }
 }
 
