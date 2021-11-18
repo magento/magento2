@@ -7,7 +7,7 @@ namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
@@ -101,19 +101,42 @@ class MessagePlugin
         ResultInterface $result
     ) {
         if (!($subject instanceof Json)) {
-            $newMessages = $this->messageManager->getMessages(true)->getItems();
+            $newMessages = [];
+            foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
+                $newMessages[] = [
+                    'type' => $message->getType(),
+                    'text' => $this->interpretationStrategy->interpret($message),
+                ];
+            }
             if (!empty($newMessages)) {
-                $messages = $this->getCookiesMessages();
-                foreach ($newMessages as $message) {
-                    $messages[] = [
-                        'type' => $message->getType(),
-                        'text' => $this->interpretationStrategy->interpret($message),
-                    ];
-                }
-                $this->setCookie($messages);
+                $this->setMessages($this->getCookiesMessages(), $newMessages);
             }
         }
         return $result;
+    }
+
+    /**
+     * Add new messages to already existing ones.
+     *
+     * In case if there are too many messages clear old messages.
+     *
+     * @param array $oldMessages
+     * @param array $newMessages
+     * @throws CookieSizeLimitReachedException
+     */
+    private function setMessages(array $oldMessages, array $newMessages): void
+    {
+        $messages = array_merge($oldMessages, $newMessages);
+        try {
+            $this->setCookie($messages);
+        } catch (CookieSizeLimitReachedException $e) {
+            if (empty($oldMessages)) {
+                throw $e;
+            }
+
+            array_shift($oldMessages);
+            $this->setMessages($oldMessages, $newMessages);
+        }
     }
 
     /**
