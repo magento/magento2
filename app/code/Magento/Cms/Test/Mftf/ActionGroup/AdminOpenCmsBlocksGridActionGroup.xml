@@ -8,11 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCMSBlocksGridActionGroup">
+    <actionGroup name="AdminOpenCmsBlocksGridActionGroup">
         <annotations>
-            <description>Navigate to the Admin Blocks Grid page.</description>
+            <description>Goes to the Cms Blocks grid page.</description>
         </annotations>
-
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
