@@ -167,7 +167,7 @@ class GenerateFixturesCommand extends Command
         $startTime = microtime(true);
         $fixture->execute($output);
         $endTime = microtime(true);
-        $resultTime = $endTime - $startTime;
+        $resultTime = (int) ($endTime - $startTime);
         $output->writeln('<info> done in ' . gmdate('H:i:s', $resultTime) . '</info>');
     }
 }

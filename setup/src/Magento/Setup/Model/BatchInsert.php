@@ -86,10 +86,11 @@ class BatchInsert
                 $this->dataStorage->setSize($this->currentStorageIndex);
             }
 
+            $this->dataStorage->rewind();
             $this->getDbConnection()
                 ->insertArray(
                     $this->insertIntoTable,
-                    array_keys(reset($this->dataStorage)),
+                    array_keys($this->dataStorage->current()),
                     $this->dataStorage->toArray()
                 );
 
