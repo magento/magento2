@@ -55,7 +55,7 @@ class DenyListPathValidator implements PathValidatorInterface
     ): void {
         $realDirectoryPath = $this->driver->getRealPathSafety($directoryPath);
         $fullPath = $this->driver->getAbsolutePath(
-            $realDirectoryPath . DIRECTORY_SEPARATOR,
+            rtrim($realDirectoryPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR,
             $path,
             $scheme
         );
@@ -71,7 +71,7 @@ class DenyListPathValidator implements PathValidatorInterface
 
         foreach ($this->fileDenyList as $file) {
             $baseName = pathinfo($actualPath, PATHINFO_BASENAME);
-            if (str_contains($baseName, $file) || preg_match('#' . "\." . $file . '#', $fullPath)) {
+            if (strpos($baseName, $file) !== false || preg_match('#' . "\." . $file . '#', $fullPath)) {
                 throw new ValidatorException(
                     new Phrase('"%1" is not a valid file path', [$path])
                 );
