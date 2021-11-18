@@ -28,7 +28,7 @@ use Magento\Store\Model\Store;
  */
 class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
-    /**#@+
+    /**
      * Custom option column names
      */
     const COLUMN_SKU = 'sku';
@@ -52,8 +52,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const COLUMN_ROW_SKU = '_custom_option_row_sku';
 
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
-
-    /**#@-*/
 
     /**
      * XML path to page size parameter
@@ -231,7 +229,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected $_optionCollection;
 
-    /**#@+
+    /**
      * Error codes
      */
     const ERROR_INVALID_STORE = 'optionInvalidStore';
@@ -256,8 +254,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const ERROR_AMBIGUOUS_TYPES = 'optionAmbiguousTypes';
 
-    /**#@-*/
-
     /**
      * @var CollectionByPagesIterator
      */
@@ -271,8 +267,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_pageSize;
 
     /**
-     * Catalog data
-     *
      * @var \Magento\Catalog\Helper\Data
      */
     protected $_catalogData = null;
@@ -1287,6 +1281,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
                     if (array_key_exists('custom_options', $rowData)
                         && (
+                            $rowData['custom_options'] === null ||
                             trim($rowData['custom_options']) === '' ||
                             trim($rowData['custom_options']) === $this->_productEntity->getEmptyAttributeValueConstant()
                         )
@@ -2098,6 +2093,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue);
+                // @phpstan-ignore-next-line
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
                     $value = trim($value);
