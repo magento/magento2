@@ -17,7 +17,7 @@ interface SerializerInterface
      * Serialize data into string
      *
      * @param string|int|float|bool|array|null $data
-     * @return string|bool
+     * @return string
      * @throws \InvalidArgumentException
      * @since 101.0.0
      */
