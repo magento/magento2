@@ -93,9 +93,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
@@ -179,9 +177,8 @@
 
         <!--Select Free Shipping and proceed to checkout -->
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="selectFlatRateShippingMethod"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
         <!-- Fill Guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">
             <argument name="customer" value="Simple_US_Customer"/>

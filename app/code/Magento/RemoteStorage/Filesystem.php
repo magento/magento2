@@ -67,7 +67,7 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
             $code = $directoryCode . '_' . $driverCode;
 
             if (!array_key_exists($code, $this->readInstances)) {
-                $uri = $this->getUri($directoryCode) ?: '/';
+                $uri = $this->getUri($directoryCode) ?: '';
 
                 $this->readInstances[$code] = $this->readFactory->create(
                     $this->driverPool->getDriver()->getAbsolutePath('', $uri),
@@ -92,11 +92,12 @@ class Filesystem extends BaseFilesystem implements FilesystemInterface
             $code = $directoryCode . '_' . $driverCode;
 
             if (!array_key_exists($code, $this->writeInstances)) {
-                $uri = $this->getUri($directoryCode) ?: '/';
-
+                $uri = $this->getUri($directoryCode) ?: '';
                 $this->writeInstances[$code] = $this->writeFactory->create(
                     $this->driverPool->getDriver()->getAbsolutePath('', $uri),
-                    $driverCode
+                    $driverCode,
+                    null,
+                    $directoryCode
                 );
             }
 

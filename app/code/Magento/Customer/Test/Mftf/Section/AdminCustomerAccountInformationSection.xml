@@ -14,6 +14,7 @@
         <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
         <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
         <element name="addressesButton" type="select" selector="//a//span[contains(text(), 'Addresses')]"/>
+        <element name="customerGroupOption" type="text" selector="//label/span[text()='{{groupValue}}']|//select/option[text()='{{groupValue}}']" parameterized="true"/>
         <element name="firstName" type="input" selector="input[name='customer[firstname]']"/>
         <element name="lastName" type="input" selector="input[name='customer[lastname]']"/>
         <element name="email" type="input" selector="input[name='customer[email]']"/>

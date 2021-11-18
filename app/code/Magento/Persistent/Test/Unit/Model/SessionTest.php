@@ -143,6 +143,9 @@ class SessionTest extends TestCase
         $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)->willReturnSelf();
+        $cookieMetadataMock->expects($this->once())
+            ->method('setSameSite')
+            ->with('Lax')->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
             ->willReturn($cookieMetadataMock);
@@ -186,6 +189,9 @@ class SessionTest extends TestCase
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')
             ->with(true)->willReturnSelf();
+        $cookieMetadataMock->expects($this->exactly($numCalls))
+            ->method('setSameSite')
+            ->with('Lax')->willReturnSelf();
         $this->cookieMetadataFactoryMock->expects($this->exactly($numCalls))
             ->method('createPublicCookieMetadata')
             ->willReturn($cookieMetadataMock);

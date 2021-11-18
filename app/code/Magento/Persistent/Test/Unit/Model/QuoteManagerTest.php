@@ -23,6 +23,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -85,6 +86,9 @@ class QuoteManagerTest extends TestCase
      */
     private $customerDataFactory;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
@@ -132,7 +136,8 @@ class QuoteManagerTest extends TestCase
                 'getExtensionAttributes',
                 'setExtensionAttributes',
                 '__wakeup',
-                'setCustomer'
+                'setCustomer',
+                'getCustomer'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -152,7 +157,10 @@ class QuoteManagerTest extends TestCase
         );
     }
 
-    public function testSetGuestWithEmptyQuote()
+    /**
+     * @return void
+     */
+    public function testSetGuestWithEmptyQuote(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')->willReturn(null);
@@ -166,7 +174,10 @@ class QuoteManagerTest extends TestCase
         $this->model->setGuest(false);
     }
 
-    public function testSetGuestWithEmptyQuoteId()
+    /**
+     * @return void
+     */
+    public function testSetGuestWithEmptyQuoteId(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')->willReturn($this->quoteMock);
@@ -181,7 +192,10 @@ class QuoteManagerTest extends TestCase
         $this->model->setGuest(false);
     }
 
-    public function testSetGuestWhenShoppingCartAndQuoteAreNotPersistent()
+    /**
+     * @return void
+     */
+    public function testSetGuestWhenShoppingCartAndQuoteAreNotPersistent(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')->willReturn($this->quoteMock);
@@ -197,7 +211,10 @@ class QuoteManagerTest extends TestCase
         $this->model->setGuest(true);
     }
 
-    public function testSetGuest()
+    /**
+     * @return void
+     */
+    public function testSetGuest(): void
     {
         $customerId = 22;
         $this->checkoutSessionMock->expects($this->once())
@@ -240,8 +257,7 @@ class QuoteManagerTest extends TestCase
             ->method('removePersistentCookie')->willReturn($this->sessionMock);
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsQty')->willReturn(1);
-        $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->getExtensionAttributesMock();
         $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')
@@ -267,7 +283,10 @@ class QuoteManagerTest extends TestCase
         $this->model->setGuest(false);
     }
 
-    public function testExpireWithActiveQuoteAndCustomerId()
+    /**
+     * @return void
+     */
+    public function testExpireWithActiveQuoteAndCustomerId(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('setLoadInactive')->willReturn($this->sessionMock);
@@ -289,7 +308,10 @@ class QuoteManagerTest extends TestCase
         $this->model->expire();
     }
 
-    public function testExpire()
+    /**
+     * @return void
+     */
+    public function testExpire(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('setLoadInactive')->willReturn($this->sessionMock);
@@ -316,7 +338,10 @@ class QuoteManagerTest extends TestCase
         $this->model->expire();
     }
 
-    public function testConvertCustomerCartToGuest()
+    /**
+     * @return void
+     */
+    public function testConvertCustomerCartToGuest(): void
     {
         $quoteId = 1;
         $addressArgs = ['customerAddressId' => null];
@@ -343,6 +368,13 @@ class QuoteManagerTest extends TestCase
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->exactly(3))
             ->method('getAddressesCollection')->willReturn($this->abstractCollectionMock);
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock->expects($this->once())
+            ->method('setId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomer')->willReturn($customerMock);
         $this->abstractCollectionMock->expects($this->exactly(3))->method('walk')->with(
             $this->logicalOr(
                 $this->equalTo('setCustomerAddressId'),
@@ -363,7 +395,10 @@ class QuoteManagerTest extends TestCase
         $this->model->convertCustomerCartToGuest();
     }
 
-    public function testConvertCustomerCartToGuestWithEmptyQuote()
+    /**
+     * @return void
+     */
+    public function testConvertCustomerCartToGuestWithEmptyQuote(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuoteId')->willReturn(null);
@@ -371,7 +406,10 @@ class QuoteManagerTest extends TestCase
         $this->model->convertCustomerCartToGuest();
     }
 
-    public function testConvertCustomerCartToGuestWithEmptyQuoteId()
+    /**
+     * @return void
+     */
+    public function testConvertCustomerCartToGuestWithEmptyQuoteId(): void
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuoteId')->willReturn(1);
@@ -380,5 +418,22 @@ class QuoteManagerTest extends TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteWithNoId);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(1);
         $this->model->convertCustomerCartToGuest();
+    }
+
+    /**
+     * Build CartExtensionInterface mock.
+     *
+     * @return MockObject
+     */
+    private function getExtensionAttributesMock(): MockObject
+    {
+        $extensionMockBuilder = $this->getMockBuilder(CartExtensionInterface::class);
+        try {
+            $extensionMockBuilder->addMethods(['setShippingAssignments']);
+        } catch (RuntimeException $e) {
+            // do nothing as CartExtensionInterface already generated and has 'setShippingAssignments' method.
+        }
+
+        return $extensionMockBuilder->getMockForAbstractClass();
     }
 }

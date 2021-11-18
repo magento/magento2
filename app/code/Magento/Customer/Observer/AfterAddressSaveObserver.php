@@ -141,7 +141,8 @@ class AfterAddressSaveObserver implements ObserverInterface
             if ($customerAddress->getVatId() == ''
                 || !$this->_customerVat->isCountryInEU($customerAddress->getCountry())
             ) {
-                $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
+                $defaultGroupId = $customer->getGroupId() ? $customer->getGroupId() :
+                    $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
@@ -216,8 +217,8 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected function _isDefaultBilling($address)
     {
         return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultBilling()
-        || $address->getIsPrimaryBilling()
-        || $address->getIsDefaultBilling();
+            || $address->getIsPrimaryBilling()
+            || $address->getIsDefaultBilling();
     }
 
     /**
@@ -229,8 +230,8 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected function _isDefaultShipping($address)
     {
         return $address->getId() && $address->getId() == $address->getCustomer()->getDefaultShipping()
-        || $address->getIsPrimaryShipping()
-        || $address->getIsDefaultShipping();
+            || $address->getIsPrimaryShipping()
+            || $address->getIsDefaultShipping();
     }
 
     /**

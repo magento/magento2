@@ -22,6 +22,8 @@
         <after>
             <!-- 6. Restore default configuration settings. -->
             <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <!-- Delete data -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\CatalogCustomer;
 
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class PriceTiersTest extends GraphQlAbstract
 {
@@ -64,10 +64,12 @@ class PriceTiersTest extends GraphQlAbstract
         );
 
         $itemTiers = $response['products']['items'][0]['price_tiers'];
-        $this->assertCount(3, $itemTiers);
+        $this->assertCount(5, $itemTiers);
         $this->assertEquals(9.25, $this->getValueForQuantity(2, $itemTiers));
         $this->assertEquals(8.25, $this->getValueForQuantity(3, $itemTiers));
         $this->assertEquals(7.25, $this->getValueForQuantity(5, $itemTiers));
+        $this->assertEquals(9.00, $this->getValueForQuantity(7, $itemTiers));
+        $this->assertEquals(7.25, $this->getValueForQuantity(8, $itemTiers));
     }
 
     /**
@@ -95,10 +97,59 @@ class PriceTiersTest extends GraphQlAbstract
         );
 
         $itemTiers = $response['products']['items'][0]['price_tiers'];
-        $this->assertCount(3, $itemTiers);
+        $this->assertCount(5, $itemTiers);
         $this->assertEquals(round(9.25 * $rate, 2), $this->getValueForQuantity(2, $itemTiers));
         $this->assertEquals(round(8.25 * $rate, 2), $this->getValueForQuantity(3, $itemTiers));
         $this->assertEquals(round(7.25 * $rate, 2), $this->getValueForQuantity(5, $itemTiers));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_tier_prices_for_multiple_groups.php
+     */
+    public function testGetLowestPriceForGuest()
+    {
+        $productSku = 'simple';
+        $query = $this->getProductSearchQuery($productSku);
+        $response = $this->graphQlQuery($query);
+        $itemTiers = $response['products']['items'][0]['price_tiers'];
+        $this->assertCount(2, $itemTiers);
+        $this->assertEquals(round(8.25, 2), $this->getValueForQuantity(7, $itemTiers));
+        $this->assertEquals(round(7.25, 2), $this->getValueForQuantity(8, $itemTiers));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/three_simple_products_with_tier_price.php
+     */
+    public function testProductTierPricesAreCorrectlyReturned()
+    {
+        $productSku = 'simple';
+        $query =  <<<QUERY
+{
+  products(search: "{$productSku}") {
+   items {
+        sku
+        name
+          price_tiers {
+              quantity
+              final_price {
+                  value
+              }
+          }
+      }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $productsWithTierPrices = ['simple_1','simple_2','simple_3'];
+
+        foreach ($response['products']['items'] as $key => $item) {
+            if (in_array($item['sku'], $productsWithTierPrices)) {
+                $this->assertCount(1, $response['products']['items'][$key]['price_tiers']);
+            } else {
+                $this->assertCount(0, $response['products']['items'][$key]['price_tiers']);
+            }
+        }
     }
 
     /**

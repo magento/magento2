@@ -25,7 +25,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminOpenCMSBlocksGridActionGroup" stepKey="navigateToCmsBlocksGrid"/>
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="navigateToCmsBlocksGrid"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridSearchFilters"/>
         <actionGroup ref="AdminSearchCMSBlockInGridByIdentifierActionGroup" stepKey="findCreatedCmsBlock">
             <argument name="identifier" value="$$createCMSBlock.identifier$$"/>

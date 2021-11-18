@@ -83,14 +83,14 @@ class Config
     }
 
     /**
-     * Retrieves value for exposing URLs.
+     * Retrieves cache config.
      *
-     * @return bool
+     * @return array
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function getExposeUrls(): bool
+    public function getCache(): array
     {
-        return (bool)$this->config->get(DriverPool::PATH_EXPOSE_URLS, false);
+        return (array)$this->config->get(DriverPool::PATH_CACHE, []);
     }
 }

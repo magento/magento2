@@ -2,8 +2,8 @@
     "name": "magento/module-remote-storage",
     "description": "N/A",
     "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "^100.0.2"
+        "php": "~7.4.0||~8.0.0",
+        "magento/framework": "*"
     },
     "suggest": {
         "magento/module-backend": "*",
@@ -14,7 +14,8 @@
         "magento/module-media-storage": "*",
         "magento/module-import-export": "*",
         "magento/module-catalog-import-export": "*",
-        "magento/module-downloadable-import-export": "*"
+        "magento/module-downloadable-import-export": "*",
+        "predis/predis": "*"
     },
     "type": "magento2-module",
     "license": [

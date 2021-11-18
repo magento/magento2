@@ -274,6 +274,14 @@ define([
                 data['reset_shipping'] = true;
             }
 
+            if (name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                if (this.shippingAsBilling) {
+                    $('order-shipping_address_customer_address_id').value = '';
+                }
+
+                $('order-' + type + '_address_customer_address_id').value = '';
+            }
+
             data['order[' + type + '_address][customer_address_id]'] = null;
             data['shipping_as_billing'] = +this.shippingAsBilling;
 
@@ -418,6 +426,9 @@ define([
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
+            // set customer_address_id to null for shipping address in order to treat it as new from backend
+            // Checkbox(Same As Billing Address) uncheck event
+            data['order[shipping_address][customer_address_id]'] = null;
             this.loadArea(areasToLoad, true, data);
         },
 
@@ -942,7 +953,8 @@ define([
          */
         sidebarConfigureProduct: function (listType, productId, itemId) {
             // create additional fields
-            var params = {};
+            var params = {},
+                isWishlist = !!itemId;
             params.reset_shipping = true;
             params.add_product = productId;
             this.prepareParams(params);
@@ -963,10 +975,18 @@ define([
             }.bind(this));
             // response handler
             productConfigure.setOnLoadIFrameCallback(listType, function (response) {
+                var areas = ['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
+
                 if (!response.ok) {
                     return;
                 }
-                this.loadArea(['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'], true);
+                if (isWishlist) {
+                    this.removeSidebarItem(itemId, 'wishlist').done(function () {
+                        this.loadArea(areas, true);
+                    }.bind(this));
+                } else {
+                    this.loadArea(areas, true);
+                }
             }.bind(this));
             // show item configuration
             itemId = itemId ? itemId : productId;
@@ -975,7 +995,10 @@ define([
         },
 
         removeSidebarItem: function (id, from) {
-            this.loadArea(['sidebar_' + from], 'sidebar_data_' + from, {remove_item: id, from: from});
+            return this.loadArea(['sidebar_' + from], 'sidebar_data_' + from, {
+                remove_item: id,
+                from: from
+            });
         },
 
         itemsUpdate: function () {

@@ -11,6 +11,7 @@ use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,6 +45,7 @@ class DisableMultishippingTest extends TestCase
      * Test 'execute' method if 'MultiShipping' mode is enabled.
      *
      * @param bool $hasShippingAssignments
+     *
      * @return void
      * @dataProvider executeWithMultishippingModeEnabledDataProvider
      */
@@ -59,11 +61,7 @@ class DisableMultishippingTest extends TestCase
             ->method('setIsMultiShipping')
             ->with(0);
 
-        /** @var CartExtensionInterface|MockObject $extensionAttributesMock */
-        $extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->addMethods(['getShippingAssignments', 'setShippingAssignments'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $extensionAttributesMock = $this->getCartExtensionMock();
 
         $extensionAttributesMock->expects($this->once())
             ->method('getShippingAssignments')
@@ -90,7 +88,7 @@ class DisableMultishippingTest extends TestCase
     {
         return [
             'check_with_shipping_assignments' => [true],
-            'check_without_shipping_assignments' => [false]
+            'check_without_shipping_assignments' => [false],
         ];
     }
 
@@ -112,5 +110,23 @@ class DisableMultishippingTest extends TestCase
             ->method('getExtensionAttributes');
 
         $this->assertFalse($this->disableMultishippingModel->execute($this->quoteMock));
+    }
+
+    /**
+     * Build cart extension mock.
+     *
+     * @return MockObject
+     */
+    private function getCartExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(CartExtensionInterface::class)
+            ->disableOriginalConstructor();
+        try {
+            $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
+        } catch (RuntimeException $e) {
+            // CartExtension already generated.
+        }
+
+        return $mockBuilder->getMockForAbstractClass();
     }
 }
