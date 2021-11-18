@@ -80,10 +80,7 @@ class Auto implements AlgorithmInterface
     private function getMaxPriceInt(EntityStorage $entityStorage)
     {
         $aggregations = $this->dataProvider->getAggregations($entityStorage);
-        $maxPrice = $aggregations['max'];
-        $maxPrice = floor($maxPrice);
-
-        return $maxPrice;
+        return ($aggregations['max'] !== null) ? floor($aggregations['max']) : 0;
     }
 
     /**

@@ -916,7 +916,7 @@ class Gd2 extends AbstractAdapter
             return false;
         }
 
-        $transparency = 127 - (($pct*127)/100);
+        $transparency = (int) (127 - (($pct * 127) / 100));
         if (false === imagefilter($tmpImg, IMG_FILTER_COLORIZE, 0, 0, 0, $transparency)) {
             return false;
         }

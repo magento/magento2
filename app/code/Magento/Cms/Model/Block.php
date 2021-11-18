@@ -107,7 +107,8 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         }
 
         $needle = 'block_id="' . $this->getId() . '"';
-        if (strstr($this->getContent(), (string) $needle) !== false) {
+        $content = ($this->getContent() !== null) ? $this->getContent() : '';
+        if (strpos($content, $needle) !== false) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Make sure that static block content does not reference the block itself.')
             );
@@ -121,9 +122,9 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
         parent::beforeSave();
 
         //Validating HTML content.
-        if ($this->getContent() && $this->getContent() !== $this->getOrigData(self::CONTENT)) {
+        if ($content && $content !== $this->getOrigData(self::CONTENT)) {
             try {
-                $this->wysiwygValidator->validate($this->getContent());
+                $this->wysiwygValidator->validate($content);
             } catch (ValidationException $exception) {
                 throw new ValidationException(
                     __('Content field contains restricted HTML elements. %1', $exception->getMessage()),
