@@ -19,7 +19,15 @@
         <waitForPageLoad stepKey="waitForPageLoadOnPayLater"/>
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtnForPayLater"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.enablePaylater(countryCode)}}" userInput="Yes" stepKey="enablePaylater"/>
+        <waitForPageLoad stepKey="waitForPageLoadOnPayLater2"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.payLaterConfigDropDown(countryCode)}}" stepKey="clickPayLaterConfiguration" />
+        <waitForPageLoad stepKey="waitForPageLoadOnPayLater3"/>
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enablePaylaterIn(countryCode)}}" userInput="Yes" stepKey="enablePaylaterIn"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.payLaterCatalogPageConfigDropDown(countryCode)}}" stepKey="clickCatalogPageConfig" />
+        <waitForPageLoad stepKey="waitForPageLoadOnPayLater4"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.display(countryCode)}}" userInput="Yes" stepKey="enableDisplay"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.position(countryCode)}}" userInput="near_pp_button" stepKey="enablePayLaterButton"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="savePayLaterConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad5"/>
     </actionGroup>
 </actionGroups>

@@ -19,5 +19,7 @@
         <waitForPageLoad stepKey="waitForPageLoadOnPayLater"/>
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtnForPayLater"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.enablePaylater(countryCode)}}" userInput="No" stepKey="disablePaylater"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
     </actionGroup>
 </actionGroups>
