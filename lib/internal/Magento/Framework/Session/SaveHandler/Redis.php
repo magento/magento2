@@ -86,20 +86,21 @@ class Redis implements \SessionHandlerInterface
      * Fetch session data
      *
      * @param string $sessionId
-     * @return string
-     * @throws ConcurrentConnectionsExceededException
+     * @return string|false
      * @throws SessionException
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
     #[\ReturnTypeWillChange]
     public function read($sessionId)
     {
+        $result = false;
+
         try {
-            return $this->getConnection()->read($sessionId);
+            $result = $this->getConnection()->read($sessionId);
         } catch (ConcurrentConnectionsExceededException $e) {
             require $this->filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/503.php');
         }
+
+        return $result;
     }
 
     /**
