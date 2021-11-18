@@ -98,7 +98,7 @@
             <argument name="filePath">media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertLocalBaseImageExists2">
-            <argument name="filePath">pub/media/.rendition/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
+            <argument name="filePath">pub/media/.renditions/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertLocalThumbnailImageExists2">
             <argument name="filePath">pub/media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{ImageUpload.file}}</argument>
