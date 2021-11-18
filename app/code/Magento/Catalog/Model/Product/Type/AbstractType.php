@@ -504,21 +504,17 @@ abstract class AbstractType
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
                         $uploader = $queueOptions['uploader'] ?? null;
                         $isUploaded = false;
-                        if ($uploader && $uploader->isValid()) {
+                        if ($uploader && $uploader->isValid($src)) {
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                             $path = pathinfo($dst, PATHINFO_DIRNAME);
                             $uploader = $this->uploaderFactory->create(['fileId' => $src]);
                             $uploader->setFilesDispersion(false);
                             $uploader->setAllowRenameFiles(true);
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                             $isUploaded = $uploader->save($path, pathinfo($dst, PATHINFO_FILENAME));
                         }
 
                         if (empty($src) || empty($dst) || !$isUploaded) {
-                            /**
-                             * @todo: show invalid option
-                             */
-                            if (isset($queueOptions['option'])) {
-                                $queueOptions['option']->setIsValid(false);
-                            }
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('The file upload failed. Try to upload again.')
                             );
@@ -756,6 +752,9 @@ abstract class AbstractType
      */
     public function beforeSave($product)
     {
+        if (!$product->getTypeId()) {
+            $product->setTypeId($this->_typeId);
+        }
         $this->_removeNotApplicableAttributes($product);
         $product->canAffectOptions(true);
         return $this;

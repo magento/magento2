@@ -9,8 +9,10 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 $captcha = $block->getCaptchaModel();
+/** @var bool $validationEnabled */
+$validationEnabled = $block->hasData('frontend_validation') ? $block->getData('frontend_validation') : true;
 ?>
-<div class="admin__field _required">
+<div class="admin__field<?php if ($validationEnabled): ?> _required<?php endif; ?>">
     <label for="captcha" class="admin__field-label">
         <span><?= $block->escapeHtml(__('Please enter the letters and numbers from the image')) ?></span>
     </label>
@@ -21,7 +23,7 @@ $captcha = $block->getCaptchaModel();
             type="text"
             name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE)
             ?>[<?= $block->escapeHtml($block->getFormId()) ?>]"
-            data-validate="{required:true}"/>
+            <?php if ($validationEnabled): ?>data-validate="{required:true}"<?php endif; ?>/>
         <?php if ($captcha->isCaseSensitive()):?>
             <div class="admin__field-note">
                 <span><?= $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong'])

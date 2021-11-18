@@ -15,6 +15,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total as AddressTotal;
+use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Model\Status;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
@@ -1422,13 +1423,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Retrieve quote items array
      *
-     * @return array
+     * @return Item[]
      */
     public function getAllItems()
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\Quote\Item $item */
+            /** @var Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }
@@ -1439,7 +1440,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Get array of all items what can be display directly
      *
-     * @return \Magento\Quote\Model\Quote\Item[]
+     * @return Item[]
      */
     public function getAllVisibleItems()
     {
@@ -1502,7 +1503,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve item model object by item identifier
      *
      * @param   int $itemId
-     * @return  \Magento\Quote\Model\Quote\Item|false
+     * @return  Item|false
      */
     public function getItemById($itemId)
     {
@@ -1518,10 +1519,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Delete quote item. If it does not have identifier then it will be only removed from collection
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
+     * @param Item $item
      * @return $this
      */
-    public function deleteItem(\Magento\Quote\Model\Quote\Item $item)
+    public function deleteItem(Item $item)
     {
         if ($item->getId()) {
             $this->removeItem($item->getId());
@@ -1599,11 +1600,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Adding new item to quote
      *
-     * @param \Magento\Quote\Model\Quote\Item $item
+     * @param Item $item
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function addItem(\Magento\Quote\Model\Quote\Item $item)
+    public function addItem(Item $item)
     {
         $item->setQuote($this);
         if (!$item->getId()) {
@@ -1619,7 +1620,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param mixed $product
      * @param null|float|\Magento\Framework\DataObject $request
      * @param null|string $processMode
-     * @return \Magento\Quote\Model\Quote\Item|string
+     * @return Item|string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -1720,7 +1721,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param int $qty
-     * @return \Magento\Quote\Model\Quote\Item
+     * @return Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _addCatalogProduct(\Magento\Catalog\Model\Product $product, $qty = 1)
@@ -1772,7 +1773,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param int $itemId
      * @param \Magento\Framework\DataObject $buyRequest
      * @param null|array|\Magento\Framework\DataObject $params
-     * @return \Magento\Quote\Model\Quote\Item
+     * @return Item
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
@@ -1839,7 +1840,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Retrieve quote item by product id
      *
      * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Quote\Model\Quote\Item|bool
+     * @return  Item|false
      */
     public function getItemByProduct($product)
     {
@@ -2316,7 +2317,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
                     ? $address->getBaseTaxAmount() + $address->getBaseDiscountTaxCompensationAmount()
                     : 0;
                 foreach ($address->getQuote()->getItemsCollection() as $item) {
-                    /** @var \Magento\Quote\Model\Quote\Item $item */
+                    /** @var Item $item */
                     $amount = $includeDiscount ?
                         $item->getBaseRowTotal() - $item->getBaseDiscountAmount() + $taxes :
                         $item->getBaseRowTotal() + $taxes;
@@ -2353,7 +2354,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $isVirtual = true;
         $countItems = 0;
         foreach ($this->getItemsCollection() as $_item) {
-            /* @var $_item \Magento\Quote\Model\Quote\Item */
+            /* @var Item $_item */
             if ($_item->isDeleted() || $_item->getParentItemId()) {
                 continue;
             }

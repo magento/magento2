@@ -52,6 +52,11 @@ class Bundle
     protected $minification;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param Filesystem $filesystem
      * @param Bundle\ConfigInterface $bundleConfig
      * @param Minification $minification

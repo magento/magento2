@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontVerifyAssociatedProductForGroupedProductActionGroup">
+        <annotations>
+            <description>Verify product data for the specified row in the Associated Grouped Products grid on the
+                storefront Product page for a Grouped Product.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="price" defaultValue="${{_defaultProduct.price}}" type="string"/>
+            <argument name="quantity" defaultValue="0" type="string"/>
+            <argument name="index" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.groupedProductsTableAllRows}}" stepKey="waitForGroupedProductRows"/>
+        <see userInput="{{name}}" selector="{{StorefrontProductInfoMainSection.groupedProductsAssociatedProductName(index)}}" stepKey="seeProductName"/>
+        <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.groupedProductsAssociatedProductPrice(index)}}" stepKey="seeProductPrice"/>
+        <seeInField userInput="{{quantity}}" selector="{{StorefrontProductInfoMainSection.groupedProductsAssociatedProductQuantity(index)}}" stepKey="seeProductQuantity"/>
+    </actionGroup>
+</actionGroups>

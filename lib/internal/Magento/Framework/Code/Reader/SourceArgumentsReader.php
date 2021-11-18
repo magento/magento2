@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
+
 class SourceArgumentsReader
 {
     /**
@@ -56,19 +60,20 @@ class SourceArgumentsReader
         foreach ($params as $param) {
             //For the sake of backward compatibility.
             $typeName = '';
-            if ($param->isArray()) {
+            $parameterType = $param->getType();
+            if ($parameterType && $parameterType->getName() === 'array') {
                 //For the sake of backward compatibility.
                 $typeName = 'array';
             } else {
                 try {
-                    $paramClass = $param->getClass();
+                    $paramClass = $this->getParameterClass($param);
                     if ($paramClass) {
                         $typeName = '\\' .$paramClass->getName();
                     }
                 } catch (\ReflectionException $exception) {
                     //If there's a problem loading a class then ignore it and
                     //just return it's name.
-                    $typeName = '\\' .$param->getType()->getName();
+                    $typeName = '\\' .$parameterType->getName();
                 }
             }
             $types[] = $typeName;
@@ -79,6 +84,22 @@ class SourceArgumentsReader
         }
 
         return $types;
+    }
+
+    /**
+     * Get class by reflection parameter
+     *
+     * @param ReflectionParameter $reflectionParameter
+     * @return ReflectionClass|null
+     * @throws ReflectionException
+     */
+    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
+    {
+        $parameterType = $reflectionParameter->getType();
+
+        return $parameterType && !$parameterType->isBuiltin()
+            ? new ReflectionClass($parameterType->getName())
+            : null;
     }
 
     /**

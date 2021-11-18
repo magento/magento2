@@ -38,7 +38,7 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="export_grid_columns">
-        <column name="file_name">
+        <column name="file_display_name" class="Magento\ImportExport\Ui\Component\Columns\FileDisplayName">
             <settings>
                 <sortable>false</sortable>
                 <label translate="true">File name</label>

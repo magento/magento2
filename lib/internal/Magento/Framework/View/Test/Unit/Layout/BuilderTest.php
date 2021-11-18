@@ -24,9 +24,11 @@ class BuilderTest extends TestCase
     const CLASS_NAME = Builder::class;
 
     /**
+     * @return void
+     *
      * @covers \Magento\Framework\View\Layout\Builder::build()
      */
-    public function testBuild()
+    public function testBuild(): void
     {
         $fullActionName = 'route_controller_action';
 
@@ -50,9 +52,13 @@ class BuilderTest extends TestCase
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
         /** @var ManagerInterface|MockObject $eventManager */
         $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $eventManager->expects($this->at(0))->method('dispatch')->with('layout_load_before', $data);
-        $eventManager->expects($this->at(1))->method('dispatch')->with('layout_generate_blocks_before', $data);
-        $eventManager->expects($this->at(2))->method('dispatch')->with('layout_generate_blocks_after', $data);
+        $eventManager
+            ->method('dispatch')
+            ->withConsecutive(
+                ['layout_load_before', $data],
+                ['layout_generate_blocks_before', $data],
+                ['layout_generate_blocks_after', $data]
+            );
         $builder = $this->getBuilder(['eventManager' => $eventManager, 'request' => $request, 'layout' => $layout]);
         $builder->build();
     }
@@ -60,14 +66,14 @@ class BuilderTest extends TestCase
     /**
      * @return array
      */
-    protected function getLayoutMockMethods()
+    protected function getLayoutMockMethods(): array
     {
         return ['setBuilder', 'getUpdate', 'generateXml', 'generateElements'];
     }
 
     /**
      * @param array $arguments
-     * @return \Magento\Framework\View\Layout\Builder
+     * @return object
      */
     protected function getBuilder($arguments)
     {

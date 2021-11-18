@@ -8,16 +8,22 @@
 <div class="admin__field-complex" css="$data.additionalClasses" attr="'data-index': index">
 
     <div class="admin__field-complex-title" if="label">
-        <span text="label"/>
+        <span text="label"></span>
     </div>
 
     <div class="admin__field-complex-elements"
          each="data: elems, as: 'element'"
-         render="" />
+         render=""></div>
 
-    <div class="admin__field-complex-content"
-         html="$data.content" if="$data.content"></div>
+    <!-- ko if: $data.content -->
+        <!-- ko with: {contentUnsanitizedHtml: $data.content} -->
+            <div class="admin__field-complex-content" html="contentUnsanitizedHtml"></div>
+        <!-- /ko -->
+    <!-- /ko -->
 
-    <div class="admin__field-complex-text"
-         html="$data.text" if="$data.text"></div>
+    <!-- ko if: $data.text -->
+        <!-- ko with: {textUnsanitizedHtml: $data.text} -->
+            <div class="admin__field-complex-text" html="textUnsanitizedHtml"></div>
+        <!-- /ko -->
+    <!-- /ko -->
 </div>
