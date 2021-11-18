@@ -102,11 +102,14 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         $this->regionFactory = $regionFactory;
         $this->resourceModel = $rateResource;
         $this->joinProcessor = $joinProcessor;
-        $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+        // phpstan:ignore "Class Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor not found."
+            \Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor::class
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
     {
@@ -126,7 +129,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($rateId)
     {
@@ -134,7 +137,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
     {
@@ -142,7 +145,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteById($rateId)
     {
@@ -153,7 +156,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
@@ -270,7 +273,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             );
         }
 
-        if (!\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')) {
+        if (!\Zend_Validate::is(trim($taxRate->getCode() ?? ''), 'NotEmpty')) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
 
@@ -293,7 +296,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
                 $exception->addError(__('Range To should be equal or greater than Range From.'));
             }
         } else {
-            if (!\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')) {
+            if (!\Zend_Validate::is(trim($taxRate->getTaxPostcode() ?? ''), 'NotEmpty')) {
                 $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']));
             }
         }
@@ -301,21 +304,5 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         if ($exception->wasErrorAdded()) {
             throw $exception;
         }
-    }
-
-    /**
-     * Retrieve collection processor
-     *
-     * @deprecated 100.2.0
-     * @return CollectionProcessorInterface
-     */
-    private function getCollectionProcessor()
-    {
-        if (!$this->collectionProcessor) {
-            $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor'
-            );
-        }
-        return $this->collectionProcessor;
     }
 }

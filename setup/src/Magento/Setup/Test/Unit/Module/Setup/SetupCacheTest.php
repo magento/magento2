@@ -60,7 +60,7 @@ class SetupCacheTest extends TestCase
     public function getNonexistentDataProvider()
     {
         return [
-            [null],
+            [''],
             ['field'],
         ];
     }
