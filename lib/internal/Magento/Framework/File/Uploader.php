@@ -149,28 +149,28 @@ class Uploader
     /**#@+
      * File upload type (multiple or single)
      */
-    private const SINGLE_STYLE = 0;
+    public const SINGLE_STYLE = 0;
 
-    private const MULTIPLE_STYLE = 1;
+    public const MULTIPLE_STYLE = 1;
 
     /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    private const TMP_NAME_EMPTY = 666;
+    public const TMP_NAME_EMPTY = 666;
 
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    private const MAX_IMAGE_WIDTH = 1920;
+    public const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    private const MAX_IMAGE_HEIGHT = 1200;
+    public const MAX_IMAGE_HEIGHT = 1200;
 
     /**
      * Resulting of uploaded file
