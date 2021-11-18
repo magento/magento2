@@ -21,7 +21,7 @@ class Token extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_dateTime;
 
     /**
-     * Date
+     * Date Formatting
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
