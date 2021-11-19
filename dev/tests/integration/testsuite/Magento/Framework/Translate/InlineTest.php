@@ -119,7 +119,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $package = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\DesignInterface::class
         )->getDesignTheme()->getPackageCode();
-        $expectedText = str_replace('{{design_package}}', $package, $expectedText);
+        $expectedText = str_replace('{{design_package}}', is_string($package) ? $package : '', $expectedText);
         return [
             'plain text' => ['text with no translations and tags', 'text with no translations and tags'],
             'html string' => [$originalText, $expectedText],

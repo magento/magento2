@@ -98,8 +98,13 @@ class JsonTest extends TestCase
      */
     public function testUnserializeException($value)
     {
+        $errorMessage = 'Unable to unserialize value.';
+
+        if ($value === null) {
+            $errorMessage = 'Invalid parameter: string must be a string type, null given.';
+        }
         $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Unable to unserialize value.');
+        $this->expectExceptionMessage($errorMessage);
         $this->json->unserialize($value);
     }
 

@@ -141,7 +141,9 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         if ($description) {
             $pageConfig->setDescription($description);
         } else {
-            $pageConfig->setDescription($this->string->substr(strip_tags($product->getDescription()), 0, 255));
+            $productDescription = is_string($product->getDescription()) ?
+                $this->string->substr(strip_tags($product->getDescription()), 0, 255) : '';
+            $pageConfig->setDescription($productDescription);
         }
 
         if ($this->_catalogProduct->canUseCanonicalTag()) {
@@ -184,7 +186,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->setPageLayout($settings->getPageLayout());
         }
 
-        $urlSafeSku = rawurlencode($product->getSku());
+        $urlSafeSku = is_string($product->getSku()) ? rawurlencode($product->getSku()) : '';
 
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {

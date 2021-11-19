@@ -988,10 +988,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private function extractHandlers(): void
     {
         foreach ($this->updates as $update) {
-            $updateXml = null;
+            $updateXml = false;
 
             try {
-                $updateXml = $this->_loadXmlString($update);
+                $updateXml = is_string($update) ? $this->_loadXmlString($update) : false;
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $exception) {
                 // ignore invalid
