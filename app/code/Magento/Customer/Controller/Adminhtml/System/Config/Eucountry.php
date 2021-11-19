@@ -15,19 +15,20 @@ use Magento\Backend\App\Action;
 class Eucountry extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var Vat
-     */
-    protected $customerVat;
-
-    /**
      * @param Context     $context
      * @param JsonFactory $resultJsonFactory
-     * @param Vat         $customerVat
      */
     public function __construct(
         Context $context,

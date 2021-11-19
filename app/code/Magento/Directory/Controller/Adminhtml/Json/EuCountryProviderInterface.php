@@ -10,6 +10,8 @@ namespace Magento\Directory\Controller\Adminhtml\Json;
 interface EuCountryProviderInterface
 {
     /**
+     * Check if the Country is in EU Country list
+     *
      * @param $countryCode
      * @return string
      */

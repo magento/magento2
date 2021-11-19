@@ -34,6 +34,8 @@ class EuCountryProvider implements EuCountryProviderInterface
     }
 
     /**
+     * Returns json string value true/false
+     *
      * @param $countryCode
      * @return string
      */
