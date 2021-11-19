@@ -77,6 +77,11 @@ class AbstractAction
     protected $skipStaticColumns = [];
 
     /**
+     * @var SkipStaticColumnsProvider
+     */
+    private $staticColumnsProvider;
+
+    /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Helper $resourceHelper
@@ -95,8 +100,7 @@ class AbstractAction
         $this->storeManager = $storeManager;
         $this->resourceHelper = $resourceHelper;
         $this->categoryMetadata = $categoryMetadata ?: ObjectManager::getInstance()->get(MetadataPool::class);
-        $skipProvider = $provider ?: ObjectManager::getInstance()->get(SkipStaticColumnsProvider::class);
-        $this->skipStaticColumns = $skipProvider->get();
+        $this->staticColumnsProvider = $provider ?: ObjectManager::getInstance()->get(SkipStaticColumnsProvider::class);
         $this->columns = array_merge($this->getStaticColumns(), $this->getEavColumns());
     }
 
@@ -213,7 +217,7 @@ class AbstractAction
         );
 
         foreach ($describe as $column) {
-            if (in_array($column['COLUMN_NAME'], $this->skipStaticColumns)) {
+            if (in_array($column['COLUMN_NAME'], $this->getSkipStaticColumns())) {
                 continue;
             }
             $isUnsigned = '';
@@ -515,5 +519,18 @@ class AbstractAction
     protected function getTableName($name)
     {
         return $this->resource->getTableName($name);
+    }
+
+    /**
+     * Get skip static columns instance.
+     *
+     * @return array
+     */
+    private function getSkipStaticColumns()
+    {
+        if ([] === $this->skipStaticColumns) {
+            $this->skipStaticColumns = $this->staticColumnsProvider->get();
+        }
+        return $this->skipStaticColumns;
     }
 }

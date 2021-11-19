@@ -145,7 +145,7 @@ class Options extends \Magento\Backend\Block\Template
     ) {
         $type = $attribute->getFrontendInput();
         if ($type === 'select' || $type === 'multiselect') {
-            $defaultValues = $attribute->getDefaultValue()
+            $defaultValues = is_string($attribute->getDefaultValue())
                 ? explode(',', $attribute->getDefaultValue())
                 : [''];
             $inputType = $type === 'select' ? 'radio' : 'checkbox';

@@ -150,8 +150,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_eventObject = 'store';
 
     /**
-     * Price filter
-     *
      * @var \Magento\Directory\Model\Currency\Filter
      */
     protected $_priceFilter;
@@ -178,15 +176,11 @@ class Store extends AbstractExtensibleModel implements
     protected $_dirCache = [];
 
     /**
-     * URL cache
-     *
      * @var array
      */
     protected $_urlCache = [];
 
     /**
-     * Base URL cache
-     *
      * @var array
      */
     protected $_baseUrlCache = [];
@@ -250,8 +244,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_configDataResource;
 
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -897,7 +889,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function setCurrentCurrencyCode($code)
     {
-        $code = strtoupper($code ?? '');
+        $code = is_string($code) && '' !== $code ?  strtoupper($code): '';
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
 
