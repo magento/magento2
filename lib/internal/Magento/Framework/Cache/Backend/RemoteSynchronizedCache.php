@@ -35,13 +35,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private $remote;
 
     /**
-     * Cache invalidation time
-     *
-     * @var \Zend_Cache_Backend_ExtendedInterface
-     */
-    protected $cacheInvalidationTime;
-
-    /**
      * Suffix for hash to compare data version in cache storage.
      */
     private const HASH_SUFFIX = ':hash';
@@ -416,6 +409,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * Calculate lock name.
+     *
+     * @param string $id
+     * @return string
      */
     private function getLockName(string $id): string
     {
