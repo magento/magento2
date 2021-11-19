@@ -567,11 +567,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     {
         echo 'pickachu';
         var_dump([
-            'message' => $e->getMessage(),
-            'code' => $e->getCode(),
-            'file' => $e->getFile(),
+            'message' => $e->getPrevious()->getMessage(),
+            'code' => $e->getPrevious()->getCode(),
+            'file' => $e->getPrevious()->getFile(),
 //            'trace' => $e->getTrace(),
-            'traceAsString' => $e->getTraceAsString(),
+            'traceAsString' => $e->getPrevious()->getTraceAsString(),
 //            'previous' => $e->getPrevious(),
         ]);
         $error = json_decode($e->getMessage(), true);

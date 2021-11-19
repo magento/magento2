@@ -103,10 +103,10 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
                     $response = $this->restClient->put($resourcePath, $arguments, $authHeader);
                 }catch (\Exception $e){
                     var_dump([
-                        'message' => $e->getMessage(),
-                        'code' => $e->getCode(),
-                        'file' => $e->getFile(),
-                        'traceAsString' => $e->getTraceAsString(),
+                        'message' => $e->getPrevious()->getMessage(),
+                        'code' => $e->getPrevious()->getCode(),
+                        'file' => $e->getPrevious()->getFile(),
+                        'traceAsString' => $e->getPrevious()->getTraceAsString(),
                     ]);
                     throw $e;
                 }
