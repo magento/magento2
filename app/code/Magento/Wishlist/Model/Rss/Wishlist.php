@@ -163,7 +163,7 @@ class Wishlist implements DataProviderInterface
                 }
                 $description .= '</p>';
 
-                if (is_string($product->getDescription()) && trim($product->getDescription()) != '') {
+                if (is_string($product->getDescription()) && trim($product->getDescription()) !== '') {
                     $description .= '<p>' . __('Comment:') . ' '
                         . $this->outputHelper->productAttribute(
                             $product,
