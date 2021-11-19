@@ -8,7 +8,6 @@ namespace Magento\Framework\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class TMap
  * @internal
  */
 class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
@@ -62,7 +61,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
         array $array = [],
         \Closure $objectCreationStrategy = null
     ) {
-        if (!class_exists($this->type) && !interface_exists($type)) {
+        if ((empty($this->type) || !class_exists($this->type)) && !interface_exists($type)) {
             throw new \InvalidArgumentException(sprintf('Unknown type %s', $type));
         }
 
@@ -142,7 +141,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function getIterator()
     {
@@ -156,7 +155,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function offsetExists($offset)
     {
@@ -164,7 +163,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function offsetGet($offset)
     {
@@ -172,7 +171,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function offsetSet($offset, $value)
     {
@@ -187,7 +186,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function offsetUnset($offset)
     {
@@ -202,7 +201,7 @@ class TMap implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function count()
     {

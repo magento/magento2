@@ -53,18 +53,20 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <comment userInput="BIC workaround" stepKey="createOrder"/>
-        <comment userInput="BIC workaround" stepKey="grabOrderId"/>
-        <comment userInput="BIC workaround" stepKey="startCreateInvoice"/>
-        <comment userInput="BIC workaround" stepKey="submitInvoice"/>
-        <comment userInput="BIC workaround" stepKey="onOrderPage"/>
-        <comment userInput="BIC workaround" stepKey="clearFilters"/>
-        <comment userInput="BIC workaround" stepKey="getOrderId"/>
-        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="createOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="startCreateInvoice"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="submitInvoice"/>
 
-        <actionGroup ref="StartToCreateCreditMemoActionGroup" stepKey="startToCreateCreditMemo">
-            <argument name="orderId" value="$createCustomerCart.return$"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$createCustomerCart.return$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onOrderPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="getOrderId"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrdersGridById"/>
+
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="startToCreateCreditMemo"/>
         <fillField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="0" stepKey="setRefundShipping"/>
         <actionGroup ref="UpdateCreditMemoTotalsActionGroup" stepKey="updateCreditMemoTotals"/>
         <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo"/>
