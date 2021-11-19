@@ -65,7 +65,6 @@
     <preference for="Magento\Customer\Api\SessionCleanerInterface" type="Magento\Customer\Model\Session\SessionCleaner"/>
     <preference for="Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface"
                 type="Magento\Customer\Model\ResourceModel\GroupExcludedWebsiteRepository" />
-    <preference for="Magento\Directory\Controller\Adminhtml\Json\EuCountryProviderInterface" type="Magento\Customer\Model\EuCountryProvider" />
     <virtualType name="SessionValidator" type="Magento\Framework\Session\CompositeValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
