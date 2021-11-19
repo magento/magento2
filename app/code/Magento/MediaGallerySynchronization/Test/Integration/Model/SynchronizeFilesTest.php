@@ -81,7 +81,7 @@ class SynchronizeFilesTest extends TestCase
 
         $loadedAsset = $this->getAssetsByPath->execute([$file])[0];
 
-        $this->assertEquals($title, pathinfo($loadedAsset->getTitle(), PATHINFO_FILENAME));
+        $this->assertEquals($title, $loadedAsset->getTitle());
         $this->assertEquals($source, $loadedAsset->getSource());
         $this->driver->deleteFile($modifiableFilePath);
     }
