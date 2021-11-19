@@ -52,7 +52,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private const REMOTE_SYNC_LOCK_PREFIX = 'rsl::';
 
     /**
-     * @inheritdoc
+     *  Available options
+     *
+     * @var array available options
      */
     protected $_options = [
         'remote_backend' => '',
@@ -77,7 +79,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     /**
      * Sign for locks, helps to avoid removing a lock that was created by another client
      *
-     * @string
+     * @var string
      */
     private $lockSign;
 
@@ -414,9 +416,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * Calculate lock name.
-     *
-     * @param string $id
-     * @return string
      */
     private function getLockName(string $id): string
     {

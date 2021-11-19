@@ -30,7 +30,10 @@ class DbStatusValidator
      */
     private $dbVersionInfo;
 
-    private DeploymentConfig $deploymentConfig;
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * @param FrontendCacheInterface $cache

@@ -30,10 +30,12 @@ class ConfigChangeDetector
      */
     private $changeDetector;
 
-    private DeploymentConfig $deploymentConfig;
+    /** @var DeploymentConfig  */
+    private $deploymentConfig;
 
     /**
-     * @param ChangeDetector $changeDetector configuration data changes detector
+     * @param ChangeDetector $changeDetector
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(ChangeDetector $changeDetector, DeploymentConfig $deploymentConfig)
     {
