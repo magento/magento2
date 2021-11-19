@@ -148,5 +148,4 @@ class StoreHelpers extends Helper
             $this->fail($exception->getMessage());
         }
     }
-
 }
