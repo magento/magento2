@@ -12,7 +12,7 @@ interface EuCountryProviderInterface
     /**
      * Check if the Country is in EU Country list
      *
-     * @param $countryCode
+     * @param string $countryCode
      * @return string
      */
     public function isEuCountry($countryCode): string;

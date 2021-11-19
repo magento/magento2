@@ -13,6 +13,13 @@ use Magento\Framework\App\ObjectManager;
 class IsEuCountry extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var EuCountryProviderInterface
      */
     private $euCountryProvider;
