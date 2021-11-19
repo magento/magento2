@@ -16,7 +16,7 @@
             <argument name="status" defaultValue="Cancel" type="string"/>
         </arguments>
         <click selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
-        <click selector="{{AdminOrdersGridSection.orderActions}}" stepKey="clickOnActionsDropDown"/>
+        <click selector="{{AdminOrdersGridSection.orderActions}}" stepKey="clickOnActionsDropdown"/>
         <click selector="{{AdminOrdersGridSection.changeOrderStatus(status)}}" stepKey="clickStatus"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

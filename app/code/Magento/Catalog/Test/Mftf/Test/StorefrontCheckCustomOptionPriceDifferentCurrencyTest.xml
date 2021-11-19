@@ -33,6 +33,7 @@
             <comment userInput="BIC workaround" stepKey="setAllowedCurrencyUSDWebsites"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Revert Allowed Currency to System Default -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
             <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="switchToMainWebsite">
