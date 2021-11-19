@@ -63,7 +63,7 @@ class Gd2 extends AbstractAdapter
      */
     public function open($filename)
     {
-        if (!file_exists($filename)) {
+        if (!$filename || !file_exists($filename)) {
             throw new FileSystemException(
                 new Phrase('File "%1" does not exist.', [$this->_fileName])
             );
@@ -267,7 +267,7 @@ class Gd2 extends AbstractAdapter
      * Returns a color identifier.
      *
      * @param resource &$imageResourceTo
-     * @return int
+     * @return void
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -293,8 +293,6 @@ class Gd2 extends AbstractAdapter
                     if (!imagesavealpha($imageResourceTo, true)) {
                         throw new \InvalidArgumentException('Failed to save alpha transparency into PNG image.');
                     }
-
-                    return $transparentAlphaColor;
                 } elseif (false !== $transparentIndex) {
                     // fill image with indexed non-alpha transparency
                     $transparentColor = false;
@@ -309,20 +307,23 @@ class Gd2 extends AbstractAdapter
                         throw new \InvalidArgumentException('Failed to fill image with transparency.');
                     }
                     imagecolortransparent($imageResourceTo, $transparentColor);
-                    return $transparentColor;
                 }
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // fallback to default background color
             }
         }
-        list($r, $g, $b) = $this->_backgroundColor;
-        $color = imagecolorallocate($imageResourceTo, $r, $g, $b);
-        if (!imagefill($imageResourceTo, 0, 0, $color)) {
-            throw new \InvalidArgumentException("Failed to fill image background with color {$r} {$g} {$b}.");
-        }
+        list($red, $green, $blue) = $this->_backgroundColor;
 
-        return $color;
+        if ($imageResourceTo && $red && $green && $blue) {
+            $color = imagecolorallocate($imageResourceTo, $red, $green, $blue);
+
+            if (!$color && !imagefill($imageResourceTo, 0, 0, $color)) {
+                throw new \InvalidArgumentException(
+                    "Failed to fill image background with color {$red} {$green} {$blue}."
+                );
+            }
+        }
     }
 
     /**

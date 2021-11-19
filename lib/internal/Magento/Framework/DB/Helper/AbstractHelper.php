@@ -63,7 +63,7 @@ abstract class AbstractHelper
      */
     public function escapeLikeValue($value, $options = [])
     {
-        $value = str_replace('\\', '\\\\', $value);
+        $value = is_string($value) ? str_replace('\\', '\\\\', $value) : '';
 
         $replaceFrom = [];
         $replaceTo = [];

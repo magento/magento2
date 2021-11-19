@@ -45,7 +45,8 @@ class StripTags implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        $result = strip_tags($value, $this->allowableTags);
+        $result = is_string($value) ? strip_tags($value, $this->allowableTags) : '';
+
         return $this->escape ? $this->escaper->escapeHtml($result, $this->allowableTags) : $result;
     }
 }

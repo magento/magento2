@@ -227,11 +227,14 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function loadFromCookie($fromCookie)
     {
+        if (!is_string($fromCookie)) {
+            throw new InputException(__($this->inputExceptionMessage));
+        }
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $cookieData = explode(':', base64_decode($fromCookie));
-        $protectCode = isset($cookieData[0]) ? $cookieData[0] : null;
-        $incrementId = isset($cookieData[1]) ? $cookieData[1] : null;
-        if (!empty($protectCode) && !empty($incrementId)) {
+        $protectCode = $cookieData[0] ?? null;
+        $incrementId = $cookieData[1] ?? null;
+        if ($protectCode && $incrementId) {
             $order = $this->getOrderRecord($incrementId);
             if (hash_equals((string)$order->getProtectCode(), $protectCode)) {
                 $this->setGuestViewCookie($fromCookie);
