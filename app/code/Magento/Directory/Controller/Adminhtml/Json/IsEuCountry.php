@@ -25,7 +25,8 @@ class IsEuCountry extends Action
         Context $context,
         ?EuCountryProviderInterface $euCountryProvider=null
     ) {
-        $this->euCountryProvider = ($euCountryProvider ?? ObjectManager::getInstance()->get(EuCountryProviderInterface::class));
+        $this->euCountryProvider = $euCountryProvider
+            ?? ObjectManager::getInstance()->get(EuCountryProviderInterface::class);
         parent::__construct($context);
     }
 
