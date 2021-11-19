@@ -19,7 +19,6 @@ class Eucountry extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var JsonFactory
