@@ -387,15 +387,11 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected $_doVoidRequest = ['AUTHORIZATIONID', 'NOTE'];
 
     /**
-     * GetTransactionDetailsRequest
-     *
      * @var string[]
      */
     protected $_getTransactionDetailsRequest = ['TRANSACTIONID'];
 
     /**
-     * GetTransactionDetailsResponse
-     *
      * @var string[]
      */
     protected $_getTransactionDetailsResponse = [

@@ -16,6 +16,6 @@ class DateTimeFactory
      */
     public function create($time = 'now', \DateTimeZone $timezone = null)
     {
-        return new \DateTime($time ?? 'now', $timezone);
+        return new \DateTime($time, $timezone);
     }
 }

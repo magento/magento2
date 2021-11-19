@@ -13,8 +13,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Bundle data
-     *
      * @var \Magento\Bundle\Helper\Data
      */
     protected $_bundleData = null;
