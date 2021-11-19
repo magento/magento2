@@ -5,8 +5,6 @@
  */
 namespace Magento\Cron\Model;
 
-use IntlDateFormatter;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use \Magento\TestFramework\Helper\Bootstrap;
 
@@ -26,11 +24,6 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      * @var DateTime
      */
     protected $dateTime;
-
-    /**
-     * @var IntlDateFormatter
-     */
-    private $dateFormatter;
 
     /**
      * @ingeritdoc
@@ -70,15 +63,14 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     public function testTryLockJobAlreadyLockedSucceeds()
     {
         $offsetInThePast = 2*24*60*60;
-        $gmtTimestamp = $this->dateTime->gmtTimestamp();
 
         $oldSchedule = $this->scheduleFactory->create()
             ->setCronExpr("* * * * *")
             ->setJobCode("test_job")
             ->setStatus(Schedule::STATUS_RUNNING)
-            ->setCreatedAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast))
-            ->setScheduledAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast + 60, 'Y-M-d HH:mm'))
-            ->setExecutedAt($this->getTimeFormat($gmtTimestamp - $offsetInThePast + 61, 'Y-M-d HH:mm'));
+            ->setCreatedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - $offsetInThePast))
+            ->setScheduledAt(date('Y-m-d H:i', $this->dateTime->gmtTimestamp() - $offsetInThePast + 60))
+            ->setExecutedAt(date('Y-m-d H:i', $this->dateTime->gmtTimestamp() - $offsetInThePast + 61));
         $oldSchedule->save();
 
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING);
@@ -118,39 +110,14 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
      */
     private function createSchedule($jobCode, $status, $timeOffset = 0)
     {
-        $gmtTimestamp  = $this->dateTime->gmtTimestamp();
-
         $schedule = $this->scheduleFactory->create()
             ->setCronExpr("* * * * *")
             ->setJobCode($jobCode)
             ->setStatus($status)
-            ->setCreatedAt($this->getTimeFormat($gmtTimestamp))
-            ->setScheduledAt($this->getTimeFormat($gmtTimestamp + $timeOffset, 'Y-M-d HH:mm'));
+            ->setCreatedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp()))
+            ->setScheduledAt(date('Y-m-d H:i', $this->dateTime->gmtTimestamp() + $timeOffset));
         $schedule->save();
 
         return $schedule;
-    }
-
-    /**
-     * This method format timestamp value.
-     *
-     * @param int $datetime
-     * @param string $format
-     *
-     * @return string
-     */
-    private function getTimeFormat(int $datetime, string $format = 'Y-M-d HH:mm:ss'): string
-    {
-        if (!$this->dateFormatter) {
-            $localeResolver = Bootstrap::getObjectManager()->create(ResolverInterface::class);
-            $this->dateFormatter = new IntlDateFormatter(
-                $localeResolver->getLocale(),
-                IntlDateFormatter::SHORT,
-                IntlDateFormatter::SHORT
-            );
-        }
-        $this->dateFormatter->setPattern($format);
-
-        return $this->dateFormatter->format($datetime);
     }
 }
