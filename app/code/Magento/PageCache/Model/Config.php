@@ -120,7 +120,7 @@ class Config
      */
     public function getType()
     {
-        return $this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
+        return (int)$this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
     }
 
     /**
