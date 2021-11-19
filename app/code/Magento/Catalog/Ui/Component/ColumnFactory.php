@@ -142,7 +142,7 @@ class ColumnFactory
             'dateFormat' => $dateFormat,
             'options' => [
                 'showsTime' => $isDatetime,
-                'dateFormat' => $this->timezone->getDateFormat()
+                'dateFormat' => $this->timezone->getDateFormatWithLongYear()
             ]
         ];
     }

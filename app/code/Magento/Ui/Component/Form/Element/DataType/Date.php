@@ -71,7 +71,7 @@ class Date extends AbstractDataType
             $config['storeTimeZone'] = $storeTimeZone;
         }
         // Set date format pattern by current locale
-        $localeDateFormat = $this->localeDate->getDateFormat();
+        $localeDateFormat = $this->localeDate->getDateFormatWithLongYear();
         $config['options']['dateFormat'] = $localeDateFormat;
         $config['options']['storeLocale'] = $this->locale;
         $this->setData('config', $config);
