@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db3efcfff9be8be46e053561ff4cfcee",
+    "content-hash": "9b7875b213c20b9dba5a44678802796d",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9897,22 +9897,23 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "15",
+            "version": "dev-AC-1059_move-phpcompatibility-rules-from-magento-tests",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "ca25070a18507ec89127c7828bbced56f0793e34"
+                "url": "https://github.com/svera/magento-coding-standard.git",
+                "reference": "7059a4b6bd29e247f7615e22c7ce5eb5727893f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/ca25070a18507ec89127c7828bbced56f0793e34",
-                "reference": "ca25070a18507ec89127c7828bbced56f0793e34",
+                "url": "https://api.github.com/repos/svera/magento-coding-standard/zipball/7059a4b6bd29e247f7615e22c7ce5eb5727893f7",
+                "reference": "7059a4b6bd29e247f7615e22c7ce5eb5727893f7",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
                 "php": ">=7.3",
+                "phpcompatibility/php-compatibility": "^9.3",
                 "squizlabs/php_codesniffer": "^3.6",
                 "webonyx/graphql-php": "^14.9"
             },
@@ -9929,17 +9930,28 @@
                     "Magento2Framework\\": "Magento2Framework/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "files": [
+                    "PHP_CodeSniffer/Tests/Standards/AbstractSniffUnitTest.php"
+                ]
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility/PHPCompatibility"
+                ],
+                "post-update-cmd": [
+                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility/PHPCompatibility"
+                ]
+            },
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
-                "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v15"
+                "source": "https://github.com/svera/magento-coding-standard/tree/AC-1059_move-phpcompatibility-rules-from-magento-tests"
             },
-            "time": "2021-11-09T10:35:30+00:00"
+            "time": "2021-11-16T15:25:06+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -13252,7 +13264,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "magento/zendframework1": 10
+        "magento/zendframework1": 10,
+        "magento/magento-coding-standard": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
