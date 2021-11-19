@@ -122,10 +122,10 @@ class CurlClient
             $resp = $this->invokeApi($url, $curlOpts, $headers);
         }catch (\Exception $e){
             var_dump([
-                'message' => $e->getPrevious()->getMessage(),
-                'code' => $e->getPrevious()->getCode(),
-                'file' => $e->getPrevious()->getFile(),
-                'traceAsString' => $e->getPrevious()->getTraceAsString(),
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'file' => $e->getFile(),
+                'traceAsString' => $e->getTraceAsString(),
             ]);
             throw $e;
         }
