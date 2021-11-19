@@ -5,10 +5,6 @@
  */
 namespace Magento\Config\Model\Config\Source\Date;
 
-use IntlDateFormatter;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Locale\ResolverInterface;
-
 /**
  * @api
  * @since 100.0.2
@@ -16,44 +12,17 @@ use Magento\Framework\Locale\ResolverInterface;
 class Short implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var IntlDateFormatter
-     */
-    private $dateFormatter;
-
-    /**
      * @return array
      */
     public function toOptionArray()
     {
         $arr = [];
+        $dateTime = new \DateTime();
         $arr[] = ['label' => '', 'value' => ''];
-        $arr[] = ['label' => 'MM/DD/YY ' . $this->getTimeFormat(time(), '(M/d/y)'), 'value' => 'M/d/y'];
-        $arr[] = ['label' => 'MM/DD/YYYY '. $this->getTimeFormat(time(), '(M/d/Y)'), 'value' => 'M/d/Y'];
-        $arr[] = ['label' => 'DD/MM/YY ' . $this->getTimeFormat(time(), '(d/m/y)'), 'value' => 'd/M/y'];
-        $arr[] = ['label' => 'DD/MM/YYYY ' . $this->getTimeFormat(time(), '(d/m/Y)'), 'value' => 'd/M/Y'];
+        $arr[] = ['label' => 'MM/DD/YY (' . $dateTime->format('m/d/y') . ')', 'value' => '%m/%d/%y'];
+        $arr[] = ['label' => 'MM/DD/YYYY (' . $dateTime->format('m/d/Y') . ')', 'value' => '%m/%d/%Y'];
+        $arr[] = ['label' => 'DD/MM/YY (' . $dateTime->format('d/m/y') . ')', 'value' => '%d/%m/%y'];
+        $arr[] = ['label' => 'DD/MM/YYYY (' . $dateTime->format('d/m/Y') . ')', 'value' => '%d/%m/%Y'];
         return $arr;
-    }
-
-    /**
-     * This method format timestamp value.
-     *
-     * @param int $datetime
-     * @param string $format
-     *
-     * @return string
-     */
-    private function getTimeFormat(int $datetime, string $format = 'Y/M/d'): string
-    {
-        if (!$this->dateFormatter) {
-            $localeResolver = ObjectManager::getInstance()->get(ResolverInterface::class);
-            $this->dateFormatter = new \IntlDateFormatter(
-                $localeResolver->getLocale(),
-                IntlDateFormatter::SHORT,
-                IntlDateFormatter::SHORT
-            );
-        }
-        $this->dateFormatter->setPattern($format);
-
-        return $this->dateFormatter->format($datetime);
     }
 }
