@@ -22,9 +22,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return array|mixed
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function current()
@@ -33,9 +31,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
-     *
-     * @return int|mixed
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function key()
@@ -44,7 +40,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function next()
@@ -53,7 +49,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function rewind()
@@ -62,7 +58,7 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     #[\ReturnTypeWillChange]
     public function valid()

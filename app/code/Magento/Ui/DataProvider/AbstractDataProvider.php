@@ -162,7 +162,6 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
 
     /**
      * @inheritdoc
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)

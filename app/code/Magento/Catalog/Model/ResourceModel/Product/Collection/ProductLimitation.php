@@ -159,7 +159,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * Sets 'Use Price' index flaf.
+     * Sets 'Use Price' index flag.
      *
      * @param bool $value
      * @return void
