@@ -428,8 +428,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
-        //@phpcs:ignore
-        $name = html_entity_decode((string)$name);
+        $name = htmlspecialchars_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
         return trim($name);

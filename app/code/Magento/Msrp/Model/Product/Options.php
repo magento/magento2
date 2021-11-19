@@ -38,8 +38,7 @@ class Options
      * Is enabled
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @phpcs:ignore
-     * @param null $visibility
+     * @param int|null $visibility
      * @return bool|null
      */
     public function isEnabled($product, $visibility = null)
