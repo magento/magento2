@@ -69,7 +69,8 @@ class DataObject implements \Zend_Validate_Interface
                 $this->_messages[] =  array_values($validator->getMessages());
             }
         }
-        return empty(array_merge([], ...$this->_messages));
+        $this->_messages = array_merge([], ...$this->_messages);
+        return empty($this->_messages);
     }
 
     /**
