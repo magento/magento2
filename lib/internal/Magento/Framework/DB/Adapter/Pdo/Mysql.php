@@ -420,6 +420,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $this->_config['driver_options'][\PDO::MYSQL_ATTR_MULTI_STATEMENTS] = false;
         }
 
+        if (!isset($this->_config['driver_options'][\PDO::ATTR_STRINGIFY_FETCHES])) {
+            $this->_config['driver_options'][\PDO::ATTR_STRINGIFY_FETCHES] = true;
+        }
+
         $this->logger->startTimer();
         parent::_connect();
         $this->logger->logStats(LoggerInterface::TYPE_CONNECT, '');
