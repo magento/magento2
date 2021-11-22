@@ -1,7 +1,5 @@
 <?php
 /**
- * Origin filesystem driver
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -38,7 +36,7 @@ class File implements DriverInterface
      */
     public function __construct(bool $stateful = false)
     {
-        $this->stateful = $stateful ?? false;
+        $this->stateful = $stateful;
     }
 
     /**

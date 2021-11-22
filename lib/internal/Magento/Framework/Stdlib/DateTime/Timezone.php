@@ -307,9 +307,9 @@ class Timezone implements TimezoneInterface
         }
 
         $formatter = $this->dateFormatterFactory->create(
-            (string)($locale ?: $this->_localeResolver->getLocale()),
-            (int)($dateType ?? \IntlDateFormatter::SHORT),
-            (int)($timeType ?? \IntlDateFormatter::SHORT),
+            (string) ($locale ?: $this->_localeResolver->getLocale()),
+            (int) $dateType,
+            (int) $timeType,
             null,
             false
         );

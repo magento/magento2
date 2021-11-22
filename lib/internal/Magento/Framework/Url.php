@@ -496,6 +496,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $data
      * @return \Magento\Framework\UrlInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _setRoutePath($data)
     {
@@ -924,9 +925,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_query']);
         }
 
-        $noSid = null;
         if (isset($routeParams['_nosid'])) {
-            $noSid = (bool)$routeParams['_nosid'];
             unset($routeParams['_nosid']);
         }
         $url = $this->getRouteUrl($routePath, $routeParams);

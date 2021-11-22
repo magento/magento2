@@ -1,13 +1,13 @@
 <?php
 /**
- * Default application path for backend area
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
 
 /**
+ * Default application path for backend area
+ *
  * @api
  * @since 100.0.2
  */
