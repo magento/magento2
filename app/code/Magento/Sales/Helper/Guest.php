@@ -20,8 +20,6 @@ use \Magento\Sales\Model\Order;
 class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;

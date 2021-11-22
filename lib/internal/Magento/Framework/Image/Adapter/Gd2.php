@@ -17,8 +17,6 @@ use Magento\Framework\Phrase;
 class Gd2 extends AbstractAdapter
 {
     /**
-     * Required extensions
-     *
      * @var array
      */
     protected $_requiredExtensions = ["gd"];
@@ -270,6 +268,7 @@ class Gd2 extends AbstractAdapter
      * @return void
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function _fillBackgroundColor(&$imageResourceTo)
     {
@@ -476,6 +475,7 @@ class Gd2 extends AbstractAdapter
      * @return false|resource
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function createWatermarkBasedOnPosition(
         $watermark,

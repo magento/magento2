@@ -14,6 +14,7 @@ use Magento\Framework\App\CacheInterface;
 /**
  * Dynamic validator for UI release notification, manage UI component visibility.
  * Return true if the logged in user has not seen the notification.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CanViewNotification implements VisibilityConditionInterface
 {
@@ -72,8 +73,6 @@ class CanViewNotification implements VisibilityConditionInterface
     }
 
     /**
-     * Validate if notification popup can be shown and set the notification flag
-     *
      * @inheritdoc
      */
     public function isVisible(array $arguments)
