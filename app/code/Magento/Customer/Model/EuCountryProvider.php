@@ -19,7 +19,7 @@ class EuCountryProvider implements EuCountryProviderInterface
     /**
      * @var Vat
      */
-    protected $customerVat;
+    private $customerVat;
 
     /**
      * @param SerializerInterface $serializer
