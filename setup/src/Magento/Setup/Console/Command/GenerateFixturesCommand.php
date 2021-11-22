@@ -21,12 +21,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class GenerateFixturesCommand extends Command
 {
-    /**
-     * Profile argument
-     */
-    const PROFILE_ARGUMENT = 'profile';
+    public const PROFILE_ARGUMENT = 'profile';
 
-    const SKIP_REINDEX_OPTION = 'skip-reindex';
+    public const SKIP_REINDEX_OPTION = 'skip-reindex';
 
     /**
      * @var FixtureModel
@@ -43,7 +40,7 @@ class GenerateFixturesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -66,7 +63,7 @@ class GenerateFixturesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -158,6 +155,8 @@ class GenerateFixturesCommand extends Command
     }
 
     /**
+     * Executes fixture and output the execution time.
+     *
      * @param \Magento\Setup\Fixtures\Fixture $fixture
      * @param OutputInterface $output
      */

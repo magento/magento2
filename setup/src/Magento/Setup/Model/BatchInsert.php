@@ -58,8 +58,7 @@ class BatchInsert
     }
 
     /**
-     * Save data to $dataStorage and automatically flush it to DB
-     * when storage size becomes equal to $batchSize
+     * Save data to $dataStorage and automatically flush it to DB when storage size becomes equal to $batchSize
      *
      * @param array $dataToInsert
      * @return void

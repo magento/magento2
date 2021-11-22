@@ -2029,6 +2029,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get customer name
      *
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getCustomerName()
     {
