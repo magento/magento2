@@ -780,6 +780,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return array
      */
+    #[\ReturnTypeWillChange]
     public function toOptionArray()
     {
         return $this->_toOptionArray();
@@ -834,6 +835,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $this->load();
@@ -845,6 +847,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         $this->load();
