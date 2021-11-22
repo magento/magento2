@@ -46,7 +46,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     protected $optionRepository;
 
     /**
-     * Option type percent
+     * Option type percent.
+     *
+     * @var string
      * @since 101.0.0
      */
     protected static $typePercent = 'percent';
@@ -69,7 +71,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     const KEY_IMAGE_SIZE_X = 'image_size_x';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var Product
+     */
     protected $product;
 
     /**
@@ -1003,9 +1007,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     private function cleanFileExtensions()
     {
-        $rawExtensions = $this->getFileExtension();
+        $rawExtensions = is_string($this->getFileExtension()) ? strtolower($this->getFileExtension()) : '';
         $matches = [];
         preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
+
         if (!empty($matches)) {
             $extensions = implode(', ', array_unique($matches['extensions']));
             $this->setFileExtension($extensions);

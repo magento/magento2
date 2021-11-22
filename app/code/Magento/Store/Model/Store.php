@@ -156,8 +156,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_eventObject = 'store';
 
     /**
-     * Price filter
-     *
      * @var \Magento\Directory\Model\Currency\Filter
      */
     protected $_priceFilter;
@@ -184,15 +182,11 @@ class Store extends AbstractExtensibleModel implements
     protected $_dirCache = [];
 
     /**
-     * URL cache
-     *
      * @var array
      */
     protected $_urlCache = [];
 
     /**
-     * Base URL cache
-     *
      * @var array
      */
     protected $_baseUrlCache = [];
@@ -256,8 +250,6 @@ class Store extends AbstractExtensibleModel implements
     protected $_configDataResource;
 
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -713,7 +705,7 @@ class Store extends AbstractExtensibleModel implements
             } else {
                 $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $indexFileName = basename($scriptFilename);
+                $indexFileName = is_string($scriptFilename) ? basename($scriptFilename) : '';
             }
             $url .= $indexFileName . '/';
         }
