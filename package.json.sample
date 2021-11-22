@@ -22,7 +22,6 @@
     "grunt-contrib-watch": "~1.1.0",
     "grunt-eslint": "~20.2.0",
     "grunt-exec": "~3.0.0",
-    "grunt-jscs": "~3.0.1",
     "grunt-replace": "~2.0.2",
     "grunt-styledocco": "~0.3.0",
     "grunt-template-jasmine-requirejs": "~0.2.3",
