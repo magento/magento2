@@ -700,7 +700,7 @@ class Store extends AbstractExtensibleModel implements
             } else {
                 $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $indexFileName = basename($scriptFilename);
+                $indexFileName = is_string($scriptFilename) ? basename($scriptFilename) : '';
             }
             $url .= $indexFileName . '/';
         }

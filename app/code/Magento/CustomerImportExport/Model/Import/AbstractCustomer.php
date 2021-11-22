@@ -13,6 +13,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import entity abstract customer model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -53,7 +54,9 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var string[]
+     */
     protected $_ignoredAttributes = ['website_id', 'store_id',
         self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
@@ -77,7 +80,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $needColumnCheck = true;
 
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $masterAttributeCode = '_email';
 
@@ -264,9 +267,9 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      */
     protected function getSelectAttrIdByValue(array $attributeParameters, $value)
     {
-        return isset($attributeParameters['options'][strtolower($value)])
-            ? $attributeParameters['options'][strtolower($value)]
-            : 0;
+        $value = is_string($value) ? strtolower($value) : '';
+
+        return $attributeParameters['options'][$value] ?? 0;
     }
 
     /**
