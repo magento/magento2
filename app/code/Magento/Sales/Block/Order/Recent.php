@@ -91,9 +91,6 @@ class Recent extends \Magento\Framework\View\Element\Template
             'customer_id',
             $customerId
         )->addAttributeToFilter(
-            'store_id',
-            $this->storeManager->getStore()->getId()
-        )->addAttributeToFilter(
             'status',
             ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
         )->addAttributeToSort(
