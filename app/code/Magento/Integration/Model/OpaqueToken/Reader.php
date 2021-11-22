@@ -20,6 +20,8 @@ use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
+ * Reads user token data
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Reader implements UserTokenReaderInterface
@@ -112,6 +114,7 @@ class Reader implements UserTokenReaderInterface
      * Validate the given user type
      *
      * @param int $userType
+     * @throws UserTokenException
      */
     private function validateUserType(int $userType): void
     {
