@@ -157,8 +157,7 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        $className = ltrim($className, '\\');
-        return $className ? '\\' . $className : '';
+        return $className ? '\\' . ltrim($className, '\\') : '';
     }
 
     /**
