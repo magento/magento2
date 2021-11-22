@@ -31,7 +31,7 @@ class IsEuCountryTest extends AbstractBackendController
 
     /**
      * Test Execute with region in the fixture
-     *@dataProvider countryDataProvider
+     * @dataProvider countryDataProvider
      */
     public function testExecute($countryCode, $expected)
     {
