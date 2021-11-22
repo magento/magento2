@@ -51,7 +51,7 @@ class IsEuCountry extends Action implements HttpPostActionInterface, HttpGetActi
      *
      * @return bool
      */
-    protected function _isAllowed()
+    public function _isAllowed()
     {
         return true;
     }
