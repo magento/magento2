@@ -14,6 +14,9 @@ use Magento\Integration\Api\Data\UserToken;
 use Magento\Integration\Api\UserTokenValidatorInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime as DtUtil;
 
+/**
+ * Validates if a token is expired
+ */
 class ExpirationValidator implements UserTokenValidatorInterface
 {
     /**
