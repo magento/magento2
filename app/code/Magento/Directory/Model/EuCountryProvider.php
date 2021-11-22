@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Directory\Controller\Adminhtml\Json;
+namespace Magento\Directory\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
 
