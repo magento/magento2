@@ -22,7 +22,7 @@ class Select extends AbstractFilter
     const COMPONENT = 'select';
 
     /**
-     * Wrapped component
+     * UI Component
      *
      * @var ElementSelect
      */
@@ -79,7 +79,8 @@ class Select extends AbstractFilter
             'config',
             array_replace_recursive(
                 (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
+                (array)$this->getData('config'),
+                ['__disableTmpl' => ['label' => true]]
             )
         );
 

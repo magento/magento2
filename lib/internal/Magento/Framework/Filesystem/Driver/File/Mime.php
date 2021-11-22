@@ -15,8 +15,6 @@ use Magento\Framework\Exception\FileSystemException;
 class Mime
 {
     /**
-     * Mime types
-     *
      * @var array
      */
     private $mimeTypes = [
@@ -91,6 +89,7 @@ class Mime
     private $genericMimeTypes = [
         'application/x-empty',
         'inode/x-empty',
+        'application/octet-stream'
     ];
 
     /**
