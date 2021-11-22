@@ -504,11 +504,14 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         $this->unsetData('route_path');
-        $routePieces = $data ? explode('/', $data) : [''];
-
-        $route = array_shift($routePieces);
-        if ('*' === $route) {
-            $route = $this->_getRequest()->getRouteName();
+        $route = '';
+        $routePieces = [];
+        if (!empty($data)) {
+            $routePieces = explode('/', $data);
+            $route = array_shift($routePieces);
+            if ('*' === $route) {
+                $route = $this->_getRequest()->getRouteName();
+            }
         }
         $this->_setRouteName($route);
 

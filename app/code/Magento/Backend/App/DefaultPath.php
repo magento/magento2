@@ -24,8 +24,11 @@ class DefaultPath implements \Magento\Framework\App\DefaultPathInterface
      */
     public function __construct(\Magento\Backend\App\ConfigInterface $config)
     {
-        $path = $config->getValue('web/default/admin');
-        $pathParts = $path ? explode('/', $path) : [''];
+        $pathConfigValue = $config->getValue('web/default/admin') ?? '';
+        $pathParts  = [];
+        if ($pathConfigValue) {
+            $pathParts = explode('/', $pathConfigValue);
+        }
 
         $this->_parts = [
             'area' => isset($pathParts[0]) ? $pathParts[0] : '',
