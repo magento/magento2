@@ -29,17 +29,17 @@ class Block extends AbstractModel implements BlockInterface, IdentityInterface
     /**
      * CMS block cache tag
      */
-    const CACHE_TAG = 'cms_b';
+    public const CACHE_TAG = 'cms_b';
 
     /**#@+
      * Block's statuses
      */
-    const STATUS_ENABLED = 1;
-    const STATUS_DISABLED = 0;
+    public const STATUS_ENABLED = 1;
+    public const STATUS_DISABLED = 0;
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var string
+     */
     protected $_cacheTag = self::CACHE_TAG;
 
     /**

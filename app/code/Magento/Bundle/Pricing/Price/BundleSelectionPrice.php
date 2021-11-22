@@ -26,7 +26,7 @@ class BundleSelectionPrice extends AbstractPrice
     /**
      * Price model code
      */
-    const PRICE_CODE = 'bundle_selection';
+    public const PRICE_CODE = 'bundle_selection';
 
     /**
      * @var \Magento\Catalog\Model\Product
@@ -34,8 +34,6 @@ class BundleSelectionPrice extends AbstractPrice
     protected $bundleProduct;
 
     /**
-     * Event manager
-     *
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
@@ -181,6 +179,8 @@ class BundleSelectionPrice extends AbstractPrice
     }
 
     /**
+     * Returns the bundle product.
+     *
      * @return SaleableInterface
      */
     public function getProduct()
