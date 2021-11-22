@@ -17,7 +17,7 @@ class Iterator extends \FilterIterator
      *
      * @param \Iterator $iterator
      */
-    public function __construct(\Iterator $iterator)
+    public function __construct(\Iterator $iterator) // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
     {
         parent::__construct($iterator);
     }
@@ -27,6 +27,7 @@ class Iterator extends \FilterIterator
      *
      * @return bool true if the current element is acceptable, otherwise false.
      */
+    #[\ReturnTypeWillChange]
     public function accept()
     {
         return !($this->current()->isDisabled() || !$this->current()->isAllowed());
