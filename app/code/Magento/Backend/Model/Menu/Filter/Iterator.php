@@ -17,7 +17,7 @@ class Iterator extends \FilterIterator
      *
      * @param \Iterator $iterator
      */
-    public function __construct(\Iterator $iterator)
+    public function __construct(\Iterator $iterator) // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod
     {
         parent::__construct($iterator);
     }

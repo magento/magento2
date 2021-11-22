@@ -162,10 +162,10 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
 
     /**
      * @inheritdoc
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingReturnTypeHint
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
+        // @phpstan-ignore-next-line as adding return statement cause of backward compatibility issue
         $this->getCollection()->addFieldToFilter(
             $filter->getField(),
             [$filter->getConditionType() => $filter->getValue()]
