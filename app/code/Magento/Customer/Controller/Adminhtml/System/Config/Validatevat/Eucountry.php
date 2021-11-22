@@ -4,23 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Controller\Adminhtml\System\Config;
+namespace Magento\Customer\Controller\Adminhtml\System\Config\Validatevat;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Backend\App\Action;
 
-class Eucountry extends Action
+class Eucountry extends \Magento\Customer\Controller\Adminhtml\System\Config\Validatevat
 {
-    /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
-
     /**
      * @var JsonFactory
      */
