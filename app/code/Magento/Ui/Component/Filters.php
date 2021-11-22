@@ -81,7 +81,7 @@ class Filters extends AbstractComponent implements ObserverInterface
     {
         $config = $this->getData('config');
         // Set date format pattern by current locale
-        $localeDateFormat = $this->localeDate->getDateFormat();
+        $localeDateFormat = $this->localeDate->getDateFormatWithLongYear();
         $config['options']['dateFormat'] = $localeDateFormat;
         $this->setData('config', $config);
         parent::prepare();

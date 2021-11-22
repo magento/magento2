@@ -59,7 +59,7 @@ class DateTest extends TestCase
     public function localeDataProvider(): array
     {
         return [
-            ['en_GB', 'dd/MM/y'], ['en_US', 'M/d/yy'],
+            ['en_GB', 'dd/MM/y'], ['en_US', 'MM/d/y'],
         ];
     }
 }

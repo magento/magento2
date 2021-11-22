@@ -52,7 +52,7 @@ class DobTest extends TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/dd/y';
+    const DATE_FORMAT = 'MM/dd/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =

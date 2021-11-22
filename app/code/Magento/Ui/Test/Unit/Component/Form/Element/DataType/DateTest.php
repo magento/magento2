@@ -69,7 +69,7 @@ class DateTest extends TestCase
         $localeDateFormat = 'dd/MM/y';
 
         $this->localeDateMock->expects($this->once())
-            ->method('getDateFormat')
+            ->method('getDateFormatWithLongYear')
             ->willReturn($localeDateFormat);
 
         $this->date->prepare();
@@ -107,7 +107,7 @@ class DateTest extends TestCase
         $localeDateFormat = 'dd/MM/y';
 
         $this->localeDateMock->expects($this->once())
-            ->method('getDateFormat')
+            ->method('getDateFormatWithLongYear')
             ->willReturn($localeDateFormat);
         $this->localeDateMock->expects($this->any())
             ->method('getConfigTimezone')

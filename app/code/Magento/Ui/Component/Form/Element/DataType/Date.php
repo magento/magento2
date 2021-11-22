@@ -25,8 +25,6 @@ class Date extends AbstractDataType
     protected $locale;
 
     /**
-     * Wrapped component
-     *
      * @var UiComponentInterface
      */
     protected $wrappedComponent;

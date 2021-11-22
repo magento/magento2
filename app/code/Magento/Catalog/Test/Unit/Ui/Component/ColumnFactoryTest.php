@@ -203,8 +203,11 @@ class ColumnFactoryTest extends TestCase
         $this->attribute->method('getFrontendInput')
             ->willReturn($frontendInput);
 
-        $this->timezone->expects($this->atLeastOnce())
-            ->method('getDateFormat')
+        $this->timezone->method('getDateFormat')
+            ->with(\IntlDateFormatter::MEDIUM)
+            ->willReturn($dateFormat);
+        $this->timezone->expects($this->once())
+            ->method('getDateFormatWithLongYear')
             ->willReturn($dateFormat);
         $this->timezone->method('getDateTimeFormat')
             ->with(\IntlDateFormatter::MEDIUM)
