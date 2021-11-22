@@ -72,7 +72,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     const CACHE_TAG = 'cat_c';
 
-    /**#@-*/
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'catalog_category';
 
     /**
@@ -157,29 +159,21 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $filter;
 
     /**
-     * Catalog config
-     *
      * @var \Magento\Catalog\Model\Config
      */
     protected $_catalogConfig;
 
     /**
-     * Product collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
-     * Store collection factory
-     *
      * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
     protected $_storeCollectionFactory;
 
     /**
-     * Category tree factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
      */
     protected $_categoryTreeFactory;

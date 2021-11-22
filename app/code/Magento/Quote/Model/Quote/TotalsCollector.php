@@ -53,8 +53,6 @@ class TotalsCollector
     protected $collectorList;
 
     /**
-     * Quote validator
-     *
      * @var \Magento\Quote\Model\QuoteValidator
      */
     protected $quoteValidator;
