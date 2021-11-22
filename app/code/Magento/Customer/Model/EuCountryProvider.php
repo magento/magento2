@@ -7,7 +7,6 @@
 namespace Magento\Customer\Model;
 
 use Magento\Directory\Controller\Adminhtml\Json\EuCountryProviderInterface;
-use Magento\Directory\Controller\Adminhtml\Json\IsEuCountry;
 use Magento\Framework\Serialize\SerializerInterface;
 
 class EuCountryProvider implements EuCountryProviderInterface

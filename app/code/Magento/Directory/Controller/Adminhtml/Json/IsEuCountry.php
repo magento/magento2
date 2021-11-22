@@ -8,9 +8,10 @@ namespace Magento\Directory\Controller\Adminhtml\Json;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
 
-class IsEuCountry extends Action
+class IsEuCountry extends Action implements HttpGetActionInterface
 {
     /**
      * @var EuCountryProviderInterface
