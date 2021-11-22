@@ -12,6 +12,8 @@ namespace Magento\Config\Model\Config\Source\Date;
 class Short implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Method return array of date options.
+     *
      * @return array
      */
     public function toOptionArray()

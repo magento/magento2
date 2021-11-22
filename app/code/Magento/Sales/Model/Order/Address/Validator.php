@@ -14,7 +14,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Class Validator
+ * Class for validating customer address.
  */
 class Validator
 {
