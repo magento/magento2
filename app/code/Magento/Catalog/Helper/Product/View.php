@@ -26,29 +26,21 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     protected $messageGroups;
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct = null;
 
     /**
-     * Catalog design
-     *
      * @var \Magento\Catalog\Model\Design
      */
     protected $_catalogDesign;
 
     /**
-     * Catalog session
-     *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
