@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Image extends AbstractHelper implements ArgumentInterface
@@ -47,8 +48,6 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_scheduleRotate = false;
 
     /**
-     * Angle
-     *
      * @var int
      */
     protected $_angle;
@@ -61,22 +60,16 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_watermark;
 
     /**
-     * Watermark Position
-     *
      * @var string
      */
     protected $_watermarkPosition;
 
     /**
-     * Watermark Size
-     *
      * @var string
      */
     protected $_watermarkSize;
 
     /**
-     * Watermark Image opacity
-     *
      * @var int
      */
     protected $_watermarkImageOpacity;
@@ -89,8 +82,6 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_product;
 
     /**
-     * Image File
-     *
      * @var string
      */
     protected $_imageFile;
@@ -108,8 +99,6 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $_assetRepo;
 
     /**
-     * Product image factory
-     *
      * @var \Magento\Catalog\Model\Product\ImageFactory
      */
     protected $_productImageFactory;

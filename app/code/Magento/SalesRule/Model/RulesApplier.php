@@ -18,6 +18,8 @@ use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 
 /**
  * Rule applier model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RulesApplier
 {
