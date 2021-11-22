@@ -76,7 +76,7 @@ originModel.prototype = {
 script;
 
 $scriptString .= 'this.regionsUrl = "' . $block->escapeJs($block->getUrl('directory/json/countryRegion')) . '";';
-$scriptString .= 'this.euCountryUrl = "' . $block->escapeJs($block->getUrl('customer/system_config_validatevat/eucountry')) . '";';
+$scriptString .= 'this.euCountryUrl = "' . $block->escapeJs($block->getUrl('customer/system_config/eucountry')) . '";';
 $scriptString .= <<<script
 
         this.bindCountryRegionRelation();

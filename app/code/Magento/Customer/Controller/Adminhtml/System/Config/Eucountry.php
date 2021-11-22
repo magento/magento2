@@ -15,13 +15,6 @@ use Magento\Backend\App\Action;
 class Eucountry extends Action
 {
     /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
-
-    /**
      * @var JsonFactory
      */
     protected $resultJsonFactory;
@@ -39,7 +32,7 @@ class Eucountry extends Action
     }
 
     /**
-     * Check whether vat is valid
+     * Check whether vat is validß
      *
      * @return Json
      */
@@ -52,5 +45,15 @@ class Eucountry extends Action
         return $resultJson->setData(
             $this->_objectManager->get(Vat::class)->isCountryInEU($countryCode)
         );
+    }
+
+    /**
+     * Check if user has permissions to access this controller
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return true;
     }
 }
