@@ -33,6 +33,13 @@
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="ConfigurableProduct::skipValidation" type="Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
+    <type name="Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend\AttributeValidation">
+        <arguments>
+            <argument name="unskippableAttributes" xsi:type="array">
+                <item name="custom_layout_update" xsi:type="string">custom_layout_update</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper\Plugin" sortOrder="50" />
     </type>

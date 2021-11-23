@@ -488,8 +488,8 @@ class PriceTest extends TestCase
             $bundle->addCustomOption('bundle_selection_ids', $this->json->serialize([$productLink->getId()]));
             $bundle->addCustomOption('selection_qty_' . $productLink->getId(), 1);
             $this->assertEquals(
-                round($expectedPrices[$productLink->getSku()], 2),
-                round($this->priceModel->getFinalPrice(1, $bundle), 2)
+                round((float) $expectedPrices[$productLink->getSku()], 2),
+                round((float) $this->priceModel->getFinalPrice(1, $bundle), 2)
             );
         }
     }

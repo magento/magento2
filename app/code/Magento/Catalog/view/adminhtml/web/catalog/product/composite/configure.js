@@ -64,7 +64,10 @@ define([
                         click: function () {
                             self.onConfirmBtn();
                         }
-                    }]
+                    }],
+                    closed: function () {
+                        self.clean('window');
+                    },
                 });
             });
         },
@@ -406,6 +409,7 @@ define([
                         this.blockMsgError.innerHTML = response.message;
                         this._showWindow();
 
+                        jQuery(this.blockForm).trigger('processStop');
                         return false;
                     }
                 }
@@ -446,6 +450,13 @@ define([
                     return elms[i];
                 }
             }
+        },
+
+        /**
+         * Helper to find select element of currently confirmed item
+         */
+        getCurrentConfirmedSelectElement: function () {
+            return $(this.confirmedCurrentId).getElementsByTagName('select');
         },
 
         /**

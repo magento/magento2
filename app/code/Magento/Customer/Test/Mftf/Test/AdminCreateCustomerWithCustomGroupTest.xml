@@ -19,6 +19,9 @@
         </annotations>
 
         <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
@@ -39,7 +42,7 @@
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
+            <argument name="tags" value="compiled_config"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
