@@ -310,9 +310,11 @@ class Timezone implements TimezoneInterface
         }
 
         $formatter = $this->dateFormatterFactory->create(
-            (string) $locale ?: $this->_localeResolver->getLocale(),
-            (int) $dateType ?: \IntlDateFormatter::SHORT,
-            (int) $timeType ?: \IntlDateFormatter::SHORT,
+            (string) ($locale ?: $this->_localeResolver->getLocale()),
+            // @phpstan-ignore-next-line
+            (int) ($dateType ?? \IntlDateFormatter::SHORT),
+            // @phpstan-ignore-next-line
+            (int) ($timeType ?? \IntlDateFormatter::SHORT),
             null,
             false
         );
