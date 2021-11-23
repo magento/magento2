@@ -26,5 +26,9 @@ try {
 } catch (StateException $exception) {
 }
 
+\Magento\Framework\App\ObjectManager::getInstance()
+    ->create(\Magento\CatalogInventory\Model\Indexer\Stock\Processor::class)
+    ->reindexAll();
+
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
