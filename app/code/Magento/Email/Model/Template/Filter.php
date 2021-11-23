@@ -11,6 +11,7 @@ use Exception;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
@@ -30,6 +31,7 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
@@ -59,45 +61,33 @@ class Filter extends Template
     const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
 
     /**
-     * Use absolute links flag
-     *
      * @var bool
      */
     protected $_useAbsoluteLinks = false;
 
     /**
-     * Whether to allow SID in store directive: NO
-     *
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
      */
     protected $_useSessionInUrl = false;
 
     /**
-     * Modifier Callbacks
-     *
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
     /**
-     * Whether template being filtered is child of another template
-     *
      * @var bool
      */
     private $isChildTemplate = false;
 
     /**
-     * List of CSS files to inline
-     *
      * @var []
      */
     private $inlineCssFiles = [];
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId;
@@ -151,22 +141,16 @@ class Filter extends Template
     protected $_layoutFactory;
 
     /**
-     * Setup callbacks for filters
-     *
      * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * Layout directive params
-     *
      * @var array
      */
     protected $_directiveParams;
 
     /**
-     * App state
-     *
      * @var State
      */
     protected $_appState;
@@ -201,6 +185,10 @@ class Filter extends Template
      */
     private $pubDirectoryRead;
 
+    /**
+     * @var StoreInformation
+     */
+    private $storeInformation;
 
     /**
      * Filter constructor.
@@ -222,6 +210,7 @@ class Filter extends Template
      * @param CssInliner $cssInliner
      * @param array $variables
      * @param array $directiveProcessors
+     * @param StoreInformation|null $storeInformation
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -242,7 +231,8 @@ class Filter extends Template
         Filesystem $pubDirectory,
         CssInliner $cssInliner,
         $variables = [],
-        array $directiveProcessors = []
+        array $directiveProcessors = [],
+        ?StoreInformation $storeInformation = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -259,6 +249,8 @@ class Filter extends Template
         $this->cssProcessor = $cssProcessor;
         $this->pubDirectory = $pubDirectory;
         $this->configVariables = $configVariables;
+        $this->storeInformation = $storeInformation ?:
+            ObjectManager::getInstance()->get(StoreInformation::class);
         parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
@@ -581,6 +573,13 @@ class Filter extends Template
             unset($params['url']);
         }
 
+        /**
+         * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
+         * in multi-store environment
+         */
+        $this->urlModel->setScope($this->_storeManager->getStore());
+        $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
+
         return $this->urlModel->getUrl($path, $params);
     }
 
@@ -825,18 +824,29 @@ class Filter extends Template
      *
      * @param string[] $construction
      * @return string
+     * @throws NoSuchEntityException
      */
     public function configDirective($construction)
     {
         $configValue = '';
         $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
+        $store = $this->_storeManager->getStore($storeId);
+        $storeInformationObj = $this->storeInformation
+            ->getStoreInformationObject($store);
         if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
+            if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
+                $configValue = $storeInformationObj->getData('country');
+            } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
+                $configValue = $storeInformationObj->getData('region') ?
+                    $storeInformationObj->getData('region') :
+                    $configValue;
+            }
         }
         return $configValue;
     }
@@ -851,7 +861,7 @@ class Filter extends Template
     {
         return in_array(
             $variable,
-            array_column($this->configVariables->getData(), 'value')
+            $this->configVariables->getAvailableVars()
         );
     }
 
@@ -912,7 +922,7 @@ class Filter extends Template
             return '/*' . PHP_EOL . $exception->getMessage() . PHP_EOL . '*/';
         }
 
-        if (empty($css)){
+        if (empty($css)) {
             return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
 
@@ -1100,7 +1110,7 @@ class Filter extends Template
             $this->resetAfterFilterCallbacks();
 
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
-                $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
+                $value = sprintf(__('Error filtering template: %s')->render(), $e->getMessage());
             } else {
                 $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }

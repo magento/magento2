@@ -22,9 +22,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE">
-                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
-            </actionGroup>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
             <waitForPageLoad stepKey="waitConfigToSave"/>
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="product1">
@@ -50,7 +48,7 @@
                           dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
                           stepKey="clickContentTab1"/>
         <waitForPageLoad stepKey="waitForContentSectionLoad1"/>
-        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand1"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.CheckIfTabExpand}}" stepKey="waitForTabExpand1"/>
         <click selector="{{CmsNewPagePageActionsSection.showHideEditor}}" stepKey="showHiddenButtons"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="seeWidgetButton"/>
         <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
@@ -109,7 +107,7 @@
                           dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
                           stepKey="clickContentTab2"/>
         <waitForPageLoad stepKey="waitForContentSectionLoad2"/>
-        <waitForElementNotVisible selector="{{CmsWYSIWYGSection.CheckIfTabExpand}}" stepKey="waitForTabExpand2"/>
+        <waitForElementNotVisible selector="{{TinyMCESection.CheckIfTabExpand}}" stepKey="waitForTabExpand2"/>
         <executeJS function="jQuery('[id=\'cms_page_form_content_ifr\']').attr('name', 'preview-iframe')"
                    stepKey="setPreviewFrameName"/>
         <switchToIFrame selector="preview-iframe" stepKey="switchToIframe"/>

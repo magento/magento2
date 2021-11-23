@@ -65,12 +65,12 @@ class HttpTest extends TestCase
         $file = __DIR__ . '/../../_files/javascript.js';
         $contentType = 'content/type';
 
-        $this->response->expects($this->at(0))
+        $this->response
             ->method('setHeader')
-            ->with('Content-length', filesize($file));
-        $this->response->expects($this->at(1))
-            ->method('setHeader')
-            ->with('Content-Type', $contentType);
+            ->withConsecutive(
+                ['Content-length', filesize($file)],
+                ['Content-Type', $contentType]
+            );
         $this->response->expects($this->once())
             ->method('sendHeaders');
         $this->mime->expects($this->once())
@@ -142,12 +142,9 @@ class HttpTest extends TestCase
         $file = __DIR__ . '/../../_files/javascript.js';
         $contentType = 'content/type';
 
-        $this->response->expects($this->at(0))
+        $this->response
             ->method('setHeader')
-            ->with('Content-length', filesize($file));
-        $this->response->expects($this->at(1))
-            ->method('setHeader')
-            ->with('Content-Type', $contentType);
+            ->withConsecutive(['Content-length', filesize($file)], ['Content-Type', $contentType]);
         $this->response->expects($this->once())
             ->method('sendHeaders');
         $this->mime->expects($this->once())
