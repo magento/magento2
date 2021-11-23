@@ -697,7 +697,7 @@ class Grouped extends AbstractModifier
                     'config' => [
                         'componentType' => Form\Field::NAME,
                         'formElement' => Form\Element\Input::NAME,
-                        'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-html',
+                        'elementTmpl' => 'Magento_GroupedProduct/components/cell-html',
                         'dataType' => Form\Element\DataType\Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,

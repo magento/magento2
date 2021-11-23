@@ -739,7 +739,7 @@ class Related extends AbstractModifier
                     'config' => [
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
-                        'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-html',
+                        'elementTmpl' => 'Magento_Catalog/components/cell-html',
                         'component' => 'Magento_Ui/js/form/element/text',
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,
