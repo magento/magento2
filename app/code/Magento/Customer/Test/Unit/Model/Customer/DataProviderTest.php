@@ -288,7 +288,10 @@ class DataProviderTest extends TestCase
         $this->eavConfigMock
             ->method('getEntityType')
             ->withConsecutive(['customer'], ['customer_address'])
-            ->willReturnOnConsecutiveCalls($this->getTypeCustomerMock($customerAttributes), $this->getTypeAddressMock());
+            ->willReturnOnConsecutiveCalls(
+                $this->getTypeCustomerMock($customerAttributes),
+                $this->getTypeAddressMock()
+            );
 
         return $this->eavConfigMock;
     }

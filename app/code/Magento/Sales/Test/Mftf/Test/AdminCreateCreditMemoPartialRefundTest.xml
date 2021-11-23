@@ -129,7 +129,10 @@
         <waitForPageLoad stepKey="waitForViewOrder"/>
         <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
-        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="110.00" stepKey="seeGrandTotal"/>
+        
+        <actionGroup ref="StorefrontCheckRefundGrandTotalActionGroup" stepKey="seeGrandTotal">
+            <argument name="grandTotal" value="110.00"/>
+        </actionGroup>
 
         <!-- Assert product Qty decreased after CreditMemo -->
         <actionGroup ref="AdminAssertProductQtyInGridActionGroup" stepKey="assertQtyDecreased">
