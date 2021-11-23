@@ -9,6 +9,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerCartSection">
+        <element name="websiteFilter" type="select" selector="#customer_cart_grid #website_filter"/>
+        <element name="grid" type="block" timeout="30" selector="table#customer_cart_grid_table"/>
         <element name="cartItem" type="button" selector="#customer_cart_grid_table tbody tr:nth-of-type({{row}}) .col-product_id" parameterized="true" timeout="5"/>
+        <element name="productName" type="text" selector="#customer_cart_grid_table tbody tr:nth-of-type({{row}}) .col-name" parameterized="true" timeout="5"/>
     </section>
 </sections>

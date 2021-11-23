@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerCartSection">
+        <element name="configureCartItem" type="button" selector="#customer_cart_grid_table tbody tr:nth-of-type({{row}}) .col-action .configure-item-link" parameterized="true" timeout="5"/>
+        <element name="slidePanelFirstOptionDropdown" type="select" selector="aside[role='dialog'] #product_composite_configure select"/>
+        <element name="slidePanelOkButton" type="button" selector="aside[role='dialog'] .page-actions .action-primary" timeout="5"/>
+    </section>
+</sections>
