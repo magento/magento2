@@ -26,4 +26,9 @@
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
         <plugin name="reset-totals" type="Magento\QuoteGraphQl\Plugin\ResetStoredTotalsBeforeTopResolver" sortOrder="1"/>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\TotalsCollector">
+        <arguments>
+            <argument name="quoteTotalsCollector" xsi:type="object">Magento\Quote\Model\Quote\TotalsCollector\Proxy</argument>
+        </arguments>
+    </type>
 </config>
