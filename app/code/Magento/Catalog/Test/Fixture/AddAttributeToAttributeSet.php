@@ -10,12 +10,10 @@ namespace Magento\Catalog\Test\Fixture;
 use Magento\Catalog\Api\ProductAttributeManagementInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
+use Magento\Framework\DataObject;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\DataFixtureInterface;
 
-/**
- * Add product attribute to attribute set
- */
 class AddAttributeToAttributeSet implements DataFixtureInterface
 {
     /**
@@ -43,7 +41,7 @@ class AddAttributeToAttributeSet implements DataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function apply(array $data = []): ?DataObject
     {
         $attributeSetId = $this->eavSetup->getAttributeSetId(Product::ENTITY, 'Default');
         $attributeGroupId = $this->eavSetup->getDefaultAttributeGroupId(Product::ENTITY, $attributeSetId);
@@ -60,6 +58,6 @@ class AddAttributeToAttributeSet implements DataFixtureInterface
         $service = $this->serviceFactory->create(ProductAttributeManagementInterface::class, 'assign');
         $service->execute($data);
 
-        return $data;
+        return null;
     }
 }

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Fixture;
 
+use Magento\Framework\DataObject;
+
 /**
  * File based data fixture
  */
@@ -31,7 +33,7 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function apply(array $data = []): ?DataObject
     {
         $this->execute($this->filePath);
         return null;
@@ -40,7 +42,7 @@ class LegacyDataFixture implements RevertibleDataFixtureInterface
     /**
      * @inheritdoc
      */
-    public function revert(array $data = []): void
+    public function revert(DataObject $data): void
     {
         $fileInfo = pathinfo($this->filePath);
         $extension = '';

@@ -11,20 +11,20 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\DataObject;
+use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
-/**
- * Creates simple product fixture
- */
 class Product implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
+        'id' => null,
         'type_id' => Type::TYPE_SIMPLE,
         'attribute_set_id' => 4,
-        'name' => 'Simple Product %uniqid%',
-        'sku' => 'simple_%uniqid%',
+        'name' => 'Simple Product%uniqid%',
+        'sku' => 'simple%uniqid%',
         'price' => 10,
         'weight' => 1,
         'visibility' => Visibility::VISIBILITY_BOTH,
@@ -34,6 +34,7 @@ class Product implements RevertibleDataFixtureInterface
         ],
         'extension_attributes' => [
             'website_ids' => [1],
+            'category_links' => [],
             'stock_item' => [
                 'use_config_manage_stock' => true,
                 'qty' => 100,
@@ -41,6 +42,12 @@ class Product implements RevertibleDataFixtureInterface
                 'is_in_stock' => true,
             ]
         ],
+        'product_links' => [],
+        'options' => [],
+        'media_gallery_entries' => [],
+        'tier_prices' => [],
+        'created_at' => null,
+        'updated_at' => null,
     ];
 
     /**
@@ -54,43 +61,47 @@ class Product implements RevertibleDataFixtureInterface
     private $dataProcessor;
 
     /**
+     * @var DataMerger
+     */
+    private $dataMerger;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        DataMerger $dataMerger
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
+        $this->dataMerger = $dataMerger;
     }
 
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function apply(array $data = []): ?DataObject
     {
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'save');
-        $result = $service->execute(
+
+        return $service->execute(
             [
-                'product' => $this->dataProcessor->process($this, $this->prepareData($data))
+                'product' => $this->prepareData($data)
             ]
         );
-
-        return [
-            'product' => $result
-        ];
     }
 
     /**
      * @inheritdoc
      */
-    public function revert(array $data = []): void
+    public function revert(DataObject $data): void
     {
         $service = $this->serviceFactory->create(ProductRepositoryInterface::class, 'deleteById');
         $service->execute(
             [
-                'sku' => $data['product']->getSku()
+                'sku' => $data->getSku()
             ]
         );
     }
@@ -103,35 +114,12 @@ class Product implements RevertibleDataFixtureInterface
      */
     private function prepareData(array $data): array
     {
-        $default = self::DEFAULT_DATA;
-        return $this->merge($default, $data);
-    }
-
-    /**
-     * Recursively merge product data
-     *
-     * @param array $arrays
-     * @return array
-     */
-    private function merge(array ...$arrays): array
-    {
-        $result = [];
-        while ($arrays) {
-            $array = array_shift($arrays);
-            // is array an associative array
-            if (array_values($array) !== $array) {
-                foreach ($array as $key => $value) {
-                    if (is_array($value) && array_key_exists($key, $result) && is_array($result[$key])) {
-                        $result[$key] = $this->merge($result[$key], $value);
-                    } else {
-                        $result[$key] = $value;
-                    }
-                }
-            } elseif (array_values($result) === $result) {
-                $result = $array;
-            }
+        $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data);
+        // remove category_links if empty in order for category_ids to processed if exists
+        if (empty($data['extension_attributes']['category_links'])) {
+            unset($data['extension_attributes']['category_links']);
         }
 
-        return $result;
+        return $this->dataProcessor->process($this, $data);
     }
 }

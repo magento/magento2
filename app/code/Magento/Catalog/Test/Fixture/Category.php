@@ -7,77 +7,86 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\DataObject;
+use Magento\TestFramework\Fixture\Api\DataMerger;
+use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
-/**
- * Creates category fixture
- */
 class Category implements RevertibleDataFixtureInterface
 {
-    private const DEFAULT_PARENT_ID = 2;
-
-    private const DEFAULT_PARENT_PATH = '1/2';
-
     private const DEFAULT_DATA = [
+        'id' => null,
         'name' => 'Category%uniqid%',
-        'parent_id' => self::DEFAULT_PARENT_ID,
+        'parent_id' => 2,
         'is_active' => true,
         'position' => 1,
-        'available_sort_by' => ['position', 'name'],
-        'default_sort_by' => 'name'
+        'level' => 1,
+        'path' => null,
+        'include_in_menu' => true,
+        'available_sort_by' => [],
+        'custom_attributes' => [
+            'default_sort_by' => ['name']
+        ],
+        'extension_attributes' => [],
+        'created_at' => null,
+        'updated_at' => null,
     ];
 
     /**
-     * @var CategoryFactory
+     * @var ServiceFactory
      */
-    private $categoryFactory;
-
-    /**
-     * @var CategoryResource
-     */
-    private $categoryResource;
+    private $serviceFactory;
 
     /**
      * @var ProcessorInterface
      */
     private $dataProcessor;
+    /**
+     * @var DataMerger
+     */
+    private $dataMerger;
 
     /**
-     * @param CategoryFactory $categoryFactory
-     * @param CategoryResource $categoryResource
+     * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
-        CategoryFactory $categoryFactory,
-        CategoryResource $categoryResource,
-        ProcessorInterface $dataProcessor
+        ServiceFactory $serviceFactory,
+        ProcessorInterface $dataProcessor,
+        DataMerger $dataMerger
     ) {
-        $this->categoryFactory = $categoryFactory;
-        $this->categoryResource = $categoryResource;
+        $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
+        $this->dataMerger = $dataMerger;
     }
 
     /**
      * @inheritdoc
      */
-    public function apply(array $data = []): ?array
+    public function apply(array $data = []): ?DataObject
     {
-        $data = $this->prepareData($data);
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->categoryFactory->create();
-        $category->isObjectNew(true);
-        $category->setData($data);
-        if (isset($data['id'])) {
-            $category->setId($data['id']);
-        }
-        $this->categoryResource->save($category);
+        $service = $this->serviceFactory->create(CategoryRepositoryInterface::class, 'save');
 
-        return [
-            'category' => $category
-        ];
+        return $service->execute(
+            [
+                'category' => $this->prepareData($data)
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function revert(DataObject $data): void
+    {
+        $service = $this->serviceFactory->create(CategoryRepositoryInterface::class, 'deleteByIdentifier');
+        $service->execute(
+            [
+                'categoryId' => $data->getId()
+            ]
+        );
     }
 
     /**
@@ -88,32 +97,8 @@ class Category implements RevertibleDataFixtureInterface
      */
     private function prepareData(array $data): array
     {
-        $data = $this->dataProcessor->process($this, array_merge(self::DEFAULT_DATA, $data));
-        if (!isset($data['path'])) {
-            $data['path'] = self::DEFAULT_PARENT_PATH;
-            if ((int) $data['parent_id'] !== self::DEFAULT_PARENT_ID) {
-                /** @var \Magento\Catalog\Model\Category $parentCategory */
-                $parentCategory = $this->categoryFactory->create();
-                $this->categoryResource->load($parentCategory, $data['parent_id']);
-                $data['path'] = $parentCategory->getPath();
-            }
-            if (isset($data['id'])) {
-                $data['path'] .= '/' . $data['id'];
-            }
-        }
-        return $data;
-    }
+        $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data);
 
-    /**
-     * @inheritdoc
-     */
-    public function revert(array $data = []): void
-    {
-        /** @var \Magento\Catalog\Model\Category $category */
-        $category = $this->categoryFactory->create();
-        $this->categoryResource->load($category, $data['category']->getId());
-        if ($category->getId()) {
-            $this->categoryResource->delete($category);
-        }
+        return $this->dataProcessor->process($this, $data);
     }
 }

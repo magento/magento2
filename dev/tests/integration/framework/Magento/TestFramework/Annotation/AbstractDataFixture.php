@@ -7,17 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Framework\DataObject;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
-use Magento\TestFramework\Fixture\DataFixtureDirectivesParser;
-use Magento\TestFramework\Fixture\DataFixtureSetup;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Exception;
-use Throwable;
 
 /**
  * Class consist of dataFixtures base logic
@@ -106,12 +98,13 @@ abstract class AbstractDataFixture
         $testsIsolation = $objectManager->get(TestsIsolation::class);
         $dbIsolationState = $this->getDbIsolationState($test);
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
+        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         /* Execute fixture scripts */
         foreach ($fixtures as $fixture) {
             if (is_callable([get_class($test), $fixture['factory']])) {
                 $fixture['factory'] = get_class($test) . '::' . $fixture['factory'];
             }
-            $fixture['result'] = $this->applyDataFixture($fixture);
+            $fixture['result'] = $dataFixtureSetup->apply($fixture);
             $this->_appliedFixtures[] = $fixture;
         }
         $resolver = Resolver::getInstance();
@@ -127,11 +120,12 @@ abstract class AbstractDataFixture
     protected function _revertFixtures(?TestCase $test = null)
     {
         $objectManager = Bootstrap::getObjectManager();
+        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($this->getAnnotation());
         $appliedFixtures = array_reverse($this->_appliedFixtures);
         foreach ($appliedFixtures as $fixture) {
-            $this->revertDataFixture($fixture);
+            $dataFixtureSetup->revert($fixture);
         }
         $this->_appliedFixtures = [];
         $resolver->setCurrentFixtureType(null);
@@ -173,75 +167,4 @@ abstract class AbstractDataFixture
      * @return string
      */
     abstract protected function getAnnotation(): string;
-
-    /**
-     * Applies data fixture and returns the result.
-     *
-     * @param array $fixture
-     * @return array|null
-     */
-    private function applyDataFixture(array $fixture): ?array
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
-        try {
-            $result = $dataFixtureSetup->apply($fixture['factory'], $fixture['data'] ?? []);
-        } catch (Throwable $exception) {
-            throw new Exception(
-                sprintf(
-                    "Unable to apply fixture%s: %s.\n%s\n%s",
-                    $fixture['name'] ? '"' . $fixture['name'] . '"' : '',
-                    $fixture['factory'],
-                    $exception->getMessage(),
-                    $exception->getTraceAsString()
-                ),
-                0,
-                $exception
-            );
-        }
-
-        if ($result !== null && !empty($fixture['name'])) {
-            DataFixtureStorageManager::getStorage()->persist(
-                $fixture['name'],
-                $objectManager->create(DataObject::class, ['data' => $result])
-            );
-        }
-
-        return $result;
-    }
-
-    /**
-     * Revert data fixture.
-     *
-     * @param array $fixture
-     */
-    private function revertDataFixture(array $fixture): void
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
-        $registry = $objectManager->get(Registry::class);
-        $isSecureArea = $registry->registry('isSecureArea');
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-        try {
-            $dataFixtureSetup->revert($fixture['factory'], $fixture['result'] ?? []);
-        } catch (NoSuchEntityException $exception) {
-            //ignore
-        } catch (Throwable $exception) {
-            throw new Exception(
-                sprintf(
-                    "Unable to revert fixture%s: %s.\n%s\n%s",
-                    $fixture['name'] ? '"' . $fixture['name'] . '"' : '',
-                    $fixture['factory'],
-                    $exception->getMessage(),
-                    $exception->getTraceAsString()
-                ),
-                0,
-                $exception
-            );
-        } finally {
-            $registry->unregister('isSecureArea');
-            $registry->register('isSecureArea', $isSecureArea);
-        }
-    }
 }

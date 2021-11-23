@@ -22,23 +22,23 @@ class DataFixtureStorage
     /**
      * Get fixture result by its identifier
      *
-     * @param string $identifier
+     * @param string $name
      * @return DataObject|null
      */
-    public function get(string $identifier): ?DataObject
+    public function get(string $name): ?DataObject
     {
-        return $this->fixtures[$identifier] ?? null;
+        return $this->fixtures[$name] ?? null;
     }
 
     /**
      * Persist fixture result to the storage
      *
-     * @param string $identifier
+     * @param string $name
      * @param DataObject|null $data
      */
-    public function persist(string $identifier, ?DataObject $data): void
+    public function persist(string $name, ?DataObject $data): void
     {
-        $this->fixtures[$identifier] = $data;
+        $this->fixtures[$name] = $data;
     }
 
     /**

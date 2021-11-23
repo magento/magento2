@@ -241,11 +241,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"id":333}
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
     public function testUpdate()
     {
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Update Category Test',
             'is_active' => false,
@@ -268,11 +268,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      */
     public function testUpdateWithDefaultSortByAttribute()
     {
-        $categoryId =  $this->fixtures->get('category')->getCategory()->getId();
+        $categoryId = 333;
         $categoryData = [
             'name' => 'Update Category Test With default_sort_by Attribute',
             'is_active' => true,
@@ -296,13 +296,13 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"id":333}
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
     public function testUpdateUrlKey()
     {
         $this->_markTestAsRestOnly('Functionality available in REST mode only.');
 
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Update Category Test Old Name',
             'custom_attributes' => [
@@ -601,11 +601,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * Check if repository does not override default values for attributes out of request
      *
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category with:{"id":333}
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
     public function testUpdateScopeAttribute()
     {
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Scope Specific Value',
         ];

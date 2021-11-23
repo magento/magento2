@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Test\Fixture;
 
+use Magento\Framework\DataObject;
 use Magento\TestFramework\Fixture\CallableDataFixture;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -67,7 +68,7 @@ class CallableDataFixtureTest extends TestCase
         $model = new CallableDataFixture([$this->fakeClass, 'fakeMethod']);
         $this->fakeClass->expects($this->once())
             ->method('fakeMethodRollback');
-        $model->revert();
+        $model->revert(new DataObject());
     }
 
     /**
@@ -86,7 +87,7 @@ class CallableDataFixtureTest extends TestCase
     public function testRevertCallableString(): void
     {
         $model = new CallableDataFixture(get_class($this) . '::fixtureMethod');
-        $model->revert();
+        $model->revert(new DataObject());
         $this->assertEquals('reverted', static::$testFlag);
     }
 
