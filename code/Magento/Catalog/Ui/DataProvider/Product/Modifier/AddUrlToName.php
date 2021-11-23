@@ -73,14 +73,16 @@ class AddUrlToName implements ModifierInterface
 
         if (!empty($data['items'])) {
             foreach ($data['items'] as &$item) {
-                $url = $this->urlBuilder->getUrl(
-                    'catalog/product/edit',
-                    ['id' => $item['entity_id'], 'store' => $storeId]
-                );
-                $item['name'] = '<a href="javascript:;" onclick="window.open(\'' . $url . '\', \'_blank\');">'
-                    . $this->escaper->escapeHtml(
-                        $item['name']
-                    ) . '</a>';
+                if (isset($item['name'])) {
+                    $url = $this->urlBuilder->getUrl(
+                        'catalog/product/edit',
+                        ['id' => $item['entity_id'], 'store' => $storeId]
+                    );
+                    $item['name'] = '<a href="javascript:;" onclick="window.open(\'' . $url . '\', \'_blank\');">'
+                        . $this->escaper->escapeHtml(
+                            $item['name']
+                        ) . '</a>';
+                }
             }
         }
 
