@@ -69,6 +69,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * Test Integration access token cannot be used as Bearer token by default
+     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 0
      */
     public function testIntegrationAsBearerTokenDefault()
     {
@@ -90,7 +91,6 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /**
      * Test Integration access token can be used as Bearer token when explicitly enabled
      *
-     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 1
      * @doesNotPerformAssertions
      */
     public function testIntegrationAsBearerTokenEnabled()

@@ -35,6 +35,9 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         parent::setUp();
     }
 
+    /**
+     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 0
+     */
     public function testDisabledIntegrationAsBearer()
     {
         $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV1,testModule5AllSoapAndRestV2';
@@ -65,9 +68,6 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->checkAll($wsdlContent);
     }
 
-    /**
-     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 1
-     */
     public function testMultiServiceWsdl()
     {
         $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}"
@@ -79,9 +79,6 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->checkAll($wsdlContent);
     }
 
-    /**
-     * @magentoConfigFixture default_store oauth/consumer/enable_integration_as_bearer 1
-     */
     public function testSingleServiceWsdl()
     {
         $this->_soapUrl = "{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV2";
