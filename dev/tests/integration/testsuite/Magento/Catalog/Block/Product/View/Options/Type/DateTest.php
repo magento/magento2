@@ -223,7 +223,7 @@ HTML;
                 ],
                 [
                     '//select[@id="options_{id}_year"]/option[@selected]' => '2020',
-                    '//select[@id="options_{id}_month"]/option[@selected]' => '03',
+                    '//select[@id="options_{id}_month"]/option[@selected]' => '3',
                     '//select[@id="options_{id}_day"]/option[@selected]' => '5',
                     '//select[@id="options_{id}_hour"]/option[@selected]' => '2',
                     '//select[@id="options_{id}_minute"]/option[@selected]' => '15',
@@ -240,7 +240,7 @@ HTML;
                 ],
                 [
                     '//select[@id="options_{id}_year"]/option[@selected]' => '2020',
-                    '//select[@id="options_{id}_month"]/option[@selected]' => '09',
+                    '//select[@id="options_{id}_month"]/option[@selected]' => '9',
                     '//select[@id="options_{id}_day"]/option[@selected]' => '30',
                     '//select[@id="options_{id}_hour"]/option[@selected]' => '2',
                     '//select[@id="options_{id}_minute"]/option[@selected]' => '15',

@@ -219,7 +219,7 @@ class TimezoneTest extends TestCase
     public function getDatetimeFormatDataProvider(): array
     {
         return [
-            ['en_US', \IntlDateFormatter::SHORT, 'M/d/yy h:mm a'],
+            ['en_US', \IntlDateFormatter::SHORT, 'MM/d/yy h:mm a'],
             ['ar_SA', \IntlDateFormatter::SHORT, 'd/MM/y h:mm a']
         ];
     }
@@ -243,7 +243,7 @@ class TimezoneTest extends TestCase
     public function getDateFormatWithLongYearDataProvider(): array
     {
         return [
-            ['en_US', 'M/d/y'],
+            ['en_US', 'MM/d/y'],
         ];
     }
 
