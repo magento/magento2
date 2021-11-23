@@ -53,9 +53,8 @@ define([
                 this.directoryTreeSelector,
                 this,
                 function () {
-                    this.renderDirectoryTree().then(function () {
-                        this.initEvents();
-                    }.bind(this));
+                    this.initEvents();
+                    this.renderDirectoryTree();
                 }.bind(this)
             );
 
