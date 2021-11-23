@@ -133,6 +133,8 @@ abstract class Validator
     }
 
     /**
+     * Adds required validators to th $object
+     *
      * @param \Zend_File_Transfer_Adapter_Http|\Zend_Validate $object
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param array $fileFullPath
@@ -193,10 +195,12 @@ abstract class Validator
         if (!$this->rootDirectory->isReadable($this->rootDirectory->getRelativePath($fileInfo))) {
             return false;
         }
-        $imageInfo = getimagesize($fileInfo);
-        if (!$imageInfo) {
+
+        $fileContent = $this->rootDirectory->readFile($fileInfo);
+        if (empty($fileContent) || !getimagesizefromstring($fileContent)) {
             return false;
         }
+
         return true;
     }
 }
