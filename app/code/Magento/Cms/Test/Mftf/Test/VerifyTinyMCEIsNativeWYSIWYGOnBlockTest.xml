@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnBlockTest">
+    <test name="VerifyTinyMCEIsNativeWYSIWYGOnBlockTest">
         <annotations>
             <features value="Cms"/>
             <stories value="MAGETWO-42046-Apply new WYSIWYG on CMS Page and Block"/>
             <group value="Cms"/>
-            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Block"/>
-            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Block"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Block"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Block"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84184"/>
         </annotations>
@@ -22,7 +22,9 @@
             <createData entity="_defaultCmsPage" stepKey="createPreReqCMSPage" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -30,7 +32,7 @@
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
         <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE" />
-        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
         <executeJS function="tinyMCE.get('cms_block_form_content').setContent('Hello Block Page!');" stepKey="executeJSFillContent"/>
         <click selector="{{BlockWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn1" />

@@ -32,6 +32,8 @@ class ReturnUrlTest extends TestCase
 {
     const LAST_REAL_ORDER_ID = '000000001';
 
+    const SILENT_POST_HASH = 'abcdfg';
+
     /**
      * @var ReturnUrl
      */
@@ -142,7 +144,7 @@ class ReturnUrlTest extends TestCase
 
         $this->checkoutSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
+            ->setMethods(['setLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->getMock();
 
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
@@ -177,8 +179,15 @@ class ReturnUrlTest extends TestCase
         $this->withLayout();
         $this->withOrder(self::LAST_REAL_ORDER_ID, $state);
 
-        $this->checkoutSession->method('getLastRealOrderId')
-            ->willReturn(self::LAST_REAL_ORDER_ID);
+        $this->request->method('getParam')
+            ->willReturnMap([
+                ['INVNUM', self::LAST_REAL_ORDER_ID],
+                ['USER2', self::SILENT_POST_HASH],
+            ]);
+
+        $this->checkoutSession->expects($this->once())
+            ->method('setLastRealOrderId')
+            ->with(self::LAST_REAL_ORDER_ID);
 
         $this->block->method('setData')
             ->with('goto_success_page', true)
@@ -203,6 +212,45 @@ class ReturnUrlTest extends TestCase
     }
 
     /**
+     * Checks a test case when silent post hash validation fails.
+     *
+     * @param string $requestHash
+     * @param string $orderHash
+     * @dataProvider invalidHashVariations
+     */
+    public function testFailedHashValidation(string $requestHash, string $orderHash)
+    {
+        $this->withLayout();
+        $this->withOrder(self::LAST_REAL_ORDER_ID, Order::STATE_PROCESSING, $orderHash);
+
+        $this->request->method('getParam')
+            ->willReturnMap([
+                ['INVNUM', self::LAST_REAL_ORDER_ID],
+                ['USER2', $requestHash],
+            ]);
+
+        $this->checkoutSession->expects($this->never())
+            ->method('setLastRealOrderId')
+            ->with(self::LAST_REAL_ORDER_ID);
+
+        $this->returnUrl->execute();
+    }
+
+    /**
+     * Gets list of allowed order states.
+     *
+     * @return array
+     */
+    public function invalidHashVariations()
+    {
+        return [
+            ['requestHash' => '', 'orderHash' => self::SILENT_POST_HASH],
+            ['requestHash' => self::SILENT_POST_HASH, 'orderHash' => ''],
+            ['requestHash' => 'abcd', 'orderHash' => 'dcba'],
+        ];
+    }
+
+    /**
      * Checks a test case when action processes order with not allowed state.
      *
      * @param string $state
@@ -218,8 +266,11 @@ class ReturnUrlTest extends TestCase
         $this->withCheckoutSession(self::LAST_REAL_ORDER_ID, $restoreQuote);
 
         $this->request->method('getParam')
-            ->with('RESPMSG')
-            ->willReturn($errMessage);
+            ->willReturnMap([
+                ['RESPMSG', $errMessage],
+                ['INVNUM', self::LAST_REAL_ORDER_ID],
+                ['USER2', self::SILENT_POST_HASH],
+            ]);
 
         $this->payment->method('getMethod')
             ->willReturn(Config::METHOD_PAYFLOWLINK);
@@ -261,8 +312,14 @@ class ReturnUrlTest extends TestCase
         $this->withLayout();
         $this->withOrder(self::LAST_REAL_ORDER_ID, Order::STATE_NEW);
 
-        $this->checkoutSession->method('getLastRealOrderId')
-            ->willReturn(self::LAST_REAL_ORDER_ID);
+        $this->checkoutSession->expects($this->once())
+            ->method('setLastRealOrderId')
+            ->with(self::LAST_REAL_ORDER_ID);
+        $this->request->method('getParam')
+            ->willReturnMap([
+                ['INVNUM', self::LAST_REAL_ORDER_ID],
+                ['USER2', self::SILENT_POST_HASH],
+            ]);
 
         $this->withBlockContent(false, 'Requested payment method does not match with order.');
 
@@ -285,8 +342,11 @@ class ReturnUrlTest extends TestCase
         $this->withCheckoutSession(self::LAST_REAL_ORDER_ID, true);
 
         $this->request->method('getParam')
-            ->with('RESPMSG')
-            ->willReturn($errorMsg);
+            ->willReturnMap([
+                ['RESPMSG', $errorMsg],
+                ['INVNUM', self::LAST_REAL_ORDER_ID],
+                ['USER2', self::SILENT_POST_HASH],
+            ]);
 
         $this->checkoutHelper->method('cancelCurrentOrder')
             ->with(self::equalTo($errorMsgEscaped));
@@ -323,8 +383,11 @@ class ReturnUrlTest extends TestCase
         $this->withCheckoutSession(self::LAST_REAL_ORDER_ID, true);
 
         $this->request->method('getParam')
-            ->with('RESPMSG')
-            ->willReturn('message');
+            ->willReturnMap([
+                ['RESPMSG', 'message'],
+                ['INVNUM', self::LAST_REAL_ORDER_ID],
+                ['USER2', self::SILENT_POST_HASH],
+            ]);
 
         $this->withBlockContent('paymentMethod', 'Your payment has been declined. Please try again.');
 
@@ -347,9 +410,10 @@ class ReturnUrlTest extends TestCase
      *
      * @param string $incrementId
      * @param string $state
+     * @param string $hash
      * @return void
      */
-    private function withOrder($incrementId, $state)
+    private function withOrder($incrementId, $state, $hash = self::SILENT_POST_HASH)
     {
         $this->orderFactory->method('create')
             ->willReturn($this->order);
@@ -366,6 +430,8 @@ class ReturnUrlTest extends TestCase
 
         $this->order->method('getPayment')
             ->willReturn($this->payment);
+        $this->payment->method('getAdditionalInformation')
+            ->willReturn($hash);
     }
 
     /**
@@ -390,8 +456,8 @@ class ReturnUrlTest extends TestCase
      */
     private function withCheckoutSession($orderId, $restoreQuote)
     {
-        $this->checkoutSession->method('getLastRealOrderId')
-            ->willReturn($orderId);
+        $this->checkoutSession->method('setLastRealOrderId')
+            ->with($orderId);
 
         $this->checkoutSession->method('getLastRealOrder')
             ->willReturn($this->order);

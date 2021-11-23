@@ -7,20 +7,22 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnNewsletterTest">
+    <test name="VerifyTinyMCEIsNativeWYSIWYGOnNewsletterTest">
         <annotations>
             <features value="Newsletter"/>
             <stories value="MAGETWO-47309-Apply new WYSIWYG in Newsletter"/>
             <group value="Newsletter"/>
-            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Newsletter"/>
-            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Newsletter"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Newsletter"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84683"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <amOnPage url="{{NewsletterTemplateForm.url}}" stepKey="amOnNewsletterTemplatePage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -30,7 +32,7 @@
         <fillField selector="{{BasicFieldNewsletterSection.senderEmail}}" userInput="{{_defaultNewsletter.senderEmail}}" stepKey="fillSenderEmail" />
         <conditionalClick selector="#toggletext" dependentSelector=".mce-tinymce" visible="false" stepKey="clickBtnIfTinyMCEHidden"/>
         <waitForPageLoad stepKey="waitForTinyMce"/>
-        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <actionGroup ref="VerifyMagentoEntityActionGroup" stepKey="verifyMagentoEntities"/>
         <executeJS function="tinyMCE.get('text').setContent('Hello World From Newsletter Template!');" stepKey="executeJSFillContent"/>
         <click selector="{{NewsletterWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />

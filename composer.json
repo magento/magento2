@@ -37,7 +37,6 @@
         "guzzlehttp/guzzle": "^6.3.3",
         "laminas/laminas-captcha": "^2.10",
         "laminas/laminas-code": "^3.5.1",
-        "laminas/laminas-crypt": "^3.4.0",
         "laminas/laminas-db": "^2.12.0",
         "laminas/laminas-dependency-plugin": "^2.1.0",
         "laminas/laminas-di": "^3.2.0",

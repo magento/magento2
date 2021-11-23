@@ -8,20 +8,22 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyTinyMCEv4IsNativeWYSIWYGOnCatalogTest">
+    <test name="VerifyTinyMCEIsNativeWYSIWYGOnCatalogTest">
         <annotations>
             <features value="Catalog"/>
             <stories value="MAGETWO-72137-Apply new WYSIWYG on Categories Page"/>
             <group value="Catalog"/>
-            <title value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Catalog Page"/>
-            <description value="Admin should see TinyMCEv4.6 is the native WYSIWYG on Catalog Page"/>
+            <title value="Admin should see TinyMCE is the native WYSIWYG on Catalog Page"/>
+            <description value="Admin should see TinyMCE is the native WYSIWYG on Catalog Page"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-82551"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" >
+                <argument name="TinyMCEValue" value="{{EnableTinyMCE.value}}"/>
+            </actionGroup>
         </before>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
         <waitForLoadingMaskToDisappear stepKey="wait2" />
@@ -30,7 +32,7 @@
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
         <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
         <seeElement selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" stepKey="seeShowHideBtn" />
-        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE4"/>
+        <actionGroup ref="VerifyTinyMCEActionGroup" stepKey="verifyTinyMCE"/>
         <executeJS function="tinyMCE.get('category_form_description').setContent('Hello World!');" stepKey="executeJSFillContent"/>
         <click selector="{{CatalogWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn" />
         <waitForElementVisible selector="{{TinyMCESection.InsertImageBtn}}" stepKey="waitForInsertImage" />

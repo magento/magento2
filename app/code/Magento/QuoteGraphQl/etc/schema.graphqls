@@ -104,8 +104,8 @@ input SetBillingAddressOnCartInput {
 input BillingAddressInput {
     customer_address_id: Int
     address: CartAddressInput
-    use_for_shipping: Boolean @doc(description: "Deprecated: use `same_as_shipping` field instead")
-    same_as_shipping: Boolean @doc(description: "Set billing address same as shipping")
+    use_for_shipping: Boolean @doc(description: "Indicates whether to additionally set the shipping address based on the provided billing address")
+    same_as_shipping: Boolean @doc(description: "Indicates whether to set the billing address based on the existing shipping address on the cart")
 }
 
 input CartAddressInput {
