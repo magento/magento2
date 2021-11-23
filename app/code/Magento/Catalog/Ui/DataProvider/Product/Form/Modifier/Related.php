@@ -12,7 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Helper\Product\AddUrlToName as NameHelper;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\DynamicRows;
@@ -24,6 +23,7 @@ use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Ui\Component\Listing\Columns\Price;
 
 /**
  * Class for Product Modifier Related
@@ -124,6 +124,7 @@ class Related extends AbstractModifier
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param NameHelper $nameHelper
+     * @param Price $priceModifier
      * @param string $scopeName
      * @param string $scopePrefix
      */
@@ -136,6 +137,7 @@ class Related extends AbstractModifier
         Status $status,
         AttributeSetRepositoryInterface $attributeSetRepository,
         NameHelper $nameHelper,
+        Price $priceModifier,
         $scopeName = '',
         $scopePrefix = ''
     ) {
@@ -147,6 +149,7 @@ class Related extends AbstractModifier
         $this->status = $status;
         $this->attributeSetRepository = $attributeSetRepository;
         $this->nameHelper = $nameHelper;
+        $this->priceModifier = $priceModifier;
         $this->scopeName = $scopeName;
         $this->scopePrefix = $scopePrefix;
     }
@@ -257,11 +260,6 @@ class Related extends AbstractModifier
      */
     private function getPriceModifier()
     {
-        if (!$this->priceModifier) {
-            $this->priceModifier = ObjectManager::getInstance()->get(
-                \Magento\Catalog\Ui\Component\Listing\Columns\Price::class
-            );
-        }
         return $this->priceModifier;
     }
 

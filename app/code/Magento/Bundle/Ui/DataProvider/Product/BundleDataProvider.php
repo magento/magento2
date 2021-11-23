@@ -32,10 +32,10 @@ class BundleDataProvider extends ProductDataProvider
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
      * @param Data $dataHelper
-     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
-     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @param \Magento\Ui\DataProvider\AddFieldToCollectionInterface[] $addFieldStrategies
+     * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param PoolInterface|null $modifiersPool
      */
     public function __construct(
