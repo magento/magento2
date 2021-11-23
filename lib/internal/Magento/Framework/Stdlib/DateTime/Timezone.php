@@ -264,8 +264,8 @@ class Timezone implements TimezoneInterface
      */
     public function isScopeDateInInterval($scope, $dateFrom = null, $dateTo = null)
     {
-        $dateFrom = $dateFrom ?: '';
-        $dateTo = $dateTo ?: '';
+        $dateFrom = $dateFrom ?? '';
+        $dateTo = $dateTo ?? '';
         if (!$scope instanceof ScopeInterface) {
             $scope = $this->_scopeResolver->getScope($scope);
         }
@@ -284,6 +284,9 @@ class Timezone implements TimezoneInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function formatDateTime(
         $date,
@@ -307,9 +310,9 @@ class Timezone implements TimezoneInterface
         }
 
         $formatter = $this->dateFormatterFactory->create(
-            (string) ($locale ?: $this->_localeResolver->getLocale()),
-            (int) $dateType,
-            (int) $timeType,
+            (string) $locale ?: $this->_localeResolver->getLocale(),
+            (int) $dateType ?: \IntlDateFormatter::SHORT,
+            (int) $timeType ?: \IntlDateFormatter::SHORT,
             null,
             false
         );

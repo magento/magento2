@@ -925,9 +925,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_query']);
         }
 
-        if (isset($routeParams['_nosid'])) {
-            unset($routeParams['_nosid']);
-        }
+        unset($routeParams['_nosid']);
         $url = $this->getRouteUrl($routePath, $routeParams);
 
         /**
