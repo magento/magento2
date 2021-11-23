@@ -73,19 +73,19 @@
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
         <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
-        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <!--Step11. Go to admin Order page for newly created order-->
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="entityId" value="{$orderId}"/>
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
         <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="clickShipAction"/>
         <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="clickSubmitShipment"/>
         <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
         <actionGroup ref="StorefrontOpenOrderShipmentsTabByOrderIdActionGroup" stepKey="amOnOrderShipmentPage">
-            <argument name="orderId" value="$orderId"/>
+            <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="waitForOrderShipmentsPageLoad"/>
         <actionGroup ref="AssertStorefrontOrderShipmentsQtyShippedActionGroup" stepKey="verifyAssertOrderShipments">
