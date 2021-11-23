@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Integration\Model\Config\AuthorizationConfig;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Api\IntegrationServiceInterface;
@@ -52,23 +53,29 @@ class SoapUserContext implements UserContextInterface
     private $integrationService;
 
     /**
+     * @var AuthorizationConfig
+     */
+    private $authorizationConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param Request $request
      * @param TokenFactory $tokenFactory
      * @param IntegrationServiceInterface $integrationService
-     * @param DateTime|null $dateTime
-     * @param Date|null $date
-     * @param OauthHelper|null $oauthHelper
+     * @param AuthorizationConfig|null $authorizationConfig
      */
     public function __construct(
         Request $request,
         TokenFactory $tokenFactory,
-        IntegrationServiceInterface $integrationService
+        IntegrationServiceInterface $integrationService,
+        ?AuthorizationConfig $authorizationConfig = null
     ) {
         $this->request = $request;
         $this->tokenFactory = $tokenFactory;
         $this->integrationService = $integrationService;
+        $this->authorizationConfig = $authorizationConfig ?? ObjectManager::getInstance()
+                ->get(AuthorizationConfig::class);
     }
 
     /**
@@ -110,10 +117,11 @@ class SoapUserContext implements UserContextInterface
             return;
         }
         $tokenType = strtolower($headerPieces[0]);
-        if ($tokenType !== 'bearer') {
+        if ($tokenType !== 'bearer' || !$this->authorizationConfig->isIntegrationAsBearerEnabled()) {
             $this->isRequestProcessed = true;
             return;
         }
+
         $bearerToken = $headerPieces[1];
 
         /** @var Token $token */

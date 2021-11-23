@@ -6,21 +6,20 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Webapi\Model\Authorization\OauthUserContext">
-        <arguments>
-            <argument name="request" xsi:type="object">Magento\Webapi\Controller\Soap\Request</argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
         <arguments>
             <argument name="userContexts" xsi:type="array">
-                <item name="soapUserContext" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\SoapUserContext</item>
-                    <item name="sortOrder" xsi:type="string">9</item>
+                <item name="oauthUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\OauthUserContext</item>
+                    <item name="sortOrder" xsi:type="string">5</item>
                 </item>
                 <item name="tokenUserContext" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\TokenUserContext</item>
                     <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+                <item name="soapUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\SoapUserContext</item>
+                    <item name="sortOrder" xsi:type="string">15</item>
                 </item>
                 <item name="guestUserContext" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\GuestUserContext</item>
