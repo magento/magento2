@@ -79,7 +79,7 @@
         </actionGroup>
 
         <!-- Go to product visible -->
-        <amOnPage url="$$createProduct.name$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
+        <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
         <see userInput="$$createProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertFirstProductNameTitle"/>
 
         <!--Add a product to the cart-->

@@ -12,7 +12,6 @@ use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -73,7 +72,8 @@ class CartPlugin
     {
         /** @var Quote $quote */
         $quote = $this->checkoutSession->getQuote();
-        if ($quote->isMultipleShippingAddresses()) {
+        $isMultipleShippingAddressesPresent = $quote->isMultipleShippingAddresses();
+        if ($isMultipleShippingAddressesPresent || $this->isDisableMultishippingRequired($request, $quote)) {
             $this->disableMultishipping->execute($quote);
             foreach ($quote->getAllShippingAddresses() as $address) {
                 $quote->removeAddress($address->getId());
@@ -84,6 +84,9 @@ class CartPlugin
             if ($defaultShipping) {
                 $defaultCustomerAddress = $this->addressRepository->getById($defaultShipping);
                 $shippingAddress->importCustomerAddressData($defaultCustomerAddress);
+            }
+            if ($isMultipleShippingAddressesPresent) {
+                $this->checkoutSession->setMultiShippingAddressesFlag(true);
             }
             $this->cartRepository->save($quote);
         } elseif ($this->disableMultishipping->execute($quote) && $this->isVirtualItemInQuote($quote)) {
@@ -110,5 +113,19 @@ class CartPlugin
         }
 
         return false;
+    }
+
+    /**
+     * Check if we have to disable multishipping mode depends on the request action name
+     *
+     * We should not disable multishipping mode if we are adding a new product item to the existing quote
+     *
+     * @param RequestInterface $request
+     * @param Quote $quote
+     * @return bool
+     */
+    private function isDisableMultishippingRequired(RequestInterface $request, Quote $quote): bool
+    {
+        return $request->getActionName() !== "add" && $quote->getIsMultiShipping();
     }
 }

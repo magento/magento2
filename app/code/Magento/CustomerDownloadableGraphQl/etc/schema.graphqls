@@ -2,17 +2,17 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\CustomerDownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "The query returns the contents of a customer's downloadable products") @cache(cacheable: false)
+    customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\CustomerDownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "Return a list of downloadable products the customer has purchased.") @cache(cacheable: false)
 }
 
-type CustomerDownloadableProducts {
-    items: [CustomerDownloadableProduct] @doc(description: "List of purchased downloadable items")
+type CustomerDownloadableProducts @doc(description: "Contains a list of downloadable products.") {
+    items: [CustomerDownloadableProduct] @doc(description: "An array of purchased downloadable items.")
 }
 
-type CustomerDownloadableProduct {
-    order_increment_id: String
-    date: String
-    status: String
-    download_url: String
-    remaining_downloads: String
+type CustomerDownloadableProduct @doc(description: "Contains details about a single downloadable product.") {
+    order_increment_id: String @doc(description: "The unique ID assigned to the item.")
+    date: String @doc(description: "The date and time the purchase was made.")
+    status: String @doc(description: "Indicates when the product becomes available for download. Options are `Pending` and `Invoiced`.")
+    download_url: String @doc(description: "The fully qualified URL to the download file.")
+    remaining_downloads: String @doc(description: "The remaining number of times the customer can download the product.")
 }

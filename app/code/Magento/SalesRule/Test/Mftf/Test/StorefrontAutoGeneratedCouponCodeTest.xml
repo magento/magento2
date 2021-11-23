@@ -79,7 +79,7 @@
         </actionGroup>
 
         <!-- Step: 6-7. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -109,7 +109,7 @@
         </actionGroup>
 
         <!-- Step: 9-10. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule1">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -125,7 +125,7 @@
         <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOut"/>
 
         <!-- Step: 12-13. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage2"/>
         <waitForPageLoad stepKey="waitForPageLoad4"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule2">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -155,7 +155,7 @@
         </actionGroup>
 
         <!-- Step; 15-16. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage3"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage3"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule3">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -171,7 +171,7 @@
         <resetCookie userInput="PHPSESSID" stepKey="resetCookie"/>
 
         <!-- Step: 18-19. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage4"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProductPage4"/>
         <waitForPageLoad stepKey="waitForPageLoad6"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule4">
             <argument name="product" value="$$createSimpleProduct$$"/>

@@ -61,7 +61,7 @@
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeButton"/>
-        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$createBundleOption.title$$)}}" userInput="$$simpleProduct1.sku$$ +$100.00" stepKey="selectOption"/>
+        <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts($$createBundleOption.title$$)}}" userInput="$$simpleProduct1.name$$ +$100.00" stepKey="selectOption"/>
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addBundleProductWithOptionToWishlist">
             <argument name="productVar" value="$$createBundleProduct$$"/>
         </actionGroup>

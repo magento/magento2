@@ -121,9 +121,10 @@ class CartFixedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartFixedDiscountHelper = $this->getMockBuilder(CartFixedDiscount::class)
-            ->setMethods([
+            ->onlyMethods([
                 'calculateShippingAmountWhenAppliedToShipping',
                 'getDiscountAmount',
+                'getDiscountedAmountProportionally',
                 'checkMultiShippingQuote',
                 'getQuoteTotalsForMultiShipping',
                 'getQuoteTotalsForRegularShipping',
@@ -170,7 +171,7 @@ class CartFixedTest extends TestCase
             );
         $this->cartFixedDiscountHelper
             ->expects($this->any())
-            ->method('getDiscountAmount')
+            ->method('getDiscountedAmountProportionally')
             ->will(
                 $this->returnValue(
                     $ruleDetails['discounted_amount']
