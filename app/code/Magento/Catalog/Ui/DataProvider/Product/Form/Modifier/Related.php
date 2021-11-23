@@ -111,7 +111,7 @@ class Related extends AbstractModifier
     protected $scopePrefix;
 
     /**
-     * @var \Magento\Catalog\Ui\Component\Listing\Columns\Price
+     * @var Price
      */
     private $priceModifier;
 
