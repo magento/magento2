@@ -118,6 +118,7 @@
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
     <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
     <preference for="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator" />
+    <preference for="Magento\Sales\Model\OrderMutexInterface" type="Magento\Sales\Model\OrderMutex"/>
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">

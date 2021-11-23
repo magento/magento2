@@ -76,8 +76,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_code = self::CODE;
 
     /**
-     * Weight precision
-     *
      * @var int
      */
     private static $weightPrecision = 10;
@@ -111,7 +109,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_customizableContainerTypes = ['VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR'];
 
     /**
-     * Carrier helper
+     * The carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
      */
@@ -130,7 +128,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_httpClientFactory;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
@@ -178,6 +176,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
+     * @param DataHelper|null $dataHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -202,7 +201,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $httpClient = null,
-        ?ProxyDeferredFactory $proxyDeferredFactory = null
+        ?ProxyDeferredFactory $proxyDeferredFactory = null,
+        ?DataHelper $dataHelper = null
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -228,6 +228,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->httpClient = $httpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->proxyDeferredFactory = $proxyDeferredFactory
             ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
+        $this->dataHelper = $dataHelper ?? ObjectManager::getInstance()->get(DataHelper::class);
     }
 
     /**
@@ -477,8 +478,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $service = $r->getService();
             }
 
-            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
-                strpos($r->getContainer(), 'FLAT RATE BOX') !== false
+            if ($r->getContainer() !== null && (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+                strpos($r->getContainer(), 'FLAT RATE BOX') !== false)
             ) {
                 $service = 'Priority';
             }
@@ -634,7 +635,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             );
                         }
                     }
-                    asort($priceArr);
+                    uasort($priceArr, function ($previous, $next) {
+                        return ($previous <= $next) ? -1 : 1;
+                    });
                 } elseif (!$isUS && is_object($xml->Package->Service)) {
                     /*
                      * International Rates
@@ -654,7 +657,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             );
                         }
                     }
-                    asort($priceArr);
+                    uasort($priceArr, function ($previous, $next) {
+                        return ($previous <= $next) ? -1 : 1;
+                    });
                 }
             }
         }
@@ -1493,7 +1498,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
-                $this->_carrierHelper->convertMeasureWeight(
+                (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
@@ -1587,7 +1592,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
-                $this->_carrierHelper->convertMeasureWeight(
+                (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
@@ -1680,21 +1685,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
             $length = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $width = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $height = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
@@ -1703,7 +1708,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
             $girth = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
                     \Zend_Measure_Length::INCH
@@ -2064,8 +2069,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
-        return $this->_isUSCountry($countyDest)
-            && $this->getDataHelper()->displayGirthValue($carrierMethodCode) ? false : true;
+        return !($this->_isUSCountry($countyDest) && $this->dataHelper->displayGirthValue($carrierMethodCode));
     }
 
     /**
@@ -2177,20 +2181,5 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return $data;
-    }
-
-    /**
-     * Gets Data helper object
-     *
-     * @return DataHelper
-     * @deprecated 100.2.0
-     */
-    private function getDataHelper()
-    {
-        if (!$this->dataHelper) {
-            $this->dataHelper = ObjectManager::getInstance()->get(DataHelper::class);
-        }
-
-        return $this->dataHelper;
     }
 }

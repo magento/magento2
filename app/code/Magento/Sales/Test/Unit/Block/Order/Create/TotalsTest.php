@@ -47,7 +47,7 @@ class TotalsTest extends TestCase
     protected $quoteMock;
 
     /**
-     * Init
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -57,14 +57,13 @@ class TotalsTest extends TestCase
             ->getMock();
         $this->quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'setTotalsCollectedFlag',
+            ->onlyMethods([
                 'collectTotals',
                 'getTotals',
                 'isVirtual',
                 'getBillingAddress',
                 'getShippingAddress'
-            ])
+            ])->addMethods(['setTotalsCollectedFlag'])
             ->getMock();
         $this->shippingAddressMock = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
@@ -87,12 +86,14 @@ class TotalsTest extends TestCase
     }
 
     /**
+     * @param bool $isVirtual
+     *
+     * @return void
      * @dataProvider totalsDataProvider
      */
-    public function testGetTotals($isVirtual)
+    public function testGetTotals(bool $isVirtual): void
     {
         $expected = 'expected';
-        $this->quoteMock->expects($this->at(1))->method('collectTotals');
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn($isVirtual);
         if ($isVirtual) {
             $this->billingAddressMock->expects($this->once())->method('getTotals')->willReturn($expected);
@@ -105,7 +106,7 @@ class TotalsTest extends TestCase
     /**
      * @return array
      */
-    public function totalsDataProvider()
+    public function totalsDataProvider(): array
     {
         return [
             [true],
