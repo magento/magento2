@@ -90,7 +90,8 @@
 
         <!-- Open created order in backend -->
         <comment userInput="BIC workaround" stepKey="goToOrders"/>
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrderGridById">
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
