@@ -178,7 +178,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->setPageLayout($settings->getPageLayout());
         }
 
-        $urlSafeSku = is_string($product->getSku()) ? rawurlencode($product->getSku()) : '';
+        $urlSafeSku = rawurlencode($product->getSku());
 
         // Load default page handles and page configurations
         if ($params && $params->getBeforeHandles()) {

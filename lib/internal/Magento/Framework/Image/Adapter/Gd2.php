@@ -61,9 +61,9 @@ class Gd2 extends AbstractAdapter
      */
     public function open($filename)
     {
-        if (!$filename || !file_exists($filename)) {
+        if ($filename === null || !file_exists($filename)) {
             throw new FileSystemException(
-                new Phrase('File "%1" does not exist.', [$this->_fileName])
+                new Phrase('File "%1" does not exist.', [$filename])
             );
         }
         if (!$filename || filesize($filename) === 0 || !$this->validateURLScheme($filename)) {
