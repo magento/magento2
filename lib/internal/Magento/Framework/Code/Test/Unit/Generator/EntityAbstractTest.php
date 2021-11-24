@@ -294,7 +294,7 @@ class EntityAbstractTest extends TestCase
 
         $codeGenerator->expects($this->once())
             ->method('generate')
-            ->willReturn($willWriteCode ? self::RESULT_CODE : null);
+            ->willReturn($willWriteCode ? self::RESULT_CODE : '');
 
         // Add configuration for the generation step
         /** @var \PHPUnit\Framework\MockObject\MockObject $ioObject */
