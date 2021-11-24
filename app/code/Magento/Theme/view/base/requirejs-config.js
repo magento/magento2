@@ -74,6 +74,11 @@ var config = {
         'jquery/jquery-migrate'
     ],
     config: {
+        mixins: {
+            'jquery': {
+                'jquery/patches/jquery': true
+            }
+        },
         text: {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'
