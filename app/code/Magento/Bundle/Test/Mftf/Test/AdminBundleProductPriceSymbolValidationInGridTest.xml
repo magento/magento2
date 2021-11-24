@@ -34,7 +34,7 @@
             <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdownSpecialPrice"/>
             <!-- It takes a few seconds for column update to be saved -->
             <!-- waitForPageLoad won't work here since saving is happening with a short delay -->
-            <wait time="5" stepKey="waitForColumnUpdateToSave"/> 
+            <wait time="5" stepKey="waitForColumnUpdateToSave"/>
         </before>
         <after>
             <!-- Navigate to catalog product grid page -->
@@ -82,5 +82,5 @@
         <actionGroup ref="AdminAssertSpecialPriceAttributeValueOnProductGridPageActionGroup" stepKey="assertSpecialPricePercentageSymbol">
             <argument name="expectedValue" value="90.00%"/>
         </actionGroup>
-    </test>
+    </test> 
 </tests>
