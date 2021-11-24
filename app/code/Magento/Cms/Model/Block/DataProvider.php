@@ -30,6 +30,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     protected $loadedData;
 
     /**
+     * Constructor
+     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
