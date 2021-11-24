@@ -120,7 +120,7 @@ class ManagerTest extends TestCase
             ->willReturn('source/file.min.js');
         $this->asset->expects($this->once())
             ->method('getPath')
-            ->willReturn('some/path/to_file');
+            ->willReturn('some/path/to_file'); // PHP 8.1. compatibility
         $dirRead->expects($this->once())
             ->method('getAbsolutePath')
             ->with('some/path/to_file')
