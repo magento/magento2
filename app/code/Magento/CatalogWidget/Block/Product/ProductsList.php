@@ -31,6 +31,7 @@ use Magento\Rule\Model\Condition\Combine;
 use Magento\Rule\Model\Condition\Sql\Builder as SqlBuilder;
 use Magento\Widget\Block\BlockInterface;
 use Magento\Widget\Helper\Conditions;
+
 /**
  * Catalog Products List widget block
  *
@@ -74,15 +75,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $httpContext;
 
     /**
-     * Catalog product visibility
-     *
      * @var Visibility
      */
     protected $catalogProductVisibility;
 
     /**
-     * Product collection factory
-     *
      * @var CollectionFactory
      */
     protected $productCollectionFactory;
@@ -337,7 +334,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         /**
-         * Change sorting attribute to entity_id because created_at can be the same for products fastly created
+         * Change sorting attribute to position because created_at can be the same for products fastly created
          * one by one and sorting by created_at is indeterministic in this case.
          */
         $collection = $this->_addProductAttributesAndPrices($collection)
