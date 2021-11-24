@@ -167,7 +167,9 @@ class StorageTest extends TestCase
     {
         $uploader = $this->prepareUploader();
         $uploader->expects($this->once())->method('save')->willReturn(['not_empty', 'path' => 'absPath']);
-        $this->helperStorage->expects($this->any())->method('getStorageType')->willReturn(Storage::TYPE_IMAGE);
+        $this->helperStorage->expects($this->any())
+            ->method('getStorageType')
+            ->willReturn(Storage::TYPE_IMAGE);
 
         /** Prepare filesystem */
 
@@ -449,13 +451,17 @@ class StorageTest extends TestCase
     /**
      * @return void
      * cover Storage::deleteDirectory
+     * @throws LocalizedException
      */
     public function testDeleteDirectory(): void
     {
         $directoryPath = $this->storageRoot . '/../root';
 
-        $this->helperStorage->expects($this->atLeastOnce())->method('getStorageRoot')->willReturn($this->storageRoot);
+        $this->helperStorage->expects($this->atLeastOnce())
+            ->method('getStorageRoot')
+            ->willReturn($this->storageRoot);
         $this->directoryWrite->expects($this->once())->method('delete')->with($directoryPath);
+        $this->directoryWrite->expects($this->once())->method('getAbsolutePath')->willreturn('');
 
         $this->storageModel->deleteDirectory($directoryPath);
     }

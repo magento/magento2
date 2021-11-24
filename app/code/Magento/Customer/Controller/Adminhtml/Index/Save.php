@@ -444,10 +444,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      */
     private function updateSubscriptions(CustomerInterface $customer): void
     {
-        if (!$this->_authorization->isAllowed(null)) {
-            return;
-        }
-
         $subscriptionStatus = (array)$this->getRequest()->getParam('subscription_status');
         $subscriptionStore = (array)$this->getRequest()->getParam('subscription_store');
         if (empty($subscriptionStatus)) {
