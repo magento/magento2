@@ -82,6 +82,7 @@ interface FileAssertionsInterface
      * @param string $path
      * @param string $pattern
      * @param string $message
+     * @return void
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      */

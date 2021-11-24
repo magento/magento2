@@ -57,7 +57,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     {
         parent::__construct($moduleContainer, $config);
         $this->storageType = getenv('MEDIA_STORAGE_DRIVER') ?: self::STORAGE_TYPE_LOCAL;
-        if (!empty($this->storageType) && $this->storageType === 's3') {
+        if ($this->storageType === self::STORAGE_TYPE_S3) {
             $this->helperInstance = new S3FileAssertions($moduleContainer, $config);
         } else {
             $this->helperInstance = new LocalFileAssertions($moduleContainer, $config);
@@ -65,7 +65,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Create text file.
+     * Create a file in the storage.
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $text
