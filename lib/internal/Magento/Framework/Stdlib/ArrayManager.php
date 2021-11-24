@@ -49,7 +49,7 @@ class ArrayManager
      *
      * @param array|string $path
      * @param array $data
-     * @param array|null $defaultValue
+     * @param mixed $defaultValue
      * @param string $delimiter
      * @return mixed|null
      * @since 100.1.0
