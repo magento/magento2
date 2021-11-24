@@ -42,7 +42,6 @@ define([
             $.ajax({
                 url: this.options.url,
                 type: 'post',
-                async: false,
                 dataType: 'json',
                 context: this,
                 data: {
