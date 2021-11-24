@@ -126,9 +126,16 @@ class GeneratorTest extends TestCase
         $this->expectException('RuntimeException');
         $fullClassName = $className . $entityType;
 
-        $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityGeneratorMock = $this->getMockForAbstractClass(
+            EntityAbstract::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getSourceClassName']
+        );
+        $entityGeneratorMock->method('getSourceClassName')->willReturn('');
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
@@ -184,9 +191,16 @@ class GeneratorTest extends TestCase
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
 
-        $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entityGeneratorMock = $this->getMockForAbstractClass(
+            EntityAbstract::class,
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['getSourceClassName']
+        );
+        $entityGeneratorMock->method('getSourceClassName')->willReturn('');
         $this->objectManagerMock
             ->expects($this->once())
             ->method('create')

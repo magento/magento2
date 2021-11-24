@@ -78,6 +78,12 @@ class CurrentTest extends TestCase
      */
     public function testIsCurrentIfIsset(): void
     {
+        $pathStub = '';
+        $this->_urlBuilderMock
+            ->method('getUrl')
+            ->with($pathStub)
+            ->will($this->returnValue(''));
+        $this->currentLink->setPath($pathStub);
         $this->currentLink->setCurrent(true);
         $this->assertTrue($this->currentLink->isCurrent());
     }

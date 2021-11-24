@@ -143,7 +143,6 @@ class MultiselectTest extends AbstractFormTestCase
     {
         return [
             'empty' => ['', ''],
-            'null' => [null, ''],
             'number' => [14, 'fourteen'],
             'string' => ['some key', 'some string'],
             'array' => [[14, 'some key'], 'fourteen, some string'],
