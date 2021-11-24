@@ -207,7 +207,7 @@ class StringUtils
      * @param int $offset
      * @return int|bool
      */
-    public function strpos($haystack, $needle, $offset = null)
+    public function strpos($haystack, $needle, $offset = 0)
     {
         return mb_strpos($haystack, $needle, $offset, self::ICONV_CHARSET);
     }

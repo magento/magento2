@@ -226,6 +226,10 @@ class ClassGenerator extends \Laminas\Code\Generator\ClassGenerator implements
      */
     public function getNamespaceName()
     {
-        return ltrim(parent::getNamespaceName(), '\\') ?: null;
+        $namespaceName = parent::getNamespaceName();
+        if ($namespaceName !== null) {
+            $namespaceName = ltrim(parent::getNamespaceName(), '\\') ?: null;
+        }
+        return $namespaceName;
     }
 }

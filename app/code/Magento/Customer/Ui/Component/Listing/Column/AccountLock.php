@@ -42,7 +42,7 @@ class AccountLock extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 if (array_key_exists('lock_expires', $item)) {
-                    $lockExpires = new \DateTime($item['lock_expires']);
+                    $lockExpires = new \DateTime($item['lock_expires'] ?? 'now');
                     if ($lockExpires > new \DateTime()) {
                         $item['lock_expires'] =  __('Locked');
                     } else {
