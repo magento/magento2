@@ -14,7 +14,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
