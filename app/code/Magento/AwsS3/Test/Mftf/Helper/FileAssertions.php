@@ -77,7 +77,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Delete text file if exists.
+     * Delete a file from the storage if it exists
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -88,7 +88,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Copy source file to destination folder.
+     * Copy source into destination
      *
      * @param string $source - path to file or json structure with paths by storage type.
      * @param string $destination - path to file or json structure with paths by storage type.
@@ -100,7 +100,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Create directory.
+     * Create directory in the storage
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param int $permissions
@@ -112,7 +112,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Delete directory.
+     * Recursive delete directory in the storage
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -123,7 +123,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file exists by path.
+     * Assert a file exists in the storage
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $message
@@ -135,7 +135,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file exists in glob results obtained by pattern.
+     * Asserts that a file with the given glob pattern exists in the given path in the storage
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param string $pattern
@@ -148,7 +148,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert directory exists.
+     * Asserts that a directory exists in the storage
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param string $message
@@ -160,7 +160,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert directory does not exist.
+     * Asserts that a directory does not exist in the storage
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param string $message
@@ -172,7 +172,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file does not exist.
+     * Assert a file does not exist in the storage
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $message
@@ -184,7 +184,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file exists and is empty.
+     * Assert a file in the storage has no contents
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $message
@@ -196,7 +196,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file exists and is not empty.
+     * Assert a file in the storage is not empty
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $message
@@ -208,7 +208,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file contains given string.
+     * Assert a file in the storage contains a given string
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $text
@@ -221,7 +221,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file obtained by glob pattern exists and contains string.
+     * Asserts that a file with the given glob pattern at the given path in the storage contains a given string
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param string $pattern
@@ -242,7 +242,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert file exists and does not contain given string.
+     * Assert a file in the storage does not contain a given string
      *
      * @param string $filePath - path to file or json structure with paths by storage type.
      * @param string $text
@@ -255,7 +255,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert directory is empty.
+     * Asserts that a directory in the storage is empty
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param string $message
@@ -267,7 +267,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     }
 
     /**
-     * Assert directory is not empty.
+     * Asserts that a directory in the storage is not empty
      *
      * @param string $path - path to file or json structure with paths by storage type.
      * @param string $message
