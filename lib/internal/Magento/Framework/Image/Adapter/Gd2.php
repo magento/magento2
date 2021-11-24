@@ -61,9 +61,9 @@ class Gd2 extends AbstractAdapter
      */
     public function open($filename)
     {
-        if (!$filename || !file_exists($filename)) {
+        if ($filename === null || !file_exists($filename)) {
             throw new FileSystemException(
-                new Phrase('File "%1" does not exist.', [$this->_fileName])
+                new Phrase('File "%1" does not exist.', [$filename])
             );
         }
         if (!$filename || filesize($filename) === 0 || !$this->validateURLScheme($filename)) {
@@ -188,7 +188,7 @@ class Gd2 extends AbstractAdapter
                 } else {
                     $newImage = imagecreate($this->_imageSrcWidth, $this->_imageSrcHeight);
                 }
-                $this->_fillBackgroundColor($newImage);
+                $this->fillBackgroundColor($newImage);
                 imagecopy($newImage, $this->_imageHandler, 0, 0, 0, 0, $this->_imageSrcWidth, $this->_imageSrcHeight);
                 $this->imageDestroy();
                 $this->_imageHandler = $newImage;
@@ -265,47 +265,29 @@ class Gd2 extends AbstractAdapter
      * Returns a color identifier.
      *
      * @param resource &$imageResourceTo
+     *
      * @return void
      * @throws \InvalidArgumentException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function _fillBackgroundColor(&$imageResourceTo)
+    private function fillBackgroundColor(&$imageResourceTo): void
     {
         // try to keep transparency, if any
         if ($this->_keepTransparency) {
             $isAlpha = false;
             $transparentIndex = $this->_getTransparency($this->_imageHandler, $this->_fileType, $isAlpha);
+
             try {
-                // fill truecolor png with alpha transparency
+                // fill true color png with alpha transparency
                 if ($isAlpha) {
-                    if (!imagealphablending($imageResourceTo, false)) {
-                        throw new \InvalidArgumentException('Failed to set alpha blending for PNG image.');
-                    }
-                    $transparentAlphaColor = imagecolorallocatealpha($imageResourceTo, 0, 0, 0, 127);
-                    if (false === $transparentAlphaColor) {
-                        throw new \InvalidArgumentException('Failed to allocate alpha transparency for PNG image.');
-                    }
-                    if (!imagefill($imageResourceTo, 0, 0, $transparentAlphaColor)) {
-                        throw new \InvalidArgumentException('Failed to fill PNG image with alpha transparency.');
-                    }
-                    if (!imagesavealpha($imageResourceTo, true)) {
-                        throw new \InvalidArgumentException('Failed to save alpha transparency into PNG image.');
-                    }
-                } elseif (false !== $transparentIndex) {
-                    // fill image with indexed non-alpha transparency
-                    $transparentColor = false;
-                    if ($transparentIndex >= 0 && $transparentIndex <= imagecolorstotal($this->_imageHandler)) {
-                        list($r, $g, $b) = array_values(imagecolorsforindex($this->_imageHandler, $transparentIndex));
-                        $transparentColor = imagecolorallocate($imageResourceTo, $r, $g, $b);
-                    }
-                    if (false === $transparentColor) {
-                        throw new \InvalidArgumentException('Failed to allocate transparent color for image.');
-                    }
-                    if (!imagefill($imageResourceTo, 0, 0, $transparentColor)) {
-                        throw new \InvalidArgumentException('Failed to fill image with transparency.');
-                    }
-                    imagecolortransparent($imageResourceTo, $transparentColor);
+                    $this->applyAlphaTransparency($imageResourceTo);
+
+                    return;
+                }
+
+                if ($transparentIndex !== false) {
+                    $this->applyTransparency($imageResourceTo, $transparentIndex);
+
+                    return;
                 }
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
@@ -313,16 +295,68 @@ class Gd2 extends AbstractAdapter
             }
         }
         list($red, $green, $blue) = $this->_backgroundColor;
+        $red = $red !== null ? $red : 0;
+        $green = $green !== null ? $green : 0;
+        $blue = $blue !== null ? $blue : 0;
+        $color = imagecolorallocate($imageResourceTo, $red, $green, $blue);
 
-        if ($imageResourceTo && $red && $green && $blue) {
-            $color = imagecolorallocate($imageResourceTo, $red, $green, $blue);
-
-            if (!$color && !imagefill($imageResourceTo, 0, 0, $color)) {
-                throw new \InvalidArgumentException(
-                    "Failed to fill image background with color {$red} {$green} {$blue}."
-                );
-            }
+        if (!imagefill($imageResourceTo, 0, 0, $color)) {
+            throw new \InvalidArgumentException("Failed to fill image background with color {$red} {$green} {$blue}.");
         }
+    }
+
+    /**
+     * Method to apply alpha transparency for image.
+     *
+     * @param resource $imageResourceTo
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
+    private function applyAlphaTransparency(&$imageResourceTo): void
+    {
+        if (!imagealphablending($imageResourceTo, false)) {
+            throw new \InvalidArgumentException('Failed to set alpha blending for PNG image.');
+        }
+        $transparentAlphaColor = imagecolorallocatealpha($imageResourceTo, 0, 0, 0, 127);
+
+        if (false === $transparentAlphaColor) {
+            throw new \InvalidArgumentException('Failed to allocate alpha transparency for PNG image.');
+        }
+
+        if (!imagefill($imageResourceTo, 0, 0, $transparentAlphaColor)) {
+            throw new \InvalidArgumentException('Failed to fill PNG image with alpha transparency.');
+        }
+
+        if (!imagesavealpha($imageResourceTo, true)) {
+            throw new \InvalidArgumentException('Failed to save alpha transparency into PNG image.');
+        }
+    }
+
+    /**
+     * Method to apply transparency for image.
+     *
+     * @param resource $imageResourceTo
+     * @param int $transparentIndex
+     *
+     * @return void
+     */
+    private function applyTransparency(&$imageResourceTo, $transparentIndex): void
+    {
+        // fill image with indexed non-alpha transparency
+        $transparentColor = false;
+
+        if ($transparentIndex >= 0 && $transparentIndex <= imagecolorstotal($this->_imageHandler)) {
+            list($red, $green, $blue) = array_values(imagecolorsforindex($this->_imageHandler, $transparentIndex));
+            $transparentColor = imagecolorallocate($imageResourceTo, (int) $red, (int) $green, (int) $blue);
+        }
+        if (false === $transparentColor) {
+            throw new \InvalidArgumentException('Failed to allocate transparent color for image.');
+        }
+        if (!imagefill($imageResourceTo, 0, 0, $transparentColor)) {
+            throw new \InvalidArgumentException('Failed to fill image with transparency.');
+        }
+        imagecolortransparent($imageResourceTo, $transparentColor);
     }
 
     /**
@@ -398,7 +432,7 @@ class Gd2 extends AbstractAdapter
         }
 
         // fill new image with required color
-        $this->_fillBackgroundColor($newImage);
+        $this->fillBackgroundColor($newImage);
 
         if ($this->_imageHandler) {
             // resample source image and copy it into new frame

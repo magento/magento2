@@ -988,7 +988,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private function extractHandlers(): void
     {
         foreach ($this->updates as $update) {
-            $updateXml = false;
+            $updateXml = null;
 
             try {
                 $updateXml = is_string($update) ? $this->_loadXmlString($update) : false;
