@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element Text Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

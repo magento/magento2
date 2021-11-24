@@ -20,7 +20,6 @@ use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
-use Magento\GeneratedClass\Factory as GeneratedClassFactory;
 use RuntimeException;
 
 /**
@@ -163,7 +162,7 @@ class GeneratorTest extends TestCase
         $this->objectManagerConfigMock
             ->expects($this->once())
             ->method('getVirtualTypes')
-            ->willReturn([GeneratedClassFactory::class => GeneratedClassFactory::class]);
+            ->willReturn(['Magento\GeneratedClass\Factory' => 'Magento\GeneratedClass\Factory']);
         $this->objectManagerMock
             ->expects($this->once())
             ->method('get')
@@ -173,7 +172,7 @@ class GeneratorTest extends TestCase
 
         $this->assertSame(
             Generator::GENERATION_SKIP,
-            $this->model->generateClass(GeneratedClassFactory::class)
+            $this->model->generateClass('Magento\GeneratedClass\Factory')
         );
     }
 
@@ -325,7 +324,7 @@ class GeneratorTest extends TestCase
 
         $this->assertSame(
             Generator::GENERATION_SKIP,
-            $this->model->generateClass(GeneratedClassFactory::class)
+            $this->model->generateClass('Magento\GeneratedClass\Factory')
         );
     }
 
