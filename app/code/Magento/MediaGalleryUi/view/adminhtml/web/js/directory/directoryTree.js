@@ -53,6 +53,7 @@ define([
                 this.directoryTreeSelector,
                 this,
                 function () {
+                    this.initJsTreeEvents();
                     this.renderDirectoryTree().then(function () {
                         this.initEvents();
                     }.bind(this));
@@ -214,7 +215,6 @@ define([
          *  Handle jstree events
          */
         initEvents: function () {
-            this.initJsTreeEvents();
             this.disableMultiselectBehavior();
 
             $(window).on('reload.MediaGallery', function () {
