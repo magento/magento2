@@ -387,11 +387,15 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected $_doVoidRequest = ['AUTHORIZATIONID', 'NOTE'];
 
     /**
+     * GetTransactionDetailsRequest
+     *
      * @var string[]
      */
     protected $_getTransactionDetailsRequest = ['TRANSACTIONID'];
 
     /**
+     * GetTransactionDetailsResponse
+     *
      * @var string[]
      */
     protected $_getTransactionDetailsResponse = [
@@ -1196,7 +1200,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             throw $e;
         }
 
-        $response = preg_split('/^\r?$/m', $response ?? '', 2);
+        $response = preg_split('/^\r?$/m', $response, 2);
         $response = trim($response[1]);
         $response = $this->_deformatNVP($response);
 
