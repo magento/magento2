@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckingVATNumberValidationButtonForEUCountryTest">
+        <annotations>
+            <title value="Validate VAT Number button for United Kingdom should work same as for non-EU countries after Brexit 2021"/>
+            <description value="Validate VAT Number button for United Kingdom (GB) should work same as for non-EU countries after Brexit 2021"/>
+            <features value="Config"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="ACP2E-355"/>
+            <useCaseId value="ACP2E-182"/>
+            <stories value="Error while validating Store VAT Number"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to the general configuration tab of store-->
+        <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage"/>
+
+        <!-- Expand the store information tab -->
+        <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
+        <waitForPageLoad time="60" stepKey="wait" />
+
+        <!-- Verify that the page source contains the raw source code `<button class="action-validate-vat disabled">`. -->
+        <seeInSource html="&#60;button class&#61;&#34;action-validate-vat disabled&#34;" stepKey="seeInSource"/>
+
+        <!--Open country options section and select an EU Country (`Denmark`) -->
+        <selectOption userInput="{{DE_Address_Berlin_Not_Default_Address.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectEUStoreCountry"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+
+        <!-- Wait up to 30 seconds for `Validate VAT Number` button to become enabled on the page before continuing. -->
+        <waitForElementVisible selector="{{StoreConfigSection.validateVATNumber}}" stepKey="waitForElementVisible"/>
+
+        <!-- Verify that `Validate VAT Number` is available and visible on the current page. -->
+        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="seeVATNumberButton"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1" />
+
+        <!--Fill valid VAT Number for the selected EU Country (Denmark)-->
+        <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{DE_Address_Berlin_Not_Default_Address.vatNumber}}" stepKey="fillVATNumberForEU"/>
+
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2" />
+        <!-- Verify that the page source contains the raw source code `<button class="action-validate-vat">`. -->
+        <seeInSource html="&#60;button class&#61;&#34;action-validate-vat&#34;" stepKey="seeInSource2"/>
+
+        <!-- Click the `Validate VAT Number` button. -->
+        <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickButton"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
+        <waitForElementVisible selector="#validation_result" time="20" stepKey="waitForAssertValidVATNumber"/>
+        <see selector="#validation_result" userInput="VAT Number is valid." stepKey="validVATNumberResult"/>
+        <waitForPageLoad time="60" stepKey="wait2" />
+
+        <!-- Disable `Validate VAT Number` button for non-EU Country (GB)-->
+        <selectOption userInput="{{UK_With_State_Default_Billing.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectNonEUStoreCountry"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad3"/>
+        <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{UK_With_State_Default_Billing.vatNumber}}" stepKey="fillVATNumberForNonEU"/>
+        <waitForPageLoad time="60" stepKey="wait3" />
+
+        <!-- Verify that the page source contains the raw source code `<button class="action-validate-vat disabled">`. -->
+        <seeInSource html="&#60;button class&#61;&#34;action-validate-vat disabled&#34;" stepKey="seeInSource3"/>
+    </test>
+</tests>
