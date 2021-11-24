@@ -68,22 +68,16 @@ class Switcher extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Backend::store/switcher.phtml';
 
     /**
-     * Website factory
-     *
      * @var \Magento\Store\Model\WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
-     * Store Group Factory
-     *
      * @var \Magento\Store\Model\GroupFactory
      */
     protected $_storeGroupFactory;
 
     /**
-     * Store Factory
-     *
      * @var \Magento\Store\Model\StoreFactory
      */
     protected $_storeFactory;
