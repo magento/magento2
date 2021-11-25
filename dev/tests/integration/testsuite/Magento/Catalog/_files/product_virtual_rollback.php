@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\App\ObjectManager;
-use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Registry;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
 
 $registry = Bootstrap::getObjectManager()->get(Registry::class);
 
