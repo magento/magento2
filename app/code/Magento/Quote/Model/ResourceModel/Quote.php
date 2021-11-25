@@ -319,4 +319,26 @@ class Quote extends AbstractDb
 
         return $this;
     }
+
+    /**
+     * Quickly check if quote exists
+     *
+     * Uses direct DB query due to performance reasons
+     *
+     * @param int $quoteId
+     * @return bool
+     */
+    public function isExists(int $quoteId): bool
+    {
+        $connection = $this->getConnection();
+        $mainTable = $this->getMainTable();
+        $idFieldName = $this->getIdFieldName();
+
+        $field = $connection->quoteIdentifier(sprintf('%s.%s', $mainTable, $idFieldName));
+        $select = $connection->select()
+            ->from($mainTable, [$idFieldName])
+            ->where($field . '=?', $quoteId);
+
+        return (bool)$connection->fetchOne($select);
+    }
 }
