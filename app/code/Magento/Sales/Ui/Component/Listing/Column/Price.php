@@ -78,8 +78,10 @@ class Price extends Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
                 if (!$currencyCode) {
-                    $storeId = isset($item['store_id']) && (int)$item['store_id'] !== 0 ? $item['store_id'] :
-                        $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID);
+                    $storeId = isset($item['store_id']) && is_numeric($item['store_id']) && (int)$item['store_id'] !== 0 
+                        ? $item['store_id'] 
+                        : $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID);
+                    
                     $store = $this->storeManager->getStore(
                         $storeId
                     );
