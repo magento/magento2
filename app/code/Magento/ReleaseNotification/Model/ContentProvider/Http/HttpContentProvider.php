@@ -93,7 +93,7 @@ class HttpContentProvider implements ContentProviderInterface
     /**
      * Returns the response body from the HTTP client
      *
-     * @param $url
+     * @param string $url
      * @return string
      */
     private function getResponse($url)
