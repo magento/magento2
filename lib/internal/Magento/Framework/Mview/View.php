@@ -219,12 +219,9 @@ class View extends DataObject implements ViewInterface
     }
 
     /**
-     * Remove subscriptions
-     *
-     * @return ViewInterface
-     * @throws Exception
+     * @inheritDoc
      */
-    public function unsubscribe()
+    public function unsubscribe(bool $dropTable = true): ViewInterface
     {
         if ($this->getState()->getMode() != View\StateInterface::MODE_DISABLED) {
             // Remove subscriptions
@@ -232,14 +229,15 @@ class View extends DataObject implements ViewInterface
                 $this->initSubscriptionInstance($subscriptionConfig)->remove();
             }
 
-            try {
-                // Remove changelog table
-                $this->getChangelog()->drop();
-                // Reset version_id
+            if ($dropTable) {
+                try {
+                    $this->getChangelog()->drop();
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                } catch (ChangelogTableNotExistsException $e) {
+                    // We want the table to not exist, and it doesn't. All done.
+                }
+
                 $this->getState()->setVersionId(0);
-            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-            } catch (ChangelogTableNotExistsException $e) {
-                // Silently ignore this error
             }
 
             // Update view state

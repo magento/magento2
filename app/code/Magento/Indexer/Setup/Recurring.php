@@ -121,8 +121,14 @@ class Recurring implements InstallSchemaInterface
 
             $indexer = $this->indexerFactory->create()->load($indexerId);
             if ($indexer->isScheduled()) {
-                $indexer->setScheduled(false);
-                $indexer->setScheduled(true);
+                // The purpose of the following two lines is to ensure that any
+                // database triggers are correctly set up for this indexer. We
+                // are calling methods on the view directly because we want to
+                // choose to not drop the changelog tables at this time. This
+                // also intentionally bypasses the $indexer->invalidate() call
+                // within $indexer->setScheduled().
+                $indexer->getView()->unsubscribe(false);
+                $indexer->getView()->subscribe();
             }
         }
     }
