@@ -117,6 +117,11 @@ class InstallCommand extends AbstractSetupCommand
     protected $searchConfigOptionsList;
 
     /**
+     * @var array
+     */
+    protected $interactiveSetupUserInput;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
@@ -228,7 +233,9 @@ class InstallCommand extends AbstractSetupCommand
     {
         $consoleLogger = new ConsoleLogger($output);
         $installer = $this->installerFactory->create($consoleLogger);
-        $installer->install($input->getOptions());
+        $isInteractiveSetup = $input->getOption(self::INPUT_KEY_INTERACTIVE_SETUP) ?? false;
+        $installer->install($isInteractiveSetup ? array_merge($input->getOptions(), $this->interactiveSetupUserInput) :
+            $input->getOptions());
 
         $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
         $arrayInput = new ArrayInput([]);
@@ -260,6 +267,7 @@ class InstallCommand extends AbstractSetupCommand
                 $command .= " --{$key}={$value}";
             }
             $output->writeln("<comment>Try re-running command: php bin/magento setup:install{$command}</comment>");
+            $this->interactiveSetupUserInput = $configOptionsToValidate;
         }
 
         $errors = $this->configModel->validate($configOptionsToValidate);
@@ -356,7 +364,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * Runs interactive questions
      *
-     * It will ask users for interactive questionst regarding setup configuration.
+     * It will ask users for interactive questions regarding setup configuration.
      *
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -403,14 +411,11 @@ class InstallCommand extends AbstractSetupCommand
         $question->setValidator(function ($answer) use ($option, $validateInline) {
 
             if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
-                $answer = $option->getSelectOptions()[$answer];
+                //If user doesn't provide an input & default value for question is not set, take first option as input.
+                $answer = $option->getSelectOptions()[$answer] ?? current($option->getSelectOptions());
             }
 
-            if ($answer == null) {
-                $answer = '';
-            } else {
-                $answer = trim($answer);
-            }
+            $answer = $answer === null ? '' : (is_string($answer) ? trim($answer) : $answer);
 
             if ($validateInline) {
                 $option->validate($answer);
