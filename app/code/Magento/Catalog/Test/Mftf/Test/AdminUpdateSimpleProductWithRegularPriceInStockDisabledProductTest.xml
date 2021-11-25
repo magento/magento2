@@ -70,6 +70,10 @@
 
         <!-- Search updated simple product(from above step) in the grid -->
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickClearAll"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickFiltersButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillSimpleProductNameInNameFilter"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductSku"/>
         <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="clickApplyFiltersButton">
             <argument name="product" value="simpleProductDisabled"/>
         </actionGroup>
