@@ -50,13 +50,13 @@ class DateTest extends TestCase
     private $dataProviderMock;
 
     /**
-     * Set up
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
@@ -64,7 +64,7 @@ class DateTest extends TestCase
             ->getMock();
 
         $this->filterModifierMock = $this->getMockBuilder(FilterModifier::class)
-            ->setMethods(['applyFilterModifier'])
+            ->onlyMethods(['applyFilterModifier'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -72,11 +72,11 @@ class DateTest extends TestCase
     }
 
     /**
-     * Run test getComponentName method
+     * Run test getComponentName method.
      *
      * @return void
      */
-    public function testGetComponentName()
+    public function testGetComponentName(): void
     {
         $this->contextMock->expects(static::never())->method('getProcessor');
         $date = new Date(
@@ -97,10 +97,11 @@ class DateTest extends TestCase
      * @param bool $showsTime
      * @param array $filterData
      * @param array|null $expectedCondition
-     * @dataProvider getPrepareDataProvider
+     *
      * @return void
+     * @dataProvider getPrepareDataProvider
      */
-    public function testPrepare(string $name, bool $showsTime, array $filterData, ?array $expectedCondition)
+    public function testPrepare(string $name, bool $showsTime, array $filterData, ?array $expectedCondition): void
     {
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -154,55 +155,22 @@ class DateTest extends TestCase
     }
 
     /**
-     * Gets Filter mock
-     *
-     * @param string $name
-     * @param string $expectedType
-     * @param string $expectedDate
-     * @param int $i
-     *
-     * @return Filter|MockObject
-     */
-    private function getFilterMock($name, $expectedType, $expectedDate, &$i)
-    {
-        $this->filterBuilderMock->expects(static::at($i++))
-            ->method('setConditionType')
-            ->with($expectedType)
-            ->willReturnSelf();
-        $this->filterBuilderMock->expects(static::at($i++))
-            ->method('setField')
-            ->with($name)
-            ->willReturnSelf();
-        $this->filterBuilderMock->expects(static::at($i++))
-            ->method('setValue')
-            ->with($expectedDate)
-            ->willReturnSelf();
-
-        $filterMock = $this->createMock(Filter::class);
-        $this->filterBuilderMock->expects(static::at($i++))
-            ->method('create')
-            ->willReturn($filterMock);
-
-        return $filterMock;
-    }
-
-    /**
      * @return array
      */
-    public function getPrepareDataProvider()
+    public function getPrepareDataProvider(): array
     {
         return [
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => '11-05-2015', 'to' => null]],
-                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'gteq'],
+                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'gteq']
             ],
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => null, 'to' => '11-05-2015']],
-                'expectedCondition' => ['date' => '2015-05-11 23:59:59', 'type' => 'lteq'],
+                'expectedCondition' => ['date' => '2015-05-11 23:59:59', 'type' => 'lteq']
             ],
             [
                 'name' => 'test_date',
@@ -211,19 +179,19 @@ class DateTest extends TestCase
                 'expectedCondition' => [
                     'date_from' => '2015-05-11 00:00:00', 'type_from' => 'gteq',
                     'date_to' => '2015-05-11 23:59:59', 'type_to' => 'lteq'
-                ],
+                ]
             ],
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => '11-05-2015'],
-                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'eq'],
+                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'eq']
             ],
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => '', 'to' => '']],
-                'expectedCondition' => null,
+                'expectedCondition' => null
             ],
             [
                 'name' => 'test_date',
@@ -232,8 +200,8 @@ class DateTest extends TestCase
                 'expectedCondition' => [
                     'date_from' => '2015-05-11 10:20:00', 'type_from' => 'gteq',
                     'date_to' => '2015-05-11 18:25:00', 'type_to' => 'lteq'
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
@@ -243,6 +211,8 @@ class DateTest extends TestCase
      * @param array $filterData
      * @param array $expectedCondition
      * @param MockObject $uiComponent
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processFilters(
@@ -251,7 +221,7 @@ class DateTest extends TestCase
         array $filterData,
         array $expectedCondition,
         FormDate $uiComponent
-    ) {
+    ): void {
         if (is_string($filterData[$name])) {
             $uiComponent->expects(static::once())
                 ->method($showsTime ? 'convertDatetime' : 'convertDate')
@@ -280,39 +250,57 @@ class DateTest extends TestCase
                     );
             }
         }
+        $setConditionTypeWithArgs = [];
+        $setFieldWithArgs = [];
+        $setValueWithArgs = [];
+        $createReturnArgs = [];
 
-        $i = 0;
         switch (true) {
             case is_string($filterData[$name]):
             case isset($filterData[$name]['from']) && !isset($filterData[$name]['to']):
             case !isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
-                $filterMock = $this->getFilterMock(
-                    $name,
-                    $expectedCondition['type'],
-                    $expectedCondition['date'],
-                    $i
-                );
+                $filterMock = $this->createMock(Filter::class);
+                $createReturnArgs[] = $filterMock;
+                $setConditionTypeWithArgs[] = [$expectedCondition['type']];
+                $setFieldWithArgs[] = [$name];
+                $setValueWithArgs[] = [$expectedCondition['date']];
+
                 $this->dataProviderMock->expects(static::once())
                     ->method('addFilter')
                     ->with($filterMock);
                 break;
             case isset($filterData[$name]['from']) && isset($filterData[$name]['to']):
-                $this->getFilterMock(
-                    $name,
-                    $expectedCondition['type_from'],
-                    $expectedCondition['date_from'],
-                    $i
-                );
-                $filterMock = $this->getFilterMock(
-                    $name,
-                    $expectedCondition['type_to'],
-                    $expectedCondition['date_to'],
-                    $i
-                );
+                $filterMock = $this->createMock(Filter::class);
+                $createReturnArgs[] = $filterMock;
+                $setConditionTypeWithArgs[] = [$expectedCondition['type_from']];
+                $setFieldWithArgs[] = [$name];
+                $setValueWithArgs[] = [$expectedCondition['date_from']];
+
+                $filterMock = $this->createMock(Filter::class);
+                $createReturnArgs[] = $filterMock;
+                $setConditionTypeWithArgs[] = [$expectedCondition['type_to']];
+                $setFieldWithArgs[] = [$name];
+                $setValueWithArgs[] = [$expectedCondition['date_to']];
+
                 $this->dataProviderMock->expects(static::exactly(2))
                     ->method('addFilter')
                     ->with($filterMock);
                 break;
         }
+        $this->filterBuilderMock
+            ->method('setConditionType')
+            ->withConsecutive(...$setConditionTypeWithArgs)
+            ->willReturnSelf();
+        $this->filterBuilderMock
+            ->method('setField')
+            ->withConsecutive(...$setFieldWithArgs)
+            ->willReturnSelf();
+        $this->filterBuilderMock
+            ->method('setValue')
+            ->withConsecutive(...$setValueWithArgs)
+            ->willReturnSelf();
+        $this->filterBuilderMock
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(...$createReturnArgs);
     }
 }

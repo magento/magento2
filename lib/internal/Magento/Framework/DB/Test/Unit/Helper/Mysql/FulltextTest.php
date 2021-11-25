@@ -17,7 +17,10 @@ use PHPUnit\Framework\TestCase;
 
 class FulltextTest extends TestCase
 {
-    public function testGetMatchQuery()
+    /**
+     * @return void
+     */
+    public function testGetMatchQuery(): void
     {
         /** @var Fulltext $select */
         $select = (new ObjectManager($this))->getObject(
@@ -37,9 +40,11 @@ class FulltextTest extends TestCase
 
     /**
      * @param $isCondition
+     *
+     * @return void
      * @dataProvider matchProvider
      */
-    public function testMatch($isCondition)
+    public function testMatch($isCondition): void
     {
         $fullCondition = "MATCH (title, description) AGAINST ('some searchable text' IN NATURAL LANGUAGE MODE)";
 
@@ -73,7 +78,7 @@ class FulltextTest extends TestCase
     /**
      * @return array
      */
-    public function matchProvider()
+    public function matchProvider(): array
     {
         return [[true], [false]];
     }
@@ -81,12 +86,12 @@ class FulltextTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function getResourceMock()
+    protected function getResourceMock(): MockObject
     {
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $connection->expects($this->at(0))
+        $connection
             ->method('quote')
             ->with('some searchable text')
             ->willReturn("'some searchable text'");

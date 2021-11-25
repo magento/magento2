@@ -58,35 +58,31 @@ class Builder implements BuilderInterface
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
                         'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat'],
+                            ['lowercase', 'keyword_repeat', 'asciifolding'],
                             array_keys($filter)
                         ),
                         'char_filter' => array_keys($charFilter)
                     ],
-                    // this analyzer must not include stemmer filter
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => key($tokenizer),
-                        'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat']
-                        ),
+                        'filter' => ['lowercase', 'asciifolding'],
                         'char_filter' => array_keys($charFilter)
                     ],
                     'sku' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
                         'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat'],
+                            ['lowercase', 'keyword_repeat', 'asciifolding'],
                             array_keys($filter)
                         ),
                     ],
-                    // this analyzer must not include stemmer filter
+                    // this analyzer must not include keyword_repeat and stemmer filters
                     'sku_prefix_search' => [
                         'type' => 'custom',
                         'tokenizer' => 'keyword',
-                        'filter' => array_merge(
-                            ['lowercase', 'keyword_repeat']
-                        ),
+                        'filter' => ['lowercase', 'asciifolding']
                     ]
                 ],
                 'tokenizer' => $tokenizer,
