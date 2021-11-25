@@ -9,8 +9,11 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\App\ObjectManager;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\Registry;
 
-$registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry = Bootstrap::getObjectManager()->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
@@ -26,8 +29,8 @@ try {
 } catch (StateException $exception) {
 }
 
-\Magento\Framework\App\ObjectManager::getInstance()
-    ->create(\Magento\CatalogInventory\Model\Indexer\Stock\Processor::class)
+ObjectManager::getInstance()
+    ->create(Processor::class)
     ->reindexAll();
 
 $registry->unregister('isSecureArea');
