@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProductGraphQl\Model\Options\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Retrieve child products
@@ -45,7 +46,7 @@ class Variant
      * @return ProductInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getSalableVariantsByParent(ProductInterface $product)
+    public function getSalableVariantsByParent(ProductInterface $product): array
     {
         $collection = $this->configurableType->getUsedProductCollection($product);
         $collection
@@ -62,6 +63,6 @@ class Variant
         }
         $collection->clear();
 
-        return $collection->getItems();
+        return $collection->getItems() ?? [];
     }
 }

@@ -493,7 +493,7 @@
         <field name="stop_rules_processing" formElement="checkbox">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="number">1</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                 </item>
             </argument>

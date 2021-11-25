@@ -174,6 +174,11 @@
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Session\SidResolver">
         <arguments>
         <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
@@ -441,6 +446,14 @@
                 <item name="manageStoreCookie" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManageStoreCookie</item>
                 <item name="managePrivateContent" xsi:type="object">Magento\Store\Model\StoreSwitcher\ManagePrivateContent</item>
                 <item name="hashProcessor" xsi:type="object" sortOrder="1000">Magento\Store\Model\StoreSwitcher\HashProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Validation\StoreValidator">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="name" xsi:type="object">Magento\Store\Model\Validation\StoreNameValidator</item>
+                <item name="code" xsi:type="object">Magento\Store\Model\Validation\StoreCodeValidator</item>
             </argument>
         </arguments>
     </type>

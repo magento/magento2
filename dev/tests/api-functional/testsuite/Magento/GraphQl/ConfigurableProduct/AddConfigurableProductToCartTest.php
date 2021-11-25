@@ -83,7 +83,6 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
         $parentSku = $product['sku'];
         $skuOne = 'simple_10';
         $skuTwo = 'simple_20';
-        $valueIdOne = $product['configurable_options'][0]['values'][0]['value_index'];
 
         $query = <<<QUERY
 mutation {
@@ -119,6 +118,10 @@ mutation {
             value_label
             value_id
           }
+          configured_variant {
+            sku
+            varchar_attribute
+          }
         }
       }
     }
@@ -130,14 +133,12 @@ QUERY;
 
         $cartItems = $response['addConfigurableProductsToCart']['cart']['items'];
         self::assertCount(2, $cartItems);
-
-        foreach ($cartItems as $cartItem) {
-            if ($cartItem['configurable_options'][0]['value_id'] === $valueIdOne) {
-                self::assertEquals($quantityOne, $cartItem['quantity']);
-            } else {
-                self::assertEquals($quantityTwo, $cartItem['quantity']);
-            }
-        }
+        $firstCartItem = $cartItems[0];
+        self::assertEquals($quantityOne, $firstCartItem['quantity']);
+        self::assertEquals('varchar10', $firstCartItem['configured_variant']['varchar_attribute']);
+        $secondCartItem = $cartItems[1];
+        self::assertEquals($quantityTwo, $secondCartItem['quantity']);
+        self::assertEquals('varchar20', $secondCartItem['configured_variant']['varchar_attribute']);
     }
 
     /**
@@ -249,6 +250,25 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     */
+    public function testAddConfigurableProductNotAssignedToWebsite()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "configurable"');
+
+        $reservedOrderId = 'test_order_2';
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $headerMap = ['Store' => 'fixture_second_store'];
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, 1);
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
     public function testAddNonExistentConfigurableProductVariationToCart()
@@ -269,11 +289,31 @@ QUERY;
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
-            'doesn\'t exist. Verify the product and try again.'
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
         );
 
         $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_only_parent_two_websites.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
+     */
+    public function testAddUnassignedToWebsiteConfigurableProductVariationToCart()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+        );
+
+        $reservedOrderId = 'test_order_2';
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $headerMap = ['Store' => 'fixture_second_store'];
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, 1);
+        $this->graphQlMutation($query, [], '', $headerMap);
     }
 
     /**
@@ -531,6 +571,48 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testAddMoreProductsFromAnotherStore()
+    {
+        $parentSku = 'configurable';
+        $sku = 'simple_20';
+        $quantity = 400; // the number should be greater than the available qty / 3
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, $quantity);
+
+        $headerMap = ['Store' => 'default'];
+        $this->graphQlMutation($query, [], '', $headerMap);
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
+        self::assertEquals($maskedQuoteId, $response['addConfigurableProductsToCart']['cart']['id']);
+        $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
+        self::assertEquals($parentSku, $cartItem['product']['sku']);
+        self::assertEquals($quantity * 2, $cartItem['quantity']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_in_multiple_websites_disable_first_child.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddConfigurableProductWithDisabledChildToCart(): void
+    {
+        $quantity = 1;
+        $parentSku = 'configurable';
+        $sku = 'simple_Option_1';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find specified product.');
+
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, $quantity);
+        $headerMap = ['Store' => 'default'];
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku
@@ -554,6 +636,7 @@ mutation {
     }
   ) {
     cart {
+      id
       items {
         id
         quantity
@@ -582,8 +665,12 @@ QUERY;
      * @param int $quantity
      * @return string
      */
-    private function graphQlQueryForVariant(string $maskedQuoteId, string $parentSku, string $sku, int $quantity): string
-    {
+    private function graphQlQueryForVariant(
+        string $maskedQuoteId,
+        string $parentSku,
+        string $sku,
+        int $quantity
+    ): string {
         return <<<QUERY
 mutation {
   addConfigurableProductsToCart(

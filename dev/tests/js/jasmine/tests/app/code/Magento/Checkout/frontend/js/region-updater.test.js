@@ -159,7 +159,7 @@ define([
         });
         it('Check that region list is not displayed when selected country has no predefined regions', function () {
             init();
-            $(countryEl).val('GB').change();
+            $(countryEl).val('GB').trigger('change');
             expect($(regionInputEl).is(':visible')).toBe(true);
             expect($(regionInputEl).is(':disabled')).toBe(false);
             expect($(regionSelectEl).is(':visible')).toBe(false);
@@ -167,7 +167,7 @@ define([
         });
         it('Check country that has predefined and optional regions', function () {
             init();
-            $(countryEl).val('DE').change();
+            $(countryEl).val('DE').trigger('change');
             expect($(regionSelectEl).is(':visible')).toBe(true);
             expect($(regionSelectEl).is(':disabled')).toBe(false);
             expect($(regionSelectEl).hasClass('required-entry')).toBe(false);
@@ -182,7 +182,7 @@ define([
         });
         it('Check country that has predefined and required regions', function () {
             init();
-            $(countryEl).val('US').change();
+            $(countryEl).val('US').trigger('change');
             expect($(regionSelectEl).is(':visible')).toBe(true);
             expect($(regionSelectEl).is(':disabled')).toBe(false);
             expect($(regionSelectEl).hasClass('required-entry')).toBe(true);
@@ -199,7 +199,7 @@ define([
             init({
                 optionalRegionAllowed: false
             });
-            $(countryEl).val('DE').change();
+            $(countryEl).val('DE').trigger('change');
             expect($(regionSelectEl).is(':visible')).toBe(false);
             expect($(regionInputEl).is(':visible')).toBe(false);
         });
@@ -226,7 +226,7 @@ define([
             $(countryEl).val('GB');
             $(regionInputEl).val('Liverpool');
             init();
-            $(countryEl).val('IT').change();
+            $(countryEl).val('IT').trigger('change');
             expect($(countryEl).val()).toBe('IT');
             expect($(regionInputEl).val()).toBe('');
         });
@@ -235,7 +235,7 @@ define([
             init({
                 defaultRegion: '2'
             });
-            $(countryEl).val('DE').change();
+            $(countryEl).val('DE').trigger('change');
             expect($(countryEl).val()).toBe('DE');
             expect($(regionSelectEl).val()).toBe('');
         });
