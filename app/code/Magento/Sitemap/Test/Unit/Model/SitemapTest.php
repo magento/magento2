@@ -583,6 +583,10 @@ class SitemapTest extends TestCase
             ->willReturn('2012-12-21T00:00:00-08:00');
 
         $model->expects($this->any())
+            ->method('_getBaseDir')
+            ->willReturn('');
+
+        $model->expects($this->any())
             ->method('_getDocumentRoot')
             ->willReturn('/project');
 
