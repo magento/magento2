@@ -56,9 +56,7 @@ class PayLaterLink extends Field
     public function _getElementHtml(AbstractElement $element): string
     {
         $html = parent::_getElementHtml($element);
-
         $html .= $this->getPayLaterCommentHtml();
-
         $country = $this->getPayLaterCountry();
 
         return (in_array($country, self::ARRAY_PAYLATER_SUPPORTED_COUNTRIES)) ?

@@ -155,8 +155,8 @@
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="advertise_paylater">
-                            <field id="paylater_enabled"/>
+                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1">
+                            <field id="paylater_enabled" showInDefault="1" showInWebsite="1"/>
                         </group>
                     </group>
                 </group>
@@ -373,7 +373,7 @@
                 <group id="express_checkout_required">
                     <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                     <group id="advertise_paylater" showInDefault="1" showInWebsite="1">
-                        <field id="paylater_enabled"/>
+                        <field id="paylater_enabled" showInDefault="1" showInWebsite="1"/>
                     </group>
                 </group>
             </group>
