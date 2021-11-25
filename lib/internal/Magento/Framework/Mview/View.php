@@ -28,7 +28,7 @@ class View extends DataObject implements ViewInterface
     /**
      * Default batch size for partial reindex
      */
-    const DEFAULT_BATCH_SIZE = 1000;
+    public const DEFAULT_BATCH_SIZE = 1000;
 
     /**
      * @var string
