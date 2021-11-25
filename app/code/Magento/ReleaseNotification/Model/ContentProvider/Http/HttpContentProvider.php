@@ -32,19 +32,21 @@ class HttpContentProvider implements ContentProviderInterface
     private $urlBuilder;
 
     /**
-     * HttpContentProvider constructor.
      * @param ClientInterface $httpClient
      * @param UrlBuilder $urlBuilder
      * @param LoggerInterface $logger
+     * @param int $requestTimeout
      */
     public function __construct(
         ClientInterface $httpClient,
         UrlBuilder $urlBuilder,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        int $requestTimeout = 30
     ) {
         $this->httpClient = $httpClient;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
+        $this->httpClient->setTimeout($requestTimeout);
     }
 
     /**
