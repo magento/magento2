@@ -1333,4 +1333,13 @@
             <argument name="imageResizeScheduler" xsi:type="object">Magento\MediaStorage\Service\ImageResizeScheduler\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\ReservedAttributeChecker">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="product_reserved_attribute_codes" xsi:type="object">\Magento\Catalog\Model\Product\ReservedAttributeCheckerAdapter</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
