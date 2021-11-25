@@ -53,7 +53,7 @@ class PayLaterLink extends Field
     /**
      * @inheritdoc
      */
-    protected function _getElementHtml(AbstractElement $element): string
+    public function _getElementHtml(AbstractElement $element): string
     {
         $html = parent::_getElementHtml($element);
 
