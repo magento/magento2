@@ -111,7 +111,7 @@ class Collection
      */
     private function fetch(): array
     {
-        if (empty($this->productIds) || !empty($this->attributeMap)) {
+        if (empty($this->productIds) || array_key_exists(end($this->productIds), $this->attributeMap)) {
             return $this->attributeMap;
         }
 

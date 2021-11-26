@@ -1116,7 +1116,7 @@ class AccountManagement implements AccountManagementInterface
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
-                    $this->getEavValidator()->getMessages()
+                    array_values($this->getEavValidator()->getMessages())
                 )
             );
         }
