@@ -9,13 +9,16 @@
     <policies>
         <policy id="script-src">
             <values>
-              <value id="newrelic" type="host">newrelic.com</value>
-              <value id="newrelic-data" type="host">nr-data.com</value>
+              <value id="newrelic" type="host">*.newrelic.com</value>
+              <value id="newrelic-data" type="host">*.nr-data.com</value>
+              <value id="newrelic-nerd" type="host">*.nr-ext.net</value>
+              <value id="newrelic-assets" type="host">*.nr-assets.net</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
-                <value id="newrelic-data" type="host">https://bam.nr-data.net/</value>
+                <value id="newrelic-data" type="host">*.newrelic.com</value>
+                <value id="newrelic-data" type="host">*.nr-data.net</value>
             </values>
         </policy>
     </policies>
