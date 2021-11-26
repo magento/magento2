@@ -419,12 +419,12 @@ class IndexerTest extends TestCase
      */
     public function testSetScheduled($scheduled, $method)
     {
-        $stateMock = $this->createPartialMock(State::class, ['load', 'save']);
+        $stateMock = $this->createPartialMock(State::class, ['load', 'save', 'setStatus']);
 
         $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
         $this->viewMock->expects($this->once())->method('load')->willReturnSelf();
-        $this->viewMock->expects($this->once())->method($method)->willReturn(true);
-        $stateMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->viewMock->expects($this->once())->method($method)->willReturnSelf();
+        $stateMock->expects($this->atLeastOnce())->method('save')->willReturnSelf();
         if (!$scheduled) {
             $stateMock->expects($this->once())
                 ->method('setStatus')
