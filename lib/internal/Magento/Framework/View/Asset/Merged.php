@@ -15,7 +15,7 @@ class Merged implements \Iterator
     /**
      * Directory for dynamically generated public view files, relative to STATIC_VIEW
      */
-    const CACHE_VIEW_REL = '_cache';
+    public const CACHE_VIEW_REL = '_cache';
 
     /**
      * @var \Psr\Log\LoggerInterface

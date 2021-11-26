@@ -17,7 +17,7 @@ class Pool implements \Iterator
     /**
      * Frontend identifier associated with the default settings
      */
-    const DEFAULT_FRONTEND_ID = 'default';
+    public const DEFAULT_FRONTEND_ID = 'default';
 
     /**
      * @var DeploymentConfig
