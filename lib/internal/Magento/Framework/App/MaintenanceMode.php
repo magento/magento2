@@ -22,17 +22,17 @@ class MaintenanceMode
      * DO NOT consolidate this file and the IP allow list into one.
      * It is going to work much faster in 99% of cases: the isOn() will return false whenever file doesn't exist.
      */
-    const FLAG_FILENAME = '.maintenance.flag';
+    public const FLAG_FILENAME = '.maintenance.flag';
 
     /**
      * IP-addresses file name
      */
-    const IP_FILENAME = '.maintenance.ip';
+    public const IP_FILENAME = '.maintenance.ip';
 
     /**
      * Maintenance flag dir
      */
-    const FLAG_DIR = DirectoryList::VAR_DIR;
+    public const FLAG_DIR = DirectoryList::VAR_DIR;
 
     /**
      * Path to store files
