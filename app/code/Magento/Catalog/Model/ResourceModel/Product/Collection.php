@@ -2067,16 +2067,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $categoryProductSelect = $this->getConnection()->select()
             ->from($this->getTable('catalog_category_product'))
-            ->reset(Select::ORDER)
-            ->reset(Select::LIMIT_COUNT)
-            ->reset(Select::LIMIT_OFFSET)
-            ->reset(Select::COLUMNS)
-            ->columns([
-                "product_id"   => "product_id",
-                "min_position" => new Zend_Db_Expr("MIN(position)")
+            >columns([
+                'product_id'   => 'product_id',
+                'min_position' => new Zend_Db_Expr('MIN(position)')
             ])
-            ->where("category_id IN (?)", $categories)
-            ->group("product_id");
+            ->where('category_id IN (?)', $categories)
+            ->group('product_id');
 
         $joinCond = 'cat_pro.product_id = e.entity_id';
 
