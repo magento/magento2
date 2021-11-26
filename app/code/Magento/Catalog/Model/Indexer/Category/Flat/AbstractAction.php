@@ -28,7 +28,7 @@ class AbstractAction
     /**
      * Suffix for table to show it is temporary
      */
-    const TEMPORARY_TABLE_SUFFIX = '_tmp';
+    public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
     /**
      * @var array

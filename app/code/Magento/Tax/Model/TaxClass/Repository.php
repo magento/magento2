@@ -27,6 +27,8 @@ use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollec
  */
 class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 {
+    public const CLASS_ID_NOT_ALLOWED = 'class_id is not expected for this request.';
+
     /**
      * @var TaxClassCollectionFactory
      */
@@ -41,8 +43,6 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @var ClassModelRegistry
      */
     protected $classModelRegistry;
-
-    const CLASS_ID_NOT_ALLOWED = 'class_id is not expected for this request.';
 
     /**
      * @var SearchCriteriaBuilder

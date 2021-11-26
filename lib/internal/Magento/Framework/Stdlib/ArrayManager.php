@@ -16,7 +16,7 @@ class ArrayManager
     /**
      * Default node delimiter for path
      */
-    const DEFAULT_PATH_DELIMITER = '/';
+    public const DEFAULT_PATH_DELIMITER = '/';
 
     /**
      * @var array
