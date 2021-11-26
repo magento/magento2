@@ -492,7 +492,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
             //only 5 chars available
-            $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
+            $package->addChild(
+                'ZipDestination',
+                is_string($r->getDestPostal()) ? substr($r->getDestPostal(), 0, 5) : ''
+            );
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());
             // Because some methods don't accept VARIABLE and (NON)RECTANGULAR containers

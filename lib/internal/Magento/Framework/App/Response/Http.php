@@ -131,7 +131,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      */
     public function setPublicHeaders($ttl)
     {
-        if ($ttl < 0 || !preg_match('/^[0-9]+$/', $ttl)) {
+        if ($ttl === null || $ttl < 0 || !preg_match('/^[0-9]+$/', $ttl)) {
             throw new \InvalidArgumentException('Time to live is a mandatory parameter for set public headers');
         }
         $this->setHeader('pragma', 'cache', true);

@@ -128,7 +128,7 @@ class DataObject implements \ArrayAccess
         }
 
         /* process a/b/c key as ['a']['b']['c'] */
-        if (strpos($key, '/') !== false) {
+        if (is_string($key) && strpos($key, '/') !== false) {
             $data = $this->getDataByPath($key);
         } else {
             $data = $this->_getData($key);

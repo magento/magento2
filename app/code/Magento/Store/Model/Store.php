@@ -666,12 +666,13 @@ class Store extends AbstractExtensibleModel implements
                     throw new \InvalidArgumentException('Invalid base url type');
             }
 
-            if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
+            if (is_string($url) && false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
+            $url = is_string($url) ? rtrim($url, '/') : '';
             $this->_baseUrlCache[$cacheKey] = $this->getUrlModifier()->execute(
-                rtrim($url, '/') . '/',
+                $url . '/',
                 \Magento\Framework\Url\ModifierInterface::MODE_BASE
             );
         }

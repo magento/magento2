@@ -59,7 +59,7 @@ class AllowspecificTest extends TestCase
                 'secureRenderer' => $secureRendererMock
             ]
         );
-        $this->_object->setData('html_id', 'spec_element');
+        $this->_object->setId('spec_element');
         $this->_formMock = $this->getMockBuilder(Form::class)
             ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
             ->onlyMethods(['getElement'])
