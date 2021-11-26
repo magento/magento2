@@ -14,9 +14,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Customer\Api\Data\CustomerInterface;
 
-/**
- * Save customer
- */
 class SaveCustomer
 {
     /**
