@@ -65,7 +65,7 @@ class HttpContentProvider implements ContentProviderInterface
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->warning('Failed to retrieve the release notification content.');
+            $this->logger->warning('Failed to retrieve the release notification content.', ['exception' => $e]);
         }
 
         return $result;
