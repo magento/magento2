@@ -14,22 +14,16 @@ use Magento\Framework\Registry;
 class MenuCategoryData
 {
     /**
-     * Catalog category
-     *
      * @var CategoryHelper
      */
     protected $catalogCategory;
 
     /**
-     * Catalog layer
-     *
      * @var Layer
      */
     private $catalogLayer = null;
 
     /**
-     * Catalog layer resolver
-     *
      * @var Resolver
      */
     protected $layerResolver;
@@ -106,6 +100,7 @@ class MenuCategoryData
 
     /**
      * Get catalog layer
+     *
      * @return Layer
      */
     private function getCatalogLayer(): Layer
