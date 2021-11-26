@@ -9,6 +9,7 @@ namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * A target directory for remote filesystems.
@@ -56,5 +57,17 @@ class TargetDirectory
     public function getDirectoryRead(string $directoryCode): ReadInterface
     {
         return $this->filesystem->getDirectoryRead($directoryCode, $this->driverCode);
+    }
+
+    /**
+     * Create an instance of directory with read permissions with file path.
+     *
+     * @param String $path
+     * @param string $driverCode
+     * @return ReadInterface
+     */
+    public function getDirectoryReadByPath(String $path, $driverCode = DriverPool::FILE): ReadInterface
+    {
+        return $this->filesystem->getDirectoryReadByPath($path, $driverCode);
     }
 }
