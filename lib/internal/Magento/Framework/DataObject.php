@@ -120,6 +120,7 @@ class DataObject implements \ArrayAccess
      * @param string $key
      * @param string|int $index
      * @return mixed
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getData($key = '', $index = null)
     {
