@@ -2067,7 +2067,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $categoryProductSelect = $this->getConnection()->select()
             ->from($this->getTable('catalog_category_product'))
-            >columns([
+            ->columns([
                 'product_id'   => 'product_id',
                 'min_position' => new Zend_Db_Expr('MIN(position)')
             ])
