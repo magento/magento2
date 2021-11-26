@@ -9,18 +9,18 @@
         <if args="useLinkForAsLowAs">
             <a attr="href: $row().url"
                class="minimal-price-link"
-               html="getMinimalPrice($row())"/>
+               html="getMinimalPriceUnsanitizedHtml($row())"></a>
         </if>
 
         <ifnot args="useLinkForAsLowAs">
             <span class="price-wrapper price-including-tax">
                       <span class="minimal-price-link"
-                            html="getMinimalPrice($row())"/>
+                            html="getMinimalPriceUnsanitizedHtml($row())"></span>
             </span>
         </ifnot>
 
         <each args="data: getAdjustments(), as: '$adj'">
-            <render args="$adj.getBody()"/>
+            <render args="$adj.getBody()"></render>
         </each>
     </ifnot>
 </span>
