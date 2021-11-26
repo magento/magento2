@@ -5,9 +5,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Validator;
 
-class EmailAddress extends \Zend_Validate_EmailAddress implements \Magento\Framework\Validator\ValidatorInterface
+use Laminas\Validator\EmailAddress as LaminasEmailAddress;
+
+class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
 {
     /**
      * Instantiates hostname validator for local use.

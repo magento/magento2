@@ -7,11 +7,13 @@
  */
 namespace Magento\Framework\Validator;
 
+use Laminas\Validator\ValidatorInterface as LaminasValidatorInterface;
+
 /**
  * @api
  * @since 100.0.2
  */
-interface ValidatorInterface extends \Zend_Validate_Interface
+interface ValidatorInterface extends LaminasValidatorInterface
 {
     /**
      * Set translator instance.
