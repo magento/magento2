@@ -365,16 +365,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
         }
 
-        if (!isset($this->originalProcessTitle)) {
-            $this->originalProcessTitle = PHP_BINARY . ' ' . implode(' ', $this->environment->getServer('argv'));
-        }
-
-        if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
-            // Group is already shown, so no need to include here in duplicate
-            cli_set_process_title($this->originalProcessTitle . " # job: $jobCode");
-        } else {
-            cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
-        }
+        $this->setProcessTitle($jobCode, $groupId);
 
         $schedule->setExecutedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp()));
         $this->retrier->execute(
@@ -953,5 +944,25 @@ class ProcessCronQueueObserver implements ObserverInterface
             },
             $scheduleResource->getConnection()
         );
+    }
+
+    /**
+     * Set the process title to include the job code and group
+     *
+     * @param string $jobCode
+     * @param string $groupId
+     */
+    private function setProcessTitle(string $jobCode, string $groupId): void
+    {
+        if (!isset($this->originalProcessTitle)) {
+            $this->originalProcessTitle = PHP_BINARY . ' ' . implode(' ', $this->environment->getServer('argv'));
+        }
+
+        if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
+            // Group is already shown, so no need to include here in duplicate
+            cli_set_process_title($this->originalProcessTitle . " # job: $jobCode");
+        } else {
+            cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
+        }
     }
 }
