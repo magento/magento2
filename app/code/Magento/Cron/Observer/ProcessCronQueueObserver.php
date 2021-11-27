@@ -376,7 +376,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
         }
 
-        $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()));
+        $schedule->setExecutedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp()));
         $this->retrier->execute(
             function () use ($schedule) {
                 $schedule->save();
