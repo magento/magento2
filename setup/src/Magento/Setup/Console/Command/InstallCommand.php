@@ -119,7 +119,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * @var array
      */
-    protected $interactiveSetupUserInput;
+    private $interactiveSetupUserInput;
 
     /**
      * Constructor
