@@ -22,22 +22,22 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Input key for the debug_logging option.
      */
-    const INPUT_KEY_DEBUG_LOGGING = 'enable-debug-logging';
+    public const INPUT_KEY_DEBUG_LOGGING = 'enable-debug-logging';
 
     /**
      * Path to the debug_logging value in the deployment config.
      */
-    const CONFIG_PATH_DEBUG_LOGGING = 'dev/debug/debug_logging';
+    public const CONFIG_PATH_DEBUG_LOGGING = 'dev/debug/debug_logging';
 
     /**
      * Input key for the syslog_logging option.
      */
-    const INPUT_KEY_SYSLOG_LOGGING = 'enable-syslog-logging';
+    public const INPUT_KEY_SYSLOG_LOGGING = 'enable-syslog-logging';
 
     /**
      * Path to the syslog_logging value in the deployment config.
      */
-    const CONFIG_PATH_SYSLOG_LOGGING = 'dev/syslog/syslog_logging';
+    public const CONFIG_PATH_SYSLOG_LOGGING = 'dev/syslog/syslog_logging';
 
     /**
      * @var ConfigDataFactory

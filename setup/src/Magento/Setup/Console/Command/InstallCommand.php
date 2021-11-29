@@ -33,61 +33,61 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * Parameter indicating command whether to cleanup database in the install routine
      */
-    const INPUT_KEY_CLEANUP_DB = 'cleanup-database';
+    public const INPUT_KEY_CLEANUP_DB = 'cleanup-database';
 
     /**
      * Parameter to specify an order_increment_prefix
      */
-    const INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX = 'sales-order-increment-prefix';
+    public const INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX = 'sales-order-increment-prefix';
 
     /**
      * Parameter indicating command whether to install Sample Data
      */
-    const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
+    public const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
 
     /**
      * List of comma-separated module names. That must be enabled during installation.
      * Available magic param all.
      */
-    const INPUT_KEY_ENABLE_MODULES = 'enable-modules';
+    public const INPUT_KEY_ENABLE_MODULES = 'enable-modules';
 
     /**
      * List of comma-separated module names. That must be avoided during installation.
      * List of comma-separated module names. That must be avoided during installation.
      * Available magic param all.
      */
-    const INPUT_KEY_DISABLE_MODULES = 'disable-modules';
+    public const INPUT_KEY_DISABLE_MODULES = 'disable-modules';
 
     /**
      * If this flag is enabled, than all your old scripts with format:
      * InstallSchema, UpgradeSchema will be converted to new db_schema.xml format.
      */
-    const CONVERT_OLD_SCRIPTS_KEY = 'convert-old-scripts';
+    public const CONVERT_OLD_SCRIPTS_KEY = 'convert-old-scripts';
 
     /**
      * Parameter indicating command for interactive setup
      */
-    const INPUT_KEY_INTERACTIVE_SETUP = 'interactive';
+    public const INPUT_KEY_INTERACTIVE_SETUP = 'interactive';
 
     /**
      * Parameter indicating command shortcut for interactive setup
      */
-    const INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT = 'i';
+    public const INPUT_KEY_INTERACTIVE_SETUP_SHORTCUT = 'i';
 
     /**
      * Parameter says that in this mode all destructive operations, like column removal will be dumped
      */
-    const INPUT_KEY_SAFE_INSTALLER_MODE = 'safe-mode';
+    public const INPUT_KEY_SAFE_INSTALLER_MODE = 'safe-mode';
 
     /**
      * Parameter allows to restore data, that was dumped with safe mode before
      */
-    const INPUT_KEY_DATA_RESTORE = 'data-restore';
+    public const INPUT_KEY_DATA_RESTORE = 'data-restore';
 
     /**
      * Regex for sales_order_increment_prefix validation.
      */
-    const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
+    public const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
 
     /**
      * Installer service factory
