@@ -67,17 +67,17 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Cookie key for guest view
      */
-    const COOKIE_NAME = 'guest-view';
+    public const COOKIE_NAME = 'guest-view';
 
     /**
      * Cookie path value
      */
-    const COOKIE_PATH = '/';
+    public const COOKIE_PATH = '/';
 
     /**
      * Cookie lifetime value
      */
-    const COOKIE_LIFETIME = 600;
+    public const COOKIE_LIFETIME = 600;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
