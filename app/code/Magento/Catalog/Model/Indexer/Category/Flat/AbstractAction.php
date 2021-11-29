@@ -79,28 +79,30 @@ class AbstractAction
     /**
      * @var SkipStaticColumnsProvider
      */
-    private $staticColumnsProvider;
+    private $skipStaticColumnsProvider;
 
     /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Helper $resourceHelper
-     * @param MetadataPool|null $categoryMetadata
-     * @param SkipStaticColumnsProvider|null $provider
+     * @param MetadataPool|null $metadataPool
+     * @param SkipStaticColumnsProvider|null $skipStaticColumnsProvider
      */
     public function __construct(
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
         Helper $resourceHelper,
-        MetadataPool $categoryMetadata = null,
-        SkipStaticColumnsProvider $provider = null
+        MetadataPool $metadataPool = null,
+        SkipStaticColumnsProvider $skipStaticColumnsProvider = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->resourceHelper = $resourceHelper;
-        $this->categoryMetadata = $categoryMetadata ?: ObjectManager::getInstance()->get(MetadataPool::class);
-        $this->staticColumnsProvider = $provider ?: ObjectManager::getInstance()->get(SkipStaticColumnsProvider::class);
+        $metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->categoryMetadata = $metadataPool->getMetadata(CategoryInterface::class);
+        $this->skipStaticColumnsProvider = $skipStaticColumnsProvider
+            ?? ObjectManager::getInstance()->get(SkipStaticColumnsProvider::class);
         $this->columns = array_merge($this->getStaticColumns(), $this->getEavColumns());
     }
 
@@ -522,14 +524,14 @@ class AbstractAction
     }
 
     /**
-     * Get skip static columns instance.
+     * Gets skipped static columns.
      *
      * @return array
      */
     private function getSkipStaticColumns()
     {
-        if ([] === $this->skipStaticColumns) {
-            $this->skipStaticColumns = $this->staticColumnsProvider->get();
+        if ($this->skipStaticColumns === []) {
+            $this->skipStaticColumns = $this->skipStaticColumnsProvider->get();
         }
         return $this->skipStaticColumns;
     }
