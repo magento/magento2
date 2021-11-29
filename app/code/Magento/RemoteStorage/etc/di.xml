@@ -82,6 +82,9 @@
     <type name="Magento\MediaStorage\Model\File\Storage\SynchronizationFactory">
         <plugin name="remoteMediaStorageSynchronizationFactory" type="Magento\RemoteStorage\Plugin\File\Storage\SynchronizationFactory" />
     </type>
+    <type name="Magento\MediaGalleryMetadata\Model\IptcEmbed">
+        <plugin name="remoteIptcEmbed" type="Magento\RemoteStorage\Plugin\MediaGalleryMetadata\IptcEmbed" />
+    </type>
     <type name="Magento\Framework\Data\Collection\Filesystem">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
