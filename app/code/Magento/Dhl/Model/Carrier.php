@@ -36,21 +36,21 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     /**#@+
      * Carrier Product indicator
      */
-    const DHL_CONTENT_TYPE_DOC = 'D';
-    const DHL_CONTENT_TYPE_NON_DOC = 'N';
+    public const DHL_CONTENT_TYPE_DOC = 'D';
+    public const DHL_CONTENT_TYPE_NON_DOC = 'N';
     /**#@-*/
 
     /**#@+
      * Minimum allowed values for shipping package dimensions
      */
-    const DIMENSION_MIN_CM = 3;
-    const DIMENSION_MIN_IN = 1;
+    public const DIMENSION_MIN_CM = 3;
+    public const DIMENSION_MIN_IN = 1;
     /**#@-*/
 
     /**
      * Config path to UE country list
      */
-    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
+    public const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
      * Container types that could be customized
@@ -62,7 +62,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     /**
      * Code of the carrier
      */
-    const CODE = 'dhl';
+    public const CODE = 'dhl';
 
     /**
      * DHL service prefixes used for message reference
