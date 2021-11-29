@@ -40,7 +40,7 @@ class FileAssertions extends Helper implements FileAssertionsInterface
     private $helperInstance;
 
     /**
-     * Storage type.
+     * Type of storage.
      *
      * @var string
      */
