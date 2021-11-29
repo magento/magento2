@@ -65,6 +65,7 @@ class XmpTest extends TestCase
         $this->xmpReader = Bootstrap::getObjectManager()->get(ReadXmp::class);
         $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
+        $this->directory->create('testDir');
     }
 
     /**

@@ -59,6 +59,7 @@ class IptcTest extends TestCase
         $this->iptcReader = Bootstrap::getObjectManager()->get(ReadIptc::class);
         $this->fileReader = Bootstrap::getObjectManager()->get(ReadFile::class);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
+        $this->directory->create('testDir');
     }
 
     /**

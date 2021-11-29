@@ -50,7 +50,6 @@ class ReadFile implements ReadFileInterface
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param Filesystem $filesystem
-     * @throws FileSystemException
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
@@ -60,7 +59,6 @@ class ReadFile implements ReadFileInterface
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
         $this->filesystem = $filesystem;
-        $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
     }
 
     /**
@@ -68,11 +66,11 @@ class ReadFile implements ReadFileInterface
      */
     public function execute(string $path): FileInterface
     {
-        $resource = $this->driver->fileOpen($path, 'rb');
+        $resource = $this->getDriver()->fileOpen($path, 'rb');
         $header = $this->readHeader($resource);
 
         if ($header != self::PNG_FILE_START) {
-            $this->driver->fileClose($resource);
+            $this->getDriver()->fileClose($resource);
             throw new ValidatorException(__('Not a PNG image'));
         }
 
@@ -92,10 +90,10 @@ class ReadFile implements ReadFileInterface
             }
         } while ($header
             && $segmentHeader['type'] != self::PNG_MARKER_IMAGE_END
-            && !$this->driver->endOfFile($resource)
+            && !$this->getDriver()->endOfFile($resource)
         );
 
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileClose($resource);
 
         return $this->fileFactory->create([
             'path' => $path,
@@ -127,10 +125,24 @@ class ReadFile implements ReadFileInterface
     {
         $data = '';
 
-        while (!$this->driver->endOfFile($resource) && strlen($data) < $length) {
-            $data .= $this->driver->fileRead($resource, $length - strlen($data));
+        while (!$this->getDriver()->endOfFile($resource) && strlen($data) < $length) {
+            $data .= $this->getDriver()->fileRead($resource, $length - strlen($data));
         }
 
         return $data;
+    }
+
+
+    /**
+     * @return DriverInterface
+     * @throws FileSystemException
+     */
+    private function getDriver(): DriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        }
+
+        return $this->driver;
     }
 }

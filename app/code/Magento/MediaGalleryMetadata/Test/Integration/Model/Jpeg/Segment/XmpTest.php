@@ -59,6 +59,7 @@ class XmpTest extends TestCase
         $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataFactory::class);
+        $this->directory->create('testDir');
     }
 
     /**

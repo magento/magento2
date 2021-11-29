@@ -48,10 +48,19 @@ class AddMetadataTest extends TestCase
     protected function setUp(): void
     {
         $this->addMetadata = Bootstrap::getObjectManager()->get(AddMetadataInterface::class);
-        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
-            ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->metadataFactory = Bootstrap::getObjectManager()->get(MetadataInterfaceFactory::class);
         $this->extractMetadata = Bootstrap::getObjectManager()->get(ExtractMetadataInterface::class);
+        $this->directory = Bootstrap::getObjectManager()->get(FileSystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->directory->create('testDir');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->directory->delete('testDir');
     }
 
     /**
@@ -70,7 +79,7 @@ class AddMetadataTest extends TestCase
         ?string $description,
         ?array $keywords
     ): void {
-        $modifiableFilePath = $this->directory->getAbsolutePath($fileName);
+        $modifiableFilePath = $this->directory->getAbsolutePath('testDir/' . $fileName);
         $driver = $this->directory->getDriver();
         $driver->filePutContents(
             $modifiableFilePath,
