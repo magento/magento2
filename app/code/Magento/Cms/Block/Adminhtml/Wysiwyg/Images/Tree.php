@@ -14,15 +14,11 @@ namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 class Tree extends \Magento\Backend\Block\Template
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Cms wysiwyg images
-     *
      * @var \Magento\Cms\Helper\Wysiwyg\Images
      */
     protected $_cmsWysiwygImages = null;
@@ -76,17 +72,36 @@ class Tree extends \Magento\Backend\Block\Template
                 'path' => substr($item->getFilename(), strlen($storageRoot)),
                 'cls' => 'folder',
             ];
-            $nestedDirectories = $this->getMediaDirectory()->readRecursively($item->getFilename());
-            $hasNestedDirectories = count($nestedDirectories) > 0;
+            $hasNestedDirectories = $this->hasNestedDirectories($storageRoot, $item->getFilename());
 
-            // if no nested directories inside dir, add 'leaf' state so that jstree hides dropdown arrow next to dir
-            if (!$hasNestedDirectories) {
-                $data['state'] = 'leaf';
+            // Display node as closed and enable lazy loading
+            if ($hasNestedDirectories) {
+                $data['children'] = true;
             }
 
             $jsonArray[] = $data;
         }
         return $this->serializer->serialize($jsonArray);
+    }
+
+    /**
+     * Check if directory has nested directories
+     *
+     * @param string $storageRoot
+     * @param string $fileName
+     * @return bool
+     */
+    private function hasNestedDirectories(string $storageRoot, string $fileName): bool
+    {
+        $pathList = $this->getMediaDirectory()->read($fileName);
+        foreach ($pathList as $directoryPath) {
+            $file = $this->_filesystem->getDirectoryReadByPath($storageRoot . $directoryPath);
+            if ($file->isDirectory()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

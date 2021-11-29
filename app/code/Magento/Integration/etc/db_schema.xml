@@ -74,6 +74,9 @@
         <index referenceId="OAUTH_TOKEN_CONSUMER_ID" indexType="btree">
             <column name="consumer_id"/>
         </index>
+        <index referenceId="OAUTH_TOKEN_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
     </table>
     <table name="oauth_nonce" resource="default" engine="innodb" comment="OAuth Nonce">
         <column xsi:type="varchar" name="nonce" nullable="false" length="32" comment="Nonce String"/>
@@ -84,7 +87,7 @@
         <constraint xsi:type="foreign" referenceId="OAUTH_NONCE_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_nonce"
                     column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="OAUTH_NONCE_NONCE_CONSUMER_ID">
+        <constraint xsi:type="primary" referenceId="OAUTH_NONCE_NONCE_CONSUMER_ID">
             <column name="nonce"/>
             <column name="consumer_id"/>
         </constraint>
