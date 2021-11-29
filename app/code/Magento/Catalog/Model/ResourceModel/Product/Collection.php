@@ -45,12 +45,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Alias for index table
      */
-    const INDEX_TABLE_ALIAS = 'price_index';
+    public const INDEX_TABLE_ALIAS = 'price_index';
 
     /**
      * Alias for main table
      */
-    const MAIN_TABLE_ALIAS = 'e';
+    public const MAIN_TABLE_ALIAS = 'e';
 
     /**
      * @var string
