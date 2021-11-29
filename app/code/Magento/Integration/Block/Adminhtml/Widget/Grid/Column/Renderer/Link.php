@@ -81,8 +81,9 @@ class Link extends AbstractRenderer
     }
 
     /**
-     * Return URL pattern for action associated with the link e.g. "(star)(slash)(star)(slash)activate" ->
-     * will be translated to http://.../admin/integration/activate/id/X
+     * Return URL pattern for action associated with the link e.g. "(star)(slash)(star)(slash)activate"
+     *
+     * Will be translated to http://.../admin/integration/activate/id/X
      *
      * @return string
      */
@@ -164,6 +165,6 @@ class Link extends AbstractRenderer
      */
     protected function _getUrl(DataObject $row)
     {
-        return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
+        return $this->isDisabled() ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
     }
 }

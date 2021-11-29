@@ -152,7 +152,7 @@ class Options extends \Magento\Backend\Block\Template
             $inputType = '';
         }
 
-        $values = [[]];
+        $values = [];
         $isSystemAttribute = is_array($optionCollection);
         if ($isSystemAttribute) {
             $values[] = $this->getPreparedValues($optionCollection, $isSystemAttribute, $inputType, $defaultValues);
@@ -168,7 +168,7 @@ class Options extends \Magento\Backend\Block\Template
             }
         }
 
-        return array_merge(...$values);
+        return array_merge([], ...$values);
     }
 
     /**

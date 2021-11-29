@@ -305,8 +305,7 @@ class NvpTest extends TestCase
 
     /**
      * Tests case if obtained response with code 10415 'Transaction has already
-     * been completed for this token'. It must does not throws the exception and
-     * must returns response array.
+     * been completed for this token'. It must throw the ProcessableException.
      */
     public function testCallTransactionHasBeenCompleted()
     {
@@ -317,15 +316,10 @@ class NvpTest extends TestCase
             ->method('read')
             ->willReturn($response);
         $this->model->setProcessableErrors($processableErrors);
-        $this->customLoggerMock->expects($this->once())
-            ->method('debug');
-        $expectedResponse = [
-            'ACK' => 'Failure',
-            'L_ERRORCODE0' => '10415',
-            'L_SHORTMESSAGE0' => 'Message.',
-            'L_LONGMESSAGE0' => 'Long Message.'
-        ];
 
-        $this->assertEquals($expectedResponse, $this->model->call('some method', ['data' => 'some data']));
+        $this->expectExceptionMessageMatches('/PayPal gateway has rejected request/');
+        $this->expectException(ProcessableException::class);
+
+        $this->model->call('DoExpressCheckout', ['data' => 'some data']);
     }
 }

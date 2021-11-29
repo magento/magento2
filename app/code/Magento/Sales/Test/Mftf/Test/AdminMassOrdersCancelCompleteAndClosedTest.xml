@@ -8,15 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMassOrdersCancelCompleteAndClosedTest">
+    <test name="AdminMassOrdersCancelCompleteAndClosedTest" deprecated="Use AdminMassOrdersCancelClosedAndCompleteTest instead">
         <annotations>
             <stories value="Mass Update Orders"/>
-            <title value="Mass cancel orders in status  Complete, Closed"/>
+            <title value="DEPRECATED. Mass cancel orders in status  Complete, Closed"/>
             <description value="Try to cancel orders in status Complete, Closed"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16183"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMassOrdersCancelClosedAndCompleteTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

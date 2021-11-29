@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 use Magento\CatalogImportExport\Model\Import\Uploader;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Driver\Http;
 use Magento\Framework\Filesystem\Driver\Https;
@@ -73,6 +74,11 @@ class UploaderTest extends TestCase
      */
     protected $uploader;
 
+    /**
+     * @var TargetDirectory|MockObject
+     */
+    private $targetDirectory;
+
     protected function setUp(): void
     {
         $this->coreFileStorageDb = $this->getMockBuilder(Database::class)
@@ -115,6 +121,13 @@ class UploaderTest extends TestCase
             ->setMethods(['getRandomString'])
             ->getMock();
 
+        $this->targetDirectory = $this->getMockBuilder(TargetDirectory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDirectoryWrite', 'getDirectoryRead'])
+            ->getMock();
+        $this->targetDirectory->method('getDirectoryWrite')->willReturn($this->directoryMock);
+        $this->targetDirectory->method('getDirectoryRead')->willReturn($this->directoryMock);
+
         $this->uploader = $this->getMockBuilder(Uploader::class)
             ->setConstructorArgs(
                 [
@@ -125,7 +138,8 @@ class UploaderTest extends TestCase
                     $this->filesystem,
                     $this->readFactory,
                     null,
-                    $this->random
+                    $this->random,
+                    $this->targetDirectory
                 ]
             )
             ->setMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
@@ -274,9 +288,9 @@ class UploaderTest extends TestCase
             ->addMethods(['readAll'])
             ->onlyMethods(['isExists'])
             ->getMock();
-        $driverMock->expects($this->any())->method('isExists')->willReturn(true);
-        $driverMock->expects($this->any())->method('readAll')->willReturn(null);
-        $driverPool->expects($this->any())->method('getDriver')->willReturn($driverMock);
+        $driverMock->method('isExists')->willReturn(true);
+        $driverMock->method('readAll')->willReturn(null);
+        $driverPool->method('getDriver')->willReturn($driverMock);
 
         $readFactory = $this->getMockBuilder(ReadFactory::class)
             ->setConstructorArgs(
@@ -287,10 +301,11 @@ class UploaderTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $readFactory->expects($this->any())->method('create')
+        $readFactory->method('create')
             ->with($expectedHost, $expectedScheme)
             ->willReturn($driverMock);
 
+        /** @var Uploader $uploaderMock */
         $uploaderMock = $this->getMockBuilder(Uploader::class)
             ->setConstructorArgs(
                 [
@@ -300,6 +315,9 @@ class UploaderTest extends TestCase
                     $this->validator,
                     $this->filesystem,
                     $readFactory,
+                    null,
+                    $this->random,
+                    $this->targetDirectory
                 ]
             )
             ->getMock();

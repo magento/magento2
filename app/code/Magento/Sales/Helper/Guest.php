@@ -15,6 +15,7 @@ use \Magento\Sales\Model\Order;
 /**
  * Sales module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -71,7 +72,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     const COOKIE_NAME = 'guest-view';
 
     /**
-     * Cookie path
+     * Cookie path value
      */
     const COOKIE_PATH = '/';
 
@@ -151,6 +152,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->resultRedirectFactory->create()->setPath('sales/order/history');
         }
         $post = $request->getPostValue();
+        $post = filter_var($post, FILTER_CALLBACK, ['options' => 'trim']);
         $fromCookie = $this->cookieManager->getCookie(self::COOKIE_NAME);
         if (empty($post) && !$fromCookie) {
             return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
@@ -209,7 +211,8 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
             ->setPath(self::COOKIE_PATH)
-            ->setHttpOnly(true);
+            ->setHttpOnly(true)
+            ->setSameSite('Lax');
         $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $cookieValue, $metadata);
     }
 
@@ -224,6 +227,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function loadFromCookie($fromCookie)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $cookieData = explode(':', base64_decode($fromCookie));
         $protectCode = isset($cookieData[0]) ? $cookieData[0] : null;
         $incrementId = isset($cookieData[1]) ? $cookieData[1] : null;
@@ -272,9 +276,20 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         $lastName = $postData['oar_billing_lastname'];
         $zip = $postData['oar_zip'];
         $billingAddress = $order->getBillingAddress();
-        return strtolower($lastName) === strtolower($billingAddress->getLastname()) &&
-            ($type === 'email' && strtolower($email) === strtolower($billingAddress->getEmail()) ||
-                $type === 'zip' && strtolower($zip) === strtolower($billingAddress->getPostcode()));
+        return $this->normalizeStr($lastName) === $this->normalizeStr($billingAddress->getLastname()) &&
+            ($type === 'email' && $this->normalizeStr($email) === $this->normalizeStr($billingAddress->getEmail()) ||
+                $type === 'zip' && $this->normalizeStr($zip) === $this->normalizeStr($billingAddress->getPostcode()));
+    }
+
+    /**
+     * Trim and convert to lower case
+     *
+     * @param string $str
+     * @return string
+     */
+    private function normalizeStr(string $str): string
+    {
+        return trim(strtolower($str));
     }
 
     /**

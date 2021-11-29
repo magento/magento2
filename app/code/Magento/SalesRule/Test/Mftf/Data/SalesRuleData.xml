@@ -261,6 +261,9 @@
     <entity name="SalesRuleNoCouponWithFixedDiscount" extends="ApiCartRule">
         <data key="simple_action">by_fixed</data>
     </entity>
+    <entity name="SalesRuleNoCouponWithFixedDiscountWholeCart" extends="ApiCartRule">
+        <data key="simple_action">cart_fixed</data>
+    </entity>
     <entity name="ActiveSalesRuleWithPercentPriceDiscountCoupon">
         <data key="name" unique="suffix">Cart Price Rule with Specific Coupon</data>
         <data key="description">Description for Cart Price Rule</data>
@@ -472,5 +475,37 @@
         <data key="discountStep">one</data>
         <data key="discountAmount">one</data>
         <data key="maximumQtyDiscount">one</data>
+    </entity>
+
+    <entity name="SalesRuleSpecificCouponAndByPercent25" extends="SalesRuleSpecificCouponAndByPercent">
+        <data key="discount_amount">25</data>
+        <data key="discount_qty">0</data>
+        <data key="discount_step">1</data>
+        <data key="stop_rules_processing">true</data>
+    </entity>
+
+    <entity name="FreeProductGroupCartPriceRule" type="SalesRule">
+        <data key="name" unique="suffix">FreeProductGroupCartPriceRule-</data>
+        <data key="description">100% off free product group</data>
+        <data key="websites">Main Website</data>
+        <data key="customerGroups">'NOT LOGGED IN', 'General', 'Wholesale', 'Retailer'</data>
+        <data key="coupon_type">No Coupon</data>
+        <data key="subtotal">560</data>
+        <data key="uses_per_customer">0</data>
+        <data key="is_active">true</data>
+        <data key="is_advanced">true</data>
+        <data key="sort_order">0</data>
+        <data key="simple_action">by_percent</data>
+        <data key="discount_amount">100</data>
+        <data key="discount_qty">0</data>
+        <data key="maximumQtyDiscount">0</data>
+        <data key="discount_step">0</data>
+        <data key="apply_to_shipping">true</data>
+        <data key="is_rss">true</data>
+        <data key="use_auto_generation">false</data>
+        <data key="uses_per_coupon">0</data>
+        <data key="simple_free_shipping">0</data>
+        <data key="defaultRuleLabelAllStoreViews">Free Shipping in Rule conditions</data>
+        <data key="defaultStoreView">Free Shipping in Rule conditions</data>
     </entity>
 </entities>

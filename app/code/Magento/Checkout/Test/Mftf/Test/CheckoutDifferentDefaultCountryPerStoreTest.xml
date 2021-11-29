@@ -39,10 +39,10 @@
         </after>
         <!-- Open product and add product to cart-->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
-            <argument name="product" value="$$createProduct$$"/>
+            <argument name="product" value="$createProduct$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
         <!-- Go to cart -->
@@ -58,6 +58,18 @@
         <assertEquals stepKey="assertCountryValue">
             <actualResult type="const">$grabCountry</actualResult>
             <expectedResult type="string">{{DE_Address_Berlin_Not_Default_Address.country_id}}</expectedResult>
+        </assertEquals>
+        <!-- Go to cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="returnToCartPage"/>
+        <!-- Switch to default store view -->
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefaultStoreView"/>
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="proceedToCheckoutWithDefaultStore"/>
+        <!-- Grab country code from checkout page and assert value with default country for default store view -->
+        <grabValueFrom selector="{{CheckoutShippingSection.country}}" stepKey="grabDefaultStoreCountry"/>
+        <assertEquals stepKey="assertDefaultCountryValue">
+            <actualResult type="const">$grabDefaultStoreCountry</actualResult>
+            <expectedResult type="string">{{US_Address_TX.country_id}}</expectedResult>
         </assertEquals>
     </test>
 </tests>

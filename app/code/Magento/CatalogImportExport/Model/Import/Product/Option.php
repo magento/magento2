@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIterator;
 use Magento\Store\Model\Store;
 
 /**
@@ -257,7 +258,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var CollectionByPagesIterator
+     */
     protected $_byPagesIterator;
 
     /**
@@ -317,15 +320,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * Product entity link field
-     *
      * @var string
      */
     private $productEntityLinkField;
 
     /**
-     * Product entity identifier field
-     *
      * @var string
      */
     private $productEntityIdentifierField;
@@ -421,7 +420,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
         $this->_initMessageTemplates();
 
-        $this->_initProductsSku()->_initOldCustomOptions();
+        $this->_initProductsSku();
     }
 
     /**
@@ -606,12 +605,29 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     'option_title.store_id = ?',
                     $storeId
                 );
+                if (!empty($this->_newOptionsOldData)) {
+                    $this->_optionCollection->addProductToFilter(array_keys($this->_newOptionsOldData));
+                }
 
                 $this->_byPagesIterator->iterate($this->_optionCollection, $this->_pageSize, [$addCustomOptions]);
             }
             $this->_oldCustomOptions = $oldCustomOptions;
         }
         return $this;
+    }
+
+    /**
+     * Get existing custom options data
+     *
+     * @return array
+     */
+    private function getOldCustomOptions(): array
+    {
+        if ($this->_oldCustomOptions === null) {
+            $this->_initOldCustomOptions();
+        }
+
+        return $this->_oldCustomOptions;
     }
 
     /**
@@ -717,9 +733,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $errorRows = [];
         foreach ($this->_newOptionsOldData as $productId => $options) {
             foreach ($options as $outerData) {
-                if (isset($this->_oldCustomOptions[$productId])) {
+                if (isset($this->getOldCustomOptions()[$productId])) {
                     $optionsCount = 0;
-                    foreach ($this->_oldCustomOptions[$productId] as $innerData) {
+                    foreach ($this->getOldCustomOptions()[$productId] as $innerData) {
                         if (count($outerData['titles']) == count($innerData['titles'])) {
                             $outerTitles = $outerData['titles'];
                             $innerTitles = $innerData['titles'];
@@ -753,8 +769,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $errorRows = [];
         foreach ($this->_newOptionsOldData as $productId => $options) {
             foreach ($options as $outerData) {
-                if (isset($this->_oldCustomOptions[$productId])) {
-                    foreach ($this->_oldCustomOptions[$productId] as $innerData) {
+                if (isset($this->getOldCustomOptions()[$productId])) {
+                    foreach ($this->getOldCustomOptions()[$productId] as $innerData) {
                         if (count($outerData['titles']) == count($innerData['titles'])) {
                             $outerTitles = $outerData['titles'];
                             $innerTitles = $innerData['titles'];
@@ -784,9 +800,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _findExistingOptionId(array $newOptionData, array $newOptionTitles)
     {
         $productId = $newOptionData['product_id'];
-        if (isset($this->_oldCustomOptions[$productId])) {
+        if (isset($this->getOldCustomOptions()[$productId])) {
             ksort($newOptionTitles);
-            $existingOptions = $this->_oldCustomOptions[$productId];
+            $existingOptions = $this->getOldCustomOptions()[$productId];
             foreach ($existingOptions as $optionId => $optionData) {
                 if ($optionData['type'] == $newOptionData['type']
                     && $optionData['titles'][Store::DEFAULT_STORE_ID] == $newOptionTitles[Store::DEFAULT_STORE_ID]
@@ -1766,7 +1782,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             'product_id' => $productId,
             'type' => $type,
             'is_require' => empty($rowData[self::COLUMN_IS_REQUIRED]) ? 0 : 1,
-            'sort_order' => empty($rowData[self::COLUMN_SORT_ORDER]) ? 0 : abs($rowData[self::COLUMN_SORT_ORDER]),
+            'sort_order' => empty($rowData[self::COLUMN_SORT_ORDER]) ? 0
+                : abs((int) $rowData[self::COLUMN_SORT_ORDER]),
         ];
 
         if (!$this->_isRowHasSpecificType($type)) {
@@ -1837,7 +1854,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {
             $valueData = [
                 'option_type_id' => $optionTypeId,
-                'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0 : abs($rowData[self::COLUMN_ROW_SORT]),
+                'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0
+                    : abs((int) $rowData[self::COLUMN_ROW_SORT]),
                 'sku' => !empty($rowData[self::COLUMN_ROW_SKU]) ? $rowData[self::COLUMN_ROW_SKU] : '',
             ];
             $data['value'] = $valueData;

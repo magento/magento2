@@ -24,6 +24,22 @@ define([
         },
 
         /**
+         * {@inheritdoc}
+         */
+        initialize: function () {
+            var option;
+
+            this._super();
+
+            option = _.find(this.countryOptions, function (row) {
+                return row['is_default'] === true;
+            });
+            this.hideRegion(option);
+
+            return this;
+        },
+
+        /**
          * Method called every time country selector's value gets changed.
          * Updates all validations and requirements for certain country.
          * @param {String} value - Selected country ID.
@@ -42,16 +58,9 @@ define([
                 return;
             }
 
+            this.hideRegion(option);
+
             defaultPostCodeResolver.setUseDefaultPostCode(!option['is_zipcode_optional']);
-
-            if (option['is_region_visible'] === false) {
-                // Hide select and corresponding text input field if region must not be shown for selected country.
-                this.setVisible(false);
-
-                if (this.customEntry) { // eslint-disable-line max-depth
-                    this.toggleInput(false);
-                }
-            }
 
             isRegionRequired = !this.skipValidation && !!option['is_region_required'];
 
@@ -67,7 +76,24 @@ define([
                 input.validation['required-entry'] = isRegionRequired;
                 input.validation['validate-not-number-first'] = !this.options().length;
             }.bind(this));
+        },
+
+        /**
+         * Hide select and corresponding text input field if region must not be shown for selected country.
+         *
+         * @private
+         * @param {Object}option
+         */
+        hideRegion: function (option) {
+            if (!option || option['is_region_visible'] !== false) {
+                return;
+            }
+
+            this.setVisible(false);
+
+            if (this.customEntry) {
+                this.toggleInput(false);
+            }
         }
     });
 });
-

@@ -93,8 +93,6 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
-            created_at
             id
             name
             price {
@@ -107,7 +105,6 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
             }
             sku
             type_id
-            updated_at
             ... on PhysicalProductInterface {
                 weight
             }
@@ -138,8 +135,6 @@ QUERY;
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
-            created_at
             id
             name
             price {
@@ -152,7 +147,6 @@ QUERY;
             }
             sku
             type_id
-            updated_at
             ... on PhysicalProductInterface {
                 weight
             }
@@ -187,8 +181,6 @@ QUERY;
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
-            created_at
             id
             name
             price {
@@ -201,7 +193,6 @@ QUERY;
             }
             sku
             type_id
-            updated_at
             ... on PhysicalProductInterface {
                 weight
             }

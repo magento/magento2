@@ -65,9 +65,7 @@
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
             <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
             <!-- Delete data -->
             <deleteData createDataKey="productA" stepKey="deleteProductA"/>

@@ -137,6 +137,33 @@ class ReorderTest extends AbstractController
     }
 
     /**
+     * Reorder with JS calendar options
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_with_js_date_option_product.php
+     * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
+     *
+     * @return void
+     */
+    public function testReorderWithJSCalendar(): void
+    {
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $items = $order->getItems();
+        $orderItem = array_pop($items);
+        $orderRequestOptions = $orderItem->getProductOptionByCode('info_buyRequest')['options'];
+        $order->save();
+        $this->customerSession->setCustomerId($order->getCustomerId());
+        $this->dispatchReorderRequest((int)$order->getId());
+        $this->assertRedirect($this->stringContains('checkout/cart'));
+        $this->quote = $this->checkoutSession->getQuote();
+        $quoteItemsCollection = $this->quote->getItemsCollection();
+        $this->assertCount(1, $quoteItemsCollection);
+        $items = $quoteItemsCollection->getItems();
+        $quoteItem = array_pop($items);
+        $quoteRequestOptions = $quoteItem->getBuyRequest()->getOptions();
+        $this->assertEquals($orderRequestOptions, $quoteRequestOptions);
+    }
+
+    /**
      * Dispatch reorder request.
      *
      * @param null|int $orderId

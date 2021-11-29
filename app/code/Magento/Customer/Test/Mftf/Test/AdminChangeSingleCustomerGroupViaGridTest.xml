@@ -29,12 +29,12 @@
             <!--Delete created data-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCustomerGroup" stepKey="deleteCustomerGroup"/>
-            <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomersPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomersPage"/>
         <actionGroup ref="AdminFilterCustomerGridByEmail" stepKey="filterCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>

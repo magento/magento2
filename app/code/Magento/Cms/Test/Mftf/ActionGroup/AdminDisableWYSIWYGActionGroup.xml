@@ -13,6 +13,6 @@
             <description>Runs bin/magento command to disable WYSIWYG</description>
         </annotations>
 
-        <magentoCLI stepKey="disableWYSIWYG" command="config:set cms/wysiwyg/enabled disabled"/>
+        <magentoCLI command="config:set {{WysiwygDisabledByDefault.path}} {{WysiwygDisabledByDefault.value}}" stepKey="disableWYSIWYG"/>
     </actionGroup>
 </actionGroups>

@@ -28,6 +28,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 
 /**
  * Class Full reindex action
@@ -72,6 +74,18 @@ class Full extends AbstractAction
     private $batchQueryGenerator;
 
     /**
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
      * @param ResourceConnection $resource
      * @param StockFactory $indexerFactory
      * @param ProductType $catalogProductType
@@ -83,6 +97,7 @@ class Full extends AbstractAction
      * @param array $batchRowsCount
      * @param ActiveTableSwitcher|null $activeTableSwitcher
      * @param QueryGenerator|null $batchQueryGenerator
+     * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -96,7 +111,8 @@ class Full extends AbstractAction
         BatchProviderInterface $batchProvider = null,
         array $batchRowsCount = [],
         ActiveTableSwitcher $activeTableSwitcher = null,
-        QueryGenerator $batchQueryGenerator = null
+        QueryGenerator $batchQueryGenerator = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(
             $resource,
@@ -115,6 +131,7 @@ class Full extends AbstractAction
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()
             ->get(ActiveTableSwitcher::class);
         $this->batchQueryGenerator = $batchQueryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -141,21 +158,38 @@ class Full extends AbstractAction
                 $connection = $indexer->getConnection();
                 $tableName = $this->activeTableSwitcher->getAdditionalTableName($indexer->getMainTable());
 
-                $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
-                    ? $this->batchRowsCount[$indexer->getTypeId()]
-                    : $this->batchRowsCount['default'];
+                $batchRowCount = $this->deploymentConfig->get(
+                    self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Processor::INDEXER_ID . '/' . $indexer->getTypeId(),
+                    $this->deploymentConfig->get(
+                        self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Processor::INDEXER_ID . '/' . 'default'
+                    )
+                );
+
+                if (is_null($batchRowCount)) {
+                    $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
+                        ? $this->batchRowsCount[$indexer->getTypeId()]
+                        : $this->batchRowsCount['default'];
+                }
 
                 $this->batchSizeManagement->ensureBatchSize($connection, $batchRowCount);
 
                 $select = $connection->select();
                 $select->distinct(true);
-                $select->from(['e' => $entityMetadata->getEntityTable()], $entityMetadata->getIdentifierField());
+                $select->from(
+                    [
+                        'e' => $entityMetadata->getEntityTable()
+                    ],
+                    $entityMetadata->getIdentifierField()
+                )->where(
+                    'type_id = ?',
+                    $indexer->getTypeId()
+                );
 
                 $batchQueries = $this->batchQueryGenerator->generate(
                     $entityMetadata->getIdentifierField(),
                     $select,
                     $batchRowCount,
-                    BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
+                    BatchIteratorInterface::UNIQUE_FIELD_ITERATOR
                 );
 
                 foreach ($batchQueries as $query) {

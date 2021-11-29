@@ -56,6 +56,6 @@ class BuyRequestBuilder
             $requestData[] = $provider->execute($cartItem);
         }
 
-        return $this->dataObjectFactory->create(['data' => array_merge(...$requestData)]);
+        return $this->dataObjectFactory->create(['data' => array_merge([], ...$requestData)]);
     }
 }

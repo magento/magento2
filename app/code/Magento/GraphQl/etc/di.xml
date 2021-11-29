@@ -14,6 +14,8 @@
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
+    <preference for="Magento\GraphQl\Model\Query\Logger\LoggerInterface" type="Magento\GraphQl\Model\Query\Logger\LoggerPool"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -102,31 +104,11 @@
             <argument name="queryComplexity" xsi:type="number">300</argument>
         </arguments>
     </type>
-
-    <preference for="Magento\GraphQl\Model\Cors\ConfigurationInterface" type="Magento\GraphQl\Model\Cors\Configuration" />
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsMaxAgeHeaderProvider">
+    <type name="Magento\GraphQl\Model\Query\Logger\LoggerPool">
         <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Max-Age</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowCredentialsHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Credentials</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowHeadersHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Headers</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowMethodsHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Methods</argument>
-        </arguments>
-    </type>
-    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowOriginHeaderProvider">
-        <arguments>
-            <argument name="headerName" xsi:type="string">Access-Control-Allow-Origin</argument>
+            <argument name="loggers" xsi:type="array">
+                <item name="newRelic" xsi:type="object">Magento\GraphQl\Model\Query\Logger\NewRelic</item>
+            </argument>
         </arguments>
     </type>
 </config>

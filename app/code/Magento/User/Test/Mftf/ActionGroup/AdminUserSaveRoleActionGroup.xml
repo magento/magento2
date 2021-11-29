@@ -9,7 +9,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminUserSaveRoleActionGroup">
         <annotations>
-            <description>Click to Save Role</description>
+            <description>Deprecated. Please use AdminSaveUserRoleActionGroup</description>
         </annotations>
         <click selector="{{AdminEditRoleInfoSection.saveButton}}" stepKey="clickSaveRoleButton" />
         <see userInput="You saved the role." stepKey="seeUserRoleSavedMessage"/>

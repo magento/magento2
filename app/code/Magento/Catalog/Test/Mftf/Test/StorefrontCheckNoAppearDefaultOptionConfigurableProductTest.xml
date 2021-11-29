@@ -44,7 +44,7 @@
         </actionGroup>
         <actionGroup ref="AdminSetQuantityToEachSkusConfigurableProductActionGroup" stepKey="saveConfigurable"/>
         <grabValueFrom selector="{{NewProductPageSection.sku}}" stepKey="grabSkuProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
 
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="expandOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>

@@ -14,8 +14,9 @@ define([
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/action/get-totals',
     'Magento_Checkout/js/model/full-screen-loader',
-    'underscore'
-], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader, _) {
+    'underscore',
+    'Magento_Checkout/js/model/payment/place-order-hooks'
+], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader, _, hooks) {
     'use strict';
 
     /**
@@ -29,7 +30,7 @@ define([
                 list[key] = filterTemplateData(value);
             }
 
-            if (key === '__disableTmpl') {
+            if (key === '__disableTmpl' || key === 'title') {
                 delete list[key];
             }
         });
@@ -37,7 +38,8 @@ define([
 
     return function (messageContainer, paymentData, skipBilling) {
         var serviceUrl,
-            payload;
+            payload,
+            headers = {};
 
         paymentData = filterTemplateData(paymentData);
         skipBilling = skipBilling || false;
@@ -64,8 +66,12 @@ define([
 
         fullScreenLoader.startLoader();
 
+        _.each(hooks.requestModifiers, function (modifier) {
+            modifier(headers, payload);
+        });
+
         return storage.post(
-            serviceUrl, JSON.stringify(payload)
+            serviceUrl, JSON.stringify(payload), true, 'application/json', headers
         ).fail(
             function (response) {
                 errorProcessor.process(response, messageContainer);
@@ -73,6 +79,9 @@ define([
         ).always(
             function () {
                 fullScreenLoader.stopLoader();
+                _.each(hooks.afterRequestListeners, function (listener) {
+                    listener();
+                });
             }
         );
     };
