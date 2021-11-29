@@ -8,6 +8,15 @@ namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Collection
@@ -16,41 +25,48 @@ use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
 class Collection extends PageCollection implements SearchResultInterface
 {
     /**
+     * @var TimezoneInterface
+     */
+    private $timeZone;
+
+    /**
      * @var AggregationInterface
      */
     protected $aggregations;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      * @param mixed|null $mainTable
      * @param string $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
      * @param string $model
      * @param null $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
+     * @param AbstractDb|null $resource,
+     * @param TimezoneInterface|null $timeZone
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool,
         $mainTable,
         $eventPrefix,
         $eventObject,
         $resourceModel,
         $model = \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
         $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        AbstractDb $resource = null,
+        TimezoneInterface $timeZone = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -66,6 +82,38 @@ class Collection extends PageCollection implements SearchResultInterface
         $this->_eventObject = $eventObject;
         $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
+        $this->timeZone = $timeZone ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
+        foreach ($tableDescription as $columnInfo) {
+            $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'creation_time' || $field === 'update_time') {
+            if (is_array($condition)) {
+                foreach ($condition as $key => $value) {
+                    $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
+                }
+            }
+        }
+
+        return parent::addFieldToFilter($field, $condition);
     }
 
     /**
