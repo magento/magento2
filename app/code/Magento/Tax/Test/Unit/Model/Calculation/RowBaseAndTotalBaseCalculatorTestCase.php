@@ -72,6 +72,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
     /** @var MockObject */
     protected $mockAppliedTax;
 
+    /** @var DataObject */
     protected $addressRateRequest;
 
     /** @var  AppliedTaxRateInterface */
@@ -268,7 +269,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends TestCase
             ->method('round')
             ->willReturnCallback(
                 function ($price) {
-                    return round($price, 2);
+                    return round((float) $price, 2);
                 }
             );
     }

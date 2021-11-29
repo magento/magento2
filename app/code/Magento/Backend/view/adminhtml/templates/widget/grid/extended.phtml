@@ -14,12 +14,13 @@
  *  getPagerVisibility()
  *  getVarNamePage()
  */
-$numColumns = count($block->getColumns());
 
 /**
  * @var \Magento\Backend\Block\Widget\Grid\Extended $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
+$numColumns = count($block->getColumns());
+
 ?>
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>
@@ -285,7 +286,9 @@ $numColumns = count($block->getColumns());
         </table>
 
     </div>
+        <?php if ($block->canDisplayContainer()): ?>
 </div>
+        <?php endif; ?>
     <?php
     /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
     $jsonHelper = $block->getData('jsonHelper');

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Categories -->
+    <entity name="ImportCategory_Downloadable_UrlLinks" type="category">
+        <data key="name">import-category-downloadable-url-links</data>
+        <data key="name_lwr">import-category-downloadable-url-links</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="urlKey">import-category-downloadable-url-links</data>
+    </entity>
+    <entity name="ImportCategory_Downloadable_FileLinks" type="category">
+        <data key="name">import-category-downloadable-file-links</data>
+        <data key="name_lwr">import-category-downloadable-file-links</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="urlKey">import-category-downloadable-file-links</data>
+    </entity>
+
+    <!-- Products -->
+    <entity name="ImportProduct_Downloadable_UrlLinks" type="product">
+        <data key="fileName">import_downloadable_product_url_links.csv</data>
+        <data key="importSummary">Created: 1, Updated: 0, Deleted: 0</data>
+        <data key="sku">import-product-downloadable-url-links</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="name">import-product-downloadable-url-links</data>
+        <data key="price">99.00</data>
+        <data key="quantity">100</data>
+        <data key="weight"/>
+        <data key="visibilityText">Catalog, Search</data>
+        <data key="status">1</data>
+        <data key="urlKey">import-product-downloadable-url-links</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
+        <data key="linksTitle">Links</data>
+        <data key="linkTitle">Link1</data>
+        <data key="linkPrice">2.00</data>
+        <data key="totalPriceWithLink">101.00</data>
+        <data key="linkFileType">URL</data>
+        <data key="linkFileUrl">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="linkFileName">magento-logo</data>
+        <data key="linkSampleFileType">URL</data>
+        <data key="linkSampleFileUrl">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="linkSampleFileName">magento-logo</data>
+        <data key="linkShareable">Yes</data>
+        <data key="linkMaxDownloads">0</data>
+        <data key="samplesTitle">Samples</data>
+        <data key="sampleTitle">Sample1</data>
+        <data key="sampleFileType">URL</data>
+        <data key="sampleFileUrl">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
+        <data key="sampleFileName">magento-logo</data>
+    </entity>
+    <entity name="ImportProduct_Downloadable_FileLinks" type="product">
+        <data key="fileName">import_downloadable_product_file_links.csv</data>
+        <data key="importSummary">Created: 1, Updated: 0, Deleted: 0</data>
+        <data key="name">import-product-downloadable-file-links</data>
+        <data key="sku">import-product-downloadable-file-links</data>
+        <data key="type_id">downloadable</data>
+        <data key="attribute_set_id">4</data>
+        <data key="price">100.00</data>
+        <data key="quantity">100</data>
+        <data key="weight"/>
+        <data key="visibilityText">Catalog, Search</data>
+        <data key="status">1</data>
+        <data key="urlKey">import-product-downloadable-file-links</data>
+        <data key="baseImage">magento-logo.png</data>
+        <data key="baseImageName">magento-logo</data>
+        <data key="smallImage">m-logo.gif</data>
+        <data key="smallImageName">m-logo</data>
+        <data key="thumbnailImage">adobe-base.jpg</data>
+        <data key="thumbnailImageName">adobe-base</data>
+        <data key="linksTitle">Links</data>
+        <data key="linkTitle">Link1</data>
+        <data key="linkPrice">3.00</data>
+        <data key="totalPriceWithLink">103.00</data>
+        <data key="linkFileType">Upload File</data>
+        <data key="linkFileName">m-logo</data>
+        <data key="linkSampleFileType">Upload File</data>
+        <data key="linkSampleFileName">magento-logo</data>
+        <data key="linkShareable">No</data>
+        <data key="linkMaxDownloads">0</data>
+        <data key="samplesTitle">Samples</data>
+        <data key="sampleTitle">Sample1</data>
+        <data key="sampleFileType">Upload File</data>
+        <data key="sampleFileName">adobe-base</data>
+    </entity>
+</entities>

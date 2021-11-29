@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontGuestCheckoutShippingAddressFormPrefilledActionGroup">
+        <annotations>
+            <description>Verify that shipping address form is filled with provided customer and address information.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer" defaultValue="Simple_US_Customer" type="entity"/>
+            <argument name="address" defaultValue="US_Address_TX" type="entity"/>
+        </arguments>
+
+        <grabValueFrom selector="{{CheckoutShippingSection.email}}" stepKey="email"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.firstName}}" stepKey="firstname"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.lastName}}" stepKey="lastname"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.street}}" stepKey="street"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.city}}" stepKey="city"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.postcode}}" stepKey="postcode"/>
+        <grabValueFrom selector="{{CheckoutShippingSection.telephone}}" stepKey="telephone"/>
+
+        <assertEquals stepKey="assertEmail">
+            <actualResult type="variable">email</actualResult>
+            <expectedResult type="string">{{customer.email}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertFirstName">
+            <actualResult type="variable">firstname</actualResult>
+            <expectedResult type="string">{{customer.firstName}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertLastName">
+            <actualResult type="variable">lastname</actualResult>
+            <expectedResult type="string">{{customer.lastName}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertStreet">
+            <actualResult type="variable">street</actualResult>
+            <expectedResult type="string">{{address.street[0]}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertCity">
+            <actualResult type="variable">city</actualResult>
+            <expectedResult type="string">{{address.city}}</expectedResult>
+        </assertEquals>
+        <seeOptionIsSelected selector="{{CheckoutShippingSection.region}}" userInput="{{address.state}}" stepKey="assertRegion"/>
+        <seeOptionIsSelected selector="{{CheckoutShippingSection.country}}" userInput="{{address.country}}" stepKey="assertCountry"/>
+        <assertEquals stepKey="assertPostcode">
+            <actualResult type="variable">postcode</actualResult>
+            <expectedResult type="string">{{address.postcode}}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertTelephone">
+            <actualResult type="variable">telephone</actualResult>
+            <expectedResult type="string">{{address.telephone}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

@@ -184,20 +184,49 @@ class CategoryRepositoryTest extends WebapiAbstract
 
     /**
      * @dataProvider deleteSystemOrRootDataProvider
+     *
+     * @param int $categoryId
+     * @param string $exceptionMsg
+     * @return void
      */
-    public function testDeleteSystemOrRoot()
+    public function testDeleteSystemOrRoot(int $categoryId, string $exceptionMsg): void
     {
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage($exceptionMsg);
 
-        $this->deleteCategory($this->modelId);
+        $this->deleteCategory($categoryId);
     }
 
-    public function deleteSystemOrRootDataProvider()
+    /**
+     * @return array
+     */
+    public function deleteSystemOrRootDataProvider(): array
     {
         return [
-            [Category::TREE_ROOT_ID],
-            [2] //Default root category
+            'system_category' => [
+                'category_id' => Category::TREE_ROOT_ID,
+                'exception_message' => $this->buildExceptionMessage(Category::TREE_ROOT_ID),
+            ],
+            'root_category' => [
+                'category_id' => 2,
+                'exception_message' => $this->buildExceptionMessage(2),
+            ],
         ];
+    }
+
+    /**
+     * Build response error message
+     *
+     * @param int $categoryId
+     * @return string
+     */
+    private function buildExceptionMessage(int $categoryId): string
+    {
+        $translatedMsg = (string)__('Cannot delete category with id %1');
+
+        return TESTS_WEB_API_ADAPTER === self::ADAPTER_REST
+            ? sprintf('{"message":"%s","parameters":["%u"]}', $translatedMsg, $categoryId)
+            : $translatedMsg;
     }
 
     /**

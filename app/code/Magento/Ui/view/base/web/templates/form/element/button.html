@@ -8,8 +8,8 @@
         css="buttonClasses"
         click="action"
         disable="disabled"
-        attr="'data-index': index">
-    <span text="title"/>
+        attr="'data-index': index, 'aria-labelledby': ariLabelledby">
+    <span attr="'id': buttonTextId" text="title"></span>
 </button>
 
 <if args="childError">
