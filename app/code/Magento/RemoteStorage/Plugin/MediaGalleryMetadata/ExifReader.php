@@ -5,17 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\RemoteStorage\Plugin;
+namespace Magento\RemoteStorage\Plugin\MediaGalleryMetadata;
 
-use Magento\Catalog\Model\Product\Option\Type\File\ExistingValidate as Subject;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Image\Adapter\AbstractAdapter;
+use Magento\MediaGalleryMetadata\Model\ExifReader as Subject;
 use Magento\RemoteStorage\Model\TmpFileCopier;
 
 /**
- * @see AbstractAdapter
+ * Copies file from the remote server to the tmp directory if remote storage is enabled
  */
-class ExistingValidate
+class ExifReader
 {
     /**
      * @var TmpFileCopier
@@ -35,14 +34,13 @@ class ExistingValidate
      * Copies file from the remote server to the tmp directory
      *
      * @param Subject $subject
-     * @param string $value
-     * @param string|null $originalName
+     * @param string $filePath
      * @return array
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeIsValid(Subject $subject, $value, string $originalName = null)
+    public function beforeGet(Subject $subject, string $filePath)
     {
-        return [$this->tmpFileCopier->copy($value), $originalName];
+        return [$this->tmpFileCopier->copy($filePath)];
     }
 }

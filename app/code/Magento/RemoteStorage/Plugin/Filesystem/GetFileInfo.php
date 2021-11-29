@@ -5,17 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\RemoteStorage\Plugin;
+namespace Magento\RemoteStorage\Plugin\Filesystem;
 
-use Magento\Catalog\Model\Product\Option\Type\File\ExistingValidate as Subject;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Image\Adapter\AbstractAdapter;
+use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo as Subject;
 use Magento\RemoteStorage\Model\TmpFileCopier;
 
 /**
- * @see AbstractAdapter
+ * Copies file from the remote server to the tmp directory if remote storage is enabled
  */
-class ExistingValidate
+class GetFileInfo
 {
     /**
      * @var TmpFileCopier
@@ -35,14 +34,13 @@ class ExistingValidate
      * Copies file from the remote server to the tmp directory
      *
      * @param Subject $subject
-     * @param string $value
-     * @param string|null $originalName
+     * @param string $path
      * @return array
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeIsValid(Subject $subject, $value, string $originalName = null)
+    public function beforeExecute(Subject $subject, string $path)
     {
-        return [$this->tmpFileCopier->copy($value), $originalName];
+        return [$this->tmpFileCopier->copy($path)];
     }
 }

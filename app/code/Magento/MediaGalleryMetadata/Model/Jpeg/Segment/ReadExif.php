@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Jpeg\Segment;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\MediaGalleryMetadata\Model\ExifReader;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
@@ -29,12 +31,19 @@ class ReadExif implements ReadMetadataInterface
     private $metadataFactory;
 
     /**
+     * @var ExifReader
+     */
+    private $exifReader;
+
+    /**
      * @param MetadataInterfaceFactory $metadataFactory
      */
     public function __construct(
-        MetadataInterfaceFactory $metadataFactory
+        MetadataInterfaceFactory $metadataFactory,
+        ExifReader $exifReader = null
     ) {
         $this->metadataFactory = $metadataFactory;
+        $this->exifReader = $exifReader ?? ObjectManager::getInstance()->get(ExifReader::class);
     }
 
     /**
@@ -72,7 +81,7 @@ class ReadExif implements ReadMetadataInterface
         $description = null;
         $keywords = null;
 
-        $data = exif_read_data($filePath);
+        $data = $this->exifReader->get($filePath);
 
         if (!empty($data)) {
             $title = isset($data['DocumentName']) ? $data['DocumentName'] : null;

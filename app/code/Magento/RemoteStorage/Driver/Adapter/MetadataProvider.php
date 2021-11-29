@@ -104,7 +104,7 @@ class MetadataProvider implements MetadataProviderInterface
             'visibility' => $meta->visibility(),
             'mimetype' => $meta->mimeType(),
             'dirname' => dirname($meta->path()),
-            'basename' => basename($meta->path()),
+            'basename' => basename($meta->path(), '.' . pathinfo($path, PATHINFO_EXTENSION)),
         ];
         $extraMetadata = $meta->extraMetadata();
         if (isset($extraMetadata['Metadata']['image-width']) && isset($extraMetadata['Metadata']['image-height'])) {
