@@ -109,7 +109,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_customizableContainerTypes = ['VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR'];
 
     /**
-     * Carrier helper
+     * The carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
      */
@@ -478,8 +478,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $service = $r->getService();
             }
 
-            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
-                strpos($r->getContainer(), 'FLAT RATE BOX') !== false
+            if ($r->getContainer() !== null && (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+                strpos($r->getContainer(), 'FLAT RATE BOX') !== false)
             ) {
                 $service = 'Priority';
             }

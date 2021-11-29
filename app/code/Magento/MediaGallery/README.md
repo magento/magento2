@@ -20,4 +20,6 @@ Extension developers can interact with the Magento_MediaGallery module. For more
 
 ## Additional information
 
-For information about significant changes in patch releases, see [Release information](https://devdocs.magento.com/guides/v2.4/release-notes/bk-release-notes.html).
+For information about significant changes in patch releases, see [2.4.x Release information](https://devdocs.magento.com/guides/v2.4/release-notes/bk-release-notes.html).
+
+[Learn more about New Media Gallery](https://docs.magento.com/user-guide/cms/media-gallery.html).
