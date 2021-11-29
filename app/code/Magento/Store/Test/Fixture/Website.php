@@ -62,7 +62,18 @@ class Website implements RevertibleDataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'id'               => (int) ID. Optional.
+     *      'code'             => (string) Code. Optional.
+     *      'name'             => (string) Name. Optional.
+     *      'default_group_id' => (int) Default Group ID. Optional.
+     *      'is_default'       => (int) Is Default. Optional. Default: 0.
+     *      'sort_order'       => (int) Sort Order. Optional. Default: 0.
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {

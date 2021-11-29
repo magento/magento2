@@ -20,7 +20,8 @@ class Store implements RevertibleDataFixtureInterface
     private const DEFAULT_DATA = [
         'code' => 'test_store_view%uniqid%',
         'name' => 'Test Store View%uniqid%',
-        'sort_order' => '1'
+        'sort_order' => '0',
+        'is_active' => '1'
     ];
 
     /**
@@ -62,7 +63,19 @@ class Store implements RevertibleDataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'id'             => (int) ID. Optional.
+     *      'code'           => (string) Code. Optional.
+     *      'name'           => (string) Name. Optional.
+     *      'website_id'     => (int) Website ID. Optional. Default: default website.
+     *      'store_group_id' => (int) Store Group ID. Optional. Default: default store group.
+     *      'is_active'      => (int) Is Active. Optional. Default: 1
+     *      'sort_order'     => (int) Sort Order. Optional. Default: 0
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -108,6 +121,7 @@ class Store implements RevertibleDataFixtureInterface
         } elseif (!isset($data['store_group_id']) && isset($data['website_id'])) {
             $data['store_group_id'] = $this->storeManager->getWebsite($data['website_id'])->getDefaultGroupId();
         }
+        $data['group_id'] = $data['store_group_id'];
 
         return $this->dataProcessor->process($this, $data);
     }

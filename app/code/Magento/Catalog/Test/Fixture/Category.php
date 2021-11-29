@@ -43,6 +43,7 @@ class Category implements RevertibleDataFixtureInterface
      * @var ProcessorInterface
      */
     private $dataProcessor;
+
     /**
      * @var DataMerger
      */
@@ -63,7 +64,9 @@ class Category implements RevertibleDataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters. Same format as Category::DEFAULT_DATA. Custom attributes and extension attributes
+     *  can be passed directly in the outer array instead of custom_attributes or extension_attributes.
      */
     public function apply(array $data = []): ?DataObject
     {

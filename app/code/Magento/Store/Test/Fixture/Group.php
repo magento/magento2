@@ -70,7 +70,18 @@ class Group implements DataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'id'               => (int) ID. Optional.
+     *      'code'             => (string) Code. Optional.
+     *      'name'             => (string) Name. Optional.
+     *      'website_id'       => (int) Website ID. Optional. Default: default website.
+     *      'root_category_id' => (int) Root Category ID. Optional. Default: default root category.
+     *      'default_store_id' => (int) Default Store ID. Optional.
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {

@@ -66,8 +66,8 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -77,17 +77,17 @@ class ProductTest extends TestCase
     public function testGetAttributeRawValueGetDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', 'default_value');
+        $product->setCustomAttribute('prod_attr', 'default_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('default_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -97,21 +97,21 @@ class ProductTest extends TestCase
     public function testGetAttributeRawValueGetStoreSpecificValueNoDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', null);
+        $product->setCustomAttribute('prod_attr', null);
         $this->productRepository->save($product);
 
         $product = $this->productRepository->get('simple', true, 1, true);
-        $product->setCustomAttribute('fixture_attribute', 'store_value');
+        $product->setCustomAttribute('prod_attr', 'store_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('store_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -121,21 +121,21 @@ class ProductTest extends TestCase
     public function testGetAttributeRawValueGetStoreSpecificValueWithDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', 'default_value');
+        $product->setCustomAttribute('prod_attr', 'default_value');
         $this->productRepository->save($product);
 
         $product = $this->productRepository->get('simple', true, 1, true);
-        $product->setCustomAttribute('fixture_attribute', 'store_value');
+        $product->setCustomAttribute('prod_attr', 'store_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('store_value', $actual);
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "fixture_attribute"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -146,10 +146,10 @@ class ProductTest extends TestCase
     public function testGetAttributeRawValueGetStoreValueFallbackToDefault()
     {
         $product = $this->productRepository->get('simple', true, 0, true);
-        $product->setCustomAttribute('fixture_attribute', 'default_value');
+        $product->setCustomAttribute('prod_attr', 'default_value');
         $this->productRepository->save($product);
 
-        $actual = $this->model->getAttributeRawValue($product->getId(), 'fixture_attribute', 1);
+        $actual = $this->model->getAttributeRawValue($product->getId(), 'prod_attr', 1);
         $this->assertEquals('default_value', $actual);
     }
 

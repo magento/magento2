@@ -80,7 +80,9 @@ class Product implements RevertibleDataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters. Same format as Product::DEFAULT_DATA. Custom attributes and extension attributes
+     *  can be passed directly in the outer array instead of custom_attributes or extension_attributes.
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -115,7 +117,7 @@ class Product implements RevertibleDataFixtureInterface
     private function prepareData(array $data): array
     {
         $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data);
-        // remove category_links if empty in order for category_ids to processed if exists
+        // remove category_links if empty in order for category_ids to be processed if exists
         if (empty($data['extension_attributes']['category_links'])) {
             unset($data['extension_attributes']['category_links']);
         }
