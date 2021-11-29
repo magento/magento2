@@ -179,7 +179,7 @@ class ElasticsearchTest extends TestCase
                 'used_in_product_listing' => 0,
                 'used_for_sort_by' => 0,
                 'frontend_label' => ['Multiselect Attribute'],
-                'backend_type' => 'varchar',
+                'backend_type' => 'text',
                 'backend_model' => ArrayBackend::class,
                 'option' => [
                     'value' => [
