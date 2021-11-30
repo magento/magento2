@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Gif;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryMetadata\Model\SegmentNames;
 use Magento\MediaGalleryMetadataApi\Model\FileInterface;
 use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\ReadFileInterface;
@@ -35,6 +37,11 @@ class ReadFile implements ReadFileInterface
     private $filesystem;
 
     /**
+     * @var SegmentNames
+     */
+    private $segmentNames;
+
+    /**
      * @var SegmentInterfaceFactory
      */
     private $segmentFactory;
@@ -45,20 +52,24 @@ class ReadFile implements ReadFileInterface
     private $fileFactory;
 
     /**
+     * @param DriverInterface $driver
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
-     * @param Filesystem $filesystem
-     * @throws FileSystemException
+     * @param SegmentNames $segmentNames
+     * @param Filesystem|null $filesystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
+        DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        Filesystem $filesystem
+        SegmentNames $segmentNames,
+        Filesystem $filesystem = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
-        $this->filesystem = $filesystem;
-        $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        $this->segmentNames = $segmentNames;
+        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
@@ -66,19 +77,19 @@ class ReadFile implements ReadFileInterface
      */
     public function execute(string $path): FileInterface
     {
-        $resource = $this->driver->fileOpen($path, 'rb');
+        $resource = $this->getDriver()->fileOpen($path, 'rb');
 
         $header = $this->read($resource, 3);
 
         if ($header != "GIF") {
-            $this->driver->fileClose($resource);
+            $this->getDriver()->fileClose($resource);
             throw new ValidatorException(__('Not a GIF image'));
         }
 
         $version = $this->read($resource, 3);
 
         if (!in_array($version, ['87a', '89a'])) {
-            $this->driver->fileClose($resource);
+            $this->getDriver()->fileClose($resource);
             throw new LocalizedException(__('Unexpected GIF version'));
         }
 
@@ -103,7 +114,7 @@ class ReadFile implements ReadFileInterface
 
         array_unshift($segments, $headerSegment, $generalSegment);
 
-        $this->driver->fileClose($resource);
+        $this->getDriver()->fileClose($resource);
 
         return $this->fileFactory->create([
             'path' => $path,
@@ -145,7 +156,7 @@ class ReadFile implements ReadFileInterface
             }
 
             $segments[] = $this->getExtensionSegment($resource);
-        } while (!$this->driver->endOfFile($resource));
+        } while (!$this->getDriver()->endOfFile($resource));
 
         return $segments;
     }
@@ -274,8 +285,8 @@ class ReadFile implements ReadFileInterface
     {
         $data = '';
 
-        while (!$this->driver->endOfFile($resource) && strlen($data) < $length) {
-            $data .= $this->driver->fileRead($resource, $length - strlen($data));
+        while (!$this->getDriver()->endOfFile($resource) && strlen($data) < $length) {
+            $data .= $this->getDriver()->fileRead($resource, $length - strlen($data));
         }
 
         return $data;
@@ -316,5 +327,18 @@ class ReadFile implements ReadFileInterface
             return '';
         }
         return $blockLengthBinary . $this->read($resource, $blockLength) . $this->read($resource, 1);
+    }
+
+    /**
+     * @return DriverInterface
+     * @throws FileSystemException
+     */
+    private function getDriver(): DriverInterface
+    {
+        if ($this->driver === null) {
+            $this->driver = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver();
+        }
+
+        return $this->driver;
     }
 }

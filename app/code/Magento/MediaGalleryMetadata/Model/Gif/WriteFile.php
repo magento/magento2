@@ -41,13 +41,13 @@ class WriteFile implements WriteFileInterface
     /**
      * @param DriverInterface $driver
      * @param SegmentNames $segmentNames
-     * @param Filesystem $filesystem
+     * @param Filesystem|null $filesystem
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DriverInterface $driver,
         SegmentNames $segmentNames,
-        Filesystem $filesystem
+        Filesystem $filesystem = null
     ) {
         $this->segmentNames = $segmentNames;
         $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);

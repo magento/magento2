@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\Png;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -47,18 +48,21 @@ class ReadFile implements ReadFileInterface
     private $fileFactory;
 
     /**
+     * @param DriverInterface $driver
      * @param FileInterfaceFactory $fileFactory
      * @param SegmentInterfaceFactory $segmentFactory
      * @param Filesystem $filesystem
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
+        DriverInterface $driver,
         FileInterfaceFactory $fileFactory,
         SegmentInterfaceFactory $segmentFactory,
-        Filesystem $filesystem
+        Filesystem $filesystem = null
     ) {
         $this->fileFactory = $fileFactory;
         $this->segmentFactory = $segmentFactory;
-        $this->filesystem = $filesystem;
+        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
     }
 
     /**
