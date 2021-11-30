@@ -340,7 +340,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getYearStart()
     {
-        $_range = explode(',', $this->getConfigData('year_range') ?? '');
+        $_range = $this->getConfigData('year_range') !== null
+            ? explode(',', $this->getConfigData('year_range')) : [];
         if (isset($_range[0]) && !empty($_range[0])) {
             return $_range[0];
         } else {
@@ -355,7 +356,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getYearEnd()
     {
-        $_range = explode(',', $this->getConfigData('year_range') ?? '');
+        $_range = $this->getConfigData('year_range')
+            ? explode(',', $this->getConfigData('year_range')) : [];
         if (isset($_range[1]) && !empty($_range[1])) {
             return $_range[1];
         } else {

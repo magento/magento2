@@ -33,7 +33,8 @@ class CatalogEavValidationRules
             $rules['validate-zero-or-greater'] = true;
         }
 
-        $validationClasses = explode(' ', $attribute->getFrontendClass() ?? '');
+        $validationClasses = $attribute->getFrontendClass()
+            ? explode(' ', $attribute->getFrontendClass()) : [];
 
         foreach ($validationClasses as $class) {
             if (preg_match('/^maximum-length-(\d+)$/', $class, $matches)) {

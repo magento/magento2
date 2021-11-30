@@ -25,9 +25,9 @@ use Magento\Customer\Model\Indexer\Processor;
 class Address extends AbstractCustomer
 {
     /**
-     * Customer Address EAV additional attribute collection name
+     * The customer address attribute collection class name
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**
      * Permanent column names
@@ -35,38 +35,38 @@ class Address extends AbstractCustomer
      * Names that begins with underscore is not an attribute.
      * This name convention is for to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = '_email';
+    public const COLUMN_EMAIL = '_email';
 
-    const COLUMN_ADDRESS_ID = '_entity_id';
+    public const COLUMN_ADDRESS_ID = '_entity_id';
 
     /**
      * Required column names
      */
-    const COLUMN_REGION = 'region';
+    public const COLUMN_REGION = 'region';
 
-    const COLUMN_COUNTRY_ID = 'country_id';
+    public const COLUMN_COUNTRY_ID = 'country_id';
 
-    const COLUMN_POSTCODE = 'postcode';
+    public const COLUMN_POSTCODE = 'postcode';
 
-    const COLUMN_REGION_ID = 'region_id';
+    public const COLUMN_REGION_ID = 'region_id';
 
     /**
      * Particular columns that contains of customer default addresses
      */
-    const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
+    public const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
 
-    const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
+    public const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
 
     /**
      * Error codes
      */
-    const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
+    public const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
 
-    const ERROR_ADDRESS_NOT_FOUND = 'addressNotFound';
+    public const ERROR_ADDRESS_NOT_FOUND = 'addressNotFound';
 
-    const ERROR_INVALID_REGION = 'invalidRegion';
+    public const ERROR_INVALID_REGION = 'invalidRegion';
 
-    const ERROR_DUPLICATE_PK = 'duplicateAddressId';
+    public const ERROR_DUPLICATE_PK = 'duplicateAddressId';
 
     /**
      * @var string[]

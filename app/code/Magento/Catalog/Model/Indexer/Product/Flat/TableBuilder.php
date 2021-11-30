@@ -59,9 +59,9 @@ class TableBuilder
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
         $this->_connection = $resource->getConnection();
-        $this->tableBuilderFactory = $tableBuilderFactory ?: ObjectManager::getInstance()
+        $this->tableBuilderFactory = $tableBuilderFactory ?? ObjectManager::getInstance()
             ->get(BuilderInterfaceFactory::class);
-        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**

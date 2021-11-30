@@ -31,32 +31,32 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Custom option column names
      */
-    const COLUMN_SKU = 'sku';
+    public const COLUMN_SKU = 'sku';
 
-    const COLUMN_PREFIX = '_custom_option_';
+    public const COLUMN_PREFIX = '_custom_option_';
 
-    const COLUMN_STORE = '_custom_option_store';
+    public const COLUMN_STORE = '_custom_option_store';
 
-    const COLUMN_TYPE = '_custom_option_type';
+    public const COLUMN_TYPE = '_custom_option_type';
 
-    const COLUMN_TITLE = '_custom_option_title';
+    public const COLUMN_TITLE = '_custom_option_title';
 
-    const COLUMN_IS_REQUIRED = '_custom_option_is_required';
+    public const COLUMN_IS_REQUIRED = '_custom_option_is_required';
 
-    const COLUMN_SORT_ORDER = '_custom_option_sort_order';
+    public const COLUMN_SORT_ORDER = '_custom_option_sort_order';
 
-    const COLUMN_ROW_TITLE = '_custom_option_row_title';
+    public const COLUMN_ROW_TITLE = '_custom_option_row_title';
 
-    const COLUMN_ROW_PRICE = '_custom_option_row_price';
+    public const COLUMN_ROW_PRICE = '_custom_option_row_price';
 
-    const COLUMN_ROW_SKU = '_custom_option_row_sku';
+    public const COLUMN_ROW_SKU = '_custom_option_row_sku';
 
-    const COLUMN_ROW_SORT = '_custom_option_row_sort';
+    public const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
     /**
      * XML path to page size parameter
      */
-    const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
+    public const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
 
     /**
      * @var string
@@ -1279,9 +1279,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $multiRowData = $this->_getMultiRowFormat($rowData);
                 if (!empty($rowData[self::COLUMN_SKU]) && isset($this->_productsSkuToId[$rowData[self::COLUMN_SKU]])) {
                     $this->_rowProductId = $this->_productsSkuToId[$rowData[self::COLUMN_SKU]];
-                    if (array_key_exists('custom_options', $rowData)
+                    if (isset($rowData['custom_options'])
                         && (
-                            $rowData['custom_options'] === null ||
                             trim($rowData['custom_options']) === '' ||
                             trim($rowData['custom_options']) === $this->_productEntity->getEmptyAttributeValueConstant()
                         )

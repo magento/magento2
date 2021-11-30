@@ -21,7 +21,7 @@ use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
  */
 class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
 {
-    const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';
+    public const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';
 
     /**
      * Tax rate model and tax rate data object converter
@@ -102,7 +102,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         $this->regionFactory = $regionFactory;
         $this->resourceModel = $rateResource;
         $this->joinProcessor = $joinProcessor;
-        $this->collectionProcessor = $collectionProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
+        $this->collectionProcessor = $collectionProcessor ?? \Magento\Framework\App\ObjectManager::getInstance()->get(
         // phpstan:ignore "Class Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor not found."
             \Magento\Tax\Model\Api\SearchCriteria\TaxRateCollectionProcessor::class
         );
