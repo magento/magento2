@@ -20,7 +20,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * URL for store switcher hint
      */
-    const HINT_URL = 'https://docs.magento.com/user-guide/configuration/scope.html';
+    public const HINT_URL = 'https://docs.magento.com/user-guide/configuration/scope.html';
 
     /**
      * Name of website variable
