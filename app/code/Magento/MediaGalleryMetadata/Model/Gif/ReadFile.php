@@ -103,6 +103,8 @@ class ReadFile implements ReadFileInterface
 
         array_unshift($segments, $headerSegment, $generalSegment);
 
+        $this->driver->fileClose($resource);
+
         return $this->fileFactory->create([
             'path' => $path,
             'segments' => $segments
