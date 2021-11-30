@@ -66,8 +66,8 @@ class ValidatorTest extends TestCase
         $this->validator = $this->objectManagerHelper->getObject(
             Validator::class,
             [
-                'validators' => $this->validators,
-                'string' => new StringUtils()
+                'string' => new StringUtils(),
+                'validators' => $this->validators
             ]
         );
         $this->validator->init($this->context);

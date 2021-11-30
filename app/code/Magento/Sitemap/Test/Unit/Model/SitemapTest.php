@@ -574,20 +574,16 @@ class SitemapTest extends TestCase
             ->setConstructorArgs($this->getModelConstructorArgs())
             ->getMock();
 
-        $model->expects($this->any())
-            ->method('_getResource')
+        $model->method('_getResource')
             ->willReturn($this->resourceMock);
 
-        $model->expects($this->any())
-            ->method('_getCurrentDateTime')
+        $model->method('_getCurrentDateTime')
             ->willReturn('2012-12-21T00:00:00-08:00');
 
-        $model->expects($this->any())
-            ->method('_getBaseDir')
+        $model->method('_getBaseDir')
             ->willReturn('');
 
-        $model->expects($this->any())
-            ->method('_getDocumentRoot')
+        $model->method('_getDocumentRoot')
             ->willReturn('/project');
 
         $model->setSitemapFilename('sitemap.xml');
