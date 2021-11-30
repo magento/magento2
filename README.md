@@ -1,11 +1,13 @@
 
+<p style="text-align:center;">
+<a href="https://www.codetriage.com/magento/magento2"><img src="https://www.codetriage.com/magento/magento2/badges/users.svg" alt="Open Source Helpers" /></a>
+<a href="https://gitter.im/magento/magento2?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter" /></a> <a href="https://crowdin.com/project/magento-2"><img src="https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg" alt="Crowdin" /></a><br/>
 <a href="https://magento.com/products/magento-open-source">
 <img alt="Adobe logo" height="50px" src="https://www.adobe.com/content/dam/cc/icons/Adobe_Corporate_Horizontal_Red_HEX.svg"/>
 </a>
+</p>
 
-[![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)[![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
-
-# Magento Open Source
+<h1 style="text-align:center;">Magento Open Source</h1>
 
 Welcome to the Magento Open Source project! [Magento Open Source](https://magento.com/products/magento-open-source) software delivers basic eCommerce capabilities that allow you to build a unique online store from the ground up.
 
@@ -26,7 +28,7 @@ This project is huge. Our [Community](https://opensource.magento.com/) is large 
 - [Report an issue](https://devdocs.magento.com/contributor-guide/contributing.html#report)
 - [Improve the developer documentation](https://github.com/magento/devdocs)
 - [Improve the end-user documentation](https://github.com/magento/merchdocs)
-- [Shape the future of eCommerce](https://opensource.magento.com/)
+- [Shape the future of Magento Open Source](https://developer.adobe.com/open/magento)
 
 ### Maintainers
 
