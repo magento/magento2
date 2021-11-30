@@ -181,7 +181,7 @@ class PostTest extends TestCase
             'name' => 'Name',
             'comment' => 'Comment',
             'email' => 'valid@mail.com',
-            'hideit' => null
+            'hideit' => ''
         ];
 
         $this->dataPersistorMock->expects($this->once())

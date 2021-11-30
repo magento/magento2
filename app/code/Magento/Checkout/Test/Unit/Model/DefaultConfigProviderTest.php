@@ -39,6 +39,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Shipping\Model\Config;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -122,6 +123,13 @@ class DefaultConfigProviderTest extends TestCase
         $this->addressMetadata = $this->createMock(AddressMetadataInterface::class);
         $attributeOptionManager = $this->createMock(AttributeOptionManagementInterface::class);
         $customerAddressData = $this->createMock(CustomerAddressDataProvider::class);
+
+        // PHP 8.1 compatibility; The real code returns '', not null.
+        $scopeConfig->method('getValue')
+            ->withConsecutive(
+                ['shipping/shipping_policy/shipping_policy_content', ScopeInterface::SCOPE_STORE]
+            )->willReturn('');
+
         $this->model = new DefaultConfigProvider(
             $checkoutHelper,
             $this->checkoutSession,

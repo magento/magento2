@@ -3119,8 +3119,11 @@ class Product extends AbstractEntity
      */
     private function isSkuExist($sku)
     {
-        $sku = strtolower($sku);
-        return isset($this->_oldSku[$sku]);
+        if ($sku !== null) {
+            $sku = strtolower($sku);
+            return isset($this->_oldSku[$sku]);
+        }
+        return false;
     }
 
     /**
