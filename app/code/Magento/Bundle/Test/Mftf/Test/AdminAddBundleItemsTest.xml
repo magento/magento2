@@ -38,7 +38,7 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        
+
         <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems"/>
@@ -46,7 +46,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions"/>
         <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillOptionTitle">
             <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
-        </actionGroup>    
+        </actionGroup>
         <actionGroup ref="AdminFillBundleOptionTypeActionGroup" stepKey="selectInputType"/>
         <actionGroup ref="AdminClickAddProductToOptionByOptionIndexActionGroup" stepKey="clickAddProductsToOption"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
@@ -60,12 +60,12 @@
         <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddSelectedBundleProducts"/>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
         <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
-            <expectedResult type="string">1</expectedResult>
+            <expectedResult type="string">50</expectedResult>
             <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
         </assertEquals>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
         <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
-            <expectedResult type="string">1</expectedResult>
+            <expectedResult type="string">50</expectedResult>
             <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
         </assertEquals>
         <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
@@ -82,7 +82,9 @@
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <scrollToTopOfPage stepKey="scroll"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
@@ -105,12 +107,12 @@
         </actionGroup>
         <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="clickOnBundleProductToEdit"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
-        <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption"/>   
+        <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptionsToAppear"/>
         <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillNewestOptionTitle">
             <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}_new"/>
             <argument name="index" value="1"/>
-        </actionGroup>    
+        </actionGroup>
         <actionGroup ref="AdminFillBundleOptionTypeActionGroup" stepKey="selectNewInputType">
             <argument name="optionIndex" value="1"/>
         </actionGroup>
@@ -128,12 +130,12 @@
         <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddNewSelectedBundleProducts"/>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantityAfterUserInput"/>
         <assertEquals stepKey="assertFirstBundleOptionDefaultQuantityAfterUserInput">
-            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
+            <expectedResult type="string">50</expectedResult>
             <actualResult type="string">$grabbedFirstBundleOptionQuantityAfterUserInput</actualResult>
         </assertEquals>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantityAfterUserInput"/>
         <assertEquals stepKey="assertSecondBundleOptionDefaultQuantityAfterUserInput">
-            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
+            <expectedResult type="string">50</expectedResult>
             <actualResult type="string">$grabbedSecondBundleOptionQuantityAfterUserInput</actualResult>
         </assertEquals>
         <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillNewProductDefaultQty1">

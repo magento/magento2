@@ -70,6 +70,7 @@ class Products implements ResolverInterface
         $data = [
             'total_count' => $searchResult->getTotalCount(),
             'items' => $searchResult->getProductsSearchResult(),
+            'suggestions' => $searchResult->getSuggestions(),
             'page_info' => [
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurrentPage(),
