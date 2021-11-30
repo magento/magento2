@@ -82,7 +82,8 @@
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterCreatedCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
         <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
 
@@ -91,7 +92,7 @@
         </actionGroup>
         <actionGroup ref="AdminSelectDropdownOptionOnConfigureProductSlidingModalActionGroup" stepKey="selectProductOption">
             <argument name="optionName" value="$$createFirstProduct.name$$"/>
-        </actionGroup>    
+        </actionGroup>
 
         <actionGroup ref="AdminClickOkOnConfigureProductSlidingModalActionGroup" stepKey="clickOkBtn"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForAddingConfigure"/>

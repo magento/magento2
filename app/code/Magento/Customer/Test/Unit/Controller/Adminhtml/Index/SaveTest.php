@@ -495,11 +495,6 @@ class SaveTest extends TestCase
             ->with($customerMock, $customerEmail)
             ->willReturnSelf();
 
-        $this->authorizationMock->expects($this->once())
-            ->method('isAllowed')
-            ->with(null)
-            ->willReturn(true);
-
         $this->subscriptionManager->expects($this->once())
             ->method($subscriptionStatus ? 'subscribeCustomer' : 'unsubscribeCustomer')
             ->with($customerId, $subscriptionStore);
@@ -670,10 +665,6 @@ class SaveTest extends TestCase
             ->method('createAccount')
             ->with($customerMock, null, '')
             ->willReturn($customerMock);
-        $this->authorizationMock->expects($this->once())
-            ->method('isAllowed')
-            ->with(null)
-            ->willReturn(true);
         $this->subscriptionManager->expects($this->once())
             ->method($subscriptionStatus ? 'subscribeCustomer' : 'unsubscribeCustomer')
             ->with($customerId, $subscriptionStore);
