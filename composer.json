@@ -59,12 +59,12 @@
         "laminas/laminas-uri": "^2.9.1",
         "laminas/laminas-validator": "^2.15.0",
         "laminas/laminas-view": "~2.14.1",
-        "league/flysystem": "^2.0",
+        "league/flysystem": "~2.3.2",
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "1.8.x-dev as 1.8.0",
         "magento/composer-dependency-version-audit-plugin": "~0.1",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "1.14.6-beta1 as 1.14.6",
+        "magento/zendframework1": "dev-master as 1.14.6",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^6.0.0",
         "php-amqplib/php-amqplib": "~3.1.0",
@@ -77,11 +77,11 @@
         "tedivm/jshrink": "~1.4.0",
         "tubalmartin/cssmin": "4.1.1",
         "web-token/jwt-framework": "^v2.2.7",
-        "webonyx/graphql-php": "~14.9.0",
+        "webonyx/graphql-php": "~14.11.3",
         "wikimedia/less.php": "^3.0.0"
     },
     "require-dev": {
-        "allure-framework/allure-phpunit": "~1.4.0",
+        "allure-framework/allure-phpunit": "~1.5.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
         "friendsofphp/php-cs-fixer": "~3.0.0",
         "lusitanian/oauth": "~0.8.10",
@@ -89,7 +89,7 @@
         "magento/magento2-functional-testing-framework": "^3.7",
         "pdepend/pdepend": "~2.10.0",
         "phpmd/phpmd": "^2.9.1",
-        "phpstan/phpstan": "~1.1.0",
+        "phpstan/phpstan": "~1.2.0",
         "phpunit/phpunit": "~9.5.0",
         "sebastian/phpcpd": "^6.0.3",
         "squizlabs/php_codesniffer": "~3.6.0",
@@ -381,5 +381,12 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento/zf1.git"
+        }
+    ],
+    "minimum-stability": "dev"
 }
