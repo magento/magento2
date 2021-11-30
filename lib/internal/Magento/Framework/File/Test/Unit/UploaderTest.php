@@ -170,7 +170,8 @@ class UploaderTest extends TestCase
      * @param string $fileType
      * @return void
      */
-    private function setupFiles($fileSize, $fileName, $fileType) {
+    private function setupFiles($fileSize, $fileName, $fileType)
+    {
         $_FILES = [
             'fileId' => [
                 'name' => $fileName,
