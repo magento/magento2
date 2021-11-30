@@ -96,6 +96,9 @@
             <wait time="60" stepKey="waitForUpdateStarts"/>
         </before>
         <after>
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindex"/>
+
             <!-- Delete Created Data -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -193,7 +196,6 @@
         </actionGroup>
 
         <!-- Verify product Attribute Option1 is displayed  -->
-
         <see selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_value$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeOption1AfterUpdate"/>
 
         <!--Select product Attribute option1 and verify changes in the price -->
