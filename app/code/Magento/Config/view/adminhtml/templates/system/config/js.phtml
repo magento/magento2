@@ -6,6 +6,7 @@
 
 /**
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Config\ViewModel\CountryFilter $countryFilter
  */
 ?>
 
@@ -86,7 +87,8 @@ originModel.prototype = {
 script;
 
 $scriptString .= 'this.regionsUrl = "' . $block->escapeJs($block->getUrl('directory/json/countryRegion')) . '";';
-$euCountries = $this->helper(\Magento\Config\Helper\Country::class)->getEuCountryList();
+$countryFilter = $block->getData('countryFilter');
+$euCountries = $countryFilter->getEuCountryList();
 $scriptString .= 'this.euCountryList = ' . json_encode($euCountries);
 
 $scriptString .= <<<script
