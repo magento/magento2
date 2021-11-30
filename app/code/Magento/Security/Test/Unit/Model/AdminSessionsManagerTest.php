@@ -335,9 +335,32 @@ class AdminSessionsManagerTest extends TestCase
      */
     public function testGetLogoutReasonMessage($expectedResult, $sessionStatus)
     {
-        $this->adminSessionInfoFactoryMock->expects($this->once())
+        $this->adminSessionInfoFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->willReturn($this->currentSessionMock);
+        $this->authSessionMock->expects($this->any())
+            ->method('getUser')
+            ->willReturn($this->userMock);
+        $this->currentSessionMock->expects($this->once())
+            ->method('setData')
+            ->willReturn($this->currentSessionMock);
+        $this->currentSessionMock->expects($this->once())
+            ->method('save')
+            ->willReturn($this->currentSessionMock);
+        $this->adminSessionInfoCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->adminSessionInfoCollectionMock);
+        $this->adminSessionInfoCollectionMock->expects($this->once())->method('filterByUser')
+            ->willReturnSelf();
+        $this->adminSessionInfoCollectionMock->expects($this->once())
+            ->method('filterExpiredSessions')
+            ->willReturnSelf();
+        $this->adminSessionInfoCollectionMock->expects($this->once())
+            ->method('loadData')
+            ->willReturnSelf();
+        $this->adminSessionInfoCollectionMock->expects($this->once())
+            ->method('setDataToAll')
+            ->willReturnSelf();
         $this->currentSessionMock->expects($this->once())
             ->method('getStatus')
             ->willReturn($sessionStatus);

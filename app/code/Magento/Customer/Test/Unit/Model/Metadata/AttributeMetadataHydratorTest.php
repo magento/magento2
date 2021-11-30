@@ -191,8 +191,8 @@ class AttributeMetadataHydratorTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExtract(): void
     {
         $data = ['foo' => 'bar'];
