@@ -10,6 +10,10 @@ namespace Magento\Framework\File\Test\Unit;
 use Magento\Framework\File\Uploader;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Unit Test class for \Magento\Framework\File\Uploader
@@ -21,9 +25,37 @@ class UploaderTest extends TestCase
      */
     private $uploader;
 
+    /**
+     * Allowed extensions array
+     *
+     * @var array
+     */
+    private $_allowedMimeTypes = [
+        'php' => 'text/plain',
+        'txt' => 'text/plain'
+    ];
+
     protected function setUp(): void
     {
-        $this->uploader = $this->createMock(Uploader::class);
+        $class = new \ReflectionObject($this);
+        $fileName = $class->getFilename();
+        $fileType = 'php';
+        $this->setupFiles(1230123, $fileName, $fileType);
+
+        $driverPool  =  $this->createMock(DriverPool::class);
+        $directoryList = $this->createMock(DirectoryList::class);
+        $filesystem    = $this->createMock(Filesystem::class);
+        $targetDirectory = $this->createMock(TargetDirectory::class);
+
+        $this->uploader = new Uploader(
+            "fileId",
+            null,
+            $directoryList,
+            $driverPool,
+            $targetDirectory,
+            $filesystem
+        );
+        $this->uploader->setAllowedExtensions(array_keys($this->_allowedMimeTypes));
     }
 
     /**
@@ -87,11 +119,10 @@ class UploaderTest extends TestCase
      */
     public function testCheckAllowedExtension(bool $isValid, string $extension)
     {
-        $this->uploader
-            ->expects($this->never())
-            ->method('checkAllowedExtension')
-            ->with($extension)
-            ->willReturn($isValid);
+        $this->assertEquals(
+            $isValid,
+            $this->uploader->checkAllowedExtension($extension)
+        );
     }
 
     /**
@@ -102,15 +133,19 @@ class UploaderTest extends TestCase
         return [
             [
                 true,
-                'jpeg'
+                'txt'
+            ],
+            [
+                false,
+                'png'
             ],
             [
                 false,
                 '$#@$#@$3'
             ],
             [
-                true,
-                '4324324324jpeg'
+                false,
+                '4324324324txt'
             ],
             [
                 false,
@@ -118,7 +153,31 @@ class UploaderTest extends TestCase
             ],
             [
                 false,
-                '../../jpeg'
+                '../../txt'
+            ],
+            [
+                true,
+                'php'
+            ]
+        ];
+    }
+
+    /**
+     * Setup global variable $_FILES.
+     *
+     * @param int $fileSize
+     * @param string $fileName
+     * @param string $fileType
+     * @return void
+     */
+    private function setupFiles($fileSize, $fileName, $fileType) {
+        $_FILES = [
+            'fileId' => [
+                'name' => $fileName,
+                'type' => $fileType,
+                'tmp_name' => $fileName,
+                'error' => 0,
+                'size' => $fileSize,
             ]
         ];
     }
