@@ -47,7 +47,6 @@
     <preference for="Magento\Directory\Api\CountryInformationAcquirerInterface" type="Magento\Directory\Model\CountryInformationAcquirer" />
     <preference for="Magento\Directory\Api\Data\CountryInformationInterface" type="Magento\Directory\Model\Data\CountryInformation" />
     <preference for="Magento\Directory\Api\Data\RegionInformationInterface" type="Magento\Directory\Model\Data\RegionInformation" />
-    <preference for="Magento\Directory\Controller\Adminhtml\Json\EuCountryProviderInterface" type="Magento\Directory\Model\EuCountryProvider" />
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
