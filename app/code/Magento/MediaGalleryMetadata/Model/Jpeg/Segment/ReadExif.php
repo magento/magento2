@@ -72,7 +72,7 @@ class ReadExif implements ReadMetadataInterface
     }
 
     /**
-     * Parese exif data from segment
+     * Parse exif data from segment
      *
      * @param string $filePath
      */

@@ -102,7 +102,7 @@ class WriteFile implements WriteFileInterface
     }
 
     /**
-     * Returns current driver for media dircetory
+     * Returns current driver for media directory
      *
      * @return DriverInterface
      * @throws FileSystemException
