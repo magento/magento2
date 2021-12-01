@@ -60,8 +60,10 @@ class ConfigOptionsListConstants
 
     /**
      * Default limiting input array size for asynchronous Web API
+     * phpcs:disable
      */
     public const CONFIG_PATH_WEBAPI_ASYNC_DEFAULT_INPUT_ARRAY_SIZE_LIMIT = 'webapi/async/default_input_array_size_limit';
+    //phpcs:enable
 
     /**#@+
      * Input keys for the options
