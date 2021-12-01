@@ -192,8 +192,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->startNewSession($activeSessionId);
         $this->assertNotNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should be set.');
         // Make sure current visitor session is updated.
-        $this->assertLessThanOrEqual($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($activeVisitor->getId()));
-        $this->assertGreaterThan($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($currentVisitor->getId()));
+        $this->assertLessThanOrEqual(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($activeVisitor->getId())
+        );
+        $this->assertGreaterThan(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($currentVisitor->getId())
+        );
 
         $this->accountManagement->authenticate('customer@example.com', 'new_Password123');
     }
@@ -441,8 +447,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $this->startNewSession($activeSessionId);
         $this->assertNotNull($this->getCustomerCutoff($customerId), 'Customer cutoff session should be set.');
         // Make sure current visitor session is updated.
-        $this->assertLessThanOrEqual($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($activeVisitor->getId()));
-        $this->assertGreaterThan($this->getCustomerCutoff($customerId), $this->getVisitorCreatedAt($currentVisitor->getId()));
+        $this->assertLessThanOrEqual(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($activeVisitor->getId())
+        );
+        $this->assertGreaterThan(
+            $this->getCustomerCutoff($customerId),
+            $this->getVisitorCreatedAt($currentVisitor->getId())
+        );
     }
 
     /**

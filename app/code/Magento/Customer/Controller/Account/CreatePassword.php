@@ -102,6 +102,7 @@ class CreatePassword extends \Magento\Customer\Controller\AbstractAccount implem
 
         try {
             $this->accountManagement->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+            $this->confirmByToken->resetCustomerConfirmation($customerId);
 
             // Extend token validity to avoid expiration while this form is
             // being completed by the user.

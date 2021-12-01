@@ -73,6 +73,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param array $data
      * @param AccountConfirmation $accountConfirmation
      * @param EncryptorInterface|null $encryptor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,

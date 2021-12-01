@@ -1467,7 +1467,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
+    public function changeResetPasswordLinkToken(CustomerInterface $customer, string $passwordLinkToken): bool
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
@@ -1476,8 +1476,7 @@ class AccountManagement implements AccountManagementInterface
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );
-        }
-        if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
+        } else {
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerSecure->setRpToken($passwordLinkToken);
             $customerSecure->setRpTokenCreatedAt(
