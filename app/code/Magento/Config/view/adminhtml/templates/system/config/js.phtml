@@ -277,26 +277,6 @@ $scriptString .= <<<script
         var regionElementId = this.regionElement.id;
         parentNode.innerHTML = text.outerHTML;
         this.regionElement = $(regionElementId);
-    },
-    validateVatNumber: function(serverResponse){
-        document.getElementById(this.regionElement.id.replace(/region_id/, 'merchant_vat_number')).value = '';
-        var resultElement = document.getElementById("validation_result");
-        var btnVatNumber  = document.getElementById(this.regionElement.id.replace(/region_id/, 'validate_vat_number'));
-
-        if (serverResponse === true) {
-            btnVatNumber.classList.remove('disabled');
-            if (resultElement) {
-                resultElement.style.display = "block";
-                resultElement.innerHTML = '';
-                if ( resultElement.classList.contains('admin__field-error') )
-                resultElement.classList.remove('admin__field-error');
-            }
-        } else {
-            btnVatNumber.classList.add('disabled');
-            if (resultElement) {
-                resultElement.style.display = "none";
-            }
-        }
     }
 }
 
