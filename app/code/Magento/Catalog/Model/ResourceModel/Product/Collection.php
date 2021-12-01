@@ -2062,17 +2062,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected function _applyZeroStoreProductLimitations()
     {
-        $filters    = $this->_productLimitationFilters;
+        $filters = $this->_productLimitationFilters;
         $categories = $this->getChildrenCategories((int)$filters['category_id']);
-
-        $categoryProductSelect = $this->getConnection()->select()
-            ->from($this->getTable('catalog_category_product'))
-            ->columns([
-                'min_position' => new Zend_Db_Expr('MIN(position)')
-            ])
-            ->where('category_id IN (?)', $categories)
-            ->group('product_id');
-
         $joinCond = 'cat_pro.product_id = e.entity_id';
 
         $fromPart = $this->getSelect()->getPart(Select::FROM);
@@ -2080,11 +2071,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $fromPart['cat_pro']['joinCondition'] = $joinCond;
             $this->getSelect()->setPart(Select::FROM, $fromPart);
         } else {
-            $this->getSelect()->join(
-                ['cat_pro' => $categoryProductSelect],
+            $conditions = [
                 $joinCond,
-                ['cat_index_position' => 'min_position']
-            );
+                $this->getConnection()->quoteInto('cat_pro.category_id IN(?)', $categories, 'int'),
+            ];
+            $joinCond = join(' AND ', $conditions);
+            $this->getSelect()->join(
+                ['cat_pro' => $this->getTable('catalog_category_product')],
+                $joinCond,
+                ['cat_index_position' => new Zend_Db_Expr('MIN(cat_pro.position)')]
+            )->group('e.entity_id');
         }
         $this->_joinFields['position'] = ['table' => 'cat_pro', 'field' => 'min_position'];
 
