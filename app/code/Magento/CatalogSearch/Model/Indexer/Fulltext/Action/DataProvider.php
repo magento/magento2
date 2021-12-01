@@ -574,7 +574,7 @@ class DataProvider
         if (false !== $value) {
             $optionValue = $this->getAttributeOptionValue($attributeId, $valueIds, $storeId);
             if (null === $optionValue) {
-                $value = ($value !== null) ? $this->filterAttributeValue($value) : '';
+                $value = $value !== null ? $this->filterAttributeValue($value) : '';
             } else {
                 $value = implode($this->separator, array_filter([$value, $optionValue]));
             }
@@ -594,7 +594,7 @@ class DataProvider
     private function getAttributeOptionValue($attributeId, $valueIds, $storeId)
     {
         $optionKey = $attributeId . '-' . $storeId;
-        $attributeValueIds = ($valueIds !== null) ? explode(',', $valueIds) : [''];
+        $attributeValueIds = $valueIds !== null ? explode(',', $valueIds) : [];
         $attributeOptionValue = '';
         if (!array_key_exists($optionKey, $this->attributeOptions)
         ) {
@@ -608,7 +608,7 @@ class DataProvider
                 $this->attributeOptions[$optionKey] = array_column($options, 'label', 'value');
                 $this->attributeOptions[$optionKey] = array_map(
                     function ($value) {
-                        return ($value !== null) ? $this->filterAttributeValue($value) : '';
+                        return $value !== null ? $this->filterAttributeValue($value) : '';
                     },
                     $this->attributeOptions[$optionKey]
                 );

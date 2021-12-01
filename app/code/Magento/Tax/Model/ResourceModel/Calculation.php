@@ -229,7 +229,7 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         // as needed, reduce the postcode to the correct length
         $len = $this->_taxData->getPostCodeSubStringLength();
-        $postcode = ($postcode !== null) ? substr($postcode, 0, $len) : '';
+        $postcode = $postcode !== null ? substr($postcode, 0, $len) : '';
 
         // begin creating the search template array
         $strArr = [$postcode, $postcode . '*'];

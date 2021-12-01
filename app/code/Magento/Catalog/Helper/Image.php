@@ -776,8 +776,8 @@ class Image extends AbstractHelper implements ArgumentInterface
      */
     protected function parseSize($string)
     {
-        $size = $string ? explode('x', strtolower($string)) : [''];
-        if (count($size) == 2) {
+        $size = $string !== null ? explode('x', strtolower($string)) : [];
+        if (count($size) === 2) {
             return ['width' => $size[0] > 0 ? $size[0] : null, 'height' => $size[1] > 0 ? $size[1] : null];
         }
         return false;

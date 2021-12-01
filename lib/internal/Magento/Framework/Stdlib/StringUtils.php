@@ -160,7 +160,7 @@ class StringUtils
      */
     public function cleanString($string)
     {
-        return ($string !== null) ? mb_convert_encoding($string, self::ICONV_CHARSET) : '';
+        return $string !== null ? mb_convert_encoding($string, self::ICONV_CHARSET) : '';
     }
 
     /**
