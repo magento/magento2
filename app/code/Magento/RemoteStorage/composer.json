@@ -12,6 +12,7 @@
         "magento/module-downloadable": "*",
         "magento/module-catalog": "*",
         "magento/module-media-storage": "*",
+        "magento/module-media-gallery-metadata": "*",
         "magento/module-import-export": "*",
         "magento/module-catalog-import-export": "*",
         "magento/module-downloadable-import-export": "*",

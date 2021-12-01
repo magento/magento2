@@ -37,11 +37,6 @@ class ReadFile implements ReadFileInterface
     private $filesystem;
 
     /**
-     * @var SegmentNames
-     */
-    private $segmentNames;
-
-    /**
      * @var SegmentInterfaceFactory
      */
     private $segmentFactory;
@@ -50,6 +45,11 @@ class ReadFile implements ReadFileInterface
      * @var FileInterfaceFactory
      */
     private $fileFactory;
+
+    /**
+     * @var SegmentNames
+     */
+    private $segmentNames;
 
     /**
      * @param DriverInterface $driver
