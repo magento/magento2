@@ -32,7 +32,7 @@
         "colinmollenhour/cache-backend-file": "~1.4.1",
         "colinmollenhour/cache-backend-redis": "1.14.2",
         "colinmollenhour/credis": "1.12.1",
-        "colinmollenhour/php-redis-session-abstract": "~1.4.0",
+        "colinmollenhour/php-redis-session-abstract": "~1.4.5",
         "composer/composer": "^1.9 || ^2.0",
         "elasticsearch/elasticsearch": "~7.15.0",
         "guzzlehttp/guzzle": "^7.3.0",
