@@ -294,10 +294,7 @@ class Gd2 extends AbstractAdapter
                 // fallback to default background color
             }
         }
-        list($red, $green, $blue) = $this->_backgroundColor;
-        $red = $red !== null ? $red : 0;
-        $green = $green !== null ? $green : 0;
-        $blue = $blue !== null ? $blue : 0;
+        list($red, $green, $blue) = $this->_backgroundColor ?: [0, 0, 0];
         $color = imagecolorallocate($imageResourceTo, $red, $green, $blue);
 
         if (!imagefill($imageResourceTo, 0, 0, $color)) {

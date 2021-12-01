@@ -1,13 +1,12 @@
 <?php
 /**
+ * Abstract DB helper class
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Helper;
 
-/**
- * Abstract DB helper class.
- */
 abstract class AbstractHelper
 {
     /**
@@ -64,7 +63,7 @@ abstract class AbstractHelper
      */
     public function escapeLikeValue($value, $options = [])
     {
-        $value = is_string($value) ? str_replace('\\', '\\\\', $value) : '';
+        $value = str_replace('\\', '\\\\', $value);
 
         $replaceFrom = [];
         $replaceTo = [];
@@ -101,7 +100,6 @@ abstract class AbstractHelper
 
     /**
      * Escapes, quotes and adds escape symbol to LIKE expression.
-     *
      * For options and escaping see escapeLikeValue().
      *
      * @param string $value
@@ -114,7 +112,6 @@ abstract class AbstractHelper
 
     /**
      * Returns case insensitive LIKE construction.
-     *
      * For options and escaping see escapeLikeValue().
      *
      * @param string $field

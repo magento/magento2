@@ -36,7 +36,7 @@ class Json implements SerializerInterface
     {
         if ($string === null) {
             throw new \InvalidArgumentException(
-                sprintf('Unable to unserialize value. Error: Parameter must be a string type, null given.')
+                'Unable to unserialize value. Error: Parameter must be a string type, null given.'
             );
         }
         $result = json_decode($string, true);
