@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Element\Html;
 
 /**
@@ -11,22 +10,6 @@ namespace Magento\Framework\View\Element\Html;
  */
 class Date extends \Magento\Framework\View\Element\Template
 {
-    /**
-     * Date format not supported function date().
-     */
-    private const DATE_FORMAT_NOT_SUPPORTED = [
-        '%a', '%A', '%d', '%e', '%u', '%w', '%W', '%b', '%h', '%B', '%m', '%y', '%Y', '%D', '%F', '%x', '%n', '%t',
-        '%H', '%k', '%I', '%l', '%M', '%p', '%P', '%r', '%R', '%S', '%T', '%X', '%z', '%Z', '%c', '%s', '%g', '%G', '%%'
-    ];
-
-    /**
-     * Date format supported by function date().
-     */
-    private const DATE_FORMAT_SUPPORTED = [
-        'D', 'l',  'd', 'j', 'N', 'w', 'W', 'M', 'M', 'F', 'm', 'y', 'Y', 'm/d/y', 'Y-m-d', 'm/d/y',"\n","\t", 'H', 'G',
-        'h', 'g', 'i', 'A', 'a', 'h:i:s A', 'H:i', 's', 'H:i:s', 'H:i:s', 'O', 'T', 'D M j H:i:s Y', 'U', 'y', 'Y', '%'
-    ];
-
     /**
      * Render block HTML
      *
@@ -93,7 +76,7 @@ class Date extends \Magento\Framework\View\Element\Template
     public function getEscapedValue()
     {
         if ($this->getFormat() && $this->getValue()) {
-            return $this->getDateByFormat($this->getFormat(), strtotime($this->getValue()));
+            return strftime($this->getFormat(), strtotime($this->getValue()));
         }
         return $this->escapeHtml($this->getValue());
     }
@@ -101,40 +84,12 @@ class Date extends \Magento\Framework\View\Element\Template
     /**
      * Produce and return block's html output
      *
+     * {@inheritdoc}
+     *
      * @return string
      */
     public function getHtml()
     {
         return $this->toHtml();
-    }
-
-    /**
-     * Method to get date by format.
-     *
-     * @param string $format
-     * @param int $timestamp
-     *
-     * @return string
-     */
-    private function getDateByFormat(string $format, int $timestamp): string
-    {
-        $format = str_replace(self::DATE_FORMAT_NOT_SUPPORTED, self::DATE_FORMAT_SUPPORTED, $format);
-
-        if (strpos($format, '%') !== false) {
-            $unsupportedData = ['%U', '%V', '%C'];
-
-            foreach ($unsupportedData as $unsupported) {
-                if (strpos($format, $unsupported) !== false) {
-                    if ($unsupported === '%C') {
-                        $format = str_replace($unsupported, round(date("Y", $timestamp) / 100), $format);
-
-                        continue;
-                    }
-                    $format = str_replace($unsupported, date("W", strtotime("-1 day", $timestamp)), $format);
-                }
-            }
-        }
-
-        return date($format, $timestamp);
     }
 }
