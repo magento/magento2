@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db3efcfff9be8be46e053561ff4cfcee",
+    "content-hash": "2595185926b6486e340f5c603e5a4904",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9897,22 +9897,24 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "15",
+            "version": "16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "ca25070a18507ec89127c7828bbced56f0793e34"
+                "reference": "9dd071e644bd9f4e4c08ad8ad345270cecc66a2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/ca25070a18507ec89127c7828bbced56f0793e34",
-                "reference": "ca25070a18507ec89127c7828bbced56f0793e34",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/9dd071e644bd9f4e4c08ad8ad345270cecc66a2a",
+                "reference": "9dd071e644bd9f4e4c08ad8ad345270cecc66a2a",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
                 "php": ">=7.3",
+                "phpcompatibility/php-compatibility": "^9.3",
+                "rector/rector": "^0.12.4",
                 "squizlabs/php_codesniffer": "^3.6",
                 "webonyx/graphql-php": "^14.9"
             },
@@ -9937,9 +9939,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v15"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v16"
             },
-            "time": "2021-11-09T10:35:30+00:00"
+            "time": "2021-11-23T11:54:35+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -11376,6 +11378,66 @@
                 "source": "https://github.com/php-fig/cache/tree/master"
             },
             "time": "2016-08-06T20:24:11+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "0.12.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "d7d4659acae85a9ba5b8b75d4dadb998ffed2a48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d7d4659acae85a9ba5b8b75d4dadb998ffed2a48",
+                "reference": "d7d4659acae85a9ba5b8b75d4dadb998ffed2a48",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0",
+                "phpstan/phpstan": "^1.1.1"
+            },
+            "conflict": {
+                "phpstan/phpdoc-parser": "<1.2",
+                "rector/rector-cakephp": "*",
+                "rector/rector-doctrine": "*",
+                "rector/rector-laravel": "*",
+                "rector/rector-nette": "*",
+                "rector/rector-phpoffice": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-prefixed": "*",
+                "rector/rector-symfony": "*"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/0.12.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-11-15T14:06:50+00:00"
         },
         {
             "name": "sebastian/cli-parser",
