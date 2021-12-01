@@ -16,7 +16,7 @@ class StringUtils
     /**
      * Default charset
      */
-    const ICONV_CHARSET = 'UTF-8';
+    public const ICONV_CHARSET = 'UTF-8';
 
     /**
      * Capitalize first letters and convert separators if needed
