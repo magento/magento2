@@ -59,9 +59,9 @@ class GetTree extends Action implements HttpGetActionInterface
     public function execute()
     {
         try {
-            $responseContent = [
+            $responseContent =
                 $this->getDirectoryTree->execute()
-            ];
+            ;
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
