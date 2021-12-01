@@ -183,6 +183,7 @@ class ConfigTest extends TestCase
     {
         $this->backendUrlMock->expects($this->atLeastOnce())
             ->method('getUrl')
+            ->with('cms/wysiwyg/directive')
             ->willReturn('some_link');
         $this->backendUrlMock->expects($this->once())
             ->method('getBaseUrl')

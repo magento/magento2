@@ -18,17 +18,15 @@ class Quantity extends AbstractImportValidator implements RowValidatorInterface
         if (!empty($value['qty']) && (!is_numeric($value['qty'])
             && $value['qty'] !== $this->context->getEmptyAttributeValueConstant())
         ) {
-            if ($this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE) !== null) {
-                $this->_addMessages(
-                    [
-                        sprintf(
-                            $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
-                            'qty',
-                            'decimal'
-                        ),
-                    ]
-                );
-            }
+            $this->_addMessages(
+                [
+                    sprintf(
+                        $this->context->retrieveMessageTemplate(self::ERROR_INVALID_ATTRIBUTE_TYPE),
+                        'qty',
+                        'decimal'
+                    ),
+                ]
+            );
             return false;
         }
         return true;

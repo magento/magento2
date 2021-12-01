@@ -13,7 +13,6 @@ use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Request\HttpRequest;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -50,7 +49,7 @@ class PostTest extends TestCase
     private $urlMock;
 
     /**
-     * @var HttpRequest|MockObject
+     * @var Http|MockObject
      */
     private $requestStub;
 
