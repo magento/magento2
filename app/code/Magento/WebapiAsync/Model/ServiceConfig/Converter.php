@@ -16,12 +16,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**#@+
      * Array keys for config internal representation.
      */
-    const KEY_SERVICES = 'services';
-    const KEY_METHOD = 'method';
-    const KEY_METHODS = 'methods';
-    const KEY_SYNCHRONOUS_INVOCATION_ONLY = 'synchronousInvocationOnly';
-    const KEY_ROUTES = 'routes';
-    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
+    public const KEY_SERVICES = 'services';
+    public const KEY_METHOD = 'method';
+    public const KEY_METHODS = 'methods';
+    public const KEY_SYNCHRONOUS_INVOCATION_ONLY = 'synchronousInvocationOnly';
+    public const KEY_ROUTES = 'routes';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
     /**

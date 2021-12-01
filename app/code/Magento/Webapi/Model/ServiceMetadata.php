@@ -21,33 +21,33 @@ class ServiceMetadata
     /**#@+
      * Keys that a used for service config internal representation.
      */
-    const KEY_CLASS = 'class';
+    public const KEY_CLASS = 'class';
 
-    const KEY_IS_SECURE = 'isSecure';
+    public const KEY_IS_SECURE = 'isSecure';
 
-    const KEY_SERVICE_METHODS = 'methods';
+    public const KEY_SERVICE_METHODS = 'methods';
 
-    const KEY_METHOD = 'method';
+    public const KEY_METHOD = 'method';
 
-    const KEY_IS_REQUIRED = 'inputRequired';
+    public const KEY_IS_REQUIRED = 'inputRequired';
 
-    const KEY_ACL_RESOURCES = 'resources';
+    public const KEY_ACL_RESOURCES = 'resources';
 
-    const KEY_ROUTES = 'routes';
+    public const KEY_ROUTES = 'routes';
 
-    const KEY_ROUTE_METHOD = 'method';
+    public const KEY_ROUTE_METHOD = 'method';
 
-    const KEY_ROUTE_PARAMS = 'parameters';
+    public const KEY_ROUTE_PARAMS = 'parameters';
 
-    const KEY_METHOD_ALIAS = 'methodAlias';
+    public const KEY_METHOD_ALIAS = 'methodAlias';
 
-    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
 
-    const SERVICES_CONFIG_CACHE_ID = 'services-services-config';
+    public const SERVICES_CONFIG_CACHE_ID = 'services-services-config';
 
-    const ROUTES_CONFIG_CACHE_ID = 'routes-services-config';
+    public const ROUTES_CONFIG_CACHE_ID = 'routes-services-config';
 
-    const REFLECTED_TYPES_CACHE_ID = 'soap-reflected-types';
+    public const REFLECTED_TYPES_CACHE_ID = 'soap-reflected-types';
 
     /**#@-*/
 

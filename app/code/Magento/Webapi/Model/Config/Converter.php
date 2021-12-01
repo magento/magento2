@@ -16,23 +16,23 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**#@+
      * Array keys for config internal representation.
      */
-    const KEY_SERVICE_CLASS = 'class';
-    const KEY_URL = 'url';
-    const KEY_SERVICE_METHOD = 'method';
-    const KEY_SECURE = 'secure';
-    const KEY_ROUTES = 'routes';
-    const KEY_ACL_RESOURCES = 'resources';
-    const KEY_SERVICE = 'service';
-    const KEY_SERVICES = 'services';
-    const KEY_FORCE = 'force';
-    const KEY_VALUE = 'value';
-    const KEY_DATA_PARAMETERS = 'parameters';
-    const KEY_SOURCE = 'source';
-    const KEY_METHOD = 'method';
-    const KEY_METHODS = 'methods';
-    const KEY_DESCRIPTION = 'description';
-    const KEY_REAL_SERVICE_METHOD = 'realMethod';
-    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
+    public const KEY_SERVICE_CLASS = 'class';
+    public const KEY_URL = 'url';
+    public const KEY_SERVICE_METHOD = 'method';
+    public const KEY_SECURE = 'secure';
+    public const KEY_ROUTES = 'routes';
+    public const KEY_ACL_RESOURCES = 'resources';
+    public const KEY_SERVICE = 'service';
+    public const KEY_SERVICES = 'services';
+    public const KEY_FORCE = 'force';
+    public const KEY_VALUE = 'value';
+    public const KEY_DATA_PARAMETERS = 'parameters';
+    public const KEY_SOURCE = 'source';
+    public const KEY_METHOD = 'method';
+    public const KEY_METHODS = 'methods';
+    public const KEY_DESCRIPTION = 'description';
+    public const KEY_REAL_SERVICE_METHOD = 'realMethod';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
     /**

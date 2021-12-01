@@ -36,7 +36,7 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
+    public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor

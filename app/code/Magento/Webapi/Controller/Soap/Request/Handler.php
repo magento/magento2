@@ -32,7 +32,7 @@ use Magento\Webapi\Model\ServiceMetadata;
  */
 class Handler
 {
-    const RESULT_NODE_NAME = 'result';
+    public const RESULT_NODE_NAME = 'result';
 
     /**
      * @var \Magento\Framework\Webapi\Request

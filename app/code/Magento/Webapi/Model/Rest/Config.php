@@ -20,23 +20,23 @@ class Config
     /**#@+
      * HTTP methods supported by REST.
      */
-    const HTTP_METHOD_GET = 'GET';
-    const HTTP_METHOD_DELETE = 'DELETE';
-    const HTTP_METHOD_PUT = 'PUT';
-    const HTTP_METHOD_POST = 'POST';
-    const HTTP_METHOD_PATCH = 'PATCH';
+    public const HTTP_METHOD_GET = 'GET';
+    public const HTTP_METHOD_DELETE = 'DELETE';
+    public const HTTP_METHOD_PUT = 'PUT';
+    public const HTTP_METHOD_POST = 'POST';
+    public const HTTP_METHOD_PATCH = 'PATCH';
     /**#@-*/
 
     /**#@+
      * Keys that a used for config internal representation.
      */
-    const KEY_IS_SECURE = 'isSecure';
-    const KEY_CLASS = 'class';
-    const KEY_METHOD = 'method';
-    const KEY_ROUTE_PATH = 'routePath';
-    const KEY_ACL_RESOURCES = 'resources';
-    const KEY_PARAMETERS = 'parameters';
-    const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
+    public const KEY_IS_SECURE = 'isSecure';
+    public const KEY_CLASS = 'class';
+    public const KEY_METHOD = 'method';
+    public const KEY_ROUTE_PATH = 'routePath';
+    public const KEY_ACL_RESOURCES = 'resources';
+    public const KEY_PARAMETERS = 'parameters';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /*#@-*/
 
     /**
