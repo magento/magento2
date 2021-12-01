@@ -429,8 +429,6 @@ class Bootstrap
      */
     protected function terminate(\Throwable $e)
     {
-        echo "ramamba";
-        var_dump($e);
         /** @var Response $response */
         $response = $this->objectManager->get(Response::class);
         $response->clearHeaders();

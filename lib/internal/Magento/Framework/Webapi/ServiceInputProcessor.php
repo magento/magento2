@@ -195,6 +195,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     {
         $inputData = [];
         $inputError = [];
+        $this->inputArraySizeLimitValue->set($inputArraySizeLimit);
 
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
             $paramName = $param[MethodsMap::METHOD_META_NAME];
@@ -217,7 +218,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         $this->processInputError($inputError);
-        $this->inputArraySizeLimitValue->set($inputArraySizeLimit);
 
         return $inputData;
     }

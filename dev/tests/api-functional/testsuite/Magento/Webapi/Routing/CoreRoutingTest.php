@@ -116,12 +116,7 @@ class CoreRoutingTest extends BaseService
             $exceptionResult = $this->processRestExceptionResult($e);
             $actualMessage = $exceptionResult['message'];
             $this->assertStringNotContainsString($unexpectedMessage, $actualMessage);
-            $this->assertStringContainsString('getMessage', $e->getMessage());
-            $this->assertStringContainsString('getCode', $e->getCode());
-            $this->assertStringContainsString('getTraceAsString', $e->getTraceAsString());
-            $this->assertStringContainsString('getFile', $e->getFile());
-            $this->assertStringContainsString('line', $e->getLine());
-            $this->assertArrayHasKey('getTrace', $e->getTrace());
+            $this->assertStringContainsString($expectedMessage, $actualMessage);
         }
     }
 }
