@@ -37,7 +37,15 @@ class AddProductToCart implements DataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'cart_id'    => (int) Cart ID. Required.
+     *      'product_id' => (int) Product ID. Required.
+     *      'qty'        => (int) Quantity. Optional. Default: 1.
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {

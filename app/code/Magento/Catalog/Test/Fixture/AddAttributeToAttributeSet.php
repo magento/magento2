@@ -39,7 +39,16 @@ class AddAttributeToAttributeSet implements DataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'attribute_code'     => (string) Attribute Code. Required.
+     *      'attribute_set_id'   => (int) Attribute Set ID. Optional. Default: default attribute set.
+     *      'attribute_group_id' => (int) Attribute Group ID. Optional. Default: default attribute group.
+     *      'sort_order'         => (int) Sort Order. Optional. Default: 0.
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -49,7 +58,6 @@ class AddAttributeToAttributeSet implements DataFixtureInterface
             [
                 'attribute_set_id' => $attributeSetId,
                 'attribute_group_id' => $attributeGroupId,
-                'attribute_code' => 'fixture_attribute',
                 'sort_order' => 0,
             ],
             $data

@@ -34,13 +34,13 @@ class Attribute implements RevertibleDataFixtureInterface
         'used_in_product_listing' => '0',
         'is_visible' => true,
         'scope' => 'store',
-        'attribute_code' => 'fixture_attribute_%uniqid%',
+        'attribute_code' => 'product_attribute%uniqid%',
         'frontend_input' => 'text',
         'entity_type_id' => '4',
         'is_required' => false,
         'options' => [],
         'is_user_defined' => true,
-        'default_frontend_label' => 'Fixture Attribute %uniqid%',
+        'default_frontend_label' => 'Product Attribute%uniqid%',
         'frontend_labels' => [],
         'backend_type' => 'varchar',
         'is_unique' => '0',
@@ -70,7 +70,8 @@ class Attribute implements RevertibleDataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters. Same format as Attribute::DEFAULT_DATA.
      */
     public function apply(array $data = []): ?DataObject
     {

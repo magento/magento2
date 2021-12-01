@@ -16,14 +16,14 @@ use Magento\TestFramework\Fixture\DataFixtureInterface;
 class SetBillingAddress implements DataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        AddressInterface::KEY_TELEPHONE => 3468676,
-        AddressInterface::KEY_POSTCODE => 75477,
+        AddressInterface::KEY_TELEPHONE => 3340000000,
+        AddressInterface::KEY_POSTCODE => 36104,
         AddressInterface::KEY_COUNTRY_ID => 'US',
-        AddressInterface::KEY_CITY => 'CityM',
-        AddressInterface::KEY_COMPANY => 'CompanyName',
+        AddressInterface::KEY_CITY => 'Montgomery',
+        AddressInterface::KEY_COMPANY => 'Magento',
         AddressInterface::KEY_STREET => ['Green str, 67'],
-        AddressInterface::KEY_LASTNAME => 'Smith',
         AddressInterface::KEY_FIRSTNAME => 'John',
+        AddressInterface::KEY_LASTNAME => 'Doe',
         AddressInterface::KEY_REGION_ID => 1,
     ];
 
@@ -42,7 +42,14 @@ class SetBillingAddress implements DataFixtureInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @param array $data Parameters
+     * <pre>
+     *    $data = [
+     *      'cart_id' => (int) Cart ID. Required.
+     *      'address' => (array) Address Data. Optional. Default: SetBillingAddress::DEFAULT_DATA
+     *    ]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
