@@ -37,6 +37,7 @@ class ReadExif implements ReadMetadataInterface
 
     /**
      * @param MetadataInterfaceFactory $metadataFactory
+     * @param ExifReader|null $exifReader
      */
     public function __construct(
         MetadataInterfaceFactory $metadataFactory,

@@ -136,8 +136,9 @@ class ReadFile implements ReadFileInterface
         return $data;
     }
 
-
     /**
+     * Returns current driver for media dircetory
+     *
      * @return DriverInterface
      * @throws FileSystemException
      */

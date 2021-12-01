@@ -17,6 +17,8 @@ class IptcEmbed
     /**
      * Returns result of iptcembed function
      *
+     * @param string $iptcData
+     * @param string $filePath
      * @throws LocalizedException if iptcembed function is not enabled
      */
     public function get(string $iptcData, string $filePath)

@@ -62,6 +62,7 @@ class MetadataProvider implements MetadataProviderInterface
      */
     public function getMetadata(string $path): array
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $metadata = $this->cache->getMetadata($path);
         if (isset($metadata['type']) && ($metadata['type'] == 'dir' || $this->isMetadataComplete($metadata))) {
             return $metadata;
@@ -106,6 +107,7 @@ class MetadataProvider implements MetadataProviderInterface
             'dirname' => dirname($meta->path()),
             'basename' => basename($meta->path(), '.' . pathinfo($path, PATHINFO_EXTENSION)),
         ];
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         $extraMetadata = $meta->extraMetadata();
         if (isset($extraMetadata['Metadata']['image-width']) && isset($extraMetadata['Metadata']['image-height'])) {
             $data['extra'] = $extraMetadata['Metadata'];

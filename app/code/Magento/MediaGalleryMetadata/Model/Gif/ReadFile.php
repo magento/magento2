@@ -330,6 +330,8 @@ class ReadFile implements ReadFileInterface
     }
 
     /**
+     * Returns current driver for media dircetory
+     *
      * @return DriverInterface
      * @throws FileSystemException
      */

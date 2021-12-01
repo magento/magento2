@@ -49,7 +49,7 @@ class WriteFile implements WriteFileInterface
     public function __construct(
         DriverInterface $driver,
         SegmentNames $segmentNames,
-        Filesystem $filesystem
+        Filesystem $filesystem = null
     ) {
         $this->segmentNames = $segmentNames;
         $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
@@ -88,6 +88,8 @@ class WriteFile implements WriteFileInterface
     }
 
     /**
+     * Returns current driver for media dircetory
+     *
      * @return DriverInterface
      * @throws FileSystemException
      */

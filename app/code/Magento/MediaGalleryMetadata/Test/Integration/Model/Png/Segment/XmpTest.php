@@ -35,11 +35,6 @@ class XmpTest extends TestCase
     private $xmpReader;
 
     /**
-     * @var DriverInterface
-     */
-    private $driver;
-
-    /**
      * @var ReadFile
      */
     private $fileReader;

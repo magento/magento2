@@ -52,6 +52,8 @@ class AddIptcMetadata
      * @param DriverInterface $driver
      * @param ReadFile $fileReader
      * @param Filesystem|null $filesystem
+     * @param IptcEmbed|null $iptcEmbed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FileInterfaceFactory $fileFactory,
