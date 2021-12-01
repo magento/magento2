@@ -120,11 +120,11 @@ class ManagerTest extends TestCase
             ->willReturn('source/file.min.js');
         $this->asset->expects($this->once())
             ->method('getPath')
-            ->willReturn('');
+            ->willReturn('some/path/to_file');
         $dirRead->expects($this->once())
             ->method('getAbsolutePath')
-            ->with('')
-            ->willReturn(true);
+            ->with('some/path/to_file')
+            ->willReturn('some/path/to_file');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::APP)

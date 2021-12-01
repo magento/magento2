@@ -117,7 +117,7 @@ class FileInfoTest extends TestCase
             ->willReturn('/a/b/c/pub/');
 
         $this->store->method('getBaseUrl')
-            ->willReturn('');
+            ->willReturn('https://example.com/');
 
         $this->model = new FileInfo(
             $this->filesystem,

@@ -82,7 +82,7 @@ class CurrentTest extends TestCase
         $this->_urlBuilderMock
             ->method('getUrl')
             ->with($pathStub)
-            ->will($this->returnValue(''));
+            ->will($this->returnValue('http://example.com/'));
         $this->currentLink->setPath($pathStub);
         $this->currentLink->setCurrent(true);
         $this->assertTrue($this->currentLink->isCurrent());

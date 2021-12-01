@@ -27,7 +27,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class FileTest extends AbstractFormTestCase
 {
-    const ENTITY_TYPE = 0;
+    public const ENTITY_TYPE = 0;
 
     /**
      * @var MockObject|EncoderInterface
