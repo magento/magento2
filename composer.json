@@ -381,12 +381,5 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/magento/zf1.git"
-        }
-    ],
-    "minimum-stability": "dev"
+    "prefer-stable": true
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5fdb84c0d60e0093432dc18a1c6d852",
+    "content-hash": "881ce7529a5d4b8bd66281efc97b5497",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3909,28 +3909,22 @@
                     "Zend_": "library/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
-            "archive": {
-                "exclude": [
-                    "/demos",
-                    "/documentation",
-                    "/tests"
-                ]
-            },
             "license": [
                 "BSD-3-Clause"
             ],
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "framework",
-                "zf1"
+                "ZF1",
+                "framework"
             ],
             "support": {
-                "source": "https://github.com/magento/zf1/tree/master",
-                "issues": "https://github.com/magento/zf1/issues"
+                "issues": "https://github.com/magento/zf1/issues",
+                "source": "https://github.com/magento/zf1/tree/master"
             },
             "time": "2021-11-30T15:38:43+00:00"
         },
@@ -12702,7 +12696,7 @@
             "alias_normalized": "1.14.6.0"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
         "magento/zendframework1": 20
