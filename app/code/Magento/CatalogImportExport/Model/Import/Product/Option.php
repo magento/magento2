@@ -54,6 +54,31 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     public const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
     /**
+     * Error codes
+     */
+    public const ERROR_INVALID_STORE = 'optionInvalidStore';
+
+    public const ERROR_INVALID_TYPE = 'optionInvalidType';
+
+    public const ERROR_EMPTY_TITLE = 'optionEmptyTitle';
+
+    public const ERROR_INVALID_PRICE = 'optionInvalidPrice';
+
+    public const ERROR_INVALID_MAX_CHARACTERS = 'optionInvalidMaxCharacters';
+
+    public const ERROR_INVALID_SORT_ORDER = 'optionInvalidSortOrder';
+
+    public const ERROR_INVALID_ROW_PRICE = 'optionInvalidRowPrice';
+
+    public const ERROR_INVALID_ROW_SORT = 'optionInvalidRowSort';
+
+    public const ERROR_AMBIGUOUS_NEW_NAMES = 'optionAmbiguousNewNames';
+
+    public const ERROR_AMBIGUOUS_OLD_NAMES = 'optionAmbiguousOldNames';
+
+    public const ERROR_AMBIGUOUS_TYPES = 'optionAmbiguousTypes';
+
+    /**
      * XML path to page size parameter
      */
     public const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
@@ -228,31 +253,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option\Collection
      */
     protected $_optionCollection;
-
-    /**
-     * Error codes
-     */
-    const ERROR_INVALID_STORE = 'optionInvalidStore';
-
-    const ERROR_INVALID_TYPE = 'optionInvalidType';
-
-    const ERROR_EMPTY_TITLE = 'optionEmptyTitle';
-
-    const ERROR_INVALID_PRICE = 'optionInvalidPrice';
-
-    const ERROR_INVALID_MAX_CHARACTERS = 'optionInvalidMaxCharacters';
-
-    const ERROR_INVALID_SORT_ORDER = 'optionInvalidSortOrder';
-
-    const ERROR_INVALID_ROW_PRICE = 'optionInvalidRowPrice';
-
-    const ERROR_INVALID_ROW_SORT = 'optionInvalidRowSort';
-
-    const ERROR_AMBIGUOUS_NEW_NAMES = 'optionAmbiguousNewNames';
-
-    const ERROR_AMBIGUOUS_OLD_NAMES = 'optionAmbiguousOldNames';
-
-    const ERROR_AMBIGUOUS_TYPES = 'optionAmbiguousTypes';
 
     /**
      * @var CollectionByPagesIterator
