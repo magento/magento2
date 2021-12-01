@@ -168,6 +168,7 @@ class Generic implements CacheInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function deleteDir(string $dirname): void
     {
