@@ -428,7 +428,8 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
-        $name = htmlspecialchars_decode((string)$name);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        $name = html_entity_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
         return trim($name);
