@@ -120,7 +120,6 @@ class DataObject implements \ArrayAccess
      * @param string $key
      * @param string|int $index
      * @return mixed
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getData($key = '', $index = null)
     {
@@ -129,7 +128,7 @@ class DataObject implements \ArrayAccess
         }
 
         /* process a/b/c key as ['a']['b']['c'] */
-        if (is_string($key) && strpos($key, '/') !== false) {
+        if (strpos($key, '/') !== false) {
             $data = $this->getDataByPath($key);
         } else {
             $data = $this->_getData($key);

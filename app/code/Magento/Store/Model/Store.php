@@ -45,89 +45,89 @@ class Store extends AbstractExtensibleModel implements
     /**
      * Store Id key name
      */
-    public const STORE_ID = 'store_id';
+    const STORE_ID = 'store_id';
 
     /**
      * Entity name
      */
-    public const ENTITY = 'store';
+    const ENTITY = 'store';
 
     /**
      * Parameter used to determine app context.
      */
-    public const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
+    const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
 
     /**#@+
      * Configuration paths
      */
-    public const XML_PATH_STORE_IN_URL = 'web/url/use_store';
+    const XML_PATH_STORE_IN_URL = 'web/url/use_store';
 
-    public const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
+    const XML_PATH_USE_REWRITES = 'web/seo/use_rewrites';
 
-    public const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
 
-    public const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
 
-    public const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
+    const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
-    public const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
+    const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
 
-    public const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
+    const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
 
-    public const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
+    const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
 
-    public const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
+    const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
 
-    public const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
+    const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
 
-    public const XML_PATH_SECURE_BASE_STATIC_URL = 'web/secure/base_static_url';
+    const XML_PATH_SECURE_BASE_STATIC_URL = 'web/secure/base_static_url';
 
-    public const XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
+    const XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
 
-    public const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
+    const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
 
-    public const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
+    const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
 
-    public const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
+    const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
 
     /**#@-*/
 
     /**#@+
      * Price scope constants
      */
-    public const PRICE_SCOPE_GLOBAL = 0;
+    const PRICE_SCOPE_GLOBAL = 0;
 
-    public const PRICE_SCOPE_WEBSITE = 1;
+    const PRICE_SCOPE_WEBSITE = 1;
 
     /**#@-*/
 
-    public const ADMIN_CODE = 'admin';
+    const ADMIN_CODE = 'admin';
 
     /**
      * Tag to use to cache stores.
      */
-    public const CACHE_TAG = 'store';
+    const CACHE_TAG = 'store';
 
     /**
      * Script name, which returns all the images
      */
-    public const MEDIA_REWRITE_SCRIPT = 'get.php/';
+    const MEDIA_REWRITE_SCRIPT = 'get.php/';
 
     /**
      * A placeholder for generating base URL
      */
-    public const BASE_URL_PLACEHOLDER = '{{base_url}}';
+    const BASE_URL_PLACEHOLDER = '{{base_url}}';
 
     /**
      * Identifier of default store
      * used for loading data of default scope
      */
-    public const DEFAULT_STORE_ID = 0;
+    const DEFAULT_STORE_ID = 0;
 
     /**
      * Default store Id (for install)
      */
-    public const DISTRO_STORE_ID = 1;
+    const DISTRO_STORE_ID = 1;
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
@@ -156,6 +156,8 @@ class Store extends AbstractExtensibleModel implements
     protected $_eventObject = 'store';
 
     /**
+     * Price filter
+     *
      * @var \Magento\Directory\Model\Currency\Filter
      */
     protected $_priceFilter;
@@ -182,11 +184,15 @@ class Store extends AbstractExtensibleModel implements
     protected $_dirCache = [];
 
     /**
+     * URL cache
+     *
      * @var array
      */
     protected $_urlCache = [];
 
     /**
+     * Base URL cache
+     *
      * @var array
      */
     protected $_baseUrlCache = [];
@@ -250,6 +256,8 @@ class Store extends AbstractExtensibleModel implements
     protected $_configDataResource;
 
     /**
+     * Core file storage database
+     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -658,13 +666,12 @@ class Store extends AbstractExtensibleModel implements
                     throw new \InvalidArgumentException('Invalid base url type');
             }
 
-            if (is_string($url) && strpos($url, self::BASE_URL_PLACEHOLDER) !== false) {
+            if (false !== strpos($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
-            $url = is_string($url) ? rtrim($url, '/') : '';
             $this->_baseUrlCache[$cacheKey] = $this->getUrlModifier()->execute(
-                $url . '/',
+                rtrim($url, '/') . '/',
                 \Magento\Framework\Url\ModifierInterface::MODE_BASE
             );
         }
