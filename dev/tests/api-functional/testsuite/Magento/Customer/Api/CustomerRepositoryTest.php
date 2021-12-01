@@ -38,9 +38,9 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class CustomerRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'customerCustomerRepositoryV1';
-    const RESOURCE_PATH = '/V1/customers';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'customerCustomerRepositoryV1';
+    public const RESOURCE_PATH = '/V1/customers';
 
     private const STUB_INVALID_CUSTOMER_GROUP_ID = 777;
 
