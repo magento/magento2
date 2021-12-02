@@ -37,16 +37,7 @@ class MaintenanceModeTest extends TestCase
      */
     protected function setup(): void
     {
-        $this->flagDir = $this->getMockForAbstractClass(
-            WriteInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['readFile']
-        );
-        $this->flagDir->method('readFile')->willReturn('');
+        $this->flagDir = $this->getMockForAbstractClass(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method('getDirectoryWrite')
             ->willReturn($this->flagDir);
@@ -104,6 +95,10 @@ class MaintenanceModeTest extends TestCase
         $this->flagDir->expects($this->exactly(2))
             ->method('isExist')
             ->willReturnMap($mapisExist);
+        $this->flagDir->expects($this->once())
+            ->method('readFile')
+            ->with(MaintenanceMode::IP_FILENAME)
+            ->willReturn('');
         $this->assertFalse($this->model->isOn());
     }
 
