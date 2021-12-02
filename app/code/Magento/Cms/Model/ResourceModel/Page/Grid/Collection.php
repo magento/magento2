@@ -46,8 +46,8 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param mixed $eventObject
      * @param mixed $resourceModel
      * @param string $model
-     * @param null $connection
-     * @param AbstractDb|null $resource,
+     * @param mixed|null $connection
+     * @param AbstractDb|null $resource
      * @param TimezoneInterface|null $timeZone
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -117,6 +117,8 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
+     * Get aggregation interface instance
+     *
      * @return AggregationInterface
      */
     public function getAggregations()
@@ -125,6 +127,8 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
+     * Set aggregation interface instance
+     *
      * @param AggregationInterface $aggregations
      * @return $this
      */

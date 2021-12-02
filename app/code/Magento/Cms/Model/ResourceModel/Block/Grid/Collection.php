@@ -117,6 +117,8 @@ class Collection extends BlockCollection implements SearchResultInterface
     }
 
     /**
+     * Get aggregation interface instance
+     *
      * @return AggregationInterface
      */
     public function getAggregations()
@@ -125,6 +127,8 @@ class Collection extends BlockCollection implements SearchResultInterface
     }
 
     /**
+     * Set aggregation interface instance
+     *
      * @param AggregationInterface $aggregations
      * @return $this
      */
