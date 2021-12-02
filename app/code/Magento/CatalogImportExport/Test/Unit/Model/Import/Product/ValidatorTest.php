@@ -112,7 +112,7 @@ class ValidatorTest extends TestCase
             [
                 'any_behavior',
                 [],
-                ['product_type' => 'any', 'sku' => ''],
+                ['product_type' => 'any'],
                 false,
                 Product::COL_SKU
             ],
