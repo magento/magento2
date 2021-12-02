@@ -118,6 +118,8 @@ class ManagerTest extends TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('source/file.min.js');
+        $this->asset->method('getPath')
+            ->willReturn('');   // PHP 8.1. compatibility
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::APP)
@@ -171,6 +173,8 @@ class ManagerTest extends TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
+        $this->asset->method('getPath')
+            ->willReturn('');   // PHP 8.1. compatibility
         $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
@@ -201,6 +205,8 @@ class ManagerTest extends TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::APP)
             ->willReturn($dirRead);
+        $dirRead->method('getAbsolutePath')
+            ->willReturn('some/excluded/file');
         $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
             ->willReturn('/path/to/source/file.min.js');

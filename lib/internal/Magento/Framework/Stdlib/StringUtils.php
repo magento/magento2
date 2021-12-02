@@ -16,7 +16,7 @@ class StringUtils
     /**
      * Default charset
      */
-    const ICONV_CHARSET = 'UTF-8';
+    public const ICONV_CHARSET = 'UTF-8';
 
     /**
      * Capitalize first letters and convert separators if needed
@@ -209,6 +209,6 @@ class StringUtils
      */
     public function strpos($haystack, $needle, $offset = null)
     {
-        return mb_strpos($haystack, $needle, $offset, self::ICONV_CHARSET);
+        return mb_strpos($haystack, $needle, $offset ?? 0, self::ICONV_CHARSET);
     }
 }

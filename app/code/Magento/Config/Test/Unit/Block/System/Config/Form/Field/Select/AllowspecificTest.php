@@ -87,6 +87,7 @@ class AllowspecificTest extends TestCase
         $afterHtmlCode = 'after html';
         $this->_object->setData('after_element_html', $afterHtmlCode);
         $this->_object->setForm($this->_formMock);
+        $this->_object->setId('spec_element');
 
         $actual = $this->_object->getAfterElementHtml();
 
