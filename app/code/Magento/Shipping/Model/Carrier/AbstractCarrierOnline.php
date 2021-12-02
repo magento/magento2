@@ -15,19 +15,20 @@ use Magento\Framework\Xml\Security;
 /**
  * Abstract online shipping carrier model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
-    const USA_COUNTRY_ID = 'US';
+    public const USA_COUNTRY_ID = 'US';
 
-    const PUERTORICO_COUNTRY_ID = 'PR';
+    public const PUERTORICO_COUNTRY_ID = 'PR';
 
-    const GUAM_COUNTRY_ID = 'GU';
+    public const GUAM_COUNTRY_ID = 'GU';
 
-    const GUAM_REGION_CODE = 'GU';
+    public const GUAM_REGION_CODE = 'GU';
 
     /**
      * Array of quotes
@@ -44,8 +45,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_activeFlag = 'active';
 
     /**
-     * Directory data
-     *
      * @var \Magento\Directory\Helper\Data
      */
     protected $_directoryData = null;
@@ -438,6 +437,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = html_entity_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
@@ -454,10 +454,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $phonePattern = '/[\s\_\-\(\)]+/';
         $phoneNumber = $request->getShipperContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setShipperContactPhoneNumber($phoneNumber);
         $phoneNumber = $request->getRecipientContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setRecipientContactPhoneNumber($phoneNumber);
     }
 

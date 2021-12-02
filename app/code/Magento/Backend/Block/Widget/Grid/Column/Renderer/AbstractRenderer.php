@@ -139,9 +139,10 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     {
         if (false !== $this->getColumn()->getSortable()) {
             $className = 'not-sort';
-            $dir = strtolower($this->getColumn()->getDir());
+            $dir = is_string($this->getColumn()->getDir()) ? strtolower($this->getColumn()->getDir()) : '';
             $nDir = $dir == 'asc' ? 'desc' : 'asc';
-            if ($this->getColumn()->getDir()) {
+
+            if ($dir) {
                 $className = '_' . $dir . 'end';
             }
             $out = '<th data-sort="' .
