@@ -180,8 +180,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_scopeConfig;
 
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -192,15 +190,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_localeDate;
 
     /**
-     * Catalog url
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Url
      */
     protected $_catalogUrl;
 
     /**
-     * Product option factory
-     *
      * @var \Magento\Catalog\Model\Product\OptionFactory
      */
     protected $_productOptionFactory;
@@ -765,7 +759,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
         if (is_array($productId)) {
-            if (!empty($productId)) {
+            if ($productId) {
                 if ($exclude) {
                     $condition = ['nin' => $productId];
                 } else {
