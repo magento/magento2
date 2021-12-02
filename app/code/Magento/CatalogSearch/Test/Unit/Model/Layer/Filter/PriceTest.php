@@ -102,10 +102,7 @@ class PriceTest extends TestCase
             ->onlyMethods(['getState', 'getProductCollection'])
             ->getMock();
 
-        $this->state = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addFilter'])
-            ->getMock();
+        $this->state = new State();
         $this->layer->expects($this->any())
             ->method('getState')
             ->willReturn($this->state);
@@ -129,15 +126,24 @@ class PriceTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $filterItem = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
-            ->getMock();
-        $filterItem->expects($this->any())
-            ->method($this->anything())->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
-            ->willReturn($filterItem);
+            ->willReturnCallback(
+                function (array $data) {
+                    return new Item(
+                        $this->createMock(\Magento\Framework\UrlInterface::class),
+                        $this->createMock(\Magento\Theme\Block\Html\Pager::class),
+                        $data
+                    );
+                }
+            );
+        $priceFormatter = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $priceFormatter->method('format')
+            ->willReturnCallback(
+                function ($number) {
+                    return sprintf('$%01.2f', $number);
+                }
+            );
 
         $escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
@@ -160,7 +166,8 @@ class PriceTest extends TestCase
                 'layer' => $this->layer,
                 'itemDataBuilder' => $this->itemDataBuilder,
                 'filterItemFactory' => $this->filterItemFactory,
-                'escaper' => $escaper
+                'escaper' => $escaper,
+                'priceCurrency' => $priceFormatter,
             ]
         );
     }
@@ -181,7 +188,13 @@ class PriceTest extends TestCase
 
         $this->request
             ->method('getParam')
-            ->with($requestField);
+            ->with($requestField)
+            ->willReturnMap(
+                [
+                    [$requestField, $requestValue],
+                    [$idField, $idValue],
+                ]
+            );
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -209,22 +222,15 @@ class PriceTest extends TestCase
     }
 
     /**
-    * @return void
-    */
-    public function testApply(): void
+     * @dataProvider applyDataProvider
+     */
+    public function testApply(string $filter, array $expected): void
     {
-        $priceId = '15-50';
-        $requestVar = 'test_request_var';
-
-        $this->target->setRequestVar($requestVar);
+        $requestVar = 'price';
         $this->request->expects($this->exactly(1))
             ->method('getParam')
-            ->willReturnCallback(
-                function ($field) use ($requestVar, $priceId) {
-                    $this->assertContains($field, [$requestVar, 'id']);
-                    return $priceId;
-                }
-            );
+            ->with($requestVar)
+            ->willReturn($filter);
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
@@ -232,11 +238,44 @@ class PriceTest extends TestCase
 
         $this->target->setCurrencyRate(1);
         $this->target->apply($this->request);
+        $actual = [];
+        foreach ($this->state->getFilters() as $item) {
+            $actual[] = ['label' => $item->getLabel(), 'value' => $item->getValue(), 'count' => $item->getCount()];
+        }
+
+        $this->assertEquals($expected, $actual);
     }
 
     /**
-    * @return void
-    */
+     * @return array
+     */
+    public function applyDataProvider(): array
+    {
+        return [
+            [
+                '10-50',
+                [
+                    ['label' => '$10.00 - $49.99', 'value' => ['10', '50'], 'count' => '0'],
+                ]
+            ],
+            [
+                '-50',
+                [
+                    ['label' => '$0.00 - $49.99', 'value' => ['', '50'], 'count' => '0'],
+                ]
+            ],
+            [
+                '10-',
+                [
+                    ['label' => '$10.00 and above', 'value' => ['10', ''], 'count' => '0'],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @return void
+     */
     public function testGetItems(): void
     {
         $this->target->setAttributeModel($this->attribute);

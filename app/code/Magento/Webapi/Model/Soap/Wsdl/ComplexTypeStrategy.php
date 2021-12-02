@@ -222,7 +222,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         $appInfoNode->setAttributeNS(
             Wsdl::XML_NS_URI,
             Wsdl::XML_NS . ':' . self::APP_INF_NS,
-            $this->getContext()->getTargetNamespace()
+            (string) $this->getContext()->getTargetNamespace()
         );
 
         $this->_processDefaultValueAnnotation($elementType, $default, $appInfoNode);

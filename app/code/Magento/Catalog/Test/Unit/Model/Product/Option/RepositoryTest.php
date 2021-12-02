@@ -90,8 +90,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetList(): void
     {
         $productSku = 'simple_product';
@@ -106,8 +106,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDelete(): void
     {
         $this->optionResourceMock->expects($this->once())->method('delete')->with($this->optionMock);
@@ -115,8 +115,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetNonExistingOption(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
@@ -136,8 +136,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGet(): void
     {
         $optionId = 1;
@@ -155,8 +155,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteByIdentifierNonExistingOption(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
@@ -177,8 +177,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteByIdentifier(): void
     {
         $optionId = 1;
@@ -200,8 +200,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteByIdentifierWhenCannotRemoveOption(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
@@ -228,8 +228,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveCouldNotSaveException(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
@@ -239,8 +239,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveNoSuchEntityException(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
@@ -261,8 +261,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSave(): void
     {
         $productSku = 'simple_product';
@@ -307,8 +307,8 @@ class RepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveWhenOptionTypeWasChanged(): void
     {
         $productSku = 'simple_product';

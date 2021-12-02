@@ -62,7 +62,7 @@ class FlushAllCache implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->_config->getType() == Config::BUILT_IN) {
+        if ($this->_config->getType() === Config::BUILT_IN) {
             $this->fullPageCache->clean();
         }
     }

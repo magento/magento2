@@ -135,7 +135,7 @@ class StockStateProvider implements StockStateProviderInterface
         $result->addData($this->checkQtyIncrements($stockItem, $qty)->getData());
 
         $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
-        if (!$stockItem->getIsQtyDecimal() && (floor($qty) !== $qty)) {
+        if (!$stockItem->getIsQtyDecimal() && (floor($qty) !== (float) $qty)) {
             $result->setHasError(true)
                 ->setMessage(__('You cannot use decimal quantity for this product.'))
                 ->setErrorCode('qty_decimal')

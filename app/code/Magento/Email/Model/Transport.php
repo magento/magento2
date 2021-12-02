@@ -177,7 +177,7 @@ class Transport implements TransportInterface
             $this->getTransport()->send($laminasMessage);
         } catch (\Exception $e) {
             $this->logger->error($e);
-            throw new MailException(new Phrase('Unable to send mail. Please try again later.'));
+            throw new MailException(new Phrase('Unable to send mail. Please try again later.'), $e);
         }
     }
 

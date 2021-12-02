@@ -125,6 +125,8 @@
         <waitForPageLoad stepKey="waitForViewOrder"/>
         <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
-        <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
+        <actionGroup ref="StorefrontCheckRefundGrandTotalActionGroup" stepKey="seeGrandTotal">
+            <argument name="grandTotal" value="555.00"/>
+        </actionGroup>
     </test>
 </tests>
