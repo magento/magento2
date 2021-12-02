@@ -31,11 +31,6 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown(): void
-    {
-        $this->customerModel->delete();
-    }
-
     /**
      * Test save rp token
      *

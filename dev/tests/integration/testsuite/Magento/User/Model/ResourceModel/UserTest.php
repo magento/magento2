@@ -130,8 +130,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $token = 'randomstring';
         $username = $this->random->getRandomString(6);
-        $email= $username."@example.com";
-
+        $email = $username . "@example.com";
+        $password = uniqid().$this->random->getRandomString(10);
         $userModel = Bootstrap::getObjectManager()->get(User::class);
 
         $userModel->setData(
@@ -140,7 +140,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
                 'rp_token' => $token,
                 'firstname' => 'John',
                 'lastname' => 'Doe',
-                'password' => $this->random->getRandomString(10),
+                'password' => $password,
                 'username' => $username
             ]
         )->save();
