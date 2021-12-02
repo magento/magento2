@@ -12,7 +12,8 @@ define([
     'collapsable',
     'mage/translate',
     'mage/backend/validation',
-    'Magento_Ui/js/modal/modal'
+    'Magento_Ui/js/modal/modal',
+    'jquery-ui-modules/sortable'
 ], function ($, mageTemplate, alert) {
     'use strict';
 
