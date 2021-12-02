@@ -48,29 +48,29 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Entity code.
      * Can be used as part of method name for entity processing
      */
-    const ENTITY = 'catalog_category';
+    public const ENTITY = 'catalog_category';
 
     /**#@+
      * Category display modes
      */
-    const DM_PRODUCT = 'PRODUCTS';
+    public const DM_PRODUCT = 'PRODUCTS';
 
-    const DM_PAGE = 'PAGE';
+    public const DM_PAGE = 'PAGE';
 
-    const DM_MIXED = 'PRODUCTS_AND_PAGE';
+    public const DM_MIXED = 'PRODUCTS_AND_PAGE';
     /**#@-*/
 
     /**
      * Id of root category
      */
-    const ROOT_CATEGORY_ID = 0;
+    public const ROOT_CATEGORY_ID = 0;
 
     /**
      * Id of category tree root
      */
-    const TREE_ROOT_ID = 1;
+    public const TREE_ROOT_ID = 1;
 
-    const CACHE_TAG = 'cat_c';
+    public const CACHE_TAG = 'cat_c';
 
     /**
      * @var string

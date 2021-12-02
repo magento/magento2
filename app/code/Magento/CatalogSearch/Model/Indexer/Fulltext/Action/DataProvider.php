@@ -69,15 +69,11 @@ class DataProvider
     private $productAttributeCollectionFactory;
 
     /**
-     * Eav config
-     *
      * @var Config
      */
     private $eavConfig;
 
     /**
-     * Catalog product type
-     *
      * @var Type
      */
     private $catalogProductType;
@@ -90,8 +86,6 @@ class DataProvider
     private $eventManager;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -179,7 +173,8 @@ class DataProvider
         $this->engine = $engineProvider->get();
         $this->metadata = $metadataPool->getMetadata(ProductInterface::class);
         $this->antiGapMultiplier = $antiGapMultiplier;
-        $this->selectSearchableProducts = $getSearchableProductsSelect ?: ObjectManager::getInstance()->get(GetSearchableProductsSelect::class);
+        $this->selectSearchableProducts = $getSearchableProductsSelect ?:
+            ObjectManager::getInstance()->get(GetSearchableProductsSelect::class);
     }
 
     /**
@@ -589,7 +584,9 @@ class DataProvider
      * @param int $attributeId
      * @param int|string $valueIds
      * @param int $storeId
+     *
      * @return null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getAttributeOptionValue($attributeId, $valueIds, $storeId)
     {

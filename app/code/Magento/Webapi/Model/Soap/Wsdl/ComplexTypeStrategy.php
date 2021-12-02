@@ -16,12 +16,12 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      *  Array item key value for element.
      */
-    const ARRAY_ITEM_KEY_NAME = 'item';
+    public const ARRAY_ITEM_KEY_NAME = 'item';
 
     /**
      * Appinfo nodes namespace.
      */
-    const APP_INF_NS = 'inf';
+    public const APP_INF_NS = 'inf';
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor

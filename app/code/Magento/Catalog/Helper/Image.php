@@ -24,7 +24,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     /**
      * Media config node
      */
-    const MEDIA_TYPE_CONFIG_NODE = 'images';
+    public const MEDIA_TYPE_CONFIG_NODE = 'images';
 
     /**
      * Current model

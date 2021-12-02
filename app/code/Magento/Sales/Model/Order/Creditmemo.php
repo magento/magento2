@@ -32,15 +32,15 @@ use Magento\Sales\Model\EntityInterface;
  */
 class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInterface
 {
-    const STATE_OPEN = 1;
+    public const STATE_OPEN = 1;
 
-    const STATE_REFUNDED = 2;
+    public const STATE_REFUNDED = 2;
 
-    const STATE_CANCELED = 3;
+    public const STATE_CANCELED = 3;
 
-    const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
+    public const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
-    const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
+    public const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
     /**
      * Identifier for order history item
