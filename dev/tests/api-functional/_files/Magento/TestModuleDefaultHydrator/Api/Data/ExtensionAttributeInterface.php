@@ -13,9 +13,9 @@ interface ExtensionAttributeInterface
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const ID = 'id';
-    const CUSTOMER_ID = 'customer_id';
-    const VALUE = 'value';
+    public const ID = 'id';
+    public const CUSTOMER_ID = 'customer_id';
+    public const VALUE = 'value';
     /**#@-*/
 
     /**

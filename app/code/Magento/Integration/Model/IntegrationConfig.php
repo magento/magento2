@@ -21,7 +21,7 @@ use Magento\Integration\Model\Config\Integration\Reader;
  */
 class IntegrationConfig
 {
-    const CACHE_ID = 'integration-api';
+    public const CACHE_ID = 'integration-api';
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config

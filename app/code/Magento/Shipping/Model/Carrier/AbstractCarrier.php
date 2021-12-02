@@ -18,7 +18,7 @@ use Magento\Shipping\Model\Shipment\Request;
  */
 abstract class AbstractCarrier extends \Magento\Framework\DataObject implements AbstractCarrierInterface
 {
-    const DEBUG_KEYS_MASK = '****';
+    public const DEBUG_KEYS_MASK = '****';
 
     /**
      * @var string
@@ -50,19 +50,19 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      */
     protected $_customizableContainerTypes = [];
 
-    const USA_COUNTRY_ID = 'US';
+    public const USA_COUNTRY_ID = 'US';
 
-    const CANADA_COUNTRY_ID = 'CA';
+    public const CANADA_COUNTRY_ID = 'CA';
 
-    const MEXICO_COUNTRY_ID = 'MX';
+    public const MEXICO_COUNTRY_ID = 'MX';
 
-    const HANDLING_TYPE_PERCENT = 'P';
+    public const HANDLING_TYPE_PERCENT = 'P';
 
-    const HANDLING_TYPE_FIXED = 'F';
+    public const HANDLING_TYPE_FIXED = 'F';
 
-    const HANDLING_ACTION_PERPACKAGE = 'P';
+    public const HANDLING_ACTION_PERPACKAGE = 'P';
 
-    const HANDLING_ACTION_PERORDER = 'O';
+    public const HANDLING_ACTION_PERORDER = 'O';
 
     /**
      * @var array

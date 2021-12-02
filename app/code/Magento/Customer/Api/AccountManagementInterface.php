@@ -19,10 +19,10 @@ interface AccountManagementInterface
     /**#@+
      * Constant for confirmation status
      */
-    const ACCOUNT_CONFIRMED = 'account_confirmed';
-    const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
-    const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
-    const MAX_PASSWORD_LENGTH = 256;
+    public const ACCOUNT_CONFIRMED = 'account_confirmed';
+    public const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
+    public const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
+    public const MAX_PASSWORD_LENGTH = 256;
     /**#@-*/
 
     /**

@@ -20,12 +20,12 @@ class Session extends \Magento\Framework\Model\AbstractModel
     /**
      * Persistent cookie key length
      */
-    const KEY_LENGTH = 50;
+    public const KEY_LENGTH = 50;
 
     /**
      * Persistent cookie name
      */
-    const COOKIE_NAME = 'persistent_shopping_cart';
+    public const COOKIE_NAME = 'persistent_shopping_cart';
 
     /**
      * @var string[]

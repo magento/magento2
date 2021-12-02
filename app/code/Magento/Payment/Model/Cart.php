@@ -22,13 +22,13 @@ class Cart
     /**#@+
      * Amounts
      */
-    const AMOUNT_TAX = 'tax';
+    public const AMOUNT_TAX = 'tax';
 
-    const AMOUNT_SHIPPING = 'shipping';
+    public const AMOUNT_SHIPPING = 'shipping';
 
-    const AMOUNT_DISCOUNT = 'discount';
+    public const AMOUNT_DISCOUNT = 'discount';
 
-    const AMOUNT_SUBTOTAL = 'subtotal';
+    public const AMOUNT_SUBTOTAL = 'subtotal';
     /**#@-*/
 
     /**

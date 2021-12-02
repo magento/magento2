@@ -52,7 +52,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
  */
 class Eav extends AbstractModifier
 {
-    const SORT_ORDER_MULTIPLIER = 10;
+    public const SORT_ORDER_MULTIPLIER = 10;
 
     /**
      * @var LocatorInterface

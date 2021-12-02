@@ -33,7 +33,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     /**
      * Admin session lifetime config path
      */
-    const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
+    public const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
      * @var boolean

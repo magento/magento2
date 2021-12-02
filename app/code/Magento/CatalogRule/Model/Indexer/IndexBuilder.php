@@ -36,7 +36,7 @@ use Psr\Log\LoggerInterface;
  */
 class IndexBuilder
 {
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool

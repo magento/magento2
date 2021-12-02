@@ -32,17 +32,17 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     MethodInterface,
     PaymentMethodInterface
 {
-    const STATUS_UNKNOWN = 'UNKNOWN';
+    public const STATUS_UNKNOWN = 'UNKNOWN';
 
-    const STATUS_APPROVED = 'APPROVED';
+    public const STATUS_APPROVED = 'APPROVED';
 
-    const STATUS_ERROR = 'ERROR';
+    public const STATUS_ERROR = 'ERROR';
 
-    const STATUS_DECLINED = 'DECLINED';
+    public const STATUS_DECLINED = 'DECLINED';
 
-    const STATUS_VOID = 'VOID';
+    public const STATUS_VOID = 'VOID';
 
-    const STATUS_SUCCESS = 'SUCCESS';
+    public const STATUS_SUCCESS = 'SUCCESS';
 
     /**
      * @var string

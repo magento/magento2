@@ -19,7 +19,7 @@ use Magento\Integration\Model\Cache\Type;
  */
 class Config
 {
-    const CACHE_ID = 'integration';
+    public const CACHE_ID = 'integration';
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config

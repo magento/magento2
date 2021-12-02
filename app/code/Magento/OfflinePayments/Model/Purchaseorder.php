@@ -18,7 +18,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_PURCHASEORDER_CODE = 'purchaseorder';
+    public const PAYMENT_METHOD_PURCHASEORDER_CODE = 'purchaseorder';
 
     /**
      * @var string

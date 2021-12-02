@@ -22,13 +22,13 @@ use Magento\Framework\Xml\Security;
  */
 abstract class AbstractCarrierOnline extends AbstractCarrier
 {
-    const USA_COUNTRY_ID = 'US';
+    public const USA_COUNTRY_ID = 'US';
 
-    const PUERTORICO_COUNTRY_ID = 'PR';
+    public const PUERTORICO_COUNTRY_ID = 'PR';
 
-    const GUAM_COUNTRY_ID = 'GU';
+    public const GUAM_COUNTRY_ID = 'GU';
 
-    const GUAM_REGION_CODE = 'GU';
+    public const GUAM_REGION_CODE = 'GU';
 
     /**
      * @var array

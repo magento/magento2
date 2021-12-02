@@ -19,7 +19,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config
 {
-    const YEARS_RANGE = 10;
+    public const YEARS_RANGE = 10;
 
     /**
      * @var array
