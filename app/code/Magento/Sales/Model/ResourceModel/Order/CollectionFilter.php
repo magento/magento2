@@ -27,9 +27,9 @@ class CollectionFilter extends SearchResult
      * @param Logger            $logger
      * @param FetchStrategy     $fetchStrategy
      * @param EventManager      $eventManager
+     * @param TimezoneInterface $timeZone
      * @param string            $mainTable
      * @param string            $resourceModel
-     * @param TimezoneInterface $timeZone
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -47,13 +47,16 @@ class CollectionFilter extends SearchResult
     /**
      * @inheritdoc
      */
-    protected function _initSelect()
+    public function _initSelect()
     {
         parent::_initSelect();
 
         $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
-        foreach ($tableDescription as $columnInfo) {
-            $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
+
+        if ($tableDescription) {
+            foreach ($tableDescription as $columnInfo) {
+                $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.' . $columnInfo['COLUMN_NAME']);
+            }
         }
 
         return $this;

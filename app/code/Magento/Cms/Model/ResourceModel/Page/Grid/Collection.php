@@ -93,8 +93,11 @@ class Collection extends PageCollection implements SearchResultInterface
         parent::_initSelect();
 
         $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
-        foreach ($tableDescription as $columnInfo) {
-            $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
+
+        if ($tableDescription) {
+            foreach ($tableDescription as $columnInfo) {
+                $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
+            }
         }
 
         return $this;
