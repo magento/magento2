@@ -41,37 +41,37 @@ class Transport implements TransportInterface
     /**
      * Configuration path for custom Transport
      */
-    const XML_PATH_TRANSPORT = 'system/smtp/transport';
+    private const XML_PATH_TRANSPORT = 'system/smtp/transport';
 
     /**
      * Configuration path for SMTP Host
      */
-    const XML_PATH_HOST = 'system/smtp/host';
+    private const XML_PATH_HOST = 'system/smtp/host';
 
     /**
      * Configuration path for SMTP Port
      */
-    const XML_PATH_PORT = 'system/smtp/port';
+    private const XML_PATH_PORT = 'system/smtp/port';
 
     /**
      * Configuration path for SMTP Username
      */
-    const XML_PATH_USERNAME = 'system/smtp/username';
+    private const XML_PATH_USERNAME = 'system/smtp/username';
 
     /**
      * Configuration path for SMTP Password
      */
-    const XML_PATH_PASSWORD = 'system/smtp/password';
+    private const XML_PATH_PASSWORD = 'system/smtp/password';
 
     /**
      * Configuration path for SMTP Auth type
      */
-    const XML_PATH_AUTH = 'system/smtp/auth';
+    private const XML_PATH_AUTH = 'system/smtp/auth';
 
     /**
-     * Configuration path for SMTP SSL
+     * Configuration path for SMTP SSL value
      */
-    const XML_PATH_SSL = 'system/smtp/ssl';
+    private const XML_PATH_SSL = 'system/smtp/ssl';
 
     /**
      * Whether return path should be set or no.
