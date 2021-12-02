@@ -282,3 +282,20 @@ input EnteredOptionInput @doc(description: "Defines a customer-entered option.")
     uid: ID! @doc(description: "The unique ID for a `CustomizableOptionInterface` object, such as a `CustomizableFieldOption`, `CustomizableFileOption`, or `CustomizableAreaOption` object.")
     value: String! @doc(description: "Text the customer entered.")
 }
+
+enum BatchMutationStatus {
+    SUCCESS
+    FAILURE
+    MIXED_RESULTS
+}
+
+interface ErrorInterface {
+    message: String!
+}
+
+type NoSuchEntityUidError implements ErrorInterface {
+    uid: ID!
+}
+
+type InternalError implements ErrorInterface {
+}
