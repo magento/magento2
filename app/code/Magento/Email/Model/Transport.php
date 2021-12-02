@@ -141,6 +141,11 @@ class Transport implements TransportInterface
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
+    /**
+     * Get the LaminasTransport based on the configuration.
+     *
+     * @return LaminasTransportInterface
+     */
     public function getTransport(): LaminasTransportInterface
     {
         if ($this->laminasTransport === null) {
@@ -189,6 +194,11 @@ class Transport implements TransportInterface
         return $this->message;
     }
 
+    /**
+     * Create a Smtp LaminasTransport.
+     *
+     * @return Smtp
+     */
     private function createSmtpTransport(): Smtp
     {
         $host = $this->scopeConfig->getValue(
@@ -221,7 +231,6 @@ class Transport implements TransportInterface
             ScopeInterface::SCOPE_STORE
         );
 
-
         $options  = [
             'name' => 'localhost',
             'host' => $host,
@@ -244,7 +253,8 @@ class Transport implements TransportInterface
     }
 
     /**
-     * @param $parameters
+     * Create a Sendmail Laminas Transport
+     * 
      * @return Sendmail
      */
     private function createSendmailTransport(): Sendmail
