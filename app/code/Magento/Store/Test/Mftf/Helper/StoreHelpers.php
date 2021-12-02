@@ -36,7 +36,6 @@ class StoreHelpers extends Helper
         string $successMessageContainer
     ): void {
         try {
-            /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
             /** @var FacebookWebDriver $webDriver */
             $webDriver = $magentoWebDriver->webDriver;
@@ -80,7 +79,6 @@ class StoreHelpers extends Helper
         string $successMessageContainer
     ): void {
         try {
-            /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
             /** @var FacebookWebDriver $webDriver */
             $webDriver = $magentoWebDriver->webDriver;
@@ -124,7 +122,6 @@ class StoreHelpers extends Helper
         string $successMessageContainer
     ): void {
         try {
-            /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
             /** @var FacebookWebDriver $webDriver */
             $webDriver = $magentoWebDriver->webDriver;
