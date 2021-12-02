@@ -79,7 +79,7 @@ script;
 $scriptString .= 'this.regionsUrl = "' . $block->escapeJs($block->getUrl('directory/json/countryRegion')) . '";';
 $countryFilter = $block->getData('countryFilter');
 $euCountries = $countryFilter->getEuCountryList();
-$scriptString .= 'this.euCountryList = ' . json_encode($euCountries);
+$scriptString .= 'this.euCountryList =  Object.values(' . json_encode($euCountries) . ');';
 
 $scriptString .= <<<script
 
@@ -101,7 +101,6 @@ $scriptString .= <<<script
     },
     reloadVatNumberField : function(event)
     {
-        this.reload = true;
         var countryElement = Event.element(event);
         if (countryElement && countryElement.id) {
             this.refreshVatNumberField(countryElement);
@@ -132,26 +131,21 @@ $scriptString .= <<<script
         if (btnVatNumberElement) {
             this.btnVatNumberElement = btnVatNumberElement;
             if (countryElement.value.length) {
-                this.btnValidateVatNumber(countryElement.value);
+                this.renderValidateVatNumberButton(countryElement.value);
             }
         }
     },
-    btnValidateVatNumber: function(countryCode)
+    renderValidateVatNumberButton: function(countryCode)
     {
         var resultElement = document.getElementById("validation_result");
-        var isEuCountry = false;
-        const fruits = Object.values(this.euCountryList);
-
-        if ( fruits.includes(countryCode)) {
-            isEuCountry = true;
-        }
-        if (isEuCountry) {
+        if (this.euCountryList.includes(countryCode)) {
             this.btnVatNumberElement.classList.remove('disabled');
             if (resultElement) {
                 resultElement.style.display = "block";
                 resultElement.innerHTML = '';
-                if ( resultElement.classList.contains('admin__field-error') )
-                resultElement.classList.remove('admin__field-error');
+                if (resultElement.classList.contains('admin__field-error')) {
+                    resultElement.classList.remove('admin__field-error');
+                }
             }
         } else {
             this.btnVatNumberElement.classList.add('disabled');
