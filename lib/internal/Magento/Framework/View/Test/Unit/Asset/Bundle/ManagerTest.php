@@ -118,8 +118,13 @@ class ManagerTest extends TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getFilePath')
             ->willReturn('source/file.min.js');
-        $this->asset->method('getPath')
-            ->willReturn('');   // PHP 8.1. compatibility
+        $this->asset->expects($this->once())
+            ->method('getPath')
+            ->willReturn('some/path/to_file');
+        $dirRead->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('some/path/to_file')
+            ->willReturn('some/path/to_file');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::APP)
@@ -193,6 +198,7 @@ class ManagerTest extends TestCase
     {
         $dirRead = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getAbsolutePath'])
             ->getMockForAbstractClass();
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
