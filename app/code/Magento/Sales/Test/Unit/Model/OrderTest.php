@@ -403,9 +403,6 @@ class OrderTest extends TestCase
         $this->order->setCustomerFirstname($expectedData['first_name']);
         $this->order->setCustomerSuffix($expectedData['customer_suffix']);
         $this->order->setCustomerPrefix($expectedData['customer_prefix']);
-        $this->scopeConfigMock->expects($this->exactly($expectedData['invocation']))
-            ->method('isSetFlag')
-            ->willReturn(true);
         $this->assertEquals($expectedData['expected_name'], $this->order->getCustomerName());
     }
 
@@ -419,7 +416,6 @@ class OrderTest extends TestCase
                 [
                     [
                         'first_name' => null,
-                        'invocation' => 0,
                         'expected_name' => 'Guest',
                         'customer_suffix' => 'smith',
                         'customer_prefix' => 'mr.'
@@ -428,7 +424,6 @@ class OrderTest extends TestCase
                 [
                     [
                         'first_name' => 'Smith',
-                        'invocation' => 1,
                         'expected_name' => 'mr. Smith  Carl',
                         'customer_suffix' => 'Carl',
                         'customer_prefix' => 'mr.'

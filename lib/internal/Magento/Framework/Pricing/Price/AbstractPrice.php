@@ -24,7 +24,7 @@ abstract class AbstractPrice implements PriceInterface
     /**
      * Default price type
      */
-    const PRICE_CODE = 'abstract_price';
+    public const PRICE_CODE = 'abstract_price';
 
     /**
      * @var AmountInterface[]
