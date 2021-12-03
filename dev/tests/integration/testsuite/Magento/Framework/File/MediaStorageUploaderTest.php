@@ -9,6 +9,7 @@ namespace Magento\Framework\File;
 
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Test for \Magento\MediaStorage\Model\File\Uploader
@@ -90,7 +91,7 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Upload file test when `Old Media Gallery` is disabled
+     * Upload file test to 'var' directory
      *
      * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoAppArea adminhtml
@@ -117,7 +118,7 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
         $uploader->save($destinationDirectory->getAbsolutePath($destinationDir));
 
         // Uploader doesn't save file to local var if remote storage is configured
-        if ($this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver() instanceof Filesystem\Driver\File) {
+        if ($this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver() instanceof File) {
             $this->assertTrue($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
         } else {
             $this->assertFalse($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
