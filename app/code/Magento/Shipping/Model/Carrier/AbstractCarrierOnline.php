@@ -31,15 +31,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     public const GUAM_REGION_CODE = 'GU';
 
     /**
-     * Array of quotes
-     *
      * @var array
      */
     protected static $_quotesCache = [];
 
     /**
-     * Flag for check carriers for activity
-     *
      * @var string
      */
     protected $_activeFlag = 'active';
@@ -107,8 +103,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_rawRequest = null;
 
     /**
-     * The security scanner XML document
-     *
      * @var Security
      */
     protected $xmlSecurity;
@@ -171,7 +165,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $code
      * @return $this
-     * @api
      */
     public function setActiveFlag($code = 'active')
     {
@@ -195,7 +188,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param string $tracking
      * @return string|false
-     * @api
      */
     public function getTrackingInfo($tracking)
     {
@@ -268,7 +260,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param RateRequest $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @api
      */
     public function getAllItems(RateRequest $request)
     {
@@ -566,7 +557,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @todo implement rollback logic
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @api
      */
     public function rollBack($data)
     {
@@ -617,7 +607,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param null|string $carrierMethodCode
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @api
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
@@ -629,7 +618,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param \Magento\Framework\DataObject|null $request
      * @return $this
-     * @api
      */
     public function setRawRequest($request)
     {
@@ -644,7 +632,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $cost
      * @param string $method
      * @return float|string
-     * @api
      */
     public function getMethodPrice($cost, $method = '')
     {
@@ -666,8 +653,6 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param string $customSimplexml
      * @return \SimpleXMLElement|bool
      * @throws LocalizedException
-     *
-     * @api
      */
     public function parseXml($xmlContent, $customSimplexml = 'SimpleXMLElement')
     {
