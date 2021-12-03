@@ -34,24 +34,19 @@ class CatalogEavValidationRules
         }
 
         $validationClasses = $attribute->getFrontendClass()
-            ? explode(' ', $attribute->getFrontendClass()) : [];
+            ? explode(' ', $attribute->getFrontendClass())
+            : [];
 
         foreach ($validationClasses as $class) {
             if (preg_match('/^maximum-length-(\d+)$/', $class, $matches)) {
-                $rules['max_text_length'][] = $matches[1];
+                $rules = array_merge($rules, ['max_text_length' => $matches[1]]);
                 continue;
             }
             if (preg_match('/^minimum-length-(\d+)$/', $class, $matches)) {
-                $rules['min_text_length'][] = $matches[1];
+                $rules = array_merge($rules, ['min_text_length' => $matches[1]]);
                 continue;
             }
 
-            if (isset($rules['max_text_length'])) {
-                $rules['max_text_length'] = array_merge([], ...$rules['max_text_length']);
-            }
-            if (isset($rules['min_text_length'])) {
-                $rules['min_text_length'] = array_merge([], ...$rules['min_text_length']);
-            }
             $rules = $this->mapRules($class, $rules);
         }
 
