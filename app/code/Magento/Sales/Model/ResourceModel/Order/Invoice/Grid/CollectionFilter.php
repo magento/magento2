@@ -51,7 +51,7 @@ class CollectionFilter extends SearchResult
     /**
      * @inheritdoc
      */
-    protected function _initSelect()
+    public function _initSelect()
     {
         parent::_initSelect();
 
