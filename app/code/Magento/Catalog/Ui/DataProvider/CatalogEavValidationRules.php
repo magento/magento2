@@ -38,13 +38,11 @@ class CatalogEavValidationRules
 
         foreach ($validationClasses as $class) {
             if (preg_match('/^maximum-length-(\d+)$/', $class, $matches)) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $rules = array_merge($rules, ['max_text_length' => $matches[1]]);
+                $rules['max_text_length'] = $matches[1];
                 continue;
             }
             if (preg_match('/^minimum-length-(\d+)$/', $class, $matches)) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $rules = array_merge($rules, ['min_text_length' => $matches[1]]);
+                $rules['min_text_length'] = $matches[1];
                 continue;
             }
 
