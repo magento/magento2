@@ -846,7 +846,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         $ids = $this->getData('path_ids');
         if ($ids === null) {
-            $ids = $this->getPath() ? explode('/', $this->getPath()) : [];
+            $ids = $this->getPath() !== null ? explode('/', $this->getPath()) : [''];
             $this->setData('path_ids', $ids);
         }
         return $ids;
@@ -860,7 +860,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getLevel()
     {
         if (!$this->hasLevel()) {
-            return $this->getPath() ? count(explode('/', $this->getPath())) - 1 : 0;
+            return $this->getPath() !== null ? count(explode('/', $this->getPath())) - 1 : 0;
         }
         return $this->getData(self::KEY_LEVEL);
     }
