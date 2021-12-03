@@ -272,7 +272,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             );
         }
 
-        if ($taxRate->getCode() !== null
+        if ($taxRate->getCode() === null
             || !\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')
         ) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
@@ -297,7 +297,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
                 $exception->addError(__('Range To should be equal or greater than Range From.'));
             }
         } else {
-            if ($taxRate->getTaxPostcode() !== null
+            if ($taxRate->getTaxPostcode() === null
                 || !\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')
             ) {
                 $exception->addError(
