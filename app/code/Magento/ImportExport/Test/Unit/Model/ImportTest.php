@@ -940,6 +940,7 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->never())
             ->method('getRelativePath');
         $phrase = $this->createMock(Phrase::class);
+        $phrase->method('render')->willReturn('');
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')

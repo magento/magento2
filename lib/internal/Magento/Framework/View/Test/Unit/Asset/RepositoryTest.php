@@ -372,12 +372,10 @@ class RepositoryTest extends TestCase
 
         $originalAssetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getModule', 'getContext'])
+            ->onlyMethods(['getModule', 'getContext', 'getFilePath'])
             ->getMock();
-        $originalAssetMock
-            ->expects($this->any())
-            ->method('getContext')
-            ->willReturn($originalContextMock);
+        $originalAssetMock->method('getContext')->willReturn($originalContextMock);
+        $originalAssetMock->method('getFilePath')->willReturn('');
 
         $assetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
