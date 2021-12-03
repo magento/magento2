@@ -36,7 +36,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Product type code
      */
-    const TYPE_CODE = 'configurable';
+    public const TYPE_CODE = 'configurable';
 
     /**
      * Cache key for Used Product Attribute Ids

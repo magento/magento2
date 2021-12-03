@@ -151,6 +151,7 @@
             <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="clearShoppingCartForDefaultWebsite">
                 <argument name="productName" value="$createConfigProduct.name$"/>
             </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
 
             <!-- Delete Configurable and Child Products, Delete Category and Attribute -->
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
