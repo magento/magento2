@@ -43,15 +43,11 @@ class ImportTest extends AbstractImportTestCase
 {
 
     /**
-     * Entity adapter.
-     *
      * @var AbstractEntity|MockObject
      */
     protected $_entityAdapter;
 
     /**
-     * Import export data
-     *
      * @var Data|MockObject
      */
     protected $_importExportData = null;
