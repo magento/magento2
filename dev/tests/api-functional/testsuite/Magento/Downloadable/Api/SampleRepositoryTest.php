@@ -36,8 +36,17 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected $deleteServiceInfo;
 
+    /**
+     * @var DomainManagerInterface
+     */
+    private $domainManager;
+
     protected function setUp(): void
     {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->domainManager = $objectManager->get(DomainManagerInterface::class);
+        $this->domainManager->addDomains(['example.com']);
+
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links/samples',
@@ -73,6 +82,15 @@ class SampleRepositoryTest extends WebapiAbstract
         ];
 
         $this->testImagePath = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/test_image.jpg');
+    }
+
+    /**
+     * Remove example domain from whitelist and call parent restore configuration
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->domainManager->removeDomains(['example.com']);
     }
 
     /**
