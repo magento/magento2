@@ -20,6 +20,10 @@ However, for those who need a full featured eCommerce solution, we recommend [Ad
 - [Prerequisites](https://devdocs.magento.com/guides/v2.4/install-gde/prereq/prereq-overview.html)
 - [More installation options](https://devdocs.magento.com/guides/v2.4/install-gde/bk-install-guide.html)
 
+## Get help
+
+- [Help center](https://support.magento.com/hc/en-us)
+
 ## Contribute
 
 This project is huge. Our [Community](https://opensource.magento.com/) is large and diverse. As a contributor, you have countless opportunities to have an impact by introducing new or improving the existing features, enhancing the test coverage, updating the [documentation for developers](https://devdocs.magento.com/) and [end-users](https://docs.magento.com/user-guide/), catching and fixing code bugs, suggesting points for optimization, and sharing your great ideas.
@@ -39,13 +43,13 @@ We encourage experts from the Community to help us with GitHub routine such as a
 
 [![](https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png)](https://magento.com/magento-contributors#maintainers)
 
-### Leaderboard
+### Leaders
 
 We highly appreciate contributions that help us to improve the code, clarify the documentation, and increase the test coverage. Check out our Community leaders, superstars, and superheroes on the [leaderboard](https://magento.biterg.io/app/kibana#/dashboard/41dc0c60-fa06-11eb-bbaa-dd6ca6f8fda8?_g=()).
 
 [![](https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png)](https://magento.com/magento-contributors)
 
-### Labels
+### Labeling
 
 We use labels in the GitHub issues and pull requests to help the participants retrieve additional information such as progress, component assignments, or release lines.
 
@@ -57,7 +61,7 @@ We use labels in the GitHub issues and pull requests to help the participants re
 
 Stay up-to-date on the latest security news and patches by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
-## Legal stuff (NEEDS REVIEW)
+## Licensing
 
 Each source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license.
 
@@ -70,11 +74,11 @@ Subject to Licensee's payment of fees and compliance with the terms and conditio
 
 ## Communications
 
-We adore our Community and try to be open as much as we can. You can participate in our offline and online events, read our [DevBlog](https://community.magento.com/t5/Magento-DevBlog/bg-p/devblog), follow us on Twitter and on YouTube.
+We adore our Community and try to be open as much as we can thorough the [events](https://www.adobe.io/open/magento/calendar), our [DevBlog](https://community.magento.com/t5/Magento-DevBlog/bg-p/devblog), channels in Twitter and on YouTube, and [other Community resources](https://devdocs.magento.com/community/resources.html).
 
 To connect with people from both the Community and the Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
 
-- [More Community resources](https://devdocs.magento.com/community/resources.html)
+- [Popular Slack channels](https://www.adobe.io/open/magento/slack)
 
 If you are a new Community member, check out the following channels:
 
