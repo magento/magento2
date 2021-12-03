@@ -94,6 +94,41 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoAppArea adminhtml
+     *
+     * @return void
+     */
+    public function testUploadFileToVar(): void
+    {
+        $destinationDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+
+        $fileName = 'file.txt';
+        $destinationDir = 'tmp';
+        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+
+        $tmpDirectory->writeFile($fileName, 'some data');
+
+        $type = [
+            'tmp_name' => $filePath,
+            'name' => $fileName,
+        ];
+
+        $uploader = $this->uploaderFactory->create(['fileId' => $type]);
+        $uploader->save($destinationDirectory->getAbsolutePath($destinationDir));
+
+        // Uploader doesn't save file to local var if remote storage is configured
+        if ($this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver() instanceof Filesystem\Driver\File) {
+            $this->assertTrue($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
+        } else {
+            $this->assertFalse($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
+        }
+    }
+
+    /**
+     * Upload file test when `Old Media Gallery` is disabled
+     *
+     * @magentoConfigFixture system/media_gallery/enabled 1
+     * @magentoAppArea adminhtml
      * @dataProvider dirCodeDataProvider
      *
      * @param string $directoryCode
