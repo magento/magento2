@@ -154,7 +154,7 @@ class CategoryTreeTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPathIds()
     {
-        $this->assertEquals([], $this->_model->getPathIds());
+        $this->assertEquals([''], $this->_model->getPathIds());
         $this->_model->setPathIds([1]);
         $this->assertEquals([1], $this->_model->getPathIds());
 
