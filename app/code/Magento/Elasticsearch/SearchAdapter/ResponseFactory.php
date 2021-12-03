@@ -64,6 +64,10 @@ class ResponseFactory
     {
         $documents = [];
         foreach ($response['documents'] as $rawDocument) {
+            if (!array_key_exists('_id', $rawDocument) && array_key_exists('fields', $rawDocument)) {
+                $rawDocument['_id'] = $rawDocument['fields']['_id'][0];
+                unset($rawDocument['fields']);
+            }
             /** @var \Magento\Framework\Api\Search\Document[] $documents */
             $documents[] = $this->documentFactory->create(
                 $rawDocument
