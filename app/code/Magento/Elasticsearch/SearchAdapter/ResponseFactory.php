@@ -8,7 +8,7 @@ namespace Magento\Elasticsearch\SearchAdapter;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Response Factory
+ * Query Response Factory
  * @api
  * @since 100.1.0
  */
@@ -23,7 +23,7 @@ class ResponseFactory
     protected $objectManager;
 
     /**
-     * Document Factory
+     * Document Factory to create Search Document instance
      *
      * @var DocumentFactory
      * @since 100.1.0
@@ -31,7 +31,7 @@ class ResponseFactory
     protected $documentFactory;
 
     /**
-     * Aggregation Factory
+     * Aggregation Factory to create Aggregation instance
      *
      * @var AggregationFactory
      * @since 100.1.0
