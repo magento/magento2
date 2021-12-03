@@ -75,9 +75,7 @@
             </createData>
             <magentoCLI command="config:set customer/online_customers/section_data_lifetime 1"
                         stepKey="setConfigForCartLifetime"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
