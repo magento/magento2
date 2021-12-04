@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
 {
+    const XML_PATH_CUSTOMER_ADDRESS_COMPANY_SHOW = 'customer/address/company_show';
+
     /**
      * Quote repository.
      *
@@ -95,7 +97,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
-        $this->addressValidator->validateForCart($quote, $address);
+        $this->validateBeforeMerge($quote, $address);
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
@@ -136,5 +138,14 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
+    }
+
+    private function validateBeforeMerge($quote, $address): void
+    {
+        $this->addressValidator->validateForCart($quote, $address);
+        if ($address->getSaveInAddressBook()
+            && !$this->scopeConfig->getValue(self::XML_PATH_CUSTOMER_ADDRESS_COMPANY_SHOW)) {
+            $address->setCompany(null);
+        }
     }
 }
