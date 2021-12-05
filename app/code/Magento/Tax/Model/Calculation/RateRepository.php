@@ -238,10 +238,10 @@ class RateRepository implements TaxRateRepositoryInterface
         $exception = new InputException();
 
         $countryCode = $taxRate->getTaxCountryId();
-        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
+        /** @phpstan-ignore-next-line */
         if (!\Zend_Validate::is($countryCode, 'NotEmpty')) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'country_id']));
-            // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
+            /** @phpstan-ignore-next-line */
         } elseif (!\Zend_Validate::is(
             $this->countryFactory->create()->loadByCode($countryCode)->getId(),
             'NotEmpty'
@@ -257,13 +257,11 @@ class RateRepository implements TaxRateRepositoryInterface
 
         $regionCode = $taxRate->getTaxRegionId();
         // if regionCode eq 0 (all regions *), do not validate with existing region list
-        // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
-        if (\Zend_Validate::is($regionCode, 'NotEmpty') &&
-            // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
-            $regionCode != "0" && !\Zend_Validate::is(
-                $this->regionFactory->create()->load($regionCode)->getId(),
-                'NotEmpty'
-            )
+        /** @phpstan-ignore-next-line */
+        if (\Zend_Validate::is($regionCode, 'NotEmpty')
+            && $regionCode != "0"
+            /** @phpstan-ignore-next-line */
+            && !\Zend_Validate::is($this->regionFactory->create()->load($regionCode)->getId(),'NotEmpty')
         ) {
             $exception->addError(__(
                 'Invalid value of "%value" provided for the %fieldName field.',
@@ -281,7 +279,7 @@ class RateRepository implements TaxRateRepositoryInterface
         }
 
         if ($taxRate->getCode() === null
-            // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
+            /** @phpstan-ignore-next-line */
             || !\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')
         ) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
@@ -307,7 +305,7 @@ class RateRepository implements TaxRateRepositoryInterface
             }
         } else {
             if ($taxRate->getTaxPostcode() === null
-                // phpstan:ignore "File has calls static method. (phpStaticMethodCalls)"
+                /** @phpstan-ignore-next-line */
                 || !\Zend_Validate::is(trim($taxRate->getTaxPostcode()), 'NotEmpty')
             ) {
                 $exception->addError(
