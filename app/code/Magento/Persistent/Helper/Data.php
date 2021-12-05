@@ -63,8 +63,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
-	\Magento\Framework\Escaper $escaper,
-	\Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->_modulesReader = $modulesReader;
 	$this->_escaper = $escaper;
