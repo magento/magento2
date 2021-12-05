@@ -110,11 +110,11 @@ class Import extends AbstractModel
     /**
      * Import empty attribute default value
      */
-    const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
-    const DEFAULT_SIZE = 50;
-    const MAX_IMPORT_CHUNKS = 4;
-    const IMPORT_HISTORY_DIR = 'import_history/';
-    const IMPORT_DIR = 'import/';
+    public const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
+    public const DEFAULT_SIZE = 50;
+    public const MAX_IMPORT_CHUNKS = 4;
+    public const IMPORT_HISTORY_DIR = 'import_history/';
+    public const IMPORT_DIR = 'import/';
 
     /**
      * @var AbstractEntity|ImportAbstractEntity
