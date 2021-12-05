@@ -67,8 +67,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->_modulesReader = $modulesReader;
-	$this->_escaper = $escaper;
-	$this->storeManager = $storeManager;
+        $this->_escaper = $escaper;
+        $this->storeManager = $storeManager ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
         parent::__construct(
             $context
         );
