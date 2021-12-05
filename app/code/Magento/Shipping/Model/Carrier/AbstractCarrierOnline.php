@@ -428,7 +428,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      */
     protected function _prepareServiceName($name)
     {
-        // phpcs:disable Magento2.Functions.DiscouragedFunction
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = html_entity_decode((string)$name);
         $name = strip_tags(preg_replace('#&\w+;#', '', $name));
 
@@ -445,10 +445,10 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     {
         $phonePattern = '/[\s\_\-\(\)]+/';
         $phoneNumber = $request->getShipperContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setShipperContactPhoneNumber($phoneNumber);
         $phoneNumber = $request->getRecipientContactPhoneNumber();
-        $phoneNumber = preg_replace($phonePattern, '', $phoneNumber);
+        $phoneNumber = is_string($phoneNumber) ? preg_replace($phonePattern, '', $phoneNumber) : '';
         $request->setRecipientContactPhoneNumber($phoneNumber);
     }
 
