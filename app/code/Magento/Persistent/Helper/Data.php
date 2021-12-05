@@ -202,6 +202,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canProcess($observer)
     {
-        return $this->isEnabled($this->storeManager->getStore()->getCode());
+        return null === $this->storeManager ? 
+            true :
+            $this->isEnabled($this->storeManager->getStore()->getCode());
     }
 }
