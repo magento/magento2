@@ -52,23 +52,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
-	\Magento\Framework\Escaper $escaper,
-	\Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->_modulesReader = $modulesReader;
-	$this->_escaper = $escaper;
-	$this->storeManager = $storeManager;
+        $this->_escaper = $escaper;
+        $this->storeManager = $storeManager ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
         parent::__construct(
             $context
         );
