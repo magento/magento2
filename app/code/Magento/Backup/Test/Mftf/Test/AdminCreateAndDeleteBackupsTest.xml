@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Magento backup functionality is deprecated</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableBackupFunctionality.path}} {{EnableBackupFunctionality.value}}" stepKey="setEnableBackup"/>
