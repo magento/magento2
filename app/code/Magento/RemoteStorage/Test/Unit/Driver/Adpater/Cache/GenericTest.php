@@ -85,7 +85,7 @@ class GenericTest extends TestCase
                     'timestamp' => null,
                     'visibility' => null,
                     'mimetype' => '',
-                ]
+                ],
             ],
             [
                 'media/tmp/catalog/product/1/test.jpeg',
@@ -104,11 +104,11 @@ class GenericTest extends TestCase
                         'image-width' => 680,
                         'image-height' => 383,
                     ],
-                ]
+                ],
             ],
             [
                 'media-nonexistent-path',
-                null
+                null,
             ],
         ];
     }
