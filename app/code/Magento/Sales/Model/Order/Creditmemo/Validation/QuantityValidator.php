@@ -86,7 +86,7 @@ class QuantityValidator implements ValidatorInterface
             if ($this->isValidRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
                 $messages[] =__(
                     'You cannot use decimal quantity to refund item "%1".',
-                    $item->getSku()
+                    $orderItem->getSku()
                 );
                 continue;
             }
