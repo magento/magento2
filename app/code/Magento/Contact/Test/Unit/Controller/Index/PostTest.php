@@ -207,7 +207,7 @@ class PostTest extends TestCase
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(
             function ($key) use ($post) {
-                return $post[$key];
+                return $post[$key] ?? '';
             }
         );
     }
