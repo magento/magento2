@@ -114,7 +114,7 @@ class QuantityValidator implements ValidatorInterface
     }
 
     /**
-     * to check the refund qty is decimal if getIsQtyDecimal is unset.
+     * To check the refund qty is decimal if getIsQtyDecimal is unset.
      *
      * @param int|null $isQtyDecimal
      * @param float $itemQty
