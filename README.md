@@ -36,7 +36,7 @@ This project is huge. Our [Community](https://opensource.magento.com/) is large 
 
 ### Maintainers
 
-We encourage experts from the Community to help us with GitHub routine such as accepting, merging, or rejecting the pull requests, reviewing the issues. Thanks to the invaluable input from the Community Maintainers team, we can significantly improve quality an processing time of every contribution.
+We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting the pull requests, reviewing the issues. Thanks to the invaluable input from the Community Maintainers team, we can significantly improve quality and processing time of every contribution.
 
 - [Learn more about the Maintainer role](https://devdocs.magento.com/contributor-guide/maintainers.html)
 - [Maintainer's Handbook](https://devdocs.magento.com/contributor-guide/maintainer-handbook.html)
@@ -74,7 +74,7 @@ Subject to Licensee's payment of fees and compliance with the terms and conditio
 
 ## Communications
 
-We adore our Community and try to be open as much as we can thorough the [events](https://www.adobe.io/open/magento/calendar), our [DevBlog](https://community.magento.com/t5/Magento-DevBlog/bg-p/devblog), channels in Twitter and on YouTube, and [other Community resources](https://devdocs.magento.com/community/resources.html).
+We adore our Community and try to be open as much as we can through the [events](https://www.adobe.io/open/magento/calendar), our [DevBlog](https://community.magento.com/t5/Magento-DevBlog/bg-p/devblog), channels in Twitter and on YouTube, and [other Community resources](https://devdocs.magento.com/community/resources.html).
 
 To connect with people from both the Community and the Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
 
