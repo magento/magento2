@@ -49,21 +49,6 @@ class CollectionFilter extends SearchResult
     }
 
     /**
-     * @inheritdoc
-     */
-    public function _initSelect()
-    {
-        parent::_initSelect();
-
-        $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
-        foreach ($tableDescription as $columnInfo) {
-            $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
-        }
-
-        return $this;
-    }
-
-    /**
      * @inheritDoc
      */
     public function addFieldToFilter($field, $condition = null)
