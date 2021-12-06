@@ -9,6 +9,8 @@ namespace Magento\Catalog\Api\Data;
 
 /**
  * Dto that holds render information about products
+ *
+ * @api
  */
 interface ProductRenderSearchResultsInterface
 {
@@ -22,7 +24,6 @@ interface ProductRenderSearchResultsInterface
     /**
      * Set list of products rendered information
      *
-     * @api
      * @param \Magento\Catalog\Api\Data\ProductRenderInterface[] $items
      * @return $this
      */
