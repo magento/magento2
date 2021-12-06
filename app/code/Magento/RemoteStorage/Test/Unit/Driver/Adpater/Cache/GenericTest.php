@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\RemoteStorage\Test\Unit\Driver\Adapter\Cache;
+namespace Magento\RemoteStorage\Test\Unit\Driver\Adpater\Cache;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -63,7 +63,7 @@ class GenericTest extends TestCase
             ->method('unserialize')
             ->willReturn($cacheData);
         $this->generic->setFromStorage(json_encode($cacheData));
-        
+
         $this->assertEquals($expectedOutput, $this->generic->getMetaData($input));
     }
 
