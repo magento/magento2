@@ -16,6 +16,7 @@
             <description value="Admin should be able to see default toolbar display on Short Description content area"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-80505"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>

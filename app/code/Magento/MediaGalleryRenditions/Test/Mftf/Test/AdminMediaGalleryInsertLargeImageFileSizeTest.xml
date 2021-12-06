@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminMediaGalleryInsertImageLargeFileSizeTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
