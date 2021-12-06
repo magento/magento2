@@ -64,7 +64,7 @@ class ResponseFactory
     {
         $documents = [];
         foreach ($response['documents'] as $rawDocument) {
-            if (!array_key_exists('_id', $rawDocument) && array_key_exists('_id', $rawDocument['fields'])) {
+            if (!array_key_exists('_id', $rawDocument) && isset($rawDocument['fields']['_id'][0])) {
                 $rawDocument['_id'] = $rawDocument['fields']['_id'][0];
                 unset($rawDocument['fields']);
             }

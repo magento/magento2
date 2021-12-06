@@ -59,7 +59,7 @@ class Dynamic implements BucketBuilderInterface
     {
         $ids = [];
         foreach ($queryResult['hits']['hits'] as $document) {
-            if (!array_key_exists('_id', $document) && array_key_exists('_id', $document['fields'])) {
+            if (!array_key_exists('_id', $document) && isset($document['fields']['_id'][0])) {
                 $document['_id'] = $document['fields']['_id'][0];
                 unset($document['fields']);
             }
