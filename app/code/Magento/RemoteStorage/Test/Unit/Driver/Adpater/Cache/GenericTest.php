@@ -113,7 +113,7 @@ class GenericTest extends TestCase
         ];
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->generic);
         unset($this->cacheAdapterMock);
