@@ -9,6 +9,7 @@ namespace Magento\Sales\Model\ResourceModel\Order\Invoice\Grid;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Sales\Model\ResourceModel\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\CollectionFilter as Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +38,13 @@ class CollectionFilterTest extends TestCase
     public function testCollectionCreate(): void
     {
         /** @var Collection $gridCollection */
-        $gridCollection = $this->objectManager->get(Collection::class);
+        $gridCollection = $this->objectManager->create(
+            Collection::class,
+            [
+                'mainTable' => 'sales_invoice_grid',
+                'resourceModel' => Invoice::class
+            ]
+        );
         $tableDescription = $gridCollection->getConnection()
             ->describeTable($gridCollection->getMainTable());
 
@@ -69,7 +76,13 @@ class CollectionFilterTest extends TestCase
         /** @var TimezoneInterface $timeZone */
         $timeZone = $this->objectManager->get(TimezoneInterface::class);
         /** @var Collection $gridCollection */
-        $gridCollection = $this->objectManager->get(Collection::class);
+        $gridCollection = $this->objectManager->create(
+            Collection::class,
+            [
+                'mainTable' => 'sales_invoice_grid',
+                'resourceModel' => Invoice::class
+            ]
+        );
         $convertedDate = $timeZone->convertConfigTimeToUtc($filterDate);
 
         $collection = $gridCollection->addFieldToFilter('created_at', ['qteq' => $filterDate]);

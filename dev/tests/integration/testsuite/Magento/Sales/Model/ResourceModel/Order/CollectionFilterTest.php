@@ -31,13 +31,20 @@ class CollectionFilterTest extends TestCase
     /**
      * Tests collection properties.
      *
+     * @dataProvider getCollectionFiltersDataProvider
      * @throws \ReflectionException
      * @return void
      */
-    public function testCollectionCreate(): void
+    public function testCollectionCreate($mainTable, $resourceModel): void
     {
         /** @var Collection $gridCollection */
-        $gridCollection = $this->objectManager->get(Collection::class);
+        $gridCollection = $this->objectManager->create(
+            Collection::class,
+            [
+                'mainTable' => $mainTable,
+                'resourceModel' => $resourceModel
+            ]
+        );
         $tableDescription = $gridCollection->getConnection()
             ->describeTable($gridCollection->getMainTable());
 
