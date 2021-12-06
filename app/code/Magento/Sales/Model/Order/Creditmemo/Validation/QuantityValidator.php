@@ -83,6 +83,14 @@ class QuantityValidator implements ValidatorInterface
             }
             $orderItem = $orderItemsById[$item->getOrderItemId()];
 
+            if (!$orderItem->getIsQtyDecimal() && (floor($item->getQty()) !== $item->getQty())) {
+                $messages[] =__(
+                    'You cannot use decimal quantity to refund item "%1".',
+                    $item->getSku()
+                );
+                continue;
+            }
+
             if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
                 !$this->isQtyAvailable($orderItem, $item->getQty())
             ) {
