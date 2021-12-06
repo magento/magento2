@@ -89,7 +89,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
+        <scrollTo selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="scrollToOptions"/>
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection2"/>
+        <waitForElementVisible selector=".admin__dynamic-rows[data-index='values'] tr.data-row" stepKey="waitForRowsToBeVisible"/>
         <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
     </test>
 </tests>
