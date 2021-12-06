@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="MQE-1576"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Configure Paypal Payflow Pro payment method -->
