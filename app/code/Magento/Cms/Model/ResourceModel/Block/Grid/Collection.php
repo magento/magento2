@@ -86,26 +86,6 @@ class Collection extends BlockCollection implements SearchResultInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function _initSelect()
-    {
-        parent::_initSelect();
-
-        $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
-
-        if ($tableDescription) {
-            foreach ($tableDescription as $columnInfo) {
-                if ($columnInfo['COLUMN_NAME'] === 'creation_time' || $columnInfo['COLUMN_NAME'] === 'update_time') {
-                    $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @inheritDoc
      */
     public function addFieldToFilter($field, $condition = null)
