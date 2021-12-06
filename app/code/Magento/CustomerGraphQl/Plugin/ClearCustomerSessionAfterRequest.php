@@ -10,6 +10,7 @@ namespace Magento\CustomerGraphQl\Plugin;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -36,6 +37,11 @@ class ClearCustomerSessionAfterRequest
     private $customerRepository;
 
     /**
+     * @var AddUserInfoToContext
+     */
+    private $addUserInfoToContext;
+
+    /**
      * @param UserContextInterface $userContext
      * @param CustomerSession $customerSession
      * @param CustomerRepository $customerRepository
@@ -43,11 +49,14 @@ class ClearCustomerSessionAfterRequest
     public function __construct(
         UserContextInterface $userContext,
         CustomerSession $customerSession,
-        CustomerRepository $customerRepository
+        CustomerRepository $customerRepository,
+        AddUserInfoToContext $addUserInfoToContext
     ) {
         $this->userContext = $userContext;
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
+        $this->addUserInfoToContext = $addUserInfoToContext ??
+            ObjectManager::getInstance()->get(AddUserInfoToContext::class);
     }
 
     /**
@@ -61,8 +70,10 @@ class ClearCustomerSessionAfterRequest
      */
     public function afterDispatch(GraphQlController $controller, ResponseInterface $response): ResponseInterface
     {
-        $this->customerSession->setCustomerId(null);
-        $this->customerSession->setCustomerGroupId(null);
+        $loggedInCustomerData = $this->addUserInfoToContext->getLoggedInCustomerData();
+        $this->customerSession->setCustomerId($loggedInCustomerData ? $loggedInCustomerData->getId() : null);
+        $this->customerSession->setCustomerGroupId($loggedInCustomerData ? $loggedInCustomerData->getGroupId() : null);
+
         return $response;
     }
 }

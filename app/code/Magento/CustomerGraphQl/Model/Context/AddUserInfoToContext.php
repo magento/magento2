@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
@@ -32,6 +33,11 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
      * @var CustomerRepository
      */
     private $customerRepository;
+
+    /**
+     * @var CustomerInterface|null
+     */
+    private ?CustomerInterface $loggedInCustomerData = null;
 
     /**
      * @param UserContextInterface $userContext
@@ -75,12 +81,36 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
 
         $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
+
+        if ($this->session->isLoggedIn()) {
+            $this->setLoggedInCustomerData($this->session->getCustomerData());
+        }
+
         if ($isCustomer) {
             $customer = $this->customerRepository->getById($currentUserId);
             $this->session->setCustomerData($customer);
             $this->session->setCustomerGroupId($customer->getGroupId());
         }
         return $contextParameters;
+    }
+
+    /**
+     * @param CustomerInterface $customerData
+     * @return AddUserInfoToContext
+     */
+    public function setLoggedInCustomerData(CustomerInterface $customerData): self
+    {
+        $this->loggedInCustomerData = $customerData;
+
+        return $this;
+    }
+
+    /**
+     * @return CustomerInterface
+     */
+    public function getLoggedInCustomerData(): ?CustomerInterface
+    {
+        return $this->loggedInCustomerData;
     }
 
     /**
