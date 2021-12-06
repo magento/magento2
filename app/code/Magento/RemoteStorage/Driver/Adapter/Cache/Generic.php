@@ -168,6 +168,7 @@ class Generic implements CacheInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings("unused")
      */
     public function deleteDir(string $dirname): void
     {
@@ -194,7 +195,7 @@ class Generic implements CacheInterface
                 return null;
             }
             $meta = $this->serializer->unserialize($meta);
-            if (!$meta[$path]) {
+            if (empty($meta[$path])) {
                 return null;
             }
             $this->cacheData[$path] = $meta[$path];
@@ -216,7 +217,7 @@ class Generic implements CacheInterface
      *
      * @param string $json
      */
-    private function setFromStorage(string $json)
+    public function setFromStorage(string $json)
     {
         $this->cacheData = array_merge($this->cacheData, $this->serializer->unserialize($json));
     }
