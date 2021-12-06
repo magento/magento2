@@ -20,17 +20,17 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED = 'persistent/options/enabled';
+    public const XML_PATH_ENABLED = 'persistent/options/enabled';
 
-    const XML_PATH_LIFE_TIME = 'persistent/options/lifetime';
+    public const XML_PATH_LIFE_TIME = 'persistent/options/lifetime';
 
-    const XML_PATH_LOGOUT_CLEAR = 'persistent/options/logout_clear';
+    public const XML_PATH_LOGOUT_CLEAR = 'persistent/options/logout_clear';
 
-    const XML_PATH_REMEMBER_ME_ENABLED = 'persistent/options/remember_enabled';
+    public const XML_PATH_REMEMBER_ME_ENABLED = 'persistent/options/remember_enabled';
 
-    const XML_PATH_REMEMBER_ME_DEFAULT = 'persistent/options/remember_default';
+    public const XML_PATH_REMEMBER_ME_DEFAULT = 'persistent/options/remember_default';
 
-    const XML_PATH_PERSIST_SHOPPING_CART = 'persistent/options/shopping_cart';
+    public const XML_PATH_PERSIST_SHOPPING_CART = 'persistent/options/shopping_cart';
 
     /**
      * Name of config file
@@ -70,9 +70,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_escaper = $escaper;
         $this->storeManager = $storeManager ?? \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Store\Model\StoreManagerInterface::class);
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
     }
 
     /**
@@ -202,8 +200,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function canProcess($observer)
     {
-        return null === $this->storeManager ? 
-            true :
-            $this->isEnabled($this->storeManager->getStore()->getCode());
+        return $this->isEnabled($this->storeManager->getStore()->getCode());
     }
 }
