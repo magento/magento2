@@ -83,6 +83,14 @@ class QuantityValidator implements ValidatorInterface
             }
             $orderItem = $orderItemsById[$item->getOrderItemId()];
 
+            if ($this->isValidRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+                $messages[] =__(
+                    'You cannot use decimal quantity to refund item "%1".',
+                    $item->getSku()
+                );
+                continue;
+            }
+
             if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
                 !$this->isQtyAvailable($orderItem, $item->getQty())
             ) {
@@ -103,6 +111,21 @@ class QuantityValidator implements ValidatorInterface
         }
 
         return $messages;
+    }
+
+    /**
+     * to check the refund qty is decimal if getIsQtyDecimal is unset.
+     *
+     * @param int|null $isQtyDecimal
+     * @param float $itemQty
+     * @return bool
+     */
+    private function isValidRefundQty($isQtyDecimal, float $itemQty): bool
+    {
+        if (!$isQtyDecimal && (floor($itemQty) !== $itemQty)) {
+            return true;
+        }
+        return false;
     }
 
     /**
