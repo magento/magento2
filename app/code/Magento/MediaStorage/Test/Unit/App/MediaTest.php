@@ -37,9 +37,9 @@ use PHPUnit\Framework\TestCase;
  */
 class MediaTest extends TestCase
 {
-    const MEDIA_DIRECTORY = 'mediaDirectory';
-    const RELATIVE_FILE_PATH = 'test/file.png';
-    const CACHE_FILE_PATH = 'var';
+    public const MEDIA_DIRECTORY = 'mediaDirectory';
+    public const RELATIVE_FILE_PATH = 'test/file.png';
+    public const CACHE_FILE_PATH = 'var';
 
     /**
      * @var Media
@@ -264,7 +264,7 @@ class MediaTest extends TestCase
             $this->syncFactoryMock,
             $this->responseMock,
             $isAllowedCallback,
-            false,
+            self::MEDIA_DIRECTORY,
             self::CACHE_FILE_PATH,
             self::RELATIVE_FILE_PATH,
             $this->filesystemMock,

@@ -462,7 +462,10 @@ class StorageTest extends TestCase
             ->willReturn($this->storageRoot);
         $this->directoryWrite->expects($this->once())->method('delete')->with($directoryPath);
         $this->directoryWrite->expects($this->once())->method('getAbsolutePath')->willreturn('');
-
+        $this->filesystemDriver->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with('')
+            ->willReturn('');
         $this->storageModel->deleteDirectory($directoryPath);
     }
 
@@ -478,7 +481,10 @@ class StorageTest extends TestCase
         $this->helperStorage->expects($this->atLeastOnce())
             ->method('getStorageRoot')
             ->willReturn($this->storageRoot);
-
+        $this->filesystemDriver->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with('')
+            ->willReturn('');
         $this->storageModel->deleteDirectory($directoryPath);
     }
 
