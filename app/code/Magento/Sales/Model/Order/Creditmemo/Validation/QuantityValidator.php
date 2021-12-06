@@ -74,34 +74,13 @@ class QuantityValidator implements ValidatorInterface
 
         $totalQuantity = 0;
         foreach ($entity->getItems() as $item) {
-            if (!isset($orderItemsById[$item->getOrderItemId()])) {
-                $messages[] = __(
-                    'The creditmemo contains product SKU "%1" that is not part of the original order.',
-                    $item->getSku()
-                );
-                continue;
-            }
-            $orderItem = $orderItemsById[$item->getOrderItemId()];
-
-            if ($this->isValidRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
-                $messages[] =__(
-                    'You cannot use decimal quantity to refund item "%1".',
-                    $orderItem->getSku()
-                );
-                continue;
-            }
-
-            if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
-                !$this->isQtyAvailable($orderItem, $item->getQty())
-            ) {
-                $messages[] =__(
-                    'The quantity to creditmemo must not be greater than the unrefunded quantity'
-                    . ' for product SKU "%1".',
-                    $orderItem->getSku()
-                );
-            } else {
-                $totalQuantity += $item->getQty();
-            }
+            $this->calculateTotalQuantity(
+                $orderItemsById,
+                $messages,
+                $totalQuantity,
+                $item,
+                $invoiceQtysRefundLimits
+            );
         }
 
         if ($entity->getGrandTotal() <= 0) {
@@ -126,6 +105,50 @@ class QuantityValidator implements ValidatorInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * Calculate total quantity.
+     *
+     * @param array $orderItemsById
+     * @param array &$messages
+     * @param int &$totalQuantity
+     * @param Magento\Sales\Api\Data\CreditmemoItemInterface|mixed $item
+     * @param array $invoiceQtysRefundLimits
+     * @return void
+     */
+    private function calculateTotalQuantity(
+        array $orderItemsById,
+        array &$messages,
+        int &$totalQuantity,
+        $item,
+        array $invoiceQtysRefundLimits
+    ) {
+        if (!isset($orderItemsById[$item->getOrderItemId()])) {
+            $messages[] = __(
+                'The creditmemo contains product SKU "%1" that is not part of the original order.',
+                $item->getSku()
+            );
+        } else {
+            $orderItem = $orderItemsById[$item->getOrderItemId()];
+
+            if ($this->isValidRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+                $messages[] =__(
+                    'You cannot use decimal quantity to refund item "%1".',
+                    $orderItem->getSku()
+                );
+            } elseif (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
+                !$this->isQtyAvailable($orderItem, $item->getQty())
+            ) {
+                $messages[] =__(
+                    'The quantity to creditmemo must not be greater than the unrefunded quantity'
+                    . ' for product SKU "%1".',
+                    $orderItem->getSku()
+                );
+            } else {
+                $totalQuantity += $item->getQty();
+            }
+        }
     }
 
     /**
