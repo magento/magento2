@@ -96,7 +96,9 @@ class Collection extends PageCollection implements SearchResultInterface
 
         if ($tableDescription) {
             foreach ($tableDescription as $columnInfo) {
-                $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
+                if ($columnInfo['COLUMN_NAME'] === 'creation_time' || $columnInfo['COLUMN_NAME'] === 'update_time') {
+                    $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
+                }
             }
         }
 
