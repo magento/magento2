@@ -2039,17 +2039,17 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
         $customerName = '';
         $prefix = $this->getCustomerPrefix();
-        if (($prefix !== null) && $this->isVisibleCustomerPrefix() && strlen($prefix)) {
+        if ($prefix !== null && $this->isVisibleCustomerPrefix() && strlen($prefix)) {
             $customerName .= $prefix . ' ';
         }
         $customerName .= $this->getCustomerFirstname();
         $middlename = $this->getCustomerMiddlename();
-        if (($middlename !== null) && $this->isVisibleCustomerMiddlename() && strlen($middlename)) {
+        if ($middlename !== null && $this->isVisibleCustomerMiddlename() && strlen($middlename)) {
             $customerName .= ' ' . $middlename;
         }
         $customerName .= ' ' . $this->getCustomerLastname();
         $suffix = $this->getCustomerSuffix();
-        if (($suffix !== null) && $this->isVisibleCustomerSuffix() && strlen($suffix)) {
+        if ($suffix !== null && $this->isVisibleCustomerSuffix() && strlen($suffix)) {
             $customerName .= ' ' . $suffix;
         }
 
