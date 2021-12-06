@@ -17,6 +17,7 @@
             <testCaseId value="MC-15863"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
             <skip>
                 <issueId value="DEPRECATED">Use AdminCreateCreditMemoForOrderWithCashOnDeliveryTest instead</issueId>
             </skip>

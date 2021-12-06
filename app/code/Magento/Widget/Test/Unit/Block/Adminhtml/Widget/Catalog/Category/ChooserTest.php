@@ -83,12 +83,12 @@ class ChooserTest extends TestCase
 
         $this->childNode = $this->getMockBuilder(Node::class)
             ->addMethods(['getLevel'])
-            ->onlyMethods(['hasChildren'])
+            ->onlyMethods(['hasChildren', 'getIdField'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->rootNode = $this->getMockBuilder(Node::class)
             ->addMethods(['getLevel'])
-            ->onlyMethods(['hasChildren', 'getChildren'])
+            ->onlyMethods(['hasChildren', 'getChildren', 'getIdField'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->categoryTree = $this->createMock(Tree::class);
@@ -115,6 +115,8 @@ class ChooserTest extends TestCase
             ]
         );
 
+        $this->rootNode->method('getIdField')->willReturn('test_id_field');
+        $this->childNode->method('getIdField')->willReturn('test_id_field');
         $this->childNode->expects($this->atLeastOnce())->method('getLevel')->willReturn($level);
 
         $this->rootNode->expects($this->atLeastOnce())->method('getLevel')->willReturn($rootLevel);
