@@ -16,6 +16,8 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ValidatorInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use \Magento\Framework\Phrase;
 
 /**
  * Creditmemo QuantityValidator
@@ -74,7 +76,7 @@ class QuantityValidator implements ValidatorInterface
 
         $totalQuantity = 0;
         foreach ($entity->getItems() as $item) {
-            $message = $this->calculateTotalQuantity(
+            $message = $this->validateTotalQuantityRefundable(
                 $orderItemsById,
                 $item,
                 $invoiceQtysRefundLimits
@@ -102,7 +104,7 @@ class QuantityValidator implements ValidatorInterface
      * @param float $itemQty
      * @return bool
      */
-    private function isValidRefundQty($isQtyDecimal, float $itemQty): bool
+    private function isValidDecimalRefundQty(?int $isQtyDecimal, float $itemQty): bool
     {
         if (!$isQtyDecimal && (floor($itemQty) !== $itemQty)) {
             return true;
@@ -116,9 +118,9 @@ class QuantityValidator implements ValidatorInterface
      * @param array $orderItemsById
      * @param Magento\Sales\Api\Data\CreditmemoItemInterface|mixed $item
      * @param array $invoiceQtysRefundLimits
-     * @return \Magento\Framework\Phrase|void
+     * @return Phrase|void
      */
-    private function calculateTotalQuantity(
+    private function validateTotalQuantityRefundable(
         array $orderItemsById,
         $item,
         array $invoiceQtysRefundLimits
@@ -131,9 +133,9 @@ class QuantityValidator implements ValidatorInterface
         }
         $orderItem = $orderItemsById[$item->getOrderItemId()];
 
-        if ($this->isValidRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+        if ($this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
             return __(
-                'You cannot use decimal quantity to refund item "%1".',
+                'We found an invalid quantity to refund item "%1".',
                 $orderItem->getSku()
             );
         }

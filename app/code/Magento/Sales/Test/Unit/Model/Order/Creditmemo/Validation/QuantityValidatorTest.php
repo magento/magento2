@@ -152,72 +152,13 @@ class QuantityValidatorTest extends TestCase
         );
     }
 
-    public function testValidateWithWrongRefundQty()
-    {
-        $orderId = 1;
-        $orderItemId = 1;
-        $qtyToRequest = 1.5;
-        $sku = 'test sku';
-        $total = 0;
-        $expected = [
-            __(
-                'You cannot use decimal quantity to refund item "%1".',
-                $sku
-            ),
-            __('The credit memo\'s total must be positive.')
-        ];
-        $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
-            ->willReturn($orderId);
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')
-            ->willReturn($total);
-        $creditmemoItemMock = $this->getMockBuilder(
-            CreditmemoItemInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $creditmemoItemMock->expects($this->exactly(2))->method('getOrderItemId')
-            ->willReturn($orderItemId);
-        $creditmemoItemMock->expects($this->never())->method('getSku')
-            ->willReturn($sku);
-        $creditmemoItemMock->expects($this->atLeastOnce())->method('getQty')
-            ->willReturn($qtyToRequest);
-        $creditmemoMock->expects($this->exactly(1))->method('getItems')
-            ->willReturn([$creditmemoItemMock]);
-
-        $orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $orderItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $creditmemoItemMock->expects($this->any())->method('getQty')
-            ->willReturn($qtyToRequest);
-        $orderMock->expects($this->once())->method('getItems')
-            ->willReturn([$orderItemMock]);
-        $orderItemMock->expects($this->once())->method('getItemId')
-            ->willReturn($orderItemId);
-        $orderItemMock->expects($this->any())->method('getSku')
-            ->willReturn($sku);
-
-        $this->orderRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($orderId)
-            ->willReturn($orderMock);
-
-        $this->assertEquals(
-            $expected,
-            $this->validator->validate($creditmemoMock)
-        );
-    }
-
     /**
      * @param int $orderId
      * @param int $orderItemId
      * @param int $qtyToRequest
      * @param int $qtyToRefund
      * @param string $sku
+     * @param int $total
      * @param array $expected
      * @dataProvider dataProviderForValidateQty
      */
@@ -249,7 +190,7 @@ class QuantityValidatorTest extends TestCase
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $orderItemMock->expects($this->exactly(2))->method('getQtyToRefund')
+        $orderItemMock->expects($this->any())->method('getQtyToRefund')
             ->willReturn($qtyToRefund);
         $creditmemoItemMock->expects($this->any())->method('getQty')
             ->willReturn($qtyToRequest);
@@ -296,6 +237,21 @@ class QuantityValidatorTest extends TestCase
                 'sku',
                 'total' => 15,
                 'expected' => []
+            ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
+                'qtyToRequest' => 1.5,
+                'qtyToRefund' => 1,
+                'sku',
+                'total' => 0,
+                'expected' => [
+                    __(
+                        'We found an invalid quantity to refund item "%1".',
+                        $sku
+                    ),
+                    __('The credit memo\'s total must be positive.')
+                ]
             ],
             [
                 'orderId' => 1,
