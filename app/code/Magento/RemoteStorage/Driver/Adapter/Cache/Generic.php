@@ -217,9 +217,19 @@ class Generic implements CacheInterface
      *
      * @param string $json
      */
-    public function setFromStorage(string $json)
+    private function setFromStorage(string $json)
     {
         $this->cacheData = array_merge($this->cacheData, $this->serializer->unserialize($json));
+    }
+
+    /**
+     * Setter for cache data
+     *
+     * @param array $cacheData
+     */
+    public function setCacheData(array $cacheData): void
+    {
+        $this->cacheData = $cacheData;
     }
 
     /**
