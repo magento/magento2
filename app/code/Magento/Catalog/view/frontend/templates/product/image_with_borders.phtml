@@ -29,6 +29,15 @@ $styles = <<<STYLE
     aspect-ratio: auto {$width} / {$height};
     height: {$height}px;
 }
+// fallback
+@supports not (aspect-ratio: auto) {
+    .product-image-container-{$block->getProductId()}::before {
+        // fallback
+    }
+    .product-image-container-{$block->getProductId()} > img {
+        // fallback
+    }
+}
 .product-image-photo {
     bottom: inherit !important;
     display: inherit !important;
