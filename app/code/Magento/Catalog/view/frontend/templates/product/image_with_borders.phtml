@@ -25,42 +25,25 @@ $paddingBottom = $block->getRatio() * 100;
 </span>
 <?php
 $styles = <<<STYLE
+.product-image-container {
+    position: relative;
+}
 .product-image-container-{$block->getProductId()} > img {
-    width: {$width}px;
     aspect-ratio: auto {$width} / {$height};
-    height: {$height}px;
+    height: auto;
+    position: absolute !important;
+    top: 0 !important;    
+    bottom: 0 !important;
+    left: 0 !important;
+    margin: auto !important;
+    right: 0 !important;
+    width: auto !important;
 }
-// fallback
-@supports not (aspect-ratio: auto) {
-    .product-image-container {
-        position: relative;
-    }
-    .product-image-container-{$block->getProductId()}::before {
-        width:100%;
-        content:'';
-        padding-bottom:{$paddingBottom}%;
-        display: block;
-    }
-    .product-image-container-{$block->getProductId()} > img.product-image-photo {
-        bottom: 0 !important;
-        display: block !important;
-        left: 0 !important;
-        margin: auto !important;
-        position: absolute !important;
-        right: 0 !important;
-        top: 0 !important;
-        width: auto !important;
-    }
-}
-.product-image-photo {
-    bottom: inherit !important;
-    display: inherit !important;
-    left: inherit !important;
-    margin: inherit !important;
-    position: inherit !important;
-    right: inherit !important;
-    top: inherit !important;
-    width: inherit !important;
+.product-image-container-{$block->getProductId()}::before {
+    width:100%;
+    content:'';
+    padding-bottom:{$paddingBottom}%;
+    display: block;
 }
 STYLE;
 ?>
