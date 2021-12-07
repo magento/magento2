@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Model\File;
 
+use Magento\Downloadable\Api\Data\File\ContentInterface;
 use Magento\Downloadable\Api\Data\File\ContentInterfaceFactory;
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Sample;
@@ -17,18 +18,19 @@ use Magento\MediaStorage\Helper\File\Storage;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Integration test for \Magento\Downloadable\Model\File\ContentUploader class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ContentUploaderTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var ContentInterface
      */
-    private $fileContentMock;
+    private $fileContent;
 
     /**
      * @var string
@@ -51,11 +53,11 @@ class ContentUploaderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->fileContentMock = $this->objectManager->create(ContentInterfaceFactory::class)->create();
+        $this->fileContent = $this->objectManager->create(ContentInterfaceFactory::class)->create();
         $fixtureDir = realpath(__DIR__ . '/../../_files');
         $this->filePath = $fixtureDir . DIRECTORY_SEPARATOR . 'test_image.jpg';
-        $this->fileContentMock->setFileData(base64_encode(file_get_contents($this->filePath)));
-        $this->fileContentMock->setName('test_image.jpg');
+        $this->fileContent->setFileData(base64_encode(file_get_contents($this->filePath)));
+        $this->fileContent->setName('test_image.jpg');
 
         $database = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
@@ -104,7 +106,7 @@ class ContentUploaderTest extends TestCase
     {
         $data = ['path' => $this->filePath, 'file' => 'test_image.jpg'];
         $this->model->expects($this->once())->method('save')->willReturn($data);
-        $result = $this->model->upload($this->fileContentMock, 'sample');
+        $result = $this->model->upload($this->fileContent, 'sample');
         $this->assertIsArray($result);
         $this->assertArrayHasKey('status', $result);
         $this->assertArrayHasKey('name', $result);
@@ -113,6 +115,6 @@ class ContentUploaderTest extends TestCase
     public function testUploadWithFalseSave()
     {
         $this->model->expects($this->once())->method('save')->willReturn(false);
-        $this->assertFalse($this->model->upload($this->fileContentMock, 'sample'));
+        $this->assertFalse($this->model->upload($this->fileContent, 'sample'));
     }
 }

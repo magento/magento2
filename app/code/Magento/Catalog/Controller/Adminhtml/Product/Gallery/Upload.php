@@ -98,19 +98,20 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
 
-            if ($result === false) {
-                throw new LocalizedException(__('Something went wrong while saving the file(s).'));
+            if (is_array($result)) {
+                $this->_eventManager->dispatch(
+                    'catalog_product_gallery_upload_image_after',
+                    ['result' => $result, 'action' => $this]
+                );
+
+                unset($result['tmp_name']);
+                unset($result['path']);
+
+                $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
+                $result['file'] = $result['file'] . '.tmp';
+            } else {
+                $result = ['error' => 'Something went wrong while saving the file(s).'];
             }
-            $this->_eventManager->dispatch(
-                'catalog_product_gallery_upload_image_after',
-                ['result' => $result, 'action' => $this]
-            );
-
-            unset($result['tmp_name']);
-            unset($result['path']);
-
-            $result['url'] = $this->productMediaConfig->getTmpMediaUrl($result['file']);
-            $result['file'] = $result['file'] . '.tmp';
         } catch (LocalizedException $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         } catch (\Throwable $e) {

@@ -85,8 +85,10 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(true);
         $absoluteTmpPath = $this->_mediaDirectory->getAbsolutePath($tmpPath);
-        $result = $uploader->save($absoluteTmpPath) ?: [];
-        unset($result['path']);
+        $result = $uploader->save($absoluteTmpPath);
+        if (is_array($result)) {
+            unset($result['path']);
+        }
 
         return $result;
     }

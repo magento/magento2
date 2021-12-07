@@ -201,16 +201,16 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $destDir = $rootDirectory->getAbsolutePath($this->getDestDir());
         $result = $this->save($destDir);
 
-        if ($result) {
+        if (\is_array($result)) {
             unset($result['path']);
             $result['name'] = self::getCorrectFileName($result['name']);
-        }
 
-        // Directory and filename must be no more than 255 characters in length
-        if (strlen($result['file']) > $this->maxFilenameLength) {
-            throw new \LengthException(
-                __('Filename is too long; must be %1 characters or less', $this->maxFilenameLength)
-            );
+            // Directory and filename must be no more than 255 characters in length
+            if (strlen($result['file']) > $this->maxFilenameLength) {
+                throw new \LengthException(
+                    __('Filename is too long; must be %1 characters or less', $this->maxFilenameLength)
+                );
+            }
         }
 
         return $result;

@@ -85,7 +85,6 @@ class File extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      * @throws LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function beforeSave()
     {
@@ -104,8 +103,8 @@ class File extends \Magento\Framework\App\Config\Value
             } catch (Exception $e) {
                 throw new LocalizedException(__('%1', $e->getMessage()));
             }
-            $filename = ($result !== false) ? $result['file'] : '';
-            if ($filename) {
+            if ($result !== false) {
+                $filename = $result['file'];
                 if ($this->_addWhetherScopeInfo()) {
                     $filename = $this->_prependScopeInfo($filename);
                 }

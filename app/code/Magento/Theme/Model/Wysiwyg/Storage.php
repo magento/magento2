@@ -298,8 +298,8 @@ class Storage
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
                 $file['thumbnailParams'] = $requestParams;
-                //phpcs:ignore Generic.PHP.NoSilencedErrors
-                $size = @getimagesizefromstring($path);
+                // phpcs:ignore Generic.PHP.NoSilencedErrors, Magento2.Functions.DiscouragedFunction
+                $size = @getimagesize($path);
                 if (is_array($size)) {
                     $file['width'] = $size[0];
                     $file['height'] = $size[1];
