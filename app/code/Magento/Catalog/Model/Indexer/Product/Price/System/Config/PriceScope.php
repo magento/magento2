@@ -28,10 +28,10 @@ class PriceScope extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
-     * @param PriceScopeChange $priceScopeChange
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @param PriceScopeChange $priceScopeChange
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -39,14 +39,15 @@ class PriceScope extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
-        \Magento\Catalog\Model\Config\PriceScopeChange $priceScopeChange,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        PriceScopeChange $priceScopeChange = null
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->indexerRegistry = $indexerRegistry;
-        $this->priceScopeChange = $priceScopeChange;
+        $this->priceScopeChange = $priceScopeChange ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(PriceScopeChange::class);
     }
 
     /**
