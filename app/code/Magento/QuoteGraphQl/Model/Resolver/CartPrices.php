@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
-use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 
 /**
  * @inheritdoc

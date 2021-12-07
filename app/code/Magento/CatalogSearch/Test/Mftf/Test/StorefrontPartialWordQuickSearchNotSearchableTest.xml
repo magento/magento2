@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPartialWordQuickSearchNotSearchableTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Partial Word search using Elasticsearch"/>
+            <title value="Partial word search should be performed on searchable fields only"/>
+            <description value="Partial word search should be performed on searchable fields only"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40782"/>
+            <useCaseId value="MC-40715"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="newCategory"/>
+            <!--Create product1-->
+            <createData entity="ProductForPartialSearch" stepKey="product1">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+            <!--Create product2-->
+            <createData entity="SimpleProduct" stepKey="product2">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+            <!--Create product3-->
+            <createData entity="ApiSimpleProduct" stepKey="product3">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Open "Name" attribute in admin-->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="OpenNameAttribute">
+                <argument name="productAttributeCode" value="name"/>
+            </actionGroup>
+            <!--Configure "Name" attribute as not searchable-->
+            <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeNameNotSearchable">
+                <argument name="useInSearchValue" value="No"/>
+            </actionGroup>
+            <!--Save "Name" attribute-->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
+            <!--Reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Clean cache-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete product1-->
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <!--Delete product2-->
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <!--Delete product3-->
+            <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
+            <!--Delete category-->
+            <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
+            <!--Open "Name" attribute in admin-->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="OpenNameAttribute">
+                <argument name="productAttributeCode" value="name"/>
+            </actionGroup>
+            <!--Configure "Name" attribute as searchable-->
+            <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeNameSearchable">
+                <argument name="useInSearchValue" value="Yes"/>
+            </actionGroup>
+            <!--Configure "Name" attribute to be visible in advanced search (this option is automatically turned off when "use in search" is off)-->
+            <actionGroup ref="AdminProductAttributeSetVisibleInAdvancedSearchActionGroup" stepKey="makeNameVisibleInAdvancedSearch">
+                <argument name="isVisibleInAdvancedSearch" value="Yes"/>
+            </actionGroup>
+            <!--Save "Name" attribute-->
+            <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
+            <!--Clear grid filter-->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!--Reindex-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Clean cache-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+        <!--Navigate to home page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <!--Search for word "partial"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search1">
+            <argument name="phrase" value="partial"/>
+        </actionGroup>
+        <!--Assert that product1 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <!--Assert that product3 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct3">
+            <argument name="productName" value="$$product3.name$$"/>
+        </actionGroup>
+
+        <!--Search for word "simple"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search2">
+            <argument name="phrase" value="simple"/>
+        </actionGroup>
+        <!--Assert that product1 is present in the search result-->
+        <comment userInput="BIC workaround" stepKey="dontSeeProduct1"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct1c">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct2">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <!--Assert that product3 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct3">
+            <argument name="productName" value="$$product3.name$$"/>
+        </actionGroup>
+
+        <!--Search for word "api-sim"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search3">
+            <argument name="phrase" value="api-sim"/>
+        </actionGroup>
+        <!--Assert that product1 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct1b">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Assert that product2 is not present in the search result-->
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProduct2b">
+            <argument name="productName" value="$$product2.name$$"/>
+        </actionGroup>
+        <!--Assert that product3 is present in the search result-->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProduct3b">
+            <argument name="productName" value="$$product3.name$$"/>
+        </actionGroup>
+    </test>
+</tests>
+

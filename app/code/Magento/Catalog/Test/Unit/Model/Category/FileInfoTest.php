@@ -116,6 +116,9 @@ class FileInfoTest extends TestCase
         $this->pubDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/pub/');
 
+        $this->store->method('getBaseUrl')
+            ->willReturn('https://example.com/');
+
         $this->model = new FileInfo(
             $this->filesystem,
             $this->mime,
@@ -129,21 +132,13 @@ class FileInfoTest extends TestCase
         $absoluteFilePath = '/a/b/c/pub/media/catalog/category/filename.ext1';
 
         $expected = 'ext1';
-
-        $this->mediaDirectory->expects($this->at(0))
-            ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media/');
-
-        $this->mediaDirectory->expects($this->at(1))
-            ->method('getAbsolutePath')
-            ->with(null)
-            ->willReturn('/a/b/c/pub/media/');
-
-        $this->mediaDirectory->expects($this->at(2))
-            ->method('getAbsolutePath')
-            ->with('/catalog/category/filename.ext1')
-            ->willReturn($absoluteFilePath);
+        $this->mediaDirectory->method('getAbsolutePath')
+            ->willReturnMap(
+                [
+                    [null, '/a/b/c/pub/media'],
+                    ['/catalog/category/filename.ext1', $absoluteFilePath]
+                ]
+            );
 
         $this->mime->expects($this->once())
             ->method('getMimeType')

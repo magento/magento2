@@ -326,9 +326,12 @@ class OrdersFixture extends Fixture
             $batchNumber++;
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $productCount = [
+                // mt_rand() here is not for cryptographic use.
+                // phpcs:disable Magento2.Security.InsecureFunction
                 Type::TYPE_SIMPLE => mt_rand($orderSimpleCountFrom, $orderSimpleCountTo),
                 Configurable::TYPE_CODE => mt_rand($orderConfigurableCountFrom, $orderConfigurableCountTo),
                 self::BIG_CONFIGURABLE_TYPE => mt_rand($orderBigConfigurableCountFrom, $orderBigConfigurableCountTo)
+                // phpcs:enable
             ];
             $order = [
                 '%itemsPerOrder%' => array_sum($productCount),

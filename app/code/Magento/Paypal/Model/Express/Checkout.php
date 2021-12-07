@@ -505,7 +505,7 @@ class Checkout
         $solutionType = $this->_config->getMerchantCountry() == 'DE'
             ? \Magento\Paypal\Model\Config::EC_SOLUTION_TYPE_MARK
             : $this->_config->getValue('solutionType');
-        $totalAmount = round($this->_quote->getBaseGrandTotal(), 2);
+        $totalAmount = round((float)$this->_quote->getBaseGrandTotal(), 2);
         $this->_getApi()->setAmount($totalAmount)
             ->setCurrencyCode($this->_quote->getBaseCurrencyCode())
             ->setInvNum($this->_quote->getReservedOrderId())
@@ -663,7 +663,7 @@ class Checkout
         ) === \Magento\Paypal\Model\Config::REQUIRE_BILLING_ADDRESS_ALL;
 
         if ($isButton && !$requireBillingAddress && !$quote->isVirtual()) {
-            $billingAddress = clone $shippingAddress;
+            $billingAddress = clone $shippingAddress; /** @phpstan-ignore-line */
             $billingAddress->unsAddressId()->unsAddressType()->setCustomerAddressId(null);
             $data = $billingAddress->getData();
             $data['save_in_address_book'] = 0;
@@ -1155,8 +1155,18 @@ class Checkout
     protected function prepareGuestQuote()
     {
         $quote = $this->_quote;
+        $billingAddress = $quote->getBillingAddress();
+
+        /* Check if Guest customer provided an email address on checkout page, and in case
+        it was provided, use it as priority, if not, use email address returned from PayPal.
+        (Guest customer can place order two ways: - from checkout page, where guest is asked to provide
+        an email address that later can be used for account creation; - from mini shopping cart, directly
+        proceeding to PayPal without providing an email address */
+        $email = $billingAddress->getOrigData('email') !== null
+            ? $billingAddress->getOrigData('email') : $billingAddress->getEmail();
+
         $quote->setCustomerId(null)
-            ->setCustomerEmail($quote->getBillingAddress()->getEmail())
+            ->setCustomerEmail($email)
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;

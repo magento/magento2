@@ -40,4 +40,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQl\Controller\GraphQl">
+        <plugin name="ClearCustomerSessionAfterRequest" type="Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest" sortOrder="1" disabled="false" />
+    </type>
+    <type name="Magento\GraphQlCache\Model\CacheId\CacheIdCalculator">
+        <arguments>
+            <argument name="idFactorProviders" xsi:type="array">
+                <item name="customergroup" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerGroupProvider</item>
+                <item name="customertaxrate" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerTaxRateProvider</item>
+                <item name="isloggedin" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

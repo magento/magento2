@@ -232,7 +232,10 @@ class Category extends AbstractResource
      */
     protected function _afterDelete(DataObject $object)
     {
-        $this->indexerProcessor->markIndexerAsInvalid();
+        if ($object->getIsActive() || $object->getDeletedChildrenIds()) {
+            $this->indexerProcessor->markIndexerAsInvalid();
+        }
+
         return parent::_afterDelete($object);
     }
 
@@ -515,9 +518,8 @@ class Category extends AbstractResource
                 $websiteId
             );
         }
-        $bind = ['category_id' => (int)$category->getId()];
 
-        return $this->getConnection()->fetchPairs($select, $bind);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -575,7 +577,8 @@ class Category extends AbstractResource
             'entity_id'
         )->where(
             'entity_id IN(?)',
-            $ids
+            $ids,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchCol($select);

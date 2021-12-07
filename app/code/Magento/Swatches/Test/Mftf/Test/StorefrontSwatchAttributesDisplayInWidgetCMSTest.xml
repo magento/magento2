@@ -8,23 +8,24 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest">
+    <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest" deprecated="Use StorefrontSwatchAttributeDisplayedInWidgetCMSTest instead">
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Swatches"/>
-            <title value="Swatch Attribute is not displayed in the Widget CMS"/>
-            <description value="Swatch Attribute is not displayed in the Widget CMS"/>
+            <title value="Deprecated. Swatch Attribute is not displayed in the Widget CMS"/>
+            <description value="Deprecated. Swatch Attribute is not displayed in the Widget CMS"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-96469"/>
             <useCaseId value="MAGETWO-96406"/>
             <group value="ConfigurableProduct"/>
             <skip>
-                <issueId value="MQE-1424" />
+                <issueId value="DEPRECATED">Use StorefrontSwatchAttributeDisplayedInWidgetCMSTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <createData entity="NewRootCategory" stepKey="createRootCategory"/>
         </before>
 
@@ -47,7 +48,7 @@
             <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
             <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <!--logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

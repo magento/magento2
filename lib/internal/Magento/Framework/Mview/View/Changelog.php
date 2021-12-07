@@ -6,8 +6,12 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
 use Magento\Framework\Phrase;
 
 /**
@@ -24,6 +28,11 @@ class Changelog implements ChangelogInterface
      * Column name of changelog entity
      */
     const COLUMN_NAME = 'entity_id';
+
+    /**
+     * Column name for Version ID
+     */
+    const VERSION_ID_COLUMN_NAME = 'version_id';
 
     /**
      * Database connection
@@ -45,14 +54,31 @@ class Changelog implements ChangelogInterface
     protected $resource;
 
     /**
+     * @var Config
+     */
+    private $mviewConfig;
+
+    /**
+     * @var ProcessorFactory
+     */
+    private $additionalColumnsProcessorFactory;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param Config $mviewConfig
+     * @param ProcessorFactory $additionalColumnsProcessorFactory
      * @throws ConnectionException
      */
-    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
-    {
+    public function __construct(
+        \Magento\Framework\App\ResourceConnection $resource,
+        Config $mviewConfig,
+        ProcessorFactory $additionalColumnsProcessorFactory
+    ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->checkConnection();
+        $this->mviewConfig = $mviewConfig;
+        $this->additionalColumnsProcessorFactory = $additionalColumnsProcessorFactory;
     }
 
     /**
@@ -83,7 +109,7 @@ class Changelog implements ChangelogInterface
             $table = $this->connection->newTable(
                 $changelogTableName
             )->addColumn(
-                'version_id',
+                self::VERSION_ID_COLUMN_NAME,
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
@@ -95,8 +121,44 @@ class Changelog implements ChangelogInterface
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Entity ID'
             );
+
+            foreach ($this->initAdditionalColumnData() as $columnData) {
+                /** @var AdditionalColumnProcessorInterface $processor */
+                $processorClass = $columnData['processor'];
+                $processor = $this->additionalColumnsProcessorFactory->create($processorClass);
+                $processor->processColumnForCLTable($table, $columnData['cl_name']);
+            }
+
             $this->connection->createTable($table);
         }
+    }
+
+    /**
+     * Retrieve additional column data
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function initAdditionalColumnData(): array
+    {
+        $config = $this->mviewConfig->getView($this->getViewId());
+        $additionalColumns = [];
+
+        if (!$config) {
+            return $additionalColumns;
+        }
+
+        foreach ($config['subscriptions'] as $subscription) {
+            if (isset($subscription['additional_columns'])) {
+                foreach ($subscription['additional_columns'] as $additionalColumn) {
+                    //We are gatherig unique change log column names in order to create them later
+                    $additionalColumns[$additionalColumn['cl_name']] = $additionalColumn;
+                    $additionalColumns[$additionalColumn['cl_name']]['processor'] = $subscription['processor'];
+                }
+            }
+        }
+
+        return $additionalColumns;
     }
 
     /**
@@ -139,7 +201,7 @@ class Changelog implements ChangelogInterface
      *
      * @param int $fromVersionId
      * @param int $toVersionId
-     * @return int[]
+     * @return array
      * @throws ChangelogTableNotExistsException
      */
     public function getList($fromVersionId, $toVersionId)
@@ -203,7 +265,7 @@ class Changelog implements ChangelogInterface
      */
     public function getName()
     {
-        if (strlen($this->viewId) == 0) {
+        if (!$this->viewId || strlen($this->viewId) == 0) {
             throw new \DomainException(
                 new Phrase("View's identifier is not set")
             );

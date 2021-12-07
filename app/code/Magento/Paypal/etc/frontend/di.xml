@@ -151,20 +151,32 @@
                     <item name="label" xsi:type="string">paypal</item>
                 </item>
                 <item name="product" xsi:type="array">
-                    <item name="layout" xsi:type="string">horizontal</item>
+                    <item name="layout" xsi:type="string">vertical</item>
                     <item name="size" xsi:type="string">responsive</item>
                     <item name="color" xsi:type="string">gold</item>
                     <item name="shape" xsi:type="string">pill</item>
                     <item name="label" xsi:type="string">buynow</item>
                 </item>
             </argument>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Block\Express\InContext\Component">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Controller\Index\Index">
+        <plugin name="sdk_url_configuration" type="Magento\Paypal\Plugin\CheckoutIndex" />
+    </type>
+    <type name="Magento\Paypal\Model\SdkUrl">
+        <arguments>
             <argument name="disallowedFundingMap" xsi:type="array">
                 <item name="CREDIT" xsi:type="string">credit</item>
                 <item name="CARD" xsi:type="string">card</item>
                 <item name="ELV" xsi:type="string">sepa</item>
             </argument>
             <argument name="unsupportedPaymentMethods" xsi:type="array">
-                <item name="venmo" xsi:type="string">venmo</item>
                 <item name="bancontact" xsi:type="string">bancontact</item>
                 <item name="eps" xsi:type="string">eps</item>
                 <item name="giropay" xsi:type="string">giropay</item>
@@ -173,12 +185,18 @@
                 <item name="p24" xsi:type="string">p24</item>
                 <item name="sofort" xsi:type="string">sofort</item>
             </argument>
+            <argument name="supportedPaymentMethods" xsi:type="array">
+                <item name="venmo" xsi:type="string">venmo</item>
+                <item name="paylater" xsi:type="string">paylater</item>
+            </argument>
             <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
         </arguments>
     </type>
-    <type name="Magento\Paypal\Block\Express\InContext\Component">
+    <type name="Magento\Checkout\Block\Onepage">
         <arguments>
-            <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="payLater" xsi:type="object">Magento\Paypal\Block\PayLater\LayoutProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>
