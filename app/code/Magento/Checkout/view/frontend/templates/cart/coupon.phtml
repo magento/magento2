@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /**
  * @var \Magento\Framework\View\Element\AbstractBlock $block
  */
@@ -13,13 +15,9 @@ $hasCouponCode = $block->getCouponCode() !== null && strlen($block->getCouponCod
 ?>
 <div class="block discount"
      id="block-discount"
-     data-mage-init='{"collapsible":{"active": <?= $hasCouponCode ? 'true' : 'false' ?>,
-                                     "openedState": "active", "saveState": false}}'
->
+     data-mage-init='{"collapsible":{"active": <?= $hasCouponCode ? 'true' : 'false' ?>, "openedState": "active", "saveState": false}}'>
     <div class="title" data-role="title">
-        <strong id="block-discount-heading" role="heading" aria-level="2">
-            <?= $block->escapeHtml(__('Apply Discount Code')) ?>
-        </strong>
+        <strong id="block-discount-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('Apply Discount Code')) ?></strong>
     </div>
     <div class="content" data-role="content" aria-labelledby="block-discount-heading">
         <form id="discount-coupon-form"
