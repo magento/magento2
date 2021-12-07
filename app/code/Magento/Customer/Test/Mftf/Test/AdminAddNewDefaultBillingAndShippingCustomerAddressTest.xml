@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddNewDefaultBillingAndShippingCustomerAddressTest">
+        <annotations>
+            <stories value="Add new default billing/shipping customer address"/>
+            <title value="Add new default billing/shipping customer address"/>
+            <description value="Add new default billing/shipping customer address on customer addresses tab"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-94814"/>
+            <group value="customer"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="goToCustomerEditPage">
+            <argument name="customerId" value="$customer.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenAddressesTabFromCustomerEditPageActionGroup" stepKey="openAddressesTab"/>
+       
+        <actionGroup ref="AdminAssertCustomerNoDefaultBillingAddress" stepKey="seeDefaultBillingAddressSectionBeforeChangingDefaultAddress"/>
+        <actionGroup ref="AdminAssertCustomerNoDefaultShippingAddress" stepKey="seeDefaultShippingAddressSectionBeforeChangingDefaultAddress"/>
+        
+        <actionGroup ref="AdminClickAddNewAddressButtonOnCustomerAddressesTabActionGroup" stepKey="clickAddNewAddressButton"/>
+        <actionGroup ref="AdminClickDefaultBillingAddressToggleOnAddUpdateAddressPageActionGroup" stepKey="enableDefaultBillingAddress"/>
+        <actionGroup ref="AdminClickDefaultShippingAddressToggleOnAddUpdateAddressPageActionGroup" stepKey="enableDefaultShippingAddress"/>
+        <actionGroup ref="AdminFillAndSaveCustomerAddressInformationActionGroup" stepKey="fillAndSaveCustomerAddressInformationActionGroup">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        
+        <actionGroup ref="AdminAssertCustomerDefaultBillingAddressAgainstEntityActionGroup" stepKey="assertDefaultBillingAddressIsChanged">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertCustomerDefaultShippingAddressAgainstEntityActionGroup" stepKey="assertDefaultShippingAddressIsChanged">
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        
+        <actionGroup ref="AdminClickEditLinkForDefaultBillingAddressActionGroup" stepKey="clickEditDefaultBillingAddress"/>
+        <actionGroup ref="AdminAssertDefaultShippingAddressToggleIsOnOnAddUpdateAddressPageActionGroup" stepKey="assertDefaultBillingIsEnabledCustomerAddressAddUpdateForm"/>
+        <actionGroup ref="AdminAssertDefaultShippingAddressToggleIsOnOnAddUpdateAddressPageActionGroup" stepKey="assertDefaultShippingIsEnabledCustomerAddressAddUpdateForm"/>
+    </test>
+</tests>

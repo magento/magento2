@@ -6,15 +6,15 @@
 namespace Magento\Framework\Code\Generator;
 
 use Laminas\Code\Generator\ValueGenerator;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
+use Magento\Framework\GetParameterClassTrait;
 
 /**
  * Abstract entity
  */
 abstract class EntityAbstract
 {
+    use GetParameterClassTrait;
+
     /**
      * Entity type abstract
      */
@@ -157,8 +157,7 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        $className = ltrim($className, '\\');
-        return $className ? '\\' . $className : '';
+        return $className ? '\\' . ltrim($className, '\\') : '';
     }
 
     /**
@@ -348,22 +347,6 @@ abstract class EntityAbstract
         }
 
         return $typeName;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**
