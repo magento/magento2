@@ -57,7 +57,7 @@ We use labels in the GitHub issues and pull requests to help the participants re
 
 ## Security
 
-[Security](https://devdocs.magento.com/guides/v2.4/architecture/security_intro.html) is one of the highest priorities in Adobe. To learn more about reporting any security concerns, visit the [Adobe Vulnerability Disclosure Program and Magento Bug Bounty Program](https://hackerone.com/adobe).
+[Security](https://devdocs.magento.com/guides/v2.4/architecture/security_intro.html) is one of the highest priorities at Adobe. To learn more about reporting security concerns, visit the [Adobe Vulnerability Disclosure Program and Magento Bug Bounty Program](https://hackerone.com/adobe).
 
 Stay up-to-date on the latest security news and patches by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
