@@ -121,10 +121,10 @@ class GraphQl implements FrontControllerInterface
      * @param QueryFields $queryFields
      * @param JsonFactory|null $jsonFactory
      * @param HttpResponse|null $httpResponse
-     * @param ContextFactoryInterface $contextFactory
-     * @param LogData $logDataHelper
-     * @param LoggerPool $loggerPool
-     * @param AreaList $areaList
+     * @param ContextFactoryInterface|null $contextFactory
+     * @param LogData|null $logDataHelper
+     * @param LoggerPool|null $loggerPool
+     * @param AreaList|null $areaList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
