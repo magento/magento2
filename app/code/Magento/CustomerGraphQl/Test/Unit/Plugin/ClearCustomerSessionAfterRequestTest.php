@@ -113,9 +113,15 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
 
     protected function tearDown(): void
     {
-        unset($this->addCustomerGroupToContext);
-        unset($this->userContextMock);
-        unset($this->sessionMock);
-        unset($this->customerRepositoryMock);
+        unset(
+            $this->clearCustomerSessionAfterRequest,
+            $this->userContextMock,
+            $this->sessionMock,
+            $this->customerRepositoryMock,
+            $this->addUserInfoToContextMock,
+            $this->graphQlMock,
+            $this->responseMock,
+            $this->customerMock
+        );
     }
 }

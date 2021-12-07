@@ -107,9 +107,13 @@ class AddUserInfoToContextTest extends TestCase
 
     protected function tearDown(): void
     {
-        unset($this->addCustomerGroupToContext);
-        unset($this->userContextMock);
-        unset($this->sessionMock);
-        unset($this->customerRepositoryMock);
+        unset(
+            $this->addCustomerGroupToContext,
+            $this->userContextMock,
+            $this->sessionMock,
+            $this->customerRepositoryMock,
+            $this->contextParametersMock,
+            $this->customerMock
+        );
     }
 }
