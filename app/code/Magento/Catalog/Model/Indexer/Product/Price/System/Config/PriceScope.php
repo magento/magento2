@@ -31,7 +31,7 @@ class PriceScope extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @param PriceScopeChange $priceScopeChange
+     * @param PriceScopeChange|null $priceScopeChange
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
