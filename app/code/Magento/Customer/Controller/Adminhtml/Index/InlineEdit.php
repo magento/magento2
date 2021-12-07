@@ -179,7 +179,7 @@ class InlineEdit extends \Magento\Backend\App\Action implements HttpPostActionIn
         $addressKeys = preg_grep(
             '/^(' . AttributeRepository::BILLING_ADDRESS_PREFIX . '\w+)/',
             array_keys($data),
-            $isCustomerData ?? 0
+            (int) $isCustomerData
         );
         $result = array_intersect_key($data, array_flip($addressKeys));
         if ($isCustomerData === null) {
