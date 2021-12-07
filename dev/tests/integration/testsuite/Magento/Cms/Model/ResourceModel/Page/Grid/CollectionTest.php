@@ -51,7 +51,8 @@ class CollectionTest extends TestCase
 
         $collection = $gridCollection->addFieldToFilter($field, ['qteq' => $filterDate]);
         $expectedSelect = "SELECT `main_table`.* FROM `cms_page` AS `main_table` " .
-            "WHERE (((`{$field}` = '{$convertedDate}')))";
+            "WHERE ((((`{$field}` = '{$convertedDate}')))) " .
+            "AND (main_table.created_in <= 1) AND (main_table.updated_in > 1)";
 
         $this->assertEquals($expectedSelect, $collection->getSelectSql(true));
     }
