@@ -36,7 +36,7 @@ Our [Community](https://opensource.magento.com/) is large and diverse, and our p
 
 ### Maintainers
 
-We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting the pull requests, reviewing the issues. Thanks to the invaluable input from the Community Maintainers team, we can significantly improve quality and processing time of every contribution.
+We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting pull requests and reviewing issues. Thanks to invaluable input from the Community Maintainers team, we can significantly improve contribution quality and accelerate the time to deliver your updates to production.
 
 - [Learn more about the Maintainer role](https://devdocs.magento.com/contributor-guide/maintainers.html)
 - [Maintainer's Handbook](https://devdocs.magento.com/contributor-guide/maintainer-handbook.html)
