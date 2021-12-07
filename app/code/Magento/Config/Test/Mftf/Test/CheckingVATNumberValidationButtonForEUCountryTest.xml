@@ -16,7 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="ACP2E-355"/>
             <useCaseId value="ACP2E-182"/>
-            <stories value="Error while validating Store VAT Number"/>
+            <stories value="Store VAT Number Validation"/>
             <group value="configuration"/>
         </annotations>
         <before>
@@ -30,44 +30,36 @@
         <actionGroup ref="AdminOpenStoreConfigPageActionGroup" stepKey="openStoreConfigPage"/>
 
         <!-- Expand the store information tab -->
-        <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" stepKey="checkIfTabOpen" visible="true"/>
-        <waitForPageLoad time="60" stepKey="wait" />
+        <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" visible="true" stepKey="checkIfTabOpen"/>
 
-        <!-- Verify that the page source contains the raw source code `<button class="action-validate-vat disabled">`. -->
-        <seeInSource html="&#60;button class&#61;&#34;action-validate-vat disabled&#34;" stepKey="seeInSource"/>
-
-        <!--Open country options section and select an EU Country (`Denmark`) -->
-        <selectOption userInput="{{DE_Address_Berlin_Not_Default_Address.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectEUStoreCountry"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
-
-        <!-- Wait up to 30 seconds for `Validate VAT Number` button to become enabled on the page before continuing. -->
-        <waitForElementVisible selector="{{StoreConfigSection.validateVATNumber}}" stepKey="waitForElementVisible"/>
-
-        <!-- Verify that `Validate VAT Number` is available and visible on the current page. -->
+        <!-- Verify that `Validate VAT Number` button is available and visible on the current page. -->
         <seeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="seeVATNumberButton"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1" />
 
-        <!--Fill valid VAT Number for the selected EU Country (Denmark)-->
-        <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{DE_Address_Berlin_Not_Default_Address.vatNumber}}" stepKey="fillVATNumberForEU"/>
+        <!-- Verify that the `Validate VAT Number` button contains class `disabled` for non-EU Country or none-->
+        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" selectorArray="['class' => 'disabled']" stepKey="validateVatNumberButtonShouldBeDisabledInitially"/>
 
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2" />
-        <!-- Verify that the page source contains the raw source code `<button class="action-validate-vat">`. -->
-        <seeInSource html="&#60;button class&#61;&#34;action-validate-vat&#34;" stepKey="seeInSource2"/>
+        <!--Open country options section and select an EU Country (`Germany`) -->
+        <selectOption userInput="{{DE_Address_Berlin_Not_Default_Address.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectEUStoreCountry"/>
+        <waitForAjaxLoad stepKey="waitForAjaxToLoadRegionForEuCountry"/>
+
+        <!--Fill valid VAT Number for the selected EU Country (Germany)-->
+        <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{DE_Address_Berlin_Not_Default_Address.vatNumber}}" stepKey="fillValidVatNumberForEuCountry"/>
+
+        <!-- Verify that the `Validate VAT Number` button should not contain class `disabled` for EU Country-->
+        <dontSeeElement selector="{{StoreConfigSection.validateVATNumber}}" parameterArray="['class' => 'disabled']" stepKey="validateVatNumberButtonEnabledForEuCountry"/>
 
         <!-- Click the `Validate VAT Number` button. -->
-        <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickButton"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad2"/>
-        <waitForElementVisible selector="#validation_result" time="20" stepKey="waitForAssertValidVATNumber"/>
-        <see selector="#validation_result" userInput="VAT Number is valid." stepKey="validVATNumberResult"/>
-        <waitForPageLoad time="60" stepKey="wait2" />
+        <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickValidateVatNumberButton"/>
+        <waitForAjaxLoad stepKey="waitForAjaxToLoadVatValidationResult"/>
+        <waitForElementVisible selector="#validation_result" time="20" stepKey="waitForRenderingVatValidationResult"/>
+        <see selector="#validation_result" userInput="VAT Number is valid." stepKey="seeValidVatNumberResult"/>
 
-        <!-- Disable `Validate VAT Number` button for non-EU Country (GB)-->
+        <!-- Disable `Validate VAT Number` button for non-EU Country (United Kingdom)-->
         <selectOption userInput="{{UK_With_State_Default_Billing.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectNonEUStoreCountry"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad3"/>
+        <waitForAjaxLoad stepKey="waitForAjaxToLoadRegionForNonEuCountry"/>
         <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{UK_With_State_Default_Billing.vatNumber}}" stepKey="fillVATNumberForNonEU"/>
-        <waitForPageLoad time="60" stepKey="wait3" />
 
-        <!-- Verify that the page source contains the raw source code `<button class="action-validate-vat disabled">`. -->
-        <seeInSource html="&#60;button class&#61;&#34;action-validate-vat disabled&#34;" stepKey="seeInSource3"/>
+        <!-- Verify that the `Validate VAT Number` button contains class `disabled` for non-EU Country-->
+        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" selectorArray="['class' => 'disabled']" stepKey="validateVatNumberButtonDisabledAgain"/>
     </test>
 </tests>
