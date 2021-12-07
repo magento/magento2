@@ -55,7 +55,7 @@ class Category extends AbstractResource
     protected $_isActiveAttributeId = null;
 
     /**
-     * Store id
+     * Id of store
      *
      * @var int
      */
@@ -69,14 +69,14 @@ class Category extends AbstractResource
     protected $_eventManager = null;
 
     /**
-     * Category collection factory
+     * Collection factory of category
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $_categoryCollectionFactory;
 
     /**
-     * Category tree factory
+     * Tree factory of category
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
      */

@@ -46,7 +46,7 @@ class AfterImportDataObserver implements ObserverInterface
     /**
      * Url Key Attribute
      */
-    const URL_KEY_ATTRIBUTE_CODE = 'url_key';
+    public const URL_KEY_ATTRIBUTE_CODE = 'url_key';
 
     /**
      * @var StoreViewService

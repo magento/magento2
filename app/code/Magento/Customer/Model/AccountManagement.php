@@ -73,7 +73,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
+    public const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
     /**
      * Configuration paths for register no password email template
@@ -81,7 +81,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
+    public const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
 
     /**
      * Configuration paths for remind email identity
@@ -89,7 +89,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
+    public const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
     /**
      * Configuration paths for remind email template
@@ -97,7 +97,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
+    public const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
     /**
      * Configuration paths for forgot email email template
@@ -105,7 +105,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
+    public const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
     /**
      * Configuration paths for forgot email identity
@@ -113,7 +113,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
+    public const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
     /**
      * Configuration paths for account confirmation required
@@ -121,7 +121,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see AccountConfirmation::XML_PATH_IS_CONFIRM
      */
-    const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
+    public const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
     /**
      * Configuration paths for account confirmation email template
@@ -129,7 +129,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
+    public const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     /**
      * Configuration paths for confirmation confirmed email template
@@ -137,7 +137,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+    public const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
     /**
      * Constants for the type of new account email to be sent
@@ -145,7 +145,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
+    public const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
     /**
      * Welcome email, when password setting is required
@@ -153,7 +153,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
+    public const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
 
     /**
      * Welcome email, when confirmation is enabled
@@ -161,7 +161,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
+    public const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
 
     /**
      * Confirmation email, when account is confirmed
@@ -169,26 +169,26 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see EmailNotificationInterface::NEW_ACCOUNT_EMAIL_REGISTERED
      */
-    const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
+    public const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
 
     /**
      * Constants for types of emails to send out.
      * pdl:
      * forgot, remind, reset email templates
      */
-    const EMAIL_REMINDER = 'email_reminder';
+    public const EMAIL_REMINDER = 'email_reminder';
 
-    const EMAIL_RESET = 'email_reset';
+    public const EMAIL_RESET = 'email_reset';
 
     /**
      * Configuration path to customer password minimum length
      */
-    const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'customer/password/minimum_password_length';
+    public const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'customer/password/minimum_password_length';
 
     /**
      * Configuration path to customer password required character classes number
      */
-    const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
+    public const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
 
     /**
      * Configuration path to customer reset password email template
@@ -196,7 +196,7 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see Magento/Customer/Model/EmailNotification::XML_PATH_REGISTER_EMAIL_TEMPLATE
      */
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+    public const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
      * Minimum password length
@@ -204,14 +204,14 @@ class AccountManagement implements AccountManagementInterface
      * @deprecated Get rid of Helpers in Password Security Management
      * @see \Magento\Customer\Model\AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
      */
-    const MIN_PASSWORD_LENGTH = 6;
+    public const MIN_PASSWORD_LENGTH = 6;
 
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
     /**
      * @var CustomerFactory
