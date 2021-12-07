@@ -50,11 +50,9 @@ class CollectionTest extends TestCase
         $convertedDate = $timeZone->convertConfigTimeToUtc($filterDate);
 
         $collection = $gridCollection->addFieldToFilter($field, ['qteq' => $filterDate]);
-        $expectedSelect = "SELECT `main_table`.* FROM `cms_block` AS `main_table` " .
-            "WHERE ((((`{$field}` = '{$convertedDate}')))) " .
-            "AND (main_table.created_in <= 1) AND (main_table.updated_in > 1)";
+        $expectedSelectCondition = "`{$field}` = '{$convertedDate}'";
 
-        $this->assertEquals($expectedSelect, $collection->getSelectSql(true));
+        $this->assertStringContainsString($expectedSelectCondition, $collection->getSelectSql(true));
     }
 
     /**
