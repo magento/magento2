@@ -7,16 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching;
 
-use GraphQL\GraphQL;
 use GraphQL\Type\Definition\ScalarType;
-use GraphQL\Type\Definition\Type as GraphQLType;
 use GraphQL\Utils\BuildSchema;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
-use Magento\Framework\GraphQl\Type\Definition\FloatType;
-use Magento\Framework\GraphQl\Type\Definition\IntType;
-use Magento\Framework\GraphQl\Type\Definition\StringType;
+use Magento\Framework\GraphQl\Type\TypeManagement;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType;
 
@@ -58,11 +54,6 @@ class GraphQlReader implements ReaderInterface
     private static $componentRegistrar;
 
     /**
-     * @var boolean
-     */
-    private static $typesOverridden = false;
-
-    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReaderComposite $typeReader
      * @param string $fileName
@@ -78,7 +69,8 @@ class GraphQlReader implements ReaderInterface
         $this->typeReader = $typeReader;
         $this->defaultScope = $defaultScope;
         $this->fileName = $fileName;
-        $this->overrideStandardGraphQLTypes();
+        $typeManagement = new TypeManagement();
+        $typeManagement->overrideStandardGraphQLTypes();
     }
 
     /**
@@ -351,23 +343,5 @@ class GraphQlReader implements ReaderInterface
         }
 
         return $source;
-    }
-
-    /**
-     * Replace the standard type definitions with ones that know how to cast input values
-     */
-    private function overrideStandardGraphQLTypes(): void
-    {
-        if (!self::$typesOverridden) {
-            $standardTypes = GraphQLType::getStandardTypes();
-
-            GraphQL::overrideStandardTypes([
-                GraphQLType::INT => new IntType($standardTypes[GraphQLType::INT]->config),
-                GraphQLType::FLOAT => new FloatType($standardTypes[GraphQLType::FLOAT]->config),
-                GraphQLType::STRING => new StringType($standardTypes[GraphQLType::STRING]->config)
-            ]);
-
-            self::$typesOverridden = true;
-        }
     }
 }
