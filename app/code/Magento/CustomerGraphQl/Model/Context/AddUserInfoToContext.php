@@ -15,7 +15,7 @@ use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
 
 /**
- * @inheritdoc
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AddUserInfoToContext implements UserContextParametersProcessorInterface
 {
