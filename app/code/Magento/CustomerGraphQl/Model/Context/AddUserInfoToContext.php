@@ -37,7 +37,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
     /**
      * @var CustomerInterface|null
      */
-    private ?CustomerInterface $loggedInCustomerData = null;
+    private $loggedInCustomerData = null;
 
     /**
      * @param UserContextInterface $userContext
@@ -95,17 +95,20 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
     }
 
     /**
+     * Set logged in customer data
+     *
      * @param CustomerInterface $customerData
      * @return AddUserInfoToContext
      */
     public function setLoggedInCustomerData(CustomerInterface $customerData): self
     {
         $this->loggedInCustomerData = $customerData;
-
         return $this;
     }
 
     /**
+     * Get logged in customer data
+     *
      * @return CustomerInterface
      */
     public function getLoggedInCustomerData(): ?CustomerInterface

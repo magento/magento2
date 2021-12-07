@@ -45,12 +45,13 @@ class ClearCustomerSessionAfterRequest
      * @param UserContextInterface $userContext
      * @param CustomerSession $customerSession
      * @param CustomerRepository $customerRepository
+     * @param AddUserInfoToContext $addUserInfoToContext
      */
     public function __construct(
         UserContextInterface $userContext,
         CustomerSession $customerSession,
         CustomerRepository $customerRepository,
-        AddUserInfoToContext $addUserInfoToContext
+        AddUserInfoToContext $addUserInfoToContext = null
     ) {
         $this->userContext = $userContext;
         $this->customerSession = $customerSession;
