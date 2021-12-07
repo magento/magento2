@@ -28,6 +28,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
@@ -55,7 +56,6 @@ use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\AuthorizationInterface;
 
 /**
  * Handle various customer account actions
@@ -1461,15 +1461,14 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-        if (is_string($passwordLinkToken) && !empty($passwordLinkToken)) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt(
-                $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
-            );
-            $this->setIgnoreValidationFlag($customer);
-            $this->customerRepository->save($customer);
-        }
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+        $customerSecure->setRpToken($passwordLinkToken);
+        $customerSecure->setRpTokenCreatedAt(
+            $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
+        );
+        $this->setIgnoreValidationFlag($customer);
+        $this->customerRepository->save($customer);
+
         return true;
     }
 
