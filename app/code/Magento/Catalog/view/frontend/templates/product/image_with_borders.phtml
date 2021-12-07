@@ -9,43 +9,36 @@
 /** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $width = (int)$block->getWidth();
-$paddingBottom = $block->getRatio() * 100;
+$height = (int)$block->getHeight();
 ?>
 <span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
-    <span class="product-image-wrapper">
-        <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-            <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
-                <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
-            <?php endforeach; ?>
-            src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
-            loading="lazy"
-            width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
-            height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
-            alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
+    <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+        <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+            <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
+        <?php endforeach; ?>
+        src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+        loading="lazy"
+        width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+        height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
+        alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/>
 </span>
 <?php
 $styles = <<<STYLE
-.product-image-container-{$block->getProductId()} {
+.product-image-container-{$block->getProductId()} > img {
     width: {$width}px;
+    aspect-ratio: auto {$width} / {$height};
+    height: {$width}px;
 }
-.product-image-container-{$block->getProductId()} span.product-image-wrapper {
-    padding-bottom: {$paddingBottom}%;
+.product-image-photo {
+    bottom: inherit !important;
+    display: inherit !important;
+    left: inherit !important;
+    margin: inherit !important;
+    position: inherit !important;
+    right: inherit !important;
+    top: inherit !important;
+    width: inherit !important;
 }
 STYLE;
-//In case a script was using "style" attributes of these elements
-$script = <<<SCRIPT
-prodImageContainers = document.querySelectorAll(".product-image-container-{$block->getProductId()}");
-for (var i = 0; i < prodImageContainers.length; i++) {
-    prodImageContainers[i].style.width = "{$width}px";
-}
-prodImageContainersWrappers = document.querySelectorAll(
-    ".product-image-container-{$block->getProductId()}  span.product-image-wrapper"
-);
-for (var i = 0; i < prodImageContainersWrappers.length; i++) {
-    prodImageContainersWrappers[i].style.paddingBottom = "{$paddingBottom}%";
-}
-SCRIPT;
-
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('style', [], $styles, false) ?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false) ?>
