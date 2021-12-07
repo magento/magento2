@@ -10,6 +10,7 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $width = (int)$block->getWidth();
 $height = (int)$block->getHeight();
+$paddingBottom = $block->getRatio() * 100;
 ?>
 <span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
     <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
@@ -31,11 +32,24 @@ $styles = <<<STYLE
 }
 // fallback
 @supports not (aspect-ratio: auto) {
-    .product-image-container-{$block->getProductId()}::before {
-        // fallback
+    .product-image-container {
+        position: relative;
     }
-    .product-image-container-{$block->getProductId()} > img {
-        // fallback
+    .product-image-container-{$block->getProductId()}::before {
+        width:100%;
+        content:'';
+        padding-bottom:{$paddingBottom}%;
+        display: block;
+    }
+    .product-image-container-{$block->getProductId()} > img.product-image-photo {
+        bottom: 0 !important;
+        display: block !important;
+        left: 0 !important;
+        margin: auto !important;
+        position: absolute !important;
+        right: 0 !important;
+        top: 0 !important;
+        width: auto !important;
     }
 }
 .product-image-photo {
