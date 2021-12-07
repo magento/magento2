@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CustomerGraphQl\Test\Unit\Model\Context;
+namespace Magento\CustomerGraphQl\Test\Unit\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
