@@ -125,6 +125,7 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
             throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
         }
         if (trim($request->getParam('hideit', '')) !== '') {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception();
         }
 
