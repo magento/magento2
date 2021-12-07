@@ -9,7 +9,7 @@
 
 <h1 align="center">Magento Open Source</h1>
 
-Welcome to the Magento Open Source project! [Magento Open Source](https://magento.com/products/magento-open-source) software delivers basic eCommerce capabilities that allow you to build a unique online store from the ground up.
+Welcome to the Magento Open Source project! [Magento Open Source](https://magento.com/products/magento-open-source) software delivers basic eCommerce capabilities to build a unique online store from the ground up.
 
 However, for those who need a full featured eCommerce solution, we recommend [Adobe Commerce](https://magento.com/products/magento-commerce) which includes our optimized cloud architecture and hosting as well as AI-powered merchandising and analytics.
 
