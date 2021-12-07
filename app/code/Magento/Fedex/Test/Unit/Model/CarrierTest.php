@@ -455,7 +455,7 @@ class CarrierTest extends TestCase
         $this->trackErrorFactory->expects($this->once())
             ->method('create')
             ->willReturn($error);
-
+        $this->serializer->method('serialize')->willReturn('');
         $this->carrier->getTracking($tracking);
         $tracks = $this->carrier->getResult()->getAllTrackings();
 

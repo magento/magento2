@@ -19,6 +19,7 @@
             <useCaseId value="MC-36809"/>
             <group value="cookie"/>
             <group value="configuration"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
