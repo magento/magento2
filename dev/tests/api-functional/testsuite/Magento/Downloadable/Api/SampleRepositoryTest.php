@@ -176,33 +176,6 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
-    public function testCreateSavesTitleInStoreViewScope()
-    {
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'downloadable-product',
-            'sample' => [
-                'title' => 'Store View Title',
-                'sort_order' => 1,
-                'sample_url' => 'http://www.sample.example.com/',
-                'sample_type' => 'url',
-            ],
-        ];
-
-        $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
-        $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $newSampleId);
-        $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEmpty($globalScopeSample->getTitle());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     */
     public function testCreateSavesProvidedUrls()
     {
         $requestData = [
