@@ -100,11 +100,11 @@ class QuantityValidator implements ValidatorInterface
     /**
      * To check the refund qty is decimal if getIsQtyDecimal is unset.
      *
-     * @param int|null $isQtyDecimal
+     * @param mixed $isQtyDecimal
      * @param float $itemQty
      * @return bool
      */
-    private function isValidDecimalRefundQty(?int $isQtyDecimal, float $itemQty): bool
+    private function isValidDecimalRefundQty($isQtyDecimal, float $itemQty): bool
     {
         if (!$isQtyDecimal && (floor($itemQty) !== $itemQty)) {
             return true;
