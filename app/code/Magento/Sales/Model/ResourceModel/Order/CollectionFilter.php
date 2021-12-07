@@ -18,7 +18,7 @@ class CollectionFilter extends SearchResult
     /**
      * @var TimezoneInterface
      */
-    private $timeZone;
+    private TimezoneInterface $timeZone;
 
     /**
      * Initialize dependencies.

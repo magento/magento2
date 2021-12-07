@@ -22,7 +22,7 @@ class CollectionFilter extends SearchResult
     /**
      * @var TimezoneInterface
      */
-    private $timeZone;
+    private TimezoneInterface $timeZone;
 
     /**
      * Initialize dependencies.
@@ -55,9 +55,10 @@ class CollectionFilter extends SearchResult
     {
         parent::_initSelect();
 
-        $tableDescription = $this->getConnection()->describeTable($this->getMainTable());
-        if ($tableDescription) {
-            foreach ($tableDescription as $columnInfo) {
+        $invoiceTableDescription = $this->getConnection()->describeTable($this->getMainTable());
+
+        if ($invoiceTableDescription) {
+            foreach ($invoiceTableDescription as $columnInfo) {
                 $this->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.'.$columnInfo['COLUMN_NAME']);
             }
         }
@@ -68,9 +69,9 @@ class CollectionFilter extends SearchResult
     /**
      * @inheritDoc
      */
-    public function addFieldToFilter($field, $condition = null)
+    public function addFieldToFilter($column, $condition = null)
     {
-        if ($field === 'created_at' || $field === 'order_created_at') {
+        if ($column === 'created_at' || $column === 'order_created_at') {
             if (is_array($condition)) {
                 foreach ($condition as $key => $value) {
                     $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
@@ -78,6 +79,6 @@ class CollectionFilter extends SearchResult
             }
         }
 
-        return parent::addFieldToFilter($field, $condition);
+        return parent::addFieldToFilter($column, $condition);
     }
 }
