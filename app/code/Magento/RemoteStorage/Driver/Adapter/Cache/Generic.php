@@ -223,16 +223,6 @@ class Generic implements CacheInterface
     }
 
     /**
-     * Setter for cache data
-     *
-     * @param array $cacheData
-     */
-    public function setCacheData(array $cacheData): void
-    {
-        $this->cacheData = $cacheData;
-    }
-
-    /**
      * Ensure parent directories of an object.
      *
      * @param string $path object path
