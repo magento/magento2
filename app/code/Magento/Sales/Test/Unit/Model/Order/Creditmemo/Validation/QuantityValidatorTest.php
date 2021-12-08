@@ -160,10 +160,19 @@ class QuantityValidatorTest extends TestCase
      * @param string $sku
      * @param int $total
      * @param array $expected
+     * @param bool $isQtyDecimalAllowed
      * @dataProvider dataProviderForValidateQty
      */
-    public function testValidate($orderId, $orderItemId, $qtyToRequest, $qtyToRefund, $sku, $total, array $expected)
-    {
+    public function testValidate(
+        $orderId,
+        $orderItemId,
+        $qtyToRequest,
+        $qtyToRefund,
+        $sku,
+        $total,
+        array $expected,
+        bool $isQtyDecimalAllowed
+    ) {
         $creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -190,6 +199,8 @@ class QuantityValidatorTest extends TestCase
         $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $orderItemMock->expects($this->any())->method('getIsQtyDecimal')
+            ->willReturn($isQtyDecimalAllowed);
         $orderItemMock->expects($this->any())->method('getQtyToRefund')
             ->willReturn($qtyToRefund);
         $creditmemoItemMock->expects($this->any())->method('getQty')
@@ -227,7 +238,8 @@ class QuantityValidatorTest extends TestCase
                 'qtyToRefund' => 1,
                 'sku',
                 'total' => 15,
-                'expected' => []
+                'expected' => [],
+                'isQtyDecimalAllowed' => false
             ],
             [
                 'orderId' => 1,
@@ -236,22 +248,23 @@ class QuantityValidatorTest extends TestCase
                 'qtyToRefund' => 0,
                 'sku',
                 'total' => 15,
-                'expected' => []
+                'expected' => [],
+                'isQtyDecimalAllowed' => false
             ],
             [
                 'orderId' => 1,
                 'orderItemId' => 1,
                 'qtyToRequest' => 1.5,
-                'qtyToRefund' => 1,
+                'qtyToRefund' => 3,
                 'sku',
-                'total' => 0,
+                'total' => 5,
                 'expected' => [
                     __(
                         'We found an invalid quantity to refund item "%1".',
                         $sku
-                    ),
-                    __('The credit memo\'s total must be positive.')
-                ]
+                    )
+                ],
+                'isQtyDecimalAllowed' => false
             ],
             [
                 'orderId' => 1,
@@ -267,7 +280,8 @@ class QuantityValidatorTest extends TestCase
                         $sku
                     ),
                     __('The credit memo\'s total must be positive.')
-                ]
+                ],
+                'isQtyDecimalAllowed' => false
             ],
         ];
     }

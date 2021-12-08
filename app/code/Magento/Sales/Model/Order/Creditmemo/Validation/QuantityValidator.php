@@ -17,7 +17,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ValidatorInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
-use \Magento\Framework\Phrase;
+use Magento\Framework\Phrase;
 
 /**
  * Creditmemo QuantityValidator
@@ -107,22 +107,22 @@ class QuantityValidator implements ValidatorInterface
     private function isValidDecimalRefundQty($isQtyDecimal, float $itemQty): bool
     {
         if (!$isQtyDecimal && (floor($itemQty) !== $itemQty)) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**
      * Calculate total quantity.
      *
      * @param array $orderItemsById
-     * @param Magento\Sales\Api\Data\CreditmemoItemInterface|mixed $item
+     * @param CreditmemoItemInterface $item
      * @param array $invoiceQtysRefundLimits
      * @return Phrase|void
      */
     private function validateTotalQuantityRefundable(
         array $orderItemsById,
-        $item,
+        CreditmemoItemInterface $item,
         array $invoiceQtysRefundLimits
     ) {
         if (!isset($orderItemsById[$item->getOrderItemId()])) {
@@ -133,7 +133,7 @@ class QuantityValidator implements ValidatorInterface
         }
         $orderItem = $orderItemsById[$item->getOrderItemId()];
 
-        if ($this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+        if (!$this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
             return __(
                 'We found an invalid quantity to refund item "%1".',
                 $orderItem->getSku()
