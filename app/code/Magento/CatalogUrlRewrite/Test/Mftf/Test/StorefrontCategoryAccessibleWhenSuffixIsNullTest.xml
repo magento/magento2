@@ -16,6 +16,7 @@
             <stories value="Url rewrites"/>
             <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/seo/category_url_suffix ''" stepKey="setCategoryUrlSuffix"/>
