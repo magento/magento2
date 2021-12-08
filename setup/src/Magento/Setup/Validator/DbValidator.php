@@ -19,7 +19,7 @@ class DbValidator
     /**
      * Db prefix max length
      */
-    const DB_PREFIX_LENGTH = 5;
+    public const DB_PREFIX_LENGTH = 5;
 
     /**
      * DB connection factory
