@@ -20,6 +20,7 @@
                 <issueId value="MQE-2834" />
             </skip>
             <group value="sales"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
