@@ -143,7 +143,7 @@ class Reader implements UserTokenReaderInterface
             $userId = $tokenModel->getAdminId();
         } elseif ($userType === CustomUserContext::USER_TYPE_INTEGRATION) {
             $integration = $this->integrationService->findByConsumerId($tokenModel->getConsumerId());
-            if ($this->bearerTokenValidator->isIntegrationAllowedToAsBearerToken($integration)) {
+            if ($this->bearerTokenValidator->isIntegrationAllowedAsBearerToken($integration)) {
                 $userId = $integration->getId();
             }
         } else {

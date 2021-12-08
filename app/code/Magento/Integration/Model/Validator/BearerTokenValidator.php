@@ -36,7 +36,7 @@ class BearerTokenValidator
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function isIntegrationAllowedToAsBearerToken(Integration $integration): bool
+    public function isIntegrationAllowedAsBearerToken(Integration $integration): bool
     {
         return $this->authorizationConfig->isIntegrationAsBearerEnabled();
     }

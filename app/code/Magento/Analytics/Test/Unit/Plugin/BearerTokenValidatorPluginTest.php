@@ -44,7 +44,7 @@ class BearerTokenValidatorPluginTest extends TestCase
             ->with('getName')
             ->willReturn('invalid');
 
-        $result = $this->plugin->afterIsIntegrationAllowedToAsBearerToken($this->validator, true, $integration);
+        $result = $this->plugin->afterIsIntegrationAllowedAsBearerToken($this->validator, true, $integration);
         self::assertTrue($result);
     }
 
@@ -55,7 +55,7 @@ class BearerTokenValidatorPluginTest extends TestCase
             ->with('getName')
             ->willReturn('invalid');
 
-        $result = $this->plugin->afterIsIntegrationAllowedToAsBearerToken($this->validator, false, $integration);
+        $result = $this->plugin->afterIsIntegrationAllowedAsBearerToken($this->validator, false, $integration);
         self::assertFalse($result);
     }
 
@@ -66,7 +66,7 @@ class BearerTokenValidatorPluginTest extends TestCase
             ->with('getName')
             ->willReturn('abc');
 
-        $result = $this->plugin->afterIsIntegrationAllowedToAsBearerToken($this->validator, true, $integration);
+        $result = $this->plugin->afterIsIntegrationAllowedAsBearerToken($this->validator, true, $integration);
         self::assertTrue($result);
     }
 }

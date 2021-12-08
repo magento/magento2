@@ -129,7 +129,7 @@ class SoapUserContext implements UserContextInterface
         }
         if (((int) $token->getUserType()) === UserContextInterface::USER_TYPE_INTEGRATION) {
             $integration = $this->integrationService->findByConsumerId($token->getConsumerId());
-            if ($this->bearerTokenValidator->isIntegrationAllowedToAsBearerToken($integration)) {
+            if ($this->bearerTokenValidator->isIntegrationAllowedAsBearerToken($integration)) {
                 $this->userId = $integration->getId();
                 $this->userType = UserContextInterface::USER_TYPE_INTEGRATION;
             }

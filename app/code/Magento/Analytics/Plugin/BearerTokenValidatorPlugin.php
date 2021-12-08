@@ -39,7 +39,7 @@ class BearerTokenValidatorPlugin
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterIsIntegrationAllowedToAsBearerToken(
+    public function afterIsIntegrationAllowedAsBearerToken(
         BearerTokenValidator $subject,
         bool $result,
         Integration $integration
