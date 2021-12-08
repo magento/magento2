@@ -19,6 +19,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminApplyCatalogPriceRuleByProductAttributeTest instead.</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
