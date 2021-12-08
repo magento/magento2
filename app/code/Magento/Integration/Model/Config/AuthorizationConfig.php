@@ -24,7 +24,7 @@ class AuthorizationConfig
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
      * @param ScopeConfigInterface $scopeConfig

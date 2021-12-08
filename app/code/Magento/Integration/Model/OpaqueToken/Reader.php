@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Integration\Model\OpaqueToken;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Integration\Api\Data\UserToken;
 use Magento\Integration\Api\Exception\UserTokenException;
@@ -18,6 +19,7 @@ use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Helper\Oauth\Data as OauthHelper;
+use Magento\Integration\Model\Validator\BearerTokenValidator;
 
 /**
  * Reads user token data
@@ -37,33 +39,33 @@ class Reader implements UserTokenReaderInterface
     private $helper;
 
     /**
-     * @var AuthorizationConfig
-     */
-    private $authorizationConfig;
-
-    /**
      * @var IntegrationServiceInterface
      */
     private IntegrationServiceInterface $integrationService;
 
     /**
+     * @var BearerTokenValidator
+     */
+    private BearerTokenValidator $bearerTokenValidator;
+
+    /**
      * @param TokenFactory $tokenFactory
      * @param OauthHelper $helper
-     * @param AuthorizationConfig|null $authorizationConfig
      * @param IntegrationServiceInterface|null $integrationService
+     * @param BearerTokenValidator|null $bearerTokenValidator
      */
     public function __construct(
         TokenFactory $tokenFactory,
         OauthHelper $helper,
-        ?AuthorizationConfig $authorizationConfig = null,
-        ?IntegrationServiceInterface $integrationService = null
+        ?IntegrationServiceInterface $integrationService = null,
+        ?BearerTokenValidator $bearerTokenValidator = null
     ) {
         $this->tokenFactory = $tokenFactory;
         $this->helper = $helper;
-        $this->authorizationConfig = $authorizationConfig ?? ObjectManager::getInstance()
-            ->get(AuthorizationConfig::class);
         $this->integrationService = $integrationService ?? ObjectManager::getInstance()
             ->get(IntegrationServiceInterface::class);
+        $this->bearerTokenValidator = $bearerTokenValidator ?? ObjectManager::getInstance()
+            ->get(BearerTokenValidator::class);
     }
 
     /**
@@ -118,12 +120,9 @@ class Reader implements UserTokenReaderInterface
      */
     private function validateUserType(int $userType): void
     {
-        if ($userType === CustomUserContext::USER_TYPE_INTEGRATION) {
-            if (!$this->authorizationConfig->isIntegrationAsBearerEnabled()) {
-                throw new UserTokenException('Invalid token found');
-            }
-        } elseif ($userType !== CustomUserContext::USER_TYPE_ADMIN
+        if ($userType !== CustomUserContext::USER_TYPE_ADMIN
             && $userType !== CustomUserContext::USER_TYPE_CUSTOMER
+            && $userType !== CustomUserContext::USER_TYPE_INTEGRATION
         ) {
             throw new UserTokenException('Invalid token found');
         }
@@ -138,11 +137,15 @@ class Reader implements UserTokenReaderInterface
     private function getUserId(Token $tokenModel): int
     {
         $userType = (int)$tokenModel->getUserType();
+        $userId = null;
 
         if ($userType === CustomUserContext::USER_TYPE_ADMIN) {
             $userId = $tokenModel->getAdminId();
         } elseif ($userType === CustomUserContext::USER_TYPE_INTEGRATION) {
-            $userId = $this->integrationService->findByConsumerId($tokenModel->getConsumerId())->getId();
+            $integration = $this->integrationService->findByConsumerId($tokenModel->getConsumerId());
+            if ($this->bearerTokenValidator->isIntegrationAllowedToAsBearerToken($integration)) {
+                $userId = $integration->getId();
+            }
         } else {
             $userId = $tokenModel->getCustomerId();
         }
