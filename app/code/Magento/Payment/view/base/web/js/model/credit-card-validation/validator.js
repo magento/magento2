@@ -35,7 +35,7 @@ define([
                 cardInfo = creditCardNumberValidator(number).card;
 
                 for (i = 0, l = allowedTypes.length; i < l; i++) {
-                    if (cardInfo.title == allowedTypes[i].type) { //eslint-disable-line eqeqeq
+                    if (cardInfo.type == allowedTypes[i].type) { //eslint-disable-line eqeqeq
                         return true;
                     }
                 }
