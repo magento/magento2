@@ -19,7 +19,7 @@ class AuthorizationConfig
     /**
      * XML Path for Enable Integration as Bearer
      */
-    const CONFIG_PATH_INTEGRATION_BEARER = 'oauth/consumer/enable_integration_as_bearer';
+    private const CONFIG_PATH_INTEGRATION_BEARER = 'oauth/consumer/enable_integration_as_bearer';
 
     /**
      * @var ScopeConfigInterface
