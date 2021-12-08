@@ -115,7 +115,7 @@ class Tree extends \Magento\Backend\Block\Template
 
         $currentTreePath = $this->getRequest()->getParam('current_tree_path');
 
-        if (strlen($currentTreePath)) {
+        if ($currentTreePath && strlen($currentTreePath)) {
             $params['current_tree_path'] = $currentTreePath;
         }
 
@@ -138,7 +138,7 @@ class Tree extends \Magento\Backend\Block\Template
     /**
      * Return tree node full path based on current path
      *
-     * @return string
+     * @return string[]
      */
     public function getTreeCurrentPath()
     {
@@ -150,7 +150,7 @@ class Tree extends \Magento\Backend\Block\Template
             $path = $this->_coreRegistry->registry('storage')->getSession()->getCurrentPath();
         }
 
-        if (strlen($path)) {
+        if ($path) {
             $path = str_replace($this->_cmsWysiwygImages->getStorageRoot(), '', $path);
             $relative = [];
             foreach (explode('/', $path) as $dirName) {
