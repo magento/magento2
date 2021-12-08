@@ -150,7 +150,6 @@ class PostTest extends TestCase
             ->method('set')
             ->with('contact_us', $postData);
 
-
         $this->controller->execute();
     }
 
