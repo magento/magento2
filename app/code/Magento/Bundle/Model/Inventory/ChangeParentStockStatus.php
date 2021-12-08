@@ -8,23 +8,16 @@ declare(strict_types=1);
 namespace Magento\Bundle\Model\Inventory;
 
 use Magento\Bundle\Model\Product\Type;
-use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 /***
  * Update stock status of bundle products based on children products stock status
  */
 class ChangeParentStockStatus
 {
-    /**
-     * @var StockRegistryInterface
-     */
-    private $stockRegistry;
-
     /**
      * @var Type
      */
@@ -46,32 +39,21 @@ class ChangeParentStockStatus
     private $stockConfiguration;
 
     /**
-     * @var ProductWebsiteLink
-     */
-    private $productWebsiteLink;
-
-    /**
-     * @param StockRegistryInterface $stockRegistry
      * @param StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockConfigurationInterface $stockConfiguration
      * @param Type $bundleType
-     * @param ProductWebsiteLink $productWebsiteLink
      */
     public function __construct(
-        StockRegistryInterface $stockRegistry,
         StockItemCriteriaInterfaceFactory $criteriaInterfaceFactory,
         StockItemRepositoryInterface $stockItemRepository,
         StockConfigurationInterface $stockConfiguration,
-        Type $bundleType,
-        ProductWebsiteLink $productWebsiteLink
+        Type $bundleType
     ) {
-        $this->stockRegistry = $stockRegistry;
         $this->bundleType = $bundleType;
         $this->criteriaInterfaceFactory = $criteriaInterfaceFactory;
         $this->stockItemRepository = $stockItemRepository;
         $this->stockConfiguration = $stockConfiguration;
-        $this->productWebsiteLink = $productWebsiteLink;
     }
 
     /**
@@ -96,27 +78,24 @@ class ChangeParentStockStatus
      */
     private function processStockForParent(int $productId): void
     {
-        $criteria = $this->criteriaInterfaceFactory->create();
-        $criteria->setScopeFilter($this->stockConfiguration->getDefaultScopeId());
-
-        $criteria->setProductsFilter($productId);
-        $stockItemCollection = $this->stockItemRepository->getList($criteria);
-        $allItems = $stockItemCollection->getItems();
-        if (empty($allItems)) {
-            return;
-        }
-        $parentStockItem = array_shift($allItems);
-        $childrenIsInStock = $this->isChildrenInStock($productId);
-
-        if ($this->isNeedToUpdateParent($parentStockItem, $childrenIsInStock)) {
-            $parentStockItem->setIsInStock($childrenIsInStock);
-            $parentStockItem->setStockStatusChangedAuto(1);
-            $this->stockItemRepository->save($parentStockItem);
+        $stockItems = $this->getStockItems([$productId]);
+        $parentStockItem = $stockItems[$productId] ?? null;
+        if ($parentStockItem) {
+            $childrenIsInStock = $this->isChildrenInStock($productId);
+            if ($this->isNeedToUpdateParent($parentStockItem, $childrenIsInStock)) {
+                $parentStockItem->setIsInStock($childrenIsInStock);
+                $parentStockItem->setStockStatusChangedAuto(1);
+                $this->stockItemRepository->save($parentStockItem);
+            }
         }
     }
 
     /**
-     * Check if any of bundle children products is in stock
+     * Returns stock status of bundle product based on children stock status
+     *
+     * Returns TRUE if any of the following conditions is true:
+     * - At least one product is in-stock in each required option
+     * - Any product is in-stock (if all options are optional)
      *
      * @param int $productId
      * @return bool
@@ -125,17 +104,14 @@ class ChangeParentStockStatus
     {
         $childrenIsInStock = false;
         $childrenIds = $this->bundleType->getChildrenIds($productId, true);
-        $websiteIds = $this->productWebsiteLink->getWebsiteIdsByProductId($productId);
-        //prepend global scope
-        array_unshift($websiteIds, null);
+        $stockItems = $this->getStockItems(array_merge(...array_values($childrenIds)));
         foreach ($childrenIds as $childrenIdsPerOption) {
             $childrenIsInStock = false;
             foreach ($childrenIdsPerOption as $id) {
-                foreach ($websiteIds as $scopeId) {
-                    if ((int)$this->stockRegistry->getProductStockStatus($id, $scopeId) === 1) {
-                        $childrenIsInStock = true;
-                        break 2;
-                    }
+                $stockItem = $stockItems[$id] ?? null;
+                if ($stockItem && $stockItem->getIsInStock()) {
+                    $childrenIsInStock = true;
+                    break;
                 }
             }
             if (!$childrenIsInStock) {
@@ -159,5 +135,26 @@ class ChangeParentStockStatus
     ): bool {
         return $parentStockItem->getIsInStock() !== $childrenIsInStock &&
             ($childrenIsInStock === false || $parentStockItem->getStockStatusChangedAuto());
+    }
+
+    /**
+     * Get stock items for provided product IDs
+     *
+     * @param array $productIds
+     * @return StockItemInterface[]
+     */
+    private function getStockItems(array $productIds): array
+    {
+        $criteria = $this->criteriaInterfaceFactory->create();
+        $criteria->setScopeFilter($this->stockConfiguration->getDefaultScopeId());
+        $criteria->setProductsFilter(array_unique($productIds));
+        $stockItemCollection = $this->stockItemRepository->getList($criteria);
+
+        $stockItems = [];
+        foreach ($stockItemCollection->getItems() as $stockItem) {
+            $stockItems[$stockItem->getProductId()] = $stockItem;
+        }
+
+        return $stockItems;
     }
 }
