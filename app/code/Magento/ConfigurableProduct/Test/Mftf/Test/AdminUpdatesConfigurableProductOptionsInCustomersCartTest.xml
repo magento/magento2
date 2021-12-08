@@ -165,6 +165,7 @@
             </actionGroup>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete second Website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteNewWebsite">
