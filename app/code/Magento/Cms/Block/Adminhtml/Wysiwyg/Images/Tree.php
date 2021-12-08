@@ -115,7 +115,7 @@ class Tree extends \Magento\Backend\Block\Template
 
         $currentTreePath = $this->getRequest()->getParam('current_tree_path');
 
-        if ($currentTreePath && strlen($currentTreePath)) {
+        if ($currentTreePath !== null && strlen($currentTreePath)) {
             $params['current_tree_path'] = $currentTreePath;
         }
 
