@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Controller\Rest\Asynchronous;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Framework\Webapi\ServiceInputProcessor;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\InputParamsResolver as WebapiInputParamsResolver;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\RequestValidator;
@@ -54,6 +57,11 @@ class InputParamsResolver
     private $isBulk;
 
     /**
+     * @var InputArraySizeLimitValue|null
+     */
+    private $inputArraySizeLimitValue;
+
+    /**
      * Initialize dependencies.
      *
      * @param RestRequest $request
@@ -62,6 +70,7 @@ class InputParamsResolver
      * @param Router $router
      * @param RequestValidator $requestValidator
      * @param WebapiInputParamsResolver $inputParamsResolver
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      * @param bool $isBulk
      */
     public function __construct(
@@ -71,7 +80,8 @@ class InputParamsResolver
         Router $router,
         RequestValidator $requestValidator,
         WebapiInputParamsResolver $inputParamsResolver,
-        $isBulk = false
+        bool $isBulk = false,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -80,6 +90,8 @@ class InputParamsResolver
         $this->requestValidator = $requestValidator;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->isBulk = $isBulk;
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -91,20 +103,29 @@ class InputParamsResolver
      * @return array
      * @throws InputException if no value is provided for required parameters
      * @throws Exception
-     * @throws AuthorizationException
+     * @throws AuthorizationException|LocalizedException
      */
     public function resolve()
     {
         if ($this->isBulk === false) {
             return [$this->inputParamsResolver->resolve()];
         }
+
         $this->requestValidator->validate();
         $webapiResolvedParams = [];
         $route = $this->getRoute();
+        $routeServiceClass = $route->getServiceClass();
+        $routeServiceMethod = $route->getServiceMethod();
+        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
         foreach ($this->getInputData() as $key => $singleEntityParams) {
-            $webapiResolvedParams[$key] = $this->resolveBulkItemParams($singleEntityParams, $route);
+            $webapiResolvedParams[$key] = $this->resolveBulkItemParams(
+                $singleEntityParams,
+                $routeServiceClass,
+                $routeServiceMethod
+            );
         }
+
         return $webapiResolvedParams;
     }
 
@@ -132,6 +153,7 @@ class InputParamsResolver
      * Returns route.
      *
      * @return Route
+     * @throws Exception
      */
     public function getRoute()
     {
@@ -148,17 +170,13 @@ class InputParamsResolver
      * we don't need to merge body params with url params and use only body params
      *
      * @param array $inputData data to send to method in key-value format
-     * @param Route $route
+     * @param string $serviceClass route Service Class
+     * @param string $serviceMethod route Service Method
      * @return array list of parameters that can be used to call the service method
-     * @throws Exception
+     * @throws Exception|LocalizedException
      */
-    private function resolveBulkItemParams(array $inputData, Route $route): array
+    private function resolveBulkItemParams(array $inputData, string $serviceClass, string $serviceMethod): array
     {
-        return $this->serviceInputProcessor->process(
-            $route->getServiceClass(),
-            $route->getServiceMethod(),
-            $inputData,
-            $route->getInputArraySizeLimit()
-        );
+        return $this->serviceInputProcessor->process($serviceClass, $serviceMethod, $inputData);
     }
 }

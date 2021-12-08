@@ -23,7 +23,6 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
 use Laminas\Code\Reflection\ClassReflection;
-use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Framework\Webapi\Validator\IOLimit\DefaultPageSizeSetter;
 use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
 
@@ -104,11 +103,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSizeSetter;
 
     /**
-     * @var InputArraySizeLimitValue
-     */
-    private $inputArraySizeLimitValue;
-
-    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -122,7 +116,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param ServiceInputValidatorInterface|null $serviceInputValidator
      * @param int $defaultPageSize
      * @param DefaultPageSizeSetter|null $defaultPageSizeSetter
-     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -136,8 +129,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         array $customAttributePreprocessors = [],
         ServiceInputValidatorInterface $serviceInputValidator = null,
         int $defaultPageSize = 20,
-        ?DefaultPageSizeSetter $defaultPageSizeSetter = null,
-        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
+        ?DefaultPageSizeSetter $defaultPageSizeSetter = null
     ) {
         $this->typeProcessor = $typeProcessor;
         $this->objectManager = $objectManager;
@@ -154,8 +146,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->defaultPageSize = $defaultPageSize >= 10 ? $defaultPageSize : 10;
         $this->defaultPageSizeSetter = $defaultPageSizeSetter ?? ObjectManager::getInstance()
             ->get(DefaultPageSizeSetter::class);
-        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
-                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -186,16 +176,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceClassName name of the service class that we are trying to call
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
-     * @param int|null $inputArraySizeLimit size limit for input array
      * @return array list of parameters that can be used to call the service method
      * @throws Exception
      * @throws LocalizedException
      */
-    public function process($serviceClassName, $serviceMethodName, array $inputArray, ?int $inputArraySizeLimit = null)
+    public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
         $inputData = [];
         $inputError = [];
-        $this->inputArraySizeLimitValue->set($inputArraySizeLimit);
 
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
             $paramName = $param[MethodsMap::METHOD_META_NAME];

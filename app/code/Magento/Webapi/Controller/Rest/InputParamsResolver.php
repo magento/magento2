@@ -17,6 +17,7 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
@@ -61,6 +62,11 @@ class InputParamsResolver
     private $methodsMap;
 
     /**
+     * @var InputArraySizeLimitValue
+     */
+    private $inputArraySizeLimitValue;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -69,6 +75,7 @@ class InputParamsResolver
      * @param Router $router
      * @param RequestValidator $requestValidator
      * @param MethodsMap|null $methodsMap
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,
@@ -76,7 +83,8 @@ class InputParamsResolver
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
         RequestValidator $requestValidator,
-        MethodsMap $methodsMap = null
+        MethodsMap $methodsMap = null,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
@@ -85,6 +93,8 @@ class InputParamsResolver
         $this->requestValidator = $requestValidator;
         $this->methodsMap = $methodsMap ?: ObjectManager::getInstance()
             ->get(MethodsMap::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
@@ -97,12 +107,12 @@ class InputParamsResolver
     {
         $this->requestValidator->validate();
         $route = $this->getRoute();
+        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
 
         return $this->serviceInputProcessor->process(
             $route->getServiceClass(),
             $route->getServiceMethod(),
             $this->getInputData(),
-            $route->getInputArraySizeLimit()
         );
     }
 
