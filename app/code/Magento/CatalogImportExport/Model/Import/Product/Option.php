@@ -2093,20 +2093,17 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
             foreach ($optionValueParams as $nameAndValue) {
                 $nameAndValue = explode('=', $nameAndValue);
-                // @phpstan-ignore-next-line
-                if (!empty($nameAndValue)) {
-                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
-                    $value = trim($value);
-                    $fieldName = trim($nameAndValue[0]);
-                    if ($value && ($fieldName == 'name')) {
-                        if ($name != $value) {
-                            $name = $value;
-                            $k = 0;
-                        }
+                $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                $value = trim($value);
+                $fieldName = trim($nameAndValue[0]);
+                if ($value && ($fieldName === 'name')) {
+                    if ($name != $value) {
+                        $name = $value;
+                        $k = 0;
                     }
-                    if ($name) {
-                        $options[$name][$k][$fieldName] = $value;
-                    }
+                }
+                if ($name) {
+                    $options[$name][$k][$fieldName] = $value;
                 }
             }
             if (isset($rowData[Product::COL_STORE_VIEW_CODE])) {

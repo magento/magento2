@@ -306,10 +306,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         try {
             $value = $this->serializer->unserialize($infoBuyRequest->getValue());
 
-            if (is_array($value)
-                && isset($value['options'])
-                && isset($value['options'][$this->getOption()->getId()])
-            ) {
+            if (is_array($value) && isset($value['options'][$this->getOption()->getId()])) {
                 return $value['options'][$this->getOption()->getId()];
             } else {
                 return ['date_internal' => $optionValue];
