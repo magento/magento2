@@ -29,7 +29,7 @@ $styles = <<<STYLE
 .product-image-container-{$block->getProductId()} {
     width: {$width}px;
     height: auto;
-    aspect-ratio: auto {$width} / {$height};
+    aspect-ratio: {$width} / {$height};
 }
 .product-image-container-{$block->getProductId()} span.product-image-wrapper {
     height: 100%;
@@ -38,8 +38,6 @@ $styles = <<<STYLE
 @supports not (aspect-ratio: auto) { 
     .product-image-container-{$block->getProductId()} span.product-image-wrapper {
         padding-bottom: {$paddingBottom}%;
-        height: auto;
-        width: auto;
     }
 }
 STYLE;
