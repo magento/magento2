@@ -289,7 +289,7 @@ enum BatchMutationStatus {
     MIXED_RESULTS
 }
 
-interface ErrorInterface {
+interface ErrorInterface @typeResolver(class: "\\Magento\\GraphQl\\Model\\Mutation\\Resolver\\ErrorTypeResolver") {
     message: String!
 }
 
