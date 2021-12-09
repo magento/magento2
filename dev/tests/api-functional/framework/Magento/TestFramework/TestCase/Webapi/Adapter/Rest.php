@@ -61,7 +61,8 @@ class Rest implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @throws \LogicException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
