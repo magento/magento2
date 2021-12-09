@@ -45,7 +45,7 @@ class PriceScopeChange
      *
      * @retrun void
      */
-    public function changeScope(int $value)
+    public function changeScope(int $value): void
     {
         $this->searchCriteriaBuilder->addFilter('frontend_input', 'price');
         $criteria = $this->searchCriteriaBuilder->create();
