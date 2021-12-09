@@ -940,7 +940,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             );
         }
 
-        return $dimension ? round($dimension, 3) : 0.0;
+        return round((float) $dimension, 3);
     }
 
     /**
