@@ -22,7 +22,7 @@ class MessagePlugin
     /**
      * Cookies name for messages
      */
-    const MESSAGES_COOKIES_NAME = 'mage-messages';
+    public const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
