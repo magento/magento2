@@ -61,11 +61,10 @@ class Options
      */
     public function getNameSuffixOptions($store = null)
     {
-        $options = $this->addressHelper->getConfig('suffix_options', $store);
-        return $options !== null ? $this->prepareNamePrefixSuffixOptions(
-            $options,
+        return $this->prepareNamePrefixSuffixOptions(
+            $this->addressHelper->getConfig('suffix_options', $store),
             $this->addressHelper->getConfig('suffix_show', $store) === NooptreqSource::VALUE_OPTIONAL
-        ) : false;
+        );
     }
 
     /**
