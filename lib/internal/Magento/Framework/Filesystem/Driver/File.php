@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -175,10 +176,13 @@ class File implements DriverInterface
     public function fileGetContents($path, $flag = null, $context = null)
     {
         $filename = $this->getScheme() . $path;
+
         if (!$this->stateful) {
             clearstatcache(false, $filename);
         }
+        $flag = $flag ?? false;
         $result = @file_get_contents($filename, $flag, $context);
+
         if (false === $result) {
             throw new FileSystemException(
                 new Phrase(
@@ -624,10 +628,13 @@ class File implements DriverInterface
      */
     public function filePutContents($path, $content, $mode = null)
     {
+        $mode = $mode ?? 0;
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
+
         if ($this->stateful) {
             clearstatcache(true, $this->getScheme() . $path);
         }
+
         if ($result === false) {
             throw new FileSystemException(
                 new Phrase(
@@ -636,6 +643,7 @@ class File implements DriverInterface
                 )
             );
         }
+
         return $result;
     }
 

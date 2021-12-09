@@ -1,7 +1,5 @@
 <?php
 /**
- * Catalog super product configurable part block
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,7 +19,6 @@ use Magento\Store\Model\Store;
 /**
  * Confugurable product view type
  *
- * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -29,8 +26,6 @@ use Magento\Store\Model\Store;
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct = null;
@@ -44,8 +39,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $currentCustomer;
 
     /**
-     * Prices
-     *
      * @var array
      */
     protected $_prices = [];
