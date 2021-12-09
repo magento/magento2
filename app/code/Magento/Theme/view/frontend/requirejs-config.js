@@ -34,8 +34,7 @@ var config = {
     deps: [
         'mage/common',
         'mage/dataPost',
-        'mage/bootstrap',
-        'Magento_Ui/js/core/app'
+        'mage/bootstrap'
     ],
     config: {
         mixins: {
