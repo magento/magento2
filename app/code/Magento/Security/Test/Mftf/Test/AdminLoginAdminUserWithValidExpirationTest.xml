@@ -18,6 +18,7 @@
             <testCaseId value=""/>
             <severity value="CRITICAL"/>
             <group value="security"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
