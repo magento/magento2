@@ -11,8 +11,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 
 class TestService
 {
-    const DEFAULT_VALUE = 42;
-    const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
+    public const DEFAULT_VALUE = 42;
+    public const CUSTOM_ATTRIBUTE_CODE = 'customAttr';
 
     /**
      * @param int $entityId

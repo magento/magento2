@@ -1,7 +1,5 @@
 <?php
 /**
- * Service Input Processor
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -36,7 +34,7 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
+    private const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
