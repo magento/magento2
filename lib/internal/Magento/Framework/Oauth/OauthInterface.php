@@ -59,6 +59,10 @@ interface OauthInterface
     /**#@+
      * Signature Methods
      */
+    /**
+     * @deprecated SHA1 is deprecated
+     * @see SIGNATURE_SHA256
+     */
     const SIGNATURE_SHA1 = 'HMAC-SHA1';
 
     const SIGNATURE_SHA256 = 'HMAC-SHA256';
@@ -69,16 +73,6 @@ interface OauthInterface
      * Issue a pre-authorization request token to the caller.
      *
      * @param array $params - Array containing parameters necessary for requesting Request Token.
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
-     * )
-     * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
      * @return array - The request token/secret pair.
@@ -96,18 +90,6 @@ interface OauthInterface
      * Get access token for a pre-authorized request token.
      *
      * @param array $params - Array containing parameters necessary for requesting Access Token.
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_token' => 'a6aa81cc3e65e2960a487939244sssss',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D',
-     *         'oauth_verifier' => 'a6aa81cc3e65e2960a487939244vvvvv'
-     * )
-     * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
      * @return array - The access token/secret pair.
@@ -125,17 +107,6 @@ interface OauthInterface
      * Validate an access token request.
      *
      * @param array $params - Array containing parameters necessary for validating Access Token.
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_token' => 'a6aa81cc3e65e2960a487939244sssss',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
-     * )
-     * </pre>
      * @param string $requestUrl - The request Url.
      * @param string $httpMethod - (default: 'POST')
      * @return int Consumer ID.
@@ -167,20 +138,15 @@ interface OauthInterface
      *   );
      * </pre>
      * @param string $requestUrl e.g 'http://www.example.com/endpoint'
-     * @param string $signatureMethod (default: 'HMAC-SHA1')
+     * @param string $signatureMethod (default: 'HMAC-SHA256')
      * @param string $httpMethod (default: 'POST')
      * @return string
-     * <pre>
-     * OAuth oauth_version="1.0", oauth_signature_method="HMAC-SHA1", oauth_nonce="5X1aWR2qzf2uFm1",
-     * oauth_timestamp="1381930661", oauth_consumer_key="34edf957ef88492f0a32eb7e1731e85d",
-     * oauth_token="7c0709f789e1f38a17aa4b9a28e1b06c", oauth_signature="agVxK0epXOOeQK4%2Bc7UAqUXoAok%3D"
-     * <pre>
      * @throws \Magento\Framework\Oauth\Exception
      */
     public function buildAuthorizationHeader(
         $params,
         $requestUrl,
-        $signatureMethod = self::SIGNATURE_SHA1,
+        $signatureMethod = self::SIGNATURE_SHA256,
         $httpMethod = 'POST'
     );
 }
