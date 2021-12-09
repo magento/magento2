@@ -129,7 +129,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         $configTimeZone = $this->timezoneConverter->getConfigTimezone();
-        $storeDateTime = $this->dateTimeFactory->create(null, new \DateTimeZone($configTimeZone));
+        $storeDateTime = $this->dateTimeFactory->create('now', new \DateTimeZone($configTimeZone));
         if (!is_numeric($time)) {
             //convert time from UTC to admin store timezone
             //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone

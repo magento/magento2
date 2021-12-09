@@ -10,6 +10,7 @@ use Magento\Directory\Model\Region;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Api\Data\TaxRateTitleInterface;
 
 /**
  * Tax Rate Model
@@ -18,7 +19,7 @@ use Magento\Tax\Api\Data\TaxRateInterface;
  */
 class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements TaxRateInterface
 {
-    /**
+    /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
     public const KEY_ID              = 'id';
@@ -32,9 +33,10 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     public const KEY_PERCENTAGE_RATE = 'rate';
     public const KEY_CODE            = 'code';
     public const KEY_TITLES          = 'titles';
+    /**#@-*/
 
     /**
-     * @var null
+     * @var TaxRateTitleInterface[]
      */
     protected $_titles = null;
 
@@ -213,7 +215,9 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     }
 
     /**
-     * After rate delete redeclared for dispatch tax_settings_change_after event
+     * After rate delete
+     *
+     * Redeclared for dispatch tax_settings_change_after event
      *
      * @return \Magento\Tax\Model\Calculation\Rate
      */
@@ -327,10 +331,8 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     }
 
     /**
-     * Get tax calculation rate id
-     *
-     * @codeCoverageIgnoreStart
      * @inheritdoc
+     * @codeCoverageIgnoreStart
      */
     public function getTaxCalculationRateId()
     {
@@ -503,7 +505,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     /**
      * Set tax rate titles
      *
-     * @param \Magento\Tax\Api\Data\TaxRateTitleInterface[] $titles
+     * @param TaxRateTitleInterface[] $titles
      * @return $this
      */
     public function setTitles(array $titles = null)
