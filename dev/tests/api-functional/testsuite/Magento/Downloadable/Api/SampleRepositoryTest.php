@@ -176,31 +176,6 @@ class SampleRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
-    public function testCreateSavesProvidedUrls()
-    {
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'downloadable-product',
-            'sample' => [
-                'title' => 'Sample with URL resource',
-                'sort_order' => 1,
-                'sample_url' => 'http://www.sample.example.com/',
-                'sample_type' => 'url',
-            ],
-        ];
-
-        $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
-        $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     */
     public function testCreateThrowsExceptionIfSampleTypeIsInvalid()
     {
         $this->expectException(\Exception::class);

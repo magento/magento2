@@ -34,13 +34,9 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Originally this test belonged to \Magento\Downloadable\Api\SampleRepositoryTest
-     * but it was moved to integration tests
-     * because of error on CI builds that sample URL's domain is not in the list of downloadable_domains in env.php
-     *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
-    public function testCreateSavesTitleInStoreViewScope(): void
+    public function testCreateSavesProvidedUrls()
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -51,7 +47,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
         $samples = $this->model->getSamples($product);
         $this->assertEmpty($samples->getData());
         $downloadableSampleData = [
-            'title' => 'Store View Title',
+            'title' => 'Sample with URL resource',
             'sort_order' => 1,
             'sample_url' => 'http://www.sample.example.com/',
             'sample_type' => 'url',
@@ -70,12 +66,53 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
         $product->setExtensionAttributes($extension);
         $productRepository->save($product);
 
-        $expectedSample = [
+        $samples = $this->getTargetProduct(false)->getExtensionAttributes()->getDownloadableProductSamples();
+        $sample = reset($samples);
+
+        $this->assertNotEmpty($sample->getData());
+        $this->assertCount(1, $samples);
+
+        /** @var \Magento\Downloadable\Model\Sample $sample */
+        $sampleData = $sample->getData();
+        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
+        foreach ($downloadableSampleData as $key => $value) {
+            $this->assertArrayHasKey($key, $sampleData);
+            $this->assertEquals($value, $sampleData[$key]);
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
+     */
+    public function testCreateSavesTitleInStoreViewScope(): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $this->getTargetProduct(false);
+
+        $links = $this->model->getLinks($product);
+        $this->assertNotEmpty($links);
+        $samples = $this->model->getSamples($product);
+        $this->assertEmpty($samples->getData());
+        $downloadableSampleData = [
             'title' => 'Store View Title',
             'sort_order' => 1,
             'sample_url' => 'http://www.sample.example.com/',
-            'sample_type' => 'url',
+            'sample_type' => 'url'
         ];
+
+        $sampleFactory = $this->objectManager->create(SampleInterfaceFactory::class);
+        $extension = $product->getExtensionAttributes();
+        $sample = $sampleFactory->create(['data' => $downloadableSampleData]);
+        $sample->setStoreId($product->getStoreId());
+        $sample->setSampleType($downloadableSampleData['sample_type']);
+        $sample->setSampleUrl($downloadableSampleData['sample_url']);
+        if (!$sample->getSortOrder()) {
+            $sample->setSortOrder(1);
+        }
+        $extension->setDownloadableProductSamples([$sample]);
+        $product->setExtensionAttributes($extension);
+        $productRepository->save($product);
 
         $samples = $this->getTargetProduct(false)->getExtensionAttributes()->getDownloadableProductSamples();
         $sample = reset($samples);
@@ -86,7 +123,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Downloadable\Model\Sample $sample */
         $sampleData = $sample->getData();
         /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
-        foreach ($expectedSample as $key => $value) {
+        foreach ($downloadableSampleData as $key => $value) {
             $this->assertArrayHasKey($key, $sampleData);
             $this->assertEquals($value, $sampleData[$key]);
         }
