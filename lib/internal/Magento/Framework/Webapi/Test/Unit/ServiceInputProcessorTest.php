@@ -85,11 +85,6 @@ class ServiceInputProcessorTest extends TestCase
     private $defaultPageSizeSetter;
 
     /**
-     * @var InputArraySizeLimitValue
-     */
-    private $inputArraySizeLimitValue;
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -173,7 +168,7 @@ class ServiceInputProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->inputArraySizeLimitValue = $this->createMock(InputArraySizeLimitValue::class);
+        $inputArraySizeLimitValue = $this->createMock(InputArraySizeLimitValue::class);
 
         $this->defaultPageSizeSetter = self::getMockBuilder(DefaultPageSizeSetter::class)
             ->disableOriginalConstructor()
@@ -191,11 +186,10 @@ class ServiceInputProcessorTest extends TestCase
                 'serviceInputValidator' => new EntityArrayValidator(
                     50,
                     $this->inputLimitConfig,
-                    $this->inputArraySizeLimitValue
+                    $inputArraySizeLimitValue
                 ),
                 'defaultPageSizeSetter' => $this->defaultPageSizeSetter,
-                'defaultPageSize' => 123,
-                'inputArraySizeLimitValue' => $this->inputArraySizeLimitValue
+                'defaultPageSize' => 123
             ]
         );
 

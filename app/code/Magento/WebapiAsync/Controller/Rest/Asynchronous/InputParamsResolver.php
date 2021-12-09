@@ -70,8 +70,8 @@ class InputParamsResolver
      * @param Router $router
      * @param RequestValidator $requestValidator
      * @param WebapiInputParamsResolver $inputParamsResolver
-     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      * @param bool $isBulk
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,

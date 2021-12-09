@@ -18,7 +18,7 @@ use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Framework\Webapi\Request as SoapRequest;
+use Magento\Framework\Webapi\Request as WebapiRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
@@ -38,7 +38,7 @@ class Handler
     public const RESULT_NODE_NAME = 'result';
 
     /**
-     * @var \Magento\Framework\Webapi\Request
+     * @var WebapiRequest
      */
     protected $_request;
 
@@ -48,32 +48,32 @@ class Handler
     protected $_objectManager;
 
     /**
-     * @var \Magento\Webapi\Model\Soap\Config
+     * @var SoapConfig
      */
     protected $_apiConfig;
 
     /**
-     * @var \Magento\Framework\Webapi\Authorization
+     * @var Authorization
      */
     protected $authorization;
 
     /**
-     * @var \Magento\Framework\Api\SimpleDataObjectConverter
+     * @var SimpleDataObjectConverter
      */
     protected $_dataObjectConverter;
 
     /**
-     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     * @var ServiceInputProcessor
      */
     protected $serviceInputProcessor;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     * @var DataObjectProcessor
      */
     protected $_dataObjectProcessor;
 
     /**
-     * @var \Magento\Framework\Reflection\MethodsMap
+     * @var MethodsMap
      */
     protected $methodsMapProcessor;
 
@@ -90,7 +90,7 @@ class Handler
     /**
      * Initialize dependencies.
      *
-     * @param SoapRequest $request
+     * @param WebapiRequest $request
      * @param ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
      * @param Authorization $authorization
@@ -100,9 +100,10 @@ class Handler
      * @param MethodsMap $methodsMapProcessor
      * @param ParamsOverrider|null $paramsOverrider
      * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        SoapRequest $request,
+        WebapiRequest  $request,
         ObjectManagerInterface $objectManager,
         SoapConfig $apiConfig,
         Authorization $authorization,
