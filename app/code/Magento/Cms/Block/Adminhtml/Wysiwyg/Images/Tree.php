@@ -138,7 +138,7 @@ class Tree extends \Magento\Backend\Block\Template
     /**
      * Return tree node full path based on current path
      *
-     * @return string[]
+     * @return string
      */
     public function getTreeCurrentPath()
     {
