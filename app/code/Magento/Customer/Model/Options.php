@@ -47,10 +47,11 @@ class Options
      */
     public function getNamePrefixOptions($store = null)
     {
-        return $this->prepareNamePrefixSuffixOptions(
-            $this->addressHelper->getConfig('prefix_options', $store),
-            $this->addressHelper->getConfig('prefix_show', $store) == NooptreqSource::VALUE_OPTIONAL
-        );
+        $options = $this->addressHelper->getConfig('prefix_options', $store);
+        return $options !== null ? $this->prepareNamePrefixSuffixOptions(
+            $options,
+            $this->addressHelper->getConfig('prefix_show', $store) === NooptreqSource::VALUE_OPTIONAL
+        ) : false;
     }
 
     /**
@@ -61,10 +62,11 @@ class Options
      */
     public function getNameSuffixOptions($store = null)
     {
-        return $this->prepareNamePrefixSuffixOptions(
-            $this->addressHelper->getConfig('suffix_options', $store),
-            $this->addressHelper->getConfig('suffix_show', $store) == NooptreqSource::VALUE_OPTIONAL
-        );
+        $options = $this->addressHelper->getConfig('suffix_options', $store);
+        return $options !== null ? $this->prepareNamePrefixSuffixOptions(
+            $options,
+            $this->addressHelper->getConfig('suffix_show', $store) === NooptreqSource::VALUE_OPTIONAL
+        ) : false;
     }
 
     /**

@@ -53,7 +53,7 @@ class AjaxLoadRates extends Action
     public function execute()
     {
         $ratesPage = (int) $this->getRequest()->getParam('p');
-        $ratesFilter = trim($this->getRequest()->getParam('s'));
+        $ratesFilter = trim($this->getRequest()->getParam('s', ''));
 
         try {
             if (!empty($ratesFilter)) {
