@@ -21,12 +21,12 @@ class Sitemap extends \Magento\Framework\App\Config\Value
     /**
      * Cron string path for product alerts
      */
-    const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
+    public const CRON_STRING_PATH = 'crontab/default/jobs/sitemap_generate/schedule/cron_expr';
 
     /**
      * Cron mode path
      */
-    const CRON_MODEL_PATH = 'crontab/default/jobs/sitemap_generate/run/model';
+    public const CRON_MODEL_PATH = 'crontab/default/jobs/sitemap_generate/run/model';
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
