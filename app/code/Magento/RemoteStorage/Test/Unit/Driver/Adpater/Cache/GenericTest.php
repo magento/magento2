@@ -59,10 +59,14 @@ class GenericTest extends TestCase
     public function testGetMetaData(string $input, ?array $expectedOutput): void
     {
         $cacheData = include __DIR__ . '/_files/CacheData.php';
+        $this->cacheAdapterMock
+            ->expects($this->once())
+            ->method('load')
+            ->willReturn(json_encode($cacheData));
         $this->serializerMock
+            ->expects($this->once())
             ->method('unserialize')
             ->willReturn($cacheData);
-        $this->generic->setFromStorage(json_encode($cacheData));
 
         $this->assertEquals($expectedOutput, $this->generic->getMetaData($input));
     }
