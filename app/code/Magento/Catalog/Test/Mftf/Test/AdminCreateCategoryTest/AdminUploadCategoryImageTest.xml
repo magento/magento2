@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-26112"/>
             <group value="catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
