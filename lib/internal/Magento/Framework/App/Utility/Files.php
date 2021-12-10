@@ -1661,6 +1661,11 @@ class Files
     {
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
+            if ($this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName) === null) {
+                var_dump('The failed module name and cache key.');
+                var_dump($moduleName);
+                var_dump($key);
+            }
             self::$_cache[$key] = file_exists(
                 $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
             );
