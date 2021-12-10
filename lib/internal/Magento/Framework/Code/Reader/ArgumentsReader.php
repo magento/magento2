@@ -110,7 +110,8 @@ class ArgumentsReader
 
         $type = $parameter->detectType();
 
-        if ($type === 'null') {
+        if ($type === null || $type === 'null') {
+            // check on null for PHP 8.1 compatibility, emulates the behavior from PHP 7.4
             return null;
         }
 
