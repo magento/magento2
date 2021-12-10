@@ -86,7 +86,7 @@
         "friendsofphp/php-cs-fixer": "~3.3.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "dev-develop",
+        "magento/magento2-functional-testing-framework": "^3.7",
         "pdepend/pdepend": "~2.10.0",
         "phpmd/phpmd": "^2.9.1",
         "phpstan/phpstan": "~1.2.0",

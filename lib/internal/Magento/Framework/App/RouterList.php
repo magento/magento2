@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\App;
 
-/** * Used as a container for list of routers.
+/**
+ * Used as a container for list of routers.
  */
 class RouterList implements RouterListInterface
 {
