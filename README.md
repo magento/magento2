@@ -11,7 +11,7 @@
 
 Welcome to the Magento Open Source project! [Magento Open Source](https://magento.com/products/magento-open-source) software delivers basic eCommerce capabilities to build a unique online store from the ground up.
 
-However, for those who need a full featured eCommerce solution, we recommend [Adobe Commerce](https://magento.com/products/magento-commerce) which includes our optimized cloud architecture and hosting as well as AI-powered merchandising and analytics.
+However, for those who need a full-featured eCommerce solution, we recommend [Adobe Commerce](https://magento.com/products/magento-commerce), which includes our optimized cloud architecture and hosting as well as AI-powered merchandising and analytics.
 
 ## Get started
 
@@ -63,7 +63,7 @@ Stay up-to-date on the latest security news and patches by signing up for [Secur
 
 ## Licensing
 
-Each Magento source file included in this distribution is licensed under OSL 3.0 or under the terms and conditions of the applicable ordering document between Licensee/Customer and Adobe (or Magento).
+Each Magento source file included in this distribution is licensed under OSL 3.0 or the terms and conditions of the applicable ordering document between Licensee/Customer and Adobe (or Magento).
  
 [Open Software License (OSL 3.0)](https://opensource.org/licenses/osl-3.0.php) – Please see [LICENSE.txt](LICENSE.txt) for the full text of the OSL 3.0 license.
  
@@ -75,7 +75,7 @@ Subject to Licensee's/Customer's payment of fees and compliance with the terms a
 
 We are dedicated to our Community and encourage your contributions and welcome feedback through [events](https://www.adobe.io/open/magento/calendar), our [DevBlog](https://community.magento.com/t5/Magento-DevBlog/bg-p/devblog), Twitter and YouTube channels, and [other Community resources](https://devdocs.magento.com/community/resources.html).
 
-To connect with people from both the Community and Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
+To connect with people from the Community and Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
 
 - [Popular Slack channels](https://www.adobe.io/open/magento/slack)
 
