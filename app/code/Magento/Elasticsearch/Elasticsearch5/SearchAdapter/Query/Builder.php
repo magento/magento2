@@ -91,7 +91,8 @@ class Builder
             'body' => [
                 'from' => min(self::ELASTIC_INT_MAX, $request->getFrom()),
                 'size' => $request->getSize(),
-                'stored_fields' => ['_id', '_score'],
+                'stored_fields' => '_none_',
+                'docvalue_fields' => ['_id', '_score'],
                 'sort' => $this->sortBuilder->getSort($request),
                 'query' => [],
             ],
