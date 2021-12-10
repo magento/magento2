@@ -122,8 +122,7 @@ class GenerateFixturesCommand extends Command
             }
 
             $totalEndTime = microtime(true);
-            $totalResultTime = $totalEndTime - $totalStartTime;
-
+            $totalResultTime = (int) ($totalEndTime - $totalStartTime);
             $output->writeln('<info>Total execution time: ' . gmdate('H:i:s', $totalResultTime) . '</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
