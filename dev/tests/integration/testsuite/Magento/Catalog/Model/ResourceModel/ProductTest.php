@@ -67,7 +67,6 @@ class ProductTest extends TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -87,7 +86,6 @@ class ProductTest extends TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -111,7 +109,6 @@ class ProductTest extends TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -135,7 +132,6 @@ class ProductTest extends TestCase
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Attribute with:{"attribute_code": "prod_attr"}
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\AddAttributeToAttributeSet with:{"attribute_code": "prod_attr"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku": "simple"}
      * @throws NoSuchEntityException
      * @throws CouldNotSaveException
@@ -155,10 +151,9 @@ class ProductTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple","special_price":"5.99"}
      * @magentoAppIsolation enabled
      * @magentoConfigFixture default_store catalog/price/scope 1
-     * @magentoDataFixtureDataProvider productFixtureDataProvider
      */
     public function testUpdateStoreSpecificSpecialPrice()
     {
@@ -173,19 +168,6 @@ class ProductTest extends TestCase
 
         $product = $this->productRepository->get('simple', false, 0, true);
         $this->assertEquals(5.99, $product->getSpecialPrice());
-    }
-
-    /**
-     * @return array
-     */
-    public function productFixtureDataProvider(): array
-    {
-        return [
-            'product' => [
-                'sku' => 'simple',
-                'special_price' => 5.99,
-            ]
-        ];
     }
 
     /**

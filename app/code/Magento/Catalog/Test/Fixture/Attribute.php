@@ -7,7 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\ProductAttributeManagementInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
@@ -45,6 +49,13 @@ class Attribute implements RevertibleDataFixtureInterface
         'backend_type' => 'varchar',
         'is_unique' => '0',
         'validation_rules' => []
+
+    ];
+
+    private const DEFAULT_ATTRIBUTE_SET_DATA = [
+        '_set_id' => null,
+        '_group_id' => null,
+        '_sort_order' => 0,
     ];
 
     /**
@@ -58,15 +69,30 @@ class Attribute implements RevertibleDataFixtureInterface
     private $dataProcessor;
 
     /**
+     * @var EavSetup
+     */
+    private $eavSetup;
+
+    /**
+     * @var ProductAttributeManagementInterface
+     */
+    private $productAttributeManagement;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
+     * @param EavSetup $eavSetup
      */
     public function __construct(
         ServiceFactory $serviceFactory,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        EavSetup $eavSetup,
+        ProductAttributeManagementInterface $productAttributeManagement
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
+        $this->eavSetup = $eavSetup;
+        $this->productAttributeManagement = $productAttributeManagement;
     }
 
     /**
@@ -77,11 +103,27 @@ class Attribute implements RevertibleDataFixtureInterface
     {
         $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
 
-        return $service->execute(
+        /**
+         * @var ProductAttributeInterface $attribute
+         */
+        $attribute = $service->execute(
             [
-                'attribute' => $this->prepareData($data)
+                'attribute' => $this->prepareData(array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA))
             ]
         );
+
+        $attributeSetData = $this->prepareAttributeSetData(
+            array_intersect_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA)
+        );
+
+        $this->productAttributeManagement->assign(
+            $attributeSetData['_set_id'],
+            $attributeSetData['_group_id'],
+            $attribute->getAttributeCode(),
+            $attributeSetData['_sort_order']
+        );
+
+        return $attribute;
     }
 
     /**
@@ -108,5 +150,24 @@ class Attribute implements RevertibleDataFixtureInterface
         $data = array_merge(self::DEFAULT_DATA, $data);
 
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * Prepare attribute set data
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareAttributeSetData(array $data): array
+    {
+        $attributeSetId = $this->eavSetup->getAttributeSetId(Product::ENTITY, 'Default');
+        $attributeGroupId = $this->eavSetup->getDefaultAttributeGroupId(Product::ENTITY, $attributeSetId);
+        $attributeSetData = [
+            '_set_id' => $attributeSetId,
+            '_group_id' => $attributeGroupId,
+        ];
+        $data = array_merge(self::DEFAULT_ATTRIBUTE_SET_DATA, $attributeSetData, $data);
+
+        return array_intersect_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA);
     }
 }

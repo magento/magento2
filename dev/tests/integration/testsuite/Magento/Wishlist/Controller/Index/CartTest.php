@@ -41,6 +41,11 @@ class CartTest extends AbstractController
     private $productRepository;
 
     /**
+     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -52,6 +57,7 @@ class CartTest extends AbstractController
         $this->cartFactory = $this->_objectManager->get(CartFactory::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = $this->_objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -123,8 +129,8 @@ class CartTest extends AbstractController
      */
     public function testAddItemWithRelatedProducts(): void
     {
-        $firstProductId = DataFixtureStorageManager::getStorage()->get('product1')->getId();
-        $secondProductID = DataFixtureStorageManager::getStorage()->get('product2')->getId();
+        $firstProductId = $this->fixtures->get('product1')->getId();
+        $secondProductID = $this->fixtures->get('product2')->getId();
         $relatedIds = $expectedAddedIds = [$firstProductId, $secondProductID];
 
         $this->customerSession->setCustomerId(1);

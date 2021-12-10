@@ -24,7 +24,7 @@ class Product implements RevertibleDataFixtureInterface
         'type_id' => Type::TYPE_SIMPLE,
         'attribute_set_id' => 4,
         'name' => 'Simple Product%uniqid%',
-        'sku' => 'simple%uniqid%',
+        'sku' => 'simple-product%uniqid%',
         'price' => 10,
         'weight' => 1,
         'visibility' => Visibility::VISIBILITY_BOTH,

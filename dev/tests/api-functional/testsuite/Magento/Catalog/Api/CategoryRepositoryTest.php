@@ -31,8 +31,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class CategoryRepositoryTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/categories';
-    const SERVICE_NAME = 'catalogCategoryRepositoryV1';
+    private const RESOURCE_PATH = '/V1/categories';
+    private const SERVICE_NAME = 'catalogCategoryRepositoryV1';
 
     /**
      * @var int
