@@ -43,15 +43,11 @@ class ImportTest extends AbstractImportTestCase
 {
 
     /**
-     * Entity adapter.
-     *
      * @var AbstractEntity|MockObject
      */
     protected $_entityAdapter;
 
     /**
-     * Import export data
-     *
      * @var Data|MockObject
      */
     protected $_importExportData = null;
@@ -940,6 +936,7 @@ class ImportTest extends AbstractImportTestCase
             ->expects($this->never())
             ->method('getRelativePath');
         $phrase = $this->createMock(Phrase::class);
+        $phrase->method('render')->willReturn('');
         $this->_driver
             ->expects($this->any())
             ->method('fileGetContents')
