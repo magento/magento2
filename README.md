@@ -81,6 +81,6 @@ To connect with people from the Community and Adobe engineering, [join us in Sla
 
 If you are a new Community member, check out the following channels:
 
-- [general](https://magentocommeng.slack.com/archives/C4YS78WE6)--Open chat for introductions and Magento 2 questions
-- [github](https://magentocommeng.slack.com/archives/C7KB93M32)--Support for GitHub issues, pull requests, and processes
-- [public-backlog](https://magentocommeng.slack.com/archives/CCV3J3RV5)--Discussions of the backlog
+- [general](https://magentocommeng.slack.com/archives/C4YS78WE6) is an open chat for introductions and Magento 2 questions
+- [github](https://magentocommeng.slack.com/archives/C7KB93M32) is a support channel for GitHub issues, pull requests, and processes
+- [public-backlog](https://magentocommeng.slack.com/archives/CCV3J3RV5) for discussions of the backlog
