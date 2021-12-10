@@ -16,9 +16,6 @@
             <description value="Check while order printing URL with an id of not relevant order redirects to order history"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-28543"/>
-            <skip>
-                <issueId value="MQE-2834" />
-            </skip>
             <group value="sales"/>
             <group value="pr_exclude"/>
         </annotations>
@@ -37,17 +34,17 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <!--Log in to Storefront as Customer 1 -->
+        <!-- Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
 
-        <!--Create an order at Storefront as Customer 1 -->
+        <!-- Create an order at Storefront as Customer 1 -->
         <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint">
             <argument name="Category" value="$createCategory$"/>
         </actionGroup>
 
-        <!--Go to 'print order' page by grabbed order id-->
+        <!-- Go to 'print order' page by grabbed order id-->
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderIdFromURL"/>
         <comment userInput="BIC workaround" stepKey="waitForPrintWindowToOpen"/>
         <switchToWindow stepKey="switchToPrintPage"/>
@@ -62,7 +59,7 @@
         <switchToWindow stepKey="switchToDuplicatePrintPage"/>
         <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkDuplicatePrintPage"/>
 
-        <!--Log out as customer 1-->
+        <!-- Log out of customer 1's account -->
         <openNewTab stepKey="openNewTab2"/>
         <waitForPageLoad stepKey="waitForNewTabToOpen1" />
         <switchToNextTab stepKey="switchForward2"/>
@@ -71,25 +68,30 @@
         <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
 
-        <!--Log in to Storefront as Customer 2 -->
+        <!-- Log in to Storefront as Customer 2 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp2">
             <argument name="Customer" value="$createCustomer2$"/>
         </actionGroup>
 
-        <!--Create an order at Storefront as Customer 2 -->
+        <!-- Create an order on Storefront as Customer 2 and open print order page -->
         <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint2">
             <argument name="Category" value="$createCategory$"/>
         </actionGroup>
 
-        <!--Try to load 'print order' page with not relevant order id to be redirected to 'order history' page-->
-        <waitForPageLoad stepKey="waitForPrintWindowToOpen2" />
-        <switchToWindow stepKey="switchToPrintPage2"/>
-        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkPrintPage2"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen2" />
+        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/order/print/order_id/</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToPrintPage2"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="checkPrintPage2"/>
 
         <openNewTab stepKey="openNewTab3"/>
         <waitForPageLoad stepKey="waitForNewTabToOpen2" />
         <switchToNextTab stepKey="switchForward4"/>
         <waitForElement selector="body" stepKey="waitForNewTabHTML" />
+
+        <!-- Assert trying to load 'print order' page as customer 2 with the the order id created by customer 1 will redirect to 'order history' page -->
         <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage2"/>
         <waitForPageLoad stepKey="waitForOpenDuplicatePage" />
         <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}" stepKey="waitOrderHistoryPage"/>
