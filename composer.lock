@@ -3955,12 +3955,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "83f34f56344740c94138f4804870e33c4fd56508"
+                "reference": "7b4cb1f74a2515c16113812543f47742207b4a7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/83f34f56344740c94138f4804870e33c4fd56508",
-                "reference": "83f34f56344740c94138f4804870e33c4fd56508",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/7b4cb1f74a2515c16113812543f47742207b4a7f",
+                "reference": "7b4cb1f74a2515c16113812543f47742207b4a7f",
                 "shasum": ""
             },
             "require": {
@@ -3999,7 +3999,7 @@
                 "issues": "https://github.com/magento/zf1/issues",
                 "source": "https://github.com/magento/zf1/tree/master"
             },
-            "time": "2021-11-30T15:38:43+00:00"
+            "time": "2021-12-10T22:41:02+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -5365,16 +5365,16 @@
         },
         {
             "name": "seld/phar-utils",
-            "version": "1.1.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/phar-utils.git",
-                "reference": "749042a2315705d2dfbbc59234dd9ceb22bf3ff0"
+                "reference": "9f3452c93ff423469c0d56450431562ca423dcee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/749042a2315705d2dfbbc59234dd9ceb22bf3ff0",
-                "reference": "749042a2315705d2dfbbc59234dd9ceb22bf3ff0",
+                "url": "https://api.github.com/repos/Seldaek/phar-utils/zipball/9f3452c93ff423469c0d56450431562ca423dcee",
+                "reference": "9f3452c93ff423469c0d56450431562ca423dcee",
                 "shasum": ""
             },
             "require": {
@@ -5407,9 +5407,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/phar-utils/issues",
-                "source": "https://github.com/Seldaek/phar-utils/tree/1.1.2"
+                "source": "https://github.com/Seldaek/phar-utils/tree/1.2.0"
             },
-            "time": "2021-08-19T21:01:38+00:00"
+            "time": "2021-12-10T11:20:11+00:00"
         },
         {
             "name": "spomky-labs/aes-key-wrap",
