@@ -36,7 +36,7 @@ Our [Community](https://opensource.magento.com/) is large and diverse, and our p
 
 ### Maintainers
 
-We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting pull requests and reviewing issues. Thanks to invaluable input from the Community Maintainers team, we can significantly improve contribution quality and accelerate the time to deliver your updates to production.
+We encourage experts from the Community to help us with GitHub routines such as accepting, merging, or rejecting pull requests and reviewing issues. Adobe has granted the Community Maintainers permission to accept, merge, and reject pull requests, as well as review issues. Thanks to invaluable input from the Community Maintainers team, we can significantly improve contribution quality and accelerate the time to deliver your updates to production. 
 
 - [Learn more about the Maintainer role](https://devdocs.magento.com/contributor-guide/maintainers.html)
 - [Maintainer's Handbook](https://devdocs.magento.com/contributor-guide/maintainer-handbook.html)
@@ -45,7 +45,7 @@ We encourage experts from the Community to help us with GitHub routines such as 
 
 ### Leaders
 
-We highly appreciate contributions that help us to improve the code, clarify the documentation, and increase test coverage. Check out our Community leaders, superstars, and superheroes on the [leaderboard](https://magento.biterg.io/app/kibana#/dashboard/41dc0c60-fa06-11eb-bbaa-dd6ca6f8fda8?_g=()).
+Adobe highly appreciates contributions that help us to improve the code, clarify the documentation, and increase test coverage. Check out our Community leaders, superstars, and superheroes on the [leaderboard](https://magento.biterg.io/app/kibana#/dashboard/41dc0c60-fa06-11eb-bbaa-dd6ca6f8fda8?_g=()).
 
 [![](https://raw.githubusercontent.com/wiki/magento/magento2/images/contributors.png)](https://magento.com/magento-contributors)
 
@@ -57,18 +57,17 @@ We use labels in the GitHub issues and pull requests to help the participants re
 
 ## Security
 
-[Security](https://devdocs.magento.com/guides/v2.4/architecture/security_intro.html) is one of the highest priorities at Adobe. To learn more about reporting security concerns, visit the [Adobe Vulnerability Disclosure Program and Magento Bug Bounty Program](https://hackerone.com/adobe).
+[Security](https://devdocs.magento.com/guides/v2.4/architecture/security_intro.html) is one of the highest priorities at Adobe. To learn more about reporting security concerns, visit the [Adobe Bug Bounty Program](https://hackerone.com/adobe).
 
 Stay up-to-date on the latest security news and patches by signing up for [Security Alert Notifications](https://magento.com/security/sign-up).
 
 ## Licensing
 
-Each source file included in this distribution is licensed under OSL 3.0 or the Magento Enterprise Edition (MEE) license.
-
-[Open Software License (OSL 3.0)](https://opensource.org/licenses/osl-3.0.php).
-Please see [LICENSE.txt](https://github.com/magento/magento2/blob/2.4-develop/LICENSE.txt) for the full text of the OSL 3.0 license or contact license@magentocommerce.com for a copy.
-
-Subject to Licensee's payment of fees and compliance with the terms and conditions of the MEE License, the MEE License supersedes the OSL 3.0 license for each source file.
+Each Magento source file included in this distribution is licensed under OSL 3.0 or under the terms and conditions of the applicable ordering document between Licensee/Customer and Adobe (or Magento).
+ 
+[Open Software License (OSL 3.0)](https://opensource.org/licenses/osl-3.0.php) – Please see [LICENSE.txt](LICENSE.txt) for the full text of the OSL 3.0 license.
+ 
+Subject to Licensee's/Customer's payment of fees and compliance with the terms and conditions of the applicable ordering document between Licensee/Customer and Adobe (or Magento), the terms and conditions of the applicable ordering between Licensee/Customer and Adobe (or Magento) supersede the OSL 3.0 license for each source file.
 
 - [Terms of Service](https://magento.com/legal/terms/)
 
@@ -76,7 +75,7 @@ Subject to Licensee's payment of fees and compliance with the terms and conditio
 
 We are dedicated to our Community and encourage your contributions and welcome feedback through [events](https://www.adobe.io/open/magento/calendar), our [DevBlog](https://community.magento.com/t5/Magento-DevBlog/bg-p/devblog), Twitter and YouTube channels, and [other Community resources](https://devdocs.magento.com/community/resources.html).
 
-To connect with people from both the Community and Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
+To connect with people from both the Community and Adobe engineering, [join us in Slack](https://magentocommeng.slack.com). We have a channel for every project. To join a particular channel, send us a request at [engcom@adobe.com](mailto:engcom@adobe.com), or [sign up](https://opensource.magento.com/slack).
 
 - [Popular Slack channels](https://www.adobe.io/open/magento/slack)
 
