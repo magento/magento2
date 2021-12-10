@@ -51,19 +51,27 @@ class ClassWithAllArgumentTypes
      * @param stdClass $stdClassObject
      * @param ClassWithoutConstruct $withoutConstructorClassObject
      * @param mixed $someVariable
+     * @param $noType
      * @param string $const
      * @param int $optionalNumValue
      * @param string $optionalStringValue
      * @param array $optionalArrayValue
+     * @param null $optNullValue
+     * @param null|int $optNullIntValue first type from defined will be used
+     * @param $optNoTypeValue
      */
     public function __construct(
         \stdClass $stdClassObject,
         \ClassWithoutConstruct $withoutConstructorClassObject,
         $someVariable,
+        $noType,
         $const = \ClassWithAllArgumentTypes::DEFAULT_VALUE,
         $optionalNumValue = 9807,
         $optionalStringValue = 'optional string',
-        $optionalArrayValue = ['optionalKey' => 'optionalValue']
+        $optionalArrayValue = ['optionalKey' => 'optionalValue'],
+        $optNullValue = null,
+        $optNullIntValue = 1,
+        $optNoTypeValue = null
     ) {
         $this->_stdClassObject = $stdClassObject;
         $this->_withoutConstructorClassObject = $withoutConstructorClassObject;

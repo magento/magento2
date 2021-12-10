@@ -110,8 +110,11 @@ class ArgumentsReader
 
         $type = $parameter->detectType();
 
+        /**
+         * $type === null if it is unspecified
+         * $type === 'null' if it is used in doc block
+         */
         if ($type === null || $type === 'null') {
-            // check on null for PHP 8.1 compatibility, emulates the behavior from PHP 7.4
             return null;
         }
 

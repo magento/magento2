@@ -124,7 +124,7 @@ class Instance extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 $pageGroupData['template']
             );
             $insert = ['handle' => $handle, 'xml' => $xml];
-            if (strlen($widgetInstance->getSortOrder())) {
+            if ($widgetInstance->getSortOrder() !== null && strlen($widgetInstance->getSortOrder())) {
                 $insert['sort_order'] = $widgetInstance->getSortOrder();
             }
 

@@ -657,6 +657,6 @@ class Config
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->includes;
+        return $this->includes ?? '';
     }
 }
