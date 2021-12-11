@@ -6,8 +6,11 @@
 
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Psr\Log\LoggerInterface;
 
@@ -48,25 +51,38 @@ class SaveHandler implements SaveHandlerInterface
      */
     private $sessionMaxSizeConfig;
 
+    private ?ManagerInterface $messageManager;
+
+    /**
+     * @var State|mixed
+     */
+    private $appState;
+
     /**
      * @param SaveHandlerFactory $saveHandlerFactory
      * @param ConfigInterface $sessionConfig
      * @param LoggerInterface $logger
      * @param SessionMaxSizeConfig $sessionMaxSizeConfigs
      * @param string $default
+     * @param ManagerInterface|null $messageManager
+     * @param State|null $appState
      */
     public function __construct(
         SaveHandlerFactory $saveHandlerFactory,
         ConfigInterface $sessionConfig,
         LoggerInterface $logger,
         SessionMaxSizeConfig $sessionMaxSizeConfigs,
-        $default = self::DEFAULT_HANDLER
+        $default = self::DEFAULT_HANDLER,
+        ManagerInterface $messageManager = null,
+        State $appState = null
     ) {
         $this->saveHandlerFactory = $saveHandlerFactory;
         $this->sessionConfig = $sessionConfig;
         $this->logger = $logger;
         $this->defaultHandler = $default;
         $this->sessionMaxSizeConfig = $sessionMaxSizeConfigs;
+        $this->messageManager = $messageManager ?: ObjectManager::getInstance()->get(ManagerInterface::class);
+        $this->appState = $appState ?: ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -99,7 +115,22 @@ class SaveHandler implements SaveHandlerInterface
      */
     public function read($sessionId)
     {
-        return $this->callSafely('read', $sessionId);
+        $sessionData = $this->callSafely('read', $sessionId);
+        $sessionMaxSize = $this->sessionMaxSizeConfig->getSessionMaxSize();
+        $sessionSize = strlen($sessionData);
+
+        if ($sessionSize !== null && $sessionMaxSize < $sessionSize) {
+            $sessionData = '';
+            if ($this->appState->getAreaCode() == 'frontend') {
+                $this->messageManager->addErrorMessage(
+                    __(
+                        'There is an error. Please Contact store administrator.'
+                    )
+                );
+            }
+        }
+
+        return $sessionData;
     }
 
     /**
@@ -127,7 +158,7 @@ class SaveHandler implements SaveHandlerInterface
             )
         );
 
-        return $this->callSafely('write', $sessionId, $this->read($sessionId));
+        return $this->callSafely('write', $sessionId, $data);
     }
 
     /**

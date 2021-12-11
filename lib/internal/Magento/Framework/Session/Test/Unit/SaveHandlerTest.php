@@ -125,7 +125,7 @@ class SaveHandlerTest extends TestCase
             ->method('getSessionMaxSize')
             ->willReturn(1);
 
-        $this->saveHandlerAdapterMock->expects($this->once())
+        $this->saveHandlerAdapterMock->expects($this->any())
             ->method('read')
             ->with('test_session_id')
             ->willReturn('test_session_data');
