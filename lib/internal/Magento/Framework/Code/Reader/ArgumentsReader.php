@@ -14,7 +14,7 @@ class ArgumentsReader
 {
     use GetParameterClassTrait;
 
-    const NO_DEFAULT_VALUE = 'NO-DEFAULT';
+    public const NO_DEFAULT_VALUE = 'NO-DEFAULT';
 
     /**
      * @var NamespaceResolver
