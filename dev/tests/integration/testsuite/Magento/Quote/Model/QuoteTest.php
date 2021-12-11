@@ -116,8 +116,8 @@ class QuoteTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @return void
      */
     public function testCollectTotalsWithVirtual(): void
