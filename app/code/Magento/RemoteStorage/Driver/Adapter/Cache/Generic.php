@@ -195,7 +195,8 @@ class Generic implements CacheInterface
                 return null;
             }
             $meta = $this->serializer->unserialize($meta);
-            if (!isset($meta[$path]) || !$meta[$path]) {
+
+            if (empty($meta[$path])) {
                 return null;
             }
             $this->cacheData[$path] = $meta[$path];
