@@ -652,8 +652,12 @@ class Config
      */
     public function getIncludes()
     {
-        $this->includes = ($this->isIncludesAvailable && $this->includes === null) ?
-            $this->scopeConfig->getValue('design/head/includes', ScopeInterface::SCOPE_STORE) : '';
-        return $this->includes;
+        if ($this->includes === null && $this->isIncludesAvailable) {
+            $this->includes = $this->scopeConfig->getValue(
+                'design/head/includes',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
+        return $this->includes ??= '';
     }
 }
