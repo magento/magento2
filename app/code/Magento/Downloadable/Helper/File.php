@@ -5,9 +5,7 @@
  */
 namespace Magento\Downloadable\Helper;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaStorage\Model\File\Uploader;
@@ -24,11 +22,6 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
-
-    /**
-     * @var DriverInterface
-     */
-    private $driver;
 
     /**
      * Filesystem object.
@@ -49,15 +42,13 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param array $mimeTypes
-     * @param DriverInterface|null $driver
      * @throws FileSystemException
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
-        array $mimeTypes = [],
-        DriverInterface $driver = null
+        array $mimeTypes = []
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
@@ -68,8 +59,6 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
                 self::$_mimeTypes[$key] = $value;
             }
         }
-        $this->driver = $driver ?: ObjectManager::getInstance()
-            ->create(DriverInterface::class);
     }
 
     /**
@@ -150,12 +139,10 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
         if (strrpos($file, '.tmp') == strlen($file) - 4) {
             $file = substr($file, 0, strlen($file) - 4);
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
 
-        $destFile = $this->driver->getParentDirectory(
-            $file
-        ) . '/' . Uploader::getNewFileName(
-            $this->getFilePath($basePath, $file)
-        );
+        $destFile = dirname($file) . '/'
+            . Uploader::getNewFileName($this->getFilePath($basePath, $file));
 
         $this->_coreFileStorageDatabase->copyFile(
             $this->getFilePath($baseTmpPath, $file),
