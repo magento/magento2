@@ -98,7 +98,7 @@ class ArgumentsReaderTest extends TestCase
             'optNoTypeValue' => [
                 'name' => 'optNoTypeValue',
                 'position' => 10,
-                'type' => null,
+                'type' => '\\\\optNoTypeValue',
                 'isOptional' => true,
                 'default' => null,
             ],
@@ -193,7 +193,7 @@ class ArgumentsReaderTest extends TestCase
             'optNoTypeValue' => [
                 'name' => 'optNoTypeValue',
                 'position' => 10,
-                'type' => null,
+                'type' => '\\\\optNoTypeValue',
                 'isOptional' => true,
                 'default' => null,
             ],
