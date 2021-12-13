@@ -89,7 +89,7 @@
             <argument name="name" value="{{AdminMediaGalleryFolder2Data.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectUploadedImage">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageUpload.filename}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelected"/>
         <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="savePage"/>
