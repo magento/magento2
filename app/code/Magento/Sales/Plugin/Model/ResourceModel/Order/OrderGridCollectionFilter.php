@@ -44,6 +44,11 @@ class OrderGridCollectionFilter
         $field,
         $condition = null
     ) {
+        $fieldMap  = $this->getFilterFieldsMap();
+        $fieldName = $fieldMap['fields'][$field] ?? null;
+        if (!$fieldName) {
+            return $proceed($field, $condition);
+        }
 
         if ($field === 'created_at' || $field === 'order_created_at') {
             if (is_array($condition)) {
@@ -51,12 +56,29 @@ class OrderGridCollectionFilter
                     $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
                 }
             }
+
+            $fieldName = $subject->getConnection()->quoteIdentifier($field);
+            $condition = $subject->getConnection()->prepareSqlCondition($fieldName, $condition);
+            $subject->getSelect()->where($condition, null, Select::TYPE_CONDITION);
+
+            return $subject;
         }
 
-        $fieldName = $subject->getConnection()->quoteIdentifier($field);
-        $condition = $subject->getConnection()->prepareSqlCondition($fieldName, $condition);
-        $subject->getSelect()->where($condition, null, Select::TYPE_CONDITION);
+        return $proceed();
+    }
 
-        return $subject;
+    /**
+     * Map the columns needs to filter out
+     *
+     * @return \string[][]
+     */
+    private function getFilterFieldsMap(): array
+    {
+        return [
+            'fields' => [
+                'created_at'       => 'main_table.created_at',
+                'order_created_at' => 'main_table.order_created_at',
+            ],
+        ];
     }
 }
