@@ -36,15 +36,15 @@ use Magento\Framework\Intl\DateTimeFactory;
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
 
-    const STATUS_RUNNING = 'running';
+    public const STATUS_RUNNING = 'running';
 
-    const STATUS_SUCCESS = 'success';
+    public const STATUS_SUCCESS = 'success';
 
-    const STATUS_MISSED = 'missed';
+    public const STATUS_MISSED = 'missed';
 
-    const STATUS_ERROR = 'error';
+    public const STATUS_ERROR = 'error';
 
     /**
      * @var TimezoneInterface
@@ -104,7 +104,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function setCronExpr($expr)
     {
-        $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
+        $e = preg_split('#\s+#', $expr, -1, PREG_SPLIT_NO_EMPTY);
         if (count($e) < 5 || count($e) > 6) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
@@ -129,7 +129,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         $configTimeZone = $this->timezoneConverter->getConfigTimezone();
-        $storeDateTime = $this->dateTimeFactory->create(null, new \DateTimeZone($configTimeZone));
+        $storeDateTime = $this->dateTimeFactory->create('now', new \DateTimeZone($configTimeZone));
         if (!is_numeric($time)) {
             //convert time from UTC to admin store timezone
             //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
