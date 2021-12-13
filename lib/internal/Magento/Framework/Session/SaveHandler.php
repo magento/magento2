@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
@@ -51,7 +52,10 @@ class SaveHandler implements SaveHandlerInterface
      */
     private $sessionMaxSizeConfig;
 
-    private ?ManagerInterface $messageManager;
+    /**
+     * @var ManagerInterface
+     */
+    private $messageManager;
 
     /**
      * @var State|mixed
@@ -113,7 +117,7 @@ class SaveHandler implements SaveHandlerInterface
      * @param string $sessionId
      * @return string
      */
-    public function read($sessionId)
+    public function read($sessionId): string
     {
         $sessionData = $this->callSafely('read', $sessionId);
         $sessionMaxSize = $this->sessionMaxSizeConfig->getSessionMaxSize();
@@ -121,11 +125,9 @@ class SaveHandler implements SaveHandlerInterface
 
         if ($sessionSize !== null && $sessionMaxSize < $sessionSize) {
             $sessionData = '';
-            if ($this->appState->getAreaCode() == 'frontend') {
+            if ($this->appState->getAreaCode() === Area::AREA_FRONTEND) {
                 $this->messageManager->addErrorMessage(
-                    __(
-                        'There is an error. Please Contact store administrator.'
-                    )
+                    __('There is an error. Please Contact store administrator.')
                 );
             }
         }
@@ -141,7 +143,7 @@ class SaveHandler implements SaveHandlerInterface
      * @return bool
      * @throws LocalizedException
      */
-    public function write($sessionId, $data)
+    public function write($sessionId, $data): bool
     {
         $sessionMaxSize = $this->sessionMaxSizeConfig->getSessionMaxSize();
         $sessionSize = strlen($data);
