@@ -84,7 +84,7 @@ class CartFixedDiscount
         float $baseRuleTotals,
         string $discountType
     ): float {
-        $ratio = $baseItemPrice * $qty / $baseRuleTotals;
+        $ratio = $baseRuleTotals != 0 ? $baseItemPrice * $qty / $baseRuleTotals : 0;
         return $this->deltaPriceRound->round(
             $ruleDiscount * $ratio,
             $discountType
@@ -111,7 +111,7 @@ class CartFixedDiscount
         string $discountType
     ): float {
         $baseItemPriceTotal = $baseItemPrice * $qty - $baseItemDiscountAmount;
-        $ratio = $baseItemPriceTotal / $baseRuleTotalsDiscount;
+        $ratio = $baseRuleTotalsDiscount != 0 ? $baseItemPriceTotal / $baseRuleTotalsDiscount : 0;
         $discountAmount = $this->deltaPriceRound->round($ruleDiscount * $ratio, $discountType);
         return $discountAmount;
     }
@@ -129,7 +129,7 @@ class CartFixedDiscount
         float $shippingAmount,
         float $quoteBaseSubtotal
     ): float {
-        $ratio = $shippingAmount / $quoteBaseSubtotal;
+        $ratio = $quoteBaseSubtotal != 0 ? $shippingAmount / $quoteBaseSubtotal : 0;
         return $this->priceCurrency
             ->roundPrice(
                 $rule->getDiscountAmount() * $ratio
