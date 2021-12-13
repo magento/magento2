@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Magento session save handler.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveHandler implements SaveHandlerInterface
 {
