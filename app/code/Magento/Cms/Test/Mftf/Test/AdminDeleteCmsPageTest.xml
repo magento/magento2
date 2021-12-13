@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="Cms"/>
             <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

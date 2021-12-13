@@ -16,6 +16,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-37449"/>
             <group value="sales"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <remove keyForRemoval="fillOrder"/>
