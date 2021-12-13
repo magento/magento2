@@ -39,31 +39,37 @@
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
 
-        <!-- Create an order at Storefront as Customer 1 -->
+        <!-- Create an order on Storefront as Customer 1 and open print order page -->
         <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint">
             <argument name="Category" value="$createCategory$"/>
         </actionGroup>
 
-        <!-- Go to 'print order' page by grabbed order id-->
+        <!-- Go to 'print order' page by grabbed order id and assert browser does not redirect to order history page -->
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderIdFromURL"/>
         <comment userInput="BIC workaround" stepKey="waitForPrintWindowToOpen"/>
-        <switchToWindow stepKey="switchToPrintPage"/>
-        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkPrintPage"/>
-        <openNewTab stepKey="openNewTab"/>
-        <waitForPageLoad stepKey="waitForNewTabToOpen" />
-        <switchToNextTab stepKey="switchForward"/>
-        <waitForElement selector="body" stepKey="waitForNewTab3HTML" />
-        <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage"/>
 
-        <waitForPageLoad stepKey="waitForDuplicatePrintWindowToOpen" />
-        <switchToWindow stepKey="switchToDuplicatePrintPage"/>
-        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkDuplicatePrintPage"/>
+        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/order/print/order_id/{$grabOrderIdFromURL}</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToPrintPage"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="checkPrintPage"/>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="openNewTab"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTabToOpen" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchForward"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTab3HTML" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="duplicatePrintPage"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForDuplicatePrintWindowToOpen" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToDuplicatePrintPage"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="checkDuplicatePrintPage"/>
 
         <!-- Log out of customer 1's account -->
-        <openNewTab stepKey="openNewTab2"/>
-        <waitForPageLoad stepKey="waitForNewTabToOpen1" />
-        <switchToNextTab stepKey="switchForward2"/>
-        <waitForElement selector="body" stepKey="waitForNewTab2HTML" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="openNewTab2"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTabToOpen1" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchForward2"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForNewTab2HTML" />
 
         <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
@@ -79,7 +85,7 @@
         </actionGroup>
 
         <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen2" />
-        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered2">
             <argument name="expectedUrl">sales/order/print/order_id/</argument>
             <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
         </helper>
