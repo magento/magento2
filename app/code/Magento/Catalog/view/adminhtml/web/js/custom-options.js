@@ -177,7 +177,7 @@ define([
                                     'products[]': request,
                                     'form_key': widget.options.formKey
                                 }, function ($data) {
-                                    $.parseJSON($data).each(function (el) {
+                                    JSON.parse($data).each(function (el) {
                                         var i;
 
                                         el.id = widget.getFreeOptionId(el.id);

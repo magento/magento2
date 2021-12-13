@@ -228,7 +228,7 @@ define([
                      * @this {iframe}
                      */
                     iframeHandler = function () {
-                        var imageParams = $.parseJSON($(this).contents().find('body').html()),
+                        var imageParams = JSON.parse($(this).contents().find('body').html()),
                             fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
 
                         localContainer.prev('input').val(imageParams['file_path']).trigger('change');

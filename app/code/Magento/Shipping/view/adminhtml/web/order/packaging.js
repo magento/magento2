@@ -87,7 +87,7 @@ define(['prototype'], function () {
         },
 
         checkAllItems: function (headCheckbox) {
-            $(headCheckbox).up('table').select('tbody input[type="checkbox"]').each(function (checkbox) {
+            $(headCheckbox).up('table').on('select', 'tbody input[type="checkbox"]').each(function (checkbox) {
                 checkbox.checked = headCheckbox.checked;
                 this._observeQty.call(checkbox);
             }.bind(this));
@@ -244,7 +244,7 @@ define(['prototype'], function () {
         },
 
         validate: function () {
-            var dimensionElements = $('packaging_window').select(
+            var dimensionElements = $('packaging_window').on('select,
                 'input[name=container_length],input[name=container_width],input[name=container_height],input[name=container_girth]:not("._disabled")'
             );
             var callback = null;
@@ -667,7 +667,7 @@ define(['prototype'], function () {
                 return;
             }
 
-            $(currentNode).select(
+            $(currentNode).on( 'select',
                 'input[name=container_length],input[name=container_width],input[name=container_height],select[name=container_dimension_units]'
             ).each(function (inputElement) {
                 if (disable) {
@@ -686,8 +686,8 @@ define(['prototype'], function () {
 
         changeContentTypes: function (obj) {
             var packageBlock = $(obj).up('[id^="package_block"]');
-            var contentType = packageBlock.select('[name=content_type]')[0];
-            var contentTypeOther = packageBlock.select('[name=content_type_other]')[0];
+            var contentType = packageBlock.on('select', '[name=content_type]')[0];
+            var contentTypeOther = packageBlock.on('select', '[name=content_type_other]')[0];
 
             if (contentType.value == 'OTHER') {
                 Form.Element.enable(contentTypeOther);
@@ -824,7 +824,7 @@ define(['prototype'], function () {
                 this.itemsAll = itemsAll;
             }
 
-            packagePrepare.select('tbody input[type="checkbox"]').each(function (item) {
+            packagePrepare.on('select', 'tbody input[type="checkbox"]').each(function (item) {
                 $(item).observe('change', this._observeQty);
                 this._observeQty.call(item);
             }.bind(this));
