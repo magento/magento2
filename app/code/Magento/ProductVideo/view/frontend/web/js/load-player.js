@@ -131,13 +131,6 @@ define([
         },
 
         /**
-         * Destroyer
-         */
-        destroy: function () {
-            this._player.destroy();
-        },
-
-        /**
          * Calculates ratio for responsive videos
          * @private
          */
