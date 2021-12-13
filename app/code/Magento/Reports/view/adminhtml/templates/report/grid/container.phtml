@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <div class="reports-content">
@@ -11,7 +13,8 @@
 
 <?= $block->getGridHtml() ?>
 
-<script>
+<?php $scriptString = <<<script
+
 require([
     'jquery',
     'mage/backend/validation',
@@ -21,7 +24,7 @@ require([
 //<![CDATA[
     jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
     function filterFormSubmit() {
-        var filters = $$('#filter_form input', '#filter_form select'),
+        var filters = \$$('#filter_form input', '#filter_form select'),
             elements = [];
 
         for (var i in filters) {
@@ -31,7 +34,7 @@ require([
         }
 
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?= $block->escapeJs($block->escapeUrl($block->getFilterUrl())) ?>filter/'+
+            setLocation('{$block->escapeJs($block->getFilterUrl())}filter/'+
                 Base64.encode(Form.serializeElements(elements))+'/'
             );
         }
@@ -39,4 +42,7 @@ require([
 //]]>
     window.filterFormSubmit = filterFormSubmit;
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -23,7 +23,7 @@ use Magento\Config\Model\Config\PathValidatorFactory;
  * Command provides possibility to show saved system configuration.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigShowCommand extends Command
@@ -121,7 +121,7 @@ class ConfigShowCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function configure()
     {
@@ -158,7 +158,7 @@ class ConfigShowCommand extends Command
      * or scope/scope-code doesn't pass validation.
      *
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -15,6 +15,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterfaceFactory;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe the catalog_product_delete_before event and deletes relation between category content and media asset.
@@ -25,7 +26,7 @@ class ProductDelete implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-    
+
     /**
      * @var ContentIdentityInterfaceFactory
      */
@@ -52,16 +53,22 @@ class ProductDelete implements ObserverInterface
     private $getContent;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @var ExtractAssetsFromContentInterface
      */
     private $extractAssetsFromContent;
-    
+
     /**
      * @param ExtractAssetsFromContentInterface $extractAssetsFromContent
      * @param GetEntityContentsInterface $getContent
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
@@ -70,6 +77,7 @@ class ProductDelete implements ObserverInterface
         DeleteContentAssetLinksInterface $deleteContentAssetLinks,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         ContentAssetLinkInterfaceFactory $contentAssetLinkFactory,
+        Config $config,
         array $fields
     ) {
         $this->extractAssetsFromContent = $extractAssetsFromContent;
@@ -77,6 +85,7 @@ class ProductDelete implements ObserverInterface
         $this->deleteContentAssetLinks = $deleteContentAssetLinks;
         $this->contentAssetLinkFactory = $contentAssetLinkFactory;
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -88,9 +97,13 @@ class ProductDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $product = $observer->getEvent()->getData('product');
         $contentAssetLinks = [];
-        
+
         if ($product instanceof CatalogProduct) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(

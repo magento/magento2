@@ -52,9 +52,7 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
@@ -73,7 +71,7 @@
         </actionGroup>
 
         <!--save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAgain"/>
         <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
 
         <!--Checking details-->

@@ -5,16 +5,16 @@
  */
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
-
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <?= $block->getBackButtonHtml() ?>
     <?= $block->getPreviewButtonHtml() ?>
-    <?php if (!$block->getIsPreview()) : ?>
+    <?php if (!$block->getIsPreview()): ?>
         <?= $block->getResetButtonHtml() ?>
         <?= $block->getSaveButtonHtml() ?>
     <?php endif ?>
-    <?php if ($block->getCanResume()) : ?>
+    <?php if ($block->getCanResume()): ?>
         <?= $block->getResumeButtonHtml() ?>
     <?php endif ?>
 </div>
@@ -23,16 +23,18 @@
     <?= $block->getBlockHtml('formkey') ?>
     <?= $block->getChildHtml('form') ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form"
+      target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type"
+               value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
     </div>
 </form>
-<script>
+<?php $scriptString= <<<script
 require([
     'jquery',
     'wysiwygAdapter',
@@ -71,4 +73,6 @@ queueControl = {
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -10,7 +10,7 @@ namespace Magento\Catalog\Api\Data\ProductRender;
  * Price interface.
  *
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
@@ -18,7 +18,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve final price
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getFinalPrice();
 
@@ -29,7 +29,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $finalPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setFinalPrice($finalPrice);
 
@@ -39,7 +39,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * E.g. for product with custom options is price with the most expensive custom option
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMaxPrice();
 
@@ -48,7 +48,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $maxPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setMaxPrice($maxPrice);
 
@@ -60,7 +60,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $maxRegularPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setMaxRegularPrice($maxRegularPrice);
 
@@ -68,7 +68,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve max regular price
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMaxRegularPrice();
 
@@ -77,7 +77,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $minRegularPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setMinimalRegularPrice($minRegularPrice);
 
@@ -85,7 +85,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve minimal regular price
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMinimalRegularPrice();
 
@@ -96,7 +96,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $specialPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setSpecialPrice($specialPrice);
 
@@ -104,7 +104,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve special price
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getSpecialPrice();
 
@@ -112,7 +112,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve minimal price
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMinimalPrice();
 
@@ -121,7 +121,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $minimalPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setMinimalPrice($minimalPrice);
 
@@ -129,7 +129,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve regular price
      *
      * @return float
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getRegularPrice();
 
@@ -140,7 +140,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param float $regularPrice
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setRegularPrice($regularPrice);
 
@@ -148,7 +148,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve dto with formatted prices
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\FormattedPriceInfoInterface
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getFormattedPrices();
 
@@ -157,7 +157,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param FormattedPriceInfoInterface $formattedPriceInfo
      * @return void
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setFormattedPrices(FormattedPriceInfoInterface $formattedPriceInfo);
 
@@ -165,7 +165,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface|null
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getExtensionAttributes();
 
@@ -174,7 +174,7 @@ interface PriceInfoInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      *
      * @param \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface $extensionAttributes
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setExtensionAttributes(
         \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface $extensionAttributes

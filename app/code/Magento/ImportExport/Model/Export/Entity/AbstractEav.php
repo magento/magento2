@@ -158,6 +158,11 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Export\AbstractEn
                             $attributeCode,
                             ['eq' => $exportFilter[$attributeCode]]
                         );
+                    } else if (is_array($exportFilter[$attributeCode])) {
+                        $collection->addAttributeToFilter(
+                            $attributeCode,
+                            ['in' => $exportFilter[$attributeCode]]
+                        );
                     }
                 } elseif (Export::FILTER_TYPE_MULTISELECT == $attributeFilterType) {
                     if (is_array($exportFilter[$attributeCode])) {

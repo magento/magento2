@@ -10,6 +10,7 @@ namespace Magento\Framework\Search\Dynamic;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @api
+ * @since 100.0.2
  */
 class Algorithm
 {
@@ -434,8 +435,8 @@ class Algorithm
      */
     protected function _findRoundValue($lowerValue, $upperValue, $returnEmpty = true, $roundingFactor = null)
     {
-        $lowerValue = round($lowerValue, 3);
-        $upperValue = round($upperValue, 3);
+        $lowerValue = round((float) $lowerValue, 3);
+        $upperValue = round((float) $upperValue, 3);
 
         if ($roundingFactor !== null) {
             // Can't separate if values are equal
@@ -501,7 +502,7 @@ class Algorithm
         foreach ($newRoundValues as $roundingFactor => $roundValueValues) {
             if (array_key_exists($roundingFactor, $oldRoundValues)) {
                 $oldRoundValues[$roundingFactor] = array_unique(
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     array_merge($oldRoundValues[$roundingFactor], $roundValueValues)
                 );
             } else {

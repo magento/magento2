@@ -32,7 +32,7 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $unserialize;
 

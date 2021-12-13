@@ -200,12 +200,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function getBasePath()
     {
         $path = parent::getBasePath();
-        if (empty($path)) {
-            $path = '/';
-        } else {
-            $path = str_replace('\\', '/', $path);
-        }
-        return $path;
+        return empty($path) ? '/' : str_replace('\\', '/', $path);
     }
 
     /**
@@ -298,10 +293,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     {
         if ($name === null) {
             return $this->beforeForwardInfo;
-        } elseif (isset($this->beforeForwardInfo[$name])) {
-            return $this->beforeForwardInfo[$name];
         }
-        return null;
+
+        return $this->beforeForwardInfo[$name] ?? null;
     }
 
     /**
@@ -311,13 +305,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      */
     public function isAjax()
     {
-        if ($this->isXmlHttpRequest()) {
-            return true;
-        }
-        if ($this->getParam('ajax') || $this->getParam('isAjax')) {
-            return true;
-        }
-        return false;
+        return $this->isXmlHttpRequest()
+            || $this->getParam('ajax')
+            || $this->getParam('isAjax');
     }
 
     /**
@@ -365,7 +355,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         $result = '';
         if (isset($server['SCRIPT_NAME'])) {
             $envPath = str_replace('\\', '/', dirname(str_replace('\\', '/', $server['SCRIPT_NAME'])));
-            if ($envPath != '.' && $envPath != '/') {
+            if ($envPath !== '.' && $envPath !== '/') {
                 $result = $envPath;
             }
         }

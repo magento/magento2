@@ -79,9 +79,8 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache3"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Check Catalog Price Rule for first product-->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>
@@ -126,9 +125,8 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexSecondTime"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheSecondTime"/>
 
         <!--Check Catalog Price Rule for third product-->
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>

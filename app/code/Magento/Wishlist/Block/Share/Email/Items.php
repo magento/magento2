@@ -59,6 +59,7 @@ class Items extends \Magento\Wishlist\Block\AbstractBlock
      * @param Item $item
      *
      * @return Product
+     * @since 101.2.0
      */
     public function getProductForThumbnail(Item $item): Product
     {

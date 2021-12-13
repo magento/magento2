@@ -13,10 +13,11 @@ use Magento\Ui\Model;
  * ActiveEditor block
  *
  * @api
+ * @since 101.1.0
  */
 class ActiveEditor extends \Magento\Framework\View\Element\Template
 {
-    const DEFAULT_EDITOR_PATH = 'mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter';
+    const DEFAULT_EDITOR_PATH = 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter';
 
     /**
      * @var ScopeConfigInterface
@@ -50,6 +51,7 @@ class ActiveEditor extends \Magento\Framework\View\Element\Template
      * Get active wysiwyg adapter path
      *
      * @return string
+     * @since 101.1.0
      */
     public function getWysiwygAdapterPath()
     {

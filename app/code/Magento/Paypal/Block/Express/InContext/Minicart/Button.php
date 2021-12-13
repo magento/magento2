@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\Template\Context;
 
 /**
  * Class Button
- * @deprecated @see \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton
+ * @deprecated 100.3.1 @see \Magento\Paypal\Block\Express\InContext\Minicart\SmartButton
  */
 class Button extends Template implements ShortcutInterface
 {

@@ -8,6 +8,7 @@
  * Template for displaying product price at product view page, gift registry and wish-list
  *
  * @var $block \Magento\Msrp\Pricing\Render\PriceBox
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
@@ -32,18 +33,20 @@ $msrpPrice = $block->renderAmount(
 $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElementIdPrefix() : 'product-price-';
 ?>
 
-<?php if ($amount) : ?>
+<?php if ($amount): ?>
     <span class="old-price map-old-price"><?= /* @noEscape */ $msrpPrice ?></span>
     <span class="map-fallback-price normal-price"><?= /* @noEscape */ $msrpPrice ?></span>
 <?php endif; ?>
 
-<?php if ($priceType->isShowPriceOnGesture()) : ?>
+<?php if ($priceType->isShowPriceOnGesture()): ?>
     <?php
 
     $addToCartUrl = '';
     if ($product->isSaleable()) {
         /** @var Magento\Catalog\Block\Product\AbstractProduct $addToCartUrlGenerator */
-        $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton(\Magento\Catalog\Block\Product\AbstractProduct::class);
+        $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton(
+            \Magento\Catalog\Block\Product\AbstractProduct::class
+        );
         // phpcs:disable
         $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
             $product,
@@ -77,38 +80,46 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
         $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
     } else {
         $data['addToCartButton'] = sprintf(
-            'form:has(input[type="hidden"][name="product"][value="%s"]) button[type="submit"]',
-            (int) $productId . ',' .
-            sprintf(
-                '.block.widget .price-box[data-product-id=%s]+.product-item-actions button.tocart',
-                (int)$productId
-            )
+            'form:has(input[type="hidden"][name="product"][value="%1$s"]) button[type="submit"],' .
+            '.block.widget .price-box[data-product-id="%1$s"]+.product-item-actions button.tocart',
+            $productId
         );
     }
     ?>
-    <span id="<?= $block->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId) ?>" style="display:none"></span>
-    <a href="javascript:void(0);"
+    <?php $priceId = $block->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId); ?>
+    <span id="s_<?= /* @noEscape*/ $priceId ?>"></span>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none", 'span#s_' . $priceId) ?>
+    <a href="#"
        id="<?= /* @noEscape */ ($popupId) ?>"
        class="action map-show-info"
-       <?php //phpcs:disable ?>
-       data-mage-init='{"addToCart":<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>}'>
-        <?php //phpcs:enable ?>
+       data-mage-init='{"addToCart":<?= /* @noEscape */ $block->jsonEncode($data) ?>}'>
         <?= $block->escapeHtml(__('Click for price')) ?>
     </a>
-<?php else : ?>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        'event.preventDefault()',
+        'a#' . /* @noEscape */ ($popupId)
+    ) ?>
+<?php else: ?>
     <span class="msrp-message">
      <?= $block->escapeHtml($priceType->getMsrpPriceMessage()) ?>
     </span>
 <?php endif; ?>
 
-<?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW) : ?>
+<?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
-    <a href="javascript:void(0);"
+    <a href="#"
        id="<?= /* @noEscape */ $helpLinkId ?>"
        class="action map-show-info"
        data-mage-init='{"addToCart":{"origin": "info",
                                      "helpLinkId": "#<?= /* @noEscape */ $helpLinkId ?>",
-                                     "productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
-                                     "closeButtonId": "#map-popup-close"}}'><span><?= $block->escapeHtml(__("What's this?")) ?></span>
+                                     "productName": "<?= $block->escapeJs($product->getName()) ?>",
+                                     "closeButtonId": "#map-popup-close"}}'>
+        <span><?= $block->escapeHtml(__("What's this?")) ?></span>
     </a>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        'event.preventDefault()',
+        'a#' . /* @noEscape */ $helpLinkId
+    ) ?>
 <?php endif; ?>

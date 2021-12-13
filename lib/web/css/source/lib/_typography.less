@@ -13,7 +13,8 @@
     @font-format: false,
     @font-weight: normal,
     @font-style: normal,
-    @font-display: auto
+    @font-display: auto,
+    @font-type: false
 ) when (@font-format = false) {
     @font-face {
         font-family: @family-name;
@@ -25,17 +26,23 @@
     }
 }
 
+// When need specify font format also should define font type include
+// The available types for @font-type are 'woff', 'woff2', 'truetype', 'opentype', 'embedded-opentype', and 'svg'
+// Enclose it in single quotes
+//  _____________________________________________
+
 .lib-font-face(
     @family-name,
     @font-path,
     @font-format: false,
     @font-weight: normal,
     @font-style: normal,
-    @font-display: auto
-) when not (@font-format = false) {
+    @font-display: auto,
+    @font-type: false
+) when not (@font-format = false) and not (@font-type = false) {
     @font-face {
         font-family: @family-name;
-        src: url('@{font-path}.@{font-format}') format(@font-format);
+        src: url('@{font-path}.@{font-format}') format(@font-type);
         font-weight: @font-weight;
         font-style: @font-style;
         font-display: @font-display;
@@ -569,3 +576,4 @@
     .lib-typography-code();
     .lib-typography-blockquote();
 }
+

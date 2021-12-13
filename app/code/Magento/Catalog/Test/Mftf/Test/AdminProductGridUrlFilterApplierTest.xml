@@ -18,19 +18,30 @@
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
             <group value="product"/>
         </annotations>
+
         <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <createData entity="simpleProductWithShortNameAndSku" stepKey="createSimpleProduct"/>
-        </before>
-        <after>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <!-- Should wait a bit for filters really cleared because waitForPageLoad does not wait for javascripts to be finished -->
+            <!-- Without this test will fail sometimes -->
+            <wait time="5" stepKey="waitFilterReallyCleared"/>
+            <reloadPage stepKey="reloadPage"/>
+        </before>
+
+        <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}?filters[name]=$$createSimpleProduct.name$$" stepKey="navigateToProductGridWithFilters"/>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}?filters[sku]=$createSimpleProduct.sku$" stepKey="navigateToProductGridWithFilters"/>
         <waitForPageLoad stepKey="waitForProductGrid"/>
-        <see selector="{{AdminProductGridSection.productGridNameProduct($$createSimpleProduct.name$$)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct"/>
+        <see selector="{{AdminProductGridSection.productGridNameProduct($createSimpleProduct.name$)}}" userInput="$createSimpleProduct.name$" stepKey="seeProduct"/>
+        <waitForElementVisible selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="waitForEnabledFilters"/>
         <seeElement selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="seeEnabledFilters"/>
-        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Name: $$createSimpleProduct.name$$" stepKey="seeProductNameFilter"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="SKU: $createSimpleProduct.sku$" stepKey="seeProductNameFilter"/>
     </test>
 </tests>

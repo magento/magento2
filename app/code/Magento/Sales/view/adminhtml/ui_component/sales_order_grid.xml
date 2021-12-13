@@ -53,12 +53,12 @@
                     <label translate="true">Purchase Point</label>
                     <dataScope>store_id</dataScope>
                     <imports>
-                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                        <link name="visible">ns = ${ $.ns }, index = ${ $.index }:visible</link>
                     </imports>
                 </settings>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+        <massaction name="listing_massaction" component="Magento_Sales/js/grid/tree-massactions">
             <action name="cancel">
                 <settings>
                     <url path="sales/order/massCancel"/>

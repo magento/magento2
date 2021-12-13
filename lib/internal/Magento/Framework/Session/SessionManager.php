@@ -10,7 +10,8 @@ namespace Magento\Framework\Session;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
- * Session Manager
+ * Standard session management.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
@@ -200,9 +201,6 @@ class SessionManager implements SessionManagerInterface
                     session_commit();
                     session_id($_SESSION['new_session_id']);
                 }
-                $sid = $this->sidResolver->getSid($this);
-                // potential custom logic for session id (ex. switching between hosts)
-                $this->setSessionId($sid);
                 session_start();
                 if (isset($_SESSION['destroyed'])
                     && $_SESSION['destroyed'] < time() - $this->sessionConfig->getCookieLifetime()
@@ -211,13 +209,16 @@ class SessionManager implements SessionManagerInterface
                 }
 
                 $this->validator->validate($this);
-                $this->renewCookie($sid);
+                $this->renewCookie(null);
 
                 register_shutdown_function([$this, 'writeClose']);
 
                 $this->_addHost();
                 \Magento\Framework\Profiler::stop('session_start');
+            } else {
+                $this->validator->validate($this);
             }
+            // phpstan:ignore
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
         return $this;
@@ -244,6 +245,7 @@ class SessionManager implements SessionManagerInterface
             $metadata->setDuration($this->sessionConfig->getCookieLifetime());
             $metadata->setSecure($this->sessionConfig->getCookieSecure());
             $metadata->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+            $metadata->setSameSite($this->sessionConfig->getCookieSameSite());
 
             $this->cookieManager->setPublicCookie(
                 $this->getName(),
@@ -554,7 +556,7 @@ class SessionManager implements SessionManagerInterface
         } else {
             session_start();
         }
-
+        // phpstan:ignore
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {
@@ -621,7 +623,9 @@ class SessionManager implements SessionManagerInterface
         }
 
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            if ($option=='session.save_handler') {
+            // Since PHP 7.2 it is explicitly forbidden to set the module name to "user".
+            // https://bugs.php.net/bug.php?id=77384
+            if ($option === 'session.save_handler' && $value !== 'memcached') {
                 continue;
             } else {
                 $result = ini_set($option, $value);

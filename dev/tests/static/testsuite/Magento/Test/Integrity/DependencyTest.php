@@ -11,15 +11,20 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\Reader\Filesystem as Reader;
+use Magento\Framework\Config\ValidationState\Configurable;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Test\Integrity\Dependency\Converter;
 use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
 use Magento\Test\Integrity\Dependency\GraphQlSchemaDependencyProvider;
+use Magento\Test\Integrity\Dependency\SchemaLocator;
+use Magento\Test\Integrity\Dependency\WebapiFileResolver;
+use Magento\TestFramework\Dependency\AnalyticsConfigRule;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
-use Magento\TestFramework\Dependency\AnalyticsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
@@ -243,10 +248,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 realpath(__DIR__) . '/_files/dependency_test/whitelist/redundant_dependencies_*.php';
             $redundantDependenciesWhitelist = [];
             foreach (glob($redundantDependenciesWhitelistFilePattern) as $fileName) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $redundantDependenciesWhitelist = array_merge($redundantDependenciesWhitelist, include $fileName);
+                $redundantDependenciesWhitelist[] = include $fileName;
             }
-            self::$redundantDependenciesWhitelist = $redundantDependenciesWhitelist;
+            self::$redundantDependenciesWhitelist = array_merge([], ...$redundantDependenciesWhitelist);
         }
         return self::$redundantDependenciesWhitelist;
     }
@@ -280,10 +284,24 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         // In case primary module declaring the table cannot be identified, use any module referencing this table
         $tableToModuleMap = array_merge($tableToAnyModuleMap, $tableToPrimaryModuleMap);
 
+        $webApiConfigReader = new Reader(
+            new WebapiFileResolver(self::getComponentRegistrar()),
+            new Converter(),
+            new SchemaLocator(self::getComponentRegistrar()),
+            new Configurable(false),
+            'webapi.xml',
+            [
+                '/routes/route' => ['url', 'method'],
+                '/routes/route/resources/resource' => 'ref',
+                '/routes/route/data/parameter' => 'name',
+            ],
+        );
+
         self::$_rulesInstances = [
             new PhpRule(
                 self::$routeMapper->getRoutes(),
                 self::$_mapLayoutBlocks,
+                $webApiConfigReader,
                 [],
                 ['routes' => self::getRoutesWhitelist()]
             ),
@@ -310,12 +328,22 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $routesWhitelistFilePattern = realpath(__DIR__) . '/_files/dependency_test/whitelist/routes_*.php';
             $routesWhitelist = [];
             foreach (glob($routesWhitelistFilePattern) as $fileName) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $routesWhitelist = array_merge($routesWhitelist, include $fileName);
+                $routesWhitelist[] = include $fileName;
             }
-            self::$routesWhitelist = $routesWhitelist;
+            self::$routesWhitelist = array_merge([], ...$routesWhitelist);
         }
         return self::$routesWhitelist;
+    }
+
+    /**
+     * @return ComponentRegistrar
+     */
+    private static function getComponentRegistrar()
+    {
+        if (!isset(self::$componentRegistrar)) {
+            self::$componentRegistrar = new ComponentRegistrar();
+        }
+        return self::$componentRegistrar;
     }
 
     /**
@@ -556,18 +584,16 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     private function getModuleNameForRelevantFile($file)
     {
-        if (!isset(self::$componentRegistrar)) {
-            self::$componentRegistrar = new ComponentRegistrar();
-        }
+        $componentRegistrar = self::getComponentRegistrar();
         // Validates file when it belongs to default themes
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             if (strpos($file, $themeDir . '/') !== false) {
                 return '';
             }
         }
 
         $foundModuleName = '';
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             if (strpos($file, $moduleDir . '/') !== false) {
                 $foundModuleName = str_replace('_', '\\', $moduleName);
                 break;
@@ -678,9 +704,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach (self::$_rulesInstances as $rule) {
             /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
             $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
-            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $dependencies = array_merge($dependencies, $newDependencies);
+            $dependencies[] = $newDependencies;
         }
+        $dependencies = array_merge([], ...$dependencies);
 
         foreach ($dependencies as $dependencyKey => $dependency) {
             foreach (self::$whiteList as $namespace) {

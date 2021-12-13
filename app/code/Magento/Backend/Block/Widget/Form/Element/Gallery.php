@@ -6,7 +6,10 @@
 
 namespace Magento\Backend\Block\Widget\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Backend\Block\Template\Context;
 
 /**
  * Backend image gallery item renderer
@@ -27,6 +30,18 @@ class Gallery extends \Magento\Backend\Block\Template implements
     protected $_template = 'Magento_Backend::widget/form/element/gallery.phtml';
 
     /**
+     * @param Context $context
+     * @param array $data
+     */
+    public function __construct(Context $context, array $data = [])
+    {
+        $data['jsonHelper'] = ObjectManager::getInstance()->get(JsonHelper::class);
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Renderer.
+     *
      * @param AbstractElement $element
      * @return string
      */
@@ -37,6 +52,8 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
+     * Set element.
+     *
      * @param AbstractElement $element
      * @return $this
      */
@@ -47,6 +64,8 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
+     * Get element.
+     *
      * @return AbstractElement|null
      */
     public function getElement()
@@ -55,6 +74,8 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
+     * Get value.
+     *
      * @return array
      */
     public function getValues()
@@ -63,7 +84,7 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareLayout()
     {
@@ -82,6 +103,8 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
+     * Return add button.
+     *
      * @return string
      */
     public function getAddButtonHtml()
@@ -90,6 +113,8 @@ class Gallery extends \Magento\Backend\Block\Template implements
     }
 
     /**
+     * Return delete button.
+     *
      * @param string $image
      * @return string|string[]
      */

@@ -18,6 +18,7 @@
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -126,7 +127,7 @@
             <!-- Edit the attribute for the first simple product -->
             <selectOption stepKey="editSelectAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
             <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
         </before>
 
@@ -144,8 +145,8 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <magentoCLI command="indexer:reindex" stepKey="reindexAll"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAll"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>

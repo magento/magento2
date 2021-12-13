@@ -7,12 +7,24 @@
 namespace Magento\Framework\Stdlib\Cookie;
 
 /**
- * Class PublicCookieMetadata
+ * Public Cookie Attributes
  *
  * @api
+ * @since 100.0.2
  */
 class PublicCookieMetadata extends CookieMetadata
 {
+    /**
+     * @param array $metadata
+     */
+    public function __construct($metadata = [])
+    {
+        if (!isset($metadata[self::KEY_SAME_SITE])) {
+            $metadata[self::KEY_SAME_SITE] = 'Lax';
+        }
+        parent::__construct($metadata);
+    }
+
     /**
      * Set the number of seconds until the cookie expires
      *
@@ -67,6 +79,11 @@ class PublicCookieMetadata extends CookieMetadata
      */
     public function setSecure($secure)
     {
+        if (!$secure && $this->get(self::KEY_SAME_SITE) === 'None') {
+            throw new \InvalidArgumentException(
+                'Cookie must be secure in order to use the SameSite None directive.'
+            );
+        }
         return $this->set(self::KEY_SECURE, $secure);
     }
 }

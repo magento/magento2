@@ -13,7 +13,7 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
@@ -124,9 +124,11 @@ class Cart extends Action implements HttpPostActionInterface
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
-        /** @var Redirect $resultRedirect */
+
+        /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($redirectUrl);
+
         return $resultRedirect;
     }
 }

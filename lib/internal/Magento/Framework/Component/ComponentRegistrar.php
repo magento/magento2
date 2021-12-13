@@ -9,6 +9,7 @@ namespace Magento\Framework\Component;
  * Provides ability to statically register components.
  *
  * @api
+ * @since 100.0.2
  */
 class ComponentRegistrar implements ComponentRegistrarInterface
 {

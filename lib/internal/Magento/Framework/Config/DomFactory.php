@@ -8,6 +8,7 @@ namespace Magento\Framework\Config;
 /**
  * Magento configuration DOM factory
  * @api
+ * @since 100.0.2
  */
 class DomFactory
 {

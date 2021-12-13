@@ -15,6 +15,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterfaceFactory;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe the adminhtml_cmspage_on_delete event and deletes relation between page content and media asset.
@@ -25,7 +26,12 @@ class BlockDelete implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-    
+
+    /**
+     * @var Config
+     */
+    private $config;
+
     /**
      * @var ContentIdentityInterfaceFactory
      */
@@ -55,13 +61,14 @@ class BlockDelete implements ObserverInterface
      * @var ExtractAssetsFromContentInterface
      */
     private $extractAssetsFromContent;
-    
+
     /**
      * @param ExtractAssetsFromContentInterface $extractAssetsFromContent
      * @param GetEntityContentsInterface $getContent
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
@@ -70,6 +77,7 @@ class BlockDelete implements ObserverInterface
         DeleteContentAssetLinksInterface $deleteContentAssetLinks,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         ContentAssetLinkInterfaceFactory $contentAssetLinkFactory,
+        Config $config,
         array $fields
     ) {
         $this->extractAssetsFromContent = $extractAssetsFromContent;
@@ -77,6 +85,7 @@ class BlockDelete implements ObserverInterface
         $this->deleteContentAssetLinks = $deleteContentAssetLinks;
         $this->contentAssetLinkFactory = $contentAssetLinkFactory;
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -88,9 +97,13 @@ class BlockDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $block = $observer->getEvent()->getData('object');
         $contentAssetLinks = [];
-        
+
         if ($block instanceof CmsBlock) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
@@ -101,7 +114,7 @@ class BlockDelete implements ObserverInterface
                     ]
                 );
                 $assets = $this->extractAssetsFromContent->execute((string) $block->getData($field));
-                
+
                 foreach ($assets as $asset) {
                     $contentAssetLinks[] = $this->contentAssetLinkFactory->create(
                         [

@@ -9,6 +9,7 @@ namespace Magento\Framework\Api\Search;
  * Search API for all requests
  *
  * @api
+ * @since 100.0.2
  */
 interface SearchInterface
 {

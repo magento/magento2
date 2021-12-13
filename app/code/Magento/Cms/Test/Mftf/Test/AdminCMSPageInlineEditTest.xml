@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCMSPageInlineEditTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Inline Edit Cms Page"/>
+            <title value="Inline changing CMS page custom theme will be applied with proper dates"/>
+            <description value="Verify that Merchant can inline edit CMS pages in grid and dates will be proper"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40900" />
+            <useCaseId value="MC-39953"/>
+            <group value="cms"/>
+            <group value="ui"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGridAgain"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <generateDate date="now" format="m/d/Y" stepKey="today"/>
+        <generateDate date="+1 day" format="m/d/Y" stepKey="tomorrow"/>
+        <generateDate date="now" format="M j, Y" stepKey="todayFormatted"/>
+        <generateDate date="+1 day" format="M j, Y" stepKey="tomorrowFormatted"/>
+        <generateDate date="+100 day" format="m/d/Y" stepKey="newDateFrom"/>
+        <generateDate date="+101 day" format="m/d/Y" stepKey="newDateTo"/>
+        <generateDate date="+100 day" format="M j, Y" stepKey="newDateFromFormatted"/>
+        <generateDate date="+101 day" format="M j, Y" stepKey="newDateToFormatted"/>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+        <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
+            <argument name="columnLabel" value="Custom design from"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumnTwo">
+            <argument name="columnLabel" value="Custom design to"/>
+        </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="404 Not Found" stepKey="fillKeywordSearchFieldWithSecondCustomerEmail"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <see userInput="404 Not Found" selector="{{AdminGridRow.rowOne}}" stepKey="seeFirstCmsPageAfterFiltering"/>
+        <click selector="{{CmsPagesPageActionsSection.firstItemSelectButton}}" stepKey="clickOnSelectButton"/>
+        <click selector="{{CmsPagesPageActionsSection.firstItemEditButton}}" stepKey="clickOnEditButton"/>
+        <click selector="{{CmsDesignSection.customDesignUpdateTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CmsDesignSection.customDesignFrom}}" stepKey="waitForLayoutDropDown" />
+        <fillField selector="{{CmsDesignSection.customDesignFrom}}" userInput="{$today}" stepKey="fillDateFrom"/>
+        <fillField selector="{{CmsDesignSection.customDesignTo}}" userInput="{$tomorrow}" stepKey="fillDateTo"/>
+        <selectOption selector="{{CmsDesignSection.customTheme}}" userInput="{{MagentoBlankTheme.name}}" stepKey="fillCustomTheme"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveCmsPage"/>
+        <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom"/>
+        <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo"/>
+        <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit"/>
+        <waitForElementVisible selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="waitForDate"/>
+        <selectOption userInput="2 columns with right bar" selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="changeLayoutFromGrid"/>
+        <click selector="{{AdminCmsPageGridInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid"/>
+        <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom2"/>
+        <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo2"/>
+        <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit2"/>
+        <waitForElementVisible selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="waitForDate2"/>
+        <selectOption userInput="2 columns with left bar" selector="{{AdminCmsPageGridInlineEditSection.customLayout}}" stepKey="changeLayoutFromGrid2"/>
+        <click selector="{{AdminCmsPageGridInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid2"/>
+        <see userInput="{$todayFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom3"/>
+        <see userInput="{$tomorrowFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo3"/>
+        <click selector="{{AdminDataGridTableSection.rows}}" stepKey="clickEdit3"/>
+        <waitForElementVisible selector="{{AdminCmsPageGridInlineEditSection.customDesignFrom}}" stepKey="waitForDate3"/>
+        <fillField selector="{{AdminCmsPageGridInlineEditSection.customDesignFrom}}" userInput="{$newDateFrom}" stepKey="fillDateFromInGrid"/>
+        <fillField selector="{{AdminCmsPageGridInlineEditSection.customDesignTo}}" userInput="{$newDateTo}" stepKey="fillDateToInGrid"/>
+        <click selector="{{AdminCmsPageGridInlineEditSection.savePageButton}}" stepKey="clickSaveFromGrid3"/>
+        <see userInput="{$newDateFromFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design from')}}" stepKey="assertCustomDesignFrom4"/>
+        <see userInput="{$newDateToFormatted}" selector="{{AdminOrdersGridSection.gridCell('2','Custom design to')}}" stepKey="assertCustomDesignTo4"/>
+    </test>
+</tests>

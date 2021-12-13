@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Repository
 {
@@ -23,11 +24,6 @@ class Repository
      * @var array
      */
     private $algorithms = [];
-
-    /**
-     * @var AlgorithmInterface[]
-     */
-    private $instances = [];
 
     /**
      * Construct
@@ -51,27 +47,24 @@ class Repository
      */
     public function get($algorithmType, array $data = [])
     {
-        if (!isset($this->instances[$algorithmType])) {
-            if (!isset($this->algorithms[$algorithmType])) {
-                throw new LocalizedException(
-                    new \Magento\Framework\Phrase("The %1 value wasn't found in the algorithms.", [$algorithmType])
-                );
-            }
-
-            $className = $this->algorithms[$algorithmType];
-            $model = $this->objectManager->create($className, $data);
-
-            if (!$model instanceof AlgorithmInterface) {
-                throw new LocalizedException(
-                    new \Magento\Framework\Phrase(
-                        '%1 doesn\'t extends \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface',
-                        [$className]
-                    )
-                );
-            }
-            $this->instances[$algorithmType] = $model;
+        if (!isset($this->algorithms[$algorithmType])) {
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase("The %1 value wasn't found in the algorithms.", [$algorithmType])
+            );
         }
 
-        return $this->instances[$algorithmType];
+        $className = $this->algorithms[$algorithmType];
+        $model = $this->objectManager->create($className, $data);
+
+        if (!$model instanceof AlgorithmInterface) {
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase(
+                    '%1 doesn\'t extends \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface',
+                    [$className]
+                )
+            );
+        }
+
+        return $model;
     }
 }

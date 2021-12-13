@@ -5,11 +5,12 @@
  */
 
 /** @var $block \Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="import-export-tax-rates">
-    <?php if (!$block->getIsReadonly()) :?>
+    <?php if (!$block->getIsReadonly()):?>
     <div class="import-tax-rates">
-        <?php if ($block->getUseContainer()) :?>
+        <?php if ($block->getUseContainer()):?>
         <form id="import-form"
               class="admin__fieldset"
               action="<?= $block->escapeUrl($block->getUrl('tax/rate/importPost')) ?>"
@@ -18,7 +19,9 @@
         <?php endif; ?>
             <?= $block->getBlockHtml('formkey') ?>
             <div class="fieldset admin__field">
-                <label for="import_rates_file" class="admin__field-label"><span><?= $block->escapeHtml(__('Import Tax Rates')) ?></span></label>
+                <label for="import_rates_file" class="admin__field-label">
+                    <span><?= $block->escapeHtml(__('Import Tax Rates')) ?></span>
+                </label>
                 <div class="admin__field-control">
                     <input type="file"
                            id="import_rates_file"
@@ -27,11 +30,13 @@
                     <?= $block->getButtonHtml(__('Import Tax Rates'), '', 'import-submit') ?>
                 </div>
             </div>
-        <?php if ($block->getUseContainer()) :?>
+        <?php if ($block->getUseContainer()):?>
         </form>
         <?php endif; ?>
-        <script>
-require(['jquery', 'Magento_Ui/js/modal/alert', "mage/mage", "loadingPopup", 'mage/translate'], function(jQuery, uiAlert){
+        <?php $scriptString = <<<script
+
+    require(['jquery', 'Magento_Ui/js/modal/alert', "mage/mage", "loadingPopup", 'mage/translate'],
+        function(jQuery, uiAlert){
 
     jQuery('#import-form').mage('form').mage('validation');
     (function ($) {
@@ -41,7 +46,7 @@ require(['jquery', 'Magento_Ui/js/modal/alert', "mage/mage", "loadingPopup", 'ma
                     timeout: false
                 });
 
-                $(this.form).submit();
+                $(this.form).trigger('submit');
             } else {
                 uiAlert({
                     content: $.mage.__('Please select a file to import!')
@@ -51,11 +56,14 @@ require(['jquery', 'Magento_Ui/js/modal/alert', "mage/mage", "loadingPopup", 'ma
     })(jQuery);
 
 });
-</script>
+
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     </div>
     <?php endif; ?>
     <div class="export-tax-rates <?= ($block->getIsReadonly()) ? 'box-left' : 'box-right' ?>">
-        <?php if ($block->getUseContainer()) :?>
+        <?php if ($block->getUseContainer()):?>
         <form id="export_form"
               class="admin__fieldset"
               action="<?= $block->escapeUrl($block->getUrl('tax/rate/exportPost')) ?>"
@@ -66,10 +74,10 @@ require(['jquery', 'Magento_Ui/js/modal/alert', "mage/mage", "loadingPopup", 'ma
             <div class="fieldset admin__field">
                 <span class="admin__field-label"><span><?= $block->escapeHtml(__('Export Tax Rates')) ?></span></span>
                 <div class="admin__field-control">
-                    <?= $block->getButtonHtml(__('Export Tax Rates'), "this.form.submit()") ?>
+                    <?= $block->getButtonHtml(__('Export Tax Rates'), "export_form.submit()") ?>
                 </div>
             </div>
-        <?php if ($block->getUseContainer()) :?>
+        <?php if ($block->getUseContainer()):?>
         </form>
         <?php endif; ?>
     </div>

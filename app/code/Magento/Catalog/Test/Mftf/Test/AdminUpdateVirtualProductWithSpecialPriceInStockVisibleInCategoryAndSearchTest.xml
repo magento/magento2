@@ -26,6 +26,9 @@
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">
@@ -38,10 +41,9 @@
 
         <!-- Search default virtual product in the grid page -->
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
-        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
-        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
-        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
+            <argument name="keyword" value="$$initialVirtualProduct.name$$"/>
+        </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
 
@@ -64,7 +66,7 @@
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductSpecialPrice.visibility}}" stepKey="selectVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPrice.urlKey}}" stepKey="fillUrlKey"/>
@@ -99,25 +101,29 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <see selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductSpecialPrice.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPrice.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated virtual product on the magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="fillVirtualProductName"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductName">
+            <argument name="phrase" value="{{updateVirtualProductSpecialPrice.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeVirtualProductName">
+            <argument name="productName" value="{{updateVirtualProductSpecialPrice.name}}"/>
+        </actionGroup>
 
         <!--Verify customer see updated virtual product with special price(from above step) on product storefront page by url key -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductStorefrontPage"/>

@@ -86,8 +86,7 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
 
-        <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Go to store's advanced catalog search page -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>

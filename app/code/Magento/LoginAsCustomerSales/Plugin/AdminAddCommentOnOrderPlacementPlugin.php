@@ -25,9 +25,8 @@ class AdminAddCommentOnOrderPlacementPlugin
     /**
      * @param Session $session
      */
-    public function __construct(
-        Session $session
-    ) {
+    public function __construct(Session $session)
+    {
         $this->userSession = $session;
     }
 

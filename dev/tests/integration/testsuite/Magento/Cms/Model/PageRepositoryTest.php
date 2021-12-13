@@ -34,8 +34,15 @@ class PageRepositoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->repo = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class);
-        $this->retriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
+                    \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
+            ]
+        ]);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->repo = $objectManager->get(PageRepositoryInterface::class);
+        $this->retriever = $objectManager->get(GetPageByIdentifierInterface::class);
     }
 
     /**
@@ -48,7 +55,7 @@ class PageRepositoryTest extends TestCase
     public function testSaveUpdateXml(): void
     {
         $page = $this->retriever->execute('test_custom_layout_page_1', 0);
-        $page->setTitle($page->getTitle() .'TEST');
+        $page->setTitle($page->getTitle() . 'TEST');
 
         //Is successfully saved without changes to the custom layout xml.
         $page = $this->repo->save($page);
@@ -79,5 +86,20 @@ class PageRepositoryTest extends TestCase
         $page = $this->repo->save($page);
         $this->assertEmpty($page->getCustomLayoutUpdateXml());
         $this->assertEmpty($page->getLayoutUpdateXml());
+    }
+
+    /**
+     * Verifies that cms page with identifier which duplicates existed route shouldn't be saved
+     *
+     * @return void
+     * @throws \Throwable
+     * @magentoDataFixture Magento/Cms/_files/pages.php
+     */
+    public function testSaveWithRouteDuplicate(): void
+    {
+        $page = $this->retriever->execute('page100', 0);
+        $page->setIdentifier('customer');
+        $this->expectException(CouldNotSaveException::class);
+        $this->repo->save($page);
     }
 }

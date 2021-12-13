@@ -32,7 +32,7 @@
 
             <!-- Assign attribute to set -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToAttributeGridPageActionGroup" stepKey="goToAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSetPage"/>
             <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
                 <argument name="name" value="$createAttributeSet.attribute_set_name$"/>
             </actionGroup>
@@ -72,8 +72,7 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
 
-            <!-- Perform reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>

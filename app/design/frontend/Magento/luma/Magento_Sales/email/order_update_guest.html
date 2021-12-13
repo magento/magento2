@@ -6,7 +6,7 @@
 -->
 <!--@subject {{trans "Update to your %store_name order" store_name=$store.frontend_name}} @-->
 <!--@vars {
-"var billing.name":"Guest Customer Name",
+"var order_data.customer_name":"Guest Customer Name",
 "var comment|escape|nl2br":"Order Comment",
 "var order.increment_id":"Order Id",
 "var order_data.frontend_status_label":"Order Status",
@@ -18,7 +18,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$billing.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans
                     "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."

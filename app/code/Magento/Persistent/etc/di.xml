@@ -12,4 +12,14 @@
     <type name="Magento\Customer\CustomerData\Customer">
         <plugin name="section_data" type="Magento\Persistent\Model\Plugin\CustomerData" />
     </type>
+    <type name="Magento\Persistent\Model\Customer\Authorization">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Persistent\Helper\Session">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
 </config>

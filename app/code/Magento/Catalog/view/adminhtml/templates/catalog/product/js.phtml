@@ -4,11 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-
 /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php
+/** @var TaxHelper $taxHelper */
+$taxHelper = $block->getData('taxHelper');
+$priceFormat = /* @noEscape */ $taxHelper->getPriceFormat($block->getStore());
+$allRatesByProductClassJson = /* @noEscape */ $block->getAllRatesByProductClassJson();
+$scriptString = <<<script
 require([
     "jquery",
     "prototype",
@@ -30,8 +35,8 @@ function registerTaxRecalcs() {
     Event.observe($('tax_class_id'), 'change', recalculateTax);
 }
 
-var priceFormat = <?= /* @noEscape */ $this->helper(Magento\Tax\Helper\Data::class)->getPriceFormat($block->getStore()) ?>;
-var taxRates = <?= /* @noEscape */ $block->getAllRatesByProductClassJson() ?>;
+var priceFormat = {$priceFormat};
+var taxRates = {$allRatesByProductClassJson};
 
 function recalculateTax() {
     if (typeof dynamicTaxes == 'undefined') {
@@ -75,16 +80,22 @@ function bindActiveProductTab(event, ui) {
 jQuery(document).on('tabsactivate', bindActiveProductTab);
 
 // bind active tab
-<?php if ($tabsBlock = $block->getLayout()->getBlock('product_tabs')) :?>
+script;
+if ($tabsBlock = $block->getLayout()->getBlock('product_tabs')):
+    $scriptString .= <<<script
 jQuery(function () {
-    if (jQuery('#<?= $block->escapeJs($tabsBlock->getId()) ?>').length && jQuery('#<?= $block->escapeJs($tabsBlock->getId()) ?>').is(':mage-tabs')) {
-        var activeAnchor = jQuery('#<?= $block->escapeJs($tabsBlock->getId()) ?>').tabs('activeAnchor');
+    if (jQuery('#{$block->escapeJs($tabsBlock->getId())}').length &&
+        jQuery('#{$block->escapeJs($tabsBlock->getId())}').is(':mage-tabs')) {
+        var activeAnchor = jQuery('#{$block->escapeJs($tabsBlock->getId())}').tabs('activeAnchor');
         if (activeAnchor && $('store_switcher')) {
             $('store_switcher').switchParams = 'active_tab/' + activeAnchor.prop('name') + '/';
         }
     }
 });
-<?php endif; ?>
+script;
+endif;
+
+$scriptString .= <<<script
 
 window.recalculateTax = recalculateTax;
 window.bindActiveProductTab = bindActiveProductTab;
@@ -92,4 +103,6 @@ window.registerTaxRecalcs = registerTaxRecalcs;
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

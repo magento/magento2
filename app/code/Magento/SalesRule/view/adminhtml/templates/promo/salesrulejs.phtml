@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+<?php $scriptString = <<<script
 require([
     'jquery',
     "uiRegistry",
@@ -41,15 +43,15 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
     var elements = $(idPrefix + 'information_fieldset').select('input', 'select', 'textarea');
 
     elements = elements.concat(
-        $$('#rule_uses_per_coupon'),
-        $$('#rule_uses_per_customer'),
-        $$('#rule_to_date')
+        \$$('#rule_uses_per_coupon'),
+        \$$('#rule_uses_per_customer'),
+        \$$('#rule_to_date')
     );
 
     var params = Form.serializeElements(elements, true);
     params.form_key = FORM_KEY;
-    if ($$('#'+idPrefix + 'information_fieldset .messages')) {
-        $$('#'+idPrefix + 'information_fieldset .messages')[0].update();
+    if (\$$('#'+idPrefix + 'information_fieldset .messages')) {
+        \$$('#'+idPrefix + 'information_fieldset .messages')[0].update();
     }
     if ($('messages')) {
         $('messages').update();
@@ -71,8 +73,8 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
                 couponCodesGrid.reload();
             }
             if (response && response.messages) {
-                if ($$('#'+idPrefix + 'information_fieldset .messages')) {
-                    $$('#'+idPrefix + 'information_fieldset .messages')[0].update(response.messages);
+                if (\$$('#'+idPrefix + 'information_fieldset .messages')) {
+                    \$$('#'+idPrefix + 'information_fieldset .messages')[0].update(response.messages);
                 } else if ($('messages')) {
                     $('messages').update(response.messages);
                 }
@@ -94,4 +96,6 @@ window.validateCouponGenerate = validateCouponGenerate;
 window.generateCouponCodes = generateCouponCodes;
 window.refreshCouponCodesGrid = refreshCouponCodesGrid;
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

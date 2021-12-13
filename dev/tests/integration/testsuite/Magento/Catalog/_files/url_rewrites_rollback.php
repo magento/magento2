@@ -25,7 +25,7 @@ try {
 $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
 $collection
-    ->addAttributeToFilter('level', 2)
+    ->addAttributeToFilter('name', ['in' => ['Old Root', 'Category 2', 'Category 1']])
     ->load()
     ->delete();
 

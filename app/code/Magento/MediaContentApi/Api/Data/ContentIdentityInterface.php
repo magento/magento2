@@ -14,6 +14,7 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface;
 /**
  * Data interface representing the identificator of content. I.e. short description field of product entity with id 42
  * @api
+ * @since 100.4.0
  */
 interface ContentIdentityInterface extends ExtensibleDataInterface
 {
@@ -21,6 +22,7 @@ interface ContentIdentityInterface extends ExtensibleDataInterface
      * Type of entity that can have a content with media. I.e. catalog_product or cms_page
      *
      * @return string
+     * @since 100.4.0
      */
     public function getEntityType(): string;
 
@@ -28,6 +30,7 @@ interface ContentIdentityInterface extends ExtensibleDataInterface
      * Id of the entity containing content with media
      *
      * @return string
+     * @since 100.4.0
      */
     public function getEntityId(): string;
 
@@ -35,6 +38,7 @@ interface ContentIdentityInterface extends ExtensibleDataInterface
      * Field of the entity where the content can be stored. I.e. short_description for product
      *
      * @return string
+     * @since 100.4.0
      */
     public function getField(): string;
 
@@ -42,6 +46,7 @@ interface ContentIdentityInterface extends ExtensibleDataInterface
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface|null
+     * @since 100.4.0
      */
     public function getExtensionAttributes(): ?ContentIdentityExtensionInterface;
 
@@ -50,6 +55,7 @@ interface ContentIdentityInterface extends ExtensibleDataInterface
      *
      * @param \Magento\MediaContentApi\Api\Data\ContentIdentityExtensionInterface|null $extensionAttributes
      * @return void
+     * @since 100.4.0
      */
     public function setExtensionAttributes(?ContentIdentityExtensionInterface $extensionAttributes): void;
 }

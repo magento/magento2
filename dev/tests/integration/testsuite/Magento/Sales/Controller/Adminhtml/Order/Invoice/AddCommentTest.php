@@ -30,10 +30,11 @@ class AddCommentTest extends AbstractInvoiceControllerTest
     public function testSendEmailOnAddInvoiceComment(): void
     {
         $comment = 'Test Invoice Comment';
-        $order = $this->prepareRequest(
-            [
-                'comment' => ['comment' => $comment, 'is_customer_notified' => true],
-            ]
+        $order = $this->getOrder('100000001');
+        $invoice = $this->getInvoiceByOrder($order);
+        $this->prepareRequest(
+            ['comment' => ['comment' => $comment, 'is_customer_notified' => true]],
+            ['id' => $invoice->getEntityId()]
         );
         $this->dispatch('backend/sales/order_invoice/addComment');
 
@@ -41,9 +42,10 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         $this->assertStringContainsString($comment, $html);
 
         $message = $this->transportBuilder->getSentMessage();
+        $this->assertNotNull($message);
         $subject = __('Update to your %1 invoice', $order->getStore()->getFrontendName())->render();
         $messageConstraint = $this->logicalAnd(
-            new StringContains($order->getBillingAddress()->getName()),
+            new StringContains($order->getCustomerName()),
             new RegularExpression(
                 sprintf(
                     "/Your order #%s has been updated with a status of.*%s/",
@@ -55,7 +57,8 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $messageConstraint);
+        $bodyParts = $message->getBody()->getParts();
+        $this->assertThat(reset($bodyParts)->getRawContent(), $messageConstraint);
     }
 
     /**
@@ -63,7 +66,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
      */
     public function testAclHasAccess()
     {
-        $this->prepareRequest(['comment' => ['comment' => 'Comment']]);
+        $this->prepareRequest();
 
         parent::testAclHasAccess();
     }
@@ -73,31 +76,8 @@ class AddCommentTest extends AbstractInvoiceControllerTest
      */
     public function testAclNoAccess()
     {
-        $this->prepareRequest(['comment' => ['comment' => 'Comment']]);
+        $this->prepareRequest();
 
         parent::testAclNoAccess();
-    }
-
-    /**
-     * @param array $params
-     * @return \Magento\Sales\Api\Data\OrderInterface|null
-     */
-    private function prepareRequest(array $params = [])
-    {
-        $order = $this->getOrder('100000001');
-        $invoice = $this->getInvoiceByOrder($order);
-
-        $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setParams(
-            [
-                'id' => $invoice->getEntityId(),
-                'form_key' => $this->formKey->getFormKey(),
-            ]
-        );
-
-        $data = $params ?? [];
-        $this->getRequest()->setPostValue($data);
-
-        return $order;
     }
 }

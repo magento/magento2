@@ -17,6 +17,7 @@ use Magento\Framework\UrlInterface;
  * so this is a result object that implements all necessary properties of a HTTP redirect
  *
  * @api
+ * @since 100.0.2
  */
 class Redirect extends AbstractResult
 {

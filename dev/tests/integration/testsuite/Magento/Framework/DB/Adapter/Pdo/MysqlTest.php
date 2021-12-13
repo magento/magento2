@@ -27,12 +27,35 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         set_error_handler(null);
         $this->resourceConnection = Bootstrap::getObjectManager()
             ->get(ResourceConnection::class);
-        CacheCleaner::cleanAll();
     }
 
     protected function tearDown(): void
     {
         restore_error_handler();
+    }
+
+    /**
+     * Check PDO stringify fetches options
+     */
+    public function testStringifyFetchesTrue(): void
+    {
+        $tableName = $this->resourceConnection->getTableName('table_with_int_column');
+        $columnId = 'integer_column';
+        $adapter = $this->getDbAdapter();
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn($columnId, Table::TYPE_INTEGER);
+        $adapter->createTable($table);
+        $adapter->insert($tableName, [$columnId => 100]);
+
+        $select = $adapter->select()
+            ->from($tableName)
+            ->columns([$columnId])
+            ->limit(1);
+        $result = $adapter->fetchOne($select);
+        $this->assertIsString($result);
+        $adapter->dropTable($tableName);
     }
 
     /**
@@ -207,5 +230,67 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('string_column', $stringColumn['COLUMN_NAME'], 'Incorrect column name');
         $this->assertEquals('varchar', $stringColumn['DATA_TYPE'], 'Incorrect column type');
         $this->assertEquals('default test text', $stringColumn['DEFAULT'], 'Incorrect column default string value');
+    }
+
+    /**
+     * Test get auto increment field
+     *
+     * @param array $options
+     * @param string|bool $expected
+     * @throws \Zend_Db_Exception
+     * @dataProvider getAutoIncrementFieldDataProvider
+     */
+    public function testGetAutoIncrementField(array $options, $expected)
+    {
+        $adapter = $this->getDbAdapter();
+        $tableName = 'table_auto_increment_field';
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn(
+                'row_id',
+                Table::TYPE_INTEGER,
+                null,
+                $options,
+                'Row Id'
+            )
+            ->addColumn(
+                'created_at',
+                Table::TYPE_DATETIME,
+                null,
+                ['default' => new \Zend_Db_Expr('CURRENT_TIMESTAMP')]
+            )
+            ->addColumn(
+                'integer_column',
+                Table::TYPE_INTEGER,
+                11,
+                ['default' => 123456]
+            )->addColumn(
+                'string_column',
+                Table::TYPE_TEXT,
+                255,
+                ['default' => 'default test text']
+            )
+            ->setComment('Test table with auto increment column');
+        $adapter->createTable($table);
+        $autoIncrementField = $adapter->getAutoIncrementField($tableName);
+        $this->assertEquals($expected, $autoIncrementField);
+
+        //clean up database from test table
+        $adapter->dropTable($tableName);
+    }
+
+    public function getAutoIncrementFieldDataProvider()
+    {
+        return [
+            'auto increment field' => [
+                'field options' => ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'expected result' => 'row_id',
+            ],
+            'non auto increment field' => [
+                'field options' => ['unsigned' => true, 'nullable' => false,],
+                'expected result' => false,
+            ]
+        ];
     }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSelectMultipleAddressesOnCheckoutActionGroup">
+        <annotations>
+            <description>Select addresses for multinshipping checkout. Start on multishipping addresses page.</description>
+        </annotations>
+        <arguments>
+            <argument name="addressOption1" type="string" defaultValue="1"/>
+            <argument name="addressOption2" type="string" defaultValue="2"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{MultishippingSection.shippingAddressOptions(addressOption1,addressOption1)}}" stepKey="waitForMultishippingPage"/>
+        <grabTextFrom selector="{{MultishippingSection.shippingAddressOptions(addressOption1,addressOption1)}}" stepKey="firstShippingAddressValue"/>
+        <selectOption selector="{{MultishippingSection.shippingAddressSelector(addressOption1)}}" userInput="{$firstShippingAddressValue}" stepKey="selectFirstShippingMethod"/>
+        <waitForPageLoad after="selectFirstShippingMethod" stepKey="waitForSecondShippingAddresses"/>
+        <grabTextFrom selector="{{MultishippingSection.shippingAddressOptions(addressOption2,addressOption2)}}" stepKey="secondShippingAddressValue"/>
+        <selectOption selector="{{MultishippingSection.shippingAddressSelector(addressOption2)}}" userInput="{$secondShippingAddressValue}" stepKey="selectSecondShippingMethod"/>
+        <click selector="{{SingleShippingSection.updateAddress}}" stepKey="clickOnUpdateAddress"/>
+        <waitForPageLoad stepKey="waitForShippingInformation"/>
+    </actionGroup>
+</actionGroups>

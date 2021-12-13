@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridFilterRemoveErrorMessageBeforeApplyFiltersTest">
+        <annotations>
+            <stories value="Reset Error Messages"/>
+            <title value="Remove Error Message Before Apply Filters"/>
+            <description value="Test login to Admin UI and Remove Error Message Before Apply Filters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37450"/>
+            <group value="ui"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="rootCategory" />
+            </createData>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="rootCategory" />
+            </createData>
+
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <!-- Create second store -->
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="$$rootCategory.name$$"/>
+            </actionGroup>
+            <!-- Create second store view -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
+            <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="createProduct2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Filter created simple product in grid and add category and website created in create data-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>
+        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <actionGroup ref="AddWebsiteToProductActionGroup" stepKey="updateSimpleProductAddingWebsiteCreated">
+            <argument name="website" value="{{customWebsite.name}}"/>
+        </actionGroup>
+
+        <!--Search updated simple product(from above step) in the grid by StoreView and Name-->
+        <actionGroup ref="FilterProductInGridByStoreViewAndNameActionGroup" stepKey="searchCreatedSimpleProductInGrid">
+            <argument name="storeView" value="{{customStoreEN.name}}"/>
+            <argument name="productName" value="$$createProduct2.name$$"/>
+        </actionGroup>
+
+        <!--Go to stores and delete website created in create data-->
+        <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+            <argument name="websiteName" value="{{customWebsite.name}}"/>
+        </actionGroup>
+
+        <!--Go to grid page and verify AssertErrorMessage-->
+        <actionGroup ref="AssertErrorMessageAfterDeletingWebsiteActionGroup" stepKey="verifyErrorMessage">
+            <argument name="errorMessage" value="Something went wrong with processing the default view and we have restored the filter to its original state."/>
+        </actionGroup>
+
+        <!--Apply new filters to verify error message is removed -->
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
+        <click selector="{{AdminProductGridFilterSection.storeViewDropdown('Default Store View')}}" stepKey="clickStoreViewDropdown"/>
+        <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="$$createProduct.name$$" stepKey="fillProductNameInNameFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <see selector="{{AdminProductGridFilterSection.nthRow('1')}}" userInput="$$createProduct.name$$" stepKey="seeFirstRowToVerifyProductVisibleInGrid"/>
+        <dontSeeElement selector="{{AdminMessagesSection.error}}" stepKey="dontSeeErrorMessage"/>
+
+    </test>
+</tests>

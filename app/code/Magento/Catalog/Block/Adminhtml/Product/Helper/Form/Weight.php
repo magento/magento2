@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Directory\Helper\Data;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
@@ -17,6 +18,7 @@ use Magento\Framework\Data\Form\Element\Radios;
 use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\Escaper;
 use Magento\Framework\Locale\Format;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Product form weight field helper
@@ -41,12 +43,18 @@ class Weight extends Text
     protected $directoryHelper;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param Format $localeFormat
      * @param Data $directoryHelper
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Factory $factoryElement,
@@ -54,7 +62,8 @@ class Weight extends Text
         Escaper $escaper,
         Format $localeFormat,
         Data $directoryHelper,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->localeFormat = $localeFormat;
@@ -75,6 +84,7 @@ class Weight extends Text
         );
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->addClass('validate-zero-or-greater');
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -199,8 +209,7 @@ class Weight extends Text
         $checkboxLabel = __('Change');
         $html .= <<<HTML
 <span class="attribute-change-checkbox">
-    <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName" class="checkbox" $nameAttributeHtml
-        onclick="toogleFieldEditMode(this, 'weight-switcher1'); toogleFieldEditMode(this, 'weight-switcher0');" />
+    <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName" class="checkbox" $nameAttributeHtml/>
     <label class="label" for="$dataCheckboxName">
         {$checkboxLabel}
     </label>
@@ -208,6 +217,12 @@ class Weight extends Text
 HTML;
 
         $html .= '</label></div></div>';
+
+        $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "toogleFieldEditMode(this, 'weight-switcher1'); toogleFieldEditMode(this, 'weight-switcher0');",
+            "#". $dataCheckboxName
+        );
 
         return $html;
     }

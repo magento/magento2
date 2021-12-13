@@ -20,6 +20,7 @@
                 <issueId value="https://github.com/magento/magento2/issues/25468"/>
             </skip>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create a Website -->
@@ -111,7 +112,7 @@
 
         <!-- Save product form -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWithTwoOptions"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveWithTwoOptions"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- Delete created bundle product -->

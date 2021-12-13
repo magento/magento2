@@ -48,8 +48,7 @@
         </actionGroup>
         <!-- Save the product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <!-- Flush config cache to reset product attributes in attribute set -->
-        <magentoCLI command="cache:flush" arguments="config" stepKey="flushConfigCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
         <reloadPage stepKey="reloadProductEditPage"/>
         <!-- Check default value -->
         <waitForElementVisible selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="waitAttributesSectionAppears"/>

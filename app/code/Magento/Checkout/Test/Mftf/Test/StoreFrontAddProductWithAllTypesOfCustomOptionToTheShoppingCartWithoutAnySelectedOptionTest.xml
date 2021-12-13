@@ -23,7 +23,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithCustomOptions"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <deleteData  createDataKey="createCategory" stepKey="deleteCategory"/>

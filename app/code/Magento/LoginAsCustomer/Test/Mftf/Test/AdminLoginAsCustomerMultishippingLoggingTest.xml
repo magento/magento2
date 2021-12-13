@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerMultishippingLoggingTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Place order and reorder"/>
+            <title value="Admin User login as Customer and place Order with Multiple Addresses"/>
+            <description value="Verify that Admin user can place Order with Multiple Addresses using 'Login as customer' functionality "/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+            <group value="multishipping"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2-login-as-customer/pull/192"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShipping"/>
+            <actionGroup ref="CliEnableFlatRateShippingMethodActionGroup" stepKey="enableFlatRateShipping"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct2"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed_Two_Addresses" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as Customer from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <!-- Add Products to Cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct1ToCart">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProduct2ToCart">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+
+        <!-- Place Order -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <actionGroup ref="CheckingWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <waitForPageLoad stepKey="waitForShippingInfoPageLoad"/>
+        <actionGroup ref="SelectMultiShippingInfoActionGroup" stepKey="checkoutWithMultipleShipping"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="checkoutWithPaymentMethod"/>
+        <waitForPageLoad stepKey="waitForReviewOrderPageLoad"/>
+        <actionGroup ref="ReviewOrderForMultiShipmentActionGroup" stepKey="reviewOrderForMultiShipment">
+            <argument name="totalNameForFirstOrder" value="Shipping &amp; Handling"/>
+            <argument name="totalPositionForFirstOrder" value="1"/>
+            <argument name="totalNameForSecondOrder" value="Shipping &amp; Handling"/>
+            <argument name="totalPositionForSecondOrder" value="2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPlaceOrderPageLoad"/>
+        <actionGroup ref="StorefrontPlaceOrderForMultipleAddressesActionGroup" stepKey="placeOrder">
+            <argument name="firstOrderPosition" value="1"/>
+            <argument name="secondOrderPosition" value="2"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+
+        <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageFirstOrder">
+            <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageSecondOrder">
+            <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
+        </actionGroup>
+
+        <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageFirstOrder">
+            <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
+            <argument name="adminUserFullName" value="Magento User"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageSecondOrder">
+            <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
+            <argument name="adminUserFullName" value="Magento User"/>
+        </actionGroup>
+    </test>
+</tests>

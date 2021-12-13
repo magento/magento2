@@ -43,7 +43,7 @@
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple3"/>
             </updateData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteProduct1"/>

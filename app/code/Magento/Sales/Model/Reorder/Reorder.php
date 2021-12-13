@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Reorder;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Exception\InputException;
@@ -15,13 +14,15 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
-use Magento\Quote\Model\Quote as Quote;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\GuestCart\GuestCartResolver;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
@@ -63,7 +64,7 @@ class Reorder
     private $reorderHelper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -71,11 +72,6 @@ class Reorder
      * @var CartRepositoryInterface
      */
     private $cartRepository;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
 
     /**
      * @var Data\Error[]
@@ -93,30 +89,43 @@ class Reorder
     private $productCollectionFactory;
 
     /**
+     * @var GuestCartResolver
+     */
+    private $guestCartResolver;
+
+    /**
+     * @var OrderInfoBuyRequestGetter
+     */
+    private $orderInfoBuyRequestGetter;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
+     * @param GuestCartResolver $guestCartResolver
      * @param CartRepositoryInterface $cartRepository
-     * @param ProductRepositoryInterface $productRepository
      * @param ReorderHelper $reorderHelper
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
+     * @param OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
      */
     public function __construct(
         OrderFactory $orderFactory,
         CustomerCartResolver $customerCartProvider,
+        GuestCartResolver $guestCartResolver,
         CartRepositoryInterface $cartRepository,
-        ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,
-        \Psr\Log\LoggerInterface $logger,
-        ProductCollectionFactory $productCollectionFactory
+        LoggerInterface $logger,
+        ProductCollectionFactory $productCollectionFactory,
+        OrderInfoBuyRequestGetter $orderInfoBuyRequestGetter
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
-        $this->productRepository = $productRepository;
         $this->reorderHelper = $reorderHelper;
         $this->logger = $logger;
         $this->customerCartProvider = $customerCartProvider;
+        $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->orderInfoBuyRequestGetter = $orderInfoBuyRequestGetter;
     }
 
     /**
@@ -141,7 +150,9 @@ class Reorder
         $customerId = (int)$order->getCustomerId();
         $this->errors = [];
 
-        $cart = $this->customerCartProvider->resolve($customerId);
+        $cart = $customerId === 0
+            ? $this->guestCartResolver->resolve()
+            : $this->customerCartProvider->resolve($customerId);
         if (!$this->reorderHelper->isAllowed($order->getStore())) {
             $this->addError((string)__('Reorders are not allowed.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
@@ -241,13 +252,11 @@ class Reorder
      */
     private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): void
     {
-        $info = $orderItem->getProductOptionByCode('info_buyRequest');
-        $info = new \Magento\Framework\DataObject($info);
-        $info->setQty($orderItem->getQtyOrdered());
+        $infoBuyRequest = $this->orderInfoBuyRequestGetter->getInfoBuyRequest($orderItem);
 
         $addProductResult = null;
         try {
-            $addProductResult = $cart->addProduct($product, $info);
+            $addProductResult = $cart->addProduct($product, $infoBuyRequest);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
         } catch (\Throwable $e) {

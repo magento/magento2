@@ -6,15 +6,15 @@
 
 /**
  * @var \Magento\PayPal\Block\Express\Form $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  * @see \Magento\PayPal\Block\Express\Form
  */
 $code = $block->escapeHtml($block->getBillingAgreementCode());
 ?>
-<fieldset class="fieldset paypal items redirect" style="display:none;"
-          id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>">
+<fieldset class="fieldset paypal items redirect" id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>">
     <div><?= $block->escapeHtml($block->getRedirectMessage()) ?></div>
     <?php  ?>
-    <?php if ($code) : ?>
+    <?php if ($code): ?>
         <input type="checkbox" id="<?= /* @noEscape */ $code ?>" value="1" class="checkbox"
                name="payment[<?= /* @noEscape */ $code ?>]">
         <label for="<?= /* @noEscape */ $code ?>" class="label">
@@ -24,3 +24,7 @@ $code = $block->escapeHtml($block->getBillingAgreementCode());
         </label>
     <?php endif; ?>
 </fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'display:none',
+    'fieldset#payment_form_' . $block->escapeHtml($block->getMethodCode())
+) ?>

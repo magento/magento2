@@ -47,9 +47,7 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
@@ -108,8 +106,8 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->
-        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.sku$$"/>
-        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.sku$$"/>
+        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.name$$"/>
+        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.name$$"/>
         <waitForElementVisible stepKey="waitForInfoDropdown2" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad4"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>

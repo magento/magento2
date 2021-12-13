@@ -43,7 +43,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $attributeLoader;
 
     /**
-     * Connection name
+     * The connection name.
      *
      * @var string
      */
@@ -226,11 +226,13 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param Context $context
      * @param array $data
      * @param UniqueValidationInterface|null $uniqueValidator
+     * @param AttributeLoaderInterface|null $attributeLoader
      */
     public function __construct(
         Context $context,
         $data = [],
-        UniqueValidationInterface $uniqueValidator = null
+        UniqueValidationInterface $uniqueValidator = null,
+        AttributeLoaderInterface $attributeLoader = null
     ) {
         $this->_eavConfig = $context->getEavConfig();
         $this->_resource = $context->getResource();
@@ -240,8 +242,10 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         $this->_universalFactory = $context->getUniversalFactory();
         $this->transactionManager = $context->getTransactionManager();
         $this->objectRelationProcessor = $context->getObjectRelationProcessor();
-        $this->uniqueValidator = $uniqueValidator ?:
-            ObjectManager::getInstance()->get(UniqueValidationInterface::class);
+        $this->uniqueValidator = $uniqueValidator
+            ?: ObjectManager::getInstance()->get(UniqueValidationInterface::class);
+        $this->attributeLoader = $attributeLoader
+            ?: ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
         parent::__construct();
         $properties = get_object_vars($this);
         foreach ($data as $key => $value) {
@@ -547,7 +551,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function loadAllAttributes($object = null)
     {
-        return $this->getAttributeLoader()->loadAllAttributes($this, $object);
+        return $this->attributeLoader->loadAllAttributes($this, $object);
     }
 
     /**
@@ -626,6 +630,8 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     public function walkAttributes($partMethod, array $args = [], $collectExceptionMessages = null)
     {
         $methodArr = explode('/', $partMethod);
+        $part = '';
+        $method = '';
         switch (count($methodArr)) {
             case 1:
                 $part = 'attribute';
@@ -642,6 +648,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
         }
         $results = [];
         $suffix = $this->getAttributesCacheSuffix($args[0]);
+        $instance = null;
         foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
@@ -674,7 +681,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
 
             try {
                 // phpcs:disable Magento2.Functions.DiscouragedFunction
-                $results[$attrCode] = call_user_func_array([$instance, $method], $args);
+                $results[$attrCode] = call_user_func_array([$instance, $method], array_values($args));
             } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
                 if ($collectExceptionMessages) {
                     $results[$attrCode] = $e->getMessage();
@@ -1013,7 +1020,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * Loads attributes metadata.
      *
-     * @deprecated 100.2.0 Use self::loadAttributesForObject instead
+     * @deprecated 101.0.0 Use self::loadAttributesForObject instead
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1337,7 +1344,9 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             if ($this->_canUpdateAttribute($attribute, $v, $origData)) {
                 if ($this->_isAttributeValueEmpty($attribute, $v)) {
                     $this->_aggregateDeleteData($delete, $attribute, $newObject);
-                } elseif (!is_numeric($v) && $v !== $origData[$k] || is_numeric($v) && $v != $origData[$k]) {
+                } elseif (!is_numeric($v) && $v !== $origData[$k]
+                    || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k]))
+                ) {
                     $update[$attrId] = [
                         'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
                         'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
@@ -1739,6 +1748,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         try {
             $connection = $this->transactionManager->start($this->getConnection());
+            $id = 0;
             if (is_numeric($object)) {
                 $id = (int) $object;
             } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
@@ -1922,9 +1932,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     protected function getAttributeLoader()
     {
-        if ($this->attributeLoader === null) {
-            $this->attributeLoader= ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
-        }
         return $this->attributeLoader;
     }
 
@@ -1991,7 +1998,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @param array $attributes
      * @param AbstractEntity|null $object
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function loadAttributesForObject($attributes, $object = null)
     {

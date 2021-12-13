@@ -6,8 +6,14 @@
 ?>
 <?php
 /** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$fieldNameSourceFile = \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE;
+$uploaderErrorMessage = $block->escapeHtml(
+    __('Content of uploaded file was changed, please re-upload the file')
+);
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require([
     'jquery',
     'Magento_Ui/js/modal/alert',
@@ -27,27 +33,31 @@ require([
          * List of existing behavior sets
          * @type {Array}
          */
-        uniqueBehaviors: <?= /* @noEscape */ $block->getUniqueBehaviors() ?>,
+        uniqueBehaviors: {$block->getUniqueBehaviors()},
 
         /**
          * Behaviour codes for import entities
          * @type {Array}
          */
-        entityBehaviors: <?= /* @noEscape */ $block->getEntityBehaviors() ?>,
+        entityBehaviors: {$block->getEntityBehaviors()},
 
         /**
          * Behaviour notes for import entities
          * @type {Array}
          */
-        entityBehaviorsNotes: <?= /* @noEscape */ $block->getEntityBehaviorsNotes() ?>,
+        entityBehaviorsNotes: {$block->getEntityBehaviorsNotes()},
 
         /**
          * Base url
          * @type {string}
          */
-        sampleFilesBaseUrl: '<?= $block->escapeJs(
-            $block->escapeUrl($block->getUrl('*/*/download/', ['filename' => 'entity-name']))
-        ) ?>',
+        sampleFilesBaseUrl: '{$block->escapeJs($block->getUrl('*/*/download/', ['filename' => 'entity-name']))}',
+
+        /**
+        * Loaded file last modified
+        * @type {int|null}
+        */
+        loadedFileLastModified: null,
 
         /**
          * Reset selected index
@@ -163,13 +173,52 @@ require([
         },
 
         /**
+         * Refresh loaded file last modified
+         */
+        refreshLoadedFileLastModified: function(e) {
+            if (jQuery(e)[0].files.length > 0) {
+                this.loadedFileLastModified = jQuery(e)[0].files[0].lastModified;
+            } else {
+                this.loadedFileLastModified = null;
+            }
+        },
+
+        /**
          * Post form data to dynamic iframe.
          * @param {string} newActionUrl OPTIONAL Change form action to this if specified
          */
         postToFrame: function(newActionUrl) {
+            var fileUploader = document.getElementById('{$fieldNameSourceFile}');
+
+            if (fileUploader.files.length > 0) {
+                var file = fileUploader.files[0],
+                    ifrElName = this.ifrElemName,
+                    reader = new FileReader();
+
+                reader.readAsText(file, "UTF-8");
+
+                reader.onerror = function () {
+                    jQuery('body').loader('hide');
+                    alert({
+                        content: '{$uploaderErrorMessage}'
+                    });
+                    fileUploader.value = null;
+                    jQuery('iframe#' + ifrElName).remove();
+                    return;
+                }
+
+                if (file.lastModified !== this.loadedFileLastModified) {
+                    alert({
+                        content: '{$uploaderErrorMessage}'
+                    });
+                    fileUploader.value = null;
+                    return;
+                }
+            }
+
             if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
-                jQuery('body').append('<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName
-                    + '" style="display:none;"/>');
+                jQuery('body').append('<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName + '"/>');
+                jQuery('iframe#' + this.ifrElemName).attr('display', 'none');
             }
             jQuery('body')
                 .loader({
@@ -209,17 +258,17 @@ require([
         postToFrameProcessResponse: function(response) {
             if ('object' != typeof(response)) {
                 alert({
-                    content: '<?= $block->escapeHtml(__('Invalid response')); ?>'
+                    content: '{$block->escapeHtml(__('Invalid response'))}'
                 });
 
                 return false;
             }
-            $H(response).each(function(pair) {
+            \$H(response).each(function(pair) {
                 switch (pair.key) {
                     case 'show':
                     case 'clear':
                     case 'hide':
-                        $H(pair.value).each(function(val) {
+                        \$H(pair.value).each(function(val) {
                             if ($(val.value)) {
                                 $(val.value)[pair.key]();
                             }
@@ -227,7 +276,7 @@ require([
                         break;
                     case 'innerHTML':
                     case 'value':
-                        $H(pair.value).each(function(val) {
+                        \$H(pair.value).each(function(val) {
                             var el = $(val.key);
                             if (el) {
                                 el[pair.key] = val.value;
@@ -238,7 +287,7 @@ require([
                         break;
                     case 'removeClassName':
                     case 'addClassName':
-                        $H(pair.value).each(function(val) {
+                        \$H(pair.value).each(function(val) {
                             if ($(val.key)) $(val.key)[pair.key](val.value);
                         });
                         break;
@@ -265,4 +314,6 @@ require([
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

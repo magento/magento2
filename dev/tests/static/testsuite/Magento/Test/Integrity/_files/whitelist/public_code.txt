@@ -1,0 +1,1 @@
+Magento\LoginAsCustomerAssistance\Block\Adminhtml\NotAllowedPopup

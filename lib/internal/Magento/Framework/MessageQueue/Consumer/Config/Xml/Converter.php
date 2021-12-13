@@ -77,7 +77,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'maxIdleTime' => $this->getAttributeValue($consumerNode, 'maxIdleTime'),
                 'sleep' => $this->getAttributeValue($consumerNode, 'sleep'),
                 'onlySpawnWhenMessageAvailable' =>
-                    $onlySpawnWhenMessageAvailable === 'false' ? false : boolval($onlySpawnWhenMessageAvailable)
+                    $onlySpawnWhenMessageAvailable === null ? null : boolval($onlySpawnWhenMessageAvailable)
             ];
         }
         return $result;

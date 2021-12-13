@@ -98,8 +98,7 @@
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
 
-        <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Assert configurable product on product page -->
         <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>

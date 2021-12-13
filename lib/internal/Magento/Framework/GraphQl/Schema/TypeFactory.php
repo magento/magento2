@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Schema\Type\InputObjectType;
 use Magento\Framework\GraphQl\Schema\Type\EnumType;
 use Magento\Framework\GraphQl\Schema\Type\ListOfType;
 use Magento\Framework\GraphQl\Schema\Type\NonNull;
-use Magento\Framework\GraphQl\Schema\TypeInterface;
+use Magento\Framework\GraphQl\Schema\Type\UnionType;
 
 /**
  * Factory for @see TypeInterface implementations
@@ -40,6 +40,17 @@ class TypeFactory
     public function createInterface(array $config) : InterfaceType
     {
         return new InterfaceType($config);
+    }
+
+    /**
+     * Create an union type
+     *
+     * @param array $config
+     * @return UnionType
+     */
+    public function createUnion(array $config) : UnionType
+    {
+        return new UnionType($config);
     }
 
     /**

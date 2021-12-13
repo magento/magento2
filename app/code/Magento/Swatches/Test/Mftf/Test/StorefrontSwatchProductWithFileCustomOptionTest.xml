@@ -44,7 +44,7 @@
         <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addCustomOptionToProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!--Go to storefront-->
         <amOnPage url="" stepKey="goToHomePage"/>
