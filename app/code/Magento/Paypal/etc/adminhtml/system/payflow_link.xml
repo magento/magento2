@@ -56,6 +56,15 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
                 </field>
+                <field id="buyer_country" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1">
+                    <label>Buyer Country</label>
+                    <config_path>payment/payflow_link/buyer_country</config_path>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <attribute type="shared">1</attribute>
+                    <depends>
+                        <field id="sandbox_flag">1</field>
+                    </depends>
+                </field>
                 <field id="use_proxy" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1">
                     <label>Use Proxy</label>
                     <config_path>payment/payflow_link/use_proxy</config_path>
@@ -226,7 +235,7 @@
                 </group>
             </group>
             <group id="payflow_link_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
-                <label>Advertise PayPal PayLater</label>
+                <label>Advertise PayPal Pay Later</label>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>

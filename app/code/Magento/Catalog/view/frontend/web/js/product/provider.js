@@ -93,6 +93,11 @@ define([
          * @private
          */
         _resolveDataByIds: function () {
+            if (!window.checkout || !window.checkout.baseUrl) {
+                // We need data that the minicart provdes to determine storeId/websiteId
+                return;
+            }
+
             this.initIdsListener();
             this.idsMerger(
                 this.idsStorage.get(),

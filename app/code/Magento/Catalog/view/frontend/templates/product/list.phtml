@@ -87,8 +87,8 @@ $_helper = $block->getData('outputHelper');
                                               data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
                                               action="<?= $escaper->escapeUrl($postParams['action']) ?>"
                                               method="post">
-                                            <?php $optionsData = $block->getData('viewModel')->getOptionsData($_product); ?>
-                                            <?php foreach ($optionsData as $optionItem): ?>
+                                            <?php $options = $block->getData('viewModel')->getOptionsData($_product); ?>
+                                            <?php foreach ($options as $optionItem): ?>
                                                 <input type="hidden"
                                                        name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
                                                        value="<?= $escaper->escapeHtml($optionItem['value']) ?>">
@@ -119,7 +119,7 @@ $_helper = $block->getData('outputHelper');
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <?= strpos($pos, $viewMode . '-primary') ?
+                                <?= ($pos && strpos($pos, $viewMode . '-primary')) ?
                                     /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                         $position,
                                         'product-item-info_' . $_product->getId() . ' div.actions-primary'
@@ -129,7 +129,7 @@ $_helper = $block->getData('outputHelper');
                                         <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                     <?php endif; ?>
                                 </div>
-                                <?= strpos($pos, $viewMode . '-secondary') ?
+                                <?= ($pos && strpos($pos, $viewMode . '-secondary')) ?
                                     /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                         $position,
                                         'product-item-info_' . $_product->getId() . ' div.actions-secondary'
@@ -150,7 +150,7 @@ $_helper = $block->getData('outputHelper');
                         </div>
                     </div>
                 </div>
-                <?= strpos($pos, $viewMode . '-actions') ?
+                <?= ($pos && strpos($pos, $viewMode . '-actions')) ?
                 /* @noEscape */ $secureRenderer->renderStyleAsTag(
                     $position,
                     'product-item-info_' . $_product->getId() . ' div.product-item-actions'
@@ -160,6 +160,7 @@ $_helper = $block->getData('outputHelper');
         </ol>
     </div>
     <?= $block->getChildBlock('toolbar')->setIsBottom(true)->toHtml() ?>
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
     {
         "[data-role=tocart-form], .form.map.checkout": {

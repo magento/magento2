@@ -2,14 +2,14 @@
 # See COPYING.txt for license details.
 
 type Mutation {
-    subscribeEmailToNewsletter(email: String!): SubscribeEmailToNewsletterOutput @doc(description:"Subscribes the specified email to a newsletter") @resolver(class: "Magento\\NewsletterGraphQl\\Model\\Resolver\\SubscribeEmailToNewsletter")
+    subscribeEmailToNewsletter(email: String! @doc(description: "The email address that will receive the store's newsletter.")): SubscribeEmailToNewsletterOutput @doc(description:"Subscribe the specified email to the store's newsletter.") @resolver(class: "Magento\\NewsletterGraphQl\\Model\\Resolver\\SubscribeEmailToNewsletter")
 }
 
-type SubscribeEmailToNewsletterOutput {
-    status: SubscriptionStatusesEnum @doc(description: "Returns the status of the subscription request")
+type SubscribeEmailToNewsletterOutput @doc(description: "Contains the result of the `subscribeEmailToNewsletter` operation.") {
+    status: SubscriptionStatusesEnum @doc(description: "The status of the subscription request.")
 }
 
-enum SubscriptionStatusesEnum {
+enum SubscriptionStatusesEnum @doc(description: "Indicates the status of the request.") {
     NOT_ACTIVE
     SUBSCRIBED
     UNSUBSCRIBED
