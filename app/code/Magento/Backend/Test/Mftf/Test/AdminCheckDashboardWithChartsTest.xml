@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-98934"/>
             <useCaseId value="MAGETWO-98584"/>
             <group value="backend"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>

@@ -239,8 +239,9 @@ class Timezone implements TimezoneInterface
     {
         $formatTime = $showTime ? $format : \IntlDateFormatter::NONE;
 
-        if (!($date instanceof \DateTimeInterface)) {
-            $date = new \DateTime($date);
+        if (!$date instanceof \DateTimeInterface) {
+            /** @phpstan-ignore-next-line */
+            $date = new \DateTime($date ?? 'now');
         }
 
         return $this->formatDateTime($date, $format, $formatTime);
