@@ -482,11 +482,12 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         );
 
         $shippingWeight = $request->getPackageWeight();
+        $destStreet = $request->getDestStreet() !== null ? str_replace("\n", '', $request->getDestStreet()) : '';
 
         $requestObject->setValue(sprintf('%.2f', $request->getPackageValue()))
             ->setValueWithDiscount($request->getPackageValueWithDiscount())
             ->setCustomsValue($request->getPackageCustomsValue())
-            ->setDestStreet($this->string->substr(str_replace("\n", '', $request->getDestStreet()), 0, 35))
+            ->setDestStreet($this->string->substr($destStreet, 0, 35))
             ->setDestStreetLine2($request->getDestStreetLine2())
             ->setDestCity($request->getDestCity())
             ->setOrigCompanyName($request->getOrigCompanyName())
@@ -939,7 +940,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             );
         }
 
-        return round($dimension, 3);
+        return round((float) $dimension, 3);
     }
 
     /**
