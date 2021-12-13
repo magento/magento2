@@ -235,7 +235,7 @@ class Bundle extends AbstractView
      *
      * @return array
      */
-    private function getSelectionItemData(Product $product, Product $selection)
+    public function getSelectionItemData(Product $product, Product $selection)
     {
         $qty = ($selection->getSelectionQty() * 1) ?: '1';
 
@@ -345,7 +345,7 @@ class Bundle extends AbstractView
      * @param int $position
      * @return array
      */
-    private function getOptionItemData(Option $option, Product $product, $position)
+    public function getOptionItemData(Option $option, Product $product, $position)
     {
         return [
             'selections' => $this->getSelections($option, $product),
