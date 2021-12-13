@@ -140,7 +140,6 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             $file = substr($file, 0, strlen($file) - 4);
         }
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-
         $destFile = dirname($file) . '/'
             . Uploader::getNewFileName($this->getFilePath($basePath, $file));
 

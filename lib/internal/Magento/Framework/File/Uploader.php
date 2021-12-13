@@ -145,29 +145,31 @@ class Uploader
      */
     private $filesystem;
 
-    /**
+    /**#@+
      * File upload type (multiple or single)
      */
-    public const SINGLE_STYLE = 0;
+    const SINGLE_STYLE = 0;
 
-    public const MULTIPLE_STYLE = 1;
+    const MULTIPLE_STYLE = 1;
+
+    /**#@-*/
 
     /**
      * Temp file name empty code
      */
-    public const TMP_NAME_EMPTY = 666;
+    const TMP_NAME_EMPTY = 666;
 
     /**
      * Maximum Image Width resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxWidth()
      */
-    public const MAX_IMAGE_WIDTH = 1920;
+    const MAX_IMAGE_WIDTH = 1920;
 
     /**
      * Maximum Image Height resolution in pixels. For image resizing on client side
      * @deprecated @see \Magento\Framework\Image\Adapter\UploadConfigInterface::getMaxHeight()
      */
-    public const MAX_IMAGE_HEIGHT = 1200;
+    const MAX_IMAGE_HEIGHT = 1200;
 
     /**
      * Resulting of uploaded file
@@ -206,7 +208,6 @@ class Uploader
      * @param DriverPool|null $driverPool
      * @param TargetDirectory|null $targetDirectory
      * @param Filesystem|null $filesystem
-     * @param LoggerInterface|null $logger
      * @throws \DomainException
      */
     public function __construct(
@@ -215,14 +216,12 @@ class Uploader
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
         TargetDirectory $targetDirectory = null,
-        Filesystem $filesystem = null,
-        LoggerInterface $logger = null
+        Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
 
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
-        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -251,7 +250,7 @@ class Uploader
      *
      * @param string $destinationFolder
      * @param string $newFileName
-     * @return array|false
+     * @return array
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -323,7 +322,7 @@ class Uploader
         }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
-        } elseif (!$this->targetDirectory
+        } elseif (!$this->getTargetDirectory()
             ->getDirectoryWrite(DirectoryList::ROOT)
             ->isWritable($destinationFolder)
         ) {
@@ -356,12 +355,12 @@ class Uploader
         $rootCode = DirectoryList::PUB;
 
         try {
-            if (strpos($destPath, $this->directoryList->getPath($rootCode)) !== 0) {
+            if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
                 $rootCode = DirectoryList::ROOT;
             }
 
-            $destPath = str_replace($this->directoryList->getPath($rootCode), '', $destPath);
-            $directory = $this->targetDirectory->getDirectoryWrite($rootCode);
+            $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+            $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
 
             return $this->getFileDriver()->rename(
                 $tmpPath,
@@ -369,9 +368,51 @@ class Uploader
                 $directory->getDriver()
             );
         } catch (FileSystemException $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->getLogger()->critical($exception->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Get logger instance.
+     *
+     * @deprecated
+     * @return LoggerInterface
+     */
+    private function getLogger(): LoggerInterface
+    {
+        if (!$this->logger) {
+            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+        }
+        return $this->logger;
+    }
+
+    /**
+     * Retrieves target directory.
+     *
+     * @return TargetDirectory
+     */
+    private function getTargetDirectory(): TargetDirectory
+    {
+        if (!isset($this->targetDirectory)) {
+            $this->targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        }
+
+        return $this->targetDirectory;
+    }
+
+    /**
+     * Retrieves directory list.
+     *
+     * @return DirectoryList
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        if (!isset($this->directoryList)) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 
     /**
@@ -732,7 +773,7 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        $rootDirectory = $this->targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
+        $rootDirectory = $this->getTargetDirectory()->getDirectoryWrite(DirectoryList::ROOT);
 
         if (!$rootDirectory->isDirectory($destinationFolder)) {
             $result = $rootDirectory->getDriver()->createDirectory($destinationFolder);
@@ -753,11 +794,9 @@ class Uploader
     public static function getNewFileName($destinationFile)
     {
         /** @var Filesystem $fileSystem */
-        // phpcs:ignore Magento2.PHP.AutogeneratedClassNotInConstructor
         $fileSystem = ObjectManager::getInstance()->get(Filesystem::class);
         $local = $fileSystem->getDirectoryRead(DirectoryList::ROOT);
         /** @var TargetDirectory $targetDirectory */
-        // phpcs:ignore Magento2.PHP.AutogeneratedClassNotInConstructor
         $targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
         $remote = $targetDirectory->getDirectoryRead(DirectoryList::ROOT);
 
