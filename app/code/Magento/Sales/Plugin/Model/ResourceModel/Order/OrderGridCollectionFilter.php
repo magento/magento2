@@ -18,6 +18,8 @@ class OrderGridCollectionFilter
     private TimezoneInterface $timeZone;
 
     /**
+     * Timezone converter interface
+     *
      * @param TimezoneInterface $timeZone
      */
     public function __construct(
@@ -26,19 +28,9 @@ class OrderGridCollectionFilter
         $this->timeZone = $timeZone;
     }
 
-    private function _initSelect(SearchResult $subject)
-    {
-        $tableDescription = $subject->getConnection()->describeTable($subject->getMainTable());
-        if ($tableDescription) {
-            foreach ($tableDescription as $columnInfo) {
-                $subject->addFilterToMap($columnInfo['COLUMN_NAME'], 'main_table.' . $columnInfo['COLUMN_NAME']);
-            }
-        }
-
-        return $subject;
-    }
-
     /**
+     * Conditional column filters with timezone convertor interface
+     *
      * @param  SearchResult $subject
      * @param  \Closure     $proceed
      * @param  string       $field
@@ -52,12 +44,6 @@ class OrderGridCollectionFilter
         $field,
         $condition = null
     ) {
-        $this->_initSelect($subject);
-        $fieldMap  = $this->getFilterFieldsMap();
-        $fieldName = $fieldMap['fields'][$field] ?? null;
-        if (!$fieldName) {
-            return $proceed($field, $condition);
-        }
 
         if ($field === 'created_at' || $field === 'order_created_at') {
             if (is_array($condition)) {
@@ -67,23 +53,10 @@ class OrderGridCollectionFilter
             }
         }
 
-        $fieldName = $subject->getConnection()->quoteIdentifier($fieldName);
+        $fieldName = $subject->getConnection()->quoteIdentifier($field);
         $condition = $subject->getConnection()->prepareSqlCondition($fieldName, $condition);
         $subject->getSelect()->where($condition, null, Select::TYPE_CONDITION);
 
         return $subject;
-    }
-
-    /**
-     * @return \string[][]
-     */
-    private function getFilterFieldsMap(): array
-    {
-        return [
-            'fields' => [
-                'created_at'       => 'main_table.created_at',
-                'order_created_at' => 'main_table.order_created_at',
-            ],
-        ];
     }
 }
