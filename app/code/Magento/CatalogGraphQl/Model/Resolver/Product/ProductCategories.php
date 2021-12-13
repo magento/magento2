@@ -71,7 +71,13 @@ class ProductCategories
                 'store.group_id = store_group.group_id AND cat_index.category_id != store_group.root_category_id',
                 []
             )
-            ->where('product_id = ?', $productId);
+            ->joinLeft(
+                ['st' => $storeGroupTable],
+                'cat_index.category_id = st.root_category_id',
+                []
+            )
+            ->where('product_id = ?', $productId)
+            ->where('st.root_category_id IS NULL');
 
         $categoryIds = $connection->fetchCol($select);
 
