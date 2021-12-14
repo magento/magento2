@@ -13,7 +13,6 @@
         </annotations>
         <arguments>
             <argument name="file" type="string" defaultValue="{{TestImageNew.file}}"/>
-            <argument name="fileName" type="string" defaultValue="{{TestImageNew.filename}}"/>
         </arguments>
 
         <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>

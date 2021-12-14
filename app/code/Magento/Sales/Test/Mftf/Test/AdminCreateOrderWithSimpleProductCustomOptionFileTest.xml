@@ -52,7 +52,6 @@
         <!--Verify, admin able to change file for custom option.-->
         <actionGroup ref="AdminChangeCustomerOptionFileActionGroup" stepKey="changeFile">
             <argument name="file" value="{{TestImageAdobe.file}}"/>
-            <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
     </test>
 </tests>
