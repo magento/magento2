@@ -14,12 +14,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -46,8 +44,6 @@ $optionsFactory = $objectManager->get(Factory::class);
 $extensionAttributesFactory = $objectManager->get(ProductExtensionFactory::class);
 /** @var Config $configResource */
 $configResource = $objectManager->get(Config::class);
-/** @var SwitchPriceAttributeScopeOnConfigChange $observer */
-$observer = $objectManager->get(Observer::class);
 /** @var DefaultCategory $categoryHelper */
 $categoryHelper = $objectManager->get(DefaultCategory::class);
 
@@ -109,7 +105,6 @@ $productRepository->save($product);
 
 $configResource->saveConfig(Data::XML_PATH_PRICE_SCOPE, Store::PRICE_SCOPE_WEBSITE, 'default', 0);
 $objectManager->get(ReinitableConfigInterface::class)->reinit();
-$objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($observer);
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $objectManager->get(StoreManagerInterface::class);
 $secondStoreId = $storeManager->getStore('fixture_second_store')->getId();
