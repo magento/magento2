@@ -55,7 +55,7 @@ class RouterList implements RouterListInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return RouterInterface
      */
@@ -75,7 +75,7 @@ class RouterList implements RouterListInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return string|int|null
      */
