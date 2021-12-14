@@ -43,6 +43,10 @@
         <web>
             <seo>
                 <use_rewrites>0</use_rewrites>
+                <secure>
+                    <use_in_frontend>1</use_in_frontend>
+                    <use_in_adminhtml>1</use_in_adminhtml>
+                </secure>
             </seo>
         </web>
     </default>
