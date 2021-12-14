@@ -32,4 +32,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\LocalizedFileName">
+        <arguments>
+            <argument name="dateFormats" xsi:type="array">
+                <item name="Ymd_His" xsi:type="string">Ymd_His</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

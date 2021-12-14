@@ -57,6 +57,11 @@ class Config implements ActionInterface
     protected $handlerPool;
 
     /**
+     * @var array
+     */
+    private $data = [];
+
+    /**
      * Config constructor
      *
      * @param StructureFactory $structureFactory
@@ -169,7 +174,7 @@ class Config implements ActionInterface
                 $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin'] =
                     $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['origin']
                         ?: $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];
-                if ($fieldsetName != 0) {
+                if ((int) $fieldsetName !== 0) {
                     $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'] =
                         $this->data['fieldsets'][$fieldsetName]['name'] . '_'
                         . $this->data['fieldsets'][$fieldsetName]['fields'][$fieldName]['name'];

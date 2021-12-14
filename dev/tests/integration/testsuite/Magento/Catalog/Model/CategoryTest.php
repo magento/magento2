@@ -273,7 +273,7 @@ class CategoryTest extends TestCase
 
     public function testGetAvailableSortBy(): void
     {
-        $this->assertEquals([], $this->_model->getAvailableSortBy());
+        $this->assertEquals(null, $this->_model->getAvailableSortBy());
         $this->_model->setData('available_sort_by', 'test,and,test');
         $this->assertEquals(['test', 'and', 'test'], $this->_model->getAvailableSortBy());
     }

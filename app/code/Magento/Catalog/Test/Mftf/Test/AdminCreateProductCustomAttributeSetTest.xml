@@ -35,7 +35,7 @@
             <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="confirmDelete"/>
             <waitForPageLoad stepKey="wait3"/>
 
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a new attribute set -->

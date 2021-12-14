@@ -16,8 +16,21 @@ use Magento\Store\Model\StoreManager;
 class CacheIdentifierPlugin
 {
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\View\DesignExceptions
+     */
+    private $designExceptions;
+
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var \Magento\PageCache\Model\Config
+     */
+    private $config;
+
+    /**
      * @param \Magento\Framework\View\DesignExceptions $designExceptions
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\PageCache\Model\Config $config
@@ -42,7 +55,7 @@ class CacheIdentifierPlugin
      */
     public function afterGetValue(\Magento\Framework\App\PageCache\Identifier $identifier, $result)
     {
-        if ($this->config->getType() == \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
+        if ($this->config->getType() === \Magento\PageCache\Model\Config::BUILT_IN && $this->config->isEnabled()) {
             $identifierPrefix = '';
 
             $ruleDesignException = $this->designExceptions->getThemeByRequest($this->request);

@@ -58,6 +58,7 @@
 
 
         <!-- Edit Billing Address -->
+        <waitForElementVisible selector="{{CheckoutShippingSection.editAddressButton}}" stepKey="waitForEditBillingAddressButton"/>
         <click selector="{{CheckoutShippingSection.editAddressButton}}" stepKey="clickOnEditButton"/>
         <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="" stepKey="enterEmptyFirstName"/>
         <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="" stepKey="enterEmptyLastName"/>

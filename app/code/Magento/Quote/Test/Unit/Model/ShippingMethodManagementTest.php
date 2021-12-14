@@ -27,6 +27,9 @@ use Magento\Quote\Model\ShippingMethodManagement;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Quote\Api\Data\CartExtensionInterface;
+use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
+use Magento\Quote\Api\Data\ShippingInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -103,6 +106,21 @@ class ShippingMethodManagementTest extends TestCase
      */
     private $quoteAddressResource;
 
+    /**
+     * @var CartExtensionInterface|MockObject
+     */
+    private $extensionAttributesMock;
+
+    /**
+     * @var ShippingInterface|MockObject
+     */
+    private $shippingMock;
+
+    /**
+     * @var ShippingAssignmentBuilder|MockObject
+     */
+    private $shippingAssignmentBuilder;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -135,6 +153,7 @@ class ShippingMethodManagementTest extends TestCase
                 'collectTotals',
                 'save',
                 '__wakeup',
+                'getExtensionAttributes'
             ])
             ->getMock();
 
@@ -190,6 +209,20 @@ class ShippingMethodManagementTest extends TestCase
             'dataProcessor',
             $this->dataProcessor
         );
+
+        $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
+            ->setMethods(['getShippingAssignments'])
+            ->getMockForAbstractClass();
+
+        $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
+
+        $this->shippingAssignmentBuilder = $this->getMockBuilder(ShippingAssignmentBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getShipping',
+                'setShipping'
+            ])
+            ->getMock();
     }
 
     public function testGetMethodWhenShippingAddressIsNotSet()
@@ -424,6 +457,24 @@ class ShippingMethodManagementTest extends TestCase
         $this->shippingAddress->expects($this->once())
             ->method('setShippingMethod')
             ->with($carrierCode . '_' . $methodCode);
+        $this->quote->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->extensionAttributesMock);
+
+        $this->extensionAttributesMock->expects($this->once())->method('getShippingAssignments')
+            ->willReturn([$this->shippingAssignmentBuilder]);
+
+        $this->shippingAssignmentBuilder->expects($this->once())->method('getShipping')
+            ->willReturn($this->shippingMock);
+
+        $this->shippingMock->expects($this->once())
+            ->method('setMethod')
+            ->with($carrierCode . '_' . $methodCode);
+
+        $this->shippingAssignmentBuilder->expects($this->once())
+            ->method('setShipping')
+            ->with($this->shippingMock);
+
         $exception = new \Exception('Custom Error');
         $this->quote->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->quoteRepository->expects($this->once())
@@ -477,6 +528,24 @@ class ShippingMethodManagementTest extends TestCase
             ->method('getCountryId')->willReturn($countryId);
         $this->shippingAddress->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
+        $this->quote->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->extensionAttributesMock);
+
+        $this->extensionAttributesMock->expects($this->once())->method('getShippingAssignments')
+            ->willReturn([$this->shippingAssignmentBuilder]);
+
+        $this->shippingAssignmentBuilder->expects($this->once())->method('getShipping')
+            ->willReturn($this->shippingMock);
+
+        $this->shippingMock->expects($this->once())
+            ->method('setMethod')
+            ->with($carrierCode . '_' . $methodCode);
+
+        $this->shippingAssignmentBuilder->expects($this->once())
+            ->method('setShipping')
+            ->with($this->shippingMock);
+
         $this->quote->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->quoteRepository->expects($this->once())->method('save')->with($this->quote);
 

@@ -16,18 +16,17 @@ use Magento\Store\Model\StoreManagerInterface;
  * Integration test for \Magento\CatalogImportExport\Model\Import\Product class.
  *
  * @magentoAppIsolation enabled
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductMultipleStoresTest extends ProductTestBase
 {
     /**
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testProductWithMultipleStoresInDifferentBunches()
     {
@@ -125,7 +124,6 @@ class ProductMultipleStoresTest extends ProductTestBase
      *
      * @magentoDataFixture Magento/CatalogImportExport/Model/Import/_files/custom_category_store_media_disabled.php
      * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      * @return void
      */
     public function testProductsWithMultipleStoresWhenMediaIsDisabled(): void
@@ -167,8 +165,6 @@ class ProductMultipleStoresTest extends ProductTestBase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
      */
     public function testProductsWithMultipleStores()
     {
@@ -215,8 +211,6 @@ class ProductMultipleStoresTest extends ProductTestBase
      * @magentoConfigFixture current_store catalog/seo/product_use_categories 1
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testGenerateUrlsWithMultipleStores()
     {
