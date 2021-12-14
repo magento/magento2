@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Data;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Config\Model\ResourceModel\Config;
-use Magento\Framework\Event\Observer;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -22,8 +20,6 @@ $registry->register('isSecureArea', true);
 /** @var Config $configResource */
 $configResource = $objectManager->get(Config::class);
 $configResource->deleteConfig(Data::XML_PATH_PRICE_SCOPE, 'default', 0);
-$observer = $objectManager->get(Observer::class);
-$objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($observer);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 try {
