@@ -239,7 +239,6 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param bool $notified
      * @param \DateTimeInterface $created
      * @param string $comment
-     * @param int $type
      * @return array
      */
     protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
@@ -258,11 +257,24 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param int $type
      * @return array
      */
-    private function _prepareHistoryItemWithId(int $id, string $label, bool $notified, \DateTimeInterface $created, string $comment = '', int $type = 0): array
-    {
-        return ['entity_id' => $id, 'title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created, 'type' => $type];
+    private function _prepareHistoryItemWithId(
+        int $id,
+        string $label,
+        bool $notified,
+        \DateTimeInterface $created,
+        string $comment = '',
+        int $type = 0
+    ): array {
+        return [
+            'entity_id' => $id,
+            'title' => $label,
+            'notified' => $notified,
+            'comment' => $comment,
+            'created_at' => $created,
+            'type' => $type
+        ];
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -358,22 +370,22 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param array $a
      * @param array $b
      * @return int
-     */    
+     */
     private function sortHistory(array $a, array $b): int
     {
         $result = $this->sortHistoryByTimestamp($a, $b);
         if (0 !== $result) {
             return $result;
         }
-        
+
         $result = $a['type'] <=> $b['type'];
         if (0 !== $result) {
             return $result;
         }
-        
+
         return $a['entity_id'] <=> $b['entity_id'];
     }
-    
+
     /**
      * Get order admin date
      *
