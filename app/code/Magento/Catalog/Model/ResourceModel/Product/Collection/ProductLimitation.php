@@ -82,7 +82,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * Returns Store ID.
+     * Returns store ID.
      *
      * @return int|null
      * @since 101.0.0
@@ -104,7 +104,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * Returns is category an anchor.
+     * Check if the category is an anchor.
      *
      * @return int|null
      * @since 101.0.0
@@ -159,7 +159,7 @@ class ProductLimitation implements \ArrayAccess
     }
 
     /**
-     * Sets 'Use Price' index flag.
+     * Set 'use price index' offset.
      *
      * @param bool $value
      * @return void

@@ -55,7 +55,9 @@ class RouterList implements RouterListInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
+     *
+     * @return RouterInterface
      */
     #[\ReturnTypeWillChange]
     public function current()
@@ -73,7 +75,9 @@ class RouterList implements RouterListInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritDoc}
+     *
+     * @return string|int|null
      */
     #[\ReturnTypeWillChange]
     public function key()
