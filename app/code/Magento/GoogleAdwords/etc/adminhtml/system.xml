@@ -15,7 +15,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="conversion_id" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Conversion ID (required)</label>
+                    <label>Conversion ID</label>
                     <comment>(ex. AW-XXXXXXXX)</comment>
                     <validate>required-entry</validate>
                     <depends>
