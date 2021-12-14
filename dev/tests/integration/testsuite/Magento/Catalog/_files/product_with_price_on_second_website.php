@@ -11,10 +11,8 @@ use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\Event\Observer;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,9 +26,6 @@ $objectManager = Bootstrap::getObjectManager();
 $configResource = $objectManager->get(Config::class);
 $configResource->saveConfig(Data::XML_PATH_PRICE_SCOPE, Store::PRICE_SCOPE_WEBSITE, 'default', 0);
 $objectManager->get(ReinitableConfigInterface::class)->reinit();
-/** @var SwitchPriceAttributeScopeOnConfigChange $observer */
-$observer = $objectManager->get(Observer::class);
-$objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($observer);
 /** @var ProductInterfaceFactory $productFactory */
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
