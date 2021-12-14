@@ -9,9 +9,9 @@ namespace Magento\GraphQl\Model\Mutation;
 
 class BatchResult
 {
-    const STATUS_SUCCESS = 'SUCCESS';
+    public const STATUS_SUCCESS = 'SUCCESS';
 
-    const STATUS_FAILURE = 'FAILURE';
+    public const STATUS_FAILURE = 'FAILURE';
 
-    const STATUS_MIXED = 'MIXED_RESULTS';
+    public const STATUS_MIXED = 'MIXED_RESULTS';
 }
