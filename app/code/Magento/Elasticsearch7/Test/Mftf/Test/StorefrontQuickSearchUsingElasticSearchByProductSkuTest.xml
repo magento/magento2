@@ -18,6 +18,7 @@
             <testCaseId value="MC-31114"/>
             <useCaseId value="MC-29788"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
