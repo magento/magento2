@@ -97,13 +97,12 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             $result = $uploader->save(
                 $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
+            $this->_eventManager->dispatch(
+                'catalog_product_gallery_upload_image_after',
+                ['result' => $result, 'action' => $this]
+            );
 
             if (is_array($result)) {
-                $this->_eventManager->dispatch(
-                    'catalog_product_gallery_upload_image_after',
-                    ['result' => $result, 'action' => $this]
-                );
-
                 unset($result['tmp_name']);
                 unset($result['path']);
 
