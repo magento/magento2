@@ -293,9 +293,8 @@ define([
          * stops and unloads player
          * @private
          */
-        destroy: function () {
+        _destroy: function () {
             this.stop();
-            this._player.destroy();
         }
     });
 
