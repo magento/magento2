@@ -103,18 +103,18 @@ class GetSelectedShippingMethodTest extends GraphQlAbstract
     }
 
     /**
- * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 1
- * @magentoConfigFixture default_store tax/cart_display/shipping 2
- * @magentoConfigFixture default_store tax/classes/shipping_tax_class 2
- * @magentoConfigFixture default_store tax/display/shipping 2
- * @magentoApiDataFixture Magento/Customer/_files/customer.php
- * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
- * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
- * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
- * @magentoApiDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
- * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
- * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
- */
+     * @magentoConfigFixture default_store tax/calculation/shipping_includes_tax 1
+     * @magentoConfigFixture default_store tax/cart_display/shipping 2
+     * @magentoConfigFixture default_store tax/classes/shipping_tax_class 2
+     * @magentoConfigFixture default_store tax/display/shipping 2
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     */
     public function testGetSelectedShippingMethodWithAddressWithoutTax(): void
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
