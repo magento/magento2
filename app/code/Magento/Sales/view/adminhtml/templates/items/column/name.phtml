@@ -32,7 +32,7 @@ $catalogHelper = $block->getData('catalogHelper');
                 <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
                 <dd>
                     <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
-                        <?= /* @noEscape */ $block->getCustomizedOptionValue($_option) ?>
+                        <?= /* @noEscape */ $block->getCustomizedOptionValue($_option, $_item->getItemId()) ?>
                     <?php else: ?>
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
                         <?php $dots = 'dots' . uniqid(); ?>
