@@ -6,10 +6,8 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Helper\Data;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\Event\Observer;
 use Magento\TestFramework\ConfigurableProduct\Model\DeleteConfigurableProduct;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -22,8 +20,6 @@ $deleteConfigurableProduct->execute('configurable');
 $configResource = $objectManager->get(Config::class);
 $configResource->deleteConfig(Data::XML_PATH_PRICE_SCOPE, 'default', 0);
 $objectManager->get(ReinitableConfigInterface::class)->reinit();
-$observer = $objectManager->get(Observer::class);
-$objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($observer);
 
 Resolver::getInstance()->requireDataFixture(
     'Magento/Store/_files/second_website_with_store_group_and_store_rollback.php'
