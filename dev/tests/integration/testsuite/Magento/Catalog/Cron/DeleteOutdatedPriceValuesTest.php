@@ -7,7 +7,6 @@ namespace Magento\Catalog\Cron;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -67,9 +66,6 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
             'catalog/price/scope',
             \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
         );
-        $observer = $this->objectManager->get(\Magento\Framework\Event\Observer::class);
-        $this->objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)
-            ->execute($observer);
 
         $reflection = new \ReflectionClass(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class);
         $paths = $reflection->getProperty('attributesValues');
@@ -137,8 +133,5 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
             'catalog/price/scope',
             \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL
         );
-        $observer = $this->objectManager->get(\Magento\Framework\Event\Observer::class);
-        $this->objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)
-            ->execute($observer);
     }
 }
