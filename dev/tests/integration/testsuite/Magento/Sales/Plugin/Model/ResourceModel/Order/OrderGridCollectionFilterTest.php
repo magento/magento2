@@ -51,7 +51,7 @@ class OrderGridCollectionFilterTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->timeZone = $this->objectManager->get(TimezoneInterface::class);
         $this->proceed = function () {
-           $this->proceed;
+            $this->proceed;
         };
         $this->plugin = $this->objectManager->create(
             OrderGridCollectionFilter::class,
@@ -82,7 +82,12 @@ class OrderGridCollectionFilterTest extends TestCase
                 'resourceModel' => $resourceModel
             ]
         );
-        $result = $this->plugin->aroundAddFieldToFilter($this->searchResult, $this->proceed, $field, ['qteq' => $filterDate]);
+        $result = $this->plugin->aroundAddFieldToFilter(
+            $this->searchResult,
+            $this->proceed,
+            $field,
+            ['qteq' => $filterDate]
+        );
 
         $expectedSelect = "SELECT `main_table`.* FROM `{$mainTable}` AS `main_table` " .
             "WHERE (((`{$field}` = '{$convertedDate}')))";
@@ -93,21 +98,6 @@ class OrderGridCollectionFilterTest extends TestCase
     /**
      * @return array
      */
-    public function getCollectionFiltersDataProvider2(): array
-    {
-        return [
-            'shipment_grid_collection_for_created_at' => [
-                'mainTable' => 'sales_shipment_grid',
-                'resourceModel' => Shipment::class,
-                'field' => 'created_at',
-            ],
-            'shipment_grid_collection_for_order_created_at' => [
-                'mainTable' => 'sales_shipment_grid',
-                'resourceModel' => Shipment::class,
-                'field' => 'order_created_at',
-            ]
-        ];
-    }
     public function getCollectionFiltersDataProvider(): array
     {
         return [
