@@ -61,7 +61,7 @@ class NameTest extends TestCase
         $this->customerMock->expects($this->once())->method('getLastname')->willReturn($lastName);
 
         $isValid = $this->nameValidator->isValid($this->customerMock);
-        $this->assertTrue($isValid,$message);
+        $this->assertTrue($isValid, $message);
     }
 
     /**
@@ -81,7 +81,7 @@ class NameTest extends TestCase
                 'middleName' => '',
                 'lastNameName' => 'O\'Doe',
                 'message' => 'Legacy straight apostrophe must be allowed in names'
-            ],
+            ]
         ];
     }
 }
