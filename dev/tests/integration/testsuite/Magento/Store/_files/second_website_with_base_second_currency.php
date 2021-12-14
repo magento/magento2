@@ -34,7 +34,3 @@ $configResource->saveConfig(
 /** @var Magento\Config\App\Config\Type\System $config */
 $config = $objectManager->get(\Magento\Config\App\Config\Type\System::class);
 $config->clean();
-
-$observer = $objectManager->get(\Magento\Framework\Event\Observer::class);
-$objectManager->get(\Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange::class)
-    ->execute($observer);
