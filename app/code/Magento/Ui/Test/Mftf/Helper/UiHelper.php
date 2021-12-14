@@ -9,7 +9,6 @@ namespace Magento\Ui\Test\Mftf\Helper;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Magento\FunctionalTestingFramework\Helper\Helper;
-use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 use Facebook\WebDriver\Exception\NoSuchWindowException;
 
 /**
@@ -33,31 +32,16 @@ class UiHelper extends Helper
             $this->fail('Expected URL comparison match type is not valid');
         }
 
-        /** @var MagentoWebDriver $magentoWebDriver */
         $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
 
-        /** @var RemoteWebDriver $webDriver */
         $webDriver = $magentoWebDriver->webDriver;
 
-        // Pressing escape blurs the window and "unfreezes" chromedriver when it switches context back to chrome::/print
+        // Pressing escape blurs the window and "unfreezes" chromedriver when it switches context back to chrome://print
         try {
             $magentoWebDriver->pressKey('body', [\Facebook\WebDriver\WebDriverKeys::ESCAPE]);
         } catch (NoSuchWindowException $e) {
-            // This caught exception cannot be explained: no windows are closed as a result of this action; proceed
+            // This caught exception cannot be explained; no windows are closed as a result of this action; proceed
         }
-
-        $evaluateIsWebDriverOnExpectedUrl = function () use ($webDriver, $expectedUrl, $expectedUrlComparisonType) {
-            if ($expectedUrlComparisonType === self::COMPARISON_PATH_EXACT_MATCH) {
-                $isWebDriverOnExpectedUrl = parse_url($webDriver->getCurrentURL(), PHP_URL_PATH) === $expectedUrl;
-            } else { // COMPARISON_PATH_SUBSET_MATCH
-                $isWebDriverOnExpectedUrl = strpos(
-                    parse_url($webDriver->getCurrentURL(), PHP_URL_PATH),
-                    $expectedUrl
-                ) !== false;
-            }
-
-            return $isWebDriverOnExpectedUrl;
-        };
 
         $targetWindowHandle = null;
         $availableWindowHandles = $webDriver->getWindowHandles();
@@ -71,13 +55,23 @@ class UiHelper extends Helper
                     // the previous escape press is necessary for this press to close the dialog
                     $magentoWebDriver->pressKey('body', [\Facebook\WebDriver\WebDriverKeys::ESCAPE]);
                 } catch (NoSuchWindowException $e) {
-                    // Print dialog closes yet exception is raised when it tries to get session context; proceed
+                    // Print dialog successfully closes when requested in selenium,
+                    // yet missing window message is sent back in the response
+                    // when it evaluates the value on the element after the press; proceed
                 }
+
+                // selenium is now effectively detached from any window; attach to an available window handle in case
+                // "fail" method is called and MFTF "after"/teardown steps need to be executed
+                $webDriver->switchTo()->window($webDriver->getWindowHandles()[0]);
 
                 continue;
             }
 
-            $isWebDriverOnExpectedUrl = $evaluateIsWebDriverOnExpectedUrl();
+            $isWebDriverOnExpectedUrl = $this->evaluateIsWebDriverOnExpectedUrl(
+                $webDriver,
+                $expectedUrl,
+                $expectedUrlComparisonType
+            );
 
             if ($isWebDriverOnExpectedUrl) {
                 $targetWindowHandle = $webDriver->getWindowHandle();
@@ -90,5 +84,33 @@ class UiHelper extends Helper
 
         // switch to target window handle
         $webDriver->switchTo()->window($targetWindowHandle);
+    }
+
+    /**
+     * Is $webDriver currently attached to a window that matches $expectedUrl?
+     *
+     * @param RemoteWebDriver $webDriver
+     * @param string $expectedUrl
+     * @param string $expectedUrlComparisonType
+     * @return bool
+     */
+    private function evaluateIsWebDriverOnExpectedUrl(
+        RemoteWebDriver $webDriver,
+        string $expectedUrl,
+        string $expectedUrlComparisonType
+    ): bool {
+        $currentWebDriverUrlPath = parse_url($webDriver->getCurrentURL(), PHP_URL_PATH);
+
+        switch ($expectedUrlComparisonType) {
+            case self::COMPARISON_PATH_EXACT_MATCH:
+                $isWebDriverOnExpectedUrl = $currentWebDriverUrlPath === $expectedUrl;
+                break;
+            case self::COMPARISON_PATH_SUBSET_MATCH:
+            default:
+                $isWebDriverOnExpectedUrl = strpos($currentWebDriverUrlPath, $expectedUrl) !== false;
+                break;
+        }
+
+        return $isWebDriverOnExpectedUrl;
     }
 }
