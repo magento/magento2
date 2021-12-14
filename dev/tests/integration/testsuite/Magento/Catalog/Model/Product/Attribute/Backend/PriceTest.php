@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
@@ -39,9 +38,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             'catalog/price/scope',
             \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
         );
-        $observer = $this->objectManager->get(\Magento\Framework\Event\Observer::class);
-        $this->objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)
-            ->execute($observer);
 
         $this->model = $this->objectManager->create(
             \Magento\Catalog\Model\Product\Attribute\Backend\Price::class
@@ -304,10 +300,5 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             'catalog/price/scope',
             \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL
         );
-        $observer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Event\Observer::class
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(SwitchPriceAttributeScopeOnConfigChange::class)
-            ->execute($observer);
     }
 }
