@@ -48,7 +48,7 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderIdFromURL"/>
         <comment userInput="BIC workaround" stepKey="waitForPrintWindowToOpen"/>
 
-        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
             <argument name="expectedUrl">sales/order/print/order_id/{$grabOrderIdFromURL}</argument>
             <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
         </helper>
@@ -85,7 +85,7 @@
         </actionGroup>
 
         <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen2" />
-        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered2">
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered2">
             <argument name="expectedUrl">sales/order/print/order_id/</argument>
             <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
         </helper>

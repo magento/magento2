@@ -267,7 +267,7 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
-        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
             <argument name="expectedUrl">sales/guest/print/order_id/</argument>
             <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
         </helper>

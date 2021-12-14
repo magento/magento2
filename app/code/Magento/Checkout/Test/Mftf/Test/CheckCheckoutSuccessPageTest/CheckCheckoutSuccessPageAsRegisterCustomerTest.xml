@@ -137,7 +137,7 @@
 
         <!-- See print page -->
         <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
-        <helper class="Magento\Ui\Test\Mftf\Helper\UiHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
             <argument name="expectedUrl">sales/order/print/order_id/</argument>
             <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
         </helper>

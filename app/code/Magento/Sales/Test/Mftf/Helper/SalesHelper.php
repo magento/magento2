@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Ui\Test\Mftf\Helper;
+namespace Magento\Sales\Test\Mftf\Helper;
 
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Magento\FunctionalTestingFramework\Helper\Helper;
 use Facebook\WebDriver\Exception\NoSuchWindowException;
 
 /**
- * Class for MFTF helpers for Ui module.
+ * Class for MFTF helpers for Sales module.
  */
-class UiHelper extends Helper
+class SalesHelper extends Helper
 {
     private const COMPARISON_PATH_EXACT_MATCH = 'COMPARISON_PATH_EXACT_MATCH';
     private const COMPARISON_PATH_SUBSET_MATCH = 'COMPARISON_PATH_SUBSET_MATCH';
@@ -24,6 +24,14 @@ class UiHelper extends Helper
         self::COMPARISON_PATH_SUBSET_MATCH
     ];
 
+    /**
+     * Iterate through all available window handles and attach webdriver to window matching $expectedUrl.
+     * If print dialog is found, close it to prevent selenium from hanging and becoming unresponsive.
+     *
+     * @param string $expectedUrl
+     * @param string $expectedUrlComparisonType
+     * @throws \Codeception\Exception\ModuleException
+     */
     public function switchToWindowWithUrlAndClosePrintDialogIfEncountered(
         string $expectedUrl,
         string $expectedUrlComparisonType
