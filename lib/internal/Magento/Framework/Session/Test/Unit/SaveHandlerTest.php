@@ -119,31 +119,29 @@ class SaveHandlerTest extends TestCase
         $this->assertTrue($this->saveHandler->write("test_session_id", "testdata"));
     }
 
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function testWriteMoreThanSessionMaxSize(): void
     {
-        $this->sessionMaxSizeConfigMock->expects($this->once())
+        $this->sessionMaxSizeConfigMock
+            ->expects($this->once())
             ->method('getSessionMaxSize')
             ->willReturn(1);
 
-        $this->saveHandlerAdapterMock->expects($this->never())
+        $this->saveHandlerAdapterMock
+            ->expects($this->never())
             ->method('read');
 
         $this->assertTrue($this->saveHandler->write("test_session_id", "testdata"));
     }
-
-    /**
-     * @return void
-     */
+    
     public function testReadMoreThanSessionMaxSize(): void
     {
-        $this->sessionMaxSizeConfigMock->expects($this->once())
+        $this->sessionMaxSizeConfigMock
+            ->expects($this->once())
             ->method('getSessionMaxSize')
             ->willReturn(1);
 
-        $this->saveHandlerAdapterMock->expects($this->once())
+        $this->saveHandlerAdapterMock
+            ->expects($this->once())
             ->method('read')
             ->with('test_session_id')
             ->willReturn('test_session_data');
