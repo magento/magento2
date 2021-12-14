@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace Magento\CatalogImportExport\Model\Export;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 
 /**
@@ -582,8 +581,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
         $reinitiableConfig = $this->objectManager->get(ReinitableConfigInterface::class);
-        $observer = $this->objectManager->get(\Magento\Framework\Event\Observer::class);
-        $switchPriceScope = $this->objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class);
         /** @var \Magento\Catalog\Model\Product\Action $productAction */
         $productAction = $this->objectManager->create(\Magento\Catalog\Model\Product\Action::class);
         /** @var \Magento\Framework\File\Csv $csv */
@@ -600,7 +597,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
 
         $reinitiableConfig->setValue('catalog/price/scope', \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE);
-        $switchPriceScope->execute($observer);
 
         $product = $this->productRepository->get('simple');
         $productId = $product->getId();
@@ -625,7 +621,6 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         self::assertSame($expectedData, $pricesData);
 
         $reinitiableConfig->setValue('catalog/price/scope', \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL);
-        $switchPriceScope->execute($observer);
     }
 
     /**
