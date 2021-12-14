@@ -22,6 +22,8 @@
 
         <before>
             <!--Create product-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRateShipping"/>
+            <magentoCLI command="config:set carriers/flatrate/price 5.00" stepKey="setFlatRateShippingPrice"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProductApi"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
@@ -54,7 +56,9 @@
         </after>
 
         <!--Open order by Id-->
-        <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="entityId" value="$createGuestCart.return$"/>
+        </actionGroup>
         <!--Reorder-->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <!--Verify order item row-->
