@@ -97,6 +97,7 @@ class SaveHandler implements SaveHandlerInterface
      * @param string $name
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $name)
     {
         return $this->callSafely('open', $savePath, $name);
@@ -107,6 +108,7 @@ class SaveHandler implements SaveHandlerInterface
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close()
     {
         return $this->callSafely('close');
@@ -170,6 +172,7 @@ class SaveHandler implements SaveHandlerInterface
      * @param string $sessionId
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($sessionId)
     {
         return $this->callSafely('destroy', $sessionId);
@@ -182,6 +185,7 @@ class SaveHandler implements SaveHandlerInterface
      * @return bool
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxLifetime)
     {
         return $this->callSafely('gc', $maxLifetime);
