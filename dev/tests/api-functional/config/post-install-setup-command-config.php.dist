@@ -16,4 +16,12 @@ return [
         ]
     ]
     */
+    [
+        'command' => 'config:set',
+        'config' => ['web/secure/use_in_adminhtml' => 0]
+    ],
+    [
+        'command' => 'config:set',
+        'config' => ['web/secure/use_in_frontend' => 0]
+    ],
 ];
