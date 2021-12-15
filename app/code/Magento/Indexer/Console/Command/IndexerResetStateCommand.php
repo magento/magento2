@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class IndexerResetStateCommand extends AbstractIndexerManageCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -29,7 +29,7 @@ class IndexerResetStateCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

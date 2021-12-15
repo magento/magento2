@@ -34,7 +34,7 @@ class QueryLogDisableCommand extends Command
     /**
      * QueryLogDisableCommand constructor.
      * @param Writer $deployConfigWriter
-     * @param null $name
+     * @param string|null $name
      */
     public function __construct(
         Writer $deployConfigWriter,
@@ -45,7 +45,7 @@ class QueryLogDisableCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -56,7 +56,7 @@ class QueryLogDisableCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)

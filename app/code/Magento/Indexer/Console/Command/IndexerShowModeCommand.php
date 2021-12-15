@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class IndexerShowModeCommand extends AbstractIndexerManageCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -27,7 +27,7 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -164,6 +164,7 @@ class SourceThemeDeployCommand extends Command
         $output->writeln($message);
 
         foreach ($files as $file) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileInfo = pathinfo($file);
             $asset = $this->assetRepository->createAsset(
                 $fileInfo['dirname'] . DIRECTORY_SEPARATOR . $fileInfo['basename'] . '.' . $type,
