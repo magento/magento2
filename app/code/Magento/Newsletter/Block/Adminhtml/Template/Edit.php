@@ -216,7 +216,7 @@ class Edit extends Widget
      */
     public function getJsTemplateName()
     {
-        return addcslashes($this->getModel()->getTemplateCode(), "\"\r\n\\");
+        return addcslashes($this->getModel()->getTemplateCode() ?? '', "\"\r\n\\");
     }
 
     /**
