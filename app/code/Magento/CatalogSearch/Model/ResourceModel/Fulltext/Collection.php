@@ -177,8 +177,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
         DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
-        $this->searchResultFactory = $searchResultFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
+        $this->searchResultFactory = $searchResultFactory
+            ?? ObjectManager::getInstance()->get(SearchResultFactory::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -377,7 +377,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(false, true, $query);
+            $this->printLogQuery(false, true, $query ?? 'n/a');
             throw $e;
         }
 
@@ -455,7 +455,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         if ($this->searchRequestName !== 'quick_search_container'
-            || strlen(trim($this->queryText))
+            || ($this->queryText && strlen(trim($this->queryText)))
         ) {
             $this->prepareSearchTermFilter();
             $this->preparePriceAggregation();
