@@ -120,16 +120,16 @@ class GridTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTemplate(): void
     {
         $this->assertEquals('cart/form1.phtml', $this->block->getTemplate());
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetItemsForGrid(): void
     {
         $this->getMockItemsForGrid();
@@ -176,8 +176,8 @@ class GridTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetItems(): void
     {
         $this->getMockItemsForGrid();
@@ -187,8 +187,8 @@ class GridTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     private function getMockItemsForGrid(): void
     {
         $this->itemCollectionFactoryMock
@@ -236,8 +236,8 @@ class GridTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetItemsWhenPagerNotVisible(): void
     {
         $this->assertEquals([], $this->block->getItems());
