@@ -60,7 +60,7 @@ define([
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
                     addControlButton: function (button) {
-                        var controlButtonArea = $(this.node).on('select','.actions')[0];
+                        var controlButtonArea = $(this.node).select('.actions')[0];
                         if (typeof controlButtonArea != 'undefined') {
                             var buttons = controlButtonArea.childElements();
                             for (var i = 0; i < buttons.length; i++) {
@@ -225,11 +225,11 @@ define([
          * @param {String} container
          */
         bindAddressFields: function (container) {
-            var fields = $(container).on('select', 'input', 'select', 'textarea'),
+            var fields = $(container).select('input', 'select', 'textarea'),
                 i;
 
             for (i = 0; i < fields.length; i++) {
-                jQuery(fields[i]).on('change', this.changeAddressField.bind(this));
+                jQuery(fields[i]).change(this.changeAddressField.bind(this));
             }
         },
 
@@ -321,7 +321,7 @@ define([
                 syncName = fieldName.replace('billing', 'shipping');
             }
 
-            $(container).on('select', '[name="' + syncName + '"]').each(function (element) {
+            $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
                     if (element.type === "checkbox") {
                         element.checked = fieldValue.checked;
@@ -336,7 +336,7 @@ define([
             var regionIdElem = false;
             var regionIdElemValue = false;
 
-            var fields = $(container).on('select', 'input', 'select', 'textarea');
+            var fields = $(container).select('input', 'select', 'textarea');
             var re = /[^\[]*\[[^\]]*\]\[([^\]]*)\](\[(\d)\])?/;
             for (var i = 0; i < fields.length; i++) {
                 // skip input type file @Security error code: 1000
@@ -391,7 +391,7 @@ define([
                 $('order-shipping_address_customer_address_id').disabled = flag;
             }
             if ($(this.shippingAddressContainer)) {
-                var dataFields = $(this.shippingAddressContainer).on('select', 'input', 'select', 'textarea');
+                var dataFields = $(this.shippingAddressContainer).select('input', 'select', 'textarea');
                 for (var i = 0; i < dataFields.length; i++) {
                     dataFields[i].disabled = flag;
 
@@ -399,7 +399,7 @@ define([
                         dataFields[i].setValue('');
                     }
                 }
-                var buttons = $(this.shippingAddressContainer).on('select', 'button');
+                var buttons = $(this.shippingAddressContainer).select('button');
                 // Add corresponding class to buttons while disabling them
                 for (i = 0; i < buttons.length; i++) {
                     buttons[i].disabled = flag;
@@ -521,7 +521,7 @@ define([
             }
 
             if (!this.paymentMethod || method) {
-                $('order-billing_method_form').on('select', 'input', 'select', 'textarea').each(function (elem) {
+                $('order-billing_method_form').select('input', 'select', 'textarea').each(function (elem) {
                     if (elem.type != 'radio') elem.disabled = true;
                 })
             }
@@ -572,7 +572,7 @@ define([
                 return false;
             }
             var data = {};
-            var fields = $('payment_form_' + currentMethod).on('select', 'input', 'select');
+            var fields = $('payment_form_' + currentMethod).select('input', 'select');
             for (var i = 0; i < fields.length; i++) {
                 data[fields[i].name] = fields[i].getValue();
             }
@@ -617,8 +617,8 @@ define([
         },
 
         productGridRowInit: function (grid, row) {
-            var checkbox = $(row).on('select', '.checkbox')[0];
-            var inputs = $(row).on('select', '.input-text');
+            var checkbox = $(row).select('.checkbox')[0];
+            var inputs = $(row).select('.input-text');
             if (checkbox && inputs.length > 0) {
                 checkbox.inputElements = inputs;
                 for (var i = 0; i < inputs.length; i++) {
@@ -913,7 +913,7 @@ define([
             if ($(this.getAreaId('sidebar'))) {
                 var data = {};
                 if (this.collectElementsValue) {
-                    var elems = $(this.getAreaId('sidebar')).on('select', 'input');
+                    var elems = $(this.getAreaId('sidebar')).select('input');
                     for (var i = 0; i < elems.length; i++) {
                         if (elems[i].getValue()) {
                             data[elems[i].name] = elems[i].getValue();
@@ -1005,7 +1005,7 @@ define([
             var area = ['sidebar', 'items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
             // prepare additional fields
             var fieldsPrepare = {update_items: 1};
-            var info = $('order-items_grid').on('select', 'input', 'select', 'textarea');
+            var info = $('order-items_grid').select('input', 'select', 'textarea');
             for (var i = 0; i < info.length; i++) {
                 if (!info[i].disabled && (info[i].type != 'checkbox' || info[i].checked)) {
                     fieldsPrepare[info[i].name] = info[i].getValue();
@@ -1017,7 +1017,7 @@ define([
         },
 
         itemsOnchangeBind: function () {
-            var elems = $('order-items_grid').on('select', 'input', 'select', 'textarea');
+            var elems = $('order-items_grid').select('input', 'select', 'textarea');
             for (var i = 0; i < elems.length; i++) {
                 if (!elems[i].bindOnchange) {
                     elems[i].bindOnchange = true;
@@ -1079,7 +1079,7 @@ define([
          */
         showQuoteItemConfiguration: function (itemId) {
             var listType = 'quote_items';
-            var qtyElement = $('order-items_grid').on('select', 'input[name="item\[' + itemId + '\]\[qty\]"]')[0];
+            var qtyElement = $('order-items_grid').select('input[name="item\[' + itemId + '\]\[qty\]"]')[0];
             productConfigure.setConfirmCallback(listType, function () {
                 // sync qty of popup and qty of grid
                 var confirmedCurrentQty = productConfigure.getCurrentConfirmedQtyElement();
@@ -1102,7 +1102,7 @@ define([
 
         accountFieldsBind: function (container) {
             if ($(container)) {
-                var fields = $(container).on('select', 'input', 'select', 'textarea');
+                var fields = $(container).select('input', 'select', 'textarea');
                 for (var i = 0; i < fields.length; i++) {
                     if (fields[i].id == 'group_id') {
                         fields[i].observe('change', this.accountGroupChange.bind(this))
@@ -1123,7 +1123,7 @@ define([
 
         commentFieldsBind: function (container) {
             if ($(container)) {
-                var fields = $(container).on('select', 'input', 'textarea');
+                var fields = $(container).select('input', 'textarea');
                 for (var i = 0; i < fields.length; i++)
                     fields[i].observe('change', this.commentFieldChange.bind(this))
             }
@@ -1135,7 +1135,7 @@ define([
 
         giftmessageFieldsBind: function (container) {
             if ($(container)) {
-                var fields = $(container).on('select', 'input', 'textarea');
+                var fields = $(container).select('input', 'textarea');
                 for (var i = 0; i < fields.length; i++)
                     fields[i].observe('change', this.giftmessageFieldChange.bind(this))
             }
@@ -1148,7 +1148,7 @@ define([
         giftmessageOnItemChange: function (event) {
             var element = Event.element(event);
             if (element.name.indexOf("giftmessage") != -1 && element.type == "checkbox" && !element.checked) {
-                var messages = $("order-giftmessage").on('select', 'textarea');
+                var messages = $("order-giftmessage").select('textarea');
                 var name;
                 for (var i = 0; i < messages.length; i++) {
                     name = messages[i].id.split("_");
@@ -1319,7 +1319,7 @@ define([
          * @return {Object}
          */
         serializeData: function (container) {
-            var fields = $(container).on('select', 'input', 'select', 'textarea'),
+            var fields = $(container).select('input', 'select', 'textarea'),
                 data = Form.serializeElements(fields, true);
 
             return $H(data);

@@ -150,7 +150,7 @@ define([
 
                             /* eslint-disable max-depth */
                             if (msg) {
-                                if (Array.isArray('array')) {
+                                if (Array.isArray(msg)) {
                                     msg = msg.join('\n');
                                 }
                             }
