@@ -6,6 +6,7 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -36,5 +37,6 @@ class CacheStatusCommand extends AbstractCacheCommand
         foreach ($this->cacheManager->getStatus() as $cache => $status) {
             $output->writeln(sprintf('%30s: %d', $cache, $status));
         }
+        return Cli::RETURN_SUCCESS;
     }
 }

@@ -6,6 +6,7 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,7 +19,7 @@ use Magento\Framework\App\Cache\Manager;
 abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
 {
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var EventManagerInterface
      */
     protected $eventManager;
 
@@ -54,13 +55,14 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $types = $this->getRequestedTypes($input);
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
-        $output->writeln(join(PHP_EOL, $types));
+        $output->writeln(implode(PHP_EOL, $types));
+        return Cli::RETURN_SUCCESS;
     }
 }

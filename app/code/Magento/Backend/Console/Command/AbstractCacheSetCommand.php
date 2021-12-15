@@ -6,6 +6,7 @@
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -41,7 +42,8 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
         if (!empty($changedTypes) && $isEnable) {
             $this->cacheManager->clean($changedTypes);
             $output->writeln('Cleaned cache types:');
-            $output->writeln(join(PHP_EOL, $changedTypes));
+            $output->writeln(implode(PHP_EOL, $changedTypes));
         }
+        return Cli::RETURN_SUCCESS;
     }
 }

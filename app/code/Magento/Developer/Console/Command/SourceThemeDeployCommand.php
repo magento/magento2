@@ -5,6 +5,7 @@
  */
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Validator\Locale;
 use Magento\Framework\View\Asset\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -24,27 +25,27 @@ class SourceThemeDeployCommand extends Command
     /**
      * Locale option key
      */
-    const LOCALE_OPTION = 'locale';
+    public const LOCALE_OPTION = 'locale';
 
     /**
      * Area option key
      */
-    const AREA_OPTION = 'area';
+    public const AREA_OPTION = 'area';
 
     /**
      * Theme option key
      */
-    const THEME_OPTION = 'theme';
+    public const THEME_OPTION = 'theme';
 
     /**
      * Type argument key
      */
-    const TYPE_ARGUMENT = 'type';
+    public const TYPE_ARGUMENT = 'type';
 
     /**
      * Files argument key
      */
-    const FILE_ARGUMENT = 'file';
+    public const FILE_ARGUMENT = 'file';
 
     /**
      * @var Locale
@@ -185,5 +186,6 @@ class SourceThemeDeployCommand extends Command
         }
 
         $output->writeln('<info>Successfully processed.</info>');
+        return Cli::RETURN_SUCCESS;
     }
 }

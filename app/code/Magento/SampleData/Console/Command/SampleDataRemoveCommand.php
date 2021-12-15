@@ -6,6 +6,7 @@
 
 namespace Magento\SampleData\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +24,7 @@ use Composer\Console\ApplicationFactory;
  */
 class SampleDataRemoveCommand extends Command
 {
-    const OPTION_NO_UPDATE = 'no-update';
+    public const OPTION_NO_UPDATE = 'no-update';
 
     /**
      * @var Filesystem
@@ -104,8 +105,11 @@ class SampleDataRemoveCommand extends Command
             if ($result !== 0) {
                 $output->writeln('<info>' . 'There is an error during remove sample data.' . '</info>');
             }
-        } else {
-            $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
+            return $result;
         }
+
+        $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
+
+        return Cli::RETURN_SUCCESS;
     }
 }

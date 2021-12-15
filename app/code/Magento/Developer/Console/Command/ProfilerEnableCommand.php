@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem\Io\File;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -91,7 +92,7 @@ class ProfilerEnableCommand extends Command
         $this->filesystem->write(BP . '/' . self::PROFILER_FLAG_FILE, $type);
         if ($this->filesystem->fileExists(BP . '/' . self::PROFILER_FLAG_FILE)) {
             $output->write('<info>'. sprintf(self::SUCCESS_MESSAGE, $type) . '</info>');
-            if ($type == 'csvfile') {
+            if ($type === 'csvfile') {
                 $output->write(
                     '<info> ' . sprintf(
                         'Output will be saved in %s',
@@ -102,8 +103,10 @@ class ProfilerEnableCommand extends Command
             }
             $output->write(PHP_EOL);
 
-            return;
+            return Cli::RETURN_SUCCESS;
         }
         $output->writeln('<error>Something went wrong while enabling the profiler.</error>');
+
+        return Cli::RETURN_FAILURE;
     }
 }

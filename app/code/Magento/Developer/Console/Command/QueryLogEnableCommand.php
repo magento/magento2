@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\DB\Logger\LoggerProxy;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,14 +108,15 @@ class QueryLogEnableCommand extends Command
         $logQueryTime = $input->getOption(self::INPUT_ARG_LOG_QUERY_TIME);
         $logCallStack = $input->getOption(self::INPUT_ARG_LOG_CALL_STACK);
 
-        $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries != 'false');
+        $data[LoggerProxy::PARAM_LOG_ALL] = (int)($logAllQueries !== 'false');
         $data[LoggerProxy::PARAM_QUERY_TIME] = number_format($logQueryTime, 3);
-        $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack != 'false');
+        $data[LoggerProxy::PARAM_CALL_STACK] = (int)($logCallStack !== 'false');
 
         $configGroup[LoggerProxy::CONF_GROUP_NAME] = $data;
 
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => $configGroup]);
 
         $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        return Cli::RETURN_SUCCESS;
     }
 }

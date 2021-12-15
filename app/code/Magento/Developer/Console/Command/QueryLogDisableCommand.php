@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,12 +19,12 @@ class QueryLogDisableCommand extends Command
     /**
      * command name
      */
-    const COMMAND_NAME = 'dev:query-log:disable';
+    public const COMMAND_NAME = 'dev:query-log:disable';
 
     /**
      * Success message
      */
-    const SUCCESS_MESSAGE = "DB query logging disabled.";
+    public const SUCCESS_MESSAGE = "DB query logging disabled.";
 
     /**
      * @var Writer
@@ -64,5 +65,6 @@ class QueryLogDisableCommand extends Command
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);
 
         $output->writeln("<info>". self::SUCCESS_MESSAGE . "</info>");
+        return Cli::RETURN_SUCCESS;
     }
 }

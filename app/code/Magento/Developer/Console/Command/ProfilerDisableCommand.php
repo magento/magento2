@@ -6,6 +6,7 @@
 
 namespace Magento\Developer\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem\Io\File;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,17 +17,17 @@ class ProfilerDisableCommand extends Command
     /**
      * Profiler flag file
      */
-    const PROFILER_FLAG_FILE = 'var/profiler.flag';
+    public const PROFILER_FLAG_FILE = 'var/profiler.flag';
 
     /**
      * Command name
      */
-    const COMMAND_NAME = 'dev:profiler:disable';
+    public const COMMAND_NAME = 'dev:profiler:disable';
 
     /**
      * Success message
      */
-    const SUCCESS_MESSAGE = 'Profiler disabled.';
+    public const SUCCESS_MESSAGE = 'Profiler disabled.';
 
     /**
      * @var File
@@ -65,8 +66,9 @@ class ProfilerDisableCommand extends Command
         $this->filesystem->rm(BP . '/' . self::PROFILER_FLAG_FILE);
         if (!$this->filesystem->fileExists(BP . '/' . self::PROFILER_FLAG_FILE)) {
             $output->writeln('<info>'. self::SUCCESS_MESSAGE . '</info>');
-            return;
+            return Cli::RETURN_SUCCESS;
         }
         $output->writeln('<error>Something went wrong while disabling the profiler.</error>');
+        return Cli::RETURN_FAILURE;
     }
 }

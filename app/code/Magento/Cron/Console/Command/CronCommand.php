@@ -6,6 +6,7 @@
 
 namespace Magento\Cron\Console\Command;
 
+use Magento\Framework\App\Cron;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,7 +28,7 @@ class CronCommand extends Command
     /**
      * Name of input option
      */
-    const INPUT_KEY_GROUP = 'group';
+    public const INPUT_KEY_GROUP = 'group';
 
     /**
      * Object manager factory
@@ -45,7 +46,7 @@ class CronCommand extends Command
 
     /**
      * @param ObjectManagerFactory $objectManagerFactory
-     * @param DeploymentConfig $deploymentConfig Application deployment configuration
+     * @param DeploymentConfig|null $deploymentConfig Application deployment configuration
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
@@ -92,7 +93,7 @@ class CronCommand extends Command
     {
         if (!$this->deploymentConfig->get('cron/enabled', 1)) {
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
-            return;
+            return Cli::RETURN_SUCCESS;
         }
         $omParams = $_SERVER;
         $omParams[StoreManager::PARAM_RUN_CODE] = 'admin';
@@ -112,9 +113,11 @@ class CronCommand extends Command
                 $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
             }
         }
-        /** @var \Magento\Framework\App\Cron $cronObserver */
-        $cronObserver = $objectManager->create(\Magento\Framework\App\Cron::class, ['parameters' => $params]);
+        /** @var Cron $cronObserver */
+        $cronObserver = $objectManager->create(Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
         $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
+
+        return Cli::RETURN_SUCCESS;
     }
 }
