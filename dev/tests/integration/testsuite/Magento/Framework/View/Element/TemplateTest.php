@@ -116,6 +116,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheKeyInfo()
     {
+        $this->_block->setTemplate($this->_block->getTemplate() ?? '');
         $this->assertArrayHasKey('template', $this->_block->getCacheKeyInfo());
     }
 }
