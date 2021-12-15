@@ -35,6 +35,7 @@ class ExcludeFilter extends \FilterIterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function accept()
     {
         $current = str_replace('\\', '/', $this->current()->__toString());
