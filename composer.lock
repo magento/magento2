@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db99b05d6b581364bc3b01067198b6ec",
+    "content-hash": "4e66d18bf92fa829e6a7581f60830993",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.208.4",
+            "version": "3.208.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "46376c60570103b55d9440142356995bd6d37c39"
+                "reference": "58fa9d8b522b0afa260299179ff950c783ff0ee1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/46376c60570103b55d9440142356995bd6d37c39",
-                "reference": "46376c60570103b55d9440142356995bd6d37c39",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/58fa9d8b522b0afa260299179ff950c783ff0ee1",
+                "reference": "58fa9d8b522b0afa260299179ff950c783ff0ee1",
                 "shasum": ""
             },
             "require": {
@@ -143,9 +143,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.208.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.208.5"
             },
-            "time": "2021-12-09T19:19:02+00:00"
+            "time": "2021-12-13T20:17:56+00:00"
         },
         {
             "name": "brick/math",
@@ -3951,7 +3951,7 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "dev-master",
+            "version": "1.14.6-beta2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
@@ -3970,7 +3970,6 @@
                 "phpunit/dbunit": "1.3.*",
                 "phpunit/phpunit": "3.7.*"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3997,7 +3996,7 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/zf1/issues",
-                "source": "https://github.com/magento/zf1/tree/master"
+                "source": "https://github.com/magento/zf1/tree/1.14.6-beta2"
             },
             "time": "2021-12-10T22:41:02+00:00"
         },
@@ -4414,16 +4413,16 @@
         },
         {
             "name": "php-amqplib/php-amqplib",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-amqplib/php-amqplib.git",
-                "reference": "c8812f783fe8714a8a8e387003fb297aded7f974"
+                "reference": "1d8e724c1de8ac5a4322f26ba735695880514874"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/c8812f783fe8714a8a8e387003fb297aded7f974",
-                "reference": "c8812f783fe8714a8a8e387003fb297aded7f974",
+                "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/1d8e724c1de8ac5a4322f26ba735695880514874",
+                "reference": "1d8e724c1de8ac5a4322f26ba735695880514874",
                 "shasum": ""
             },
             "require": {
@@ -4489,9 +4488,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-amqplib/php-amqplib/issues",
-                "source": "https://github.com/php-amqplib/php-amqplib/tree/v3.1.0"
+                "source": "https://github.com/php-amqplib/php-amqplib/tree/v3.1.1"
             },
-            "time": "2021-10-22T16:37:06+00:00"
+            "time": "2021-12-03T14:55:21+00:00"
         },
         {
             "name": "phpseclib/mcrypt_compat",
@@ -9198,16 +9197,16 @@
         },
         {
             "name": "jms/serializer",
-            "version": "3.16.0",
+            "version": "3.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/serializer.git",
-                "reference": "9b0b5208a6edb20b979c7d95bdda53a46098a7d9"
+                "reference": "6e17603abc16c5b6eed41f51844bc51dda51cf94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/9b0b5208a6edb20b979c7d95bdda53a46098a7d9",
-                "reference": "9b0b5208a6edb20b979c7d95bdda53a46098a7d9",
+                "url": "https://api.github.com/repos/schmittjoh/serializer/zipball/6e17603abc16c5b6eed41f51844bc51dda51cf94",
+                "reference": "6e17603abc16c5b6eed41f51844bc51dda51cf94",
                 "shasum": ""
             },
             "require": {
@@ -9228,7 +9227,7 @@
                 "ocramius/proxy-manager": "^1.0|^2.0",
                 "phpbench/phpbench": "^1.0",
                 "phpstan/phpstan": "^1.0.2",
-                "phpunit/phpunit": "^8.0||^9.0",
+                "phpunit/phpunit": "^8.5.21||^9.0",
                 "psr/container": "^1.0",
                 "symfony/dependency-injection": "^3.0|^4.0|^5.0|^6.0",
                 "symfony/expression-language": "^3.2|^4.0|^5.0|^6.0",
@@ -9280,7 +9279,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/serializer/issues",
-                "source": "https://github.com/schmittjoh/serializer/tree/3.16.0"
+                "source": "https://github.com/schmittjoh/serializer/tree/3.17.0"
             },
             "funding": [
                 {
@@ -9288,7 +9287,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-22T07:03:41+00:00"
+            "time": "2021-12-14T15:01:05+00:00"
         },
         {
             "name": "lusitanian/oauth",
@@ -9501,16 +9500,16 @@
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.13.0",
+            "version": "v2.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "e95c5a008c23d3151d59ea72484d4f72049ab7f4"
+                "reference": "4e2724dd40ae9499a55e7db7df82665be0ab7e34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/e95c5a008c23d3151d59ea72484d4f72049ab7f4",
-                "reference": "e95c5a008c23d3151d59ea72484d4f72049ab7f4",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/4e2724dd40ae9499a55e7db7df82665be0ab7e34",
+                "reference": "4e2724dd40ae9499a55e7db7df82665be0ab7e34",
                 "shasum": ""
             },
             "require": {
@@ -9545,9 +9544,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/mustache.php/issues",
-                "source": "https://github.com/bobthecow/mustache.php/tree/master"
+                "source": "https://github.com/bobthecow/mustache.php/tree/v2.14.0"
             },
-            "time": "2019-11-23T21:40:31+00:00"
+            "time": "2021-12-14T14:42:17+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -10849,16 +10848,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.12.7",
+            "version": "0.12.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "d88fbe1bcde87e11cbdfa1bf2f51c990f33f426d"
+                "reference": "dd40e9e1971b1fdb5fb8d818e3ee691a31ac638b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/d88fbe1bcde87e11cbdfa1bf2f51c990f33f426d",
-                "reference": "d88fbe1bcde87e11cbdfa1bf2f51c990f33f426d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/dd40e9e1971b1fdb5fb8d818e3ee691a31ac638b",
+                "reference": "dd40e9e1971b1fdb5fb8d818e3ee691a31ac638b",
                 "shasum": ""
             },
             "require": {
@@ -10897,7 +10896,7 @@
             "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.12.7"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.8"
             },
             "funding": [
                 {
@@ -10905,7 +10904,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-09T20:25:42+00:00"
+            "time": "2021-12-13T23:55:00+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -12009,16 +12008,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.6.1",
+            "version": "3.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "f268ca40d54617c6e06757f83f699775c9b3ff2e"
+                "reference": "5e4e71592f69da17871dba6e80dd51bce74a351a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/f268ca40d54617c6e06757f83f699775c9b3ff2e",
-                "reference": "f268ca40d54617c6e06757f83f699775c9b3ff2e",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/5e4e71592f69da17871dba6e80dd51bce74a351a",
+                "reference": "5e4e71592f69da17871dba6e80dd51bce74a351a",
                 "shasum": ""
             },
             "require": {
@@ -12061,7 +12060,7 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
-            "time": "2021-10-11T04:00:11+00:00"
+            "time": "2021-12-12T21:44:58+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -12771,7 +12770,7 @@
         },
         {
             "package": "magento/zendframework1",
-            "version": "9999999-dev",
+            "version": "1.14.6.0-beta2",
             "alias": "1.14.6",
             "alias_normalized": "1.14.6.0"
         }
@@ -12779,7 +12778,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "magento/zendframework1": 20
+        "magento/zendframework1": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
