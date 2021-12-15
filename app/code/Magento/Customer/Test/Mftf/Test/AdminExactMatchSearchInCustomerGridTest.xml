@@ -17,6 +17,7 @@
             <testCaseId value="MC-16335"/>
             <useCaseId value="MAGETWO-99605"/>
             <group value="customer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>

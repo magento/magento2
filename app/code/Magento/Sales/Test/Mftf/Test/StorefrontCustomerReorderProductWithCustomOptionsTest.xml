@@ -108,6 +108,8 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Log out from storefront as Customer -->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
@@ -116,8 +118,8 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForSubmitShipment"/>
 
         <!-- Open order -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderForCreatingShipment">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderForCreatingShipment">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <!-- Create Shipment for the order -->
