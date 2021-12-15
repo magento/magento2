@@ -50,7 +50,6 @@ var config = {
     },
     shim: {
         'jquery/jquery-migrate': ['jquery'],
-        'jquery/jstree/jquery.hotkeys': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
         'mage/new-gallery': ['jquery'],
@@ -75,14 +74,6 @@ var config = {
         'jquery/jquery-migrate'
     ],
     config: {
-        mixins: {
-            'jquery/jstree/jquery.jstree': {
-                'mage/backend/jstree-mixin': true
-            },
-            'jquery': {
-                'jquery/patches/jquery': true
-            }
-        },
         text: {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'

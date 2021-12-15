@@ -67,8 +67,10 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resetPasswordToken = (string)$this->getRequest()->getQuery('token');
+        $customerId = (string)$this->getRequest()->getQuery('id');
         $password = (string)$this->getRequest()->getPost('password');
         $passwordConfirmation = (string)$this->getRequest()->getPost('password_confirmation');
+        $email = null;
 
         if ($password !== $passwordConfirmation) {
             $this->messageManager->addErrorMessage(__("New Password and Confirm New Password values didn't match."));
@@ -83,9 +85,13 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
             return $resultRedirect;
         }
 
+        if ($customerId && $this->customerRepository->getById($customerId)) {
+            $email = $this->customerRepository->getById($customerId)->getEmail();
+        }
+
         try {
             $this->accountManagement->resetPassword(
-                null,
+                $email,
                 $resetPasswordToken,
                 $password
             );
@@ -95,6 +101,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
                 $this->session->start();
             }
             $this->session->unsRpToken();
+            $this->session->unsRpCustomerId();
             $this->messageManager->addSuccessMessage(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');
 
