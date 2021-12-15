@@ -20,6 +20,7 @@ class PathUtil
      */
     public function pathInfo($path)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $pathInfo = ['path' => $path];
         $dirname = dirname($path);
         if ('' !== $dirname) {
@@ -27,6 +28,7 @@ class PathUtil
         }
         $pathInfo += pathinfo($this->basename($path));
         $pathInfo['basename'] = $pathInfo['filename'];
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         return $pathInfo + ['dirname' => ''];
     }
 
