@@ -25,8 +25,8 @@ class PathUtil
         if ('' !== $dirname) {
             $pathInfo['dirname'] = $dirname === '.' ? '' : $dirname;
         }
-        $pathInfo['basename'] = $this->basename($path);
-        $pathInfo += pathinfo($pathInfo['basename']);
+        $pathInfo += pathinfo($this->basename($path));
+        $pathInfo['basename'] = $pathInfo['filename'];
         return $pathInfo + ['dirname' => ''];
     }
 
