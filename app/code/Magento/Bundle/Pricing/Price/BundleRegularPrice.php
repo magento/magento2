@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
