@@ -64,7 +64,7 @@ switch ($block->getCheckoutType()):
                                            name="giftmessage[quote][<?= (int) $block->getEntity()->getId() ?>][from]"
                                            id="gift-message-whole-from"
                                            title="<?= $block->escapeHtmlAttr(__('From')) ?>"
-                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getSender() ?? '', $block->getDefaultFrom()) ?>"
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom()) ?>"
                                            class="input-text">
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ switch ($block->getCheckoutType()):
                                     <input type="text"
                                            name="giftmessage[quote][<?= (int) $block->getEntity()->getId() ?>][to]"
                                            id="gift-message-whole-to" title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getRecipient() ?? '', $block->getDefaultTo()) ?>"
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo()) ?>"
                                            class="input-text">
                                 </div>
                             </div>
@@ -165,7 +165,7 @@ script;
                                                     value=
                                                     "<?= /* @noEscape */
                                                      $block->getEscaped(
-                                                         $block->getMessage($_item)->getSender() ?? '',
+                                                         $block->getMessage($_item)->getSender(),
                                                          $block->getDefaultFrom()
                                                      ) ?>" class="input-text">
                                          </div>
@@ -179,7 +179,7 @@ script;
                                                    name="giftmessage[quote_item][<?= (int) $_item->getId() ?>][to]"
                                                    id="gift-message-<?= (int) $_item->getId() ?>-to"
                                                    title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                                   value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient() ?? '', $block->getDefaultTo()) ?>"
+                                                   value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>"
                                                    class="input-text">
                                         </div>
                                      </div>
@@ -291,7 +291,7 @@ script;
                                         ->getId() ?>][from]"
                                            id="gift-message-<?= (int) $block->getEntity()->getId() ?>-from"
                                            title="<?= $block->escapeHtmlAttr(__('From')) ?>"
-                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getSender() ?? '', $block->getDefaultFrom()) ?>"
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getSender(), $block->getDefaultFrom()) ?>"
                                            class="input-text">
                                 </div>
                             </div>
@@ -304,7 +304,7 @@ script;
                                         ->getId() ?>][to]"
                                            id="gift-message-<?= (int) $block->getEntity()->getId() ?>-to"
                                            title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getRecipient() ?? '', $block->getDefaultTo()) ?>"
+                                           value="<?= /* @noEscape */ $block->getEscaped($block->getMessage()->getRecipient(), $block->getDefaultTo()) ?>"
                                            class="input-text">
                                 </div>
                             </div>
@@ -391,7 +391,7 @@ script;
                                                        name="giftmessage[quote_address_item][<?= (int) $_item->getId()
                                                         ?>][from]" id="gift-message-<?= (int) $_item->getId() ?>-from"
                                                        title="<?= $block->escapeHtmlAttr(__('From')) ?>"
-                                                       value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender() ?? '', $block->getDefaultFrom()) ?>"
+                                                       value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getSender(), $block->getDefaultFrom()) ?>"
                                                        class="input-text">
                                             </div>
                                         </div>
@@ -404,7 +404,7 @@ script;
                                                        name="giftmessage[quote_address_item][<?= (int) $_item->getId()
                                                         ?>][to]" id="gift-message-<?= (int) $_item->getId() ?>-to"
                                                        title="<?= $block->escapeHtmlAttr(__('To')) ?>"
-                                                       value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient() ?? '', $block->getDefaultTo()) ?>"
+                                                       value="<?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getRecipient(), $block->getDefaultTo()) ?>"
                                                        class="input-text">
                                             </div>
                                         </div>

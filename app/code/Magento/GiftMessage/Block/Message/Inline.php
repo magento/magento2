@@ -324,7 +324,8 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getEscaped($value, $defaultValue = '')
     {
-        return $this->escapeHtml(trim($value) != '' ? $value : $defaultValue);
+        $value = ($value !== null && trim($value) != '') ? $value : $defaultValue;
+        return $this->escapeHtml($value);
     }
 
     /**
