@@ -98,7 +98,7 @@ class CanViewNotificationTest extends TestCase
         $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $this->productMetadataMock->expects($this->once())
+        $this->productMetadataMock->expects($this->any())
             ->method('getVersion')
             ->willReturn($version);
         $this->logMock->expects($this->once())
@@ -122,7 +122,7 @@ class CanViewNotificationTest extends TestCase
         return [
             [false, '2.2.1-dev', '999.999.999-alpha'],
             [true, '2.2.1-dev', '2.0.0'],
-            [true, '2.2.1-dev', '2.2.0'],
+            [true, '2.2.1-dev', null],
             [false, '2.2.1-dev', '2.2.1'],
             [true, '2.2.1-dev', '2.2.0'],
             [true, '2.3.0', '2.2.0'],
