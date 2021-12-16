@@ -54,7 +54,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
 
-        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageDeletedActionGroup" stepKey="verifyImageIsDeleted">
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageDoesNotExistActionGroup" stepKey="verifyImageIsDeleted">
             <argument name="image" value="{{ImageUpload3.filename}}"/>
         </actionGroup>
     </test>

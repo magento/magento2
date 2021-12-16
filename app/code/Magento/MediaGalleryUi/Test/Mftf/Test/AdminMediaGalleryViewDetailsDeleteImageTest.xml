@@ -52,7 +52,7 @@
             <argument name="image" value="ImageMetadata"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageDeletedActionGroup" stepKey="assertImageDeleted">
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertImageDoesNotExistActionGroup" stepKey="assertImageDeleted">
             <argument name="image" value="{{ImageMetadata.title}}"/>
         </actionGroup>
     </test>
