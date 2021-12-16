@@ -55,6 +55,7 @@
                     <range from="100" to=""/>
                 </ranges>
             </bucket>
+            <bucket xsi:type="dynamicBucket" method="auto" name="dynamic_bucket" field="price" />
         </aggregations>
         <from>10</from>
         <size>10</size>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -58,6 +57,9 @@ class AttributeMetadataHydratorTest extends TestCase
      */
     private $attributeMetadataHydrator;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -81,9 +83,10 @@ class AttributeMetadataHydratorTest extends TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testHydrate()
+    public function testHydrate(): void
     {
         $optionOneData = [
             'label' => 'Label 1',
@@ -113,30 +116,23 @@ class AttributeMetadataHydratorTest extends TestCase
         ];
 
         $optionOne = new Option($optionOneData);
-        $this->optionFactoryMock->expects($this->at(0))
-            ->method('create')
-            ->with(['data' => $optionOneData])
-            ->willReturn($optionOne);
         $optionThree = new Option($optionThreeData);
-        $this->optionFactoryMock->expects($this->at(1))
-            ->method('create')
-            ->with(['data' => $optionThreeData])
-            ->willReturn($optionThree);
         $optionFour = new Option($optionFourData);
-        $this->optionFactoryMock->expects($this->at(2))
-            ->method('create')
-            ->with(['data' => $optionFourData])
-            ->willReturn($optionFour);
 
         $optionTwoDataPartiallyConverted = [
             'label' => 'Label 2',
             'options' => [$optionThree, $optionFour]
         ];
-        $optionFour = new Option($optionTwoDataPartiallyConverted);
-        $this->optionFactoryMock->expects($this->at(3))
+        $optionFive = new Option($optionTwoDataPartiallyConverted);
+        $this->optionFactoryMock
             ->method('create')
-            ->with(['data' => $optionTwoDataPartiallyConverted])
-            ->willReturn($optionFour);
+            ->withConsecutive(
+                [['data' => $optionOneData]],
+                [['data' => $optionThreeData]],
+                [['data' => $optionFourData]],
+                [['data' => $optionTwoDataPartiallyConverted]]
+            )
+            ->willReturnOnConsecutiveCalls($optionOne, $optionThree, $optionFour, $optionFive);
 
         $validationRuleOne = new ValidationRule($validationRuleOneData);
         $this->validationRuleFactoryMock->expects($this->once())
@@ -147,7 +143,7 @@ class AttributeMetadataHydratorTest extends TestCase
         $attributeMetadataPartiallyConverted = [
             'attribute_code' => 'attribute_code',
             'frontend_input' => 'hidden',
-            'options' => [$optionOne, $optionFour],
+            'options' => [$optionOne, $optionFive],
             'validation_rules' => [$validationRuleOne]
         ];
 
@@ -194,7 +190,10 @@ class AttributeMetadataHydratorTest extends TestCase
         );
     }
 
-    public function testExtract()
+    /**
+     * @return void
+     */
+    public function testExtract(): void
     {
         $data = ['foo' => 'bar'];
         $this->dataObjectProcessorMock->expects($this->once())

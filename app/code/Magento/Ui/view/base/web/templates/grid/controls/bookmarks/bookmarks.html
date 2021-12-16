@@ -21,12 +21,11 @@
                 <input class="admin__control-text" type="text"
                     data-bind="
                         value: customLabel,
-                        autoselect,
                         hasFocus: isCustomVisible(),
                         keyboard: {
                             13: applyCustom.bind($data),
                             27: hideCustom.bind($data)
-                        }">
+                        }"/>
                 <div class="action-dropdown-menu-item-actions">
                    <button class="action-submit" type="button" click="applyCustom" attr="title: $t('Save all changes')">
                         <span translate="'Submit'"></span>

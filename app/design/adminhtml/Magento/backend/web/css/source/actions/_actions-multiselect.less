@@ -11,6 +11,9 @@
 //  Variables
 //  _____________________________________________
 
+/**
+ * @codingStandardsIgnoreStart
+ */
 @action-multiselect-menu-item__padding: 1rem;
 @action-multiselect-menu-item__hover__background-color: @color-gray89;
 @action-multiselect-menu-item__selected__background-color: @color-blue-clear-sky;
@@ -92,6 +95,21 @@
         &:before {
             height: @action__height + .1rem;
             top: auto;
+        }
+
+        > .action-close,
+        > .action-close:active {
+            background-color: transparent;
+            margin-right: 3.2rem;
+            padding: .8rem 1.5rem .6rem;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transform: none;
+
+            &:before {
+                font-size: 1.5rem;
+            }
         }
     }
 
@@ -258,6 +276,29 @@
 
         &:active {
             transform: scale(.9);
+        }
+
+        .modal-popup &,
+        .modal-slide & {
+            color: @button__color;
+            padding: 0;
+
+            &:hover {
+                color: darken(@text__color, 20%);
+            }
+
+            &:active {
+                padding: 0;
+                transform: scale(.9);
+
+                &:before {
+                    font-size: 1em;
+                }
+            }
+
+            &:before {
+                font-size: 1em;
+            }
         }
     }
 }
