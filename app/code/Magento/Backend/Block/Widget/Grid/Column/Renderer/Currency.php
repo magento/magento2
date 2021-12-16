@@ -118,11 +118,14 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     protected function _getRate($row)
     {
         if ($rate = $this->getColumn()->getRate()) {
-            return (float)$rate;
+            return (float) $rate;
         }
-        if ($rate = $row->getData($this->getColumn()->getRateField())) {
-            return (float)$rate;
+        $rateField = $this->getColumn()->getRateField();
+
+        if ($rateField !== null && $rate = $row->getData($rateField)) {
+            return (float) $rate;
         }
+
         return $this->_defaultBaseCurrency->getRate($this->_getCurrencyCode($row));
     }
 
