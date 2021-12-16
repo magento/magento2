@@ -83,9 +83,9 @@ class CronCommand extends Command
     }
 
     /**
-     * Runs cron jobs if cron is not disabled in Magento configurations
-     *
      * @inheritdoc
+     *
+     * Runs cron jobs if cron is not disabled in Magento configurations
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -93,6 +93,7 @@ class CronCommand extends Command
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
             return Cli::RETURN_SUCCESS;
         }
+        // phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageWarning
         $omParams = $_SERVER;
         $omParams[StoreManager::PARAM_RUN_CODE] = 'admin';
         $omParams[Store::CUSTOM_ENTRY_POINT_PARAM] = true;

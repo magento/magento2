@@ -44,7 +44,7 @@ class QueryLogEnableCommand extends Command
     /**
      * QueryLogEnableCommand constructor.
      * @param Writer $deployConfigWriter
-     * @param null $name
+     * @param string|null $name
      */
     public function __construct(
         Writer $deployConfigWriter,
