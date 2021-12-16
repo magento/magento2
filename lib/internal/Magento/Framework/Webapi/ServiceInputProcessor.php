@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -97,7 +98,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSize;
 
     /**
-     * @var DefaultPageSizeSetter|null
+     * @var DefaultPageSizeSetter
      */
     private $defaultPageSizeSetter;
 
@@ -176,19 +177,19 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceMethodName name of the method that we are trying to call
      * @param array $inputArray data to send to method in key-value format
      * @return array list of parameters that can be used to call the service method
-     * @throws WebapiException
+     * @throws Exception
+     * @throws LocalizedException
      */
     public function process($serviceClassName, $serviceMethodName, array $inputArray)
     {
         $inputData = [];
         $inputError = [];
+
         foreach ($this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName) as $param) {
             $paramName = $param[MethodsMap::METHOD_META_NAME];
             $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
             if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
-                $paramValue = isset($inputArray[$paramName])
-                    ? $inputArray[$paramName]
-                    : $inputArray[$snakeCaseParamName];
+                $paramValue = $inputArray[$paramName] ?? $inputArray[$snakeCaseParamName];
 
                 try {
                     $inputData[] = $this->convertValue($paramValue, $param[MethodsMap::METHOD_META_TYPE]);
@@ -203,7 +204,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 }
             }
         }
+
         $this->processInputError($inputError);
+
         return $inputData;
     }
 
@@ -214,7 +217,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return array
      * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
@@ -488,7 +491,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function convertValue($data, $type)
     {
