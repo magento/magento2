@@ -91,6 +91,7 @@ class GetCartTest extends GraphQlAbstract
         self::assertNotEmpty($response['cart']['items'][0]['id']);
         self::assertEquals(2, $response['cart']['items'][0]['quantity']);
         self::assertEquals('simple_product', $response['cart']['items'][0]['product']['sku']);
+        self::assertEquals('OUT_OF_STOCK', $response['cart']['items'][0]['product']['stock_status']);
 
         self::assertNotEmpty($response['cart']['items'][1]['id']);
         self::assertEquals(2, $response['cart']['items'][1]['quantity']);
@@ -307,6 +308,7 @@ QUERY;
       quantity
       product {
         sku
+        stock_status
       }
       prices {
         price {
