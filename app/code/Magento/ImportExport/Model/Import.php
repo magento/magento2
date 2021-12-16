@@ -51,70 +51,70 @@ use Psr\Log\LoggerInterface;
  */
 class Import extends AbstractModel
 {
-    const BEHAVIOR_APPEND = 'append';
-    const BEHAVIOR_ADD_UPDATE = 'add_update';
-    const BEHAVIOR_REPLACE = 'replace';
-    const BEHAVIOR_DELETE = 'delete';
-    const BEHAVIOR_CUSTOM = 'custom';
+    public const BEHAVIOR_APPEND = 'append';
+    public const BEHAVIOR_ADD_UPDATE = 'add_update';
+    public const BEHAVIOR_REPLACE = 'replace';
+    public const BEHAVIOR_DELETE = 'delete';
+    public const BEHAVIOR_CUSTOM = 'custom';
 
     /**
      * Import source file.
      */
-    const FIELD_NAME_SOURCE_FILE = 'import_file';
+    public const FIELD_NAME_SOURCE_FILE = 'import_file';
 
     /**
      * Import image archive.
      */
-    const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
+    public const FIELD_NAME_IMG_ARCHIVE_FILE = 'import_image_archive';
 
     /**
      * Import images file directory.
      */
-    const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
+    public const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
     /**
      * Allowed errors count field name
      */
-    const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
+    public const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
 
     /**
      * Validation startegt field name
      */
-    const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
+    public const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
 
     /**
      * Import field separator.
      */
-    const FIELD_FIELD_SEPARATOR = '_import_field_separator';
+    public const FIELD_FIELD_SEPARATOR = '_import_field_separator';
 
     /**
      * Import multiple value separator.
      */
-    const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
+    public const FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR = '_import_multiple_value_separator';
 
     /**
      * Import empty attribute value constant.
      */
-    const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+    public const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
 
     /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
-    const FIELDS_ENCLOSURE = 'fields_enclosure';
+    public const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**
      * default delimiter for several values in one cell as default for FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR
      */
-    const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
+    public const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
      * Import empty attribute default value
      */
-    const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
-    const DEFAULT_SIZE = 50;
-    const MAX_IMPORT_CHUNKS = 4;
-    const IMPORT_HISTORY_DIR = 'import_history/';
-    const IMPORT_DIR = 'import/';
+    public const DEFAULT_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '__EMPTY__VALUE__';
+    public const DEFAULT_SIZE = 50;
+    public const MAX_IMPORT_CHUNKS = 4;
+    public const IMPORT_HISTORY_DIR = 'import_history/';
+    public const IMPORT_DIR = 'import/';
 
     /**
      * @var AbstractEntity|ImportAbstractEntity
@@ -122,8 +122,6 @@ class Import extends AbstractModel
     protected $_entityAdapter;
 
     /**
-     * Import export data
-     *
      * @var DataHelper
      */
     protected $_importExportData = null;
@@ -134,7 +132,6 @@ class Import extends AbstractModel
     private $_coreConfig;
 
     /**
-     * @var \Magento\ImportExport\Model\Import\ConfigInterface
      * @var ConfigInterface
      */
     protected $_importConfig;
@@ -577,10 +574,14 @@ class Import extends AbstractModel
             throw new LocalizedException(__('The file cannot be uploaded.'));
         }
 
-        // phpcs:disable Magento2.Functions.DiscouragedFunction.Discouraged
-        $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+        $extension = '';
+        $uploadedFile = '';
+        if ($result !== false) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $extension = pathinfo($result['file'], PATHINFO_EXTENSION);
+            $uploadedFile = $result['path'] . $result['file'];
+        }
 
-        $uploadedFile = $result['path'] . $result['file'];
         if (!$extension) {
             $this->_varDirectory->delete($uploadedFile);
             throw new LocalizedException(__('The file you uploaded has no extension.'));
@@ -638,10 +639,11 @@ class Import extends AbstractModel
      */
     protected function _removeBom($sourceFile)
     {
-        $string = $this->_varDirectory->readFile($this->_varDirectory->getRelativePath($sourceFile));
+        $driver = $this->_varDirectory->getDriver();
+        $string = $driver->fileGetContents($this->_varDirectory->getAbsolutePath($sourceFile));
         if ($string !== false && substr($string, 0, 3) == pack("CCC", 0xef, 0xbb, 0xbf)) {
             $string = substr($string, 3);
-            $this->_varDirectory->writeFile($this->_varDirectory->getRelativePath($sourceFile), $string);
+            $driver->filePutContents($this->_varDirectory->getAbsolutePath($sourceFile), $string);
         }
         return $this;
     }
