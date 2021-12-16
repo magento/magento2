@@ -81,7 +81,7 @@
         <switchToIFrame stepKey="switchOutOfIFrame"/>
 
         <!--Find attribute in grid and select-->
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearExistingFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.attributeCodeFilterInput}}" userInput="{{productDropDownAttribute.attribute_code}}" stepKey="fillFilterAttributeCodeField"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
