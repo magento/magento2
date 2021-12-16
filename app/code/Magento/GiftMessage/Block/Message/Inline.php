@@ -36,8 +36,6 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
-     * Gift message message
-     *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;

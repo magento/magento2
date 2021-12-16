@@ -368,13 +368,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getEntity();
 
         $this->printLogQuery($printQuery, $logQuery);
-
+        /**
+         * Prepare select query
+         * @var string $query
+         */
+        $query = $this->getSelect();
         try {
-            /**
-             * Prepare select query
-             * @var string $query
-             */
-            $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
             $this->printLogQuery(false, true, $query);
