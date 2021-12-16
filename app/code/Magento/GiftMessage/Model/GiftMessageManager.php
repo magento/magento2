@@ -64,7 +64,7 @@ class GiftMessageManager
                     $giftMessage->load($entity->getGiftMessageId());
                 }
 
-                if (isset($message['message']) && trim($message['message']) == '') {
+                if ($message['message'] === null || trim($message['message']) == '') {
                     if ($giftMessage->getId()) {
                         try {
                             $giftMessage->delete();
