@@ -293,10 +293,10 @@ class Discount extends AbstractTotal
         $amount = $total->getDiscountAmount();
 
         if ($amount != 0) {
-            $description = $total->getDiscountDescription();
+            $description = $total->getDiscountDescription() ?? '';
             $result = [
                 'code' => $this->getCode(),
-                'title' => strlen($description ?? '') ? __('Discount (%1)', $description) : __('Discount'),
+                'title' => strlen($description) ? __('Discount (%1)', $description) : __('Discount'),
                 'value' => $amount
             ];
         }
