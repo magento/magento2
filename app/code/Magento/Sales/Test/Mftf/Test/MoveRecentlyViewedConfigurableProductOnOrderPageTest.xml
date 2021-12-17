@@ -104,6 +104,9 @@
 
         <!-- Click create order -->
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
 
         <!-- Add configure to product -->
         <click selector="{{AdminCustomerActivitiesRecentlyViewedSection.addToOrderConfigure($$createConfigProduct.name$$)}}" stepKey="configureProduct"/>
