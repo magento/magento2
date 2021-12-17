@@ -29,7 +29,7 @@ class Db implements \Magento\Framework\Config\ConverterInterface
     /**
      * Extract and prepare cron job data
      *
-     * @param array $jobs
+     * @param array $cronTab
      * @return array
      */
     protected function _extractParams(array $cronTab)
