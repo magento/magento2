@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Representation of Webapi module in System Configuration (Magento admin panel).
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="webapi">
+            <group id="graphql_validation" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GraphQl Input Limits</label>
+                <field id="input_limit_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Enable Input Limits</label>
+                    <config_path>graphql/validation/input_limit_enabled</config_path>
+                </field>
+                <field id="maximum_page_size" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maximum Page Size</label>
+                    <comment>Maximum number of items allowed in a paginated search result.</comment>
+                    <config_path>graphql/validation/maximum_page_size</config_path>
+                    <depends>
+                        <field id="input_limit_enabled">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+
