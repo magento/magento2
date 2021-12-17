@@ -102,7 +102,9 @@ class Currency extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($code = $this->getColumn()->getCurrencyCode()) {
             return $code;
         }
-        if ($code = $row->getData($this->getColumn()->getCurrency())) {
+        $currency = $this->getColumn()->getCurrency();
+
+        if ($currency !== null && $code = $row->getData($currency)) {
             return $code;
         }
 
