@@ -1,7 +1,5 @@
 <?php
 /**
- * Media application
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -19,6 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -26,11 +25,12 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
-use Magento\MediaStorage\Model\File\Storage\Synchronization;
 use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
 
 /**
+ * Media application.
+ *
  * The class resize original images
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,7 +45,6 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Media directory path
      *
      * @var string
      */
@@ -124,7 +123,7 @@ class Media implements AppInterface
      * @param ImageResize $imageResize
      * @param File $file
      * @param CatalogMediaConfig $catalogMediaConfig
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -238,7 +237,11 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        $mediaDirectoryAbsolutePath = $this->directoryMedia->getAbsolutePath();
+
+        return $this->mediaDirectoryPath !== null
+            && $mediaDirectoryAbsolutePath !== null
+            && rtrim($this->mediaDirectoryPath, '/') !== rtrim($mediaDirectoryAbsolutePath, '/');
     }
 
     /**
