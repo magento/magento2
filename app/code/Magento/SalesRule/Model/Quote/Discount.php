@@ -33,7 +33,7 @@ use Magento\SalesRule\Model\RulesApplier;
  */
 class Discount extends AbstractTotal
 {
-    const COLLECTOR_TYPE_CODE = 'discount';
+    public const COLLECTOR_TYPE_CODE = 'discount';
 
     /**
      * Discount calculation object

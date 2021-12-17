@@ -1,7 +1,5 @@
 <?php
 /**
- * Media application
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -45,8 +43,6 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Media directory path
-     *
      * @var string
      */
     private $mediaDirectoryPath;
