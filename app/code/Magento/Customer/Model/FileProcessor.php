@@ -27,7 +27,7 @@ class FileProcessor
     /**
      * Temporary directory name
      */
-    const TMP_DIR = 'tmp';
+    public const TMP_DIR = 'tmp';
 
     private const CUSTOMER_FILE_URL_PATH = 'customer/index/viewfile';
 
@@ -215,12 +215,13 @@ class FileProcessor
         );
 
         $result = $uploader->save($path);
-        unset($result['path']);
+
         if (!$result) {
             throw new LocalizedException(
                 __('File can not be saved to the destination folder.')
             );
         }
+        unset($result['path']);
 
         return $result;
     }

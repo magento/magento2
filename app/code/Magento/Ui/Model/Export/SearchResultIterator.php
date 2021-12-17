@@ -22,40 +22,45 @@ class SearchResultIterator implements \Iterator
     }
 
     /**
-     * @return array|mixed
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->items);
     }
 
     /**
-     * @return int|mixed
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->items);
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->items);
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->items);
     }
 
     /**
-     * @return bool
+     * @inheritdoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->key() !== null;
