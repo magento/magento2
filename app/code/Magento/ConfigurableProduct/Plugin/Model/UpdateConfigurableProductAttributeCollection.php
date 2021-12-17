@@ -10,7 +10,7 @@ namespace Magento\ConfigurableProduct\Plugin\Model;
 use Magento\ConfigurableProduct\Ui\DataProvider\Attributes;
 
 /**
- * Update configurable product attribute collection.
+ * Add the filter condition for configurable product attribute collection
  */
 class UpdateConfigurableProductAttributeCollection
 {
