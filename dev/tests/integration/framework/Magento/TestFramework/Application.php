@@ -276,6 +276,8 @@ class Application
         if (null === $this->installConfig) {
             // phpcs:ignore Magento2.Security.IncludeFile
             $this->installConfig = include $this->installConfigFile;
+            $this->installConfig['use-secure'] = '0';
+            $this->installConfig['use-secure-admin'] = '0';
         }
         return $this->installConfig;
     }
@@ -679,7 +681,7 @@ class Application
         $params['magento-init-params'] = $this->getInitParamsQuery();
         $result = [];
         foreach ($params as $key => $value) {
-            if (strlen($value) > 0) {
+            if (isset($value)) {
                 $result["--{$key}=%s"] = $value;
             }
         }
