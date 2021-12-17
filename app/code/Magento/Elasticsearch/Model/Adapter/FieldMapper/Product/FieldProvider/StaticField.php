@@ -127,6 +127,9 @@ class StaticField implements FieldProviderInterface
      *
      * @param AbstractAttribute $attribute
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getField(AbstractAttribute $attribute): array
     {
