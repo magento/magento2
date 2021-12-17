@@ -11,7 +11,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.4.0||~8.0.0",
+        "php": "~7.4.0||~8.0.0||~8.1.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
@@ -34,10 +34,10 @@
         "colinmollenhour/credis": "1.12.1",
         "colinmollenhour/php-redis-session-abstract": "~1.4.5",
         "composer/composer": "^1.9 || ^2.0",
-        "elasticsearch/elasticsearch": "~7.15.0",
+        "elasticsearch/elasticsearch": "~7.16.0",
         "guzzlehttp/guzzle": "^7.3.0",
         "laminas/laminas-captcha": "^2.11",
-        "laminas/laminas-code": "~4.4.3",
+        "laminas/laminas-code": "~4.5.0",
         "laminas/laminas-db": "^2.13.4",
         "laminas/laminas-dependency-plugin": "^2.2.0",
         "laminas/laminas-di": "^3.3.0",
