@@ -43,24 +43,24 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     /**
      * Default value for products count that will be shown
      */
-    const DEFAULT_PRODUCTS_COUNT = 10;
+    public const DEFAULT_PRODUCTS_COUNT = 10;
 
     /**
      * Name of request parameter for page number value
      *
      * @deprecated @see $this->getData('page_var_name')
      */
-    const PAGE_VAR_NAME = 'np';
+    public const PAGE_VAR_NAME = 'np';
 
     /**
      * Default value for products per page
      */
-    const DEFAULT_PRODUCTS_PER_PAGE = 5;
+    public const DEFAULT_PRODUCTS_PER_PAGE = 5;
 
     /**
      * Default value whether show pager or not
      */
-    const DEFAULT_SHOW_PAGER = false;
+    public const DEFAULT_SHOW_PAGER = false;
 
     /**
      * Instance of pager block
