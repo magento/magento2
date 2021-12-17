@@ -16,9 +16,6 @@
             <description value="Print Order from Guest on Frontend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-28494"/>
-            <skip>
-                <issueId value="MQE-2834" />
-            </skip>
             <group value="sales"/>
             <group value="mtf_migrated"/>
             <group value="pr_exclude"/>
@@ -122,7 +119,7 @@
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
             <assertNotEmpty stepKey="assertNotEmpty">
-    			<actualResult type="const">$grabAttribute</actualResult>
+                <actualResult type="const">$grabAttribute</actualResult>
             </assertNotEmpty>
 
             <!-- Create bundle Product -->
@@ -157,7 +154,7 @@
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
             <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
-        		<actualResult type="const">$grabBundleOption</actualResult>
+                <actualResult type="const">$grabBundleOption</actualResult>
             </assertNotEmpty>
 
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductGridFilters"/>
@@ -270,12 +267,17 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
-        <waitForPageLoad stepKey="waitForPrintWindowToOpen" />
-        <switchToWindow stepKey="switchToWindow"/>
-        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="waitForPrintTabToOpen"/>
-        <switchToNextTab stepKey="switchToTab"/>
-        <waitForPageLoad stepKey="waitForPrintPreviewToLoad"/>
-        <seeInCurrentUrl url="sales/guest/print/order_id/" stepKey="seePrintPage"/>
+        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
+            <argument name="expectedUrl">sales/guest/print/order_id/</argument>
+            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
+        </helper>
+
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintWindowToOpen" />
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintTabToOpen"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="waitForPrintPreviewToLoad"/>
+        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
 
         <!-- AssertSalesPrintOrderProducts -->
         <see userInput="$createBundleProduct.name$" selector="{{StorefrontOrderDetailsSection.productNameCell}}" stepKey="seeBundleProduct"/>
