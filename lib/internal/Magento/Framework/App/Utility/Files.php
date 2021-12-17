@@ -1661,9 +1661,8 @@ class Files
     {
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
-            self::$_cache[$key] = file_exists(
-                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
-            );
+            $componentPath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            self::$_cache[$key] = $componentPath && file_exists($componentPath);
         }
 
         return self::$_cache[$key];

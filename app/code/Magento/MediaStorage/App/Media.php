@@ -238,7 +238,12 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        $isDirectoryChanged = false;
+        if ($this->mediaDirectoryPath && $this->directoryMedia->getAbsolutePath()) {
+            $isDirectoryChanged = rtrim($this->mediaDirectoryPath, '/')
+                !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        }
+        return $isDirectoryChanged;
     }
 
     /**
