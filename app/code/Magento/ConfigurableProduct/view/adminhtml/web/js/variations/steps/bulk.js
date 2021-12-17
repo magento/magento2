@@ -67,11 +67,19 @@ define([
                     type: ko.observable('none'),
                     value: ko.observable(),
                     attribute: ko.observable()
+                },
+                weight: {
+                    label: 'weight',
+                    type: ko.observable('none'),
+                    value: ko.observable(),
+                    attribute: ko.observable(),
+                    unit: ''
                 }
             });
 
             this.variationsComponent(function (variationsComponent) {
                 this.sections().price.currencySymbol = variationsComponent.getCurrencySymbol();
+                this.sections().weight.unit = variationsComponent.getWeightUnit();
             }.bind(this));
 
             /**
@@ -81,7 +89,8 @@ define([
                 return {
                     images: new this.makeImages(null),
                     price: this.price,
-                    quantity: this.quantity
+                    quantity: this.quantity,
+                    weight: this.weight
                 };
             }.bind(this);
 

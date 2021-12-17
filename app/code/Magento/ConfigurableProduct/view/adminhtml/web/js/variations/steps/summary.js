@@ -51,7 +51,13 @@ define([
                 }
             }),
             attributes: [],
-            attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
+            attributesName: [
+                $.mage.__('Images'),
+                $.mage.__('SKU'),
+                $.mage.__('Quantity'),
+                $.mage.__('Weight'),
+                $.mage.__('Price')
+            ],
             sections: [],
             gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid',
             quantityFieldName: 'quantity'
@@ -100,7 +106,7 @@ define([
 
             this.variations = [];
             _.each(variations, function (options) {
-                var product, images, sku, name, quantity, price, variation,
+                var product, images, sku, name, quantity, price, variation, weight,
                     productId = this.variationsComponent().getProductIdByOptions(options);
 
                 if (productId) {
@@ -129,6 +135,13 @@ define([
                 if (productId && !images.file) {
                     images = product.images;
                 }
+
+                weight = getSectionValue('weight', options);
+
+                if (!weight && productWeight.length > 0) {
+                    weight = productWeight;
+                }
+
                 variation = {
                     options: options,
                     images: images,
@@ -136,7 +149,7 @@ define([
                     name: name,
                     price: price,
                     productId: productId,
-                    weight: productWeight,
+                    weight: weight,
                     editable: true
                 };
                 variation[this.quantityFieldName] = quantity;
@@ -199,6 +212,7 @@ define([
             _.each(variation.options, function (option) {
                 row.push(option.label);
             });
+            row.push(variation.weight);
             row.push(this.variationsComponent().getCurrencySymbol() +  ' ' + variation.price);
 
             return row;

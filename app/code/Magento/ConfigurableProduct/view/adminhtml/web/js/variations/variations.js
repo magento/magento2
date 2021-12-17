@@ -220,6 +220,7 @@ define([
                     productId: variation.productId || null,
                     name: variation.name || variation.sku,
                     priceCurrency: this.currencySymbol,
+                    unitWeight: this.unitWeight,
                     weight: variation.weight,
                     attribute: JSON.stringify(attributes),
                     variationKey: this.getVariationKey(variation.options),
@@ -377,6 +378,14 @@ define([
          */
         getCurrencySymbol: function () {
             return this.currencySymbol;
+        },
+
+        /**
+         * Get unit weight
+         * @returns {String}
+         */
+        getWeightUnit: function () {
+            return this.weightUnit;
         },
 
         /**
