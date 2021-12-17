@@ -214,6 +214,9 @@ class ImageTest extends TestCase
             '/media_path/theme/preview',
             $this->anything()
         );
+        $this->_imageMock->expects($this->any())
+            ->method('getImageType')
+            ->willReturn(1);
         $this->_model->createPreviewImage('/some/path/to/image.png');
         $this->assertNotNull($this->_themeMock->getData('preview_image'));
     }
@@ -300,6 +303,9 @@ class ImageTest extends TestCase
     {
         $scope = 'test_scope';
         $tmpFilePath = '/media_path/tmp/temporary.png';
+
+        $this->_imageMock->method('getImageType')
+            ->willReturn(0);   // PHP 8.1 compatibility
         $this->_themeMock->method('getPreviewImage')->willReturn('test.png');
         $this->_uploaderMock->expects($this->once())
             ->method('uploadPreviewImage')

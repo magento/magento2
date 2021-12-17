@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-91625"/>
             <group value="elasticsearch"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Set search engine to Elastic, set Locale to China, create category and product, then go to Storefront -->

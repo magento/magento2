@@ -138,7 +138,7 @@ class Gateway implements GatewayInterface
     {
         $requestData = [];
         foreach ($data as $k => $v) {
-            if (strpos($v, '&') !== false || strpos($v, '=') !== false) {
+            if (is_string($v) && (strpos($v, '&') !== false || strpos($v, '=') !== false)) {
                 $requestData[$k . '[' . strlen($v) . ']'] = $v;
             } else {
                 $requestData[$k] = $v;

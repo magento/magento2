@@ -179,7 +179,6 @@ class ProductTest extends AbstractImportTestCase
      */
     protected $_resourceFactory;
 
-    // @codingStandardsIgnoreStart
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject
      */
@@ -268,7 +267,6 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject
      */
-    // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
 
     /**
