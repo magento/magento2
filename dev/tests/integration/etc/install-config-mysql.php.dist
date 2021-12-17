@@ -23,6 +23,6 @@ return [
     'amqp-port' => '5672',
     'amqp-user' => 'guest',
     'amqp-password' => 'guest',
-    'use-secure' => 0,
-    'use-secure-admin' => 0,
+    'use-secure' => '0',
+    'use-secure-admin' => '0',
 ];
