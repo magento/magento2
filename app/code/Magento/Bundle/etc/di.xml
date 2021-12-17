@@ -72,6 +72,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Pricing\Price\BundleRegularPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Bundle\Pricing\Price\FinalPrice">
         <arguments>
             <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
