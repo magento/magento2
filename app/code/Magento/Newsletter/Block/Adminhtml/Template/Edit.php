@@ -215,7 +215,8 @@ class Edit extends Widget
     public function getJsTemplateName()
     {
         $templateCode = $this->getModel()->getTemplateCode();
-        return $templateCode ? addslashes($templateCode) : '';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return $templateCode ? addcslashes($templateCode, "\"\r\n\\") : '';
     }
 
     /**
