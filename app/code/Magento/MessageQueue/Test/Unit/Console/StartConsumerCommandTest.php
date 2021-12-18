@@ -102,12 +102,12 @@ class StartConsumerCommandTest extends TestCase
      */
     public function testExecute(
         ?string $pidFilePath,
-        bool    $singleThread,
-        ?int    $multiProcess,
-        int     $lockExpects,
-        bool    $isLocked,
-        int     $unlockExpects,
-        int     $runProcessExpects,
+        bool $singleThread,
+        ?int $multiProcess,
+        int $lockExpects,
+        bool $isLocked,
+        int $unlockExpects,
+        int $runProcessExpects,
         int $expectedReturn
     ): void {
         $areaCode = 'area_code';
