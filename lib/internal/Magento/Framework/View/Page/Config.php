@@ -197,7 +197,7 @@ class Config
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            $locale !== null ? strstr($locale, '_', true) : ''
+            $locale !== null ? strstr($locale, '_', true) : false
         );
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
