@@ -36,8 +36,6 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_GiftMessage::inline.phtml';
 
     /**
-     * Gift message message
-     *
      * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
@@ -324,7 +322,8 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getEscaped($value, $defaultValue = '')
     {
-        return $this->escapeHtml(trim($value) != '' ? $value : $defaultValue);
+        $value = ($value !== null && trim($value) != '') ? $value : $defaultValue;
+        return $this->escapeHtml($value);
     }
 
     /**
