@@ -143,14 +143,14 @@ define([
                 success: function (response) {
                     var msg;
 
-                    if ($.type(response) === 'object' && !$.isEmptyObject(response)) {
+                    if (typeof response === 'object' && !$.isEmptyObject(response)) {
                         if (response['error_messages']) {
                             this._ajaxComplete();
                             msg = response['error_messages'];
 
                             /* eslint-disable max-depth */
                             if (msg) {
-                                if ($.type(msg) === 'array') {
+                                if (Array.isArray(msg)) {
                                     msg = msg.join('\n');
                                 }
                             }
@@ -216,7 +216,7 @@ define([
         _updateOrderSubmit: function (shouldDisable, fn) {
             this._toggleButton(this.options.orderReviewSubmitSelector, shouldDisable);
 
-            if ($.type(fn) === 'function') {
+            if (typeof fn === 'function') {
                 fn.call(this);
             }
         },
