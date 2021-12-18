@@ -1,7 +1,5 @@
-# CatalogGraphQl module
-
-**CatalogGraphQl** provides type and resolver information for the GraphQl module
-to generate catalog and product information endpoints.
+# Magento_TaxImportExport module
+This module implements tax import/export functionality.
 
 ## Extensibility
 
