@@ -145,6 +145,13 @@ class Copier
         do {
             $urlKey = $this->modifyUrl($urlKey);
             $duplicate->setUrlKey($urlKey);
+
+            // PHP 8.1 Compatibility fix for problem
+            // trim(): Passing null to parameter #1 ($string) of type string is deprecated
+            // If `entity_id` field is `false` the system works correctly and reset
+            // the `entity_id` during to save process
+            $fixedDuplicateEntityId = $duplicate->getEntityId() ?? false;
+            $duplicate->setEntityId($fixedDuplicateEntityId);
         } while (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $duplicate));
         $duplicate->setData('url_path', null);
         $duplicate->save();
