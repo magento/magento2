@@ -83,7 +83,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
 
         if ($this->session->isLoggedIn()) {
-            $this->setLoggedInCustomerData($this->session->getCustomerData());
+            $this->loggedInCustomerData = $this->session->getCustomerData();
         }
 
         if ($isCustomer) {
@@ -92,18 +92,6 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
             $this->session->setCustomerGroupId($customer->getGroupId());
         }
         return $contextParameters;
-    }
-
-    /**
-     * Set logged in customer data
-     *
-     * @param CustomerInterface $customerData
-     * @return AddUserInfoToContext
-     */
-    public function setLoggedInCustomerData(CustomerInterface $customerData): self
-    {
-        $this->loggedInCustomerData = $customerData;
-        return $this;
     }
 
     /**
