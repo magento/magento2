@@ -15,5 +15,6 @@
         </annotations>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminCustomerMainActionsSection.saveAndContinue}}" stepKey="saveAndContinue"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
