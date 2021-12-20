@@ -28,6 +28,10 @@
                 <argument name="sku" value="{{BaseConfigurableProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute"/>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
