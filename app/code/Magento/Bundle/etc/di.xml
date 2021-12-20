@@ -283,4 +283,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
