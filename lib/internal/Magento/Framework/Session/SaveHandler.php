@@ -146,7 +146,8 @@ class SaveHandler implements SaveHandlerInterface
      * @return bool
      * @throws LocalizedException
      */
-    public function write($sessionId, $data): bool
+    #[\ReturnTypeWillChange]
+    public function write($sessionId, $data)
     {
         $sessionMaxSize = $this->sessionMaxSizeConfig->getSessionMaxSize();
         $sessionSize = strlen($data);
