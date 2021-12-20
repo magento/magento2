@@ -94,7 +94,15 @@ class Sort
             if (isset($this->map[$fieldName])) {
                 $fieldName = $this->map[$fieldName];
             }
-            if ($attribute->isSortable() && !($attribute->isFloatType() || $attribute->isIntegerType())) {
+            if ($attribute->isSortable() && !$attribute->isComplexType() && !($attribute->isFloatType() || $attribute->isIntegerType())) {
+                $suffix = $this->fieldNameResolver->getFieldName(
+                    $attribute,
+                    ['type' => FieldMapperInterface::TYPE_SORT]
+                );
+                $fieldName .= '.' . $suffix;
+            }
+            if ($attribute->isComplexType() && $attribute->isSortable()) {
+                $fieldName .= '_value';
                 $suffix = $this->fieldNameResolver->getFieldName(
                     $attribute,
                     ['type' => FieldMapperInterface::TYPE_SORT]
