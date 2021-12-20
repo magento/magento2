@@ -59,7 +59,8 @@ class Storage
             ];
         }
         if (count($toSave) > 0) {
-            $this->productResource->removeMultiple(array_column($toSave, 'url_rewrite_id'));
+//            Fix Commented out because we try to produce a failing test
+//            $this->productResource->removeMultiple(array_column($toSave, 'url_rewrite_id'));
             $this->productResource->saveMultiple($toSave);
         }
         return $result;
