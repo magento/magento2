@@ -247,11 +247,11 @@ class ImageUploader
             throw new LocalizedException(__('File validation failed.'));
         }
         $result = $uploader->save($this->mediaDirectory->getAbsolutePath($baseTmpPath));
-        unset($result['path']);
 
         if (!$result) {
             throw new LocalizedException(__('File can not be saved to the destination folder.'));
         }
+        unset($result['path']);
 
         /**
          * Workaround for prototype 1.7 methods "isJSON", "evalJSON" on Windows OS
