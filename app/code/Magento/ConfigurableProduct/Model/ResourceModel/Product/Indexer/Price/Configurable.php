@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -18,7 +17,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructur
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\CatalogInventory\Model\Stock;
 
 /**
  * Configurable Products Price Indexer Resource model
@@ -83,6 +81,11 @@ class Configurable implements DimensionalIndexerInterface
     private $baseSelectProcessor;
 
     /**
+     * @var OptionsIndexerInterface
+     */
+    private $optionsIndexer;
+
+    /**
      * @param BaseFinalPrice $baseFinalPrice
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
@@ -91,9 +94,9 @@ class Configurable implements DimensionalIndexerInterface
      * @param BasePriceModifier $basePriceModifier
      * @param bool $fullReindexAction
      * @param string $connectionName
-     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param BaseSelectProcessorInterface|null $baseSelectProcessor
-     *
+     * @param OptionsIndexerInterface|null $optionsIndexer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -106,7 +109,8 @@ class Configurable implements DimensionalIndexerInterface
         $fullReindexAction = false,
         $connectionName = 'indexer',
         ScopeConfigInterface $scopeConfig = null,
-        ?BaseSelectProcessorInterface $baseSelectProcessor = null
+        ?BaseSelectProcessorInterface $baseSelectProcessor = null,
+        ?OptionsIndexerInterface $optionsIndexer = null
     ) {
         $this->baseFinalPrice = $baseFinalPrice;
         $this->indexTableStructureFactory = $indexTableStructureFactory;
@@ -119,6 +123,8 @@ class Configurable implements DimensionalIndexerInterface
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->baseSelectProcessor = $baseSelectProcessor ?:
             ObjectManager::getInstance()->get(BaseSelectProcessorInterface::class);
+        $this->optionsIndexer = $optionsIndexer
+            ?: ObjectManager::getInstance()->get(OptionsIndexerInterface::class);
     }
 
     /**
@@ -175,60 +181,13 @@ class Configurable implements DimensionalIndexerInterface
             true
         );
 
-        $this->fillTemporaryOptionsTable($temporaryOptionsTableName, $dimensions, $entityIds);
+        $indexTableName = $this->getMainTable($dimensions);
+        $this->optionsIndexer->execute($indexTableName, $temporaryOptionsTableName, $entityIds);
         $this->updateTemporaryTable($temporaryPriceTable->getTableName(), $temporaryOptionsTableName);
 
         $this->getConnection()->delete($temporaryOptionsTableName);
 
         return $this;
-    }
-
-    /**
-     * Put data into catalog product price indexer config option temp table
-     *
-     * @param string $temporaryOptionsTableName
-     * @param array $dimensions
-     * @param array $entityIds
-     *
-     * @return void
-     * @throws \Exception
-     */
-    private function fillTemporaryOptionsTable(string $temporaryOptionsTableName, array $dimensions, array $entityIds)
-    {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $linkField = $metadata->getLinkField();
-
-        $select = $this->getConnection()->select()->from(
-            ['i' => $this->getMainTable($dimensions)],
-            []
-        )->join(
-            ['l' => $this->getTable('catalog_product_super_link')],
-            'l.product_id = i.entity_id',
-            []
-        )->join(
-            ['le' => $this->getTable('catalog_product_entity')],
-            'le.' . $linkField . ' = l.parent_id',
-            []
-        );
-
-        $this->baseSelectProcessor->process($select);
-
-        $select->columns(
-            [
-                'le.entity_id',
-                'customer_group_id',
-                'website_id',
-                'MIN(final_price)',
-                'MAX(final_price)',
-                'MIN(tier_price)',
-            ]
-        )->group(
-            ['le.entity_id', 'customer_group_id', 'website_id']
-        );
-        if ($entityIds !== null) {
-            $select->where('le.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
-        }
-        $this->tableMaintainer->insertFromSelect($select, $temporaryOptionsTableName, []);
     }
 
     /**
