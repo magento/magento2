@@ -71,6 +71,11 @@ class ConfigTest extends TestCase
      */
     private $typeMock;
 
+    /**
+     * @var Type|MockObject
+     */
+    private $storeManagerMock;
+
     protected function setUp(): void
     {
         $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
@@ -101,18 +106,6 @@ class ConfigTest extends TestCase
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
-        $websiteId = 1;
-        $websiteMock = $this->createMock(Website::class);
-        $websiteMock->method('getId')->willReturn($websiteId);
-
-        $storeId = 1;
-        $storeMock = $this->createMock(Store::class);
-        $storeMock
-            ->method('getId')->willReturn($storeId);
-
-        $this->storeManagerMock->method('getWebsite')->willReturn($websiteMock);
-        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
 
         $this->config = new Config(
             $this->cacheMock,
@@ -309,7 +302,16 @@ class ConfigTest extends TestCase
             ->method('create')
             ->willReturnMap($factoryCalls);
 
-        $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $this->config->getAttributes($entityType));
+        $storeMock = $this->createMock(Store::class);
+        $storeMock
+            ->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+
+        $attributes = $this->config->getAttributes($entityType);
+        $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $attributes);
     }
 
     public function testClear()

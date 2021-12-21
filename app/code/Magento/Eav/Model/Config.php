@@ -135,7 +135,7 @@ class Config
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
-    
+
     /**
      * @var StoreManagerInterface
      */
@@ -471,16 +471,16 @@ class Config
      * @param string $entityType
      * @return $this
      */
-    protected function _initAttributes($entityType)
+    protected function _initAttributes($entityType, $storeId)
     {
         $entityType = $this->getEntityType($entityType);
         $entityTypeCode = $entityType->getEntityTypeCode();
 
-        if (is_array($this->_attributeData) && isset($this->_attributeData[$entityTypeCode])) {
+        if (is_array($this->_attributeData) && isset($this->_attributeData[$storeId][$entityTypeCode])) {
             return $this;
         }
 
-        if ($this->initAttributesFromCache($entityType)) {
+        if ($this->initAttributesFromCache($entityType, $storeId)) {
             return $this;
         }
 
@@ -492,19 +492,19 @@ class Config
             $entityType
         )->getData();
 
-        $this->_attributeData[$entityTypeCode] = [];
+        $this->_attributeData[$storeId][$entityTypeCode] = [];
         foreach ($attributes as $attribute) {
             if (empty($attribute['attribute_model'])) {
                 $attribute['attribute_model'] = $entityType->getAttributeModel();
             }
             $attributeObject = $this->_createAttribute($entityType, $attribute);
             $this->saveAttribute($attributeObject, $entityTypeCode, $attributeObject->getAttributeCode());
-            $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attributeObject->toArray();
+            $this->_attributeData[$storeId][$entityTypeCode][$attribute['attribute_code']] = $attributeObject->toArray();
         }
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
-                $this->serializer->serialize($this->_attributeData[$entityTypeCode]),
-                self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode,
+                $this->serializer->serialize($this->_attributeData[$storeId][$entityTypeCode]),
+                self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-' . $entityTypeCode,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
@@ -593,7 +593,7 @@ class Config
             return;
         }
 
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode . '-preload';
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-' . $entityTypeCode . '-preload';
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {
@@ -654,7 +654,7 @@ class Config
      */
     private function cacheUserDefinedAttribute($entityType, $entityTypeCode, $code): AbstractAttribute
     {
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-attribute-' . $entityTypeCode . '-' . $code;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-attribute-' . $entityTypeCode . '-' . $code;
         $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attribute)
             : null;
@@ -761,7 +761,7 @@ class Config
     {
         $entityType = $this->getEntityType($entityType);
         $attributeSetId = 0;
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $this->getStoreId();
         if ($object instanceof \Magento\Framework\DataObject) {
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
             $storeId = $object->getStoreId() ?: $storeId;
@@ -789,8 +789,8 @@ class Config
                     $storeId
                 )->getData();
             } else {
-                $this->_initAttributes($entityType);
-                $attributesData = $this->_attributeData[$entityType->getEntityTypeCode()];
+                $this->_initAttributes($entityType, $storeId);
+                $attributesData = $this->_attributeData[$storeId][$entityType->getEntityTypeCode()];
             }
 
             if ($this->isCacheEnabled()) {
@@ -954,16 +954,16 @@ class Config
      * @param Type $entityType
      * @return bool
      */
-    private function initAttributesFromCache(Type $entityType)
+    private function initAttributesFromCache(Type $entityType, $storeId)
     {
         $entityTypeCode = $entityType->getEntityTypeCode();
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getWebsiteId() . '-' . $entityTypeCode;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-' . $entityTypeCode;
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {
                 foreach ($attributes as $attribute) {
                     $this->_createAttribute($entityType, $attribute);
-                    $this->_attributeData[$entityTypeCode][$attribute['attribute_code']] = $attribute;
+                    $this->_attributeData[$entityTypeCode][$storeId][$attribute['attribute_code']] = $attribute;
                 }
                 return true;
             }
@@ -972,12 +972,12 @@ class Config
     }
 
     /**
-     * Get current website id
-     * 
+     * Get current store id
+     *
      * @return int
      */
-    private function getWebsiteId()
+    private function getStoreId()
     {
-        return $this->storeManager->getWebsite()->getId();
+        return $this->storeManager->getStore()->getId();
     }
 }
