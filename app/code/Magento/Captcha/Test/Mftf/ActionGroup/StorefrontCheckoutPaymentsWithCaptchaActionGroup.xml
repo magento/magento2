@@ -13,7 +13,7 @@
             <argument name="captcha" type="string"/>
         </arguments>
 
-        <fillField selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" userInput="{{captcha}}" stepKey="fillCaptchaField" />
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" stepKey="waitForCaptchaField"/>
+        <fillField selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" userInput="{{captcha}}" stepKey="fillCaptchaField"/>
     </actionGroup>
 </actionGroups>
