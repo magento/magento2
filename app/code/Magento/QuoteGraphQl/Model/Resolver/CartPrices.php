@@ -54,12 +54,14 @@ class CartPrices implements ResolverInterface
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 
+// subtotal(800) - (discount (10) - discount_tax_compensation_amount(2)) = 792.
+
         return [
             'grand_total' => ['value' => $cartTotals->getGrandTotal(), 'currency' => $currency],
             'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax(), 'currency' => $currency],
             'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal(), 'currency' => $currency],
             'subtotal_with_discount_excluding_tax' => [
-                'value' => $cartTotals->getSubtotalWithDiscount(), 'currency' => $currency
+                'value' => $cartTotals->getSubtotalWithDiscount() + $cartTotals->getDiscountTaxCompensationAmount(), 'currency' => $currency
             ],
             'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
             'discount' => $this->getDiscount($cartTotals, $currency),
