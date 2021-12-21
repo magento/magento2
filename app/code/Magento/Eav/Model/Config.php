@@ -963,7 +963,7 @@ class Config
             if ($attributes) {
                 foreach ($attributes as $attribute) {
                     $this->_createAttribute($entityType, $attribute);
-                    $this->_attributeData[$entityTypeCode][$storeId][$attribute['attribute_code']] = $attribute;
+                    $this->_attributeData[$storeId][$entityTypeCode][$attribute['attribute_code']] = $attribute;
                 }
                 return true;
             }
