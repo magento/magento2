@@ -59,6 +59,7 @@ class SortTest extends TestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @dataProvider getSortProvider
      * @param array $sortItems
      * @param $isSortable
