@@ -206,6 +206,7 @@
 
         <!-- 6. Go through checkout process and try to translate all labels that have red border with 'book' icon.  Like you did it in step #4. -->
         <!-- Check Progress Bar Shipping -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="waitForProgressBarShipping"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertProgressBarShipping">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.progressBarActive}}"/>
         </actionGroup>
@@ -221,6 +222,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateProgressBarShipping3"/>
 
         <!-- Check step title "Shipping Address" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.stepTitleShipping}}" stepKey="waitForShippingAddressTitle"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertShippingAddressTitle">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.stepTitleShipping}}"/>
         </actionGroup>
@@ -236,6 +238,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateShippingAddressTitle3"/>
 
         <!-- Check button "Ship Here" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}" stepKey="waitForButtonShipHere"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonShipHere">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}"/>
         </actionGroup>
@@ -251,6 +254,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateButtonShipHere3"/>
 
         <!-- Check button "+ New Address" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.buttonNewAddress}}" stepKey="waitForButtonNewAddress"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonNewAddress">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonNewAddress}}"/>
         </actionGroup>
@@ -266,6 +270,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateButtonNewAddress3"/>
 
         <!-- Check title "Shipping Method" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.titleShippingMethod}}" stepKey="waitForTitleShippingMethod"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleShippingMethod">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShippingMethod}}"/>
         </actionGroup>
@@ -281,6 +286,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateTitleShippingMethod3"/>
 
         <!-- Check button "Next" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.buttonNext}}" stepKey="waitForButtonNext"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonNext">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonNext}}"/>
         </actionGroup>
@@ -296,6 +302,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateButtonNext3"/>
 
         <!-- Check title "Order Summary" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.titleOrderSummary}}" stepKey="waitForTitleOrderSummary"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleOrderSummary">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleOrderSummary}}"/>
         </actionGroup>
@@ -311,6 +318,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateTitleOrderSummary3"/>
 
         <!-- Check text "Item in Cart"-->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.itemsInCartText}}" stepKey="waitForItemsInCartText"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertItemsInCartText">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.itemsInCartText}}"/>
         </actionGroup>
@@ -330,6 +338,7 @@
         <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStepBeforeTranslate"/>
 
         <!-- Check Progress Bar Review & Payments -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="waitForProgressBarReviewAndPayments"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertProgressBarReviewAndPayments">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.progressBarActive}}"/>
         </actionGroup>
@@ -345,6 +354,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateProgressBarReviewAndPayments3"/>
 
         <!-- Check title "Payment Method" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.titlePayment}}" stepKey="waitForTitlePayment"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitlePayment">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titlePayment}}"/>
         </actionGroup>
@@ -360,6 +370,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateTitlePayment3"/>
 
         <!-- Check text for checkbox "My billing and shipping address are the same" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.checkboxSameBillingAddress}}" stepKey="waitForCheckboxSameBillingAddress"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertCheckboxSameBillingAddress">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.checkboxSameBillingAddress}}"/>
         </actionGroup>
@@ -375,6 +386,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateCheckboxSameBillingAddress3"/>
 
         <!-- Check button "Place Order" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.buttonPlaceOrder}}" stepKey="waitForButtonPlaceOrder"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonPlaceOrder">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonPlaceOrder}}"/>
         </actionGroup>
@@ -390,6 +402,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateButtonPlaceOrder3"/>
 
         <!-- Check button "Apply Discount Code" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.textApplyDiscountCode}}" stepKey="waitForApplyDiscountCode"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertApplyDiscountCode">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textApplyDiscountCode}}"/>
         </actionGroup>
@@ -405,6 +418,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateApplyDiscountCode3"/>
 
         <!-- Check text on sidebar "Cart Subtotal" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.textCartSubtotal}}" stepKey="waitForCartSubtotalText"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertCartSubtotalText">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textCartSubtotal}}"/>
         </actionGroup>
@@ -413,6 +427,7 @@
         <see userInput="Cart Subtotal Translated" selector="{{InlineTranslationModeCheckoutSection.textCartSubtotal}}" stepKey="seeTranslateCartSubtotalOnCheckoutText"/>
 
         <!-- Check text on sidebar text "Shipping" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.textShippingTotal}}" stepKey="waitForShippingText"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertShippingText">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textShippingTotal}}"/>
         </actionGroup>
@@ -428,6 +443,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateShippingText3"/>
 
         <!-- Check text on sidebar text "Order Total" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.textOrderTotal}}" stepKey="waitForOrderTotalText"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertOrderTotalText">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.textOrderTotal}}"/>
         </actionGroup>
@@ -443,6 +459,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateOrderTotalText3"/>
 
         <!-- Check text on sidebar title "Ship To" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.titleShipTo}}" stepKey="waitForTitleShipTo"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleShipTo">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShipTo}}"/>
         </actionGroup>
@@ -458,6 +475,7 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateTitleShipTo3"/>
 
         <!-- Check text on sidebar title "Shipping Method:" -->
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.titleShopVia}}" stepKey="waitForTitleShipVia"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertTitleShipVia">
             <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.titleShopVia}}"/>
         </actionGroup>
