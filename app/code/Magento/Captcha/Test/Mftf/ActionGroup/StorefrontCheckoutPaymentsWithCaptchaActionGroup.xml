@@ -14,5 +14,6 @@
         </arguments>
 
         <fillField selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" userInput="{{captcha}}" stepKey="fillCaptchaField" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
