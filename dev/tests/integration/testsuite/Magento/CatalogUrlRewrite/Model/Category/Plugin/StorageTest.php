@@ -101,6 +101,7 @@ class StorageTest extends TestCase
     /**
      * @return void
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/issue34210_structure.php
+     * @magentoDbIsolation disabled
      */
     public function testIssue34210(): void
     {
