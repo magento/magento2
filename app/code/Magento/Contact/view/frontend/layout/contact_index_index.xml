@@ -13,9 +13,6 @@
         <referenceContainer name="content">
             <block class="Magento\Contact\Block\ContactForm" name="contactForm" template="Magento_Contact::form.phtml">
                 <container name="form.additional.info" label="Form Additional Info"/>
-                <arguments>
-                    <argument name="view_model" xsi:type="object">Magento\Contact\ViewModel\UserDataProvider</argument>
-                </arguments>
             </block>
         </referenceContainer>
     </body>

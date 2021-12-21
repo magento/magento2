@@ -19,14 +19,14 @@ class Column extends AbstractComponent implements ColumnInterface
     const NAME = 'column';
 
     /**
-     * Wrapped component
+     * UI component
      *
      * @var UiComponentInterface
      */
     protected $wrappedComponent;
 
     /**
-     * UI component factory
+     * Factory for UI Component
      *
      * @var UiComponentFactory
      */
@@ -87,7 +87,8 @@ class Column extends AbstractComponent implements ColumnInterface
                 'config',
                 array_replace_recursive(
                     (array)$this->wrappedComponent->getData('config'),
-                    (array)$this->getData('config')
+                    (array)$this->getData('config'),
+                    ['__disableTmpl' => ['label' => true]]
                 )
             );
         }
