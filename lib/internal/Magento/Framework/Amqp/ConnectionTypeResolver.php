@@ -45,6 +45,6 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
      */
     public function getConnectionType($connectionName)
     {
-        return in_array($connectionName, $this->amqpConnectionName) ? 'amqp' : null;
+        return in_array($connectionName, $this->amqpConnectionName, true) ? 'amqp' : null;
     }
 }

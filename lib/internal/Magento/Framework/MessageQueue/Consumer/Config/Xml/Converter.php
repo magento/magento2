@@ -61,7 +61,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
             $result[$consumerName] = [
                 'name' => $consumerName,
-                'queue' => $this->getAttributeValue($consumerNode, 'queue'),
+                'queue' => $this->getAttributeValue($consumerNode, 'queue', $consumerName),
                 'consumerInstance' => $this->getAttributeValue(
                     $consumerNode,
                     'consumerInstance',
