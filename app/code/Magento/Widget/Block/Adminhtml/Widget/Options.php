@@ -172,7 +172,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             }
         } else {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $data['value'] = html_entity_decode($data['value']);
+            $data['value'] = \is_string($data['value']) ? html_entity_decode($data['value']) : '';
         }
 
         // prepare element dropdown values

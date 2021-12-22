@@ -48,8 +48,22 @@
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
-            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToCatalogRuleGridPage"/>
-            <waitForPageLoad stepKey="waitForCatalogRuleGridPageLoaded"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogRuleGridPage"/>
+            <helper class="Magento\CatalogRule\Test\Mftf\Helper\CatalogPriceRuleHelper" method="deleteAllCatalogPriceRules" stepKey="deleteAllCatalogPriceRules">
+                <argument name="firstNotEmptyRow">{{AdminCatalogPriceRuleGrid.firstNotEmptyRow}}</argument>
+                <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
+                <argument name="deleteButton">{{AdminNewCatalogPriceRule.delete}}</argument>
+                <argument name="successMessageContainer">{{AdminMessagesSection.success}}</argument>
+                <argument name="successMessage">You deleted the rule.</argument>
+            </helper>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="waitForCatalogRuleGridPageLoaded"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCatalogRuleGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>

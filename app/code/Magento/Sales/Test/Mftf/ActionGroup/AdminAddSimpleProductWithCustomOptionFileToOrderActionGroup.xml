@@ -16,9 +16,13 @@
         </arguments>
 
         <remove keyForRemoval="fillProductQty"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad" after="selectProduct"/>
-        <fillField selector="{{AdminOrderFormCustomOptionsSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty" after="waitForAjaxLoad"/>
+        <comment userInput="BIC workaround" stepKey="waitForAjaxLoad" after="waitForProductLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormCustomOptionsSection.quantity}}" stepKey="waitForProductQty" after="waitForAjaxLoad"/>
+        <fillField selector="{{AdminOrderFormCustomOptionsSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty" after="waitForProductQty"/>
         <attachFile selector="{{AdminOrderFormCustomOptionsSection.file}}" userInput="{{file}}" stepKey="attachImageForOptional" after="fillProductQty"/>
-        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickButtonOK" after="attachImageForOptional"/>
+        <waitForPageLoad stepKey="waitForImageUploaded" after="attachImageForOptional"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickButtonOK" after="waitForImageUploaded"/>
+        <waitForPageLoad stepKey="waitForSlideOutGone" after="clickButtonOK"/>
+        <waitForElementNotVisible selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="waitForOkButtonGone" after="waitForSlideOutGone"/>
     </actionGroup>
 </actionGroups>

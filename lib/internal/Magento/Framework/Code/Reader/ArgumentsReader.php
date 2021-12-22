@@ -14,7 +14,7 @@ class ArgumentsReader
 {
     use GetParameterClassTrait;
 
-    const NO_DEFAULT_VALUE = 'NO-DEFAULT';
+    public const NO_DEFAULT_VALUE = 'NO-DEFAULT';
 
     /**
      * @var NamespaceResolver
@@ -110,7 +110,11 @@ class ArgumentsReader
 
         $type = $parameter->detectType();
 
-        if ($type === 'null') {
+        /**
+         * $type === null if it is unspecified
+         * $type === 'null' if it is used in doc block
+         */
+        if ($type === null || $type === 'null') {
             return null;
         }
 
