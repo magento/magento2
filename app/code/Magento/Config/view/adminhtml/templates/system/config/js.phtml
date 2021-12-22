@@ -111,7 +111,6 @@ $scriptString .= <<<script
     {
         var countryElement = element;
         if (countryElement && countryElement.id) {
-            this.refreshVatNumberField(countryElement);
             this.refreshValidateVatNumberButton(countryElement);
         }
     },
@@ -139,7 +138,7 @@ $scriptString .= <<<script
     {
         var resultElement = document.getElementById("validation_result");
         if (this.euCountryList.includes(countryCode)) {
-            this.btnVatNumberElement.classList.remove('disabled');
+            this.btnVatNumberElement.style.display = "block";
             if (resultElement) {
                 resultElement.style.display = "block";
                 resultElement.innerHTML = '';
@@ -148,7 +147,7 @@ $scriptString .= <<<script
                 }
             }
         } else {
-            this.btnVatNumberElement.classList.add('disabled');
+            this.btnVatNumberElement.style.display = "none";
             if (resultElement) {
                 resultElement.style.display = "none";
             }

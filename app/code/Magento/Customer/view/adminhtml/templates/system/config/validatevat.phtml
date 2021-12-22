@@ -60,7 +60,7 @@ script;
 
 <div class="actions actions-validate-vat">
     <p class="admin__field-error hidden" id="validation_result"></p>
-    <button class="action-validate-vat disabled" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>">
+    <button class="action-validate-vat" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>" style="display:none">
         <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
 </div>

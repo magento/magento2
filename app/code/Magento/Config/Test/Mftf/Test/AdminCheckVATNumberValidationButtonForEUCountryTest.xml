@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CheckingVATNumberValidationButtonForEUCountryTest">
+    <test name="AdminCheckVATNumberValidationButtonForEUCountryTest">
         <annotations>
             <title value="Validate VAT Number button for United Kingdom should work same as for non-EU countries after Brexit 2021"/>
             <description value="Validate VAT Number button for United Kingdom (GB) should work same as for non-EU countries after Brexit 2021"/>
@@ -32,11 +32,8 @@
         <!-- Expand the store information tab -->
         <conditionalClick selector="{{StoreConfigSection.StoreInformation}}" dependentSelector="{{StoreConfigSection.CheckIfTabExpand}}" visible="true" stepKey="checkIfTabOpen"/>
 
-        <!-- Verify that `Validate VAT Number` button is available and visible on the current page. -->
-        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="seeVATNumberButton"/>
-
-        <!-- Verify that the `Validate VAT Number` button contains class `disabled` for non-EU Country or none-->
-        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" selectorArray="['class' => 'disabled']" stepKey="validateVatNumberButtonShouldBeDisabledInitially"/>
+        <!-- Verify that `Validate VAT Number` button is not visible when no Country selected-->
+        <dontSeeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="dontSeeVATNumberButton"/>
 
         <!--Open country options section and select an EU Country (`Germany`) -->
         <selectOption userInput="{{DE_Address_Berlin_Not_Default_Address.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectEUStoreCountry"/>
@@ -45,8 +42,8 @@
         <!--Fill valid VAT Number for the selected EU Country (Germany)-->
         <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{DE_Address_Berlin_Not_Default_Address.vatNumber}}" stepKey="fillValidVatNumberForEuCountry"/>
 
-        <!-- Verify that the `Validate VAT Number` button should not contain class `disabled` for EU Country-->
-        <dontSeeElement selector="{{StoreConfigSection.validateVATNumber}}" parameterArray="['class' => 'disabled']" stepKey="validateVatNumberButtonEnabledForEuCountry"/>
+        <!-- Verify that the `Validate VAT Number` button is visible for EU Country-->
+        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="validateVatNumberButtonEnabledForEuCountry"/>
 
         <!-- Click the `Validate VAT Number` button. -->
         <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickValidateVatNumberButton"/>
@@ -59,7 +56,7 @@
         <waitForAjaxLoad stepKey="waitForAjaxToLoadRegionForNonEuCountry"/>
         <fillField selector="{{StoreConfigSection.fillVATNumber}}" userInput="{{UK_With_State_Default_Billing.vatNumber}}" stepKey="fillVATNumberForNonEU"/>
 
-        <!-- Verify that the `Validate VAT Number` button contains class `disabled` for non-EU Country-->
-        <seeElement selector="{{StoreConfigSection.validateVATNumber}}" selectorArray="['class' => 'disabled']" stepKey="validateVatNumberButtonDisabledAgain"/>
+        <!-- Verify that the `Validate VAT Number` button disappears for selection of non-EU Country-->
+        <dontSeeElement selector="{{StoreConfigSection.validateVATNumber}}" stepKey="validateVatNumberButtonDisabledAgain"/>
     </test>
 </tests>
