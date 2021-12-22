@@ -144,7 +144,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $isRemoteStorageDeploymentConfigExists = (bool) $deploymentConfig->getConfigData()['remote_storage'] ?? false;
 
-        // remote storage config is already present and driver is not in $options, return early to prevent overwrite
+        // if remote storage config is already present and driver is not in $options, return early to prevent overwrite
         if ($isRemoteStorageDeploymentConfigExists && !isset($options[self::OPTION_REMOTE_STORAGE_DRIVER])) {
             return [];
         }
