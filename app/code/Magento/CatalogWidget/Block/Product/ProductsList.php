@@ -239,8 +239,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getProductPriceHtml(
         Product $product,
-                $priceType = null,
-                $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        $priceType = null,
+        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
         array $arguments = []
     ) {
         if (!isset($arguments['zone'])) {
