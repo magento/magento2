@@ -54,7 +54,7 @@ class TaxRateCollection extends AbstractServiceCollection
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
