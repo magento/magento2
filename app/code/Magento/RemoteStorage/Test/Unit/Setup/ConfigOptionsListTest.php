@@ -227,7 +227,7 @@ class ConfigOptionsListTest extends TestCase
     public function createConfigProvider()
     {
         return [
-            'Remote Storage Deployment Config Present and Remote Storage Driver Option Missing' => [
+            'Remote Storage Options Missing and Remote Storage Deployment Config Present' => [
                 [
                     'backend-frontname' => 'admin2022',
                 ],
@@ -236,20 +236,22 @@ class ConfigOptionsListTest extends TestCase
                         'driver' => 'aws-s3',
                     ]
                 ],
+                // no config data will be passed to write to deployment config
                 []
             ],
-            'Remote Storage Deployment Config Missing and Remote Storage Driver Option Missing' => [
+            'Remote Storage Options Missing and Remote Storage Deployment Config Missing' => [
                 [
                     'backend-frontname' => 'admin2022',
                 ],
                 [],
                 [
+                    // will create default config with file driver
                     'remote_storage' => [
                         'driver' => 'file',
                     ]
                 ]
             ],
-            'Remote Storage Deployment Config Missing and Remote Storage Driver Option Present' => [
+            'Remote Storage Options Present and Remote Storage Deployment Config Missing' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-region' => 'us-east-1',
@@ -268,7 +270,7 @@ class ConfigOptionsListTest extends TestCase
                     ]
                 ]
             ],
-            'Remote Storage Deployment Config Present and Remote Storage Driver Option Present' => [
+            'Remote Storage Options Present and Remote Storage Deployment Config Present' => [
                 [
                     'remote-storage-driver' => 'aws-s3',
                     'remote-storage-region' => 'us-east-1_NEW',
@@ -287,7 +289,7 @@ class ConfigOptionsListTest extends TestCase
                 [
                     'remote_storage' => [
                         'driver' => 'aws-s3',
-                        // prefix should be removed as it was not passed
+                        // prefix should be removed as it was not passed in options
                         'config' => [
                             'bucket' => 'bucket_NEW',
                             'region' => 'us-east-1_NEW',
