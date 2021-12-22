@@ -98,7 +98,7 @@
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
             <argument name="customerId" value="$$simpleCustomer.id$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton"/>
         <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
         <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToLoad"/>

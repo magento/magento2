@@ -79,12 +79,15 @@
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
 
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
-            <argument name="email" value="$$createCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterCreatedCustomer"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
-        <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
+        <actionGroup ref="AdminClickCreateOrderOnEditCustomerPageActionGroup" stepKey="clickCreateOrder">
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
 
         <actionGroup ref="AdminClickConfigureForRecentlyViewedProductActionGroup" stepKey="configureProduct">
             <argument name="productName" value="$$createBundleProduct.name$$"/>
