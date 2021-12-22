@@ -103,9 +103,6 @@ class AddProductsToCart
         $cart = $this->cartRepository->get($cartId);
 
         foreach ($cartItems as $cartItemPosition => $cartItem) {
-            if ($cartItemPosition != 0 && empty($cart->getItems())) {
-                $cart = $this->cartRepository->get($cartId);
-            }
             $this->addItemToCart($cart, $cartItem, $cartItemPosition);
         }
 
