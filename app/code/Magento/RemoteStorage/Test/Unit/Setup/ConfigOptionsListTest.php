@@ -188,4 +188,113 @@ class ConfigOptionsListTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @param array $options
+     * @param array $deploymentConfig
+     * @param array $expectedConfigArr
+     * @dataProvider createConfigProvider
+     */
+    public function testCreateConfig(array $options, array $deploymentConfig, array $expectedConfigArr)
+    {
+        $deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $deploymentConfigMock
+            ->expects(static::once())
+            ->method('getConfigData')
+            ->willReturn($deploymentConfig);
+
+        $configDataListArr = $this->configOptionsList->createConfig($options, $deploymentConfigMock);
+
+        if (count($configDataListArr)) {
+            $this->assertCount(1, $configDataListArr);
+            $configDataArr = $configDataListArr[0]->getData();
+        } else {
+            $configDataArr = [];
+        }
+
+        $this->assertEquals(
+            $expectedConfigArr,
+            $configDataArr
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function createConfigProvider()
+    {
+        return [
+            'Remote Storage Deployment Config Present and Remote Storage Driver Option Missing' => [
+                [
+                    'backend-frontname' => 'admin2022',
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                    ]
+                ],
+                []
+            ],
+            'Remote Storage Deployment Config Missing and Remote Storage Driver Option Missing' => [
+                [
+                    'backend-frontname' => 'admin2022',
+                ],
+                [],
+                [
+                    'remote_storage' => [
+                        'driver' => 'file',
+                    ]
+                ]
+            ],
+            'Remote Storage Deployment Config Missing and Remote Storage Driver Option Present' => [
+                [
+                    'remote-storage-driver' => 'aws-s3',
+                    'remote-storage-region' => 'us-east-1',
+                    'remote-storage-bucket' => 'bucket1',
+                    'remote-storage-prefix' => 'pre_',
+                ],
+                [],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        'prefix' => 'pre_',
+                        'config' => [
+                            'bucket' => 'bucket1',
+                            'region' => 'us-east-1',
+                        ],
+                    ]
+                ]
+            ],
+            'Remote Storage Deployment Config Present and Remote Storage Driver Option Present' => [
+                [
+                    'remote-storage-driver' => 'aws-s3',
+                    'remote-storage-region' => 'us-east-1_NEW',
+                    'remote-storage-bucket' => 'bucket_NEW',
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        'prefix' => 'pre_OLD',
+                        'config' => [
+                            'bucket' => 'bucket_OLD',
+                            'region' => 'us-east-1_OLD',
+                        ],
+                    ]
+                ],
+                [
+                    'remote_storage' => [
+                        'driver' => 'aws-s3',
+                        // prefix should be removed as it was not passed
+                        'config' => [
+                            'bucket' => 'bucket_NEW',
+                            'region' => 'us-east-1_NEW',
+                        ],
+                    ]
+                ]
+            ],
+        ];
+    }
 }
