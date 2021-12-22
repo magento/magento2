@@ -345,7 +345,7 @@ class FlatTableBuilder
                     $select = $this->_connection->select()
                         ->joinInner(
                             ['e' => $this->resource->getTableName('catalog_product_entity')],
-                            'e.entity_id = et.entity_id',
+                            'e.entity_id = et.entity_id AND e.row_id = et.row_id',
                             []
                         )->joinInner(
                             ['t' => $tableName],
