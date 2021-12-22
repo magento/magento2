@@ -46,12 +46,12 @@
             <argument name="categoryName" value="admin"/>
             <argument name="categoryUrlKey" value=""/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlAdminError}}' stepKey="seeAdminFirstErrorMessage"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlAdminPartialError}}' stepKey="seeAdminFirstErrorMessage"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSaveActionGroup" stepKey="fillAdminSecondCategoryForm">
             <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
             <argument name="categoryUrlKey" value="admin"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlAdminError}}' stepKey="seeAdminSecondErrorMessage"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput='{{AdminCategoryRestrictedUrlErrorMessage.urlAdminPartialError}}' stepKey="seeAdminSecondErrorMessage"/>
         <!--Create category with 'admin' name-->
         <comment userInput="Create category with 'admin' name" stepKey="commentAdminCategoryCreation"/>
         <actionGroup ref="FillCategoryNameAndUrlKeyAndSaveActionGroup" stepKey="fillAdminThirdCategoryForm">

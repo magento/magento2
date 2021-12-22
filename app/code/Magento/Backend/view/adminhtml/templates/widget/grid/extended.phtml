@@ -303,7 +303,7 @@ script;
 script;
         endif;
 
-        if (strpos($block->getRowClickCallback(), 'order.') !== false):
+        if ($block->getRowClickCallback() && strpos($block->getRowClickCallback(), 'order.') !== false):
             $scriptString .= <<<script
 
     deps.push('Magento_Sales/order/create/form')

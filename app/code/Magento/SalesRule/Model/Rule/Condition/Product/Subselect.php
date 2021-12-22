@@ -164,7 +164,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
                 }
             }
             if ($hasValidChild || parent::validate($item)) {
-                $total += ($hasValidChild && $useChildrenTotal)
+                $total += ($hasValidChild && $useChildrenTotal && $childrenAttrTotal > 0)
                     ? $childrenAttrTotal * $item->getQty()
                     : $item->getData($attr);
             }
