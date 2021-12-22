@@ -1047,6 +1047,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @param string[] $additionalInformation
      * @return $this
+     * @since 102.1.0
      */
     public function setAdditionalInformation($additionalInformation);
 

@@ -6,12 +6,12 @@
 namespace Magento\Sales\Model\ResourceModel\Order\Address;
 
 use Magento\Sales\Api\Data\OrderAddressSearchResultInterface;
-use \Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
+use Magento\Sales\Model\ResourceModel\Order\Collection\AbstractCollection;
+use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\ResourceModel\Order\Address as AddressResource;
 
 /**
- * Flat sales order payment collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Order addresses collection
  */
 class Collection extends AbstractCollection implements OrderAddressSearchResultInterface
 {
@@ -37,8 +37,8 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
     protected function _construct()
     {
         $this->_init(
-            \Magento\Sales\Model\Order\Address::class,
-            \Magento\Sales\Model\ResourceModel\Order\Address::class
+            Address::class,
+            AddressResource::class
         );
     }
 

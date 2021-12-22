@@ -43,13 +43,16 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 
         // Serve file if it's materialized
         if ($mediaDirectory) {
-            if (!$isAllowed($relativePath, $allowedResources)) {
+            $fileAbsolutePath = __DIR__ . '/' . $relativePath;
+            $fileRelativePath = str_replace(rtrim($mediaDirectory, '/') . '/', '', $fileAbsolutePath);
+
+            if (!$isAllowed($fileRelativePath, $allowedResources)) {
                 require_once 'errors/404.php';
                 exit;
             }
-            $mediaAbsPath = $mediaDirectory . '/' . $relativePath;
-            if (is_readable($mediaAbsPath)) {
-                if (is_dir($mediaAbsPath)) {
+
+            if (is_readable($fileAbsolutePath)) {
+                if (is_dir($fileAbsolutePath)) {
                     require_once 'errors/404.php';
                     exit;
                 }
@@ -57,7 +60,7 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
                     new \Magento\Framework\HTTP\PhpEnvironment\Response(),
                     new \Magento\Framework\File\Mime()
                 );
-                $transfer->send($mediaAbsPath);
+                $transfer->send($fileAbsolutePath);
                 exit;
             }
         }

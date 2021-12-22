@@ -31,8 +31,7 @@
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
         <!--Create Default Product-->
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddDefaultProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillDefaultProductName"/>
@@ -41,12 +40,10 @@
         <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSearchEngine"/>
         <click selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="selectSearchEngineOptimization"/>
         <fillField selector="{{AdminProductFormBundleSection.urlKey}}" userInput="{{SimpleProduct.urlKey}}" stepKey="fillUrlKey"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveDefaultProduct"/>
-        <waitForPageLoad stepKey="waitForPDefaultProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveDefaultProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="successMessageYouSavedTheProductIsShown"/>
         <!--Create product with grid filter Not Visible Individually-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="ProductList"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="ProductList"/>
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddFilterProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{defaultSimpleProduct.sku}}" stepKey="fillProductSku"/>
@@ -55,8 +52,7 @@
         <scrollTo selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="scrollToSearchEngineOptimization"/>
         <click selector="{{AdminProductFormBundleSection.seoDropdown}}" stepKey="selectSearchEngineOptimization1"/>
         <fillField selector="{{AdminProductFormBundleSection.urlKey}}" userInput="{{defaultSimpleProduct.urlKey}}" stepKey="fillUrlKey1"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
-        <waitForPageLoad stepKey="waitForProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <!--Create sub category-->
@@ -72,8 +68,7 @@
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="{{defaultSimpleProduct.name}}"  stepKey="selectDefaultProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton1"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="WaitForCategorySaved"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="successMessageYouSavedTheCategory"/>
         <!--Verify product with grid filter is not not visible-->
         <amOnPage url="{{StorefrontProductPage.url(defaultSimpleProduct.urlKey)}}" stepKey="seeOnProductPage"/>

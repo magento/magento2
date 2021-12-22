@@ -7,22 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching;
 
+use GraphQL\Type\Definition\ScalarType;
+use GraphQL\Utils\BuildSchema;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\GraphQl\Type\TypeManagement;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType;
 
 /**
  * Reads *.graphqls files from modules and combines the results as array to be used with a library to configure objects
  */
 class GraphQlReader implements ReaderInterface
 {
-    const GRAPHQL_PLACEHOLDER_FIELD_NAME = 'placeholder_graphql_field';
+    public const GRAPHQL_PLACEHOLDER_FIELD_NAME = 'placeholder_graphql_field';
 
-    const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
+    public const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
+
+    /** @deprecated */
+    public const GRAPHQL_INTERFACE = 'graphql_interface';
 
     /**
-     * File locator
-     *
      * @var FileResolverInterface
      */
     private $fileResolver;
@@ -43,6 +49,11 @@ class GraphQlReader implements ReaderInterface
     private $defaultScope;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private static $componentRegistrar;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReaderComposite $typeReader
      * @param string $fileName
@@ -58,16 +69,22 @@ class GraphQlReader implements ReaderInterface
         $this->typeReader = $typeReader;
         $this->defaultScope = $defaultScope;
         $this->fileName = $fileName;
+        $typeManagement = new TypeManagement();
+        $typeManagement->overrideStandardGraphQLTypes();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param string|null $scope
+     * @return array
      */
-    public function read($scope = null) : array
+    public function read($scope = null): array
     {
         $results = [];
         $scope = $scope ?: $this->defaultScope;
         $schemaFiles = $this->fileResolver->get($this->fileName, $scope);
+
         if (!count($schemaFiles)) {
             return $results;
         }
@@ -76,7 +93,7 @@ class GraphQlReader implements ReaderInterface
          * Compatible with @see GraphQlReader::parseTypes
          */
         $knownTypes = [];
-        foreach ($schemaFiles as $partialSchemaContent) {
+        foreach ($schemaFiles as $filePath => $partialSchemaContent) {
             $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
 
             // Keep declarations from current partial schema, add missing declarations from all previously read schemas
@@ -84,12 +101,11 @@ class GraphQlReader implements ReaderInterface
             $schemaContent = implode("\n", $knownTypes);
 
             $partialResults = $this->readPartialTypes($schemaContent);
-
             $results = array_replace_recursive($results, $partialResults);
+            $results = $this->addModuleNameToTypes($results, $filePath);
         }
 
-        $results = $this->copyInterfaceFieldsToConcreteTypes($results);
-        return $results;
+        return $this->copyInterfaceFieldsToConcreteTypes($results);
     }
 
     /**
@@ -98,17 +114,17 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function readPartialTypes(string $graphQlSchemaContent) : array
+    private function readPartialTypes(string $graphQlSchemaContent): array
     {
         $partialResults = [];
 
         $graphQlSchemaContent = $this->addPlaceHolderInSchema($graphQlSchemaContent);
 
-        $schema = \GraphQL\Utils\BuildSchema::build($graphQlSchemaContent);
+        $schema = BuildSchema::build($graphQlSchemaContent, null, ['assumeValid'=> true, 'assumeValidSDL' => true]);
 
         foreach ($schema->getTypeMap() as $typeName => $typeMeta) {
             // Only process custom types and skip built-in object types
-            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof \GraphQL\Type\Definition\ScalarType))) {
+            if ((strpos($typeName, '__') !== 0 && (!$typeMeta instanceof ScalarType))) {
                 $type = $this->typeReader->read($typeMeta);
                 if (!empty($type)) {
                     $partialResults[$typeName] = $type;
@@ -118,9 +134,7 @@ class GraphQlReader implements ReaderInterface
             }
         }
 
-        $partialResults = $this->removePlaceholderFromResults($partialResults);
-
-        return $partialResults;
+        return $this->removePlaceholderFromResults($partialResults);
     }
 
     /**
@@ -129,7 +143,7 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string[] [$typeName => $typeDeclaration, ...]
      */
-    private function parseTypes(string $graphQlSchemaContent) : array
+    private function parseTypes(string $graphQlSchemaContent): array
     {
         $typeKindsPattern = '(type|interface|union|enum|input)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
@@ -167,7 +181,7 @@ class GraphQlReader implements ReaderInterface
     private function copyInterfaceFieldsToConcreteTypes(array $source): array
     {
         foreach ($source as $interface) {
-            if ($interface['type'] == 'graphql_interface') {
+            if ($interface['type'] ?? '' == InterfaceType::GRAPHQL_INTERFACE) {
                 foreach ($source as $typeName => $type) {
                     if (isset($type['implements'])
                         && isset($type['implements'][$interface['name']])
@@ -239,10 +253,10 @@ class GraphQlReader implements ReaderInterface
      * @param string $graphQlSchemaContent
      * @return string
      */
-    private function addPlaceHolderInSchema(string $graphQlSchemaContent) :string
+    private function addPlaceHolderInSchema(string $graphQlSchemaContent): string
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
-        $typesKindsPattern = '(type|interface|input)';
+        $typesKindsPattern = '(type|interface|input|union)';
         $enumKindsPattern = '(enum)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
         $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
@@ -270,7 +284,7 @@ class GraphQlReader implements ReaderInterface
      * @param array $partialResults
      * @return array
      */
-    private function removePlaceholderFromResults(array $partialResults) : array
+    private function removePlaceholderFromResults(array $partialResults): array
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
         //remove parsed placeholders
@@ -284,5 +298,50 @@ class GraphQlReader implements ReaderInterface
             }
         }
         return $partialResults;
+    }
+
+    /**
+     * Get a module name by file path
+     *
+     * @param string $file
+     * @return string
+     */
+    private static function getModuleNameForRelevantFile(string $file): string
+    {
+        if (!isset(self::$componentRegistrar)) {
+            self::$componentRegistrar = new ComponentRegistrar();
+        }
+        $foundModuleName = '';
+        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            if (strpos($file, $moduleDir . '/') !== false) {
+                $foundModuleName = str_replace('_', '\\', $moduleName);
+                break;
+            }
+        }
+
+        return $foundModuleName;
+    }
+
+    /**
+     * Add a module name to types
+     *
+     * @param array $source
+     * @param string $filePath
+     * @return array
+     */
+    private function addModuleNameToTypes(array $source, string $filePath): array
+    {
+        foreach ($source as $typeName => $typeDefinition) {
+            if (!isset($typeDefinition['module'])) {
+                $hasTypeResolver = (bool)($typeDefinition['typeResolver'] ?? false);
+                $hasImplements = (bool)($typeDefinition['implements'] ?? false);
+                $typeDefinition = (bool)($typeDefinition['type'] ?? false);
+                if ((($typeDefinition === InterfaceType::GRAPHQL_INTERFACE && $hasTypeResolver) || $hasImplements)) {
+                    $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
+                }
+            }
+        }
+
+        return $source;
     }
 }

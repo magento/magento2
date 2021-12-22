@@ -14,6 +14,15 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Frontend\Product" sortOrder="100" />
+        <plugin name="add_bundle_child_identities" type="Magento\Bundle\Model\Plugin\Frontend\ProductIdentitiesExtender" sortOrder="100"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Type\AbstractType">
+        <plugin name="add_to_cart_single_option" type="Magento\Bundle\Plugin\Catalog\Model\Product\Type\AbstractType" />
+    </type>
+    <type name="Magento\Catalog\ViewModel\Product\OptionsData">
+        <plugin name="add_bundle_options_data" type="Magento\Bundle\Plugin\Catalog\ViewModel\Product\AddBundleOptionsData" />
+    </type>
+    <type name="Magento\Catalog\Helper\Product">
+        <plugin name="dont_show_if_child_products_disabled" type="Magento\Bundle\Plugin\Catalog\Helper\Product"/>
     </type>
 </config>

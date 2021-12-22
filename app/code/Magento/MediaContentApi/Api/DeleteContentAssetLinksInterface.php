@@ -13,6 +13,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
 /**
  * Remove the relation between media asset and the piece of content. I.e media asset no longer part of the content
  * @api
+ * @since 100.4.0
  */
 interface DeleteContentAssetLinksInterface
 {
@@ -21,6 +22,7 @@ interface DeleteContentAssetLinksInterface
      *
      * @param ContentAssetLinkInterface[] $contentAssetLinks
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @since 100.4.0
      */
     public function execute(array $contentAssetLinks): void;
 }

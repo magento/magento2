@@ -6,17 +6,20 @@
 namespace Magento\TestFramework\Deploy;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * The purpose of this class is enable/disable module and upgrade commands execution.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CliCommand
 {
     /**
-     * @var \Magento\Framework\Shell
+     * @var Shell
      */
     private $shell;
 
@@ -36,10 +39,7 @@ class CliCommand
     private $deploymentConfig;
 
     /**
-     * ShellCommand constructor.
-     *
-     * @param    TestModuleManager $testEnv
-     * @param DeploymentConfig $deploymentConfig
+     * @param TestModuleManager $testEnv
      * @internal param Shell $shell
      */
     public function __construct(
@@ -53,8 +53,9 @@ class CliCommand
     /**
      * Copy Test module files and execute enable module command.
      *
-     * @param  string $moduleName
+     * @param string $moduleName
      * @return string
+     * @throws LocalizedException
      */
     public function introduceModule($moduleName)
     {
@@ -65,13 +66,14 @@ class CliCommand
     /**
      * Execute enable module command.
      *
-     * @param  string $moduleName
+     * @param string $moduleName
      * @return string
+     * @throws LocalizedException
      */
     public function enableModule($moduleName)
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $enableModuleCommand = 'php -f ' . BP . '/bin/magento module:enable ' . $moduleName
+        $enableModuleCommand = $this->getCliScriptCommand() . ' module:enable ' . $moduleName
             . ' -n -vvv --magento-init-params="' . $initParams['magento-init-params'] . '"';
         return $this->shell->execute($enableModuleCommand);
     }
@@ -81,11 +83,12 @@ class CliCommand
      *
      * @param array $installParams
      * @return string
+     * @throws LocalizedException
      */
     public function upgrade($installParams = [])
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $upgradeCommand = 'php -f ' . BP . '/bin/magento setup:upgrade -vvv -n --magento-init-params="'
+        $upgradeCommand = $this->getCliScriptCommandWithDI() . 'setup:upgrade -vvv -n --magento-init-params="'
             . $initParams['magento-init-params'] . '"';
         $installParams = $this->toCliArguments($installParams);
         $upgradeCommand .= ' ' . implode(" ", array_keys($installParams));
@@ -96,13 +99,14 @@ class CliCommand
     /**
      * Execute disable module command.
      *
-     * @param  string $moduleName
+     * @param string $moduleName
      * @return string
+     * @throws LocalizedException
      */
     public function disableModule($moduleName)
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $disableModuleCommand = 'php -f ' . BP . '/bin/magento module:disable '. $moduleName
+        $disableModuleCommand = $this->getCliScriptCommand() . ' module:disable ' . $moduleName
             . ' -vvv --magento-init-params="' . $initParams['magento-init-params'] . '"';
         return $this->shell->execute($disableModuleCommand);
     }
@@ -111,16 +115,21 @@ class CliCommand
      * Split quote db configuration.
      *
      * @return void
+     * @throws LocalizedException
+     * @deprecated split database solution is deprecated and will be removed
      */
     public function splitQuote()
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+
         $initParams = $this->parametersHolder->getInitParams();
         $installParams = $this->toCliArguments(
             $this->parametersHolder->getDbData('checkout')
         );
-        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-quote ' .
+        $command = $this->getCliScriptCommand() . ' setup:db-schema:split-quote ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params="' .
+            ' -vvv  --no-interaction --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
@@ -130,14 +139,19 @@ class CliCommand
      * Split sales db configuration.
      *
      * @return void
+     * @throws LocalizedException
+     * @deprecated split database solution is deprecated and will be removed
      */
     public function splitSales()
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+
         $initParams = $this->parametersHolder->getInitParams();
         $installParams = $this->toCliArguments(
             $this->parametersHolder->getDbData('sales')
         );
-        $command = 'php -f ' . BP . '/bin/magento setup:db-schema:split-sales ' .
+        $command = $this->getCliScriptCommand() . ' setup:db-schema:split-sales ' .
             implode(" ", array_keys($installParams)) .
             ' -vvv --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
@@ -151,7 +165,7 @@ class CliCommand
     public function cacheClean()
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $command = 'php -f ' . BP . '/bin/magento cache:clean ' .
+        $command = $this->getCliScriptCommand() . ' cache:clean ' .
             ' -vvv --magento-init-params=' .
             $initParams['magento-init-params'];
 
@@ -162,11 +176,12 @@ class CliCommand
      * Uninstall module
      *
      * @param string $moduleName
+     * @throws LocalizedException
      */
     public function uninstallModule($moduleName)
     {
         $initParams = $this->parametersHolder->getInitParams();
-        $command = 'php -f ' . BP . '/bin/magento module:uninstall ' . $moduleName . ' --remove-data ' .
+        $command = $this->getCliScriptCommand() . ' module:uninstall ' . $moduleName . ' --remove-data ' .
             ' -vvv --non-composer --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
 
@@ -239,5 +254,30 @@ class CliCommand
         $this->deploymentConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(DeploymentConfig::class);
         $this->deploymentConfig->resetData();
+    }
+
+    /**
+     * Get custom magento-cli command with additional DI configuration
+     *
+     * @return string
+     */
+    private function getCliScriptCommandWithDI(): string
+    {
+        $params['MAGE_DIRS']['base']['path'] = BP;
+        $params['INTEGRATION_TESTS_CLI_AUTOLOADER'] = TESTS_BASE_DIR . '/framework/autoload.php';
+        $params['TESTS_BASE_DIR'] = TESTS_BASE_DIR;
+        return 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"'
+        . ' ' . PHP_BINARY . ' -f ' . INTEGRATION_TESTS_BASE_DIR
+        . '/bin/magento ';
+    }
+
+    /**
+     * Get basic magento-cli command
+     *
+     * @return string
+     */
+    private function getCliScriptCommand()
+    {
+        return PHP_BINARY . ' -f ' . BP . '/bin/magento ';
     }
 }

@@ -11,6 +11,7 @@ use Magento\Framework\Exception\ValidatorException;
 /**
  * Filesystem directory instance for read operations
  * @api
+ * @since 100.0.2
  */
 class Read implements ReadInterface
 {
@@ -67,6 +68,7 @@ class Read implements ReadInterface
      * @throws ValidatorException
      *
      * @return void
+     * @since 101.0.7
      */
     protected function validatePath(
         ?string $path,

@@ -1,9 +1,10 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Model;
 
 use Magento\Catalog\Model\Product;
@@ -40,7 +41,7 @@ use Magento\Store\Model\Website;
  * @api
  * @since 100.0.2
  * @method int getStoreId()
- * @method $this setStoreId()
+ * @method $this setStoreId(int $storeId)
  */
 class Email extends AbstractModel
 {
@@ -206,7 +207,7 @@ class Email extends AbstractModel
      *
      * @return $this
      */
-    public function setWebsite(\Magento\Store\Model\Website $website)
+    public function setWebsite(Website $website)
     {
         $this->_website = $website;
         return $this;
@@ -275,7 +276,7 @@ class Email extends AbstractModel
      *
      * @return $this
      */
-    public function addPriceProduct(\Magento\Catalog\Model\Product $product)
+    public function addPriceProduct(Product $product)
     {
         $this->_priceProducts[$product->getId()] = $product;
         return $this;
@@ -288,7 +289,7 @@ class Email extends AbstractModel
      *
      * @return $this
      */
-    public function addStockProduct(\Magento\Catalog\Model\Product $product)
+    public function addStockProduct(Product $product)
     {
         $this->_stockProducts[$product->getId()] = $product;
         return $this;
@@ -342,7 +343,7 @@ class Email extends AbstractModel
             return false;
         }
 
-        $storeId = $this->getStoreId() ?: (int) $this->_customer->getStoreId();
+        $storeId = (int) $this->getStoreId() ?: (int) $this->_customer->getStoreId();
         $store = $this->getStore($storeId);
 
         $this->_appEmulation->startEnvironmentEmulation($storeId);
@@ -378,12 +379,13 @@ class Email extends AbstractModel
                 'customerName' => $customerName,
                 'alertGrid' => $alertGrid,
             ]
-        )->setFrom(
+        )->setFromByScope(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_EMAIL_IDENTITY,
                 ScopeInterface::SCOPE_STORE,
                 $storeId
-            )
+            ),
+            $storeId
         )->addTo(
             $this->_customer->getEmail(),
             $customerName

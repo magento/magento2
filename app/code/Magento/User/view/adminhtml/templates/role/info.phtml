@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <form action="<?= $block->escapeUrl($block->getUrl('*/*/saverole')) ?>" method="post" id="role-edit-form">
     <?= $block->getBlockHtml('formkey') ?>
 </form>
-<script>
+<?php $scriptString = <<<script
+
 require([
     "jquery",
     "mage/mage"
@@ -18,4 +21,7 @@ require([
     });
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

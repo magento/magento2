@@ -11,13 +11,14 @@
     <test name="AdminExportSimpleProductWithCustomAttributeTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
+            <stories value="Export Products"/>
             <title value="Export Simple Product with custom attribute"/>
             <description value="Admin should be able to export Simple Product with custom attribute"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14007"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create simple product with custom attribute set -->
@@ -56,16 +57,19 @@
         </actionGroup>
         <reloadPage stepKey="pageReload" />
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
         <!-- Download product -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
         <!-- Delete exported file -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
     </test>

@@ -20,6 +20,9 @@ $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $entityTypeId = $entityModel->setType(\Magento\Catalog\Model\Product::ENTITY)->getTypeId();
 $groupId = $installer->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
+/** @var \Magento\Catalog\Model\Product $product */
+$product = $productRepository->get('simple', true);
+
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = $objectManager->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
 $attribute->setAttributeCode(
@@ -30,6 +33,8 @@ $attribute->setAttributeCode(
     'text'
 )->setFrontendLabel(
     'custom_attributes_frontend_label'
+)->setAttributeSetId(
+    $product->getDefaultAttributeSetId()
 )->setAttributeGroupId(
     $groupId
 )->setIsFilterable(
@@ -39,8 +44,6 @@ $attribute->setAttributeCode(
 )->setBackendType(
     $attribute->getBackendTypeByInput($attribute->getFrontendInput())
 )->save();
-
-$product = $productRepository->get('simple', true);
 
 $product->setCustomAttribute($attribute->getAttributeCode(), 'customAttributeValue');
 

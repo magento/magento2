@@ -26,8 +26,8 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
-     * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
+     * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param array $data
      */
     public function __construct(
@@ -42,6 +42,8 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     }
 
     /**
+     * Return template.
+     *
      * @param \Magento\Newsletter\Model\Template $template
      * @param string $id
      * @return $this
@@ -50,9 +52,12 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     {
         /** @var \Magento\Newsletter\Model\Queue $queue */
         $queue = $this->_queueFactory->create()->load($id);
+        $template->setId($queue->getTemplateId());
         $template->setTemplateType($queue->getNewsletterType());
         $template->setTemplateText($queue->getNewsletterText());
         $template->setTemplateStyles($queue->getNewsletterStyles());
+        $template->setData('is_legacy', false);
+
         return $this;
     }
 }

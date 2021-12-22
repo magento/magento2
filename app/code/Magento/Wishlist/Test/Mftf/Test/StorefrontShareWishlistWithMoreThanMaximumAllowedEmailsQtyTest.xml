@@ -15,6 +15,7 @@
             <title value="Sharing wishlist with more than Maximum Allowed Emails qty"/>
             <description value="Customer should not have a possibility share wishlist with more than maximum allowed emails qty"/>
             <testCaseId value="MC-35167"/>
+            <severity value="AVERAGE"/>
             <group value="wishlist"/>
             <group value="configuration"/>
         </annotations>

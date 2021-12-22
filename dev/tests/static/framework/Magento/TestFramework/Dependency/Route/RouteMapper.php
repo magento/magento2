@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Dependency\Route;
 
+use Exception;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentFile;
@@ -87,6 +88,8 @@ class RouteMapper
         'exit' => 1,
         'extends' => 1,
         'final' => 1,
+        'finally' => 1,
+        'fn' => 1,
         'for' => 1,
         'foreach' => 1,
         'function' => 1,
@@ -100,6 +103,7 @@ class RouteMapper
         'interface' => 1,
         'isset' => 1,
         'list' => 1,
+        'match' => 1,
         'namespace' => 1,
         'new' => 1,
         'or' => 1,
@@ -117,9 +121,10 @@ class RouteMapper
         'unset' => 1,
         'use' => 1,
         'var' => 1,
+        'void' => 1,
         'while' => 1,
         'xor' => 1,
-        'void' => 1,
+        'yield' => 1
     ];
 
     /**
@@ -127,7 +132,7 @@ class RouteMapper
      *
      * @param string $routerId
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRoutes(string $routerId = ''): array
     {
@@ -156,7 +161,7 @@ class RouteMapper
      * @param string $actionName
      * @return string[]
      * @throws NoSuchActionException
-     * @throws \Exception
+     * @throws Exception
      */
     public function getDependencyByRoutePath(
         string $routeId,
@@ -174,13 +179,10 @@ class RouteMapper
         $dependencies = [];
         foreach ($this->getRouterTypes() as $routerId) {
             if (isset($this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName])) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $dependencies = array_merge(
-                    $dependencies,
-                    $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName]
-                );
+                $dependencies[] = $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName];
             }
         }
+        $dependencies = array_merge([], ...$dependencies);
 
         if (empty($dependencies)) {
             throw new NoSuchActionException(implode('/', [$routeId, $controllerName, $actionName]));
@@ -194,7 +196,7 @@ class RouteMapper
      * Provide a list of router type
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function getRouterTypes()
     {
@@ -205,7 +207,7 @@ class RouteMapper
      * Provide routing declaration
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function getRoutersMap()
     {
@@ -251,7 +253,7 @@ class RouteMapper
     /**
      * Prepare the list of routes.xml files (by modules)
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function getListRoutesXml()
     {
@@ -270,7 +272,7 @@ class RouteMapper
      * Provide a list of available actions
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function getActionsMap(): array
     {
@@ -278,6 +280,7 @@ class RouteMapper
             $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE);
             $actionsMap = [];
             foreach ($this->getRoutersMap() as $routerId => $routes) {
+                $actionsMapPerArea = [];
                 foreach ($routes as $routeId => $dependencies) {
                     $actionsMapPerArea[$routeId] = [];
                     foreach ($dependencies as $module) {

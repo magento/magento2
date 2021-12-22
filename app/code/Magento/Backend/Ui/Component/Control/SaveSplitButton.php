@@ -13,6 +13,7 @@ use Magento\Ui\Component\Control\Container;
  * Provide an ability to show drop-down list with options clicking on the "Save" button
  *
  * @api
+ * @since 101.0.0
  */
 class SaveSplitButton implements ButtonProviderInterface
 {
@@ -31,6 +32,7 @@ class SaveSplitButton implements ButtonProviderInterface
 
     /**
      * {@inheritdoc}
+     * @since 101.0.0
      */
     public function getButtonData()
     {

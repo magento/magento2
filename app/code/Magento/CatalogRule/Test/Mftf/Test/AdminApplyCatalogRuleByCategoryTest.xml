@@ -36,18 +36,17 @@
             <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteSimpleProductTwo"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- 1. Begin creating a new catalog price rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
         <waitForPageLoad stepKey="waitForIndividualRulePage"/>
         <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{_defaultCatalogRule.name}}" stepKey="fillName"/>
@@ -78,15 +77,15 @@
 
         <!-- 3. Save and apply the new catalog price rule -->
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- 4. Verify the storefront -->
-        <amOnPage url="$$createCategoryOne.name$$.html" stepKey="goToCategoryOne"/>
+        <amOnPage url="$$createCategoryOne.custom_attributes[url_key]$$.html" stepKey="goToCategoryOne"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProductOne.name$$" stepKey="seeProductOne"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="seeProductOnePrice"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="Regular Price $123.00" stepKey="seeProductOneRegularPrice"/>
-        <amOnPage url="$$createCategoryTwo.name$$.html" stepKey="goToCategoryTwo"/>
+        <amOnPage url="$$createCategoryTwo.custom_attributes[url_key]$$.html" stepKey="goToCategoryTwo"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createSimpleProductTwo.name$$" stepKey="seeProductTwo"/>
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$123.00" stepKey="seeProductTwoPrice"/>
         <dontSee selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$61.50" stepKey="dontSeeDiscount"/>

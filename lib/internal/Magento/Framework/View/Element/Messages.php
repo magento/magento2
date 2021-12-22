@@ -11,6 +11,7 @@ use Magento\Framework\Message\MessageInterface;
  * Class Messages
  *
  * @api
+ * @since 100.0.2
  */
 class Messages extends Template
 {

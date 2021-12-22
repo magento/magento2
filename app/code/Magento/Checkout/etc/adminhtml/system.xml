@@ -48,6 +48,10 @@
                     <label>Show Cross-sell Items in the Shopping Cart</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="enable_clear_shopping_cart" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Enable Clear Shopping Cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="cart_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1">
                 <label>My Cart Link</label>

@@ -8,6 +8,8 @@ namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
+use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Xml\Security;
@@ -25,46 +27,46 @@ use Magento\Usps\Helper\Data as DataHelper;
  */
 class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
 {
-    /** @deprecated */
-    const CONTAINER_VARIABLE = 'VARIABLE';
+    /** @deprecated Redundant dependency */
+    public const CONTAINER_VARIABLE = 'VARIABLE';
 
-    /** @deprecated */
-    const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
+    /** @deprecated Redundant dependency */
+    public const CONTAINER_FLAT_RATE_BOX = 'FLAT RATE BOX';
 
-    /** @deprecated */
-    const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
+    /** @deprecated Redundant dependency */
+    public const CONTAINER_FLAT_RATE_ENVELOPE = 'FLAT RATE ENVELOPE';
 
-    /** @deprecated */
-    const CONTAINER_RECTANGULAR = 'RECTANGULAR';
+    /** @deprecated Redundant dependency */
+    public const CONTAINER_RECTANGULAR = 'RECTANGULAR';
 
-    /** @deprecated */
-    const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
+    /** @deprecated Redundant dependency */
+    public const CONTAINER_NONRECTANGULAR = 'NONRECTANGULAR';
 
     /**
      * USPS size
      */
-    const SIZE_REGULAR = 'REGULAR';
+    public const SIZE_REGULAR = 'REGULAR';
 
-    const SIZE_LARGE = 'LARGE';
+    public const SIZE_LARGE = 'LARGE';
 
     /**
      * Default api revision
      *
      * @var int
      */
-    const DEFAULT_REVISION = 2;
+    public const DEFAULT_REVISION = 2;
 
     /**
      * Code of the carrier
      *
      * @var string
      */
-    const CODE = 'usps';
+    public const CODE = 'usps';
 
     /**
      * Ounces in one pound for conversion
      */
-    const OUNCES_POUND = 16;
+    public const OUNCES_POUND = 16;
 
     /**
      * Code of the carrier
@@ -74,8 +76,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_code = self::CODE;
 
     /**
-     * Weight precision
-     *
      * @var int
      */
     private static $weightPrecision = 10;
@@ -109,7 +109,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_customizableContainerTypes = ['VARIABLE', 'RECTANGULAR', 'NONRECTANGULAR'];
 
     /**
-     * Carrier helper
+     * The carrier helper
      *
      * @var \Magento\Shipping\Helper\Carrier
      */
@@ -128,7 +128,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_httpClientFactory;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'USERID'
@@ -148,6 +148,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var ProxyDeferredFactory
      */
     private $proxyDeferredFactory;
+
+    /**
+     * @var DataObject
+     */
+    private $_rawTrackRequest;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -171,6 +176,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
      * @param ProxyDeferredFactory|null $proxyDeferredFactory
+     * @param DataHelper|null $dataHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -195,7 +201,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $httpClient = null,
-        ?ProxyDeferredFactory $proxyDeferredFactory = null
+        ?ProxyDeferredFactory $proxyDeferredFactory = null,
+        ?DataHelper $dataHelper = null
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -221,6 +228,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->httpClient = $httpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->proxyDeferredFactory = $proxyDeferredFactory
             ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
+        $this->dataHelper = $dataHelper ?? ObjectManager::getInstance()->get(DataHelper::class);
     }
 
     /**
@@ -470,8 +478,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $service = $r->getService();
             }
 
-            if (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
-                strpos($r->getContainer(), 'FLAT RATE BOX') !== false
+            if ($r->getContainer() !== null && (strpos($r->getContainer(), 'FLAT RATE ENVELOPE') !== false ||
+                strpos($r->getContainer(), 'FLAT RATE BOX') !== false)
             ) {
                 $service = 'Priority';
             }
@@ -484,7 +492,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $package->addChild('ZipOrigination', $r->getOrigPostal());
             //only 5 chars available
-            $package->addChild('ZipDestination', substr($r->getDestPostal(), 0, 5));
+            $package->addChild(
+                'ZipDestination',
+                is_string($r->getDestPostal()) ? substr($r->getDestPostal(), 0, 5) : ''
+            );
             $package->addChild('Pounds', $r->getWeightPounds());
             $package->addChild('Ounces', $r->getWeightOunces());
             // Because some methods don't accept VARIABLE and (NON)RECTANGULAR containers
@@ -560,7 +571,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 [
                     'deferred' => new CallbackDeferred(
                         function () use ($deferredResponse, $request, $debugData) {
-                            $responseBody = $deferredResponse->get()->getBody();
+                            $responseResult = null;
+                            try {
+                                $responseResult = $deferredResponse->get();
+                            } catch (HttpException $exception) {
+                                $this->_logger->critical($exception);
+                            }
+                            $responseBody = $responseResult ? $responseResult->getBody() : '';
                             $debugData['result'] = $responseBody;
                             $this->_setCachedQuotes($request, $responseBody);
                             $this->_debug($debugData);
@@ -621,7 +638,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             );
                         }
                     }
-                    asort($priceArr);
+                    uasort($priceArr, function ($previous, $next) {
+                        return ($previous <= $next) ? -1 : 1;
+                    });
                 } elseif (!$isUS && is_object($xml->Package->Service)) {
                     /*
                      * International Rates
@@ -641,7 +660,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             );
                         }
                     }
-                    asort($priceArr);
+                    uasort($priceArr, function ($previous, $next) {
+                        return ($previous <= $next) ? -1 : 1;
+                    });
                 }
             }
         }
@@ -1177,11 +1198,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
         }
-        if (empty($statuses)) {
-            $statuses = __('Empty response');
-        }
 
-        return $statuses;
+        return $statuses ?: __('Empty response');
     }
 
     /**
@@ -1470,7 +1488,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
-     * @deprecated This method should not be used anymore.
+     * @deprecated 100.2.1 This method should not be used anymore.
      * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
@@ -1480,7 +1498,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
-                $this->_carrierHelper->convertMeasureWeight(
+                (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
@@ -1574,7 +1592,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packageWeight = $request->getPackageWeight();
         if ($packageParams->getWeightUnits() != \Zend_Measure_Weight::OUNCE) {
             $packageWeight = round(
-                $this->_carrierHelper->convertMeasureWeight(
+                (float) $this->_carrierHelper->convertMeasureWeight(
                     (float)$request->getPackageWeight(),
                     $packageParams->getWeightUnits(),
                     \Zend_Measure_Weight::OUNCE
@@ -1647,7 +1665,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @deprecated Should not be used anymore.
+     * @deprecated 100.2.1 Should not be used anymore.
      * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
@@ -1667,21 +1685,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         if ($packageParams->getDimensionUnits() != \Zend_Measure_Length::INCH) {
             $length = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getLength(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $width = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getWidth(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
                 )
             );
             $height = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getHeight(),
                     $packageParams->getDimensionUnits(),
                     \Zend_Measure_Length::INCH
@@ -1690,7 +1708,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
         if ($packageParams->getGirthDimensionUnits() != \Zend_Measure_Length::INCH) {
             $girth = round(
-                $this->_carrierHelper->convertMeasureDimension(
+                (float) $this->_carrierHelper->convertMeasureDimension(
                     (float)$packageParams->getGirth(),
                     $packageParams->getGirthDimensionUnits(),
                     \Zend_Measure_Length::INCH
@@ -1902,7 +1920,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
      * free shipping labels generating.
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
@@ -2051,8 +2069,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function isGirthAllowed($countyDest = null, $carrierMethodCode = null)
     {
-        return $this->_isUSCountry($countyDest)
-            && $this->getDataHelper()->displayGirthValue($carrierMethodCode) ? false : true;
+        return !($this->_isUSCountry($countyDest) && $this->dataHelper->displayGirthValue($carrierMethodCode));
     }
 
     /**
@@ -2164,20 +2181,5 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return $data;
-    }
-
-    /**
-     * Gets Data helper object
-     *
-     * @return DataHelper
-     * @deprecated 100.2.0
-     */
-    private function getDataHelper()
-    {
-        if (!$this->dataHelper) {
-            $this->dataHelper = ObjectManager::getInstance()->get(DataHelper::class);
-        }
-
-        return $this->dataHelper;
     }
 }

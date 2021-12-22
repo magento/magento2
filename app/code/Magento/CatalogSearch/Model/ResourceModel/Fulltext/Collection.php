@@ -177,8 +177,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
         DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
-        $this->searchResultFactory = $searchResultFactory ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
+        $this->searchResultFactory = $searchResultFactory
+            ?? ObjectManager::getInstance()->get(SearchResultFactory::class);
         parent::__construct(
             $entityFactory,
             $logger,
@@ -337,6 +337,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 101.0.4
      */
     public function clear()
     {
@@ -348,6 +349,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 101.0.4
      */
     protected function _reset()
     {
@@ -359,19 +361,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 101.0.4
      */
     public function _loadEntities($printQuery = false, $logQuery = false)
     {
         $this->getEntity();
 
         $this->printLogQuery($printQuery, $logQuery);
-
+        /**
+         * Prepare select query
+         * @var string $query
+         */
+        $query = $this->getSelect();
         try {
-            /**
-             * Prepare select query
-             * @var string $query
-             */
-            $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
             $this->printLogQuery(false, true, $query);
@@ -429,6 +431,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param string $attribute
      * @param string $dir
      * @return $this
+     * @since 101.0.2
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -451,7 +454,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         if ($this->searchRequestName !== 'quick_search_container'
-            || strlen(trim($this->queryText))
+            || ($this->queryText && strlen(trim($this->queryText)))
         ) {
             $this->prepareSearchTermFilter();
             $this->preparePriceAggregation();
@@ -555,6 +558,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritdoc
+     * @since 100.2.3
      */
     protected function _beforeLoad()
     {

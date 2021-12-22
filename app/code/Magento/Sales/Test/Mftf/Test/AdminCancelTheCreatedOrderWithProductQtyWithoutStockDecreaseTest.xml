@@ -58,13 +58,12 @@
 
         <!--Select FlatRate shipping method-->
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-
-        <!--Submit order-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Assert Simple Product Quantity in backend after order -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
@@ -76,14 +75,14 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatus"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
-        <!-- Filter Order using orderId -->
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$orderId"/>
+        <!-- Open Order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickOnViewAction"/>
 
         <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
@@ -98,20 +97,20 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatusAfterCancelOrder"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders1"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders1"/>
 
-        <!-- Filter Order using orderId -->
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById1">
-            <argument name="orderId" value="$orderId"/>
+        <!-- Open Order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.rowViewAction('1')}}" stepKey="clickOnViewAction1"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById1"/>
+        <comment userInput="BIC workaround" stepKey="clickOnViewAction1"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPageToLoad"/>
 
         <!-- Reorder the product -->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickOnReorderButton"/>
         <waitForPageLoad stepKey="waitForReorderFormToLoad"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder1"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder1" />
 
         <!-- Assert Simple Product Quantity in backend after Reorder -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct2">

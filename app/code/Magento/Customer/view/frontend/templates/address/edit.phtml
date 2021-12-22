@@ -7,7 +7,10 @@
 /** @var \Magento\Customer\Block\Address\Edit $block */
 /** @var \Magento\Customer\ViewModel\Address $viewModel */
 /** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
 $viewModel = $block->getViewModel();
+$regionProvider = $block->getRegionProvider();
 ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $_telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
@@ -57,6 +60,13 @@ $viewModel = $block->getViewModel();
         <div class="field street required">
             <label for="street_1" class="label"><span><?= /* @noEscape */ $_street ?></span></label>
             <div class="control">
+                <div class="field primary">
+                    <label for="street_1" class="label">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Street Address: Line %1', 1)) ?>
+                        </span>
+                    </label>
+                </div>
                 <input type="text"
                        name="street[]"
                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
@@ -67,7 +77,7 @@ $viewModel = $block->getViewModel();
                     <?php for ($_i = 1, $_n = $viewModel->addressGetStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
-                                <span><?= $escaper->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
                                 <input type="text" name="street[]"
@@ -152,9 +162,10 @@ $viewModel = $block->getViewModel();
                        id="zip"
                        class="input-text validate-zip-international
                         <?= $escaper->escapeHtmlAttr($_postcodeValidationClass) ?>">
-                <div role="alert" class="message warning" style="display:none">
+                <div role="alert" class="message warning">
                     <span></span>
                 </div>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'div.message.warning') ?>
             </div>
         </div>
 
@@ -193,6 +204,7 @@ $viewModel = $block->getViewModel();
             <button type="submit"
                     class="action save primary"
                     data-action="save-address"
+                    disabled="disabled"
                     title="<?= $escaper->escapeHtmlAttr(__('Save Address')) ?>">
                 <span><?= $escaper->escapeHtml(__('Save Address')) ?></span>
             </button>
@@ -212,13 +224,13 @@ $viewModel = $block->getViewModel();
             }
         },
         "#country": {
-            "regionUpdater": {
+            "directoryRegionUpdater": {
                 "optionalRegionAllowed": <?= /* @noEscape */ $_displayAll ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= /* @noEscape */ $viewModel->dataGetRegionJson() ?>,
+                "regionJson": <?= /* @noEscape */ $regionProvider->getRegionJson(); ?>,
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
                 "countriesWithOptionalZip": <?= /* @noEscape */ $viewModel->dataGetCountriesWithOptionalZip(true) ?>
             }

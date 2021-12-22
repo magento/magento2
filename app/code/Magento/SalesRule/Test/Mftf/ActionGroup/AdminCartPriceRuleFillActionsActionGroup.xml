@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCartPriceRuleFillActionsActionGroup">
+        <annotations>
+            <description>Fill Cart Price Rule actions fields: Apply, Discount Amount, Discard subsequent rules.</description>
+        </annotations>
+        <arguments>
+            <argument name="apply" type="string" defaultValue="{{ApiSalesRule.simple_action}}"/>
+            <argument name="discountAmount" type="string" defaultValue="{{ApiSalesRule.discount_amount}}"/>
+            <argument name="discardSubsequentRules" type="string" defaultValue="1"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeaderOpen}}" visible="false" stepKey="clickToExpandActions"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToActionsFieldset"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.apply}}" stepKey="waitActionsFieldsetFullyOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="{{apply}}" stepKey="fillDiscountType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="{{discountAmount}}" stepKey="fillDiscountAmount"/>
+        <pressKey selector="{{AdminCartPriceRulesFormSection.discountAmount}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::TAB]" stepKey="pressTab"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.discardSubsequentRulesLabel}}" dependentSelector="{{AdminCartPriceRulesFormSection.discardSubsequentRulesByStatus(discardSubsequentRules)}}" visible="false" stepKey="fillDiscardSubsequentRules"/>
+    </actionGroup>
+</actionGroups>

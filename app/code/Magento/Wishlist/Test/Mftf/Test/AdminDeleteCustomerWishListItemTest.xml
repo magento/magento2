@@ -14,6 +14,7 @@
             <stories value="Wishlist items deleting"/>
             <title value="Admin deletes an item from customer wishlist"/>
             <description value="Admin Should be able delete items from customer wishlist"/>
+            <severity value="AVERAGE"/>
             <testCaseId value="MC-35170"/>
             <group value="wishlist"/>
         </annotations>
@@ -22,7 +23,6 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
@@ -43,6 +43,7 @@
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutBeforeCheck"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
             <argument name="customer" value="$createCustomer$"/>

@@ -26,19 +26,19 @@ class CurrentUrlRewritesRegenerator
 {
     /**
      * @var Product
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $product;
 
     /**
      * @var ObjectRegistry
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $productCategories;
 
     /**
      * @var UrlFinderInterface
-     * @deprecated 100.1.4
+     * @deprecated 100.1.0
      */
     protected $urlFinder;
 

@@ -16,7 +16,7 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
 /**
- * Add simple product to cart
+ * Add simple product to cart mutation
  */
 class AddSimpleProductToCart
 {
@@ -52,6 +52,7 @@ class AddSimpleProductToCart
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
+        $cartItemData['model'] = $cart;
         $sku = $this->extractSku($cartItemData);
 
         try {

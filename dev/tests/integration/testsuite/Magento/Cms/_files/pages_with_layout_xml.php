@@ -13,6 +13,12 @@ use Magento\TestFramework\Cms\Model\CustomLayoutManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+$objectManager->configure([
+    'preferences' => [
+        \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
+            \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
+    ]
+]);
 $pageFactory = $objectManager->get(PageModelFactory::class);
 
 /** @var CustomLayoutManager $fakeManager */

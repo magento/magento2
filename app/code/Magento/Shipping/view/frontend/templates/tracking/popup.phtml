@@ -6,19 +6,23 @@
 
 use Magento\Framework\View\Element\Template;
 
-/** @var $block \Magento\Shipping\Block\Tracking\Popup */
-//phpcs:disable Magento2.Files.LineLength.MaxExceeded
+/**
+ * @var $block \Magento\Shipping\Block\Tracking\Popup
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
 $results = $block->getTrackingInfo();
 ?>
 <div class="page tracking">
-    <?php if (!empty($results)) : ?>
-        <?php foreach ($results as $shipId => $result) : ?>
-            <?php if ($shipId) : ?>
-                <div class="order subtitle caption"><?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?></div>
+    <?php if (!empty($results)): ?>
+        <?php foreach ($results as $shipId => $result): ?>
+            <?php if ($shipId): ?>
+                <div class="order subtitle caption">
+                    <?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?>
+                </div>
             <?php endif; ?>
-            <?php if (!empty($result)) : ?>
-                <?php foreach ($result as $counter => $track) : ?>
+            <?php if (!empty($result)): ?>
+                <?php foreach ($result as $counter => $track): ?>
                     <div class="table-wrapper">
                         <?php
                             $shipmentBlockIdentifier = $shipId . '.' . $counter;
@@ -28,25 +32,28 @@ $results = $block->getTrackingInfo();
                                 'storeSupportEmail' => $block->getStoreSupportEmail()
                             ]);
                         ?>
-                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.details.' . $shipmentBlockIdentifier) ?>
+                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.details.' .
+                            $shipmentBlockIdentifier) ?>
                     </div>
-                    <?php if (is_object($track) && !empty($track->getProgressdetail())) : ?>
+                    <?php if (is_object($track) && !empty($track->getProgressdetail())): ?>
                         <?php
-                            $block->addChild('shipping.tracking.progress.' . $shipmentBlockIdentifier, Template::class, [
-                                'track' => $track,
-                                'template' => 'Magento_Shipping::tracking/progress.phtml'
-                            ]);
+                            $block->addChild(
+                                'shipping.tracking.progress.' . $shipmentBlockIdentifier,
+                                Template::class,
+                                ['track' => $track, 'template' => 'Magento_Shipping::tracking/progress.phtml']
+                            );
                         ?>
-                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.progress.' . $shipmentBlockIdentifier) ?>
+                        <?= /* @noEscape */ $block->getChildHtml('shipping.tracking.progress.' .
+                            $shipmentBlockIdentifier) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
-            <?php else : ?>
+            <?php else: ?>
                 <div class="message info empty">
                     <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
-    <?php else : ?>
+    <?php else: ?>
         <div class="message info empty">
             <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>
@@ -54,13 +61,18 @@ $results = $block->getTrackingInfo();
     <div class="actions">
         <button type="button"
                 title="<?= $block->escapeHtml(__('Close Window')) ?>"
-                class="action close"
-                onclick="window.close(); window.opener.focus();">
+                class="action close">
             <span><?= $block->escapeHtml(__('Close Window')) ?></span>
         </button>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "window.close(); window.opener.focus();",
+            'button.action.close'
+        ) ?>
     </div>
 </div>
-<script>
+<?php $scriptString = <<<script
+
     require([
         'jquery'
     ], function (jQuery) {
@@ -69,4 +81,7 @@ $results = $block->getTrackingInfo();
             jQuery('.actions button.close').hide();
         }
     });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

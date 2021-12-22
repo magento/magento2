@@ -134,6 +134,66 @@ class AddressTest extends TestCase
     }
 
     /**
+     * Test processing of the shipping address when shipping address id was not changed.
+     * setShippingAddressId and saveAttribute methods must not be executed.
+     */
+    public function testProcessShippingAddressNotChanged()
+    {
+        $this->orderMock->expects($this->exactly(2))
+            ->method('getAddresses')
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
+            ->method('save')->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn(null);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->addressMock);
+        $this->addressMock->expects($this->once())
+            ->method('getId')->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAddressId')
+            ->willReturn(1);
+        $this->orderMock->expects($this->never())
+            ->method('setShippingAddressId')->willReturnSelf();
+        $this->attributeMock->expects($this->never())
+            ->method('saveAttribute')
+            ->with($this->orderMock, ['shipping_address_id'])->willReturnSelf();
+        $this->assertEquals($this->address, $this->address->process($this->orderMock));
+    }
+
+    /**
+     * Test processing of the billing address when billing address id was not changed.
+     * setBillingAddressId and saveAttribute methods must not be executed.
+     */
+    public function testProcessBillingAddressNotChanged()
+    {
+        $this->orderMock->expects($this->exactly(2))
+            ->method('getAddresses')
+            ->willReturn([$this->addressMock]);
+        $this->addressMock->expects($this->once())
+            ->method('save')->willReturnSelf();
+        $this->orderMock->expects($this->once())
+            ->method('getBillingAddress')
+            ->willReturn($this->addressMock);
+        $this->orderMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn(null);
+        $this->addressMock->expects($this->once())
+            ->method('getId')->willReturn(1);
+        $this->orderMock->expects($this->once())
+            ->method('getBillingAddressId')
+            ->willReturn(1);
+        $this->orderMock->expects($this->never())
+            ->method('setBillingAddressId')->willReturnSelf();
+        $this->attributeMock->expects($this->never())
+            ->method('saveAttribute')
+            ->with($this->orderMock, ['billing_address_id'])->willReturnSelf();
+        $this->assertEquals($this->address, $this->address->process($this->orderMock));
+    }
+
+    /**
      * Test method removeEmptyAddresses
      */
     public function testRemoveEmptyAddresses()

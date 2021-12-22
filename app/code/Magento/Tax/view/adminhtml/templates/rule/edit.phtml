@@ -5,8 +5,12 @@
  */
 
 /** @var $block \Magento\Tax\Block\Adminhtml\Rule\Edit\Form */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+<?php $formElementId = /* @noEscape */ \Magento\Tax\Block\Adminhtml\Rate\Form::FORM_ELEMENT_ID;
+$jsId = /* @noEscape */ $block->getJsId();
+//phpcs:ignore Magento2.SQL.RawQuery
+$scriptString = <<<script
 require([
     'jquery',
     'Magento_Ui/js/modal/alert',
@@ -77,7 +81,7 @@ require([
             $.ajax({
                 type: "POST",
                 data: {id:id},
-                url: '<?= $block->escapeJs($block->escapeUrl($block->getTaxRateLoadUrl())) ?>',
+                url: '{$block->escapeJs($block->getTaxRateLoadUrl())}',
                 success: function(result, status) {
                     $('body').trigger('processStop');
                     if (result.success) {
@@ -94,14 +98,14 @@ require([
                             });
                         else
                             alert({
-                                content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                content: '{$block->escapeJs(__('An error occurred'))}'
                             });
                     }
                 },
                 error: function () {
                     $('body').trigger('processStop');
                     alert({
-                        content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                        content: '{$block->escapeJs(__('An error occurred'))}'
                     });
                 },
                 dataType: "json"
@@ -112,9 +116,9 @@ require([
             var options = {
                 mselectContainer: '#tax_rate + section.mselect-list',
                 toggleAddButton:false,
-                addText: '<?= $block->escapeJs($block->escapeHtml(__('Add New Tax Rate'))) ?>',
+                addText: '{$block->escapeJs(__('Add New Tax Rate'))}',
                 parse: null,
-                nextPageUrl: '<?= $block->escapeHtml($block->getTaxRatesPageUrl()) ?>',
+                nextPageUrl: '{$block->escapeJs($block->getTaxRatesPageUrl())}',
                 selectedValues: this.settings.selected_values,
                 mselectInputSubmitCallback: function (value, options) {
                     var select = $('#tax_rate');
@@ -137,7 +141,7 @@ require([
             var taxRate = $('#tax_rate'),
                 taxRateField = taxRate.parent(),
                 taxRateForm = $('#tax-rate-form'),
-                taxRateFormElement = $('#<?= /* @noEscape */ \Magento\Tax\Block\Adminhtml\Rate\Form::FORM_ELEMENT_ID ?>');
+                taxRateFormElement = $('#{$formElementId}');
 
             if (!this.isEntityEditable) {
                 // Override default layout of editable multiselect
@@ -162,11 +166,16 @@ require([
                     .on('click.mselect-edit', '.mselect-edit', this.edit)
                     .on("click.mselect-delete", ".mselect-delete", function () {
                         var that = $(this),
-                            select = that.closest('.mselect-list').prev(),
+
+script;
+                            // phpcs:ignore Magento2.SQL.RawQuery
+                            $scriptString .= "select = that.closest('.mselect-list').prev()," . PHP_EOL;
+                            $scriptString .= <<<script
+
                             rateValue = that.parent().find('input[type="checkbox"]').val();
 
                         confirm({
-                            content: '<?= $block->escapeJs(__('Do you really want to delete this tax rate?')) ?>',
+                            content: '{$block->escapeJs(__('Do you really want to delete this tax rate?'))}',
                             actions: {
                                 /**
                                  * Confirm action.
@@ -180,7 +189,7 @@ require([
                                             form_key: $('input[name="form_key"]').val()
                                         },
                                         dataType: 'json',
-                                        url: '<?= $block->escapeJs($block->escapeUrl($block->getTaxRateDeleteUrl())) ?>',
+                                        url: '{$block->escapeJs($block->getTaxRateDeleteUrl())}',
                                         success: function(result, status) {
                                             $('body').trigger('processStop');
                                             if (result.success) {
@@ -198,14 +207,14 @@ require([
                                                     });
                                                 else
                                                     alert({
-                                                        content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                                        content: '{$block->escapeJs(__('An error occurred'))}'
                                                     });
                                             }
                                         },
                                         error: function () {
                                             $('body').trigger('processStop');
                                             alert({
-                                                content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                                content: '{$block->escapeJs(__('An error occurred'))}'
                                             });
                                         }
                                     };
@@ -228,15 +237,15 @@ require([
             taxRateFormElement.mage('form').mage('validation');
 
             taxRateForm.dialogRates({
-                title: '<?= $block->escapeJs($block->escapeHtml(__('Tax Rate'))) ?>',
+                title: '{$block->escapeJs(__('Tax Rate'))}',
                 type: 'slide',
-                id: '<?= /* @noEscape */ $block->getJsId() ?>',
+                id: '{$jsId}',
                 modalClass: 'tax-rate-popup',
                 closed: function () {
                     taxRateFormElement.data('validation').clearError();
                 },
                 buttons: [{
-                    text: '<?= $block->escapeJs($block->escapeHtml(__('Save'))) ?>',
+                    text: '{$block->escapeJs(__('Save'))}',
                     'class': 'action-save action-primary',
                     click: function() {
                         this.updateItemRate();
@@ -244,7 +253,12 @@ require([
                             itemRateData = $.extend({}, itemRate);
 
                         if (itemRateData.itemElement) {
-                            delete itemRateData.itemElement;
+
+script;
+                            //phpcs:ignore Magento2.SQL.RawQuerys
+                            $scriptString .= ' delete itemRateData.itemElement;';
+$scriptString.= <<<script
+
                         }
 
                         if (!taxRateFormElement.validation().valid()) {
@@ -256,7 +270,7 @@ require([
                             type: 'POST',
                             data: itemRateData,
                             dataType: 'json',
-                            url: '<?= $block->escapeJs($block->escapeUrl($block->getTaxRateSaveUrl())) ?>',
+                            url: '{$block->escapeJs($block->getTaxRateSaveUrl())}',
                             success: function(result, status) {
                                 $('body').trigger('processStop');
                                 if (result.success) {
@@ -281,14 +295,14 @@ require([
                                         });
                                     else
                                         alert({
-                                            content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                            content: '{$block->escapeJs(__('An error occurred'))}'
                                         });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
                                 alert({
-                                    content: '<?= $block->escapeJs($block->escapeHtml(__('An error occurred'))) ?>'
+                                    content: '{$block->escapeJs(__('An error occurred'))}'
                                 });
                             }
                         };
@@ -302,4 +316,6 @@ require([
 
     window.TaxRateEditableMultiselect = TaxRateEditableMultiselect;
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

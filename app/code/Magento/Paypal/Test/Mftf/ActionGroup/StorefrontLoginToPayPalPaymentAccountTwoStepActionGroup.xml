@@ -9,7 +9,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup">
         <arguments>
-            <argument name="payerName" defaultValue="MPI" type="string"/>
             <argument name="credentials" defaultValue="_CREDS"/>
         </arguments>
         <!--Check in-context-->
@@ -17,6 +16,8 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
         <conditionalClick selector="{{PayPalPaymentSection.notYouLink}}" dependentSelector="{{PayPalPaymentSection.notYouLink}}" visible="true" stepKey="selectNotYouSection"/>
+        <conditionalClick selector="{{PayPalPaymentSection.existingAccountLoginBtn}}" dependentSelector="{{PayPalPaymentSection.existingAccountLoginBtn}}" visible="true" stepKey="skipAccountCreationAndLogin"/>
+        <waitForPageLoad stepKey="waitForLoginPageLoad"/>
         <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
         <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
@@ -25,6 +26,5 @@
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad stepKey="wait"/>
-        <see userInput="{{payerName}}" selector="{{PayPalPaymentSection.reviewUserInfo}}" stepKey="seePayerName"/>
     </actionGroup>
 </actionGroups>

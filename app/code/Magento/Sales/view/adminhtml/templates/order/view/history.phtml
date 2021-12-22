@@ -5,17 +5,22 @@
  */
 
 /** @var \Magento\Sales\Block\Adminhtml\Order\View\History $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="order_history_block" class="edit-order-comments">
-    <?php if ($block->canAddComment()) : ?>
+    <?php if ($block->canAddComment()): ?>
         <div class="order-history-block" id="history_form">
 
             <div class="admin__field">
                 <label for="history_status" class="admin__field-label"><?= $block->escapeHtml(__('Status')) ?></label>
                 <div class="admin__field-control">
                     <select name="history[status]" id="history_status" class="admin__control-select">
-                        <?php foreach ($block->getStatuses() as $_code => $_label) : ?>
-                            <option value="<?= $block->escapeHtmlAttr($_code) ?>"<?php if ($_code == $block->getOrder()->getStatus()) : ?> selected="selected"<?php endif; ?>><?= $block->escapeHtml($_label) ?></option>
+                        <?php foreach ($block->getStatuses() as $_code => $_label): ?>
+                            <option value="<?= $block->escapeHtmlAttr($_code) ?>"
+                                <?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"
+                                <?php endif; ?>>
+                                <?= $block->escapeHtml($_label) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -37,7 +42,7 @@
             <div class="admin__field">
                 <div class="order-history-comments-options">
                     <div class="admin__field admin__field-option">
-                        <?php if ($block->canSendCommentEmail()) : ?>
+                        <?php if ($block->canSendCommentEmail()): ?>
                             <input name="history[is_customer_notified]"
                                    type="checkbox"
                                    id="history_notify"
@@ -69,30 +74,40 @@
     <?php endif;?>
 
     <ul class="note-list">
-    <?php foreach ($block->getOrder()->getStatusHistoryCollection(true) as $_item) : ?>
+    <?php foreach ($block->getOrder()->getStatusHistoryCollection(true) as $_item): ?>
         <li class="note-list-item">
-            <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-            <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
+            <span class="note-list-date">
+                <?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+            </span>
+            <span class="note-list-time">
+                <?= /* @noEscape */ $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?>
+            </span>
             <span class="note-list-status"><?= $block->escapeHtml($_item->getStatusLabel()) ?></span>
             <span class="note-list-customer">
                 <?= $block->escapeHtml(__('Customer')) ?>
-                <?php if ($block->isCustomerNotificationNotApplicable($_item)) : ?>
-                    <span class="note-list-customer-notapplicable"><?= $block->escapeHtml(__('Notification Not Applicable')) ?></span>
-                <?php elseif ($_item->getIsCustomerNotified()) : ?>
+                <?php if ($block->isCustomerNotificationNotApplicable($_item)): ?>
+                    <span class="note-list-customer-notapplicable">
+                        <?= $block->escapeHtml(__('Notification Not Applicable')) ?>
+                    </span>
+                <?php elseif ($_item->getIsCustomerNotified()): ?>
                     <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
-                <?php else : ?>
+                <?php else: ?>
                     <span class="note-list-customer-not-notified"><?= $block->escapeHtml(__('Not Notified')) ?></span>
                 <?php endif; ?>
             </span>
-            <?php if ($_item->getComment()) : ?>
-                <div class="note-list-comment"><?= $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+            <?php if ($_item->getComment()): ?>
+                <div class="note-list-comment">
+                    <?= $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?>
+                </div>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
     </ul>
-    <script>
+    <?php $scriptString = <<<script
         require(['prototype'], function(){
-            if($('order_status'))$('order_status').update('<?= $block->escapeJs($block->escapeHtml($block->getOrder()->getStatusLabel())) ?>');
+            if($('order_status'))$('order_status').update('{$block->escapeJs($block->getOrder()->getStatusLabel())}');
         });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </div>

@@ -41,9 +41,7 @@
         </after>
 
         <!-- Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
-
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <!-- Select Created Product-->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -52,7 +50,9 @@
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus">
+             <argument name="stockStatus" value="In Stock"/>
+        </actionGroup> 
 
         <!-- Create Product Attribute -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
@@ -74,8 +74,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
-        <waitForPageLoad stepKey="waitForProductToSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
 
         <!--Verify product attribute added in product form and Is Required message displayed-->
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
@@ -85,8 +84,7 @@
         <!--Fill the Required field and save the product -->
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(newProductAttribute.attribute_code)}}" userInput="attribute" stepKey="fillTheAttributeRequiredInputField"/>
         <scrollToTopOfPage stepKey="scrollToTopOfProductFormPage"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct1"/>
-        <waitForPageLoad stepKey="waitForProductToSave1"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct1"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
     </test>
 </tests>

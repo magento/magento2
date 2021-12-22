@@ -94,8 +94,7 @@
         </actionGroup>
 
         <!--Navigate to Product attribute page-->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
         <fillField userInput="test_label" selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
         <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>

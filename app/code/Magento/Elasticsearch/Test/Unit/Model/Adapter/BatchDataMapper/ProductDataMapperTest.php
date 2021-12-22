@@ -21,6 +21,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit tests for \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductDataMapperTest extends TestCase
@@ -56,12 +58,12 @@ class ProductDataMapperTest extends TestCase
     private $additionalFieldsProvider;
 
     /**
-     * @var MockObject
+     * @var DataProvider|MockObject
      */
     private $dataProvider;
 
     /**
-     * Set up test environment.
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -71,6 +73,11 @@ class ProductDataMapperTest extends TestCase
         $this->attribute = $this->createMock(Attribute::class);
         $this->additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
+        $filterableAttributeTypes = [
+            'boolean' => 'boolean',
+            'multiselect' => 'multiselect',
+            'select' => 'select',
+        ];
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -81,6 +88,7 @@ class ProductDataMapperTest extends TestCase
                 'dateFieldType' => $this->dateFieldTypeMock,
                 'dataProvider' => $this->dataProvider,
                 'additionalFieldsProvider' => $this->additionalFieldsProvider,
+                'filterableAttributeTypes' => $filterableAttributeTypes,
             ]
         );
     }
@@ -159,8 +167,8 @@ class ProductDataMapperTest extends TestCase
             $productId => [$attributeId => $attributeValue],
         ];
         $documents = $this->model->map($documentData, $storeId, $context);
-        $returnAttributeData['store_id'] = $storeId;
-        $this->assertEquals($returnAttributeData, $documents[$productId]);
+        $returnAttributeData = ['store_id' => $storeId] + $returnAttributeData;
+        $this->assertSame($returnAttributeData, $documents[$productId]);
     }
 
     /**
@@ -305,8 +313,8 @@ class ProductDataMapperTest extends TestCase
                         ['value' => '2', 'label' => 'Disabled'],
                     ],
                 ],
-                [10  => '1', 11 => '2'],
-                ['status' => '1'],
+                [10 => '1', 11 => '2'],
+                ['status' => 1],
             ],
             'select without options' => [
                 10,
@@ -318,7 +326,7 @@ class ProductDataMapperTest extends TestCase
                     'options' => [],
                 ],
                 '44',
-                ['color' => '44'],
+                ['color' => 44],
             ],
             'unsearchable select with options' => [
                 10,
@@ -333,7 +341,7 @@ class ProductDataMapperTest extends TestCase
                     ],
                 ],
                 '44',
-                ['color' => '44'],
+                ['color' => 44],
             ],
             'searchable select with options' => [
                 10,
@@ -348,7 +356,7 @@ class ProductDataMapperTest extends TestCase
                     ],
                 ],
                 '44',
-                ['color' => '44', 'color_value' => 'red'],
+                ['color' => 44, 'color_value' => 'red'],
             ],
             'composite select with options' => [
                 10,
@@ -363,7 +371,7 @@ class ProductDataMapperTest extends TestCase
                     ],
                 ],
                 [10 => '44', 11 => '45'],
-                ['color' => ['44', '45'], 'color_value' => ['red', 'black']],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
             ],
             'multiselect without options' => [
                 10,
@@ -430,10 +438,10 @@ class ProductDataMapperTest extends TestCase
                     'backend_type' => 'int',
                     'frontend_input' => 'int',
                     'is_searchable' => false,
-                    'options' => []
+                    'options' => [],
                 ],
                 15,
-                []
+                [],
             ],
         ];
     }

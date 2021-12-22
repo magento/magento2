@@ -211,4 +211,22 @@ class ConsumerTest extends TestCase
 
         $this->consumer->process($numberOfMessages);
     }
+
+    /**
+     * Test for process method with 'getMaxIdleTime' and 'getSleep' consumer configurations
+     *
+     * @return void
+     */
+    public function testProcessWithGetMaxIdleTimeAndGetSleepConsumerConfigurations()
+    {
+        $numberOfMessages = 1;
+        $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion');
+        $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
+            ->disableOriginalConstructor()->getMock();
+        $this->configuration->expects($this->once())->method('getQueue')->willReturn($queue);
+        $queue->expects($this->atMost(2))->method('dequeue')->willReturn(null);
+        $this->configuration->expects($this->once())->method('getMaxIdleTime')->willReturn('2');
+        $this->configuration->expects($this->once())->method('getSleep')->willReturn('2');
+        $this->consumer->process($numberOfMessages);
+    }
 }

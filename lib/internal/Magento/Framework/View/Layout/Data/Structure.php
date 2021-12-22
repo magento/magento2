@@ -12,6 +12,7 @@ use Magento\Framework\App\State;
  * An associative data structure, that features "nested set" parent-child relations
  *
  * @api
+ * @since 100.0.2
  */
 class Structure extends DataStructure
 {
@@ -107,7 +108,7 @@ class Structure extends DataStructure
     public function reorderChildElement($parentName, $childName, $offsetOrSibling, $after = true)
     {
         if (is_numeric($offsetOrSibling)) {
-            $offset = (int)abs($offsetOrSibling) * ($after ? 1 : -1);
+            $offset = abs((int) $offsetOrSibling) * ($after ? 1 : -1);
             $this->reorderChild($parentName, $childName, $offset);
         } elseif (null === $offsetOrSibling) {
             $this->reorderChild($parentName, $childName, null);

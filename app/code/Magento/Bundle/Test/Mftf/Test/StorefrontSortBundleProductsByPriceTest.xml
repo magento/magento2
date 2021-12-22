@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-228"/>
             <group value="bundle"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create category -->
@@ -95,7 +96,9 @@
             </createData>
 
             <!-- Perform CLI reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete all created data -->

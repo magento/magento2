@@ -99,7 +99,7 @@ class RemoteAddress
                     return !in_array(trim($ip), $this->trustedProxies, true);
                 }
             );
-            $remoteAddress = trim(array_pop($ipList));
+            $remoteAddress = empty($ipList) ? '' : trim(array_pop($ipList));
         } else {
             $remoteAddress = trim(reset($ipList));
         }
@@ -120,7 +120,7 @@ class RemoteAddress
     public function getRemoteAddress(bool $ipToLong = false)
     {
         if ($this->remoteAddress !== null) {
-            return $this->remoteAddress;
+            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
         }
 
         $remoteAddress = $this->readAddress();
@@ -135,11 +135,11 @@ class RemoteAddress
             $this->remoteAddress = false;
 
             return false;
-        } else {
-            $this->remoteAddress = $remoteAddress;
-
-            return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
         }
+
+        $this->remoteAddress = $remoteAddress;
+
+        return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
     }
 
     /**

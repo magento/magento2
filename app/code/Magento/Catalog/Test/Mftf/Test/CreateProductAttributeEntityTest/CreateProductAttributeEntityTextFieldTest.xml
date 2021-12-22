@@ -33,7 +33,7 @@
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
 
         <!--Create new Product Attribute as TextField, with code and default value.-->
         <actionGroup ref="CreateProductAttributeWithTextFieldActionGroup" stepKey="createAttribute">

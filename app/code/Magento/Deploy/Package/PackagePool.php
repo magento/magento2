@@ -7,7 +7,7 @@ namespace Magento\Deploy\Package;
 
 use Magento\Deploy\Collector\Collector;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
-use Magento\Framework\AppInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Design\Theme\ListInterface;
 
@@ -42,21 +42,29 @@ class PackagePool
     private $collected = false;
 
     /**
+     * @var LocaleResolver|null
+     */
+    private $localeResolver;
+
+    /**
      * PackagePool constructor
      *
      * @param Collector $collector
      * @param ListInterface $themeCollection
      * @param PackageFactory $packageFactory
+     * @param LocaleResolver|null $localeResolver
      */
     public function __construct(
         Collector $collector,
         ListInterface $themeCollection,
-        PackageFactory $packageFactory
+        PackageFactory $packageFactory,
+        ?LocaleResolver $localeResolver = null
     ) {
         $this->collector = $collector;
         $themeCollection->clear()->resetConstraints();
         $this->themes = $themeCollection->getItems();
         $this->packageFactory = $packageFactory;
+        $this->localeResolver = $localeResolver ?: ObjectManager::getInstance()->get(LocaleResolver::class);
     }
 
     /**
@@ -221,17 +229,18 @@ class PackagePool
     private function ensureRequiredLocales(array $options)
     {
         if (empty($options[Options::LANGUAGE]) || $options[Options::LANGUAGE][0] === 'all') {
-            $forcedLocales = [AppInterface::DISTRO_LOCALE_CODE];
+            $forcedLocales = [];
         } else {
             $forcedLocales = $options[Options::LANGUAGE];
         }
 
-        $resultPackages = $this->packages;
-        foreach ($resultPackages as $package) {
+        foreach ($this->packages as $package) {
             if ($package->getTheme() === Package::BASE_THEME) {
                 continue;
             }
-            foreach ($forcedLocales as $locale) {
+
+            $locales = $forcedLocales ?: $this->localeResolver->getUsedPackageLocales($package);
+            foreach ($locales as $locale) {
                 $this->ensurePackage([
                     'area' => $package->getArea(),
                     'theme' => $package->getTheme(),

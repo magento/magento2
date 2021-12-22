@@ -48,7 +48,7 @@
 
             <!--Add tier price in one product -->
             <createData entity="tierProductPrice" stepKey="addTierPrice">
-            <requiredEntity createDataKey="createFirstSimpleProduct" />
+                <requiredEntity createDataKey="createFirstSimpleProduct" />
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
@@ -71,8 +71,7 @@
         </after>
 
         <!--Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
@@ -110,5 +109,8 @@
             <expectedResult type="string">Buy {{tierProductPrice.quantity}} for ${{tierProductPrice.price}} each and save 27%</expectedResult>
             <actualResult type="variable">tierPriceText</actualResult>
         </assertEquals>
+        <seeElement selector="{{StorefrontProductInfoMainSection.tierPriceBlock}}" stepKey="seeTierPriceBlock"/>
+        <selectOption userInput="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption2"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.tierPriceBlock}}" stepKey="dontSeeTierPriceBlock"/>
     </test>
 </tests>

@@ -16,7 +16,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
 
 /**
- * Assign shipping address to cart
+ * Assigning shipping address to cart
  */
 class AssignShippingAddressToCart
 {
@@ -49,7 +49,14 @@ class AssignShippingAddressToCart
         try {
             $this->shippingAddressManagement->assign($cart->getId(), $shippingAddress);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+            if ($cart->getIsVirtual()) {
+                throw new GraphQlNoSuchEntityException(
+                    __('Shipping address is not allowed on cart: cart contains no items for shipment.'),
+                    $e
+                );
+            } else {
+                throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+            }
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }

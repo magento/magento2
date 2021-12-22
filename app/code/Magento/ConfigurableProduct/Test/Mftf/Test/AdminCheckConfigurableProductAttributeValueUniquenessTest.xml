@@ -46,13 +46,11 @@
         </createData>
         <!--Go to created product page-->
         <comment userInput="Go to created product page" stepKey="goToProdPage"/>
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductGrid"/>
-        <waitForPageLoad stepKey="waitForProductPage1"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductGrid"/>
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterByName">
             <argument name="name" value="$$createConfigProduct.name$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductName"/>
-        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductName"/>
         <!--Create configurations for the product-->
         <comment userInput="Create configurations for the product" stepKey="createConfigurations"/>
         <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="expandConfigurationsTab1"/>

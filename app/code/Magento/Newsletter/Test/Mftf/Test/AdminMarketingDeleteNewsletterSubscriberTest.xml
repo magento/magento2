@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingDeleteNewsletterSubscriberTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Subscribers Deleting"/>
+            <title value="Admin deletes newsletter subscribers"/>
+            <description value="Admin should be able delete newsletter subscribers"/>
+            <severity value="CRITICAL"/>
+            <group value="newsletter"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
+        <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterSubscribersPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterSubscribers.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMarketingFindNewsletterSubscribersInGridActionGroup" stepKey="findSubscriber">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMarketingDeleteNewsletterSubscriberFromGridActionGroup" stepKey="deleteSubscriber"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="Total of 1 record(s) were deleted."/>
+        </actionGroup>
+        <actionGroup ref="AdminMarketingFindNewsletterSubscribersInGridActionGroup" stepKey="findDeletedSubscriber">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminDeletedNewsletterSubscriberIsNotInGridActionGroup" stepKey="dontSeeSubscriber">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
+    </test>
+</tests>

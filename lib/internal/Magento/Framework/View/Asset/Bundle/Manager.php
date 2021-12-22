@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @see \Magento\Deploy\Service\Bundle
  */
 class Manager
@@ -202,6 +202,8 @@ class Manager
     }
 
     /**
+     * Check for an asset's minified
+     *
      * @param LocalInterface $asset
      * @return bool
      */
@@ -229,6 +231,8 @@ class Manager
     }
 
     /**
+     * Validates asset
+     *
      * @param LocalInterface $asset
      * @return bool
      */
@@ -244,6 +248,8 @@ class Manager
     }
 
     /**
+     * Check if asset has valid type.
+     *
      * @param LocalInterface $asset
      * @return bool
      */

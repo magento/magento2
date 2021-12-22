@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Category;
 
-use Magento\Catalog\Api\CategoryListInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
+use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
+use Magento\CatalogGraphQl\Model\Category\Filter\SearchCriteria;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\ArgumentApplier\Filter;
-use Magento\Search\Model\Query;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 
 /**
  * Category filter allows filtering category results by attributes.
@@ -24,38 +25,57 @@ use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 class CategoryFilter
 {
     /**
-     * @var string
+     * @var CollectionFactory
      */
-    private const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
+    private $categoryCollectionFactory;
 
     /**
-     * @var ScopeConfigInterface
+     * @var CollectionProcessorInterface
      */
-    private $scopeConfig;
+    private $collectionProcessor;
 
     /**
-     * @var CategoryListInterface
+     * @var JoinProcessorInterface
      */
-    private $categoryList;
+    private $extensionAttributesJoinProcessor;
 
     /**
-     * @var Builder
+     * @var CategorySearchResultsInterfaceFactory
      */
-    private $searchCriteriaBuilder;
+    private $categorySearchResultsFactory;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param CategoryListInterface $categoryList
-     * @param Builder $searchCriteriaBuilder
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
+     * @var SearchCriteria
+     */
+    private $searchCriteria;
+
+    /**
+     * @param CollectionFactory $categoryCollectionFactory
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param CategorySearchResultsInterfaceFactory $categorySearchResultsFactory
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param SearchCriteria $searchCriteria
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        CategoryListInterface $categoryList,
-        Builder $searchCriteriaBuilder
+        CollectionFactory $categoryCollectionFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
+        CategorySearchResultsInterfaceFactory $categorySearchResultsFactory,
+        CategoryRepositoryInterface $categoryRepository,
+        SearchCriteria $searchCriteria
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->categoryList = $categoryList;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
+        $this->collectionProcessor = $collectionProcessor;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->categorySearchResultsFactory = $categorySearchResultsFactory;
+        $this->categoryRepository = $categoryRepository;
+        $this->searchCriteria = $searchCriteria;
     }
 
     /**
@@ -63,20 +83,25 @@ class CategoryFilter
      *
      * @param array $criteria
      * @param StoreInterface $store
+     * @param array $attributeNames
+     * @param ContextInterface $context
      * @return int[]
      * @throws InputException
      */
-    public function getResult(array $criteria, StoreInterface $store)
+    public function getResult(array $criteria, StoreInterface $store, array $attributeNames, ContextInterface $context)
     {
-        $categoryIds = [];
-        $criteria[Filter::ARGUMENT_NAME] = $this->formatMatchFilters($criteria['filters'], $store);
-        $criteria[Filter::ARGUMENT_NAME][CategoryInterface::KEY_IS_ACTIVE] = ['eq' => 1];
-        $searchCriteria = $this->searchCriteriaBuilder->build('categoryList', $criteria);
-        $pageSize = $criteria['pageSize'] ?? 20;
-        $currentPage = $criteria['currentPage'] ?? 1;
-        $searchCriteria->setPageSize($pageSize)->setCurrentPage($currentPage);
+        $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
+        $collection = $this->categoryCollectionFactory->create();
+        $this->extensionAttributesJoinProcessor->process($collection);
+        $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
 
-        $categories = $this->categoryList->getList($searchCriteria);
+        /** @var CategorySearchResultsInterface $searchResult */
+        $categories = $this->categorySearchResultsFactory->create();
+        $categories->setSearchCriteria($searchCriteria);
+        $categories->setItems($collection->getItems());
+        $categories->setTotalCount($collection->getSize());
+
+        $categoryIds = [];
         foreach ($categories->getItems() as $category) {
             $categoryIds[] = (int)$category->getId();
         }
@@ -103,36 +128,5 @@ class CategoryFilter
                 'current_page' => $searchCriteria->getCurrentPage(),
             ]
         ];
-    }
-
-    /**
-     * Format match filters to behave like fuzzy match
-     *
-     * @param array $filters
-     * @param StoreInterface $store
-     * @return array
-     * @throws InputException
-     */
-    private function formatMatchFilters(array $filters, StoreInterface $store): array
-    {
-        $minQueryLength = $this->scopeConfig->getValue(
-            Query::XML_PATH_MIN_QUERY_LENGTH,
-            ScopeInterface::SCOPE_STORE,
-            $store
-        );
-
-        foreach ($filters as $filter => $condition) {
-            $conditionType = current(array_keys($condition));
-            if ($conditionType === 'match') {
-                $searchValue = trim(str_replace(self::SPECIAL_CHARACTERS, '', $condition[$conditionType]));
-                $matchLength = strlen($searchValue);
-                if ($matchLength < $minQueryLength) {
-                    throw new InputException(__('Invalid match filter. Minimum length is %1.', $minQueryLength));
-                }
-                unset($filters[$filter]['match']);
-                $filters[$filter]['like'] = '%' . $searchValue . '%';
-            }
-        }
-        return $filters;
     }
 }

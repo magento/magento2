@@ -17,26 +17,36 @@ define([
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
 
-    var options = {},
+    var options = {
+            cookieLifeTime: 86400 //1 day by default
+        },
         storage,
         storageInvalidation,
         invalidateCacheBySessionTimeOut,
         invalidateCacheByCloseCookieSession,
         dataProvider,
         buffer,
-        customerData;
+        customerData,
+        deferred = $.Deferred();
 
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
 
-    //TODO: remove global change, in this case made for initNamespaceStorage
-    $.cookieStorage.setConf({
-        path: '/',
-        expires: 1
-    });
+    /**
+     * Storage initialization
+     */
+    function initStorage() {
+        $.cookieStorage.setConf({
+            path: '/',
+            expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000),
+            samesite: 'lax'
+        });
+        storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+        storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+    }
 
-    storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-    storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+    // Initialize storage with default parameters to prevent JS errors while component still not initialized
+    initStorage();
 
     /**
      * @param {Object} invalidateOptions
@@ -46,9 +56,9 @@ define([
 
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
-            date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
-            $.localStorage.set('mage-cache-timeout', date);
         }
+        date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
+        $.localStorage.set('mage-cache-timeout', date);
     };
 
     /**
@@ -86,7 +96,7 @@ define([
             var parameters;
 
             sectionNames = sectionConfig.filterClientSideSections(sectionNames);
-            parameters = _.isArray(sectionNames) ? {
+            parameters = _.isArray(sectionNames) && sectionNames.indexOf('*') < 0 ? {
                 sections: sectionNames.join(',')
             } : [];
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
@@ -110,7 +120,7 @@ define([
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) { //eslint-disable-line eqeqeq
+                    if (name !== sectionName) {
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -222,6 +232,11 @@ define([
         },
 
         /**
+         * Storage init
+         */
+        initStorage: initStorage,
+
+        /**
          * Retrieve the list of sections that has expired since last page reload.
          *
          * Sections can expire due to lifetime constraints or due to inconsistent storage information
@@ -251,11 +266,14 @@ define([
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
-                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                    cookieSectionTimestamp !== sectionData['data_id']
                 ) {
                     expiredSectionNames.push(sectionName);
                 }
             });
+
+            //remove expired section names of previously installed/enable modules
+            expiredSectionNames = _.intersection(expiredSectionNames, sectionConfig.getSectionNames());
 
             return _.uniq(expiredSectionNames);
         },
@@ -342,14 +360,53 @@ define([
         },
 
         /**
+         * Checks if customer data is initialized.
+         *
+         * @returns {jQuery.Deferred}
+         */
+        getInitCustomerData: function () {
+            return deferred.promise();
+        },
+
+        /**
+         * Reload sections on ajax complete
+         *
+         * @param {Object} jsonResponse
+         * @param {Object} settings
+         */
+        onAjaxComplete: function (jsonResponse, settings) {
+            var sections,
+                redirects;
+
+            if (settings.type.match(/post|put|delete/i)) {
+                sections = sectionConfig.getAffectedSections(settings.url);
+
+                if (sections && sections.length) {
+                    this.invalidate(sections);
+                    redirects = ['redirect', 'backUrl'];
+
+                    if (_.isObject(jsonResponse) && !_.isEmpty(_.pick(jsonResponse, redirects))) { //eslint-disable-line
+                        return;
+                    }
+                    this.reload(sections, true);
+                }
+            }
+        },
+
+        /**
          * @param {Object} settings
          * @constructor
          */
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
+
+            // re-init storage with a new settings
+            customerData.initStorage();
+
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
             customerData.init();
+            deferred.resolve();
         }
     };
 
@@ -357,22 +414,7 @@ define([
      * Events listener
      */
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        var sections,
-            redirects;
-
-        if (settings.type.match(/post|put|delete/i)) {
-            sections = sectionConfig.getAffectedSections(settings.url);
-
-            if (sections) {
-                customerData.invalidate(sections);
-                redirects = ['redirect', 'backUrl'];
-
-                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) { //eslint-disable-line
-                    return;
-                }
-                customerData.reload(sections, true);
-            }
-        }
+        customerData.onAjaxComplete(xhr.responseJSON, settings);
     });
 
     /**

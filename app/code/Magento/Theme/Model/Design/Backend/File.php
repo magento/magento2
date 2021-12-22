@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Theme\Model\Design\Backend;
 
-use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Config\Model\Config\Backend\File as BackendFile;
+use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -15,13 +17,14 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File as IoFileSystem;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
-use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * File Backend
@@ -41,6 +44,11 @@ class File extends BackendFile
     private $mime;
 
     /**
+     * @var IoFileSystem
+     */
+    private $ioFileSystem;
+
+    /**
      * @var Database
      */
     private $databaseHelper;
@@ -58,6 +66,7 @@ class File extends BackendFile
      * @param AbstractDb|null $resourceCollection
      * @param array $data
      * @param Database $databaseHelper
+     * @param IoFileSystem $ioFileSystem
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -72,7 +81,8 @@ class File extends BackendFile
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = [],
-        Database $databaseHelper = null
+        Database $databaseHelper = null,
+        IoFileSystem $ioFileSystem = null
     ) {
         parent::__construct(
             $context,
@@ -88,6 +98,7 @@ class File extends BackendFile
         );
         $this->urlBuilder = $urlBuilder;
         $this->databaseHelper = $databaseHelper ?: ObjectManager::getInstance()->get(Database::class);
+        $this->ioFileSystem = $ioFileSystem ?: ObjectManager::getInstance()->get(IoFileSystem::class);
     }
 
     /**
@@ -108,11 +119,21 @@ class File extends BackendFile
                 __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
             );
         }
+
+        if (!empty($this->getAllowedExtensions()) &&
+            (!isset($this->ioFileSystem->getPathInfo($file)['extension']) ||
+            !in_array($this->ioFileSystem->getPathInfo($file)['extension'], $this->getAllowedExtensions()))
+        ) {
+            throw new LocalizedException(
+                __('Something is wrong with the file upload settings.')
+            );
+        }
+
         if (isset($value['exists'])) {
             $this->setValue($file);
             return $this;
         }
-      
+
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->updateMediaDirectory(basename($file), $value['url']);
 
@@ -196,7 +217,7 @@ class File extends BackendFile
             $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type']];
             $baseUrl = $baseUrl['value'] . '/';
         }
-        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl  . $fileName;
+        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl . $fileName;
     }
 
     /**

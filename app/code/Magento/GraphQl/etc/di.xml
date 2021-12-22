@@ -14,6 +14,8 @@
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
+    <preference for="Magento\GraphQl\Model\Query\Logger\LoggerInterface" type="Magento\GraphQl\Model\Query\Logger\LoggerPool"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -29,6 +31,7 @@
         <arguments>
             <argument name="factoryMapByConfigElementType" xsi:type="array">
                 <item name="graphql_interface" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InterfaceFactory</item>
+                <item name="graphql_union" xsi:type="object">Magento\Framework\GraphQl\Config\Element\UnionFactory</item>
                 <item name="graphql_type" xsi:type="object">Magento\Framework\GraphQl\Config\Element\TypeFactory</item>
                 <item name="graphql_input" xsi:type="object">Magento\Framework\GraphQl\Config\Element\InputFactory</item>
                 <item name="graphql_enum" xsi:type="object">Magento\Framework\GraphQl\Config\Element\EnumFactory</item>
@@ -64,6 +67,7 @@
                 <item name="Magento\Framework\GraphQl\Config\Element\Type" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputTypeObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\Input" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Input\InputObjectType</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\InterfaceType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputInterfaceObject</item>
+                <item name="Magento\Framework\GraphQl\Config\Element\UnionType" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Output\OutputUnionObject</item>
                 <item name="Magento\Framework\GraphQl\Config\Element\Enum" xsi:type="string">Magento\Framework\GraphQl\Schema\Type\Enum\Enum</item>
             </argument>
         </arguments>
@@ -78,6 +82,7 @@
             <argument name="formatters" xsi:type="array">
                 <item name="fields" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Fields</item>
                 <item name="interfaces" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Interfaces</item>
+                <item name="unions" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\Unions</item>
                 <item name="resolveType" xsi:type="object">Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter\ResolveType</item>
             </argument>
         </arguments>
@@ -85,6 +90,7 @@
     <type name="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite">
         <arguments>
             <argument name="typeReaders" xsi:type="array">
+                <item name="union_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\UnionType</item>
                 <item name="enum_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\EnumType</item>
                 <item name="object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\ObjectType</item>
                 <item name="input_object_type" xsi:type="object">Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InputObjectType</item>
@@ -96,6 +102,13 @@
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>
             <argument name="queryComplexity" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Query\Logger\LoggerPool">
+        <arguments>
+            <argument name="loggers" xsi:type="array">
+                <item name="newRelic" xsi:type="object">Magento\GraphQl\Model\Query\Logger\NewRelic</item>
+            </argument>
         </arguments>
     </type>
 </config>

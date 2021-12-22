@@ -24,61 +24,53 @@ use Magento\Customer\Model\Indexer\Processor;
  */
 class Address extends AbstractCustomer
 {
-    /**#@+
-     * Attribute collection name
+    /**
+     * The customer address attribute collection class name
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
-    /**#@-*/
-
-    /**#@+
+    /**
      * Permanent column names
      *
      * Names that begins with underscore is not an attribute.
      * This name convention is for to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = '_email';
+    public const COLUMN_EMAIL = '_email';
 
-    const COLUMN_ADDRESS_ID = '_entity_id';
+    public const COLUMN_ADDRESS_ID = '_entity_id';
 
-    /**#@-*/
-
-    /**#@+
+    /**
      * Required column names
      */
-    const COLUMN_REGION = 'region';
+    public const COLUMN_REGION = 'region';
 
-    const COLUMN_COUNTRY_ID = 'country_id';
+    public const COLUMN_COUNTRY_ID = 'country_id';
 
-    const COLUMN_POSTCODE = 'postcode';
+    public const COLUMN_POSTCODE = 'postcode';
 
-    /**#@-*/
+    public const COLUMN_REGION_ID = 'region_id';
 
-    const COLUMN_REGION_ID = 'region_id';
-
-    /**#@+
+    /**
      * Particular columns that contains of customer default addresses
      */
-    const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
+    public const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
 
-    const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
+    public const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
 
-    /**#@-*/
-
-    /**#@+
+    /**
      * Error codes
      */
-    const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
+    public const ERROR_ADDRESS_ID_IS_EMPTY = 'addressIdIsEmpty';
 
-    const ERROR_ADDRESS_NOT_FOUND = 'addressNotFound';
+    public const ERROR_ADDRESS_NOT_FOUND = 'addressNotFound';
 
-    const ERROR_INVALID_REGION = 'invalidRegion';
+    public const ERROR_INVALID_REGION = 'invalidRegion';
 
-    const ERROR_DUPLICATE_PK = 'duplicateAddressId';
+    public const ERROR_DUPLICATE_PK = 'duplicateAddressId';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var string[]
+     */
     protected static $_defaultAddressAttributeMapping = [
         self::COLUMN_DEFAULT_BILLING => 'default_billing',
         self::COLUMN_DEFAULT_SHIPPING => 'default_shipping',
@@ -152,8 +144,6 @@ class Address extends AbstractCustomer
     ];
 
     /**
-     * Customer entity
-     *
      * @var \Magento\Customer\Model\Customer
      */
     protected $_customerEntity;
@@ -169,7 +159,7 @@ class Address extends AbstractCustomer
      * Array of region parameters
      *
      * @var array
-     * @deprecated field not in use
+     * @deprecated 100.3.4 field not in use
      */
     protected $_regionParameters;
 
@@ -199,33 +189,29 @@ class Address extends AbstractCustomer
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @deprecated field not-in use
+     * @deprecated 100.3.4 field not-in use
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @deprecated not utilized anymore
+     * @deprecated 100.3.4 not utilized anymore
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @deprecated the property isn't used
+     * @deprecated 100.3.4 the property isn't used
      */
     protected $dateTime;
 
     /**
-     * Customer attributes
-     *
      * @var string[]
      */
     protected $_customerAttributes = [];
 
     /**
-     * Valid column names
-     *
-     * @array
+     * @var string[]
      */
     protected $validColumnNames = [
         "region_id",
@@ -525,12 +511,12 @@ class Address extends AbstractCustomer
     protected function _importData()
     {
         //Preparing data for mass validation/import.
-        $rows = [[]];
+        $rows = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $rows[] = $bunch;
         }
 
-        $this->prepareCustomerData(array_merge(...$rows));
+        $this->prepareCustomerData(array_merge([], ...$rows));
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
 
@@ -644,8 +630,8 @@ class Address extends AbstractCustomer
 
                 $value = $rowData[$attributeAlias];
 
-                if (!strlen($rowData[$attributeAlias])) {
-                    if (!$newAddress) {
+                if ($rowData[$attributeAlias] === null || !strlen($rowData[$attributeAlias])) {
+                    if ($attributeParams['is_required']) {
                         continue;
                     }
 
@@ -667,8 +653,6 @@ class Address extends AbstractCustomer
                 $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
-        // let's try to find region ID
-        $entityRow[self::COLUMN_REGION_ID] = null;
 
         if (!empty($entityRow[self::COLUMN_REGION]) && !empty($entityRow[self::COLUMN_COUNTRY_ID])) {
             $entityRow[self::COLUMN_REGION_ID] = $this->getCountryRegionId(
@@ -679,6 +663,8 @@ class Address extends AbstractCustomer
             $entityRow[self::COLUMN_REGION] = $entityRow[self::COLUMN_REGION_ID] !== null
                 ? $this->_regions[$entityRow[self::COLUMN_REGION_ID]]
                 : $entityRow[self::COLUMN_REGION];
+        } elseif ($newAddress) {
+            $entityRow[self::COLUMN_REGION_ID] = null;
         }
         if ($newAddress) {
             $entityRowNew = $entityRow;
@@ -908,7 +894,7 @@ class Address extends AbstractCustomer
                     }
                 }
 
-                if (isset($rowData[self::COLUMN_COUNTRY_ID])) {
+                if (!empty($rowData[self::COLUMN_COUNTRY_ID])) {
                     if (isset($rowData[self::COLUMN_POSTCODE])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],
@@ -918,8 +904,7 @@ class Address extends AbstractCustomer
                         $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, self::COLUMN_POSTCODE);
                     }
 
-                    if (isset($rowData[self::COLUMN_REGION])
-                        && !empty($rowData[self::COLUMN_REGION])
+                    if (!empty($rowData[self::COLUMN_REGION])
                         && count($this->getCountryRegions($rowData[self::COLUMN_COUNTRY_ID])) > 0
                         && null === $this->getCountryRegionId(
                             $rowData[self::COLUMN_COUNTRY_ID],

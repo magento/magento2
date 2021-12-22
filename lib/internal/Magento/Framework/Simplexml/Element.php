@@ -10,6 +10,7 @@ namespace Magento\Framework\Simplexml;
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
  * @api
+ * @since 100.0.2
  */
 class Element extends \SimpleXMLElement
 {
@@ -65,6 +66,7 @@ class Element extends \SimpleXMLElement
      * @return boolean
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[\ReturnTypeWillChange]
     public function hasChildren()
     {
         if (!$this->children()) {

@@ -42,6 +42,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Construct block
+     *
      * @return void
      */
     protected function _construct()
@@ -50,6 +52,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_product_attribute';
 
         parent::_construct();
+
+        $this->buttonList->update('save', 'label', __('Save Attribute'));
+        $this->buttonList->update('save', 'class', 'save primary');
+        $this->buttonList->update(
+            'save',
+            'data_attribute',
+            ['mage-init' => ['button' => ['event' => 'save', 'target' => '#edit_form']]]
+        );
 
         if ($this->getRequest()->getParam('popup')) {
             $this->buttonList->remove('back');
@@ -64,6 +74,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     100
                 );
             }
+            $this->buttonList->update('reset', 'level', 10);
+            $this->buttonList->update('save', 'class', 'save action-secondary');
         } else {
             $this->addButton(
                 'save_and_edit_button',
@@ -79,14 +91,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             );
         }
 
-        $this->buttonList->update('save', 'label', __('Save Attribute'));
-        $this->buttonList->update('save', 'class', 'save primary');
-        $this->buttonList->update(
-            'save',
-            'data_attribute',
-            ['mage-init' => ['button' => ['event' => 'save', 'target' => '#edit_form']]]
-        );
-
         $entityAttribute = $this->_coreRegistry->registry('entity_attribute');
         if (!$entityAttribute || !$entityAttribute->getIsUserDefined()) {
             $this->buttonList->remove('delete');
@@ -96,14 +100,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
         if ($this->getRequest()->getParam('popup')) {
             $region = 'header';
         }
-        parent::addButton($buttonId, $data, $level, $sortOrder, $region);
+        return parent::addButton($buttonId, $data, $level, $sortOrder, $region);
     }
 
     /**

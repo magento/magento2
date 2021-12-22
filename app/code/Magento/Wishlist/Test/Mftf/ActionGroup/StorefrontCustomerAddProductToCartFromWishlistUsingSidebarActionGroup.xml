@@ -19,5 +19,6 @@
         <click selector="{{StorefrontCustomerWishlistSidebarSection.ProductAddToCartByName(product.name)}}" stepKey="AddProductToCartFromWishlistUsingSidebarClickAddToCartFromWishlist"/>
         <waitForElement selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="AddProductToCartFromWishlistUsingSidebarWaitForSuccessMessage"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added {{product.name}} to your shopping cart." stepKey="AddProductToCartFromWishlistUsingSidebarSeeProductNameAddedToCartFromWishlist"/>
+        <seeLink userInput="shopping cart" stepKey="seeLinkInSuccessMsg"/>
     </actionGroup>
 </actionGroups>

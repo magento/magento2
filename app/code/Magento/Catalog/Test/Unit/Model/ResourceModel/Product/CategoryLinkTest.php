@@ -145,11 +145,11 @@ class CategoryLinkTest extends TestCase
         $expectedResult = [];
 
         foreach ($affectedIds as $type => $ids) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $expectedResult = array_merge($expectedResult, $ids);
+            $expectedResult[] = $ids;
             // Verify if the correct insert, update and/or delete actions are performed:
             $this->setupExpectationsForConnection($type, $ids);
         }
+        $expectedResult = array_merge([], ...$expectedResult);
 
         $actualResult = $this->model->saveCategoryLinks($product, $newCategoryLinks);
 

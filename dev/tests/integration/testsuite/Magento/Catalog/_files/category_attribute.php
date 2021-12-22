@@ -4,9 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+/** @var Attribute $attribute */
+
+use Magento\Catalog\Model\Category\AttributeFactory;
+use Magento\Catalog\Model\Category\Attribute;
+use Magento\TestFramework\Helper\Bootstrap;
+
+/** @var AttributeFactory $attributeFactory */
+$attributeFactory = Bootstrap::getObjectManager()->get(AttributeFactory::class);
+$attribute = $attributeFactory->create();
 $attribute->setAttributeCode('test_attribute_code_666')
     ->setEntityTypeId(3)
     ->setIsGlobal(1)

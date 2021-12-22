@@ -25,8 +25,7 @@
         </after>
 
         <!-- Create a new product attribute of type "Text Swatch" -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
         <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>
@@ -51,8 +50,7 @@
         <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('3')}}" userInput="Something blue." stepKey="seeDescription2"/>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>

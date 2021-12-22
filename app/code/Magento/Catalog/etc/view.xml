@@ -8,9 +8,5 @@
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <vars module="Magento_Catalog">
         <var name="product_image_white_borders">1</var>
-        <!-- Variable to enable lazy loading for catalog product images without borders.
-        If you enable this setting your small size images without borders may be stretched in template.
-        So be sure you have correct image sizes. -->
-        <var name="enable_lazy_loading_for_images_without_borders">0</var>
     </vars>
 </view>

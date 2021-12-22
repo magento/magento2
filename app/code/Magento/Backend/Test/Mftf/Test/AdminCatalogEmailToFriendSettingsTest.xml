@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogEmailToFriendSettingsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Enable Email To A Friend Functionality"/>
+            <title value="Admin should be able to manage settings of Email To A Friend Functionality"/>
+            <description value="Admin should be able to enable Email To A Friend functionality in Magento Admin backend and see additional options"/>
+            <group value="backend"/>
+            <severity value="MINOR"></severity>
+            <testCaseId value="MC-35895"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI stepKey="enableSendFriend" command="config:set sendfriend/email/enabled 1"/>
+            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="disableSendFriend" command="config:set sendfriend/email/enabled 0"/>
+            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToEmailToFriendSettingsActionGroup" stepKey="navigateToSendFriendSettings"/>
+        <actionGroup ref="AssertAdminEmailToFriendOptionsAvailableActionGroup" stepKey="assertOptions"/>
+    </test>
+</tests>

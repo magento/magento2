@@ -47,9 +47,11 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
         $fileResolverMock = $this->getMockBuilder(
             \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
+        $filePath1 = __DIR__ . '/../_files/schemaA.graphqls';
+        $filePath2 = __DIR__ . '/../_files/schemaB.graphqls';
         $fileList = [
-            file_get_contents(__DIR__ . '/../_files/schemaA.graphqls'),
-            file_get_contents(__DIR__ . '/../_files/schemaB.graphqls')
+            $filePath1 => file_get_contents($filePath1),
+            $filePath2 => file_get_contents($filePath2)
         ];
         $fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
         $graphQlReader = $this->objectManager->create(
@@ -219,31 +221,25 @@ QUERY;
         }
         //Checks to make sure that the given description exists in the expectedOutput array
         $this->assertArrayHasKey(
-            
-                array_search(
-                    'Comment for empty PhysicalProductInterface',
-                    array_column($expectedOutput, 'description')
-                ),
-                $expectedOutput
-            
+            array_search(
+                'Comment for empty PhysicalProductInterface',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
         );
         $this->assertArrayHasKey(
-            
-                array_search(
-                    'Comment for empty Enum',
-                    array_column($expectedOutput, 'description')
-                ),
-                $expectedOutput
-            
+            array_search(
+                'Comment for empty Enum',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
         );
         $this->assertArrayHasKey(
-            
-                array_search(
-                    'Comment for SearchResultPageInfo',
-                    array_column($expectedOutput, 'description')
-                ),
-                $expectedOutput
-            
+            array_search(
+                'Comment for SearchResultPageInfo',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
         );
     }
 }

@@ -8,56 +8,39 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Coupon;
 
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\SalesRule\Model\Coupon;
-use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
-use Magento\SalesRule\Model\Rule\CustomerFactory;
-use Magento\SalesRule\Model\RuleFactory;
+use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
+use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
+use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
 
 /**
- * Updates the coupon usages.
+ * Updates the coupon usages
  */
 class UpdateCouponUsages
 {
     /**
-     * @var RuleFactory
+     * @var CouponUsageProcessor
      */
-    private $ruleFactory;
+    private $couponUsageProcessor;
 
     /**
-     * @var RuleFactory
+     * @var UpdateInfoFactory
      */
-    private $ruleCustomerFactory;
+    private $updateInfoFactory;
 
     /**
-     * @var Coupon
-     */
-    private $coupon;
-
-    /**
-     * @var Usage
-     */
-    private $couponUsage;
-
-    /**
-     * @param RuleFactory $ruleFactory
-     * @param CustomerFactory $ruleCustomerFactory
-     * @param Coupon $coupon
-     * @param Usage $couponUsage
+     * @param CouponUsageProcessor $couponUsageProcessor
+     * @param UpdateInfoFactory $updateInfoFactory
      */
     public function __construct(
-        RuleFactory $ruleFactory,
-        CustomerFactory $ruleCustomerFactory,
-        Coupon $coupon,
-        Usage $couponUsage
+        CouponUsageProcessor $couponUsageProcessor,
+        UpdateInfoFactory $updateInfoFactory
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->coupon = $coupon;
-        $this->couponUsage = $couponUsage;
+        $this->couponUsageProcessor = $couponUsageProcessor;
+        $this->updateInfoFactory = $updateInfoFactory;
     }
 
     /**
-     * Executes the current command.
+     * Executes the current command
      *
      * @param OrderInterface $subject
      * @param bool $increment
@@ -68,86 +51,16 @@ class UpdateCouponUsages
         if (!$subject || !$subject->getAppliedRuleIds()) {
             return $subject;
         }
-        // lookup rule ids
-        $ruleIds = explode(',', $subject->getAppliedRuleIds());
-        $ruleIds = array_unique($ruleIds);
-        $customerId = (int)$subject->getCustomerId();
-        // use each rule (and apply to customer, if applicable)
-        foreach ($ruleIds as $ruleId) {
-            if (!$ruleId) {
-                continue;
-            }
-            $this->updateRuleUsages($increment, (int)$ruleId, $customerId);
-        }
-        $this->updateCouponUsages($subject, $increment, $customerId);
+
+        /** @var UpdateInfo $updateInfo */
+        $updateInfo = $this->updateInfoFactory->create();
+        $updateInfo->setAppliedRuleIds(explode(',', $subject->getAppliedRuleIds()));
+        $updateInfo->setCouponCode((string)$subject->getCouponCode());
+        $updateInfo->setCustomerId((int)$subject->getCustomerId());
+        $updateInfo->setIsIncrement($increment);
+
+        $this->couponUsageProcessor->process($updateInfo);
 
         return $subject;
-    }
-
-    /**
-     * Update the number of rule usages.
-     *
-     * @param bool $increment
-     * @param int $ruleId
-     * @param int $customerId
-     */
-    private function updateRuleUsages(bool $increment, int $ruleId, int $customerId)
-    {
-        /** @var \Magento\SalesRule\Model\Rule $rule */
-        $rule = $this->ruleFactory->create();
-        $rule->load($ruleId);
-        if ($rule->getId()) {
-            $rule->loadCouponCode();
-            if ($increment || $rule->getTimesUsed() > 0) {
-                $rule->setTimesUsed($rule->getTimesUsed() + ($increment ? 1 : -1));
-                $rule->save();
-            }
-            if ($customerId) {
-                $this->updateCustomerRuleUsages($increment, $ruleId, $customerId);
-            }
-        }
-    }
-
-    /**
-     * Update the number of rule usages per customer.
-     *
-     * @param bool $increment
-     * @param int $ruleId
-     * @param int $customerId
-     */
-    private function updateCustomerRuleUsages(bool $increment, int $ruleId, int $customerId): void
-    {
-        /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
-        $ruleCustomer = $this->ruleCustomerFactory->create();
-        $ruleCustomer->loadByCustomerRule($customerId, $ruleId);
-        if ($ruleCustomer->getId()) {
-            if ($increment || $ruleCustomer->getTimesUsed() > 0) {
-                $ruleCustomer->setTimesUsed($ruleCustomer->getTimesUsed() + ($increment ? 1 : -1));
-            }
-        } elseif ($increment) {
-            $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(1);
-        }
-        $ruleCustomer->save();
-    }
-
-    /**
-     * Update the number of coupon usages.
-     *
-     * @param OrderInterface $subject
-     * @param bool $increment
-     * @param int $customerId
-     */
-    private function updateCouponUsages(OrderInterface $subject, bool $increment, int $customerId): void
-    {
-        $this->coupon->load($subject->getCouponCode(), 'code');
-        if ($this->coupon->getId()) {
-            if ($increment || $this->coupon->getTimesUsed() > 0) {
-                $this->coupon->setTimesUsed($this->coupon->getTimesUsed() + ($increment ? 1 : -1));
-                $this->coupon->save();
-            }
-            if ($customerId) {
-                $this->couponUsage->updateCustomerCouponTimesUsed($customerId, $this->coupon->getId(), $increment);
-            }
-        }
     }
 }

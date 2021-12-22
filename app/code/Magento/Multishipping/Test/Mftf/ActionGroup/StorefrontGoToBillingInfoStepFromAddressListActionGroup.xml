@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontGoToBillingInfoStepFromAddressListActionGroup">
+        <annotations>
+            <description>Navigates to Billing Information step from Billing Address list.</description>
+        </annotations>
+
+        <click selector="{{StorefrontBillingAddressesSection.backToBillingInformation}}" stepKey="navigateToBillingInformation"/>
+        <waitForElementVisible selector="{{PaymentMethodSection.goToReviewOrder}}" stepKey="waitForGoToReviewButton"/>
+    </actionGroup>
+</actionGroups>

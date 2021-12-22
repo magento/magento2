@@ -143,6 +143,15 @@ class CollectionTest extends TestCase
                 $indexers
             ));
 
+        $this->mviewConfigMock
+            ->method('getView')
+            ->willReturnMap(array_map(
+                function ($elem) {
+                    return [$elem, ['view_id' => $elem]];
+                },
+                $views
+            ));
+
         $this->entityFactoryMock
             ->method('create')
             ->willReturnMap([

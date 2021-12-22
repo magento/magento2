@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
-use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 
 /**
  * @inheritdoc
@@ -45,6 +45,12 @@ class CartPrices implements ResolverInterface
 
         /** @var Quote $quote */
         $quote = $value['model'];
+        /**
+         * To calculate a right discount value
+         * before calculate totals
+         * need to reset Cart Fixed Rules in the quote
+         */
+        $quote->setCartFixedRules([]);
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 

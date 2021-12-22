@@ -8,6 +8,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenCreateNewCMSPageActionGroup">
+        <annotations>
+            <description>Open create new CMS Page.</description>
+        </annotations>
+
         <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToCreateNewPage"/>
         <waitForPageLoad stepKey="waitForNewPagePageLoad"/>
     </actionGroup>

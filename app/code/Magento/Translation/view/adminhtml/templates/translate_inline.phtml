@@ -4,10 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<link rel="stylesheet" type="text/css" href="<?= $block->escapeUrl($block->getViewFileUrl('prototype/windows/themes/default.css')) ?>"/>
-<link rel="stylesheet" type="text/css" href="<?= $block->escapeUrl($block->getViewFileUrl('mage/translate-inline.css')) ?>"/>
+<link rel="stylesheet" type="text/css"
+      href="<?= $block->escapeUrl($block->getViewFileUrl('prototype/windows/themes/default.css')) ?>"/>
+<link rel="stylesheet" type="text/css"
+      href="<?= $block->escapeUrl($block->getViewFileUrl('mage/translate-inline.css')) ?>"/>
 
 <script id="translate-inline-icon" type="text/x-magento-template">
     <img src="<%- data.img %>" height="16" width="16" class="translate-edit-icon">
@@ -51,8 +57,12 @@
     <% } %>
 </script>
 
-<div data-role="translate-dialog" data-mage-init='{"translateInline":{"ajaxUrl":"<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>"},"loader":{}}'></div>
-<script>
+<div data-role="translate-dialog"
+     data-mage-init='{"translateInline":{"ajaxUrl":"<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>"},
+     "loader":{}}'>
+</div>
+<?php $scriptString = <<<script
+
 require([
     "jquery",
     "mage/edit-trigger",
@@ -60,12 +70,15 @@ require([
 ], function($){
         $('body').editTrigger(
             {
-                img: '<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('Magento_Theme::fam_book_open.png'))) ?>',
+                img: '{$block->escapeJs($block->getViewFileUrl('Magento_Theme::fam_book_open.png'))}',
                 alwaysShown: true,
                 singleElement: false
             }
         );
-        
+
         $('body').addClass('trnslate-inline-area');
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <page name="AdminLoginAsCustomerLoginManualPage" url="loginascustomer/login/manual/entity_id/{{id}}/"
+          area="storefront" module="Magento_LoginAsCustomer" parameterized="true">
+        <section name="AdminLoginAsCustomerLoginManualActionsSection"/>
+        <section name="AdminLoginAsCustomerLoginManualContentSection"/>
+    </page>
+</pages>
