@@ -53,12 +53,12 @@ class Product extends AbstractDb
     {
         $connection = $this->getConnection();
         if (count($insertData) <= self::CHUNK_SIZE) {
-            return $connection->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
+            return $connection->insertOnDuplicate($this->getTable(self::TABLE_NAME), $insertData);
         }
         $data = array_chunk($insertData, self::CHUNK_SIZE);
         $totalCount = 0;
         foreach ($data as $insertData) {
-            $totalCount += $connection->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
+            $totalCount += $connection->insertOnDuplicate($this->getTable(self::TABLE_NAME), $insertData);
         }
         return $totalCount;
     }

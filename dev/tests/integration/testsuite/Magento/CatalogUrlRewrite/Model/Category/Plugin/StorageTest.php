@@ -114,11 +114,6 @@ class StorageTest extends TestCase
             ->setSource($source)->validateData();
         $this->assertEmpty($errors->getAllErrors());
 
-        /**
-         * if the issue is fixed, we get
-         * Zend_Db_Statement_Exception : SQLSTATE[HY000]: General error: 1412 Table definition has changed, please retry transaction, query was: SELECT `catalog_category_product_index_store2`.`category_id`, `catalog_category_product_index_store2`.`product_id`, `catalog_category_product_index_store2`.`position`, `catalog_category_product_index_store2`.`store_id` FROM `catalog_category_product_index_store2` WHERE (store_id = '2') AND (product_id IN (4, 9))
-         * in the next line
-         */
         $result = $this->import->importData();
         $this->assertTrue($result);
     }
