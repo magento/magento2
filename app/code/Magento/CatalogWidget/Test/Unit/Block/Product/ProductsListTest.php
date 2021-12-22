@@ -314,7 +314,7 @@ class ProductsListTest extends TestCase
         $collection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
         $collection->expects($this->once())->method('addUrlRewrite')->willReturnSelf();
         $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
-        $collection->expects($this->once())->method('addAttributeToSort')->with('position', 'asc')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSort')->with('entity_id', 'desc')->willReturnSelf();
         $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
         $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
         $collection->expects($this->once())->method('distinct')->willReturnSelf();

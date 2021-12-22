@@ -43,24 +43,24 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     /**
      * Default value for products count that will be shown
      */
-    public const DEFAULT_PRODUCTS_COUNT = 10;
+    const DEFAULT_PRODUCTS_COUNT = 10;
 
     /**
      * Name of request parameter for page number value
      *
      * @deprecated @see $this->getData('page_var_name')
      */
-    public const PAGE_VAR_NAME = 'np';
+    const PAGE_VAR_NAME = 'np';
 
     /**
      * Default value for products per page
      */
-    public const DEFAULT_PRODUCTS_PER_PAGE = 5;
+    const DEFAULT_PRODUCTS_PER_PAGE = 5;
 
     /**
      * Default value whether show pager or not
      */
-    public const DEFAULT_SHOW_PAGER = false;
+    const DEFAULT_SHOW_PAGER = false;
 
     /**
      * Instance of pager block
@@ -75,11 +75,15 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $httpContext;
 
     /**
+     * Catalog product visibility
+     *
      * @var Visibility
      */
     protected $catalogProductVisibility;
 
     /**
+     * Product collection factory
+     *
      * @var CollectionFactory
      */
     protected $productCollectionFactory;
@@ -235,8 +239,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getProductPriceHtml(
         Product $product,
-        $priceType = null,
-        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                $priceType = null,
+                $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
         array $arguments = []
     ) {
         if (!isset($arguments['zone'])) {
@@ -334,12 +338,12 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         /**
-         * Change sorting attribute to position because created_at can be the same for products fastly created
+         * Change sorting attribute to entity_id because created_at can be the same for products fastly created
          * one by one and sorting by created_at is indeterministic in this case.
          */
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
-            ->addAttributeToSort('position', 'asc')
+            ->addAttributeToSort('entity_id', 'desc')
             ->setPageSize($this->getPageSize())
             ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
 
