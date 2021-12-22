@@ -142,7 +142,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig): array
     {
-        $isRemoteStorageDeploymentConfigExists = (bool) $deploymentConfig->getConfigData()['remote_storage'] ?? false;
+        $isRemoteStorageDeploymentConfigExists = isset($deploymentConfig->getConfigData()['remote_storage']);
 
         // if remote storage config is already present and driver is not in $options, return early to prevent overwrite
         if ($isRemoteStorageDeploymentConfigExists && !isset($options[self::OPTION_REMOTE_STORAGE_DRIVER])) {
