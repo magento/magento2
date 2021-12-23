@@ -28,15 +28,15 @@ class UpdateConfigurableProductAttributeCollection
             '(`apply_to` IS NULL) OR
                 (
                     FIND_IN_SET(' .
-            "'" . Type::TYPE_SIMPLE . "'" . ',
+                        sprintf("'%s'", Type::TYPE_SIMPLE) . ',
                         `apply_to`
                     ) AND
                     FIND_IN_SET(' .
-            "'" . Type::TYPE_VIRTUAL . "'" . ',
+                        sprintf("'%s'", Type::TYPE_VIRTUAL) . ',
                         `apply_to`
                     ) AND
                     FIND_IN_SET(' .
-            "'" . Configurable::TYPE_CODE . "'" . ',
+                        sprintf("'%s'", Configurable::TYPE_CODE) . ',
                         `apply_to`
                     )
                  )'
