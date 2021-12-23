@@ -91,5 +91,3 @@ foreach (['de_ex', 'en_ex', 'es_ex', 'fr_ex', 'zh_ex'] as $storeCode) {
 $storeManager->reinitStores();
 $indexerRegistry = $objectManager->get(IndexerRegistry::class);
 $indexerRegistry->get(Fulltext::INDEXER_ID)->reindexAll();
-//$indexerRegistry->get('catalog_category_product')->reindexAll();
-
