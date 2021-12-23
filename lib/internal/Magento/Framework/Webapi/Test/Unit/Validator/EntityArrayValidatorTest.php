@@ -11,6 +11,7 @@ namespace Magento\Framework\Webapi\Test\Unit\Validator;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Webapi\Validator\IOLimit\IOLimitConfigProvider;
 use Magento\Framework\Webapi\Validator\EntityArrayValidator;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,19 +23,64 @@ class EntityArrayValidatorTest extends TestCase
     /**
      * @var IOLimitConfigProvider|MockObject
      */
-    private $config;
+    private $configMock;
+
+    /**
+     * @var InputArraySizeLimitValue|MockObject
+     */
+    private $inputArraySizeLimitValueMock;
 
     /**
      * @var EntityArrayValidator
      */
-    private $validator;
+    private EntityArrayValidator $validator;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->config = self::getMockBuilder(IOLimitConfigProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->validator = new EntityArrayValidator(3, $this->config);
+        $this->configMock = $this->createMock(IOLimitConfigProvider::class);
+        $this->inputArraySizeLimitValueMock = $this->createMock(InputArraySizeLimitValue::class);
+        $this->validator = new EntityArrayValidator(
+            3,
+            $this->configMock,
+            $this->inputArraySizeLimitValueMock
+        );
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testAllowsDataWhenBelowLimitWhenUsingRouteInputLimit()
+    {
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
+            ->willReturn(true);
+        $this->inputArraySizeLimitValueMock->expects(self::once())
+            ->method('get')
+            ->willReturn(5);
+        $this->configMock->expects(self::never())
+            ->method('getComplexArrayItemLimit');
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 5, []));
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    public function testFailsDataWhenAboveLimitUsingRouteInputLimit()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectErrorMessage('Maximum items of type "foo" is 4');
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
+            ->willReturn(true);
+        $this->inputArraySizeLimitValueMock->expects(self::once())
+            ->method('get')
+            ->willReturn(4);
+        $this->configMock->expects(self::never())
+            ->method('getComplexArrayItemLimit');
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 5, []));
     }
 
     /**
@@ -42,9 +88,16 @@ class EntityArrayValidatorTest extends TestCase
      */
     public function testAllowsDataWhenBelowLimit()
     {
-        $this->config->method('isInputLimitingEnabled')
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
             ->willReturn(true);
-        $this->validator->validateComplexArrayType("foo", [[],[],[]]);
+        $this->inputArraySizeLimitValueMock->expects(self::once())
+            ->method('get')
+            ->willReturn(null);
+        $this->configMock->expects(self::once())
+            ->method('getComplexArrayItemLimit')
+            ->willReturn(null);
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 3, []));
     }
 
     /**
@@ -52,31 +105,54 @@ class EntityArrayValidatorTest extends TestCase
      */
     public function testAllowsDataWhenBelowLimitUsingConfig()
     {
-        $this->config->method('isInputLimitingEnabled')
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
             ->willReturn(true);
-        $this->config->method('getComplexArrayItemLimit')
+        $this->inputArraySizeLimitValueMock->expects(self::once())
+            ->method('get')
+            ->willReturn(null);
+        $this->configMock->expects(self::once())
+            ->method('getComplexArrayItemLimit')
             ->willReturn(6);
-        $this->validator->validateComplexArrayType("foo", [[],[],[],[],[]]);
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 5, []));
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testFailsDataWhenAboveLimit()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectErrorMessage('Maximum items of type "foo" is 3');
-        $this->config->method('isInputLimitingEnabled')
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
             ->willReturn(true);
-        $this->validator->validateComplexArrayType("foo", [[],[],[],[]]);
+        $this->inputArraySizeLimitValueMock->expects(self::once())
+            ->method('get')
+            ->willReturn(null);
+        $this->configMock->expects(self::once())
+            ->method('getComplexArrayItemLimit')
+            ->willReturn(null);
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 4, []));
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testFailsDataWhenAboveLimitUsingConfig()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectErrorMessage('Maximum items of type "foo" is 6');
-        $this->config->method('isInputLimitingEnabled')
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
             ->willReturn(true);
-        $this->config->method('getComplexArrayItemLimit')
+        $this->inputArraySizeLimitValueMock->expects(self::once())
+            ->method('get')
+            ->willReturn(null);
+        $this->configMock->expects(self::once())
+            ->method('getComplexArrayItemLimit')
             ->willReturn(6);
-        $this->validator->validateComplexArrayType("foo", [[],[],[],[],[],[],[]]);
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 7, []));
     }
 
     /**
@@ -84,8 +160,11 @@ class EntityArrayValidatorTest extends TestCase
      */
     public function testAboveLimitWithDisabledLimiting()
     {
-        $this->config->method('isInputLimitingEnabled')
+        $this->configMock->expects(self::once())
+            ->method('isInputLimitingEnabled')
             ->willReturn(false);
-        $this->validator->validateComplexArrayType("foo", [[],[],[],[],[],[],[]]);
+        $this->configMock->expects(self::never())
+            ->method('getComplexArrayItemLimit');
+        $this->validator->validateComplexArrayType("foo", array_fill(0, 7, []));
     }
 }
