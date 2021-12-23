@@ -187,7 +187,8 @@
 
         <!-- Verify order information -->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Filter and Open the customer edit page -->
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage1">
@@ -199,7 +200,7 @@
         
         <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="clickOnOrdersButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToOpen"/>
-        <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderId')}}" stepKey="selectOnOrderID"/>
+        <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderNumber')}}" stepKey="selectOnOrderID"/>
 
         <!-- Assert ordered product in customer order section-->
         <waitForPageLoad stepKey="waitForOrderInformationToLoad"/>
