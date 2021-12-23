@@ -19,12 +19,12 @@ class Product extends AbstractDb
     /**
      * Product/Category relation table name
      */
-    const TABLE_NAME = 'catalog_url_rewrite_product_category';
+    public const TABLE_NAME = 'catalog_url_rewrite_product_category';
 
     /**
      * Chunk for mass insert
      */
-    const CHUNK_SIZE = 100;
+    private const CHUNK_SIZE = 100;
 
     /**
      * Primary key auto increment flag
