@@ -1711,11 +1711,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             throw new \Magento\Framework\Exception\LocalizedException(__(implode("\n", $errors)));
         }
 
-        if ($items) {
-            $this->setTotalsCollectedFlag(false);
-            $this->_addresses = null;
-        }
-
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
         return $parentItem;
     }
