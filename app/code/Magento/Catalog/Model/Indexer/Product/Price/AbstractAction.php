@@ -148,14 +148,14 @@ abstract class AbstractAction
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
         $this->tierPriceIndexResource = $tierPriceIndexResource ?? ObjectManager::getInstance()->get(
-                TierPrice::class
-            );
+            TierPrice::class
+        );
         $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
-                DimensionCollectionFactory::class
-            );
+            DimensionCollectionFactory::class
+        );
         $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
-                TableMaintainer::class
-            );
+            TableMaintainer::class
+        );
     }
 
     /**
