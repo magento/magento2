@@ -55,22 +55,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Entity code.
      * Can be used as part of method name for entity processing
      */
-    const ENTITY = 'catalog_product';
+    public const ENTITY = 'catalog_product';
 
     /**
      * Product cache tag
      */
-    const CACHE_TAG = 'cat_p';
+    public const CACHE_TAG = 'cat_p';
 
     /**
      * Category product relation cache tag
      */
-    const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
+    public const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
 
     /**
      * Product Store Id
      */
-    const STORE_ID = 'store_id';
+    public const STORE_ID = 'store_id';
 
     /**
      * @var string|bool
@@ -170,7 +170,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_calculatePrice = true;
 
     /**
-     * Catalog product
+     * Catalog product helper
      *
      * @var \Magento\Catalog\Helper\Product
      */
@@ -187,43 +187,31 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_collectionFactory;
 
     /**
-     * Catalog product type
-     *
      * @var Product\Type
      */
     protected $_catalogProductType;
 
     /**
-     * Catalog product media config
-     *
      * @var Product\Media\Config
      */
     protected $_catalogProductMediaConfig;
 
     /**
-     * Catalog product status
-     *
      * @var Status
      */
     protected $_catalogProductStatus;
 
     /**
-     * Catalog product visibility
-     *
      * @var Product\Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Stock item factory
-     *
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
      */
     protected $_stockItemFactory;
 
     /**
-     * Item option factory
-     *
      * @var \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory
      */
     protected $_itemOptionFactory;
@@ -284,22 +272,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /**
-     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
+     * @var \Magento\Catalog\Model\ProductLink\CollectionProvider
      */
     protected $entityCollectionProvider;
 
     /**
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
      */
     protected $linkProvider;
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
+     * @var \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      */
     protected $productLinkFactory;
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
+     * @var \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
      */
     protected $productLinkExtensionFactory;
 
