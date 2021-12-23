@@ -704,8 +704,8 @@ class AccountManagement implements AccountManagementInterface
     public function resetPassword($email, $resetToken, $newPassword)
     {
         if (!$email) {
-            $customer = $this->getByToken->execute($resetToken);
-            $email = $customer->getEmail();
+            $params = ['fieldName' => 'email'];
+            throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         } else {
             $customer = $this->customerRepository->get($email);
         }
@@ -1163,9 +1163,9 @@ class AccountManagement implements AccountManagementInterface
      * @throws NoSuchEntityException If customer doesn't exist
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
+    private function validateResetPasswordToken(int $customerId, string $resetPasswordLinkToken): bool
     {
-        if ($customerId !== null && $customerId <= 0) {
+        if (!$customerId) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1173,14 +1173,7 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-
-        if ($customerId === null) {
-            //Looking for the customer.
-            $customerId = $this->getByToken
-                ->execute($resetPasswordLinkToken)
-                ->getId();
-        }
-        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
+        if (!$resetPasswordLinkToken) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }
@@ -1451,7 +1444,7 @@ class AccountManagement implements AccountManagementInterface
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function changeResetPasswordLinkToken($customer, $passwordLinkToken)
+    public function changeResetPasswordLinkToken(CustomerInterface $customer, string $passwordLinkToken): bool
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
@@ -1460,15 +1453,15 @@ class AccountManagement implements AccountManagementInterface
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );
+        } else {
+            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+            $customerSecure->setRpToken($passwordLinkToken);
+            $customerSecure->setRpTokenCreatedAt(
+                $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
+            );
+            $this->setIgnoreValidationFlag($customer);
+            $this->customerRepository->save($customer);
         }
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $customerSecure->setRpToken($passwordLinkToken);
-        $customerSecure->setRpTokenCreatedAt(
-            $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
-        );
-        $this->setIgnoreValidationFlag($customer);
-        $this->customerRepository->save($customer);
-
         return true;
     }
 
