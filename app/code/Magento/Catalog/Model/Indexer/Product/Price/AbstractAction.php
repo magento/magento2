@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory;
@@ -21,7 +20,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Stdlib\DateTime;
@@ -63,6 +61,8 @@ abstract class AbstractAction
     protected $_storeManager;
 
     /**
+     * Currency factory
+     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
@@ -83,6 +83,8 @@ abstract class AbstractAction
     protected $_catalogProductType;
 
     /**
+     * Indexer price factory
+     *
      * @var Factory
      */
     protected $_indexerPriceFactory;
@@ -108,11 +110,6 @@ abstract class AbstractAction
     private $tableMaintainer;
 
     /**
-     * @var CacheContext
-     */
-    private $cacheContext;
-
-    /**
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
@@ -124,7 +121,6 @@ abstract class AbstractAction
      * @param TierPrice|null $tierPriceIndexResource
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
-     * @param CacheContext|null $cacheContext
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -140,8 +136,7 @@ abstract class AbstractAction
         DefaultPrice $defaultIndexerResource,
         TierPrice $tierPriceIndexResource = null,
         DimensionCollectionFactory $dimensionCollectionFactory = null,
-        TableMaintainer $tableMaintainer = null,
-        CacheContext $cacheContext = null
+        TableMaintainer $tableMaintainer = null
     ) {
         $this->_config = $config;
         $this->_storeManager = $storeManager;
@@ -153,15 +148,14 @@ abstract class AbstractAction
         $this->_defaultIndexerResource = $defaultIndexerResource;
         $this->_connection = $this->_defaultIndexerResource->getConnection();
         $this->tierPriceIndexResource = $tierPriceIndexResource ?? ObjectManager::getInstance()->get(
-            TierPrice::class
-        );
+                TierPrice::class
+            );
         $this->dimensionCollectionFactory = $dimensionCollectionFactory ?? ObjectManager::getInstance()->get(
-            DimensionCollectionFactory::class
-        );
+                DimensionCollectionFactory::class
+            );
         $this->tableMaintainer = $tableMaintainer ?? ObjectManager::getInstance()->get(
-            TableMaintainer::class
-        );
-        $this->cacheContext = $cacheContext ?? ObjectManager::getInstance()->get(CacheContext::class);
+                TableMaintainer::class
+            );
     }
 
     /**
@@ -397,7 +391,6 @@ abstract class AbstractAction
 
         if ($changedIds) {
             $this->deleteIndexData($changedIds);
-            $this->cacheContext->registerEntities(Product::CACHE_TAG, $changedIds);
         }
 
         $typeIndexers = $this->getTypeIndexers();

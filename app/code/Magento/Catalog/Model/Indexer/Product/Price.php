@@ -66,6 +66,7 @@ class Price implements IndexerActionInterface, MviewActionInterface
     public function execute($ids)
     {
         $this->_productPriceIndexerRows->execute($ids);
+        $this->cacheContext->registerEntities(ProductModel::CACHE_TAG, $ids);
     }
 
     /**
