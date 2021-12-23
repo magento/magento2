@@ -29,6 +29,10 @@
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0" />
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{Simple_US_Customer.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
@@ -56,7 +60,7 @@
         <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
             <argument name="email" value="{{Simple_US_Customer.email}}"/>
         </actionGroup>
-       
+
         <!--Fill customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress" after="fillCustomerEmail">
             <argument name="customer" value="Simple_US_Customer"/>
