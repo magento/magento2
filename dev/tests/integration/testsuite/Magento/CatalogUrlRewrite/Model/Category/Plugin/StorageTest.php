@@ -119,27 +119,6 @@ class StorageTest extends TestCase
     }
 
     /**
-     * Check product images
-     *
-     * @param string $expectedImagePath
-     * @param array $productSkus
-     * @return void
-     */
-    private function checkProductsImages(string $expectedImagePath, array $productSkus): void
-    {
-        foreach ($productSkus as $productSku) {
-            $product = $this->productRepository->get($productSku);
-            $productImageItem = $product->getMediaGalleryImages()->getFirstItem();
-            $productImageFile = $productImageItem->getFile();
-            $productImagePath = $productImageItem->getPath();
-            $this->filesToRemove[] = $productImagePath;
-            $this->assertEquals($expectedImagePath, $productImageFile);
-            $this->assertNotEmpty($productImagePath);
-            $this->assertTrue($this->fileDriver->isExists($productImagePath));
-        }
-    }
-
-    /**
      * Remove created files
      *
      * @return void
@@ -212,27 +191,5 @@ class StorageTest extends TestCase
         $rootDirectory->create($tmpDir);
         $uploader->setDestDir($destDir);
         $uploader->setTmpDir($tmpDir);
-    }
-
-    /**
-     * Move images to appropriate folder
-     *
-     * @param string $fileName
-     * @return void
-     */
-    private function moveImages(string $fileName): void
-    {
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $tmpDir = $rootDirectory->getRelativePath(
-            $this->appParams[DirectoryList::MEDIA][DirectoryList::PATH]
-        );
-        $fixtureDir = realpath(__DIR__ . '/../../_files');
-        $tmpFilePath = $rootDirectory->getAbsolutePath($tmpDir . DIRECTORY_SEPARATOR . $fileName);
-        $this->fileDriver->createDirectory($tmpDir);
-        $rootDirectory->getDriver()->copy(
-            $fixtureDir . DIRECTORY_SEPARATOR . $fileName,
-            $tmpFilePath
-        );
-        $this->filesToRemove[] = $tmpFilePath;
     }
 }
