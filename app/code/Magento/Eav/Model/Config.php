@@ -657,7 +657,7 @@ class Config
      */
     private function cacheUserDefinedAttribute($entityType, $entityTypeCode, $code): AbstractAttribute
     {
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-attribute-' . $entityTypeCode . '-' . $code;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-attribute-' . $entityTypeCode . '-' . $code;
         $attributeData = $this->isCacheEnabled() && ($attribute = $this->_cache->load($cacheKey))
             ? $this->serializer->unserialize($attribute)
             : null;
