@@ -41,6 +41,11 @@ require(['prototype'], function(){
                         validationMessage.setStyle({color:'green'});
                     } else {
                         validationMessage.removeClassName('hidden').addClassName('admin__field-error');
+                        if (validationMessage.style.removeProperty) {
+                            validationMessage.style.removeProperty('color');
+                        } else {
+                            validationMessage.style.removeAttribute('color');
+                        }
                     }
                 } catch (e) {
                     validationMessage.removeClassName('hidden').addClassName('admin__field-error');
