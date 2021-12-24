@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\ConfigurableProduct\Api\LinkManagementInterface;
 use Magento\ConfigurableProduct\Model\LinkManagement;
 use Magento\Customer\Model\Group;
@@ -414,7 +415,6 @@ class ProductPriceTest extends GraphQlAbstract
         ];
     }
 
-
     /**
      * Check the pricing for a grouped product with simple products having special price set
      *
@@ -750,7 +750,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => $configurableProductVariants[$key]->getPrice()
                     ],
                     "final_price" => [
-                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                        "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
                         "amount_off" => ($regularPrice[$key] - $finalPrice[$key]),
@@ -762,7 +762,7 @@ class ProductPriceTest extends GraphQlAbstract
                         "value" => $configurableProductVariants[$key]->getPrice()
                     ],
                     "final_price" => [
-                        "value" => round($configurableProductVariants[$key]->getSpecialPrice(), 2)
+                        "value" => round((float) $configurableProductVariants[$key]->getSpecialPrice(), 2)
                     ],
                     "discount" => [
                         "amount_off" => $regularPrice[$key] - $finalPrice[$key],
@@ -1222,5 +1222,62 @@ QUERY;
             $product->setTierPrices($tierPrices);
             $product->save();
         }
+    }
+
+    /**
+     * Test products with the same price reverse position with ASC and DESC sorting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     */
+    public function testSortByEqualPriceAndAscDescReversePosition()
+    {
+        /** @var Product $product */
+        $product = $this->productRepository->get('simple1001');
+        //setting the same price for the product as all the rest have
+        $product->setPrice('10');
+        $this->productRepository->save($product);
+
+        /** @var Collection $categoryCollection */
+        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $categoryId = (int) $category->getId();
+
+        $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
+        $queryAsc = $this->getCategoryFilterPriceQuery($categoryId, 'ASC');
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $expectedProductsDesc = array_reverse($expectedProductsAsc);
+        $queryDesc = $this->getCategoryFilterPriceQuery($categoryId, 'DESC');
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
+    }
+
+    /**
+     * Query for category filter price
+     *
+     * @param int $categoryId
+     * @param string $direction
+     * @return string
+     */
+    protected function getCategoryFilterPriceQuery(int $categoryId, string $direction): string
+    {
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {price: $direction}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+
+        return $query;
     }
 }

@@ -41,8 +41,8 @@ var config = {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Theme/js/view/add-home-breadcrumb': true
             },
-            'jquery/ui-modules/dialog': {
-                'jquery/patches/jquery-ui': true
+            'jquery/ui-modules/widgets/sortable': {
+                'jquery/patches/jquery-ui-sortable': true
             }
         }
     }
