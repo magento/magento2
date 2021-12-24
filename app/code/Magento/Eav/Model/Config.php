@@ -471,8 +471,11 @@ class Config
      * @param string $entityType
      * @return $this
      */
-    protected function _initAttributes($entityType, $storeId)
+    protected function _initAttributes($entityType, $storeId = null)
     {
+        if (is_null($storeId)) {
+            $storeId = $this->getStoreId();
+        }
         $entityType = $this->getEntityType($entityType);
         $entityTypeCode = $entityType->getEntityTypeCode();
 
