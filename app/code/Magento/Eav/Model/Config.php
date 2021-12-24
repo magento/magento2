@@ -504,7 +504,7 @@ class Config
         if ($this->isCacheEnabled()) {
             $this->_cache->save(
                 $this->serializer->serialize($this->_attributeData[$storeId][$entityTypeCode]),
-                self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-' . $entityTypeCode,
+                self::ATTRIBUTES_CACHE_ID . '-' . $storeId . '-' . $entityTypeCode,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
                     \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
@@ -957,7 +957,7 @@ class Config
     private function initAttributesFromCache(Type $entityType, $storeId)
     {
         $entityTypeCode = $entityType->getEntityTypeCode();
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $this->getStoreId() . '-' . $entityTypeCode;
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $storeId . '-' . $entityTypeCode;
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
             if ($attributes) {
