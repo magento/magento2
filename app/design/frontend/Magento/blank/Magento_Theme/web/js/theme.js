@@ -7,7 +7,6 @@ define([
     'jquery',
     'mage/smart-keyboard-handler',
     'mage/mage',
-    'mage/ie-class-fixer',
     'domReady!'
 ], function ($, keyboardHandler) {
     'use strict';
@@ -24,6 +23,8 @@ define([
             $(this).attr('id', id + '_mobile');
         }
     });
-
+    if (navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
+        document.documentElement.classList.add('ie11');
+    }
     keyboardHandler.apply();
 });
