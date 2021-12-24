@@ -64,12 +64,15 @@ class SearchResultApplier implements SearchResultApplierInterface
             return;
         }
 
-        $items = $this->sliceItems($this->searchResult->getItems(), $this->size, $this->currentPage);
-        $ids = [];
-        foreach ($items as $item) {
-            $ids[] = (int)$item->getId();
+        $ids = $this->getProductIdsBySalability();
+
+        if (count($ids) == 0) {
+            $items = $this->sliceItems($this->searchResult->getItems(), $this->size, $this->currentPage);
+            foreach ($items as $item) {
+                $ids[] = (int)$item->getId();
+            }
         }
-        $orderList = join(',', $ids);
+        $orderList = implode(',', $ids);
         $this->collection->getSelect()
             ->where('e.entity_id IN (?)', $ids)
             ->reset(\Magento\Framework\DB\Select::ORDER)
@@ -115,5 +118,50 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function getOffset(int $pageNumber, int $pageSize): int
     {
         return ($pageNumber - 1) * $pageSize;
+    }
+
+    /**
+     * Fetch filtered product ids sorted by the salability and other applied sort orders
+     *
+     * @return array
+     */
+    private function getProductIdsBySalability()
+    {
+        $ids = [];
+        $categoryId = null;
+        $searchCriteria = $this->searchResult->getSearchCriteria();
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'category_ids') {
+                    $categoryId = $filter->getValue();
+                    break 2;
+                }
+            }
+        }
+        if ($categoryId) {
+            $this->collection->initializeCategoryFilter($categoryId, $this->collection->getStoreId());
+            $select = $this->collection->getSelect()
+                ->reset(\Magento\Framework\DB\Select::COLUMNS)
+                ->columns([
+                    'e.entity_id',
+                    'cat_index.position AS cat_index_position',
+                    'stock_status_index.stock_status AS is_salable'
+                ]);
+
+            $searchOrders = $searchCriteria->getSortOrders();
+            $searchOrders = array_merge(['is_salable' => 'DESC'], $searchOrders);
+
+            foreach ($searchOrders as $field => $dir) {
+                $select->order(new \Zend_Db_Expr("$field $dir"));
+            }
+            $offset = ($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
+            $select->limitPage($offset, $searchCriteria->getPageSize());
+            $resultSet = $this->collection->getConnection()->fetchAssoc($select);
+
+            foreach ($resultSet as $item) {
+                $ids[] = (int)$item['entity_id'];
+            }
+        }
+        return $ids;
     }
 }

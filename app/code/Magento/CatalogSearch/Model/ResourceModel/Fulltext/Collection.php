@@ -694,4 +694,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
         }
     }
+
+    /**
+     * Apply product limitations to specific category
+     *
+     * @param $categoryId
+     * @param $storeId
+     *
+     * @return void
+     */
+    public function initializeCategoryFilter($categoryId, $storeId): void
+    {
+        $this->_productLimitationFilters['category_id'] = $categoryId;
+        $this->_productLimitationFilters['store_id'] = $storeId;
+        $this->_applyProductLimitations();
+    }
 }
