@@ -35,59 +35,59 @@ class ProcessCronQueueObserver implements ObserverInterface
     /**#@+
      * Cache key values
      */
-    const CACHE_KEY_LAST_SCHEDULE_GENERATE_AT = 'cron_last_schedule_generate_at';
+    public const CACHE_KEY_LAST_SCHEDULE_GENERATE_AT = 'cron_last_schedule_generate_at';
 
-    const CACHE_KEY_LAST_HISTORY_CLEANUP_AT = 'cron_last_history_cleanup_at';
+    public const CACHE_KEY_LAST_HISTORY_CLEANUP_AT = 'cron_last_history_cleanup_at';
 
     /**
      * Flag for internal communication between processes for running
      * all jobs in a group in parallel as a separate process
      */
-    const STANDALONE_PROCESS_STARTED = 'standaloneProcessStarted';
+    public const STANDALONE_PROCESS_STARTED = 'standaloneProcessStarted';
 
     /**#@-*/
 
     /**#@+
      * List of configurable constants used to calculate and validate during handling cron jobs
      */
-    const XML_PATH_SCHEDULE_GENERATE_EVERY = 'schedule_generate_every';
+    public const XML_PATH_SCHEDULE_GENERATE_EVERY = 'schedule_generate_every';
 
-    const XML_PATH_SCHEDULE_AHEAD_FOR = 'schedule_ahead_for';
+    public const XML_PATH_SCHEDULE_AHEAD_FOR = 'schedule_ahead_for';
 
-    const XML_PATH_SCHEDULE_LIFETIME = 'schedule_lifetime';
+    public const XML_PATH_SCHEDULE_LIFETIME = 'schedule_lifetime';
 
-    const XML_PATH_HISTORY_CLEANUP_EVERY = 'history_cleanup_every';
+    public const XML_PATH_HISTORY_CLEANUP_EVERY = 'history_cleanup_every';
 
-    const XML_PATH_HISTORY_SUCCESS = 'history_success_lifetime';
+    public const XML_PATH_HISTORY_SUCCESS = 'history_success_lifetime';
 
-    const XML_PATH_HISTORY_FAILURE = 'history_failure_lifetime';
+    public const XML_PATH_HISTORY_FAILURE = 'history_failure_lifetime';
 
     /**#@-*/
 
     /**
      * Value of seconds in one minute
      */
-    const SECONDS_IN_MINUTE = 60;
+    public const SECONDS_IN_MINUTE = 60;
 
     /**
      * How long to wait for cron group to become unlocked
      */
-    const LOCK_TIMEOUT = 60;
+    public const LOCK_TIMEOUT = 60;
 
     /**
      * Static lock prefix for cron group locking
      */
-    const LOCK_PREFIX = 'CRON_';
+    public const LOCK_PREFIX = 'CRON_';
 
     /**
      * Timer ID for profiling
      */
-    const CRON_TIMERID = 'job %s';
+    public const CRON_TIMERID = 'job %s';
 
     /**
      * Max retries for acquire locks for cron jobs
      */
-    const MAX_RETRIES = 5;
+    public const MAX_RETRIES = 5;
 
     /**
      * @var ScheduleCollection
@@ -365,18 +365,9 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
         }
 
-        if (!isset($this->originalProcessTitle)) {
-            $this->originalProcessTitle = PHP_BINARY . ' ' . implode(' ', $this->environment->getServer('argv'));
-        }
+        $this->setProcessTitle($jobCode, $groupId);
 
-        if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
-            // Group is already shown, so no need to include here in duplicate
-            cli_set_process_title($this->originalProcessTitle . " # job: $jobCode");
-        } else {
-            cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
-        }
-
-        $schedule->setExecutedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()));
+        $schedule->setExecutedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp()));
         $this->retrier->execute(
             function () use ($schedule) {
                 $schedule->save();
@@ -953,5 +944,25 @@ class ProcessCronQueueObserver implements ObserverInterface
             },
             $scheduleResource->getConnection()
         );
+    }
+
+    /**
+     * Set the process title to include the job code and group
+     *
+     * @param string $jobCode
+     * @param string $groupId
+     */
+    private function setProcessTitle(string $jobCode, string $groupId): void
+    {
+        if (!isset($this->originalProcessTitle)) {
+            $this->originalProcessTitle = PHP_BINARY . ' ' . implode(' ', $this->environment->getServer('argv'));
+        }
+
+        if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
+            // Group is already shown, so no need to include here in duplicate
+            cli_set_process_title($this->originalProcessTitle . " # job: $jobCode");
+        } else {
+            cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
+        }
     }
 }
