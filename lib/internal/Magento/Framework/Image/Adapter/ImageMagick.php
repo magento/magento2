@@ -104,7 +104,15 @@ class ImageMagick extends AbstractAdapter
         $this->_getFileAttributes();
 
         try {
-            $this->_imageHandler = new \Imagick($this->_fileName);
+            if (is_callable('exif_imagetype')) {
+                $fileType = exif_imagetype($this->_fileName);
+
+                if ($fileType === IMAGETYPE_ICO) {
+                    $filename = 'ico:' . $this->_fileName;
+                }
+            }
+
+            $this->_imageHandler = new \Imagick($filename);
         } catch (\ImagickException $e) {
             //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new LocalizedException(
