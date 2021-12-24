@@ -23,8 +23,5 @@ define([
             $(this).attr('id', id + '_mobile');
         }
     });
-    if (navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
-        document.documentElement.classList.add('ie11');
-    }
     keyboardHandler.apply();
 });
