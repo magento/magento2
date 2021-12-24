@@ -170,8 +170,8 @@ class Config
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param SerializerInterface|null $serializer
      * @param ScopeConfigInterface|null $scopeConfig
-     * @param StoreManagerInterface|null $storeManager
      * @param array $attributesForPreload
+     * @param StoreManagerInterface|null $storeManager
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -182,8 +182,8 @@ class Config
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         SerializerInterface $serializer = null,
         ScopeConfigInterface $scopeConfig = null,
-        StoreManagerInterface $storeManager = null,
-        $attributesForPreload = []
+        $attributesForPreload = [],
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_cache = $cache;
         $this->_entityTypeFactory = $entityTypeFactory;
