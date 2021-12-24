@@ -153,7 +153,7 @@ class Config
      *
      * @var array
      */
-    private $isSystemAttributesLoaded = [];
+    private $isAttributesPreloaded = [];
 
     /**
      * List of predefined system attributes for preload.
@@ -563,7 +563,7 @@ class Config
         if (array_key_exists($entityTypeCode, $this->attributesForPreload)
             && array_key_exists($code, $this->attributesForPreload[$entityTypeCode])
         ) {
-            $this->initSystemAttributes($entityType, $this->attributesForPreload[$entityTypeCode]);
+            $this->initPreloadAttributes($entityType, $this->attributesForPreload[$entityTypeCode]);
         }
         if (isset($this->attributes[$entityTypeCode][$code])) {
             \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
@@ -584,15 +584,15 @@ class Config
      * Initialize predefined system attributes for preload.
      *
      * @param string $entityType
-     * @param array $systemAttributes
+     * @param array $preloadAttributes
      * @return $this|bool|void
      * @throws LocalizedException
      */
-    private function initSystemAttributes($entityType, $systemAttributes)
+    private function initPreloadAttributes($entityType, $preloadAttributes)
     {
         $entityType = $this->getEntityType($entityType);
         $entityTypeCode = $entityType->getEntityTypeCode();
-        if (!empty($this->isSystemAttributesLoaded[$entityTypeCode])) {
+        if (!empty($this->isAttributesPreloaded[$entityTypeCode])) {
             return;
         }
 
@@ -617,7 +617,7 @@ class Config
             $entityType
         )->addFieldToFilter(
             'attribute_code',
-            ['in' => array_keys($systemAttributes)]
+            ['in' => array_keys($preloadAttributes)]
         )->getData();
 
         $attributeData = [];
@@ -641,7 +641,7 @@ class Config
         }
 
         \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
-        $this->isSystemAttributesLoaded[$entityTypeCode] = true;
+        $this->isAttributesPreloaded[$entityTypeCode] = true;
 
         return $this;
     }
