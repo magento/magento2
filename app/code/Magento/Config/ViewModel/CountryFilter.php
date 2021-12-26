@@ -36,9 +36,9 @@ class CountryFilter implements ArgumentInterface
      * Fetch EU countries list
      *
      * @param  Int|null $storeId
-     * @return false|string[]
+     * @return array
      */
-    public function getEuCountryList($storeId = null)
+    public function getEuCountryList(int $storeId = null): array
     {
         $euCountries = explode(
             ',',
