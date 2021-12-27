@@ -6,8 +6,10 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
@@ -30,6 +32,16 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
+    /**
+     * @var Product
+     */
+    private $productResource;
+
+    /**
+     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -49,6 +61,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->productRepository = $this->objectManager->create(
             ProductRepositoryInterface::class
         );
+        $this->productResource = $this->objectManager->create(
+            Product::class
+        );
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
         $this->model->setAttribute(
             $this->objectManager->get(
                 \Magento\Eav\Model\Config::class
@@ -103,14 +119,17 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product = $this->productRepository->get('simple');
         $product->setPrice('9.99');
         $product->setStoreId($globalStoreId);
-        $product->getResource()->save($product);
+        $this->productResource->save($product);
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
         $this->assertEquals('9.990000', $product->getPrice());
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
+     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
+     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
+     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
@@ -122,27 +141,28 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\Store::class
         );
         $globalStoreId = $store->load('admin')->getId();
-        $secondStoreId = $store->load('fixture_second_store')->getId();
-        $thirdStoreId = $store->load('fixture_third_store')->getId();
+        $secondStoreId = $this->fixtures->get('store2')->getId();
+        $thirdStoreId = $this->fixtures->get('store3')->getId();
+        $productSku = $this->fixtures->get('product')->getSku();
         /** @var \Magento\Catalog\Model\Product\Action $productAction */
         $productAction = $this->objectManager->create(
             \Magento\Catalog\Model\Product\Action::class
         );
 
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get($productSku);
         $productId = $product->getId();
         $productAction->updateWebsites([$productId], [$store->load('fixture_second_store')->getWebsiteId()], 'add');
         $product->setStoreId($secondStoreId);
         $product->setPrice('9.99');
-        $product->getResource()->save($product);
+        $this->productResource->save($product);
 
-        $product = $this->productRepository->get('simple', false, $globalStoreId, true);
+        $product = $this->productRepository->get($productSku, false, $globalStoreId, true);
         $this->assertEquals(10, $product->getPrice());
 
-        $product = $this->productRepository->get('simple', false, $secondStoreId, true);
+        $product = $this->productRepository->get($productSku, false, $secondStoreId, true);
         $this->assertEquals('9.990000', $product->getPrice());
 
-        $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
+        $product = $this->productRepository->get($productSku, false, $thirdStoreId, true);
         $this->assertEquals('9.990000', $product->getPrice());
     }
 
@@ -173,7 +193,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->setOrigData();
         $product->setStoreId($secondStoreId);
         $product->setPrice('9.99');
-        $product->getResource()->save($product);
+        $this->productResource->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
         $this->assertEquals(10, $product->getPrice());
@@ -212,7 +232,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->setOrigData();
         $product->setStoreId($secondStoreId);
         $product->setPrice('9.99');
-        $product->getResource()->save($product);
+        $this->productResource->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
         $this->assertEquals(10, $product->getPrice());
@@ -225,7 +245,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $product->setStoreId($thirdStoreId);
         $product->setPrice(null);
-        $product->getResource()->save($product);
+        $this->productResource->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
         $this->assertEquals(10, $product->getPrice());
@@ -281,7 +301,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->setOrigData();
         $product->setStoreId($globalStoreId);
         $product->setPrice(100);
-        $product->getResource()->save($product);
+        $this->productResource->save($product);
 
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
         $this->assertEquals(100, $product->getPrice());
