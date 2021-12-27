@@ -36,7 +36,7 @@ class Attributes extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $configurableAttributeHandler->getApplicableAttributes();
     }
 
-    /** Getting the prdouct attribute collection.
+    /** Getting the product attribute collection.
      *
      * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
