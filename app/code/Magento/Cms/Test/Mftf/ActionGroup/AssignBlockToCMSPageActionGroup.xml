@@ -16,14 +16,14 @@
             <argument name="Block" defaultValue=""/>
             <argument name="CmsPage" defaultValue=""/>
         </arguments>
-        
+
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnEditPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" stepKey="clickToResetFilter" visible="true"/>
         <waitForPageLoad stepKey="waitForGridReload"/>
         <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="clickToAttemptSortByIdDescending1" visible="true"/>
         <waitForLoadingMaskToDisappear stepKey="waitForFirstIdSortDescendingToFinish1"/>
-        
+
         <!-- Conditional Click again in case it goes from default state to ascending on first click -->
         <conditionalClick selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]" dependentSelector="//span[contains(text(), 'ID')]/parent::th[not(contains(@class, '_descend'))]/parent::tr/parent::thead/parent::table/parent::div[contains(@data-role, 'grid-wrapper')]" stepKey="secondClickToAttemptSortByIdDescending2" visible="true"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish1"/>
@@ -33,7 +33,7 @@
         <click selector="{{CmsPagesPageActionsSection.edit(CmsPage.identifier)}}" stepKey="clickEdit"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon"/>
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>

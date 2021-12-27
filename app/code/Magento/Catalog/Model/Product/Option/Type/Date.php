@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 /**
  * Catalog product option date type
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
@@ -218,32 +217,36 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            if ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE) {
-                $result = $this->_localeDate->formatDateTime(
-                    new \DateTime($optionValue),
-                    \IntlDateFormatter::MEDIUM,
-                    \IntlDateFormatter::NONE,
-                    null,
-                    'UTC'
-                );
-            } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME) {
-                $result = $this->_localeDate->formatDateTime(
-                    new \DateTime($optionValue),
-                    \IntlDateFormatter::SHORT,
-                    \IntlDateFormatter::SHORT,
-                    null,
-                    'UTC'
-                );
-            } elseif ($this->getOption()->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME) {
-                $result = $this->_localeDate->formatDateTime(
-                    new \DateTime($optionValue),
-                    \IntlDateFormatter::NONE,
-                    \IntlDateFormatter::SHORT,
-                    null,
-                    'UTC'
-                );
-            } else {
-                $result = $optionValue;
+            switch ($this->getOption()->getType()) {
+                case ProductCustomOptionInterface::OPTION_TYPE_DATE:
+                    $result = $this->_localeDate->formatDateTime(
+                        new \DateTime($optionValue),
+                        \IntlDateFormatter::MEDIUM,
+                        \IntlDateFormatter::NONE,
+                        null,
+                        'UTC'
+                    );
+                    break;
+                case ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME:
+                    $result = $this->_localeDate->formatDateTime(
+                        new \DateTime($optionValue),
+                        \IntlDateFormatter::SHORT,
+                        \IntlDateFormatter::SHORT,
+                        null,
+                        'UTC'
+                    );
+                    break;
+                case ProductCustomOptionInterface::OPTION_TYPE_TIME:
+                    $result = $this->_localeDate->formatDateTime(
+                        new \DateTime($optionValue),
+                        \IntlDateFormatter::NONE,
+                        \IntlDateFormatter::SHORT,
+                        null,
+                        'UTC'
+                    );
+                    break;
+                default:
+                    $result = $optionValue;
             }
             $this->_formattedOptionValue = $result;
         }
@@ -302,8 +305,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $infoBuyRequest = $confItem->getOptionByCode('info_buyRequest');
         try {
             $value = $this->serializer->unserialize($infoBuyRequest->getValue());
-            if (is_array($value) && isset($value['options']) && isset($value['options'][$this->getOption()->getId()])
-            ) {
+
+            if (is_array($value) && isset($value['options'][$this->getOption()->getId()])) {
                 return $value['options'][$this->getOption()->getId()];
             } else {
                 return ['date_internal' => $optionValue];
@@ -340,12 +343,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getYearStart()
     {
-        $_range = explode(',', $this->getConfigData('year_range'));
-        if (isset($_range[0]) && !empty($_range[0])) {
-            return $_range[0];
-        } else {
-            return date('Y');
-        }
+        $_range = $this->getConfigData('year_range') !== null
+            ? explode(',', $this->getConfigData('year_range'))
+            : [];
+        return (isset($_range[0]) && !empty($_range[0])) ? $_range[0] : date('Y');
     }
 
     /**
@@ -355,12 +356,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getYearEnd()
     {
-        $_range = explode(',', $this->getConfigData('year_range'));
-        if (isset($_range[1]) && !empty($_range[1])) {
-            return $_range[1];
-        } else {
-            return date('Y');
-        }
+        $_range = $this->getConfigData('year_range') !== null
+            ? explode(',', $this->getConfigData('year_range'))
+            : [];
+        return (isset($_range[1]) && !empty($_range[1])) ? $_range[1] : date('Y');
     }
 
     /**

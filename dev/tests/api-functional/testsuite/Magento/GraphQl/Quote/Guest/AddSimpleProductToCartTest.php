@@ -196,8 +196,7 @@ QUERY;
 
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
-            'Product that you are trying to add is not available.'
+            'GraphQL response contains errors: Could not find a product with SKU "' . $sku . '"'
         );
 
         $this->graphQlMutation($query);
@@ -206,6 +205,7 @@ QUERY;
     /**
      * Add out of stock product to cart
      *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -225,6 +225,90 @@ QUERY;
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage(
             'Some of the products are out of stock.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Add out of stock product to cart with disabled quote item check
+     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockProductToCartWithDisabledInventoryCheck(): void
+    {
+        $sku = 'simple1';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+        $this->assertCount(2, $response['addSimpleProductsToCart']['cart']['items']);
+        $cartItems = $response['addSimpleProductsToCart']['cart']['items'];
+        $this->assertEquals(2, $cartItems[0]['quantity']);
+        $this->assertEquals(1, $cartItems[1]['quantity']);
+    }
+
+    /**
+     * Add out of stock simple product to cart with disabled quote item check
+     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 1
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockSimpleProductToCart(): void
+    {
+        $sku = 'simple_product';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Add out of stock simple product to cart with disabled quote item check
+     *
+     * @magentoConfigFixture cataloginventory/options/enable_inventory_check 0
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockSimpleProductToCartWithDisabledInventoryCheck(): void
+    {
+        $sku = 'simple_product';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
         );
 
         $this->graphQlMutation($query);
