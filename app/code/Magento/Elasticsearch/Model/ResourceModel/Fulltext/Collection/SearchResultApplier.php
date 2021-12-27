@@ -125,12 +125,11 @@ class SearchResultApplier implements SearchResultApplierInterface
      *
      * @return array
      */
-    private function getProductIdsBySalability()
+    private function getProductIdsBySalability(): array
     {
         $ids = [];
 
-        if ($this->collection->getFlag('has_stock_status_filter'))
-        {
+        if ($this->collection->getFlag('has_stock_status_filter')) {
             $categoryId = null;
             $searchCriteria = $this->searchResult->getSearchCriteria();
             foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
@@ -141,22 +140,37 @@ class SearchResultApplier implements SearchResultApplierInterface
                     }
                 }
             }
-            if ($categoryId) {
-                $this->collection->initializeCategoryFilter($categoryId, $this->collection->getStoreId());
-                $select = $this->collection->getSelect()
-                    ->reset(\Magento\Framework\DB\Select::COLUMNS)
-                    ->columns([
-                        'e.entity_id',
-                        'cat_index.position AS cat_index_position',
-                        'stock_status_index.stock_status AS is_salable'
-                    ]);
 
+            if ($categoryId) {
                 $searchOrders = $searchCriteria->getSortOrders();
-                $searchOrders = array_merge(['is_salable' => 'DESC'], $searchOrders);
+                $searchOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $searchOrders);
+                $storeId = $this->collection->getStoreId();
+
+                $connection = $this->collection->getConnection();
+                $select = $connection->select()
+                    ->from(
+                        ['product' => $this->collection->getTable('catalog_product_entity')],
+                        [
+                            'product.entity_id',
+                            'cat_index.position AS cat_index_position',
+                            'stock_status_index.stock_status AS is_salable'
+                        ]
+                    )->join(
+                        ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
+                        'product.entity_id = stock_status_index.product_id',
+                        []
+                    )->join(
+                        ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
+                        'cat_index.product_id = product.entity_id'
+                        . ' AND cat_index.category_id = ' . $categoryId
+                        . ' AND cat_index.store_id = ' . $storeId,
+                        []
+                    );
 
                 foreach ($searchOrders as $field => $dir) {
                     $select->order(new \Zend_Db_Expr("$field $dir"));
                 }
+
                 $offset = ($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
                 $select->limitPage($offset, $searchCriteria->getPageSize());
                 $resultSet = $this->collection->getConnection()->fetchAssoc($select);
