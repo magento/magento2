@@ -90,6 +90,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
+            $quote->collectTotals();
             $addressTotalsData = $quote->getBillingAddress()->getData();
             $addressTotals = $quote->getBillingAddress()->getTotals();
         } else {

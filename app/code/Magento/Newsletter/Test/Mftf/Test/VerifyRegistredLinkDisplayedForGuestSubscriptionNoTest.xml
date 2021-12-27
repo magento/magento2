@@ -17,6 +17,7 @@
             <title value="Configure guest newsletter subscription to 'No'"/>
             <description value="Configure guest newsletter subscription to 'No'"/>
             <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

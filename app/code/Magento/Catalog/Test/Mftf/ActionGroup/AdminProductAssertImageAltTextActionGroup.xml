@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductAssertImageAltTextActionGroup">
+        <annotations>
+            <description>Assert product image alt text.</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+            <argument name="altText" defaultValue="{{ProductImage.title}}" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
+        <waitForPageLoad stepKey="waitForImages"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
+        <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
+        <waitForPageLoad stepKey="waitForImageDetails"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
+        <grabValueFrom selector="{{AdminProductImagesSection.altText}}" stepKey="actualAltText"/>
+        <assertEquals stepKey="assertAltText">
+            <expectedResult type="string">{{altText}}</expectedResult>
+            <actualResult type="variable">actualAltText</actualResult>
+        </assertEquals>
+        <click selector="{{AdminSlideOutDialogSection.closeButton}}" stepKey="clickCloseButton"/>
+        <waitForPageLoad stepKey="waitForClose"/>
+        <waitForElementNotVisible selector="{{AdminProductImagesSection.altText}}" stepKey="waitForDetailsGone"/>
+    </actionGroup>
+</actionGroups>

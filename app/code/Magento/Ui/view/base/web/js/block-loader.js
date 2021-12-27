@@ -49,7 +49,7 @@ define([
      * @param {Object} element
      */
     function addBlockLoader(element) {
-        element.find(':focus').blur();
+        element.find(':focus').trigger('blur');
         element.find('input:disabled, select:disabled').addClass('_disabled');
         element.find('input, select').prop('disabled', true);
 

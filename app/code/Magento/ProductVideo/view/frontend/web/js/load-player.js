@@ -131,13 +131,6 @@ define([
         },
 
         /**
-         * Destroyer
-         */
-        destroy: function () {
-            this._player.destroy();
-        },
-
-        /**
          * Calculates ratio for responsive videos
          * @private
          */
@@ -160,7 +153,7 @@ define([
 
             this._initialize();
 
-            this.element.append('<div/>');
+            this.element.append('<div></div>');
 
             this._on(window, {
 
@@ -300,9 +293,8 @@ define([
          * stops and unloads player
          * @private
          */
-        destroy: function () {
+        _destroy: function () {
             this.stop();
-            this._player.destroy();
         }
     });
 
@@ -334,7 +326,7 @@ define([
                 timestamp +
                 additionalParams;
             this.element.append(
-                $('<iframe/>')
+                $('<iframe></iframe>')
                     .attr('frameborder', 0)
                     .attr('id', 'vimeo' + this._code + timestamp)
                     .attr('width', this._width)
