@@ -82,7 +82,9 @@
         <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReloadSecond"/>
 
         <seeInTitle userInput="Products / Inventory / Catalog / Magento Admin" stepKey="seeAdminProductsPageTitle"/>
-        <see userInput="Products" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeAdminProductsPageHeader"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeAdminProductsPageHeader">
+            <argument name="value" value="Products"/>
+        </actionGroup>
 
         <switchToNextTab stepKey="switchToFrontendTab"/>
         <closeTab stepKey="closeFrontendTab"/>

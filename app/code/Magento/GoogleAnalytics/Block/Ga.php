@@ -17,8 +17,6 @@ use Magento\Framework\App\ObjectManager;
 class Ga extends \Magento\Framework\View\Element\Template
 {
     /**
-     * Google analytics data
-     *
      * @var \Magento\GoogleAnalytics\Helper\Data
      */
     protected $_googleAnalyticsData = null;
@@ -261,8 +259,8 @@ class Ga extends \Magento\Framework\View\Element\Template
     private function getOptPageUrl()
     {
         $optPageURL = '';
-        $pageName = trim($this->getPageName());
-        if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
+        $pageName = $this->getPageName() !== null ? trim($this->getPageName()) : '';
+        if ($pageName && substr($pageName, 0, 1) === '/' && strlen($pageName) > 1) {
             $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
         }
         return $optPageURL;

@@ -153,8 +153,8 @@ class ManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetReader(): void
     {
         $this->readerFactory->expects($this->once())
@@ -168,8 +168,8 @@ class ManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testPrepareDataWithoutName(): void
     {
         $this->expectException(LocalizedException::class);
