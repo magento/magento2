@@ -81,7 +81,4 @@
     <type name="Magento\Sales\Model\Order\Invoice">
         <plugin name="update_configurable_product_total_qty" type="Magento\ConfigurableProduct\Plugin\Model\Order\Invoice\UpdateConfigurableProductTotalQty"/>
     </type>
-    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Attributes">
-        <plugin name="update_configurable_product_attribute_collection" type="Magento\ConfigurableProduct\Plugin\Model\UpdateConfigurableProductAttributeCollection"/>
-    </type>
 </config>
