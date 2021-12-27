@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -14,6 +16,8 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * @inheritdoc
@@ -26,12 +30,20 @@ class CartPrices implements ResolverInterface
     private $totalsCollector;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
      * @param TotalsCollector $totalsCollector
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
-        TotalsCollector $totalsCollector
+        TotalsCollector $totalsCollector,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         $this->totalsCollector = $totalsCollector;
+        $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -59,7 +71,7 @@ class CartPrices implements ResolverInterface
             'subtotal_including_tax' => ['value' => $cartTotals->getSubtotalInclTax(), 'currency' => $currency],
             'subtotal_excluding_tax' => ['value' => $cartTotals->getSubtotal(), 'currency' => $currency],
             'subtotal_with_discount_excluding_tax' => [
-                'value' => $cartTotals->getSubtotalWithDiscount() + $cartTotals->getDiscountTaxCompensationAmount(),
+                'value' => $this->getSubtotalWithDiscountExcludingTax($cartTotals),
                 'currency' => $currency
             ],
             'applied_taxes' => $this->getAppliedTaxes($cartTotals, $currency),
@@ -109,5 +121,24 @@ class CartPrices implements ResolverInterface
             'label' => explode(', ', $total->getDiscountDescription()),
             'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
         ];
+    }
+
+    /**
+     * Get Subtotal with discount excluding tax.
+     *
+     * @param Total $cartTotals
+     * @return float
+     */
+    private function getSubtotalWithDiscountExcludingTax(Total $cartTotals): float
+    {
+        $discountIncludeTax = $this->scopeConfig->getValue(
+            Config::CONFIG_XML_PATH_DISCOUNT_TAX,
+            ScopeInterface::SCOPE_STORE
+        ) ?? 0;
+        $discountExclTax = $discountIncludeTax ?
+            $cartTotals->getDiscountAmount() + $cartTotals->getDiscountTaxCompensationAmount() :
+            $cartTotals->getDiscountAmount();
+
+        return $cartTotals->getSubtotal() +  $discountExclTax;
     }
 }
