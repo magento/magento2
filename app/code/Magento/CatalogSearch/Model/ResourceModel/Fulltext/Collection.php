@@ -697,8 +697,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Apply product limitations to specific category
      *
-     * @param $categoryId
-     * @param $storeId
+     * @param int $categoryId
+     * @param int $storeId
      *
      * @return void
      */
