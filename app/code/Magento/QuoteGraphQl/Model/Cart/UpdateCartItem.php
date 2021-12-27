@@ -16,9 +16,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 
-/**
- * Update cart item
- */
 class UpdateCartItem
 {
     /**
