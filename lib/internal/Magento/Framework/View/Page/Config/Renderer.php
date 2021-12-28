@@ -350,15 +350,23 @@ class Renderer implements RendererInterface
     protected function addDefaultAttributes($contentType, $attributes)
     {
         if ($contentType === 'js') {
-            return ' type="text/javascript" ' . $attributes;
+            if(strpos($attributes, 'rel="preload"') !== false){
+                return $attributes;
+            } else {
+                return ' type="text/javascript"' . $attributes;
+            }
         }
 
         if ($contentType === 'css') {
-            return ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
+            return ' rel="stylesheet" type="text/css"' . ($attributes ?: ' media="all"');
         }
 
         if ($this->canTypeBeFont($contentType)) {
-            return 'rel="preload" as="font" crossorigin="anonymous"';
+            if(strpos($attributes, 'as="image"') !== false){
+                return $attributes;
+            } else {                
+                return ' rel="preload" as="font" crossorigin="anonymous"';
+            }
         }
 
         return $attributes;
@@ -375,12 +383,16 @@ class Renderer implements RendererInterface
     {
         switch ($contentType) {
             case 'js':
-                $groupTemplate = '<script ' . $attributes . ' src="%s"></script>' . "\n";
+                if(strpos($attributes, 'rel="preload"') !== false){
+                    $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
+                } else {
+                    $groupTemplate = '<script' . $attributes . ' src="%s"></script>' . "\n";
+                }
                 break;
 
             case 'css':
             default:
-                $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
+                $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
                 break;
         }
         return $groupTemplate;
