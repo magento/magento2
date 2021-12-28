@@ -17,7 +17,6 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Tax\Model\Config;
 
 /**
  * @inheritdoc
@@ -132,7 +131,7 @@ class CartPrices implements ResolverInterface
     private function getSubtotalWithDiscountExcludingTax(Total $cartTotals): float
     {
         $discountIncludeTax = $this->scopeConfig->getValue(
-            Config::CONFIG_XML_PATH_DISCOUNT_TAX,
+            'tax/calculation/discount_tax',
             ScopeInterface::SCOPE_STORE
         ) ?? 0;
         $discountExclTax = $discountIncludeTax ?
