@@ -84,7 +84,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
 
         $history = [];
         foreach ($order->getAllStatusHistory() as $orderComment) {
-            $history[] = $this->_prepareHistoryItemWithId(
+            $history[] = $this->prepareHistoryItemWithId(
                 $orderComment->getId(),
                 $orderComment->getStatusLabel(),
                 $orderComment->getIsCustomerNotified(),
@@ -95,7 +95,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         }
 
         foreach ($order->getCreditmemosCollection() as $_memo) {
-            $history[] = $this->_prepareHistoryItemWithId(
+            $history[] = $this->prepareHistoryItemWithId(
                 $_memo->getId(),
                 __('Credit memo #%1 created', $_memo->getIncrementId()),
                 $_memo->getEmailSent(),
@@ -105,7 +105,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             );
 
             foreach ($_memo->getCommentsCollection() as $_comment) {
-                $history[] = $this->_prepareHistoryItemWithId(
+                $history[] = $this->prepareHistoryItemWithId(
                     $_comment->getId(),
                     __('Credit memo #%1 comment added', $_memo->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
@@ -117,7 +117,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         }
 
         foreach ($order->getShipmentsCollection() as $_shipment) {
-            $history[] = $this->_prepareHistoryItemWithId(
+            $history[] = $this->prepareHistoryItemWithId(
                 $_shipment->getId(),
                 __('Shipment #%1 created', $_shipment->getIncrementId()),
                 $_shipment->getEmailSent(),
@@ -126,7 +126,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             );
 
             foreach ($_shipment->getCommentsCollection() as $_comment) {
-                $history[] = $this->_prepareHistoryItemWithId(
+                $history[] = $this->prepareHistoryItemWithId(
                     $_comment->getId(),
                     __('Shipment #%1 comment added', $_shipment->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
@@ -138,7 +138,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         }
 
         foreach ($order->getInvoiceCollection() as $_invoice) {
-            $history[] = $this->_prepareHistoryItemWithId(
+            $history[] = $this->prepareHistoryItemWithId(
                 $_invoice->getId(),
                 __('Invoice #%1 created', $_invoice->getIncrementId()),
                 $_invoice->getEmailSent(),
@@ -148,7 +148,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             );
 
             foreach ($_invoice->getCommentsCollection() as $_comment) {
-                $history[] = $this->_prepareHistoryItemWithId(
+                $history[] = $this->prepareHistoryItemWithId(
                     $_comment->getId(),
                     __('Invoice #%1 comment added', $_invoice->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
@@ -160,7 +160,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
         }
 
         foreach ($order->getTracksCollection() as $_track) {
-            $history[] = $this->_prepareHistoryItemWithId(
+            $history[] = $this->prepareHistoryItemWithId(
                 $_track->getId(),
                 __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
                 false,
@@ -257,7 +257,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param int $type
      * @return array
      */
-    private function _prepareHistoryItemWithId(
+    private function prepareHistoryItemWithId(
         int $id,
         string $label,
         bool $notified,
