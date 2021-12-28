@@ -23,13 +23,15 @@ class Renderer implements RendererInterface
      */
     protected $assetTypeOrder = [
         'css',
-        'ico',
-        'js',
+        'ico',        
+        'png',
+        'webp',
         'eot',
         'svg',
         'ttf',
         'woff',
-        'woff2',
+        'woff2',        
+        'js',
     ];
 
     /**
