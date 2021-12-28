@@ -52,6 +52,11 @@ class MediaGallery implements ResolverInterface
         foreach ($product->getMediaGalleryEntries() ?? [] as $key => $entry) {
             $mediaGalleryEntries[$key] = $entry->getData();
             $mediaGalleryEntries[$key]['model'] = $product;
+
+            /* This condition is for checking the disabled attribute of the media */
+            if($mediaGalleryEntries[$key]['disabled'] == 1) {
+                array_pop($mediaGalleryEntries);
+            }
             if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
                 $mediaGalleryEntries[$key]['video_content']
                     = $entry->getExtensionAttributes()->getVideoContent()->getData();
