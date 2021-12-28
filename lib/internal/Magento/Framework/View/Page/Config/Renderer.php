@@ -30,8 +30,7 @@ class Renderer implements RendererInterface
         'png',
         'webp',
         'eot',
-        'svg',                       
-        'preload',
+        'svg',
         'js',
     ];
 
