@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontFillCustomerAddressFormActionGroup">
+        <annotations>
+            <description>Fills address data in storefront customer address edit form.</description>
+        </annotations>
+        <arguments>
+            <argument name="Address"/>
+        </arguments>
+        <fillField userInput="{{Address.firstname}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{Address.lastname}}" selector="{{StorefrontCustomerAddressFormSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{Address.company}}" selector="{{StorefrontCustomerAddressFormSection.company}}" stepKey="fillCompanyName"/>
+        <fillField userInput="{{Address.telephone}}" selector="{{StorefrontCustomerAddressFormSection.phoneNumber}}" stepKey="fillPhoneNumber"/>
+        <fillField userInput="{{Address.street[0]}}" selector="{{StorefrontCustomerAddressFormSection.streetAddress}}" stepKey="fillStreetAddress"/>
+        <fillField userInput="{{Address.city}}" selector="{{StorefrontCustomerAddressFormSection.city}}" stepKey="fillCity"/>
+        <selectOption userInput="{{Address.state}}" selector="{{StorefrontCustomerAddressFormSection.state}}" stepKey="selectState"/>
+        <fillField userInput="{{Address.postcode}}" selector="{{StorefrontCustomerAddressFormSection.zip}}" stepKey="fillZip"/>
+        <selectOption userInput="{{Address.country}}" selector="{{StorefrontCustomerAddressFormSection.country}}" stepKey="selectCountry"/>
+    </actionGroup>
+</actionGroups>

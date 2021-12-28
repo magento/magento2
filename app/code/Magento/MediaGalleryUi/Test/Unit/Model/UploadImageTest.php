@@ -129,7 +129,7 @@ class UploadImageTest extends TestCase
             [
                 'targetFolder' => 'media/catalog',
                 'type' => 'image',
-                'absolutePath' => 'root/pub/media/catalog/test-image.jpeg'
+                'absolutePath' => 'root/media/catalog/test-image.jpeg'
             ]
         ];
     }

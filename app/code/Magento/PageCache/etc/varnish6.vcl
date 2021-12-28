@@ -62,13 +62,13 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass shopping cart, checkout and search requests
-    if (req.url ~ "/checkout" || req.url ~ "/catalogsearch") {
+    # Bypass customer, shopping cart, checkout
+    if (req.url ~ "/customer" || req.url ~ "/checkout") {
         return (pass);
     }
 
     # Bypass health check requests
-    if (req.url ~ "/pub/health_check.php") {
+    if (req.url ~ "^/(pub/)?(health_check.php)$") {
         return (pass);
     }
 
@@ -113,8 +113,8 @@ sub vcl_recv {
         #unset req.http.Cookie;
     }
 
-    # Authenticated GraphQL requests should not be cached by default
-    if (req.url ~ "/graphql" && req.http.Authorization ~ "^Bearer") {
+    # Bypass authenticated GraphQL requests without a X-Magento-Cache-Id
+    if (req.url ~ "/graphql" && !req.http.X-Magento-Cache-Id && req.http.Authorization ~ "^Bearer") {
         return (pass);
     }
 
@@ -122,15 +122,8 @@ sub vcl_recv {
 }
 
 sub vcl_hash {
-    if (req.http.cookie ~ "X-Magento-Vary=") {
+    if ((req.url !~ "/graphql" || !req.http.X-Magento-Cache-Id) && req.http.cookie ~ "X-Magento-Vary=") {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
-    }
-
-    # For multi site configurations to not cache each other's content
-    if (req.http.host) {
-        hash_data(req.http.host);
-    } else {
-        hash_data(server.ip);
     }
 
     # To make sure http users don't see ssl warning
@@ -145,9 +138,19 @@ sub vcl_hash {
 }
 
 sub process_graphql_headers {
+    if (req.http.X-Magento-Cache-Id) {
+        hash_data(req.http.X-Magento-Cache-Id);
+
+        # When the frontend stops sending the auth token, make sure users stop getting results cached for logged-in users
+        if (req.http.Authorization ~ "^Bearer") {
+            hash_data("Authorized");
+        }
+    }
+
     if (req.http.Store) {
         hash_data(req.http.Store);
     }
+
     if (req.http.Content-Currency) {
         hash_data(req.http.Content-Currency);
     }
@@ -169,12 +172,10 @@ sub vcl_backend_response {
         set beresp.http.X-Magento-Cache-Control = beresp.http.Cache-Control;
     }
 
-    # cache only successfully responses and 404s
-    if (beresp.status != 200 && beresp.status != 404) {
-        set beresp.ttl = 0s;
-        set beresp.uncacheable = true;
-        return (deliver);
-    } elsif (beresp.http.Cache-Control ~ "private") {
+    # cache only successfully responses and 404s that are not marked as private
+    if (beresp.status != 200 &&
+            beresp.status != 404 &&
+            beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
         set beresp.ttl = 86400s;
         return (deliver);
@@ -194,21 +195,23 @@ sub vcl_backend_response {
         # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
-    }
+   }
+
+   # If the cache key in the Magento response doesn't match the one that was sent in the request, don't cache under the request's key
+   if (bereq.url ~ "/graphql" && bereq.http.X-Magento-Cache-Id && bereq.http.X-Magento-Cache-Id != beresp.http.X-Magento-Cache-Id) {
+      set beresp.ttl = 0s;
+      set beresp.uncacheable = true;
+   }
 
     return (deliver);
 }
 
 sub vcl_deliver {
-    if (resp.http.X-Magento-Debug) {
-        if (resp.http.x-varnish ~ " ") {
-            set resp.http.X-Magento-Cache-Debug = "HIT";
-            set resp.http.Grace = req.http.grace;
-        } else {
-            set resp.http.X-Magento-Cache-Debug = "MISS";
-        }
+    if (resp.http.x-varnish ~ " ") {
+        set resp.http.X-Magento-Cache-Debug = "HIT";
+        set resp.http.Grace = req.http.grace;
     } else {
-        unset resp.http.Age;
+        set resp.http.X-Magento-Cache-Debug = "MISS";
     }
 
     # Not letting browser to cache non-static files.
@@ -218,6 +221,9 @@ sub vcl_deliver {
         set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
     }
 
+    if (!resp.http.X-Magento-Debug) {
+        unset resp.http.Age;
+    }
     unset resp.http.X-Magento-Debug;
     unset resp.http.X-Magento-Tags;
     unset resp.http.X-Powered-By;

@@ -68,7 +68,7 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function getOrderOptions()
     {
-        $result = [[]];
+        $result = [];
         if ($options = $this->getItem()->getProductOptions()) {
             if (isset($options['options'])) {
                 $result[] = $options['options'];
@@ -80,7 +80,7 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
                 $result[] = $options['attributes_info'];
             }
         }
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

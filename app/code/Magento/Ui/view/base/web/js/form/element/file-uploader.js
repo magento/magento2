@@ -54,13 +54,14 @@ define([
             this.$fileInput = fileInput;
 
             _.extend(this.uploaderConfig, {
-                dropZone:   $(fileInput).closest(this.dropZone),
-                change:     this.onFilesChoosed.bind(this),
-                drop:       this.onFilesChoosed.bind(this),
-                add:        this.onBeforeFileUpload.bind(this),
-                done:       this.onFileUploaded.bind(this),
-                start:      this.onLoadingStart.bind(this),
-                stop:       this.onLoadingStop.bind(this)
+                dropZone: $(fileInput).closest(this.dropZone),
+                change: this.onFilesChoosed.bind(this),
+                drop: this.onFilesChoosed.bind(this),
+                add: this.onBeforeFileUpload.bind(this),
+                fail: this.onFail.bind(this),
+                done: this.onFileUploaded.bind(this),
+                start: this.onLoadingStart.bind(this),
+                stop: this.onLoadingStop.bind(this)
             });
 
             $(fileInput).fileupload(this.uploaderConfig);
@@ -328,11 +329,12 @@ define([
          * May be used for implementation of additional validation rules,
          * e.g. total files and a total size rules.
          *
-         * @param {Event} e - Event object.
+         * @param {Event} event - Event object.
          * @param {Object} data - File data that will be uploaded.
          */
-        onFilesChoosed: function (e, data) {
-            // no option exists in fileuploader for restricting upload chains to single files; this enforces that policy
+        onFilesChoosed: function (event, data) {
+            // no option exists in file uploader for restricting upload chains to single files
+            // this enforces that policy
             if (!this.isMultipleFiles) {
                 data.files.splice(1);
             }
@@ -341,13 +343,13 @@ define([
         /**
          * Handler which is invoked prior to the start of a file upload.
          *
-         * @param {Event} e - Event object.
+         * @param {Event} event - Event object.
          * @param {Object} data - File data that will be uploaded.
          */
-        onBeforeFileUpload: function (e, data) {
-            var file     = data.files[0],
-                allowed  = this.isFileAllowed(file),
-                target   = $(e.target);
+        onBeforeFileUpload: function (event, data) {
+            var file = data.files[0],
+                allowed = this.isFileAllowed(file),
+                target = $(event.target);
 
             if (this.disabled()) {
                 this.notifyError($t('The file upload field is disabled.'));
@@ -356,7 +358,7 @@ define([
             }
 
             if (allowed.passed) {
-                target.on('fileuploadsend', function (event, postData) {
+                target.on('fileuploadsend', function (eventBound, postData) {
                     postData.data.append('param_name', this.paramName);
                 }.bind(data));
 
@@ -387,15 +389,24 @@ define([
         },
 
         /**
-         * Handler of the file upload complete event.
-         *
-         * @param {Event} e
+         * @param {Event} event
          * @param {Object} data
          */
-        onFileUploaded: function (e, data) {
+        onFail: function (event, data) {
+            console.error(data.jqXHR.responseText);
+            console.error(data.jqXHR.status);
+        },
+
+        /**
+         * Handler of the file upload complete event.
+         *
+         * @param {Event} event
+         * @param {Object} data
+         */
+        onFileUploaded: function (event, data) {
             var uploadedFilename = data.files[0].name,
-                file    = data.result,
-                error   = file.error;
+                file = data.result,
+                error = file.error;
 
             error ?
                 this.aggregateError(uploadedFilename, error) :
@@ -469,10 +480,10 @@ define([
          * Handler of the preview image load event.
          *
          * @param {Object} file - File associated with an image.
-         * @param {Event} e
+         * @param {Event} event
          */
-        onPreviewLoad: function (file, e) {
-            var img = e.currentTarget;
+        onPreviewLoad: function (file, event) {
+            var img = event.currentTarget;
 
             file.previewWidth = img.naturalWidth;
             file.previewHeight = img.naturalHeight;

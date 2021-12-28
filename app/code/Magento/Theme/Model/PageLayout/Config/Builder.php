@@ -94,17 +94,17 @@ class Builder implements BuilderInterface
     protected function getConfigFiles()
     {
         if (!$this->configFiles) {
-            $configFiles = [];
             $this->configFiles = $this->cacheModel->load(self::CACHE_KEY_LAYOUTS);
             if (!empty($this->configFiles)) {
                 //if value in cache is corrupted.
                 $this->configFiles = $this->serializer->unserialize($this->configFiles);
             }
             if (empty($this->configFiles)) {
+                $configFiles = [];
                 foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
                     $configFiles[] = $this->fileCollector->getFilesContent($theme, 'layouts.xml');
                 }
-                $this->configFiles = array_merge(...$configFiles);
+                $this->configFiles = array_merge([], ...$configFiles);
                 $this->cacheModel->save($this->serializer->serialize($this->configFiles), self::CACHE_KEY_LAYOUTS);
             }
         }

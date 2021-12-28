@@ -4,16 +4,21 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Shipping\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Config
+ * Config model for shipping
  * @api
  * @since 100.0.2
  */
-class Config extends \Magento\Framework\DataObject
+class Config extends DataObject
 {
     /**
      * Shipping origin settings
@@ -29,25 +34,25 @@ class Config extends \Magento\Framework\DataObject
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactory
      */
     protected $_carrierFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param ScopeConfigInterface $scopeConfig
+     * @param CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
+        ScopeConfigInterface $scopeConfig,
+        CarrierFactory $carrierFactory,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
@@ -58,17 +63,17 @@ class Config extends \Magento\Framework\DataObject
     /**
      * Retrieve active system carriers
      *
-     * @param   mixed $store
-     * @return  AbstractCarrierInterface[]
+     * @param mixed $store
+     * @return AbstractCarrierInterface[]
      */
     public function getActiveCarriers($store = null)
     {
         $carriers = [];
-        $config = $this->_scopeConfig->getValue('carriers', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        $config = $this->getCarriersConfig($store);
         foreach (array_keys($config) as $carrierCode) {
             if ($this->_scopeConfig->isSetFlag(
                 'carriers/' . $carrierCode . '/active',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $store
             )) {
                 $carrierModel = $this->_carrierFactory->create($carrierCode, $store);
@@ -77,25 +82,38 @@ class Config extends \Magento\Framework\DataObject
                 }
             }
         }
+
         return $carriers;
     }
 
     /**
      * Retrieve all system carriers
      *
-     * @param   mixed $store
-     * @return  AbstractCarrierInterface[]
+     * @param mixed $store
+     * @return AbstractCarrierInterface[]
      */
     public function getAllCarriers($store = null)
     {
         $carriers = [];
-        $config = $this->_scopeConfig->getValue('carriers', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        $config = $this->getCarriersConfig($store);
         foreach (array_keys($config) as $carrierCode) {
             $model = $this->_carrierFactory->create($carrierCode, $store);
             if ($model) {
                 $carriers[$carrierCode] = $model;
             }
         }
+
         return $carriers;
+    }
+
+    /**
+     * Returns carriers config by store
+     *
+     * @param mixed $store
+     * @return array
+     */
+    private function getCarriersConfig($store = null): array
+    {
+        return $this->_scopeConfig->getValue('carriers', ScopeInterface::SCOPE_STORE, $store) ?: [];
     }
 }

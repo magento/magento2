@@ -5,7 +5,16 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 
 /**
  * @magentoAppArea adminhtml
@@ -106,27 +115,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
-        $filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class
-        );
-
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'advanced_pricing'
-            ]
-        )->validateData();
-
+        $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_APPEND, true);
         $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
         $this->model->importData();
 
@@ -186,6 +175,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $index = 0;
         $ids = [];
         $origPricingData = [];
+        $skus = ['simple'];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getId();
             $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
@@ -203,27 +193,16 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
         $exportModel->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class,
-                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
+                ['fileSystem' => $this->fileSystem]
             )
         );
-        $this->assertNotEmpty($exportModel->export());
+        $exportContent = $exportModel->export();
+        $this->assertNotEmpty($exportContent);
 
-        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => $csvfile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-                'entity' => 'advanced_pricing'
-            ]
-        )->setSource(
-            $source
-        )->validateData();
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $directory->getDriver()->filePutContents($directory->getAbsolutePath($csvfile), $exportContent);
+
+        $errors = $this->doImport($csvfile, DirectoryList::VAR_IMPORT_EXPORT, Import::BEHAVIOR_DELETE, true);
 
         $this->assertTrue(
             $errors->getErrorsCount() == 0,
@@ -248,26 +227,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
-        $filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class
-        );
-
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $this->objectManager->create(
-            \Magento\ImportExport\Model\Import\Source\Csv::class,
-            [
-                'file' => $pathToFile,
-                'directory' => $directory
-            ]
-        );
-        $errors = $this->model->setSource(
-            $source
-        )->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE,
-                'entity' => 'advanced_pricing'
-            ]
-        )->validateData();
+        $errors = $this->doImport($pathToFile, DirectoryList::ROOT, Import::BEHAVIOR_REPLACE, true);
 
         $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
         $this->model->importData();
@@ -292,5 +252,178 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
                 $index ++;
             }
         }
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/create_products.php
+     * @param array $dbData
+     * @param array $importData
+     * @param string $importBehavior
+     * @param array $invalidRows
+     * @dataProvider importValidationDuplicateWithSameBaseCurrencyDataProvider
+     */
+    public function testImportValidationDuplicateWithSameBaseCurrency(
+        array $dbData,
+        array $importData,
+        string $importBehavior,
+        array $invalidRows
+    ) {
+        $this->createTierPrices($dbData);
+        $pathToFile = $this->generateImportFile($importData);
+        $errors = $this->doImport($pathToFile, DirectoryList::VAR_DIR, $importBehavior);
+        $rows = $errors->getRowsGroupedByErrorCode(['duplicateTierPrice'], [], false);
+        $this->assertEquals($invalidRows, $rows['duplicateTierPrice'] ?? []);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoConfigFixture base_website catalog/price/scope 1
+     * @magentoConfigFixture base_website currency/options/base EUR
+     * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/create_products.php
+     * @param array $dbData
+     * @param array $importData
+     * @param string $importBehavior
+     * @param array $invalidRows
+     * @dataProvider importValidationDuplicateWithDifferentBaseCurrencyDataProvider
+     */
+    public function testImportValidationDuplicateWithDifferentBaseCurrency(
+        array $dbData,
+        array $importData,
+        string $importBehavior,
+        array $invalidRows
+    ) {
+        $this->createTierPrices($dbData);
+        $pathToFile = $this->generateImportFile($importData);
+        $errors = $this->doImport($pathToFile, DirectoryList::VAR_DIR, $importBehavior);
+        $rows = $errors->getRowsGroupedByErrorCode(['duplicateTierPrice'], [], false);
+        $this->assertEquals($invalidRows, $rows['duplicateTierPrice'] ?? []);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function importValidationDuplicateWithSameBaseCurrencyDataProvider(): array
+    {
+        return require __DIR__ . '/_files/import_validation_duplicate_same_currency_data_provider.php';
+    }
+
+    /**
+     * @return array[]
+     */
+    public function importValidationDuplicateWithDifferentBaseCurrencyDataProvider(): array
+    {
+        return require __DIR__ . '/_files/import_validation_duplicate_diff_currency_data_provider.php';
+    }
+
+    /**
+     * @param string $directoryCode
+     * @param string $file
+     * @param string $behavior
+     * @param bool $validateOnly
+     * @return ProcessingErrorAggregatorInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function doImport(
+        string $file,
+        string $directoryCode = DirectoryList::ROOT,
+        string $behavior = Import::BEHAVIOR_APPEND,
+        bool $validateOnly = false
+    ): ProcessingErrorAggregatorInterface {
+        /** @var Filesystem $filesystem */
+        $filesystem = $this->objectManager->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite($directoryCode);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => $file,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->model->setSource($source)
+            ->setParameters(
+                [
+                    'behavior' => $behavior,
+                    'entity' => 'advanced_pricing'
+                ]
+            )
+            ->validateData();
+        if (!$validateOnly && !$errors->getAllErrors()) {
+            $this->model->importData();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $tierPrices
+     */
+    private function createTierPrices(array $tierPrices)
+    {
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $tierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
+        $tpExtensionAttributesFactory = $this->objectManager->get(ProductTierPriceExtensionFactory::class);
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $productTierPrices = [];
+        foreach ($tierPrices as $price) {
+            $sku = $price['sku'];
+            $websiteId = 0;
+            $websiteCode = $price['website_id'];
+            $percentageValue = $price['percentage_value'] ?? null;
+            unset($price['sku'], $price['website_id'], $price['percentage_value']);
+            if ($websiteCode !== 0) {
+                $websiteId = $storeManager->getWebsite($websiteCode)->getId();
+            }
+            $tierPriceExtensionAttributes = $tpExtensionAttributesFactory->create();
+            $tierPriceExtensionAttributes->setWebsiteId($websiteId);
+            $tierPriceExtensionAttributes->setPercentageValue($percentageValue);
+            $productTierPrices[$sku][] = $tierPriceFactory->create(['data' => $price])
+                ->setExtensionAttributes($tierPriceExtensionAttributes);
+        }
+
+        foreach ($productTierPrices as $sku => $prices) {
+            $product = $productRepository->get($sku, true, null, true);
+            $product->setTierPrices($prices);
+            $productRepository->save($product);
+        }
+    }
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    private function generateImportFile(array $data): string
+    {
+        $fields = [
+            'sku',
+            'tier_price_website',
+            'tier_price_customer_group',
+            'tier_price_qty',
+            'tier_price',
+            'tier_price_value_type',
+        ];
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Filesystem $filesystem */
+        $filesystem = $objectManager->get(Filesystem::class);
+        $varDir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $tmpFilename = uniqid('test_import_advanced_pricing_') . '.csv';
+        $stream = $varDir->openFile($tmpFilename, 'w+');
+        $stream->lock();
+        $stream->writeCsv($fields);
+        $emptyRow = array_fill_keys($fields, '');
+        foreach ($data as $row) {
+            $row = array_replace($emptyRow, $row);
+            $stream->writeCsv($row);
+        }
+        $stream->unlock();
+        $stream->close();
+        return $varDir->getAbsolutePath($tmpFilename);
     }
 }

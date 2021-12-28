@@ -14,12 +14,13 @@
  *  getPagerVisibility()
  *  getVarNamePage()
  */
-$numColumns = count($block->getColumns());
 
 /**
  * @var \Magento\Backend\Block\Widget\Grid\Extended $block
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
+$numColumns = count($block->getColumns());
+
 ?>
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>
@@ -101,8 +102,7 @@ $numColumns = count($block->getColumns());
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
-                    <label for="<?= $block->escapeHtml($block->getHtmlId())
-                    ?><?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                    <label for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
                         class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
 
                     <div class="admin__data-grid-pager">
@@ -285,7 +285,9 @@ $numColumns = count($block->getColumns());
         </table>
 
     </div>
+        <?php if ($block->canDisplayContainer()): ?>
 </div>
+        <?php endif; ?>
     <?php
     /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
     $jsonHelper = $block->getData('jsonHelper');
@@ -301,7 +303,7 @@ script;
 script;
         endif;
 
-        if (strpos($block->getRowClickCallback(), 'order.') !== false):
+        if ($block->getRowClickCallback() && strpos($block->getRowClickCallback(), 'order.') !== false):
             $scriptString .= <<<script
 
     deps.push('Magento_Sales/order/create/form')

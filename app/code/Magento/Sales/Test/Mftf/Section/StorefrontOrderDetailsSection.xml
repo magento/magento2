@@ -14,9 +14,12 @@
         <element name="billingAddressBlock" type="block" selector=".box-order-billing-address > .box-content > address"/>
         <element name="discountSalesRule" type="text" selector="tr.discount span.price"/>
         <element name="shippingTotalDescription" type="text" selector="#my-orders-table tr.shipping th.mark"/>
+        <element name="tax" type="text" selector=".totals-tax .price"/>
+        <element name="grandTotalIncludingTax" type="text" selector=".grand_total_incl .amount"/>
         <element name="grandTotalPrice" type="text" selector="tr.grand_total span.price"/>
         <element name="paymentMethod" type="text" selector=".box-order-billing-method dt.title"/>
         <element name="shippingMethod" type="text" selector=".box-order-shipping-method div.box-content"/>
         <element name="productNameCell" type="text" selector="//*[contains(@class, 'product-item-name')]"/>
-     </section>
+        <element name="shippingAddressBlock" type="block" selector=".block-order-details-view .box-order-shipping-address .box-content"/>
+    </section>
 </sections>

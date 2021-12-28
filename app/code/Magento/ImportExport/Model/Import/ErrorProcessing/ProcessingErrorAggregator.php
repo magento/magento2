@@ -242,7 +242,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         }
 
         $errors = array_values($this->items['rows']);
-        return array_merge(...$errors);
+        return array_merge([], ...$errors);
     }
 
     /**
@@ -253,14 +253,14 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
      */
     public function getErrorsByCode(array $codes)
     {
-        $result = [[]];
+        $result = [];
         foreach ($codes as $code) {
             if (isset($this->items['codes'][$code])) {
                 $result[] = $this->items['codes'][$code];
             }
         }
 
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

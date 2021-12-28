@@ -104,8 +104,15 @@ use Magento\Customer\Block\Widget\Name;
                     autocomplete="off" />
             </div>
         </div>
+        <div class="field choice" data-bind="scope: 'showPassword'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
     </fieldset>
-    <?= $block->getChildHtml('form_additional_info') ?>
+
+    <fieldset class="fieldset additional_info">
+        <?= $block->getChildHtml('form_additional_info') ?>
+    </fieldset>
+
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
@@ -171,6 +178,16 @@ script;
         "[data-container=new-password]": {
             "passwordStrengthIndicator": {
                 "formSelector": "form.form-edit-account"
+            }
+        },
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "showPassword": {
+                        "component": "Magento_Customer/js/show-password",
+                        "passwordSelector": "#current-password,#password,#password-confirmation"
+                    }
+                }
             }
         }
     }

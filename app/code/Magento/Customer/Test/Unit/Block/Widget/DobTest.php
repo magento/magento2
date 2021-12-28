@@ -17,8 +17,10 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Data\Form\FilterFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Date;
@@ -50,7 +52,7 @@ class DobTest extends TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/Y';
+    const DATE_FORMAT = 'M/dd/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
@@ -91,6 +93,16 @@ class DobTest extends TestCase
     private $_locale;
 
     /**
+     * @var EncoderInterface
+     */
+    private $encoder;
+
+    /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -109,17 +121,18 @@ class DobTest extends TestCase
         $cache->expects($this->any())->method('getFrontend')->willReturn($frontendCache);
 
         $objectManager = new ObjectManager($this);
-        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $localeResolver->expects($this->any())
+        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolver->expects($this->any())
             ->method('getLocale')
             ->willReturnCallback(
                 function () {
                     return $this->_locale;
                 }
             );
+        $localeResolver = $this->localeResolver;
         $timezone = $objectManager->getObject(
             Timezone::class,
-            ['localeResolver' => $localeResolver]
+            ['localeResolver' => $localeResolver, 'dateFormatterFactory' => new DateFormatterFactory()]
         );
 
         $this->_locale = Resolver::DEFAULT_LOCALE;
@@ -156,12 +169,17 @@ class DobTest extends TestCase
                 }
             );
 
+        $this->encoder = $this->getMockForAbstractClass(EncoderInterface::class);
+
         $this->_block = new Dob(
             $this->context,
             $this->createMock(Address::class),
             $this->customerMetadata,
             $this->createMock(Date::class),
-            $this->filterFactory
+            $this->filterFactory,
+            [],
+            $this->encoder,
+            $this->localeResolver
         );
     }
 
@@ -355,10 +373,15 @@ class DobTest extends TestCase
             [
                 'ar_SA',
                 preg_replace(
-                    '/[^MmDdYy\/\.\-]/',
-                    '',
-                    (new \IntlDateFormatter('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE))
-                        ->getPattern()
+                    '/(?<!d)d(?!d)/',
+                    'dd',
+                    preg_replace(
+                        '/[^MmDdYy\/\.\-]/',
+                        '',
+                        (new DateFormatterFactory())
+                            ->create('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE)
+                            ->getPattern()
+                    )
                 )
             ],
             [Resolver::DEFAULT_LOCALE, self::DATE_FORMAT],
@@ -595,5 +618,81 @@ class DobTest extends TestCase
             "data-validate=\"$validation\"",
             $this->_block->getHtmlExtraParams()
         );
+    }
+
+    /**
+     * Tests getTranslatedCalendarConfigJson()
+     *
+     * @param string $locale
+     * @param array $expectedArray
+     * @param string $expectedJson
+     * @dataProvider getTranslatedCalendarConfigJsonDataProvider
+     * @return void
+     */
+    public function testGetTranslatedCalendarConfigJson(
+        string $locale,
+        array $expectedArray,
+        string $expectedJson
+    ): void {
+        $this->_locale = $locale;
+
+        $this->encoder->expects($this->once())
+            ->method('encode')
+            ->with($expectedArray)
+            ->willReturn($expectedJson);
+
+        $this->assertEquals(
+            $expectedJson,
+            $this->_block->getTranslatedCalendarConfigJson()
+        );
+    }
+
+    /**
+     * Provider for testGetTranslatedCalendarConfigJson
+     *
+     * @return array
+     */
+    public function getTranslatedCalendarConfigJsonDataProvider()
+    {
+        return [
+            [
+                'locale' => 'en_US',
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'],
+                    'monthNamesShort' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    'dayNames' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    'dayNamesShort' => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    'dayNamesMin' => ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"dayNamesMin":["Su","Mo","Tu","We","Th","Fr","Sa"]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
+            ],
+            [
+                'locale' => 'de_DE',
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+                        'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                    'monthNamesShort' => ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni',
+                        'Juli', 'Aug.', 'Sept.', 'Okt.', 'Nov.', 'Dez.'],
+                    'dayNames' => ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+                    'dayNamesShort' => ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'],
+                    'dayNamesMin' => ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'],
+                ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["Januar","Februar","M\u00e4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],"monthNamesShort":["Jan.","Feb.","M\u00e4rz","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."],"dayNames":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],"dayNamesShort":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."],"dayNamesMin":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
+            ],
+        ];
     }
 }

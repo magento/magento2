@@ -137,6 +137,13 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
             ->with($customerId)
             ->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getItemsCount')->willReturn($emptyCount);
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(null);
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
 
         $this->model->execute($this->observerMock);
@@ -160,6 +167,13 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
             ->method('getActiveForCustomer')
             ->with($customerId)
             ->willThrowException($exception);
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerId')
+            ->with(null)
+            ->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(null);
         $this->quoteManagerMock->expects($this->once())->method('setGuest');
 
         $this->model->execute($this->observerMock);

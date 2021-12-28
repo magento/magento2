@@ -13,4 +13,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="\Magento\Quote\Model\QuoteManagement">
+        <plugin name="validate_purchase_order_number" type="Magento\OfflinePayments\Plugin\ValidatePurchaseOrderNumber"/>
+    </type>
 </config>

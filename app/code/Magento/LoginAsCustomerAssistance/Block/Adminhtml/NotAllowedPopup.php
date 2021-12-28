@@ -13,8 +13,6 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * Pop-up for Login as Customer button then Login as Customer is not allowed.
- *
- * @api
  */
 class NotAllowedPopup extends Template
 {

@@ -39,6 +39,11 @@ class Region implements \Magento\Framework\Data\Form\Element\Renderer\RendererIn
     protected $_countryFactory;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    private $_directoryHelper;
+
+    /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Escaper $escaper

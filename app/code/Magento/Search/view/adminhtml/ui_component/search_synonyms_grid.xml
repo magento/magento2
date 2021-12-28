@@ -65,7 +65,7 @@
                     <label translate="true">Store View</label>
                     <dataScope>store_id</dataScope>
                     <imports>
-                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                        <link name="visible">ns = ${ $.ns }, index = ${ $.index }:visible</link>
                     </imports>
                 </settings>
             </filterSelect>
@@ -76,7 +76,7 @@
                     <label translate="true">Website</label>
                     <dataScope>website_id</dataScope>
                     <imports>
-                        <link name="visible">ns = ${ $.ns }, componentType = column, index = ${ $.index }:visible</link>
+                        <link name="visible">ns = ${ $.ns }, index = ${ $.index }:visible</link>
                     </imports>
                 </settings>
             </filterSelect>
