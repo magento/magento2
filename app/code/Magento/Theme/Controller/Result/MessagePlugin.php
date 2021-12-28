@@ -11,7 +11,6 @@ use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Plugin for putting messages to cookies
@@ -61,11 +60,6 @@ class MessagePlugin
     protected $sessionConfig;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -73,7 +67,6 @@ class MessagePlugin
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
      * @param InlineInterface $inlineTranslate
      * @param ConfigInterface $sessionConfig
-     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
@@ -82,8 +75,7 @@ class MessagePlugin
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Framework\Serialize\Serializer\Json $serializer,
         InlineInterface $inlineTranslate,
-        ConfigInterface $sessionConfig,
-        ScopeConfigInterface $scopeConfig
+        ConfigInterface $sessionConfig
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
@@ -92,7 +84,6 @@ class MessagePlugin
         $this->interpretationStrategy = $interpretationStrategy;
         $this->inlineTranslate = $inlineTranslate;
         $this->sessionConfig = $sessionConfig;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -180,35 +171,10 @@ class MessagePlugin
             }
 
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
-
-            if( $configLifetime = $this->scopeConfig->getValue(
-                'web/cookie/cookie_lifetime',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) ) {
-                $publicCookieMetadata->setDuration($configLifetime);
-            } else {
-                $publicCookieMetadata->setDurationOneYear();
-            }
-
-            if( $configPath = $this->scopeConfig->getValue(
-                'web/cookie/cookie_path',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) ) {
-                $publicCookieMetadata->setPath($configPath);
-            } else {
-                 $publicCookieMetadata->setPath($this->sessionConfig->getCookiePath());
-            }
-            
+            $publicCookieMetadata->setDurationOneYear();
+            $publicCookieMetadata->setPath($this->sessionConfig->getCookiePath());
             $publicCookieMetadata->setHttpOnly(false);
-
             $publicCookieMetadata->setSameSite('Strict');
-
-            if( $configDomain = $this->scopeConfig->getValue(
-                'web/cookie/cookie_domain',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) ) {
-                $publicCookieMetadata->setDomain($configDomain);
-            }
 
             $this->cookieManager->setPublicCookie(
                 self::MESSAGES_COOKIES_NAME,
