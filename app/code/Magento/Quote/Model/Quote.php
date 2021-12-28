@@ -1557,10 +1557,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         if ($item) {
             $item->setQuote($this);
-            /**
-             * If we remove item from quote - we can't use multishipping mode
-             */
-            $this->setIsMultiShipping(false);
             $item->isDeleted(true);
             if ($item->getHasChildren()) {
                 foreach ($item->getChildren() as $child) {
