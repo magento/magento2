@@ -25,8 +25,8 @@ class Renderer implements RendererInterface
         'css',
         'ttf',
         'woff',
-        'woff2',  
-        'ico',        
+        'woff2',
+        'ico',
         'png',
         'webp',
         'eot',
@@ -352,7 +352,7 @@ class Renderer implements RendererInterface
     protected function addDefaultAttributes($contentType, $attributes)
     {
         if ($contentType === 'js') {
-            if(strpos($attributes, 'rel="preload"') !== false){
+            if (strpos($attributes, 'rel="preload"') !== false) {
                 return $attributes;
             } else {
                 return ' type="text/javascript"' . $attributes;
@@ -364,9 +364,9 @@ class Renderer implements RendererInterface
         }
 
         if ($this->canTypeBeFont($contentType)) {
-            if(strpos($attributes, 'as="image"') !== false){
+            if (strpos($attributes, 'as="image"') !== false) {
                 return $attributes;
-            } else {                
+            } else {
                 return ' rel="preload" as="font" crossorigin="anonymous"';
             }
         }
@@ -385,7 +385,7 @@ class Renderer implements RendererInterface
     {
         switch ($contentType) {
             case 'js':
-                if(strpos($attributes, 'rel="preload"') !== false){
+                if (strpos($attributes, 'rel="preload"') !== false) {
                     $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
                 } else {
                     $groupTemplate = '<script' . $attributes . ' src="%s"></script>' . "\n";
