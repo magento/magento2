@@ -41,7 +41,7 @@ define([
 
             $.mage.cookies.set('mage-messages', '', {
                 samesite: 'strict',
-                domain: this.cookieDomain
+                domain: ''
             });
         },
 
