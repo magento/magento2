@@ -156,71 +156,7 @@ class SearchResultApplier implements SearchResultApplierInterface
             }
 
             if ($categoryId) {
-                $storeId = $this->collection->getStoreId();
-                $searchOrders = $searchCriteria->getSortOrders();
-                $searchOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $searchOrders);
-                $defaultColumnsFilter = ['is_salable', 'position', 'name', 'price', 'entity_id'];
-
-                $connection = $this->collection->getConnection();
-                $query = clone $connection->select()
-                    ->reset(\Magento\Framework\DB\Select::ORDER)
-                    ->reset(\Magento\Framework\DB\Select::LIMIT_COUNT)
-                    ->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET)
-                    ->reset(\Magento\Framework\DB\Select::COLUMNS);
-
-                $selectColumns = [
-                    'e.entity_id',
-                    'cat_index.position AS cat_index_position',
-                    'stock_status_index.stock_status AS is_salable'
-                ];
-                $query->join(
-                    ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
-                    'stock_status_index.product_id = e.entity_id',
-                    []
-                )->join(
-                    ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
-                    'cat_index.product_id = e.entity_id'
-                    . ' AND cat_index.category_id = ' . $categoryId
-                    . ' AND cat_index.store_id = ' . $storeId,
-                    []
-                );
-                foreach ($searchOrders as $field => $dir) {
-                    if ($field === 'name') {
-                        $selectColumns[] = 'product.value AS name';
-                        $query->join(
-                            ['product' => $this->collection->getTable('catalog_product_entity_varchar')],
-                            'product.row_id = e.entity_id ' .
-                            'AND product.attribute_id = (' .
-                            'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")',
-                            []
-                        );
-                    } else if ($field === 'price') {
-                        $selectColumns[] = 'price_index.max_price AS price';
-                        $query->join(
-                            ['price_index' => $this->collection->getTable('catalog_product_index_price')],
-                            'price_index.entity_id = e.entity_id'
-                            . ' AND price_index.customer_group_id = 0'
-                            . ' AND price_index.website_id = (Select website_id FROM store WHERE store_id = '
-                            . $storeId . ')',
-                            []
-                        );
-                    }
-                    if (in_array($field, $defaultColumnsFilter, true)) {
-                        $query->order(new \Zend_Db_Expr("{$field} {$dir}"));
-                    }
-                }
-
-                $query->from(
-                    ['e' => $this->collection->getTable('catalog_product_entity')],
-                    $selectColumns
-                );
-
-                $query->limit(
-                    $searchCriteria->getPageSize(),
-                    $searchCriteria->getCurrentPage() * $searchCriteria->getPageSize()
-                );
-                $resultSet = $this->collection->getConnection()->fetchAssoc($query);
-
+                $resultSet = $this->categoryProductByCustomSortOrder($categoryId);
                 foreach ($resultSet as $item) {
                     $ids[] = (int)$item['entity_id'];
                 }
@@ -228,6 +164,81 @@ class SearchResultApplier implements SearchResultApplierInterface
         }
 
         return $ids;
+    }
+
+    /**
+     * Fetch product resultset by custom sort orders
+     *
+     * @param int $categoryId
+     * @return array
+     */
+    private function categoryProductByCustomSortOrder($categoryId): array
+    {
+        $storeId = $this->collection->getStoreId();
+        $searchCriteria = $this->searchResult->getSearchCriteria();
+        $searchOrders = $searchCriteria->getSortOrders();
+        $searchOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $searchOrders);
+        $defaultColumnsFilter = ['is_salable', 'position', 'name', 'price', 'entity_id'];
+
+        $connection = $this->collection->getConnection();
+        $query = clone $connection->select()
+            ->reset(\Magento\Framework\DB\Select::ORDER)
+            ->reset(\Magento\Framework\DB\Select::LIMIT_COUNT)
+            ->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET)
+            ->reset(\Magento\Framework\DB\Select::COLUMNS);
+
+        $selectColumns = [
+            'e.entity_id',
+            'cat_index.position AS cat_index_position',
+            'stock_status_index.stock_status AS is_salable'
+        ];
+        $query->join(
+            ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
+            'stock_status_index.product_id = e.entity_id',
+            []
+        )->join(
+            ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
+            'cat_index.product_id = e.entity_id'
+            . ' AND cat_index.category_id = ' . $categoryId
+            . ' AND cat_index.store_id = ' . $storeId,
+            []
+        );
+        foreach ($searchOrders as $field => $dir) {
+            if ($field === 'name') {
+                $selectColumns[] = 'product.value AS name';
+                $query->join(
+                    ['product' => $this->collection->getTable('catalog_product_entity_varchar')],
+                    'product.row_id = e.entity_id ' .
+                    'AND product.attribute_id = (' .
+                    'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")',
+                    []
+                );
+            } elseif ($field === 'price') {
+                $selectColumns[] = 'price_index.max_price AS price';
+                $query->join(
+                    ['price_index' => $this->collection->getTable('catalog_product_index_price')],
+                    'price_index.entity_id = e.entity_id'
+                    . ' AND price_index.customer_group_id = 0'
+                    . ' AND price_index.website_id = (Select website_id FROM store WHERE store_id = '
+                    . $storeId . ')',
+                    []
+                );
+            }
+            if (in_array($field, $defaultColumnsFilter, true)) {
+                $query->order(new \Zend_Db_Expr("{$field} {$dir}"));
+            }
+        }
+
+        $query->from(
+            ['e' => $this->collection->getTable('catalog_product_entity')],
+            $selectColumns
+        );
+
+        $query->limit(
+            $searchCriteria->getPageSize(),
+            $searchCriteria->getCurrentPage() * $searchCriteria->getPageSize()
+        );
+        return $connection->fetchAssoc($query);
     }
 
     /**
