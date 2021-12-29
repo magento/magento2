@@ -65,13 +65,14 @@ class OrderFilter
      *
      * @param array $args
      * @param int $userId
-     * @param int $storeId
+     * @param string|null $storeId
      * @return FilterGroup[]
+     * @throws InputException
      */
     public function createFilterGroups(
         array $args,
         int $userId,
-        ?int $storeId = null
+        ?string $storeId = null
     ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
@@ -81,7 +82,7 @@ class OrderFilter
 
         if ($storeId !== null) {
             $this->filterGroupBuilder->setFilters(
-                [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
+                [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('in')->create()]
             );
             $filterGroups[] = $this->filterGroupBuilder->create();
         }
