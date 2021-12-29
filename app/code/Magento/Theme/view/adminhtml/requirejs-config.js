@@ -47,7 +47,6 @@ var config = {
             'collapsible':                        'mage/collapsible',
             'menu':                               'mage/backend/menu',
             'jstree':                             'jquery/jstree/jquery.jstree',
-            'details':                            'jquery/jquery.details',
             'jquery-ui-modules/widget':           'jquery/ui',
             'jquery-ui-modules/core':             'jquery/ui',
             'jquery-ui-modules/accordion':        'jquery/ui',
@@ -89,7 +88,14 @@ var config = {
         'mage/backend/bootstrap',
         'mage/adminhtml/globals'
     ],
+    config: {
+        mixins: {
+            'jquery/jquery-ui': {
+                'jquery/patches/jquery-ui-sortable': true
+            }
+        }
+    },
     'paths': {
-        'jquery/ui': 'jquery/jquery-ui-1.9.2'
+        'jquery/ui': 'jquery/jquery-ui'
     }
 };

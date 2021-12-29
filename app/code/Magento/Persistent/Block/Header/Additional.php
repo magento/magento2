@@ -66,7 +66,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
         Json $jsonSerializer = null,
         Data $persistentHelper = null
     ) {
-        $this->isScopePrivate = true;
+        $this->_isScopePrivate = true;
         $this->_customerViewHelper = $customerViewHelper;
         $this->_persistentSessionHelper = $persistentSessionHelper;
         $this->customerRepository = $customerRepository;

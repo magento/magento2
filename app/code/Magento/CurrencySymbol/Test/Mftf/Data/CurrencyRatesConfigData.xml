@@ -32,6 +32,12 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetCurrencyRHDBaseConfig">
+        <data key="path">currency/options/base</data>
+        <data key="value">RHD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
     <entity name="SetCurrencyAUDBaseConfig">
         <data key="path">currency/options/base</data>
         <data key="value">AUD</data>
@@ -59,6 +65,12 @@
     <entity name="SetAllowedCurrenciesConfigForEUR">
         <data key="path">currency/options/allow</data>
         <data key="value">EUR</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetAllowedCurrenciesConfigForRHD">
+        <data key="path">currency/options/allow</data>
+        <data key="value">RHD</data>
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>

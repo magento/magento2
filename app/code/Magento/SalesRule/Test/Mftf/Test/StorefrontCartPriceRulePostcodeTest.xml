@@ -33,7 +33,7 @@
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createPreReqProduct" stepKey="deletePreReqProduct"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create the rule... -->
@@ -66,7 +66,7 @@
         <see selector="{{AdminCartPriceRulesSection.messages}}" userInput="You saved the rule." stepKey="seeSuccessMessage"/>
 
         <!-- Add the product we created to our cart -->
-        <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$createPreReqProduct.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
@@ -81,8 +81,10 @@
         <!-- See discount if we use valid postcode -->
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="78613" stepKey="fillPostcode"/>
         <waitForPageLoad stepKey="waitForPostcode1"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$9.99" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="9.99"/>
+        </actionGroup>
 
         <!-- Do not see discount with other postcode -->
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="90210" stepKey="fillPostcode2"/>

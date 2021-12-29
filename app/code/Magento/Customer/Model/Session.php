@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -11,6 +13,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Session\Generic;
 
 /**
  * Customer session model
@@ -25,8 +28,6 @@ use Magento\Framework\App\ObjectManager;
 class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
-     * Customer object
-     *
      * @var CustomerData
      */
     protected $_customer;
@@ -37,29 +38,21 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_customerResource;
 
     /**
-     * Customer model
-     *
      * @var Customer
      */
     protected $_customerModel;
 
     /**
-     * Flag with customer id validations result
-     *
      * @var bool|null
      */
     protected $_isCustomerIdChecked = null;
 
     /**
-     * Customer URL
-     *
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
 
     /**
-     * Core url
-     *
      * @var \Magento\Framework\Url\Helper\Data|null
      */
     protected $_coreUrl = null;
@@ -70,7 +63,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_configShare;
 
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var Generic
      */
     protected $_session;
 
@@ -132,7 +125,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param ResourceCustomer $customerResource
      * @param CustomerFactory $customerFactory
      * @param \Magento\Framework\UrlFactory $urlFactory
-     * @param \Magento\Framework\Session\Generic $session
+     * @param Generic $session
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param CustomerRepositoryInterface $customerRepository
@@ -158,7 +151,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         ResourceCustomer $customerResource,
         CustomerFactory $customerFactory,
         \Magento\Framework\UrlFactory $urlFactory,
-        \Magento\Framework\Session\Generic $session,
+        Generic $session,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Http\Context $httpContext,
         CustomerRepositoryInterface $customerRepository,
@@ -176,6 +169,10 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->customerRepository = $customerRepository;
         $this->_eventManager = $eventManager;
         $this->_httpContext = $httpContext;
+        $this->groupManagement = $groupManagement;
+        $this->response = $response;
+        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
+            ->get(AccountConfirmation::class);
         parent::__construct(
             $request,
             $sidResolver,
@@ -187,10 +184,6 @@ class Session extends \Magento\Framework\Session\SessionManager
             $cookieMetadataFactory,
             $appState
         );
-        $this->groupManagement = $groupManagement;
-        $this->response = $response;
-        $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
-            ->get(AccountConfirmation::class);
         $this->_eventManager->dispatch('customer_session_init', ['customer_session' => $this]);
     }
 
@@ -335,7 +328,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Retrieve customer id from current session
      *
-     * @api
      * @return int|null
      */
     public function getCustomerId()
@@ -404,7 +396,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Checking customer login status
      *
-     * @api
      * @return bool
      */
     public function isLoggedIn()
@@ -474,7 +465,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authorization customer by identifier
      *
-     * @api
      * @param   int $customerId
      * @return  bool
      */
@@ -492,7 +482,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Logout customer
      *
-     * @api
      * @return $this
      */
     public function logout()
@@ -508,8 +497,9 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   bool|null $loginUrl
-     * @return  bool
+     * @param bool|null $loginUrl
+     * @return bool
+     * @throws \Magento\Framework\Exception\SessionException
      */
     public function authenticate($loginUrl = null)
     {

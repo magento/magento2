@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-228"/>
             <group value="bundle"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create category -->
@@ -96,7 +97,7 @@
 
             <!-- Perform CLI reindex -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
             </actionGroup>
         </before>
         <after>

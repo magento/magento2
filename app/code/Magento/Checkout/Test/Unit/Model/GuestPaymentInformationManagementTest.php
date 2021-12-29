@@ -9,6 +9,7 @@ namespace Magento\Checkout\Test\Unit\Model;
 
 use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\GuestPaymentInformationManagement;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
@@ -74,6 +75,11 @@ class GuestPaymentInformationManagementTest extends TestCase
      */
     private $limiterMock;
 
+    /**
+     * @var PaymentSavingRateLimiterInterface|MockObject
+     */
+    private $saveLimiterMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -92,6 +98,7 @@ class GuestPaymentInformationManagementTest extends TestCase
         );
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->limiterMock = $this->getMockForAbstractClass(PaymentProcessingRateLimiterInterface::class);
+        $this->saveLimiterMock = $this->getMockForAbstractClass(PaymentSavingRateLimiterInterface::class);
         $this->model = $objectManager->getObject(
             GuestPaymentInformationManagement::class,
             [
@@ -100,7 +107,8 @@ class GuestPaymentInformationManagementTest extends TestCase
                 'cartManagement' => $this->cartManagementMock,
                 'cartRepository' => $this->cartRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
-                'paymentsRateLimiter' => $this->limiterMock
+                'paymentsRateLimiter' => $this->limiterMock,
+                'savingRateLimiter' => $this->saveLimiterMock
             ]
         );
         $objectManager->setBackwardCompatibleProperty($this->model, 'logger', $this->loggerMock);
@@ -159,11 +167,10 @@ class GuestPaymentInformationManagementTest extends TestCase
      */
     public function testSavePaymentInformationLimited(): void
     {
-        $this->expectException(PaymentProcessingRateLimitExceededException::class);
-        $this->limiterMock->method('limit')
+        $this->saveLimiterMock->method('limit')
             ->willThrowException(new PaymentProcessingRateLimitExceededException(__('Error')));
 
-        $this->savePayment();
+        $this->assertFalse($this->savePayment());
     }
 
     public function testSavePaymentInformationWithoutBillingAddress()
@@ -173,6 +180,7 @@ class GuestPaymentInformationManagementTest extends TestCase
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
         $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->expects($this->any())->method('getItemsQty')->willReturn(1);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
 
@@ -203,6 +211,7 @@ class GuestPaymentInformationManagementTest extends TestCase
 
         $quoteMock = $this->createMock(Quote::class);
         $quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);
+        $quoteMock->expects($this->any())->method('getItemsQty')->willReturn(1);
         $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
 
         $quoteIdMask = $this->getMockBuilder(QuoteIdMask::class)
@@ -221,6 +230,35 @@ class GuestPaymentInformationManagementTest extends TestCase
         $exception = new LocalizedException($phrase);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
+        $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
+    }
+
+    public function testSavePaymentInformationAndPlaceOrderWithDisabledProduct()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Some of the products are disabled.');
+        $cartId = 100;
+        $email = 'email@magento.com';
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);
+        $quoteMock->expects($this->any())->method('getItemsQty')->willReturn(0);
+        $this->cartRepositoryMock->method('getActive')->with($cartId)->willReturn($quoteMock);
+
+        $quoteIdMask = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getQuoteId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteIdMaskFactoryMock->method('create')->willReturn($quoteIdMask);
+        $quoteIdMask->method('load')->with($cartId, 'masked_id')->willReturnSelf();
+        $quoteIdMask->method('getQuoteId')->willReturn($cartId);
+
+        $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $this->paymentMethodManagementMock->expects($this->never())->method('set')->with($cartId, $paymentMock);
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
     }
 
@@ -259,6 +297,9 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->cartRepositoryMock->method('getActive')
             ->with($cartId)
             ->willReturn($quote);
+        $quote->expects($this->any())
+            ->method('getItemsQty')
+            ->willReturn(1);
         $quote->expects($this->any())
             ->method('getBillingAddress')
             ->willReturn($quoteBillingAddress);

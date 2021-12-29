@@ -356,12 +356,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             case 'text':
             case 'gallery':
             case 'media_image':
-            case 'multiselect':
                 $field = 'varchar';
                 break;
 
             case 'image':
             case 'textarea':
+            case 'multiselect':
                 $field = 'text';
                 break;
 
