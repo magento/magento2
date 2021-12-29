@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider;
 
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Ui\DataProvider\Attributes;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class AttributesTest extends TestCase
@@ -37,7 +38,6 @@ class AttributesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -52,14 +52,11 @@ class AttributesTest extends TestCase
         $collectionAttributeHandlerMock->expects($this->once())
             ->method('getApplicableAttributes')
             ->willReturn($this->collectionMock);
-        $this->attributes = $objectManager->getObject(
-            Attributes::class,
-            [
-                'name' => 'myName',
-                'primaryFieldName' => 'myPrimaryFieldName',
-                'requestFieldName' => 'myRequestFieldName',
-                'configurableAttributeHandler' => $collectionAttributeHandlerMock
-            ]
+        $this->attributes = new Attributes(
+            'myName',
+            'myPrimaryFieldName',
+            'myRequestFieldName',
+            $collectionAttributeHandlerMock
         );
     }
 
@@ -77,6 +74,24 @@ class AttributesTest extends TestCase
         $this->collectionMock->expects($this->once())
             ->method('getSelect')
             ->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())
+            ->method('where')
+            ->with('(`apply_to` IS NULL) OR
+            (
+                FIND_IN_SET(' .
+                    sprintf("'%s'", Type::TYPE_SIMPLE) . ',
+                    `apply_to`
+                ) AND
+                FIND_IN_SET(' .
+                    sprintf("'%s'", Type::TYPE_VIRTUAL) . ',
+                    `apply_to`
+                ) AND
+                FIND_IN_SET(' .
+                    sprintf("'%s'", Configurable::TYPE_CODE) . ',
+                    `apply_to`
+                )
+             )')
+            ->willReturnSelf();
         $this->collectionMock->expects($this->once())
             ->method('getItems')
             ->willReturn([new DataObject(['attribute' => 'color'])]);
