@@ -294,6 +294,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store customer/account_share/scope 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
@@ -345,7 +346,15 @@ QUERY;
         $this->assertEquals(7, $response['customer']['orders']['total_count']);
         $this->assertCount(7, $response['customer']['orders']['items']);
         $customerOrderItems = $response['customer']['orders']['items'];
-        $expectedOrderNumbers = ['100000002', '100000003', '100000004', '100000005','100000006', '100000007', '100000008'];
+        $expectedOrderNumbers = [
+            '100000002',
+            '100000003',
+            '100000004',
+            '100000005',
+            '100000006',
+            '100000007',
+            '100000008'
+        ];
         $actualOrdersFromResponse = [];
         foreach ($customerOrderItems as $order) {
             array_push($actualOrdersFromResponse, $order['number']);
@@ -354,6 +363,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store customer/account_share/scope 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
@@ -485,7 +495,7 @@ QUERY;
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         $key = 0;
         foreach ($orders as $order) {
-            $orderId = base64_encode($order->getEntityId());
+            $orderId = base64_encode((string)$order->getEntityId());
             $orderNumber = $order->getIncrementId();
             $orderItemInResponse = $customerOrderItemsInResponse[$key];
             $this->assertNotEmpty($orderItemInResponse['id']);
@@ -703,6 +713,7 @@ QUERY;
      * @param int $expectedCount
      * @throws AuthenticationException
      * @dataProvider dataProviderMultiStores
+     * @magentoConfigFixture default_store customer/account_share/scope 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_with_order_items_two_storeviews.php
      */

@@ -26,6 +26,7 @@ use Magento\Store\Api\StoreWebsiteRelationInterface;
 
 /**
  * Orders data resolver
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerOrders implements ResolverInterface
 {
@@ -69,6 +70,9 @@ class CustomerOrders implements ResolverInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      * @param OrderFormatter $orderFormatter
+     * @param ConfigShare $customerShare
+     * @param CustomerRepository $customerRepository
+     * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
@@ -93,7 +97,7 @@ class CustomerOrders implements ResolverInterface
      */
     public function resolve(
         Field $field,
-              $context,
+        $context,
         ResolveInfo $info,
         array $value = null,
         array $args = null
@@ -158,6 +162,8 @@ class CustomerOrders implements ResolverInterface
     }
 
     /**
+     * Get store ids
+     *
      * @param int $userId
      * @return string
      * @throws GraphQlInputException
