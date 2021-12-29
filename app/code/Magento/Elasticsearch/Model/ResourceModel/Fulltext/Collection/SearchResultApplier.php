@@ -74,7 +74,7 @@ class SearchResultApplier implements SearchResultApplierInterface
             return;
         }
 
-        $ids = $this->getProductIdsBySalability();
+        $ids = $this->getProductIdsBySaleability();
 
         if (count($ids) == 0) {
             $items = $this->sliceItems($this->searchResult->getItems(), $this->size, $this->currentPage);
@@ -135,67 +135,95 @@ class SearchResultApplier implements SearchResultApplierInterface
      *
      * @return array
      */
-    private function getProductIdsBySalability(): array
+    private function getProductIdsBySaleability(): array
     {
         $ids = [];
 
-        if (!$this->getShowOutOfStockStatus() || !$this->collection->getFlag('has_stock_status_filter')) {
+        if (!$this->hasShowOutOfStockStatus()) {
             return $ids;
         }
 
-        $categoryId = null;
-        $searchCriteria = $this->searchResult->getSearchCriteria();
-        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'category_ids') {
-                    $categoryId = $filter->getValue();
-                    break 2;
+        if ($this->collection->getFlag('has_stock_status_filter')) {
+            $categoryId = null;
+            $searchCriteria = $this->searchResult->getSearchCriteria();
+            foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+                foreach ($filterGroup->getFilters() as $filter) {
+                    if ($filter->getField() === 'category_ids') {
+                        $categoryId = $filter->getValue();
+                        break 2;
+                    }
                 }
             }
-        }
 
-        if ($categoryId) {
-            $storeId = $this->collection->getStoreId();
-            $searchOrders = $searchCriteria->getSortOrders();
+            if ($categoryId) {
+                $storeId = $this->collection->getStoreId();
+                $searchOrders = $searchCriteria->getSortOrders();
+                $searchOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $searchOrders);
+                $defaultColumnsFilter = ['is_salable', 'position', 'name', 'price', 'entity_id'];
 
-            $connection = $this->collection->getConnection();
-            $query = clone $connection->select()
-                ->reset(\Magento\Framework\DB\Select::ORDER)
-                ->reset(\Magento\Framework\DB\Select::LIMIT_COUNT)
-                ->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET)
-                ->reset(\Magento\Framework\DB\Select::COLUMNS)
-                ->from(
-                    ['product' => $this->collection->getTable('catalog_product_entity')],
-                    [
-                        'product.entity_id',
-                        'cat_index.position AS cat_index_position',
-                        'stock_status_index.stock_status AS is_salable'
-                    ]
-                )->join(
+                $connection = $this->collection->getConnection();
+                $query = clone $connection->select()
+                    ->reset(\Magento\Framework\DB\Select::ORDER)
+                    ->reset(\Magento\Framework\DB\Select::LIMIT_COUNT)
+                    ->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET)
+                    ->reset(\Magento\Framework\DB\Select::COLUMNS);
+
+                $selectColumns = [
+                    'e.entity_id',
+                    'cat_index.position AS cat_index_position',
+                    'stock_status_index.stock_status AS is_salable'
+                ];
+                $query->join(
                     ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
-                    'stock_status_index.product_id = product.entity_id',
+                    'stock_status_index.product_id = e.entity_id',
                     []
                 )->join(
                     ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
-                    'cat_index.product_id = product.entity_id'
+                    'cat_index.product_id = e.entity_id'
                     . ' AND cat_index.category_id = ' . $categoryId
                     . ' AND cat_index.store_id = ' . $storeId,
                     []
                 );
-            $query->order(new \Zend_Db_Expr('is_salable DESC'));
+                foreach ($searchOrders as $field => $dir) {
+                    if ($field === 'name') {
+                        $selectColumns[] = 'product.value AS name';
+                        $query->join(
+                            ['product' => $this->collection->getTable('catalog_product_entity_varchar')],
+                            'product.row_id = e.entity_id ' .
+                            'AND product.attribute_id = (' .
+                            'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")',
+                            []
+                        );
+                    } else if ($field === 'price') {
+                        $selectColumns[] = 'price_index.max_price AS price';
+                        $query->join(
+                            ['price_index' => $this->collection->getTable('catalog_product_index_price')],
+                            'price_index.entity_id = e.entity_id'
+                            . ' AND price_index.customer_group_id = 0'
+                            . ' AND price_index.website_id = (Select website_id FROM store WHERE store_id = '
+                            . $storeId . ')',
+                            []
+                        );
+                    }
+                    if (in_array($field, $defaultColumnsFilter, true)) {
+                        $query->order(new \Zend_Db_Expr("{$field} {$dir}"));
+                    }
+                }
 
-            if (array_key_exists('position', $searchOrders)) {
-                $query->order(new \Zend_Db_Expr('position ASC'));
-            }
-            $query->order(new \Zend_Db_Expr('entity_id DESC'));
+                $query->from(
+                    ['e' => $this->collection->getTable('catalog_product_entity')],
+                    $selectColumns
+                );
 
-            $offset = ($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
-            $offset = (int)$offset >= 0 ? (int)$offset : 0;
-            $query->limitPage($offset, $searchCriteria->getPageSize());
-            $resultSet = $this->collection->getConnection()->fetchAssoc($query);
+                $query->limit(
+                    $searchCriteria->getPageSize(),
+                    $searchCriteria->getCurrentPage() * $searchCriteria->getPageSize()
+                );
+                $resultSet = $this->collection->getConnection()->fetchAssoc($query);
 
-            foreach ($resultSet as $item) {
-                $ids[] = (int)$item['entity_id'];
+                foreach ($resultSet as $item) {
+                    $ids[] = (int)$item['entity_id'];
+                }
             }
         }
 
@@ -207,7 +235,7 @@ class SearchResultApplier implements SearchResultApplierInterface
      *
      * @return bool
      */
-    private function getShowOutOfStockStatus(): bool
+    private function hasShowOutOfStockStatus(): bool
     {
         return (bool) $this->scopeConfig->getValue('cataloginventory/options/show_out_of_stock');
     }
