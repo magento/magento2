@@ -1350,10 +1350,8 @@ XMLAuth;
                 }
             }
         }
-        if (!$statuses) {
-            $statuses = __('Empty response');
-        }
-        return $statuses;
+
+        return $statuses ?: __('Empty response');
     }
 
     /**
