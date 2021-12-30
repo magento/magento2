@@ -93,7 +93,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_date;
 
     /**
-     * Problem factory
+     * Factory of Problem
      *
      * @var \Magento\Newsletter\Model\ProblemFactory
      */
