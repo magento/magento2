@@ -168,8 +168,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
         $this->_transportBuilder = $transportBuilder;
 
-//        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-//        $this->timezone = $timezone ?: $objectManager->get(TimezoneInterface::class);
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->timezone = $timezone ?: $objectManager->get(TimezoneInterface::class);
         $this->utcConverter = $utcConverter ?? $objectManager->get(LocalizedDateToUtcConverterInterface::class);
     }
 
