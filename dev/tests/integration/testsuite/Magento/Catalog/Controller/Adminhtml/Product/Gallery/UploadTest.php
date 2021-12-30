@@ -24,12 +24,12 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class UploadTest extends AbstractBackendController
 {
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $resource = 'Magento_Catalog::products';
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $uri = 'backend/catalog/product_gallery/upload';
 
@@ -87,9 +87,9 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($jsonBody['url'], $expectation['url']);
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertArrayNotHasKey('errorcode', $jsonBody);
-        $this->assertFileExists(
+        $this->assertTrue($this->mediaDirectory->isExist(
             $this->getFileAbsolutePath($expectation['tmp_media_path'])
-        );
+        ));
     }
 
     /**
@@ -198,7 +198,7 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'message' => 'Wrong file size.',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/a/magento_empty.jpg',
                 ],
@@ -206,10 +206,23 @@ class UploadTest extends AbstractBackendController
             'upload_without_image' => [
                 'file' => [],
                 'expectation' => [
-                    'message' => '$_FILES array is empty',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                 ],
             ],
+            'upload_wrong_png' => [
+                'file' => [
+                    'copy_file' => true,
+                    'name' => 'magento_wrong.png',
+                    'type' => 'image/png',
+                    'current_path' => '/../../../../_files',
+                ],
+                'expectation' => [
+                    'message' => 'Something went wrong while saving the file(s).',
+                    'errorcode' => 0,
+                    'tmp_media_path' => '/m/w/magento_wrong.png',
+                ],
+            ]
         ];
     }
 

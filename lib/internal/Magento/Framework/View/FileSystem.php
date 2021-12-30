@@ -189,10 +189,10 @@ class FileSystem
     }
 
     /**
-     * Get a relative path between $relatedPath and $path paths as if $path was to refer to $relatedPath
-     * relatively of itself
-     *
      * Returns new calculated relative path.
+     *
+     * Get a relative path between $relatedPath and $path paths,
+     * as if $path was to refer to $relatedPath relatively of itself.
      * Examples:
      *   $path: /some/directory/one/file.ext
      *   $relatedPath: /some/directory/two/another/file.ext

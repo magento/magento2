@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<div>
+    <p>
+        <strong><?= $block->escapeHtml(__('Warning')) ?></strong>
+        <?= $block->escapeHtml(__(': You are about to set max session size in storefront to be lower than ' .
+            ' recommended default session size. Low max session size in storefront could break storefront ' .
+            'functionalities such as customer login. Are you sure you want to make this change?')) ?>
+    </p>
+</div>

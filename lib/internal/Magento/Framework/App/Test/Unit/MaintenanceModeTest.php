@@ -95,6 +95,10 @@ class MaintenanceModeTest extends TestCase
         $this->flagDir->expects($this->exactly(2))
             ->method('isExist')
             ->willReturnMap($mapisExist);
+        $this->flagDir->expects($this->once())
+            ->method('readFile')
+            ->with(MaintenanceMode::IP_FILENAME)
+            ->willReturn('');
         $this->assertFalse($this->model->isOn());
     }
 
