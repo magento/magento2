@@ -224,7 +224,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
                 'template_text',
                 __(
                     'Follow this link to unsubscribe <!-- This tag is for unsubscribe link  -->' .
-                    '<a href="{{var subscriber.getUnsubscriptionLink()}}">{{var subscriber.getUnsubscriptionLink()}}' .
+                    '<a href="{{var subscriber_data.unsubscription_link}}">{{var subscriber_data.unsubscription_link}}' .
                     '</a>'
                 )
             );

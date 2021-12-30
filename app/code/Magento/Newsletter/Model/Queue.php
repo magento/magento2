@@ -259,7 +259,12 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             $transport = $this->_transportBuilder->setTemplateOptions(
                 ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId()]
             )->setTemplateVars(
-                ['subscriber' => $item]
+                [
+                    'subscriber' => $item,
+                    'subscriber_data' => [
+                        'unsubscription_link' => $item->getUnsubscriptionLink()
+                    ]
+                ]
             )->setFrom(
                 ['name' => $this->getNewsletterSenderName(), 'email' => $this->getNewsletterSenderEmail()]
             )->addTo(

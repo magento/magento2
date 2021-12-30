@@ -115,10 +115,8 @@ class StrictResolver implements VariableResolverInterface
                 ...$stackArgs[$i]['args']
             );
         } else {
-            $stackArgs[$i]['variable'] = call_user_func_array(
-                [$stackArgs[$i - 1]['variable'], $stackArgs[$i]['name']],
-                $stackArgs[$i]['args']
-            );
+            $dataKey = $this->extractDataKeyFromGetter($stackArgs[$i]['name']);
+            $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']->getData($dataKey);
         }
     }
 
