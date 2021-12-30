@@ -48,14 +48,14 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_template;
 
     /**
-     * Subscribers collection
+     * Subscriber collection
      *
      * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
      */
     protected $_subscribersCollection;
 
     /**
-     * Save stores flag.
+     * Flag for Save Stores.
      *
      * @var boolean
      */
@@ -68,15 +68,15 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      */
     protected $_stores = [];
 
-    const STATUS_NEVER = 0;
+    public const STATUS_NEVER = 0;
 
-    const STATUS_SENDING = 1;
+    public const STATUS_SENDING = 1;
 
-    const STATUS_CANCEL = 2;
+    public const STATUS_CANCEL = 2;
 
-    const STATUS_SENT = 3;
+    public const STATUS_SENT = 3;
 
-    const STATUS_PAUSE = 4;
+    public const STATUS_PAUSE = 4;
 
     /**
      * Filter for newsletter text
@@ -86,7 +86,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_templateFilter;
 
     /**
-     * Date
+     * Datetime
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
@@ -100,7 +100,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected $_problemFactory;
 
     /**
-     * Template factory
+     * Factory of Template
      *
      * @var \Magento\Newsletter\Model\TemplateFactory
      */
@@ -168,8 +168,8 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         $this->_subscribersCollection = $subscriberCollectionFactory->create();
         $this->_transportBuilder = $transportBuilder;
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->timezone = $timezone ?: $objectManager->get(TimezoneInterface::class);
+//        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+//        $this->timezone = $timezone ?: $objectManager->get(TimezoneInterface::class);
         $this->utcConverter = $utcConverter ?? $objectManager->get(LocalizedDateToUtcConverterInterface::class);
     }
 
