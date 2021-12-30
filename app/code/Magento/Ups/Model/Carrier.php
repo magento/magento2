@@ -1350,10 +1350,9 @@ XMLAuth;
                 }
             }
         }
-        if (empty($statuses)) {
+        if (!$statuses) {
             $statuses = __('Empty response');
         }
-
         return $statuses;
     }
 
