@@ -37,8 +37,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         } elseif ($visitorId) {
             $this->addFieldToFilter('visitor_id', $visitorId);
         } else {
-            $this->addFieldToFilter('visitor_id', $visitorId)
-                ->addFieldToFilter('customer_id', $customerId);
+            $this->_totalRecords = 0;
+            $this->_setIsLoaded(true);
         }
 
         return $this;

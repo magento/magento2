@@ -19,6 +19,12 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      */
     private $synchronizer;
 
+    /** @var Session */
+    private $session;
+
+    /** @var Visitor */
+    private $visitor;
+
     /**
      * @var ProductRepository
      */
@@ -30,6 +36,8 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->session = $objectManager->get(\Magento\Customer\Model\Session::class);
+        $this->visitor = $objectManager->get(\Magento\Customer\Model\Visitor::class);
 
         $this->synchronizer = $objectManager->get(Synchronizer::class);
         $this->productRepository = $objectManager->get(ProductRepository::class);
@@ -109,5 +117,85 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->synchronizer->syncActions($productsData, '');
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetAllActionsWithoutCustomerAndVisitor(): void
+    {
+        $collection = $this->synchronizer->getAllActions();
+        $this->assertEquals($collection->getSize(), 0);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetAllActionsOfVisitor(): void
+    {
+        $this->visitor->setId(123);
+        $actionsType = 'recently_viewed_product';
+        $productScope = 'website';
+        $scopeId = 1;
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('simple2');
+        $product1Id = $product1->getId();
+        $product2Id = $product2->getId();
+        $productsData = [
+            $productScope . '-' . $scopeId . '-' . $product1Id => [
+                'added_at' => '1576582660',
+                'product_id' => $product1Id,
+            ],
+            $productScope . '-' . $scopeId . '-' . $product2Id => [
+                'added_at' => '1576587153',
+                'product_id' => $product2Id,
+            ],
+        ];
+
+        $this->synchronizer->syncActions($productsData, $actionsType);
+        $collection = $this->synchronizer->getAllActions();
+        $this->assertEquals($collection->getSize(), 2);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetAllActionsOfCustomer(): void
+    {
+        $this->session->setCustomerId(1);
+        $this->visitor->setId(null);
+        $actionsType = 'recently_viewed_product';
+        $productScope = 'website';
+        $scopeId = 1;
+        $product1 = $this->productRepository->get('simple');
+        $product2 = $this->productRepository->get('simple2');
+        $product1Id = $product1->getId();
+        $product2Id = $product2->getId();
+        $productsData = [
+            $productScope . '-' . $scopeId . '-' . $product1Id => [
+                'added_at' => '1576582660',
+                'product_id' => $product1Id,
+            ],
+            $productScope . '-' . $scopeId . '-' . $product2Id => [
+                'added_at' => '1576587153',
+                'product_id' => $product2Id,
+            ],
+        ];
+
+        $this->synchronizer->syncActions($productsData, $actionsType);
+        $collection = $this->synchronizer->getAllActions();
+        $this->assertEquals($collection->getSize(), 2);
     }
 }
