@@ -36,6 +36,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $this->addFieldToFilter('customer_id', $customerId);
         } elseif ($visitorId) {
             $this->addFieldToFilter('visitor_id', $visitorId);
+        } else {
+            $this->addFieldToFilter('visitor_id', $visitorId)
+                ->addFieldToFilter('customer_id', $customerId);
         }
 
         return $this;
