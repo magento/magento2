@@ -404,7 +404,7 @@ class StoreTest extends TestCase
             });
         $this->requestMock->expects($this->once())
             ->method('getOriginalPathInfo')
-            ->willReturn('web/unsecure/base_link_url/test_script.php/');
+            ->willReturn('test.html');
         $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
@@ -430,20 +430,35 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @return void
+     * @dataProvider getCliBaseUrlDataProvider
+     *
+     * @covers \Magento\Store\Model\Store::getBaseUrl
+     * @covers \Magento\Store\Model\Store::getCode
+     * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
+     * @covers \Magento\Store\Model\Store::getConfig
+     *
+     * @param string $type
+     * @param boolean $secure
+     * @param boolean $isCustomEntryPoint
+     * @param string $expectedPath
+     * @param string $expectedBaseUrl
      */
-    public function testGetBaseUrlFromCli()
-    {
-        $expectedPath = 'web/unsecure/base_link_url';
-        $expectedBaseUrl = 'http://domain.com/web/unsecure/base_link_url/';
+    public function testGetBaseUrlFromCli(
+        $type,
+        $secure,
+        $isCustomEntryPoint,
+        $expectedPath,
+        $expectedBaseUrl
+    ) {
         /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $configMock */
         $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
-                return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($secure, $expectedPath) {
+                $url = $secure ? '{{base_url}}' : 'http://domain.com/';
+                return $expectedPath == $path ? $url . $path . '/' : null;
             });
-        $this->requestMock->expects($this->once())
+        $this->requestMock->expects($this->any())
             ->method('getOriginalPathInfo')
             ->willReturn('');
 
@@ -452,7 +467,7 @@ class StoreTest extends TestCase
             Store::class,
             [
                 'config' => $configMock,
-                'isCustomEntryPoint' => false,
+                'isCustomEntryPoint' => $isCustomEntryPoint,
                 'request' => $this->requestMock
             ]
         );
@@ -462,8 +477,38 @@ class StoreTest extends TestCase
 
         $this->assertEquals(
             $expectedBaseUrl,
-            $model->getBaseUrl(UrlInterface::URL_TYPE_LINK, false)
+            $model->getBaseUrl($type, $secure)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getCliBaseUrlDataProvider()
+    {
+        return [
+            [
+                UrlInterface::URL_TYPE_LINK,
+                false,
+                false,
+                'web/unsecure/base_link_url',
+                'http://domain.com/web/unsecure/base_link_url/server.php/'
+            ],
+            [
+                UrlInterface::URL_TYPE_DIRECT_LINK,
+                false,
+                false,
+                'web/unsecure/base_link_url',
+                'http://domain.com/web/unsecure/base_link_url/server.php/'
+            ],
+            [
+                UrlInterface::URL_TYPE_LINK,
+                true,
+                false,
+                'web/secure/base_link_url',
+                'web/secure/base_link_url/server.php/'
+            ],
+        ];
     }
 
     public function testGetBaseUrlWrongType()
