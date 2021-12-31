@@ -48,11 +48,6 @@ class VoidActionTest extends TestCase
     /**
      * @var MockObject
      */
-    protected $titleMock;
-
-    /**
-     * @var MockObject
-     */
     protected $objectManagerMock;
 
     /**
@@ -107,10 +102,6 @@ class VoidActionTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-
-        $this->titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -168,13 +159,12 @@ class VoidActionTest extends TestCase
                     'getMessageManager',
                     'getResultRedirectFactory'
                 ]
-            )->addMethods(['getTitle'])
+            )
             ->getMock();
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
-        $contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlagMock);
         $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
         $contextMock->expects($this->any())->method('getHelper')->willReturn($this->helperMock);
