@@ -108,9 +108,35 @@ class SynchronizerTest extends TestCase
     }
 
     /**
-     * @inheritDoc
+     * Variation for UserIdentities.
+     *
+     * @return array
      */
-    public function testFilterProductActions(): void
+    public function getUserIdentitiesCases(): array
+    {
+        return [
+            [
+                'customerId' => 1,
+                'visitorId' => null
+            ],
+            [
+                'customerId' => null,
+                'visitorId' => 33
+            ],
+            [
+                'customerId' => null,
+                'visitorId' => null
+            ],
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     * @param int $customerId
+     * @param int $visitorId
+     * @dataProvider getUserIdentitiesCases
+     */
+    public function testFilterProductActions(int $customerId = null, int $visitorId = null): void
     {
         $typeId = 'recently_compared_product';
         $productsData = [
@@ -149,16 +175,16 @@ class SynchronizerTest extends TestCase
             ->getMock();
         $this->sessionMock->expects($this->any())
             ->method('getCustomerId')
-            ->willReturn(1);
+            ->willReturn($customerId);
         $this->visitorMock->expects($this->exactly(2))
             ->method('getId')
-            ->willReturn(34);
+            ->willReturn($visitorId);
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($collection);
         $collection->expects($this->once())
             ->method('addFilterByUserIdentities')
-            ->with(1, 34);
+            ->with($customerId, $visitorId);
         $collection
             ->method('addFieldToFilter')
             ->withConsecutive(['type_id', $typeId], ['product_id', [1, 2]]);
@@ -175,8 +201,8 @@ class SynchronizerTest extends TestCase
                 [
                     [
                         'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
+                            'visitor_id' => $visitorId,
+                            'customer_id' => $customerId,
                             'added_at' => 12,
                             'product_id' => 1,
                             'type_id' => 'recently_compared_product'
@@ -186,8 +212,8 @@ class SynchronizerTest extends TestCase
                 [
                     [
                         'data' => [
-                            'visitor_id' => null,
-                            'customer_id' => 1,
+                            'visitor_id' => $visitorId,
+                            'customer_id' => $customerId,
                             'added_at' => 13,
                             'product_id' => 2,
                             'type_id' => 'recently_compared_product'
