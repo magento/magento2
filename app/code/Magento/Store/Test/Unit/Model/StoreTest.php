@@ -410,10 +410,8 @@ class StoreTest extends TestCase
             ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
                 return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
             });
-        $this->requestMock->expects($this->once())
-            ->method('getOriginalPathInfo')
-            ->willReturn('test.html');
-        $this->requestMock->expects($this->once())
+
+        $this->requestMock->expects($this->exactly(2))
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
             ->willReturn('test_script.php');
@@ -467,8 +465,9 @@ class StoreTest extends TestCase
                 return $expectedPath == $path ? $url . $path . '/' : null;
             });
         $this->requestMock->expects($this->any())
-            ->method('getOriginalPathInfo')
-            ->willReturn('');
+            ->method('getServer')
+            ->with('SCRIPT_FILENAME')
+            ->willReturn('bin/magento');
 
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
@@ -500,21 +499,21 @@ class StoreTest extends TestCase
                 false,
                 false,
                 'web/unsecure/base_link_url',
-                'http://domain.com/web/unsecure/base_link_url/server.php/'
+                'http://domain.com/web/unsecure/base_link_url/'
             ],
             [
                 UrlInterface::URL_TYPE_DIRECT_LINK,
                 false,
                 false,
                 'web/unsecure/base_link_url',
-                'http://domain.com/web/unsecure/base_link_url/server.php/'
+                'http://domain.com/web/unsecure/base_link_url/'
             ],
             [
                 UrlInterface::URL_TYPE_LINK,
                 true,
                 false,
                 'web/secure/base_link_url',
-                'web/secure/base_link_url/server.php/'
+                'web/secure/base_link_url/'
             ],
         ];
     }
