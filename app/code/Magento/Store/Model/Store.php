@@ -704,12 +704,11 @@ class Store extends AbstractExtensibleModel implements
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
-                $indexFileName = '';
-                if ($this->_request->getOriginalPathInfo()) {
-                    $scriptFilename = $this->_request->getServer('SCRIPT_FILENAME');
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    $indexFileName = basename($scriptFilename);
-                }
+                $scriptFilename = $this->_request->getOriginalPathInfo() ?
+                    $this->_request->getServer('SCRIPT_FILENAME') :
+                    '/server.php';
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $indexFileName = is_string($scriptFilename) ? basename($scriptFilename) : '';
             }
             $url .= $indexFileName . '/';
         }
