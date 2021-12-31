@@ -24,26 +24,26 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    const INCLUDE_APP_CODE = 1;
+    public const INCLUDE_APP_CODE = 1;
 
-    const INCLUDE_TESTS = 2;
+    public const INCLUDE_TESTS = 2;
 
-    const INCLUDE_DEV_TOOLS = 4;
+    public const INCLUDE_DEV_TOOLS = 4;
 
-    const INCLUDE_TEMPLATES = 8;
+    public const INCLUDE_TEMPLATES = 8;
 
-    const INCLUDE_LIBS = 16;
+    public const INCLUDE_LIBS = 16;
 
-    const INCLUDE_PUB_CODE = 32;
+    public const INCLUDE_PUB_CODE = 32;
 
-    const INCLUDE_NON_CLASSES = 64;
+    public const INCLUDE_NON_CLASSES = 64;
 
-    const INCLUDE_SETUP = 128;
+    public const INCLUDE_SETUP = 128;
 
     /**
      * Return as data set
      */
-    const AS_DATA_SET = 1024;
+    public const AS_DATA_SET = 1024;
 
     /**
      * @var ComponentRegistrar
@@ -1661,9 +1661,8 @@ class Files
     {
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
-            self::$_cache[$key] = file_exists(
-                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
-            );
+            $componentPath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            self::$_cache[$key] = $componentPath && file_exists($componentPath);
         }
 
         return self::$_cache[$key];
