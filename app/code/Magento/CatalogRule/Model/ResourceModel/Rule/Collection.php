@@ -8,11 +8,12 @@ namespace Magento\CatalogRule\Model\ResourceModel\Rule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * @api
+ */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
     /**
-     * Store associated with rule entities information map
-     *
      * @var array
      */
     protected $_associatedEntitiesMap;
@@ -72,7 +73,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      *
      * @param string $attributeCode
      * @return $this
-     * @api
      */
     public function addAttributeInConditionFilter($attributeCode)
     {
@@ -83,6 +83,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Map data for associated entities
+     *
      * @param string $entityType
      * @param string $objectField
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -116,6 +118,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Perform operations after collection load
+     *
      * @return $this
      */
     protected function _afterLoad()
@@ -151,6 +155,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * Getter for _associatedEntitiesMap property
+     *
      * @return array
      * @deprecated 100.1.0
      */
@@ -158,6 +164,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                // phpstan:ignore
                 ->get(\Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }

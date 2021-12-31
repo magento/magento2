@@ -38,11 +38,14 @@
                     <element key="magentoConfigFixture">
                         <string>magentoConfigFixture</string>
                     </element>
-                    <element key="@magentoDbIsolation">
+                    <element key="@magentoDataFixture">
                         <string>magentoDataFixture</string>
                     </element>
                     <element key="magentoDbIsolation">
                         <string>magentoDbIsolation</string>
+                    </element>
+                    <element key="magentoDataFixtureDataProvider">
+                        <string>magentoDataFixtureDataProvider</string>
                     </element>
                 </array>
             </arguments>
