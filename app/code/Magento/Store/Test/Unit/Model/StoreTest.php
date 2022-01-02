@@ -457,6 +457,10 @@ class StoreTest extends TestCase
                 return $expectedPath == $path ? $url . $path . '/' : null;
             });
         $this->requestMock->expects($this->any())
+            ->method('getDistroBaseUrl')
+            ->willReturn('http://distro.com/');
+
+        $this->requestMock->expects($this->any())
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
             ->willReturn('bin/magento');
@@ -505,7 +509,7 @@ class StoreTest extends TestCase
                 true,
                 false,
                 'web/secure/base_link_url',
-                'web/secure/base_link_url/'
+                'http://distro.com/web/secure/base_link_url/'
             ],
         ];
     }
