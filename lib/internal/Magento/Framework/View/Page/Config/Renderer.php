@@ -360,7 +360,11 @@ class Renderer implements RendererInterface
         }
 
         if ($contentType === 'css') {
-            return ' rel="stylesheet" type="text/css"' . ($attributes ?: ' media="all"');
+            if (strpos($attributes, 'rel="preload"') !== false) {
+                return $attributes;
+            } else {
+                return ' rel="stylesheet" type="text/css"' . ($attributes ?: ' media="all"');
+            }
         }
 
         if ($this->canTypeBeFont($contentType)) {
