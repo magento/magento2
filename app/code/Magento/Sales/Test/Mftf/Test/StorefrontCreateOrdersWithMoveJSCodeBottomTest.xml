@@ -17,7 +17,9 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableMoveJsCodeBottom.path}} {{StorefrontEnableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomEnable"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
             <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
@@ -42,7 +44,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <magentoCLI command="config:set {{StorefrontDisableMoveJsCodeBottom.path}} {{StorefrontDisableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomDisable"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </after>
 
         <!-- Go to Storefront and place order for guest -->

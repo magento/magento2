@@ -47,7 +47,9 @@
 
             <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPage"/>
             <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setDefaultGridPerPage"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
 
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
