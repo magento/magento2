@@ -115,6 +115,7 @@ class ConfigTest extends TestCase
             $this->universalFactoryMock,
             $this->serializerMock,
             $this->scopeConfigMock,
+            [],
             $this->storeManagerMock
         );
     }
@@ -308,7 +309,10 @@ class ConfigTest extends TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $this->storeManagerMock->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
 
         $attributes = $this->config->getAttributes($entityType);
         $this->assertEquals(['attribute_code_1' => $entityAttributeMock], $attributes);
