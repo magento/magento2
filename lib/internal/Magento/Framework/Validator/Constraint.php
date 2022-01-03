@@ -1,28 +1,24 @@
 <?php
 /**
- * Validator constraint delegates validation to wrapped validator.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
 
 /**
+ * Validator constraint delegates validation to wrapped validator.
+ *
  * @api
  * @since 100.0.2
  */
 class Constraint extends \Magento\Framework\Validator\AbstractValidator
 {
     /**
-     * Wrapped validator
-     *
      * @var \Magento\Framework\Validator\ValidatorInterface
      */
     protected $_wrappedValidator;
 
     /**
-     * Alias can be used for search
-     *
      * @var string
      */
     protected $_alias;
@@ -44,7 +40,6 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      *
      * @param mixed $value
      * @return boolean
-     * @api
      */
     public function isValid($value)
     {
@@ -77,7 +72,6 @@ class Constraint extends \Magento\Framework\Validator\AbstractValidator
      * Get constraint alias
      *
      * @return string
-     * @api
      */
     public function getAlias()
     {

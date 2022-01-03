@@ -20,6 +20,7 @@ return [
         'es_MX',
         'Authorization',
         'CREDIT,ELV,CARD',
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -27,6 +28,7 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'es_MX',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'commit' => 'false',
                     'intent' => 'authorize',
                     'merchant-id' => 'merchant',
@@ -36,7 +38,6 @@ return [
                             'credit',
                             'sepa',
                             'card',
-                            'venmo',
                             'bancontact',
                             'eps',
                             'giropay',
@@ -46,7 +47,7 @@ return [
                             'sofort'
                         ]
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -55,6 +56,7 @@ return [
         'en_BR',
         'Sale',
         null,
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -62,14 +64,15 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'en_BR',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'commit' => 'false',
                     'intent' => 'capture',
                     'merchant-id' => 'merchant',
                     'disable-funding' => implode(
                         ',',
-                        ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                        ['bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -78,6 +81,7 @@ return [
         'en_US',
         'Order',
         null,
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -85,14 +89,15 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'en_US',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'commit' => 'false',
                     'intent' => 'order',
                     'merchant-id' => 'merchant',
                     'disable-funding' => implode(
                         ',',
-                        ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                        ['bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -102,12 +107,14 @@ return [
         'Authorization',
         'CREDIT,ELV',
         false,
+        false,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
                 [
                     'client-id' => 'sb',
                     'locale' => 'en_BR',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'commit' => 'false',
                     'intent' => 'authorize',
                     'merchant-id' => 'merchant',
@@ -117,7 +124,6 @@ return [
                             'credit',
                             'sepa',
                             'card',
-                            'venmo',
                             'bancontact',
                             'eps',
                             'giropay',
@@ -127,7 +133,7 @@ return [
                             'sofort'
                         ]
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
@@ -136,6 +142,7 @@ return [
         'en_BR',
         'Authorization',
         'CREDIT,ELV',
+        false,
         true,
         [
             'sdkUrl' => generateExpectedPaypalSdkUrl(
@@ -143,14 +150,66 @@ return [
                     'client-id' => 'sb',
                     'locale' => 'en_BR',
                     'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
                     'commit' => 'false',
                     'intent' => 'authorize',
                     'merchant-id' => 'merchant',
                     'disable-funding' => implode(
                         ',',
-                        ['credit', 'sepa', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                        ['credit', 'sepa', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
                     ),
-                    'components' => implode(',', ['messages', 'buttons'])
+                    'components' => implode(',', ['messages', 'buttons']),
+                ]
+            )
+        ]
+    ],
+    'buyer_country_enabled' => [
+        'en_BR',
+        'Authorization',
+        'CREDIT,ELV',
+        true,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_BR',
+                    'currency' => 'USD',
+                    'buyer-country' => 'US',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'sepa', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    ),
+                    'components' => implode(',', ['messages', 'buttons']),
+                ]
+            )
+        ]
+    ],
+    'buyer_country_disabled' => [
+        'en_BR',
+        'Authorization',
+        'CREDIT,ELV',
+        false,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_BR',
+                    'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'sepa', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    ),
+                    'components' => implode(',', ['messages', 'buttons']),
                 ]
             )
         ]
