@@ -20,10 +20,12 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminStandaloneMediaGalleryEditImageDetailsFromDialogTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>

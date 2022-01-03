@@ -1,38 +1,46 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type Query {
-    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "The store config query") @cache(cacheable: false)
+    storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "Return details about the store's configuration.") @cache(cacheable: false)
     availableStores(
-        useCurrentGroup: Boolean @doc(description: "Filter store views by current store group")
+        useCurrentGroup: Boolean @doc(description: "Filter store views by the current store group.")
     ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.")
 }
 
-type Website @doc(description: "Website is deprecated because it is should not be used on storefront. The type contains information about a website") {
-    id : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The ID number assigned to the website")
+type Website @doc(description: "Deprecated. It should not be used on the storefront. Contains information about a website.") {
+    id : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The ID number assigned to the website.")
     name : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The website name. Websites use this name to identify it easier.")
-    code : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "A code assigned to the website to identify it")
-    sort_order : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The attribute to use for sorting websites")
-    default_group_id : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The default group ID that the website has")
-    is_default : Boolean @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Specifies if this is the default website")
+    code : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "A code assigned to the website to identify it.")
+    sort_order : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The attribute to use for sorting websites.")
+    default_group_id : String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The default group ID of the website.")
+    is_default : Boolean @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Indicates whether this is the default website.")
 }
 
-type StoreConfig @doc(description: "The type contains information about a store config") {
-    id : Int @doc(description: "The ID number assigned to the store")
-    code : String @doc(description: "A code assigned to the store to identify it")
-    website_id : Int @doc(description: "The ID number assigned to the website store belongs")
-    locale : String @doc(description: "Store locale")
-    base_currency_code : String @doc(description: "Base currency code")
-    default_display_currency_code : String @doc(description: "Default display currency code")
-    timezone : String @doc(description: "Timezone of the store")
-    weight_unit : String @doc(description: "The unit of weight")
-    base_url : String @doc(description: "Base URL for the store")
-    base_link_url : String @doc(description: "Base link URL for the store")
-    base_static_url : String @doc(description: "Base static URL for the store")
-    base_media_url : String @doc(description: "Base media URL for the store")
-    secure_base_url : String @doc(description: "Secure base URL for the store")
-    secure_base_link_url : String @doc(description: "Secure base link URL for the store")
-    secure_base_static_url : String @doc(description: "Secure base static URL for the store")
-    secure_base_media_url : String @doc(description: "Secure base media URL for the store")
-    store_name : String @doc(description: "Name of the store")
-    use_store_in_url: Boolean @doc(description: "The configuration determines if the store code should be used in the URL")
+type StoreConfig @doc(description: "Contains information about a store's configuration.") {
+    id : Int @deprecated(reason: "Use `store_code` instead.") @doc(description: "The ID number assigned to the store.")
+    code : String @deprecated(reason: "Use `store_code` instead.") @doc(description: "A code assigned to the store to identify it.")
+    store_code: ID @doc(description: "The unique ID of the store view. In the Admin, this is called the Store View Code. When making a GraphQL call, assign this value to the `Store` header to provide the scope.")
+    store_name : String @doc(description: "The label assigned to the store view.")
+    store_sort_order : Int @doc(description: "The store view sort order.")
+    is_default_store : Boolean @doc(description: "Indicates whether the store view has been designated as the default within the store group.")
+    store_group_code : ID @doc(description: "The unique ID assigned to the store group. In the Admin, this is called the Store Name.")
+    store_group_name : String @doc(description: "The label assigned to the store group.")
+    is_default_store_group : Boolean @doc(description: "Indicates whether the store group has been designated as the default within the website.")
+    website_id : Int @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "The ID number assigned to the website store.")
+    website_code : ID @doc(description: "The unique ID for the website.")
+    website_name : String @doc(description: "The label assigned to the website.")
+    locale : String @doc(description: "The store locale.")
+    base_currency_code : String @doc(description: "The base currency code.")
+    default_display_currency_code : String @doc(description: "The default display currency code.")
+    timezone : String @doc(description: "The time zone of the store.")
+    weight_unit : String @doc(description: "The unit of weight.")
+    base_url : String @doc(description: "The store’s fully-qualified base URL.")
+    base_link_url : String @doc(description: "A fully-qualified URL that is used to create relative links to the `base_url`.")
+    base_static_url : String @doc(description: "The fully-qualified URL that specifies the location of static view files.")
+    base_media_url : String @doc(description: "The fully-qualified URL that specifies the location of media files.")
+    secure_base_url : String @doc(description: "The store’s fully-qualified secure base URL.")
+    secure_base_link_url : String @doc(description: "A secure fully-qualified URL that is used to create relative links to the `base_url`.")
+    secure_base_static_url : String @doc(description: "The secure fully-qualified URL that specifies the location of static view files.")
+    secure_base_media_url : String @doc(description: "The secure fully-qualified URL that specifies the location of media files.")
+    use_store_in_url: Boolean @doc(description: "Indicates whether the store code should be used in the URL.")
 }

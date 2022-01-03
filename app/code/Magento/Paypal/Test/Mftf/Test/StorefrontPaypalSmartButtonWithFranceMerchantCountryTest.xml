@@ -16,10 +16,11 @@
             <description value="Users are able to place order using Paypal Smart Button using Euro currency and merchant country is France"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
+            <group value="paypalExpress"/>
             <skip>
                 <issueId value="MC-37236"/>
             </skip>
-            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set price scope global-->

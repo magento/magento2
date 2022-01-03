@@ -16,6 +16,7 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,20 +52,28 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private $makeSharedValid;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ObjectManagerFactory $objectManagerFactory
      * @param IndexerRegistry|null $indexerRegistry
      * @param DependencyInfoProvider|null $dependencyInfoProvider
      * @param MakeSharedIndexValid|null $makeSharedValid
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
         IndexerRegistry $indexerRegistry = null,
         DependencyInfoProvider $dependencyInfoProvider = null,
-        MakeSharedIndexValid $makeSharedValid = null
+        MakeSharedIndexValid $makeSharedValid = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->dependencyInfoProvider = $dependencyInfoProvider;
         $this->makeSharedValid = $makeSharedValid;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         parent::__construct($objectManagerFactory);
     }
 
@@ -106,17 +115,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $resultTime = microtime(true) - $startTime;
 
                 $output->writeln(
-                    __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
+                    __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', (int) $resultTime)])
                 );
-            } catch (LocalizedException $e) {
-                $output->writeln(__('exception: %message', ['message' => $e->getMessage()]));
-                $returnValue = Cli::RETURN_FAILURE;
-            } catch (\Exception $e) {
-                $output->writeln('process unknown error:');
+            } catch (\Throwable $e) {
+                $output->writeln('process error during indexation process:');
                 $output->writeln($e->getMessage());
 
                 $output->writeln($e->getTraceAsString(), OutputInterface::VERBOSITY_DEBUG);
                 $returnValue = Cli::RETURN_FAILURE;
+
+                $this->logger->critical($e->getMessage());
             }
         }
 

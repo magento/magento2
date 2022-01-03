@@ -6,12 +6,20 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\Action;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 /**
  * Wish list Add controller
@@ -21,12 +29,12 @@ use Magento\Framework\Controller\ResultFactory;
 class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @var WishlistProviderInterface
      */
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
@@ -41,30 +49,46 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
     protected $formKeyValidator;
 
     /**
-     * @param Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @var RedirectInterface
+     */
+    private $redirect;
+
+    /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
+     * @param Context $context
+     * @param Session $customerSession
+     * @param WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
      * @param Validator $formKeyValidator
+     * @param RedirectInterface|null $redirect
+     * @param UrlInterface|null $urlBuilder
      */
     public function __construct(
-        Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
+        Context $context,
+        Session $customerSession,
+        WishlistProviderInterface $wishlistProvider,
         ProductRepositoryInterface $productRepository,
-        Validator $formKeyValidator
+        Validator $formKeyValidator,
+        RedirectInterface $redirect = null,
+        UrlInterface $urlBuilder = null
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
         $this->productRepository = $productRepository;
         $this->formKeyValidator = $formKeyValidator;
+        $this->redirect = $redirect ?: ObjectManager::getInstance()->get(RedirectInterface::class);
+        $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
         parent::__construct($context);
     }
 
     /**
      * Adding new item
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return ResultInterface
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -72,7 +96,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$this->formKeyValidator->validate($this->getRequest())) {
             return $resultRedirect->setPath('*/');
@@ -115,7 +139,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($result));
+                throw new LocalizedException(__($result));
             }
             if ($wishlist->isObjectNew()) {
                 $wishlist->save();
@@ -142,7 +166,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
                 ]
             );
             // phpcs:disable Magento2.Exceptions.ThrowCatch
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage(
                 __('We can\'t add the item to Wish List right now: %1.', $e->getMessage())
             );
@@ -153,7 +177,16 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
             );
         }
 
+        if ($this->getRequest()->isAjax()) {
+            $url = $this->urlBuilder->getUrl('*', $this->redirect->updatePathParams(['wishlist_id' => $wishlist->getId()]));
+            /** @var Json $resultJson */
+            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+            $resultJson->setData(['backUrl' => $url]);
+
+            return $resultJson;
+        }
         $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
+
         return $resultRedirect;
     }
 }

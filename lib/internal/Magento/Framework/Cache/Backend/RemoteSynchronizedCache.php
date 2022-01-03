@@ -35,13 +35,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private $remote;
 
     /**
-     * Cache invalidation time
-     *
-     * @var \Zend_Cache_Backend_ExtendedInterface
-     */
-    protected $cacheInvalidationTime;
-
-    /**
      * Suffix for hash to compare data version in cache storage.
      */
     private const HASH_SUFFIX = ':hash';
@@ -52,7 +45,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private const REMOTE_SYNC_LOCK_PREFIX = 'rsl::';
 
     /**
-     * @inheritdoc
+     *  Available options
+     *
+     * @var array available options
      */
     protected $_options = [
         'remote_backend' => '',
@@ -64,6 +59,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'local_backend_custom_naming' => true,
         'local_backend_autoload' => true,
         'use_stale_cache' => false,
+        'cleanup_percentage' => 95,
     ];
 
     /**
@@ -76,7 +72,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     /**
      * Sign for locks, helps to avoid removing a lock that was created by another client
      *
-     * @string
+     * @var string
      */
     private $lockSign;
 
@@ -248,6 +244,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             $this->unlock($id);
         }
 
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         if (!mt_rand(0, 100) && $this->checkIfLocalCacheSpaceExceeded()) {
             $this->local->clean();
         }
@@ -262,7 +260,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function checkIfLocalCacheSpaceExceeded()
     {
-        return $this->getFillingPercentage() >= 95;
+        return $this->getFillingPercentage() >= ($this->_options['cleanup_percentage'] ?? 95);
     }
 
     /**

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnePageCheckoutCancelEditingBillingAddress">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <stories value="MC-39581: Billing Address empty after going back and forth between shipping and payment step"/>
+            <title value="Billing Address empty after going back and forth between shipping and payment step"/>
+            <description value="Check billing address editing cancelation during checkout on the payment step"/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">160</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete created product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!-- Add Simple Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Navigate to checkout -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Fill shipping address -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+        </actionGroup>
+
+        <!-- Change the address -->
+
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementToBeVisible"/>
+        <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
+        <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="clickEditButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
+        <!-- Fill in New Billing Address -->
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress">
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+        <selectOption selector="{{CheckoutPaymentSection.guestRegion}}" userInput="{{US_Address_CA.state}}" stepKey="selectRegion"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
+
+
+        <!-- Edit Billing Address -->
+        <waitForElementVisible selector="{{CheckoutShippingSection.editAddressButton}}" stepKey="waitForEditBillingAddressButton"/>
+        <click selector="{{CheckoutShippingSection.editAddressButton}}" stepKey="clickOnEditButton"/>
+        <fillField selector="{{CheckoutPaymentSection.guestFirstName}}" userInput="" stepKey="enterEmptyFirstName"/>
+        <fillField selector="{{CheckoutPaymentSection.guestLastName}}" userInput="" stepKey="enterEmptyLastName"/>
+
+        <!-- Cancel Editing Billing Address -->
+        <click selector="{{CheckoutHeaderSection.shippingMethodStep}}" stepKey="goToShipping"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
+
+        <!-- Place order -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+    </test>
+</tests>

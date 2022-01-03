@@ -17,6 +17,7 @@
             <description value="When user tries to set the Email Text Length Limit higher then 10,000 then validation message occurs"/>
             <severity value="AVERAGE"/>
             <testCaseId value="N/a"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>

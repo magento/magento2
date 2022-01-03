@@ -10,16 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminSubmitConfigurableProductOrderTest">
         <annotations>
-            <title value="Create Order in Admin and update product configuration"/>
-            <stories value="MAGETWO-59632: Create Sales > Order from admin add configurable product and change options click OK does not update Items Ordered List"/>
-            <description value="Create Order in Admin and update product configuration"/>
             <features value="Sales"/>
-            <severity value="AVERAGE"/>
-            <testCaseId value="MAGETWO-59633"/>
-            <group value="Sales"/>
-            <skip>
-                <issueId value="MAGETWO-96196"/>
-            </skip>
+            <stories value="Admin create order"/>
+            <title value="Create Order in Admin and update product configuration"/>
+            <description value="Create Order as admin and update product attribute configuration during order creation"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26545"/>
+            <group value="sales"/>
         </annotations>
 
         <before>
@@ -87,38 +84,11 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
-
-        <!--Create new customer order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
-            <argument name="customer" value="$$simpleCustomer$$"/>
-        </actionGroup>
-
-        <!--Add configurable product to order-->
-        <actionGroup ref="AddConfigurableProductToOrderFromAdminActionGroup" stepKey="addConfigurableProductToOrder">
-            <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
-            <argument name="option" value="$$getConfigAttributeOption1$$"/>
-        </actionGroup>
-
-        <!--Configure ordered configurable product-->
-        <actionGroup ref="ConfigureOrderedConfigurableProductActionGroup" stepKey="configureOrderedConfigurableProduct">
-            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
-            <argument name="option" value="$$getConfigAttributeOption2$$"/>
-            <argument name="quantity" value="2"/>
-        </actionGroup>
-
-        <!--Select FlatRate shipping method-->
-        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
-
-        <!-- Checkout select Check/Money Order payment -->
-        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
-        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
-
-        <!--Verify order information-->
-        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
@@ -133,5 +103,33 @@
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
+        <!--Create new customer order-->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$simpleCustomer$"/>
+        </actionGroup>
+
+        <!--Add configurable product to order-->
+        <actionGroup ref="AddConfigurableProductToOrderFromAdminActionGroup" stepKey="addConfigurableProductToOrder">
+            <argument name="product" value="$createConfigProduct$"/>
+            <argument name="attribute" value="$createConfigProductAttribute$"/>
+            <argument name="option" value="$getConfigAttributeOption1$"/>
+        </actionGroup>
+
+        <!--Configure ordered configurable product-->
+        <actionGroup ref="ConfigureOrderedConfigurableProductActionGroup" stepKey="configureOrderedConfigurableProduct">
+            <argument name="attribute" value="$createConfigProductAttribute$"/>
+            <argument name="option" value="$getConfigAttributeOption2$"/>
+            <argument name="quantity" value="2"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
+
+        <!--Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
     </test>
 </tests>
