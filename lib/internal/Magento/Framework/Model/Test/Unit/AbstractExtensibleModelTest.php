@@ -255,6 +255,34 @@ class AbstractExtensibleModelTest extends TestCase
         );
     }
 
+    public function testSetDataChangesCustomAttribute()
+    {
+        $this->model
+            ->expects($this->any())
+            ->method('getCustomAttributesCodes')
+            ->willReturn(['attribute1']);
+
+        $attributesAsArray = [
+            'attribute1' => 'Initial value',
+        ];
+
+        $this->addCustomAttributesToModel($attributesAsArray, $this->model);
+
+        $this->assertEquals(
+            $attributesAsArray,
+            $this->model->getData(),
+            'All model data should be represented as a flat array, including custom attributes.'
+        );
+
+        $this->model->setData('attribute1', 'New value');
+
+        $this->assertEquals(
+            ['attribute1' => 'New value'],
+            $this->model->getData(),
+            'Direct changes to model data should be reflected in custom attributes.'
+        );
+    }
+
     /**
      * @param string[] $attributesAsArray
      * @param AbstractExtensibleModel $model
