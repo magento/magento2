@@ -56,4 +56,7 @@
     </type>
     <preference for="Magento\Search\Setup\InstallConfigInterface" type="Magento\Search\Setup\CompositeInstallConfig"/>
     <preference for="Magento\Search\Model\SearchEngine\ValidatorInterface" type="Magento\Search\Model\SearchEngine\Validator"/>
+    <type name="Magento\Search\Model\QueryResult">
+        <plugin name="getSearchSuggestionResultsCount" type="Magento\Search\Plugin\Model\SearchSuggestionResultsCount" sortOrder="1"/>
+    </type>
 </config>
