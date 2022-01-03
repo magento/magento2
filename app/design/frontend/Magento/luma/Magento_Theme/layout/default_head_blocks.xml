@@ -14,5 +14,9 @@
         <font src="fonts/opensans/bold/opensans-700.woff2"/>
         <font src="fonts/Luma-Icons.woff2"/>
         <link rel="preload" as="image" src="images/logo.svg" />
+        <link rel="preload" as="style" src="Magento_Theme::css/styles-m.css" />
+        <link src="addscript.js" importance="high" />  
+        <link rel="preload" as="script" src="addscript2.js" />  
+        <link rel="preload" as="fetch" src="Magento_Checkout::template/minicart/content.html" />
     </head>
 </page>
