@@ -74,6 +74,11 @@ class ConfigTest extends TestCase
     /**
      * @var Type|MockObject
      */
+    private $scopeConfigMock;
+
+    /**
+     * @var Type|MockObject
+     */
     private $storeManagerMock;
 
     protected function setUp(): void
