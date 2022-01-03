@@ -677,6 +677,7 @@ class Parser implements ParserInterface
     {
         $next = 0;
         $matches = [];
+        $isJson = $this->_isJson;
         while (preg_match('#' . self::REGEXP_TOKEN . '#', $this->_content, $matches, PREG_OFFSET_CAPTURE, $next)) {
             $translateProperties = json_encode(
                 [
@@ -688,7 +689,7 @@ class Parser implements ParserInterface
                 ],
                 JSON_HEX_QUOT
             );
-
+            $this->_isJson = true;
             $spanHtml = $this->_getDataTranslateSpan(
                 '[' . $this->escaper->escapeHtmlAttr($translateProperties) . ']',
                 $matches[1][0]
@@ -696,6 +697,7 @@ class Parser implements ParserInterface
             $this->_content = substr_replace($this->_content, $spanHtml, $matches[0][1], strlen($matches[0][0]));
             $next = $matches[0][1] + strlen($spanHtml) - 1;
         }
+        $this->_isJson = $isJson;
     }
 
     /**
