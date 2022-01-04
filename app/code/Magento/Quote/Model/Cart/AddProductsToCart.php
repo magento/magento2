@@ -104,6 +104,13 @@ class AddProductsToCart
 
         foreach ($cartItems as $cartItemPosition => $cartItem) {
             $this->addItemToCart($cart, $cartItem, $cartItemPosition);
+            // reset cart items and addresses to clean cache
+            $cart->setTotalsCollectedFlag(false);
+            $cart->getItemsCollection()->clear();
+            $cart->getAddressesCollection()->clear();
+            foreach ($cart->getAddressesCollection() as $item) {
+                $item->setQuote($cart);
+            }
         }
 
         if ($cart->getData('has_error')) {
@@ -118,8 +125,6 @@ class AddProductsToCart
         if (count($this->errors) !== 0) {
             /* Revert changes introduced by add to cart processes in case of an error */
             $cart->getItemsCollection()->clear();
-        } else {
-            $this->cartRepository->save($cart);
         }
 
         return $this->prepareErrorOutput($cart);
@@ -155,6 +160,7 @@ class AddProductsToCart
 
         try {
             $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
+            $this->cartRepository->save($cart);
         } catch (\Throwable $e) {
             $this->addError(
                 __($e->getMessage())->render(),
