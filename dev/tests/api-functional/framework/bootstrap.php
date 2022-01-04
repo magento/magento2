@@ -107,6 +107,9 @@ try {
     Magento\TestFramework\Workaround\Override\Fixture\Resolver::setInstance(
         new  \Magento\TestFramework\WebapiWorkaround\Override\Fixture\Resolver($overrideConfig)
     );
+    Magento\TestFramework\Fixture\DataFixtureStorageManager::setStorage(
+        new Magento\TestFramework\Fixture\DataFixtureStorage()
+    );
     \Magento\TestFramework\Workaround\Override\Config::setInstance($overrideConfig);
     unset($bootstrap, $application, $settings, $shell, $overrideConfig);
 } catch (\Exception $e) {
