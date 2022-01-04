@@ -105,7 +105,7 @@ class Subscriber extends AbstractModel
     protected $_scopeConfig;
 
     /**
-     * CustomerSession
+     * Session of customer
      *
      * @var \Magento\Customer\Model\Session
      */
@@ -118,7 +118,7 @@ class Subscriber extends AbstractModel
     private $dateTime;
 
     /**
-     * StoreManager
+     * Manager for store
      *
      * @var StoreManagerInterface
      */
