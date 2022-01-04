@@ -23,7 +23,7 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
-            <reloadPage stepKey="pageReload"/>
+            <actionGroup ref="ReloadPageActionGroup" stepKey="pageReload"/>
         </before>
         <after>
             <magentoCLI command="config:set admin/usage/enabled 0" stepKey="disableAdminUsageTracking"/>

@@ -51,7 +51,7 @@
         </actionGroup>
 
         <!-- Refresh page -->
-        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
 
         <!-- Click Place Order and assert order is placed -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
