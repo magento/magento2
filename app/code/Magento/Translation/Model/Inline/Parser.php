@@ -28,7 +28,7 @@ class Parser implements ParserInterface
     /**
      * data-translate html element attribute name
      */
-    const DATA_TRANSLATE = 'data-translate';
+    public const DATA_TRANSLATE = 'data-translate';
 
     /**
      * @var Escaper
