@@ -91,7 +91,7 @@ class Subscriber extends AbstractModel
     protected $_isStatusChanged = false;
 
     /**
-     * Newsletter data
+     * Data of Newsletter
      *
      * @var Data
      */
@@ -105,7 +105,7 @@ class Subscriber extends AbstractModel
     protected $_scopeConfig;
 
     /**
-     * Customer session
+     * CustomerSession
      *
      * @var \Magento\Customer\Model\Session
      */
@@ -118,7 +118,7 @@ class Subscriber extends AbstractModel
     private $dateTime;
 
     /**
-     * Store manager
+     * StoreManager
      *
      * @var StoreManagerInterface
      */
