@@ -46,7 +46,6 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
                         'media',
                         'noneditable',
                         'table',
-                        'contextmenu',
                         'paste',
                         'code',
                         'help',
