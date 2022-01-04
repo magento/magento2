@@ -203,7 +203,8 @@
             <argument name="label" value="mySet"/>
             <argument name="option1" value="['option1', 'option2']"/>
         </actionGroup>
-        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickToSaveProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForNewSimpleProductPage"/>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveProductMessageThird">
             <argument name="message" value="You saved the product."/>
         </actionGroup>
