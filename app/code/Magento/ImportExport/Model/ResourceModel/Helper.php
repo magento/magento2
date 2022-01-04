@@ -55,17 +55,13 @@ class Helper extends \Magento\Framework\DB\Helper
         $connection = $this->getConnection();
         $sql = sprintf(
             'SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = DATABASE()',
-            $this->quote($tableName)
+            $connection->quoteIdentifier($tableName)
         );
         $entityStatus = $connection->fetchRow($sql);
-        if (empty($entityStatus['AUTO_INCREMENT']))
-        {
+        if (empty($entityStatus['AUTO_INCREMENT'])) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Cannot get autoincrement value'));
         }
-        
+
         return $entityStatus['AUTO_INCREMENT'];
-        
-
-
     }
 }
