@@ -17,15 +17,11 @@ use Magento\Store\Model\StoreManagerInterface;
 class SearchSuggestionResultsCount
 {
     /**
-     * Query collection factory
-     *
      * @var QueryCollectionFactory
      */
     protected QueryCollectionFactory $_queryCollectionFactory;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected StoreManagerInterface $_storeManager;
@@ -47,6 +43,9 @@ class SearchSuggestionResultsCount
     /**
      * Get the search suggestion results count.
      *
+     * @param QueryResult $subject
+     * @param array $result
+     * @return array
      * @throws NoSuchEntityException
      */
     public function afterGetResultsCount(QueryResult $subject, $result)
@@ -57,7 +56,7 @@ class SearchSuggestionResultsCount
             $subject->getQueryText()
         );
         foreach ($collection as $item) {
-            $result = $item->getNumResults();
+            $result = $item->getData('num_results');
         }
         return $result;
     }
