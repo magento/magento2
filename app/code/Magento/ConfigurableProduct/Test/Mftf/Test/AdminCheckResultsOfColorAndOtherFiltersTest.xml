@@ -133,11 +133,14 @@
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
             <argument name="price" value="34"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnFirst" />
-        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseFirst"/>
-        <waitForPageLoad stepKey="waitForMessage"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageFirst"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandSplitBtnFirst"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="clickSaveAndCloseFirst"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveProductMessageFirst">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
         <!-- Edit created second product as configurable product with options -->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridBySecondProduct">
             <argument name="product" value="$$createSecondConfigurableProduct$$"/>
@@ -156,11 +159,13 @@
             <argument name="price" value="34"/>
             <argument name="attributeOption" value="option5"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForPageLoadThird"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnSecond" />
-        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseSecond"/>
-        <waitForPageLoad stepKey="waitForSuccessMessage"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageSecond"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoadThird"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandSplitBtnSecond"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="clickSaveAndCloseSecond"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveProductMessageSecond">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
         <!-- Edit created third product as configurable product with options -->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridByThirdProduct">
             <argument name="product" value="$$createThirdConfigurableProduct$$"/>
@@ -179,10 +184,12 @@
             <argument name="price" value="34"/>
             <argument name="attributeOption" value="option1"/>
         </actionGroup>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnThird" />
-        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseThird"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveConfigurableProductMessage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandSplitBtnThird"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="clickSaveAndCloseThird"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveConfigurableProductMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
         <!-- Create Simple product with options -->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridBySimpleProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
@@ -196,9 +203,10 @@
             <argument name="label" value="mySet"/>
             <argument name="option1" value="['option1', 'option2']"/>
         </actionGroup>
-        <click selector="{{AdminGridMainControls.save}}" stepKey="clickToSaveProduct"/>
-        <waitForPageLoad stepKey="waitForNewSimpleProductPage"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageThird"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveProductMessageThird">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
         <magentoCron stepKey="runCronIndex" groups="index"/>
     </test>
 </tests>
