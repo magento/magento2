@@ -133,4 +133,11 @@
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save">
         <plugin name="massAction" type="Magento\CatalogInventory\Plugin\MassUpdateProductAttribute" />
     </type>
+    <type name="Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\GetStatusExpression">
+        <arguments>
+            <argument name="statusExpressions" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StatusExpression\DefaultExpression</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

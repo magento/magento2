@@ -20,15 +20,17 @@
         <before>
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete all existing products -->
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
             <!-- Create product with description -->
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
 
-            <!-- Perform reindex and flush cache -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
             </actionGroup>
         </before>
         <after>

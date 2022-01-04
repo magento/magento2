@@ -24,6 +24,11 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     protected $attributeRepository;
 
     /**
+     * @var \Magento\Catalog\Ui\Component\ColumnFactory
+     */
+    private $columnFactory;
+
+    /**
      * @var array
      */
     protected $filterMap = [

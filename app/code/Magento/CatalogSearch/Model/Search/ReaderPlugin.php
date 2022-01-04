@@ -5,6 +5,9 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\CatalogSearch\Model\Search\Request\ModifierInterface;
+use Magento\Framework\Config\ReaderInterface;
+
 /**
  * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
@@ -12,34 +15,34 @@ namespace Magento\CatalogSearch\Model\Search;
 class ReaderPlugin
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Search\RequestGenerator
+     * @var ModifierInterface
      */
-    private $requestGenerator;
+    private $requestModifier;
 
     /**
-     * @param \Magento\CatalogSearch\Model\Search\RequestGenerator $requestGenerator
+     * @param ModifierInterface $requestModifier
      */
     public function __construct(
-        \Magento\CatalogSearch\Model\Search\RequestGenerator $requestGenerator
+        ModifierInterface $requestModifier
     ) {
-        $this->requestGenerator = $requestGenerator;
+        $this->requestModifier = $requestModifier;
     }
 
     /**
      * Merge reader's value with generated
      *
-     * @param \Magento\Framework\Config\ReaderInterface $subject
+     * @param ReaderInterface $subject
      * @param array $result
      * @param string|null $scope
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterRead(
-        \Magento\Framework\Config\ReaderInterface $subject,
+        ReaderInterface $subject,
         array $result,
         $scope = null
     ) {
-        $result = array_merge_recursive($result, $this->requestGenerator->generate());
+        $result = $this->requestModifier->modify($result);
         return $result;
     }
 }

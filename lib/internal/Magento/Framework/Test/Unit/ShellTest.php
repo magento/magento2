@@ -27,6 +27,9 @@ class ShellTest extends TestCase
      */
     protected $logger;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
@@ -36,14 +39,16 @@ class ShellTest extends TestCase
     }
 
     /**
-     * Test that a command with input arguments returns an expected result
+     * Test that a command with input arguments returns an expected result.
      *
      * @param Shell $shell
      * @param string $command
      * @param array $commandArgs
      * @param string $expectedResult
+     *
+     * @return void
      */
-    protected function _testExecuteCommand(Shell $shell, $command, $commandArgs, $expectedResult)
+    protected function _testExecuteCommand(Shell $shell, $command, $commandArgs, $expectedResult): void
     {
         $this->expectOutputString('');
         // nothing is expected to be ever printed to the standard output
@@ -55,9 +60,11 @@ class ShellTest extends TestCase
      * @param string $command
      * @param array $commandArgs
      * @param string $expectedResult
+     *
+     * @return void
      * @dataProvider executeDataProvider
      */
-    public function testExecute($command, $commandArgs, $expectedResult)
+    public function testExecute($command, $commandArgs, $expectedResult): void
     {
         $this->_testExecuteCommand(
             new Shell($this->commandRenderer, $this->logger),
@@ -72,18 +79,23 @@ class ShellTest extends TestCase
      * @param array $commandArgs
      * @param string $expectedResult
      * @param array $expectedLogRecords
+     *
+     * @return void
      * @dataProvider executeDataProvider
      */
-    public function testExecuteLog($command, $commandArgs, $expectedResult, $expectedLogRecords)
+    public function testExecuteLog($command, $commandArgs, $expectedResult, $expectedLogRecords): void
     {
         $quoteChar = substr(escapeshellarg(' '), 0, 1);
+        $withArgs = [];
         // environment-dependent quote character
-        foreach ($expectedLogRecords as $logRecordIndex => $expectedLogMessage) {
+        foreach ($expectedLogRecords as $expectedLogMessage) {
             $expectedLogMessage = str_replace('`', $quoteChar, $expectedLogMessage);
-            $this->logger->expects($this->at($logRecordIndex))
-                ->method('info')
-                ->with($expectedLogMessage);
+            $withArgs[] = [$expectedLogMessage];
         }
+        $this->logger
+            ->method('info')
+            ->withConsecutive(...$withArgs);
+
         $this->_testExecuteCommand(
             new Shell($this->commandRenderer, $this->logger),
             $command,
@@ -95,7 +107,7 @@ class ShellTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public function executeDataProvider(): array
     {
         // backtick symbol (`) has to be replaced with environment-dependent quote character
         return [
@@ -104,25 +116,28 @@ class ShellTest extends TestCase
                 'php -r %s',
                 ['fwrite(STDERR, 27182);'],
                 '27182',
-                ['php -r `fwrite(STDERR, 27182);` 2>&1', '27182'],
+                ['php -r `fwrite(STDERR, 27182);` 2>&1', '27182']
             ],
             'piping STDERR -> STDOUT' => [
                 // intentionally no spaces around the pipe symbol
                 'php -r %s|php -r %s',
                 ['fwrite(STDERR, 27183);', 'echo fgets(STDIN);'],
                 '27183',
-                ['php -r `fwrite(STDERR, 27183);` 2>&1|php -r `echo fgets(STDIN);` 2>&1', '27183'],
+                ['php -r `fwrite(STDERR, 27183);` 2>&1|php -r `echo fgets(STDIN);` 2>&1', '27183']
             ],
             'piping STDERR -> STDERR' => [
                 'php -r %s | php -r %s',
                 ['fwrite(STDERR, 27184);', 'fwrite(STDERR, fgets(STDIN));'],
                 '27184',
-                ['php -r `fwrite(STDERR, 27184);` 2>&1 | php -r `fwrite(STDERR, fgets(STDIN));` 2>&1', '27184'],
+                ['php -r `fwrite(STDERR, 27184);` 2>&1 | php -r `fwrite(STDERR, fgets(STDIN));` 2>&1', '27184']
             ]
         ];
     }
 
-    public function testExecuteFailure()
+    /**
+     * @return void
+     */
+    public function testExecuteFailure(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionCode('0');
@@ -135,9 +150,11 @@ class ShellTest extends TestCase
      * @param string $command
      * @param array $commandArgs
      * @param string $expectedError
+     *
+     * @return void
      * @dataProvider executeDataProvider
      */
-    public function testExecuteFailureDetails($command, $commandArgs, $expectedError)
+    public function testExecuteFailureDetails($command, $commandArgs, $expectedError): void
     {
         try {
             /* Force command to return non-zero exit code */

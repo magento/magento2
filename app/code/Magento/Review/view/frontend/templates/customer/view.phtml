@@ -38,18 +38,23 @@ $product = $block->getProductData();
                 <?php foreach ($block->getRating() as $_rating): ?>
                     <?php if ($_rating->getPercent()): ?>
                         <?php $rating = ceil($_rating->getPercent()) ?>
+                        <?php $ratingId = $_rating->getRatingId() ?>
                         <div class="rating-summary item">
                             <span class="rating-label">
                                 <span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span>
                             </span>
-                            <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
+                            <div class="rating-result <?= $block->escapeHtml($_rating->getRatingCode()) ?>"
+                                 id="rating-div-<?= $block->escapeHtml($ratingId) ?>"
+                                 title="<?= /* @noEscape */ $rating ?>%">
                                 <span>
                                     <span><?= /* @noEscape */ $rating ?>%</span>
                                 </span>
                             </div>
-                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            <?= /* @noEscape */
+                            $secureRenderer->renderStyleAsTag(
                                 "width:" . /* @noEscape */ $rating . "%",
-                                'div.rating-result>span:first-child'
+                                'div#rating-div-'.$_rating->getRatingId().
+                                '>span:first-child'
                             ) ?>
                         </div>
                     <?php endif; ?>
