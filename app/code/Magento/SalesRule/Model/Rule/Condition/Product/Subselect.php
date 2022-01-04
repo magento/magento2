@@ -72,7 +72,7 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
             [
                 'qty' => __('total quantity'),
                 'base_row_total' => __('total amount (excl. tax)'),
-                'row_total_incl_tax' => __('total amount (incl. tax)')
+                'base_row_total_incl_tax' => __('total amount (incl. tax)')
             ]
         );
         return $this;
