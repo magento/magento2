@@ -16,7 +16,7 @@ class ArrayManager
     /**
      * Default node delimiter for path
      */
-    const DEFAULT_PATH_DELIMITER = '/';
+    public const DEFAULT_PATH_DELIMITER = '/';
 
     /**
      * @var array
@@ -49,7 +49,7 @@ class ArrayManager
      *
      * @param array|string $path
      * @param array $data
-     * @param null $defaultValue
+     * @param mixed $defaultValue
      * @param string $delimiter
      * @return mixed|null
      * @since 100.1.0
@@ -321,6 +321,6 @@ class ArrayManager
      */
     public function slicePath($path, $offset, $length = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
-        return implode($delimiter, array_slice(explode($delimiter, $path), $offset, $length));
+        return $path ? implode($delimiter, array_slice(explode($delimiter, $path), $offset, $length)) : '';
     }
 }

@@ -205,11 +205,17 @@ class Related extends AbstractModifier
 
         foreach ($this->getDataScopes() as $dataScope) {
             $data[$productId]['links'][$dataScope] = [];
+            $linkItems = [];
             foreach ($this->productLinkRepository->getList($product) as $linkItem) {
                 if ($linkItem->getLinkType() !== $dataScope) {
                     continue;
                 }
-
+                $linkItems[] = $linkItem;
+            }
+            usort($linkItems, function ($a, $b) {
+                return $a->getPosition() <=> $b->getPosition();
+            });
+            foreach ($linkItems as $linkItem) {
                 /** @var \Magento\Catalog\Model\Product $linkedProduct */
                 $linkedProduct = $this->productRepository->get(
                     $linkItem->getLinkedProductSku(),

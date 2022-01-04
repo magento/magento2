@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminExportSimpleAndConfigurableProductsWithCustomOptionsTest">
+
+        <!-- S3 stores import/export artifacts in a different path than the local file system.
+        This test is used to merge with the local file system test and allows the resulting merged test
+        to use the correct path when Magento is either installed with S3 enabled or with S3 disabled -->
+
+        <after>
+            <helper class="\Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">{"local":"var/export","s3":"import_export/export"}</argument>
+            </helper>
+        </after>
+
+        <!-- Validate Export File in the filesystem depending on the storage type: Product with Custom Options -->
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsConfigurableProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">$$createConfigProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildSimpleProductOption">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">sku=$$createConfigFirstChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option1</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildSimpleProductOption">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">sku=$$createConfigSecondChildProduct.sku$$,$$createConfigProductAttribute.attribute_code$$=option2</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainFirstSimpleProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">$$createConfigFirstChildProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileDoesNotContainString" stepKey="assertExportFileDoesNotContainSecondSimpleProduct">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+            <argument name="text">$$createConfigSecondChildProduct.name$$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <helper class="\Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">{"local":"var/export/{$grabNameFile}","s3":"import_export/export/{$grabNameFile}"}</argument>
+        </helper>
+    </test>
+</tests>

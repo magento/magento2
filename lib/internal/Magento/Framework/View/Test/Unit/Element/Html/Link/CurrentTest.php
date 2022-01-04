@@ -52,7 +52,9 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * Test get Url
+     * Test get Url.
+     *
+     * @return void
      */
     public function testGetUrl(): void
     {
@@ -70,21 +72,30 @@ class CurrentTest extends TestCase
     }
 
     /**
-     * Test if set current
+     * Test if set current.
+     *
+     * @return void
      */
     public function testIsCurrentIfIsset(): void
     {
+        $pathStub = '';
+        $this->_urlBuilderMock->method('getUrl')
+            ->with($pathStub)
+            ->willReturn('http://example.com/');
+        $this->currentLink->setPath($pathStub);
         $this->currentLink->setCurrent(true);
         $this->assertTrue($this->currentLink->isCurrent());
     }
 
     /**
-     * Test if the current url is the same as link path
+     * Test if the current url is the same as link path.
      *
      * @param string $pathStub
      * @param string $urlStub
      * @param array $request
      * @param bool $expected
+     *
+     * @return void
      * @dataProvider isCurrentDataProvider
      */
     public function testIsCurrent($pathStub, $urlStub, $request, $expected): void
@@ -102,28 +113,32 @@ class CurrentTest extends TestCase
             ->method('getActionName')
             ->will($this->returnValue($request['actionStub']));
 
-        $this->_urlBuilderMock->expects($this->at(0))
-            ->method('getUrl')
-            ->with($pathStub)
-            ->will($this->returnValue($urlStub));
-        $this->_urlBuilderMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with($request['mcaStub'])
-            ->will($this->returnValue($request['getUrl']));
+        $withArgs = $willReturnArgs = [];
+
+        $withArgs[] = [$pathStub];
+        $willReturnArgs[] = $this->returnValue($urlStub);
+        $withArgs[] = [$request['mcaStub']];
+        $willReturnArgs[] = $this->returnValue($request['getUrl']);
+        $withArgs[] = ['*/*/*', ['_current' => false, '_use_rewrite' => true]];
 
         if ($request['mcaStub'] == '') {
-            $this->_urlBuilderMock->expects($this->at(2))
-                ->method('getUrl')
-                ->with('*/*/*', ['_current' => false, '_use_rewrite' => true])
-                ->will($this->returnValue($urlStub));
+            $willReturnArgs[] = $this->returnValue($urlStub);
+        } else {
+            $willReturnArgs[] = $this->returnValue('');
         }
+        $this->_urlBuilderMock
+            ->method('getUrl')
+            ->withConsecutive(...$withArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
         $this->currentLink->setPath($pathStub);
         $this->assertEquals($expected, $this->currentLink->isCurrent());
     }
 
     /**
-     * Data provider for is current
+     * Data provider for is current.
+     *
+     * @return array
      */
     public function isCurrentDataProvider(): array
     {

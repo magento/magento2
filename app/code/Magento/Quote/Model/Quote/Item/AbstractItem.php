@@ -326,7 +326,6 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
     {
         $this->setHasError(false);
         $this->clearMessage();
-
         $qty = $this->_getData('qty');
 
         try {

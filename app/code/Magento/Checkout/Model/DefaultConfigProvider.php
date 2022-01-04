@@ -97,7 +97,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $configurationPool;
 
     /**
-     * @param QuoteIdMaskFactory
+     * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
 
@@ -338,17 +338,17 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['imageData'] = $this->imageProvider->getImages($quoteId);
 
         $output['totalsData'] = $this->getTotalsData();
+
+        $policyContent = $this->scopeConfig->getValue(
+            'shipping/shipping_policy/shipping_policy_content',
+            ScopeInterface::SCOPE_STORE
+        );
         $output['shippingPolicy'] = [
             'isEnabled' => $this->scopeConfig->isSetFlag(
                 'shipping/shipping_policy/enable_shipping_policy',
                 ScopeInterface::SCOPE_STORE
             ),
-            'shippingPolicyContent' => nl2br(
-                $this->scopeConfig->getValue(
-                    'shipping/shipping_policy/shipping_policy_content',
-                    ScopeInterface::SCOPE_STORE
-                )
-            )
+            'shippingPolicyContent' => $policyContent ? nl2br($policyContent) : ''
         ];
         $output['useQty'] = $this->scopeConfig->isSetFlag(
             'checkout/cart_link/use_qty',
