@@ -52,11 +52,6 @@ class AddProductsToCart
     private $productRepository;
 
     /**
-     * @var array
-     */
-    private $errors = [];
-
-    /**
      * @var CartRepositoryInterface
      */
     private $cartRepository;
@@ -72,21 +67,29 @@ class AddProductsToCart
     private $requestBuilder;
 
     /**
+     * @var \Magento\Quote\Model\QuoteFactory
+     */
+    private $quoteFactory;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        BuyRequestBuilder $requestBuilder
+        BuyRequestBuilder $requestBuilder,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory
     ) {
         $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
+        $this->quoteFactory = $quoteFactory;
     }
 
     /**
@@ -101,33 +104,39 @@ class AddProductsToCart
     {
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         $cart = $this->cartRepository->get($cartId);
-
-        foreach ($cartItems as $cartItemPosition => $cartItem) {
-            $this->addItemToCart($cart, $cartItem, $cartItemPosition);
-            // reset cart items and addresses to clean cache
-            $cart->setTotalsCollectedFlag(false);
-            $cart->getItemsCollection()->clear();
-            $cart->getAddressesCollection()->clear();
-            foreach ($cart->getAddressesCollection() as $item) {
-                $item->setQuote($cart);
-            }
-        }
-
+        $allErrors = [];
         if ($cart->getData('has_error')) {
             $errors = $cart->getErrors();
 
             /** @var MessageInterface $error */
             foreach ($errors as $error) {
-                $this->addError($error->getText());
+                $allErrors[] = $this->createError($error->getText());
             }
         }
 
-        if (count($this->errors) !== 0) {
+        foreach ($cartItems as $cartItemPosition => $cartItem) {
+            $tempCart = $this->cloneQuote($cart);
+            $tempCart->setHasError(false);
+            $errors = $this->addItemToCart($tempCart, $cartItem, $cartItemPosition);
+            if ($errors) {
+                array_push($allErrors, ...$errors);
+            } else {
+                $cart->removeAllItems();
+                foreach ($tempCart->getAllItems() as $quoteItem) {
+                    $quoteItem->setQuote($cart);
+                    $cart->addItem($quoteItem);
+                }
+            }
+        }
+
+        $this->cartRepository->save($cart);
+
+        if (count($allErrors) !== 0) {
             /* Revert changes introduced by add to cart processes in case of an error */
             $cart->getItemsCollection()->clear();
         }
 
-        return $this->prepareErrorOutput($cart);
+        return $this->prepareErrorOutput($cart, $allErrors);
     }
 
     /**
@@ -136,47 +145,47 @@ class AddProductsToCart
      * @param CartInterface|Quote $cart
      * @param Data\CartItem $cartItem
      * @param int $cartItemPosition
+     * @return array
      */
-    private function addItemToCart(CartInterface $cart, Data\CartItem $cartItem, int $cartItemPosition): void
+    private function addItemToCart(CartInterface $cart, Data\CartItem $cartItem, int $cartItemPosition): array
     {
         $sku = $cartItem->getSku();
+        $errors = [];
 
         if ($cartItem->getQuantity() <= 0) {
-            $this->addError(__('The product quantity should be greater than 0')->render());
+            $errors[] = $this->createError(__('The product quantity should be greater than 0')->render());
+        } else {
+            $product = null;
+            try {
+                $product = $this->productRepository->get($sku, false, null, true);
+            } catch (NoSuchEntityException $e) {
+                $errors[] = $this->createError(
+                    __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                    $cartItemPosition
+                );
+            }
 
-            return;
-        }
+            if ($product !== null) {
+                $result = null;
+                try {
+                    $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
+                } catch (\Throwable $e) {
+                    $errors[] = $this->createError(
+                        __($e->getMessage())->render(),
+                        $cartItemPosition
+                    );
+                }
 
-        try {
-            $product = $this->productRepository->get($sku, false, null, true);
-        } catch (NoSuchEntityException $e) {
-            $this->addError(
-                __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
-                $cartItemPosition
-            );
-
-            return;
-        }
-
-        try {
-            $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
-            $this->cartRepository->save($cart);
-        } catch (\Throwable $e) {
-            $this->addError(
-                __($e->getMessage())->render(),
-                $cartItemPosition
-            );
-            $cart->setHasError(false);
-
-            return;
-        }
-
-        if (is_string($result)) {
-            $errors = array_unique(explode("\n", $result));
-            foreach ($errors as $error) {
-                $this->addError(__($error)->render(), $cartItemPosition);
+                if (is_string($result)) {
+                    $errors = array_unique(explode("\n", $result));
+                    foreach ($errors as $error) {
+                        $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
+                    }
+                }
             }
         }
+
+        return $errors;
     }
 
     /**
@@ -184,11 +193,11 @@ class AddProductsToCart
      *
      * @param string $message
      * @param int $cartItemPosition
-     * @return void
+     * @return Data\Error
      */
-    private function addError(string $message, int $cartItemPosition = 0): void
+    private function createError(string $message, int $cartItemPosition = 0): Data\Error
     {
-        $this->errors[] = new Data\Error(
+        return new Data\Error(
             $message,
             $this->getErrorCode($message),
             $cartItemPosition
@@ -219,14 +228,53 @@ class AddProductsToCart
      * Creates a new output from existing errors
      *
      * @param CartInterface $cart
+     * @param array $errors
      * @return AddProductsToCartOutput
      */
-    private function prepareErrorOutput(CartInterface $cart): AddProductsToCartOutput
+    private function prepareErrorOutput(CartInterface $cart, array $errors = []): AddProductsToCartOutput
     {
-        $output = new AddProductsToCartOutput($cart, $this->errors);
-        $this->errors = [];
+        $output = new AddProductsToCartOutput($cart, $errors);
         $cart->setHasError(false);
 
         return $output;
+    }
+
+    /**
+     * Create temporary quote, which will incapsulate non-checked data.
+     *
+     * Under unchecked data, means, some data that can not pass validation or etc
+     *
+     * @param Quote $quote
+     * @return Quote
+     */
+    private function cloneQuote(Quote $quote)
+    {
+        // copy data to temporary quote
+        /** @var $temporaryQuote \Magento\Quote\Model\Quote */
+        $temporaryQuote = $this->quoteFactory->create();
+        $temporaryQuote->setData($quote->getData());
+        $temporaryQuote->setId(null);//as it is clone, we need to flush ids
+        $temporaryQuote->setStore($quote->getStore())->setIsSuperMode($quote->getIsSuperMode());
+        /** @var Quote\Item $quoteItem */
+        foreach ($quote->getAllItems() as $quoteItem) {
+            $temporaryItem = clone $quoteItem;
+            $temporaryItem->setQuote($temporaryQuote);
+            $temporaryQuote->addItem($temporaryItem);
+            $quoteItem->setClonnedItem($temporaryItem);
+
+            //Check for parent item
+            $parentItem = null;
+            if ($quoteItem->getParentItem()) {
+                $parentItem = $quoteItem->getParentItem();
+                $temporaryItem->setParentProductId(null);
+            } elseif ($quoteItem->getParentProductId()) {
+                $parentItem = $quote->getItemById($quoteItem->getParentProductId());
+            }
+            if ($parentItem && $parentItem->getClonnedItem()) {
+                $temporaryItem->setParentItem($parentItem->getClonnedItem());
+            }
+        }
+
+        return $temporaryQuote;
     }
 }
