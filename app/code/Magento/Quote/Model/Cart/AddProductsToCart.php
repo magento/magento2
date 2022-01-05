@@ -177,8 +177,7 @@ class AddProductsToCart
                 }
 
                 if (is_string($result)) {
-                    $errors = array_unique(explode("\n", $result));
-                    foreach ($errors as $error) {
+                    foreach (array_unique(explode("\n", $result)) as $error) {
                         $errors[] = $this->createError(__($error)->render(), $cartItemPosition);
                     }
                 }
