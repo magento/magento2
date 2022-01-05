@@ -26,6 +26,7 @@
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">100</field>
             </createData>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleUSCustomer" stepKey="deleteCustomer"/>
