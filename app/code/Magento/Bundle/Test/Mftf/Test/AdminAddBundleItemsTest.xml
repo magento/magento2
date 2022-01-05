@@ -60,12 +60,12 @@
         <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddSelectedBundleProducts"/>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantity"/>
         <assertEquals stepKey="assertFirstBundleOptionDefaultQuantity">
-            <expectedResult type="string">50</expectedResult>
+            <expectedResult type="string">1</expectedResult>
             <actualResult type="string">$grabbedFirstBundleOptionQuantity</actualResult>
         </assertEquals>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantity"/>
         <assertEquals stepKey="assertSecondBundleOptionDefaultQuantity">
-            <expectedResult type="string">50</expectedResult>
+            <expectedResult type="string">1</expectedResult>
             <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
         </assertEquals>
         <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
@@ -130,12 +130,12 @@
         <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddNewSelectedBundleProducts"/>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantityAfterUserInput"/>
         <assertEquals stepKey="assertFirstBundleOptionDefaultQuantityAfterUserInput">
-            <expectedResult type="string">50</expectedResult>
+            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
             <actualResult type="string">$grabbedFirstBundleOptionQuantityAfterUserInput</actualResult>
         </assertEquals>
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" stepKey="grabbedSecondBundleOptionQuantityAfterUserInput"/>
         <assertEquals stepKey="assertSecondBundleOptionDefaultQuantityAfterUserInput">
-            <expectedResult type="string">50</expectedResult>
+            <expectedResult type="string">{{BundleProduct.defaultQuantity}}</expectedResult>
             <actualResult type="string">$grabbedSecondBundleOptionQuantityAfterUserInput</actualResult>
         </assertEquals>
         <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillNewProductDefaultQty1">
