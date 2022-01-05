@@ -798,14 +798,14 @@ class QuoteTest extends TestCase
             }
             $quote->removeItem($idToDelete);
             $this->assertEquals(
-            1,
-            $quote->getIsMultiShipping(),
-            "Multi-shipping mode is disabled after quote item removal"
+                1,
+                $quote->getIsMultiShipping(),
+                "Multi-shipping mode is disabled after quote item removal"
             );
         } else {
             $this->assertTrue(
-            !is_null($idToDelete),
-            "No Simple Product item with qty 1 to delete exists"
+                !is_null($idToDelete),
+                "No Simple Product item with qty 1 to delete exists"
             );
         }
     }
