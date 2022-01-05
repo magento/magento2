@@ -46,8 +46,10 @@ class DepersonalizePluginTest extends TestCase
     protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $this->checkoutSessionMock = $this->createPartialMock(CheckoutSession::class,
-            ['clearStorage', 'setQuoteId', 'getQuoteId']);
+        $this->checkoutSessionMock = $this->createPartialMock(
+            CheckoutSession::class,
+            ['clearStorage', 'setQuoteId', 'getQuoteId']
+        );
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
