@@ -115,7 +115,7 @@ class DepersonalizePluginTest extends TestCase
     }
 
     /**
-     * Test afterGenerateElements method when depersonalization is needed.
+     * Test beforeGenerateElements method when depersonalization is not needed.
      *
      * @return void
      */
