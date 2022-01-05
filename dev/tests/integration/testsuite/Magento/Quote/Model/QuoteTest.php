@@ -778,7 +778,7 @@ class QuoteTest extends TestCase
         $session->replaceQuote($quote);
         $items = $quote->getAllItems();
         $idToDelete = null;
-        foreach($items as $item) {
+        foreach ($items as $item) {
             if (!$item->getProduct()->isVirtual() && $item->getQty() == 1) {
                 $idToDelete = $item->getId();
             }
@@ -786,7 +786,7 @@ class QuoteTest extends TestCase
 
         if (!is_null($idToDelete)) {
             $quoteShippingAddresses = $quote->getAllShippingAddresses();
-            foreach($quoteShippingAddresses as $shippingAddress) {
+            foreach ($quoteShippingAddresses as $shippingAddress) {
                 if ($shippingAddress->getItemById($idToDelete)) {
                     $shippingAddress->removeItem($idToDelete);
                     $shippingAddress->setCollectShippingRates(true);
@@ -797,11 +797,16 @@ class QuoteTest extends TestCase
                 }
             }
             $quote->removeItem($idToDelete);
-            $this->assertEquals(1, $quote->getIsMultiShipping(),
-                "Multi-shipping mode is disabled after quote item removal");
+            $this->assertEquals(
+            1,
+            $quote->getIsMultiShipping(),
+            "Multi-shipping mode is disabled after quote item removal"
+            );
         } else {
-            $this->assertTrue(!is_null($idToDelete),
-                "No Simple Product item with qty 1 to delete exists");
+            $this->assertTrue(
+            !is_null($idToDelete),
+            "No Simple Product item with qty 1 to delete exists"
+            );
         }
     }
 }

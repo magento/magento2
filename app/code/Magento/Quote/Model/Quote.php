@@ -112,7 +112,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Checkout login method key
      */
-    protected const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
+    public const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
 
     /**
      * @var string
