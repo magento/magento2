@@ -18,6 +18,6 @@
         </arguments>
 
         <waitForElementVisible selector="{{StorefrontProductActionSection.quantity}}" stepKey="waitForProductQuantity" before="fillProductQuantity"/>
-        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQuantity" before="waitForAddToCartButton"/>
+        <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQuantity" before="waitForAddToCartButtonToRemoveDisabledState"/>
     </actionGroup>
 </actionGroups>
