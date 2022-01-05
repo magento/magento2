@@ -31,6 +31,7 @@
                 <field id="api_cert" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_cert" />
                 <field id="api_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/api_wizard" />
                 <field id="sandbox_flag" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/sandbox_flag" />
+                <field id="buyer_country" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/buyer_country" />
                 <field id="use_proxy" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/use_proxy" />
                 <field id="proxy_host" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/proxy_host" />
                 <field id="proxy_port" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/proxy_port" />
@@ -154,7 +155,7 @@
                 </group>
             </group>
             <group id="pphs_advertise_paylater"  translate="label" showInDefault="1" showInWebsite="1" sortOrder="60">
-                <label>Advertise PayPal PayLater</label>
+                <label>Advertise PayPal Pay Later</label>
                 <field id="paylater_enabled" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_paylater/paylater_enabled" />
                 <depends>
                     <field id="enable_paypal_paylater_experience">1</field>

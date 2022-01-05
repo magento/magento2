@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="https://github.com/magento/magento2-login-as-customer/pull/192"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
