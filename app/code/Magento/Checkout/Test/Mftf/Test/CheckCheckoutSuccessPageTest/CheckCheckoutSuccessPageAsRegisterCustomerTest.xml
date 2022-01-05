@@ -15,10 +15,8 @@
             <description value="To be sure that other elements of Success page are shown for placed order as registered Customer."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-16488"/>
-            <skip>
-                <issueId value="MQE-2834" />
-            </skip>
             <group value="checkout"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleTwo" stepKey="createSimpleProduct"/>
@@ -124,6 +122,7 @@
         <switchToWindow stepKey="switchToWindow"/>
         <switchToNextTab stepKey="switchToTab"/>
         <seeInCurrentUrl url="sales/order/print/order_id" stepKey="seePrintPage"/>
+        
         <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
         <switchToWindow stepKey="switchToWindow2"/>
     </test>
