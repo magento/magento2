@@ -22,15 +22,12 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
-            <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
-            <!-- Create the configurable product based on the data in the /data folder -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
 
-            <!-- Make the configurable product have two options, that are children of the default attribute set -->
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
             <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -54,7 +51,6 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
 
-            <!-- Create the 2 children that will be a part of the configurable product -->
             <createData entity="ApiSimpleProductWithPrice50" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
@@ -68,7 +64,6 @@
                 <requiredEntity createDataKey="getConfigAttributeOption3"/>
             </createData>
 
-            <!-- Assign the two products to the configurable product -->
             <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
@@ -89,11 +84,9 @@
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
 
-            <!--Enable Minimum advertised Price-->
             <createData entity="MsrpEnableMAP" stepKey="enableMAP"/>
         </before>
         <after>
-            <!--Delete created data-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
@@ -101,76 +94,81 @@
             <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
-            <!--Disable Minimum advertised Price-->
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
-            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <!-- Set Manufacturer's Suggested Retail Price to products-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProductEditPage">
             <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp"/>
-        <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="55" stepKey="setMsrpForFirstChildProduct"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAdvancedPricingButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForMsrp"/>
+        <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setMsrpForFirstChildProduct">
+            <argument name="advancedPrice" value="55"/>
+        </actionGroup>    
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickDoneButton"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
 
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProductEditPage">
             <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
-        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton1"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.msrp}}" stepKey="waitForMsrp1"/>
-        <fillField selector="{{AdminProductFormAdvancedPricingSection.msrp}}" userInput="66" stepKey="setMsrpForSecondChildProduct"/>
-        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAdvancedPricingButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForMsrp1"/>
+        <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setMsrpForSecondChildProduct">
+            <argument name="advancedPrice" value="66"/>
+        </actionGroup>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickDoneButton1"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
-        <!--Go to store front and check msrp for products-->
-        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToConfigProductPage"/>
-        <waitForPageLoad stepKey="waitForLoadConfigProductPage"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToConfigProductPage">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadConfigProductPage"/> 
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabMapPrice"/>
         <assertEquals stepKey="assertMapPrice">
 			<actualResult type="const">($grabMapPrice)</actualResult>
 			<expectedResult type="string">$66.00</expectedResult>
         </assertEquals>
-        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLink"/>
+        <actionGroup ref="StorefrontAssertClickForPriceLinkIsDisplayedActionGroup" stepKey="checkClickForPriceLink"/>
 
-        <!--Check msrp for second child product-->
-        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption2.value$$" stepKey="selectSecondOption"/>
-        <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad"/>
+        <actionGroup ref="StorefrontSelectProductOptionValueActionGroup" stepKey="selectSecondOption">
+            <argument name="optionValue" value="$$getConfigAttributeOption2.value$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabSecondProductMapPrice"/>
         <assertEquals stepKey="assertSecondProductMapPrice">
 			<actualResult type="const">($grabSecondProductMapPrice)</actualResult>
 			<expectedResult type="string">$66.00</expectedResult>
         </assertEquals>
-        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForSecondProduct"/>
+        <actionGroup ref="StorefrontAssertClickForPriceLinkIsDisplayedActionGroup" stepKey="checkClickForPriceLinkForSecondProduct"/>
 
-        <!--Check msrp for first child product-->
-        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectFirstOption"/>
-        <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad1"/>
+        <actionGroup ref="StorefrontSelectProductOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="optionValue" value="$$getConfigAttributeOption1.value$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoad1"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabFirstProductMapPrice"/>
         <assertEquals stepKey="assertFirstProductMapPrice">
 			<actualResult type="const">($grabFirstProductMapPrice)</actualResult>
 			<expectedResult type="string">$55.00</expectedResult>
         </assertEquals>
-        <seeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForFirstProduct"/>
+        <actionGroup ref="StorefrontAssertClickForPriceLinkIsDisplayedActionGroup" stepKey="checkClickForPriceLinkForFirstProduct"/>
 
-        <!--Check price for third child product-->
-        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption3.value$$" stepKey="selectThirdOption"/>
+        <actionGroup ref="StorefrontSelectProductOptionValueActionGroup" stepKey="selectThirdOption">
+            <argument name="optionValue" value="$$getConfigAttributeOption3.value$$"/>
+        </actionGroup>
         <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad2"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="grabThirdProductMapPrice"/>
         <assertEquals stepKey="assertThirdProductMapPrice">
 			<actualResult type="const">($grabThirdProductMapPrice)</actualResult>
 			<expectedResult type="string">$70.00</expectedResult>
         </assertEquals>
-        <dontSeeElement selector="{{StorefrontProductInfoMainSection.clickForPriceLink}}" stepKey="checkClickForPriceLinkForThirdProduct"/>
+        <actionGroup ref="StorefrontAssertClickForPriceLinkIsNotDisplayedActionGroup" stepKey="checkClickForPriceLinkForThirdProduct"/>
     </test>
 </tests>
