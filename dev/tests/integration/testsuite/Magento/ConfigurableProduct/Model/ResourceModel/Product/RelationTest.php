@@ -53,17 +53,25 @@ class RelationTest extends TestCase
     /**
      * Tests that getRelationsByChildren will return parent products entity ids of child products entity ids.
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_10"} as:p1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_20"} as:p2
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_30"} as:p3
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple_40"} as:p4
+     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Attribute as:attr
+     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf1
+     * @magentoDataFixture Magento\ConfigurableProduct\Test\Fixture\Product as:conf2
+     * @magentoDataFixtureDataProvider {"conf1":{"sku":"conf1","_options":["$attr$"],"_links":["$p1$","$p2$"]}}
+     * @magentoDataFixtureDataProvider {"conf2":{"sku":"conf2","_options":["$attr$"],"_links":["$p3$","$p4$"]}}
      */
     public function testGetRelationsByChildren(): void
     {
         $childSkusOfParentSkus = [
-            'configurable' => ['simple_10', 'simple_20'],
-            'configurable_12345' => ['simple_30', 'simple_40'],
+            'conf1' => ['simple_10', 'simple_20'],
+            'conf2' => ['simple_30', 'simple_40'],
         ];
         $configurableSkus = [
-            'configurable',
-            'configurable_12345',
+            'conf1',
+            'conf2',
             'simple_10',
             'simple_20',
             'simple_30',
@@ -114,7 +122,7 @@ class RelationTest extends TestCase
      */
     private function sortParentIdsOfChildIds(array $array): array
     {
-        foreach ($array as $childId => &$parentIds) {
+        foreach ($array as &$parentIds) {
             sort($parentIds, SORT_NUMERIC);
         }
 
