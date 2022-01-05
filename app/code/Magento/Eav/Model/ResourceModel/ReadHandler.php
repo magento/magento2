@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel;
 use Exception;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
@@ -135,12 +136,15 @@ class ReadHandler implements AttributeInterface
         $attributeTables = [];
         $attributesMap = [];
         $selects = [];
+        $attributeScopeGlobal = [];
 
         /** @var AbstractAttribute $attribute */
         foreach ($this->getEntityAttributes($entityType, new DataObject($entityData)) as $attribute) {
             if (!$attribute->isStatic()) {
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
+                $attributeScopeGlobal[$attribute->getAttributeId()] =
+                    $attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL;
             }
         }
         if (count($attributeTables)) {
@@ -174,6 +178,12 @@ class ReadHandler implements AttributeInterface
             $attributes = $connection->fetchAll($orderedUnionSelect);
             foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
+                    if (isset($attributeScopeGlobal[$attributeValue['attribute_id']]) && $attributeScopeGlobal[$attributeValue['attribute_id']]) {
+                        if ((int)$attributeValue['store_id'] !== \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                            continue;
+                        }
+                        $entityData[$attributesMap[$attributeValue['attribute_id']]] =  $attributeValue['value'];
+                    }
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {
                     $this->logger->warning(
