@@ -226,7 +226,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $environmentMock->expects($this->any())
             ->method('getServer')
             ->with('argv')
-            ->willReturn($_SERVER['argv']);
+            ->willReturn([]);
 
         $this->cronQueueObserver = new ProcessCronQueueObserver(
             $this->objectManagerMock,
