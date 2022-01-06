@@ -18,17 +18,22 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 /** @var CustomerRepositoryInterface $customerRepo */
 $customerRepo = $objectManager->get(CustomerRepositoryInterface::class);
-try {
-    $customer = $customerRepo->get('customer_with_addresses@test.com');
-    /** @var AddressRepositoryInterface $addressRepo */
-    $addressRepo = $objectManager->get(AddressRepositoryInterface::class);
-    foreach ($customer->getAddresses() as $address) {
-        $addressRepo->delete($address);
+$customersEmails = [
+    'customer_one_address@test.com',
+    'customer_with_addresses@test.com',
+];
+$addressRepo = $objectManager->get(AddressRepositoryInterface::class);
+foreach ($customersEmails as $customerEmail) {
+    try {
+        $customer = $customerRepo->get($customerEmail);
+        foreach ($customer->getAddresses() as $address) {
+            $addressRepo->delete($address);
+        }
+        $customerRepo->delete($customer);
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+    } catch (NoSuchEntityException $exception) {
+        //Already deleted
     }
-    $customerRepo->delete($customer);
-// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-} catch (NoSuchEntityException $exception) {
-    //Already deleted
 }
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryMainImageButtonsActionGroup">
+        <annotations>
+            <description>Assert the buttons functionality "change image" on the product media gallery on the product page</description>
+        </annotations>
+        <arguments>
+            <argument name="startImage" type="string" />
+            <argument name="expectedImage" type="string" />
+        </arguments>
+        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForButtons"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeProductImageBeforeActions"/>
+        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButton"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageSelectedInRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(expectedImage)}}" stepKey="seeExpectedImageOnPreview"/>
+        <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickOnPrevImageButton"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageSelectedInRibbonAfterSecondChange"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeMainProductImageAfterSecondChange"/>
+    </actionGroup>
+</actionGroups>

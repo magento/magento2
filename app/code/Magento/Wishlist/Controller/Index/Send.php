@@ -198,7 +198,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         if (strlen($message) > $textLimit) {
             $error = __('Message length must not exceed %1 symbols', $textLimit);
         } else {
-            $message = nl2br($this->escaper->escapeHtml($message));
+            $message = nl2br((string) $this->escaper->escapeHtml($message));
             if (empty($emails)) {
                 $error = __('Please enter an email address.');
             } else {

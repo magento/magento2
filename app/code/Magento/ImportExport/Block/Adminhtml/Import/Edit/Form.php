@@ -248,6 +248,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                         .', e.g. <i>product_images</i>, <i>import_images/batch1</i>.<br><br>'
                         .'For example, in case <i>product_images</i>, files should be placed into '
                         .'<i>&lt;Magento root directory&gt;/'
+                        .$this->imagesDirectoryProvider->getDirectoryRelativePath() . '/product_images</i> folder.<br>'
+                        .'<br>If remote storage is enabled, in case <i>product_images</i>, files should be placed into '
+                        .'<i>&lt;Remote Storage&gt;/'
                         .$this->imagesDirectoryProvider->getDirectoryRelativePath() . '/product_images</i> folder.',
                         ['i', 'br']
                     )
@@ -284,7 +287,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $html = '<div class="admin__field-tooltip tooltip">
             <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?"
-                href="https://docs.magento.com/m2/ce/user_guide/system/data-import.html"><span>'
+                href="https://docs.magento.com/user-guide/system/data-import.html"><span>'
             . __('What is this?')
             . '</span></a></div>';
         return $html;

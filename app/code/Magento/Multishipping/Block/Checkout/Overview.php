@@ -6,6 +6,8 @@
 
 namespace Magento\Multishipping\Block\Checkout;
 
+use Magento\Captcha\Block\Captcha;
+use Magento\Checkout\Model\CaptchaPaymentProcessingRateLimiter;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
@@ -125,6 +127,21 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $this->pageConfig->getTitle()->set(
             __('Review Order - %1', $this->pageConfig->getTitle()->getDefault())
         );
+        if (!$this->getChildBlock('captcha')) {
+            $this->addChild(
+                'captcha',
+                Captcha::class,
+                [
+                    'cacheable' => false,
+                    'after' => '-',
+                    'form_id' => CaptchaPaymentProcessingRateLimiter::CAPTCHA_FORM,
+                    'image_width' => 230,
+                    'image_height' => 230,
+                    'frontend_validation' => false
+                ]
+            );
+        }
+
         return parent::_prepareLayout();
     }
 

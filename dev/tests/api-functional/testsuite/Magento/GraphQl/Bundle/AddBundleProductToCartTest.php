@@ -104,6 +104,7 @@ mutation {
     cart {
       items {
         id
+        uid
         quantity
         product {
           sku
@@ -111,10 +112,12 @@ mutation {
         ... on BundleCartItem {
           bundle_options {
             id
+            uid
             label
             type
             values {
               id
+              uid
               label
               price
               quantity

@@ -22,7 +22,7 @@
         <element name="showCart" type="button" selector="a.showcart" timeout="60"/>
         <element name="quantity" type="button" selector="span.counter-number"/>
         <element name="miniCartOpened" type="button" selector="a.showcart.active"/>
-        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="30"/>
+        <element name="goToCheckout" type="button" selector="#top-cart-btn-checkout" timeout="60"/>
         <element name="viewAndEditCart" type="button" selector=".action.viewcart" timeout="30"/>
         <element name="miniCartItemsText" type="text" selector=".minicart-items"/>
         <element name="editMiniCartItem" type="button" selector=".action.edit" timeout="30"/>
@@ -44,5 +44,6 @@
         <element name="productQuantity" type="input" selector="//*[@id='mini-cart']//a[contains(text(),'{{productName}}')]/../..//div[@class='details-qty qty']//input[@data-item-qty='{{qty}}']" parameterized="true"/>
         <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>
         <element name="productSubTotal" type="text" selector="//div[@class='subtotal']//span/span[@class='price']"/>
+        <element name="productCountLabel" type="text" selector="//*[@id='minicart-content-wrapper']/div[2]/div[1]/span[2]"/>
     </section>
 </sections>

@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="MC-33903"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -53,7 +54,7 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveFirstProduct"/>
 
         <!-- Assert product video in storefront product page -->
-        <amOnPage url="$$createProduct.name$$.html" stepKey="goToStorefrontCategoryPage"/>
+        <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForStorefrontPageLoaded"/>
         <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage" after="waitForStorefrontPageLoaded"/>
 

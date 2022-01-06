@@ -21,7 +21,7 @@
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+                <argument name="indices" value="customer_grid"/>
             </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>

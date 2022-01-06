@@ -135,6 +135,12 @@ return [
                 ],
                 "type" => "rangeBucket",
             ],
+            'dynamic_bucket' => [
+                'name' => 'dynamic_bucket',
+                'field' => 'price',
+                'method' => 'auto',
+                'type' => 'dynamicBucket'
+            ]
         ],
         "from" => "10",
         "size" => "10",

@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -15,6 +17,7 @@ use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\App\Emulation;
 
 /**
  * Sends order creditmemo email to the customer.
@@ -53,6 +56,11 @@ class CreditmemoSender extends Sender
     protected $eventManager;
 
     /**
+     * @var Emulation
+     */
+    private $appEmulation;
+
+    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
@@ -62,6 +70,9 @@ class CreditmemoSender extends Sender
      * @param CreditmemoResource $creditmemoResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param ManagerInterface $eventManager
+     * @param Emulation|null $appEmulation
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Template $templateContainer,
@@ -72,7 +83,8 @@ class CreditmemoSender extends Sender
         PaymentHelper $paymentHelper,
         CreditmemoResource $creditmemoResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
@@ -80,6 +92,7 @@ class CreditmemoSender extends Sender
         $this->globalConfig = $globalConfig;
         $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -100,12 +113,12 @@ class CreditmemoSender extends Sender
      */
     public function send(Creditmemo $creditmemo, $forceSyncMode = false)
     {
+        $this->identityContainer->setStore($creditmemo->getStore());
         $creditmemo->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();
-            $this->identityContainer->setStore($order->getStore());
-
+            $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
                 'order_id' => $order->getId(),
@@ -125,6 +138,7 @@ class CreditmemoSender extends Sender
                 ]
             ];
             $transportObject = new DataObject($transport);
+            $this->appEmulation->stopEnvironmentEmulation();
 
             /**
              * Event argument `transport` is @deprecated. Use `transportObject` instead.

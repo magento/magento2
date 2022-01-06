@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+use Magento\Framework\GetParameterClassTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -15,6 +16,8 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class ObjectManager
 {
+    use GetParameterClassTrait;
+
     /**
      * Special cases configuration
      *
@@ -217,12 +220,13 @@ class ObjectManager
                             if (isset($arguments[$parameterName])) {
                                 $args[] = $arguments[$parameterName];
                             } else {
-                                if ($parameter->isArray()) {
+                                if ($parameter->getType() && $parameter->getType()->getName() === 'array') {
                                     $args[] = [];
                                 } elseif ($parameter->allowsNull()) {
                                     $args[] = null;
                                 } else {
-                                    $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
+                                    $parameterClass = $this->getParameterClass($parameter);
+                                    $mock = $this->_getMockWithoutConstructorCall($parameterClass->getName());
                                     $args[] = $mock;
                                 }
                             }
@@ -268,8 +272,8 @@ class ObjectManager
 
             $object = null;
             try {
-                if ($parameter->getClass()) {
-                    $argClassName = $parameter->getClass()->getName();
+                if ($parameterClass = $this->getParameterClass($parameter)) {
+                    $argClassName = $parameterClass->getName();
                 }
                 $object = $this->_getMockObject($argClassName, $arguments);
             } catch (\ReflectionException $e) {

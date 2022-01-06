@@ -6,12 +6,11 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.1/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="../../bootstrap.php"
->
+         bootstrap="../../bootstrap.php">
     <testsuites>
         <testsuite name="Magento Unit Tests for Static Code Analysis Framework">
             <directory>testsuite/Magento/TestFramework</directory>
@@ -21,7 +20,7 @@
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>
     <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->

@@ -362,8 +362,8 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
         return [
             'type' => 'image/jpeg',
             'title' => 'test.jpg',
-            'quote_path' => 'custom_options/quote/t/e/RandomString',
-            'order_path' => 'custom_options/order/t/e/RandomString',
+            'quote_path' => 'custom_options/quote/R/a/RandomString',
+            'order_path' => 'custom_options/order/R/a/RandomString',
             'size' => '3046',
             'width' => 136,
             'height' => 131,

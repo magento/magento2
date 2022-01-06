@@ -6,7 +6,9 @@
 
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Image adapter from ImageMagick.
@@ -16,14 +18,14 @@ class ImageMagick extends AbstractAdapter
     /**
      * The blur factor where > 1 is blurry, < 1 is sharp
      */
-    const BLUR_FACTOR = 0.7;
+    public const BLUR_FACTOR = 0.7;
 
     /**
      * Error messages
      */
-    const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
+    public const ERROR_WATERMARK_IMAGE_ABSENT = 'Watermark Image absent.';
 
-    const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
+    public const ERROR_WRONG_IMAGE = 'Image is not readable or file name is empty.';
 
     /**
      * Options Container
@@ -88,6 +90,11 @@ class ImageMagick extends AbstractAdapter
      */
     public function open($filename)
     {
+        if ($filename === null || !file_exists($filename)) {
+            throw new FileSystemException(
+                new Phrase('File "%1" does not exist.', [$filename])
+            );
+        }
         if (!empty($filename) && !$this->validateURLScheme($filename)) {
             throw new \InvalidArgumentException('Wrong file');
         }

@@ -47,36 +47,36 @@ type Query {
 type Mutation {
 }
 
-input FilterTypeInput @doc(description: "FilterTypeInput specifies which action will be performed in a query ") {
-    eq: String @doc(description: "Equals")
-    finset: [String] @deprecated (reason: "The finset filter is deprecated. Magento doesn't recomend to store comma separated values, therefore finset filter is redundant.")
-    from: String @doc(description: "From. Must be used with 'to'")
-    gt: String @doc(description: "Greater than")
-    gteq: String @doc(description: "Greater than or equal to")
-    in: [String] @doc(description: "In. The value can contain a set of comma-separated values")
-    like: String @doc(description: "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters")
-    lt: String @doc(description: "Less than")
-    lteq: String @doc(description: "Less than or equal to")
-    moreq: String @doc(description: "More than or equal to")
-    neq: String @doc(description: "Not equal to")
-    notnull: String @doc(description: "Not null")
-    null: String @doc(description: "Is null")
-    to: String@doc(description: "To. Must be used with 'from'")
-    nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values")
+input FilterTypeInput @doc(description: "Defines the comparison operators that can be used in a filter.") {
+    eq: String @doc(description: "Equals.")
+    finset: [String] @deprecated (reason: "We do not recommend storing comma separated values, therefore the `finset` filter is redundant.")
+    from: String @doc(description: "From. Must be used with the `to` field.")
+    gt: String @doc(description: "Greater than.")
+    gteq: String @doc(description: "Greater than or equal to.")
+    in: [String] @doc(description: "In. The value can contain a set of comma-separated values.")
+    like: String @doc(description: "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters.")
+    lt: String @doc(description: "Less than.")
+    lteq: String @doc(description: "Less than or equal to.")
+    moreq: String @doc(description: "More than or equal to.")
+    neq: String @doc(description: "Not equal to.")
+    notnull: String @doc(description: "Not null.")
+    null: String @doc(description: "Is null.")
+    to: String@doc(description: "To. Must be used with the `from` field.")
+    nin: [String] @doc(description: "Not in. The value can contain a set of comma-separated values.")
 }
 
 input FilterEqualTypeInput @doc(description: "Defines a filter that matches the input exactly.") {
-    in: [String] @doc(description: "An array of values to filter on")
-    eq: String @doc(description: "A string to filter on")
+    in: [String] @doc(description: "Use this attribute to filter on an array of values. For example, to filter on category IDs 4, 5, and 6, specify a value of `[\"4\", \"5\", \"6\"]`.")
+    eq: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific category ID, specify a value such as `5`.")
 }
 
 input FilterRangeTypeInput @doc(description: "Defines a filter that matches a range of values, such as prices or dates.") {
-    from: String @doc(description: "The beginning of the range")
-    to: String @doc(description: "The end of the range")
+    from: String @doc(description: "Use this attribute to specify the lowest possible value in the range.")
+    to: String @doc(description: "Use this attribute to specify the highest possible value in the range.")
 }
 
 input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
-    match: String @doc(description: "One or more words to filter on")
+    match: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific SKU, specify a value such as `24-MB01`.")
 }
 
 input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {
@@ -85,27 +85,27 @@ input FilterStringTypeInput @doc(description: "Defines a filter for an input str
     match: String @doc(description: "Defines a filter that performs a fuzzy search using the specified string.")
 }
 
-type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
-    page_size: Int @doc(description: "Specifies the maximum number of items to return")
-    current_page: Int @doc(description: "Specifies which page of results to return")
-    total_pages: Int @doc(description: "Total pages")
+type SearchResultPageInfo @doc(description: "Provides navigation for the query response.") {
+    page_size: Int @doc(description: "The maximum number of items to return per page of results.")
+    current_page: Int @doc(description: "The specific page to return.")
+    total_pages: Int @doc(description: "The total number of pages in the response.")
 }
 
-enum SortEnum @doc(description: "This enumeration indicates whether to return results in ascending or descending order") {
+enum SortEnum @doc(description: "Indicates whether to return results in ascending or descending order.") {
     ASC
     DESC
 }
 
 type ComplexTextValue {
-    html: String! @doc(description: "HTML format")
+    html: String! @doc(description: "Text that can contain HTML tags.")
 }
 
-type Money @doc(description: "A Money object defines a monetary value, including a numeric value and a currency code.") {
-    value: Float @doc(description: "A number expressing a monetary value")
-    currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR")
+type Money @doc(description: "Defines a monetary value, including a numeric value and a currency code.") {
+    value: Float @doc(description: "A number expressing a monetary value.")
+    currency: CurrencyEnum @doc(description: "A three-letter currency code, such as USD or EUR.")
 }
 
-enum CurrencyEnum @doc(description: "The list of available currency codes") {
+enum CurrencyEnum @doc(description: "The list of available currency codes.") {
     AFN
     ALL
     AZN
@@ -278,7 +278,24 @@ enum CurrencyEnum @doc(description: "The list of available currency codes") {
     XPF
 }
 
-input EnteredOptionInput @doc(description: "Defines a customer-entered option") {
-    uid: ID! @doc(description: "An encoded ID")
-    value: String! @doc(description: "Text the customer entered")
+input EnteredOptionInput @doc(description: "Defines a customer-entered option.") {
+    uid: ID! @doc(description: "The unique ID for a `CustomizableOptionInterface` object, such as a `CustomizableFieldOption`, `CustomizableFileOption`, or `CustomizableAreaOption` object.")
+    value: String! @doc(description: "Text the customer entered.")
+}
+
+enum BatchMutationStatus {
+    SUCCESS
+    FAILURE
+    MIXED_RESULTS
+}
+
+interface ErrorInterface @typeResolver(class: "\\Magento\\GraphQl\\Model\\Mutation\\Resolver\\ErrorTypeResolver") {
+    message: String! @doc(description: "The returned error message.")
+}
+
+type NoSuchEntityUidError implements ErrorInterface @doc(description: "Contains an error message when an invalid UID was specified.") {
+    uid: ID! @doc(description: "The specified invalid unique ID of an object.")
+}
+
+type InternalError implements ErrorInterface @doc(description: "Contains an error message when an internal error occurred.") {
 }

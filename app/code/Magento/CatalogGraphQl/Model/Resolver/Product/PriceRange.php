@@ -23,6 +23,8 @@ use Magento\Store\Api\Data\StoreInterface;
  */
 class PriceRange implements ResolverInterface
 {
+    private const STORE_FILTER_CACHE_KEY = '_cache_instance_store_filter';
+
     /**
      * @var Discount
      */
@@ -62,6 +64,15 @@ class PriceRange implements ResolverInterface
         /** @var Product $product */
         $product = $value['model'];
         $product->unsetData('minimal_price');
+        // add store filter for the product
+        $product->setData(self::STORE_FILTER_CACHE_KEY, $store);
+
+        if ($context) {
+            $customerGroupId = $context->getExtensionAttributes()->getCustomerGroupId();
+            if ($customerGroupId !== null) {
+                $product->setCustomerGroupId($customerGroupId);
+            }
+        }
 
         $requestedFields = $info->getFieldSelection(10);
         $returnArray = [];

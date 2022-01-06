@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $jsFilename = $plugins['src'];
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/%s/editor_plugin.js',
+            'http://localhost/static/%s/adminhtml/Magento/backend/en_US/%s/editor_plugin.js',
             $jsFilename
         );
 

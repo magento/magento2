@@ -83,6 +83,9 @@ class EditTest extends TestCase
      */
     protected $resultPageFactoryMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -94,7 +97,7 @@ class EditTest extends TestCase
             ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
-            ->setMethods(['create', 'get'])
+            ->onlyMethods(['create', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->once())
@@ -136,12 +139,15 @@ class EditTest extends TestCase
             [
                 'context' => $this->contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'registry' => $this->coreRegistryMock,
+                'registry' => $this->coreRegistryMock
             ]
         );
     }
 
-    public function testEditActionPageNoExists()
+    /**
+     * @return void
+     */
+    public function testEditActionPageNoExists(): void
     {
         $pageId = 1;
 
@@ -174,12 +180,14 @@ class EditTest extends TestCase
     }
 
     /**
-     * @param int $pageId
+     * @param int|null $pageId
      * @param string $label
      * @param string $title
+     *
+     * @return void
      * @dataProvider editActionData
      */
-    public function testEditAction($pageId, $label, $title)
+    public function testEditAction(?int $pageId, string $label, string $title): void
     {
         $this->requestMock->expects($this->once())
             ->method('getParam')
@@ -207,8 +215,9 @@ class EditTest extends TestCase
             ->willReturn($resultPageMock);
 
         $titleMock = $this->createMock(Title::class);
-        $titleMock->expects($this->at(0))->method('prepend')->with(__('Pages'));
-        $titleMock->expects($this->at(1))->method('prepend')->with($this->getTitle());
+        $titleMock
+            ->method('prepend')
+            ->withConsecutive([__('Pages')], [$this->getTitle()]);
         $pageConfigMock = $this->createMock(Config::class);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
 
@@ -218,10 +227,10 @@ class EditTest extends TestCase
         $resultPageMock->expects($this->any())
             ->method('addBreadcrumb')
             ->willReturnSelf();
-        $resultPageMock->expects($this->at(3))
+        $resultPageMock
             ->method('addBreadcrumb')
-            ->with(__($label), __($title))
-            ->willReturnSelf();
+            ->withConsecutive([], [], [], [__($label), __($title)])
+            ->willReturnOnConsecutiveCalls(null, null, null, $resultPageMock);
         $resultPageMock->expects($this->exactly(2))
             ->method('getConfig')
             ->willReturn($pageConfigMock);
@@ -240,7 +249,7 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function editActionData()
+    public function editActionData(): array
     {
         return [
             [null, 'New Page', 'New Page'],

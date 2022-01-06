@@ -11,7 +11,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     {
         $image = 'wysiwyg/VB.png';
         $construction = ['{{media url="' . $image . '"}}', 'media', ' url="' . $image . '"'];
-        $baseUrl = 'http://localhost/pub/media/';
+        $baseUrl = 'http://localhost/media/';
 
         /** @var \Magento\Widget\Model\Template\Filter $filter */
         $filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -25,7 +25,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     {
         $image = 'wysiwyg/VB.png';
         $construction = ['{{media url=&quot;' . $image . '&quot;}}', 'media', ' url=&quot;' . $image . '&quot;'];
-        $baseUrl = 'http://localhost/pub/media/';
+        $baseUrl = 'http://localhost/media/';
 
         /** @var \Magento\Widget\Model\Template\Filter $filter */
         $filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

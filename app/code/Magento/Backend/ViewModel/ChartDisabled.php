@@ -57,7 +57,7 @@ class ChartDisabled implements ArgumentInterface
     public function getConfigUrl(): string
     {
         return $this->urlBuilder->getUrl(
-            static::ROUTE_SYSTEM_CONFIG,
+            self::ROUTE_SYSTEM_CONFIG,
             ['section' => 'admin', '_fragment' => 'admin_dashboard-link']
         );
     }
@@ -70,7 +70,7 @@ class ChartDisabled implements ArgumentInterface
     public function isChartEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
-            static::XML_PATH_ENABLE_CHARTS,
+            self::XML_PATH_ENABLE_CHARTS,
             ScopeInterface::SCOPE_STORE
         );
     }

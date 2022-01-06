@@ -91,7 +91,10 @@ abstract class AbstractFiltersTest extends TestCase
      *
      * @return string
      */
-    abstract protected function getAttributeCode(): string;
+    protected function getAttributeCode(): string
+    {
+        return '';
+    }
 
     /**
      * Tests getFilters method from navigation block on category page.
@@ -108,7 +111,7 @@ abstract class AbstractFiltersTest extends TestCase
         array $expectation,
         string $categoryName
     ): void {
-        $this->updateAttribute($attributeData);
+        $this->updateAttribute($attributeData, $this->getAttributeCode());
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
         $category = $this->loadCategory($categoryName, Store::DEFAULT_STORE_ID);
@@ -141,7 +144,10 @@ abstract class AbstractFiltersTest extends TestCase
         string $filterValue,
         int $productsCount
     ): void {
-        $this->updateAttribute(['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS]);
+        $this->updateAttribute(
+            ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
+            $this->getAttributeCode()
+        );
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
         $this->navigationBlock->getRequest()->setParams($this->getRequestParams($filterValue));
@@ -169,7 +175,7 @@ abstract class AbstractFiltersTest extends TestCase
         array $attributeData,
         array $expectation
     ): void {
-        $this->updateAttribute($attributeData);
+        $this->updateAttribute($attributeData, $this->getAttributeCode());
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
         $this->navigationBlock->getRequest()->setParams(['q' => $this->getSearchString()]);
@@ -200,7 +206,8 @@ abstract class AbstractFiltersTest extends TestCase
         int $productsCount
     ): void {
         $this->updateAttribute(
-            ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS, 'is_filterable_in_search' => 1]
+            ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS, 'is_filterable_in_search' => 1],
+            $this->getAttributeCode()
         );
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
@@ -239,12 +246,14 @@ abstract class AbstractFiltersTest extends TestCase
      * Updates attribute data.
      *
      * @param array $data
+     * @param string $attributeCode
      * @return void
      */
     protected function updateAttribute(
-        array $data
+        array $data,
+        string $attributeCode
     ): void {
-        $attribute = $this->attributeRepository->get($this->getAttributeCode());
+        $attribute = $this->attributeRepository->get($attributeCode);
         $attribute->setDataChanges(false);
         $attribute->addData($data);
 

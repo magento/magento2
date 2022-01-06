@@ -69,10 +69,7 @@
         </actionGroup>
         <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButton"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <!--Run re-index task -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!--Verify product is visible in category front page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminMediaGalleryAttentionModalSection">
+        <element name="attentionModalHeader" type="block" parameterized="true" selector="//h1[contains(text(), '{{headerText}}')]"/>
+        <element name="attentionModalContent" type="block" parameterized="true" selector="//aside[contains(@class,'_show')]//div[@data-role='content']//div[text()='Could not {{action}} directories: {{folderName}}']"/>
+        <element name="attentionModalOkButton" type="button" selector="//button/span[contains(text(),'OK')]"/>
+    </section>
+</sections>
