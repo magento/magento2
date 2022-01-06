@@ -1,0 +1,147 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\TestFramework\Annotation;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Fixture\DataFixtureFactory;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use PHPUnit\Framework\Exception;
+
+/**
+ * Apply and revert data fixtures
+ */
+class DataFixtureSetup
+{
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @var DataFixtureFactory
+     */
+    private $dataFixtureFactory;
+
+    /**
+     * @param Registry $registry
+     * @param DataFixtureFactory $dataFixtureFactory
+     */
+    public function __construct(
+        Registry $registry,
+        DataFixtureFactory $dataFixtureFactory
+    ) {
+        $this->registry = $registry;
+        $this->dataFixtureFactory = $dataFixtureFactory;
+    }
+
+    /**
+     * Applies data fixture and returns the result.
+     *
+     * @param array $fixture
+     * @return DataObject|null
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function apply(array $fixture): ?DataObject
+    {
+        $data = $this->resolveVariables($fixture['data'] ?? []);
+        try {
+            $factory = $this->dataFixtureFactory->create($fixture['factory']);
+            $result = $factory->apply($data);
+        } catch (\Throwable $exception) {
+            throw new Exception(
+                sprintf(
+                    "Unable to apply fixture%s: %s.\n%s\n%s",
+                    $fixture['name'] ? ' "' . $fixture['name'] . '"' : '',
+                    $fixture['factory'],
+                    $exception->getMessage(),
+                    $exception->getTraceAsString()
+                ),
+                0,
+                $exception
+            );
+        }
+
+        if ($result !== null && !empty($fixture['name'])) {
+            DataFixtureStorageManager::getStorage()->persist(
+                $fixture['name'],
+                $result
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Revert data fixture.
+     *
+     * @param array $fixture
+     */
+    public function revert(array $fixture): void
+    {
+        $isSecureArea = $this->registry->registry('isSecureArea');
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        try {
+            $factory = $this->dataFixtureFactory->create($fixture['factory']);
+            if ($factory instanceof RevertibleDataFixtureInterface) {
+                $factory->revert($fixture['result'] ?? new DataObject());
+            }
+        } catch (NoSuchEntityException $exception) {
+            //ignore
+        } catch (\Throwable $exception) {
+            throw new Exception(
+                sprintf(
+                    "Unable to revert fixture%s: %s.\n%s\n%s",
+                    $fixture['name'] ? '"' . $fixture['name'] . '"' : '',
+                    $fixture['factory'],
+                    $exception->getMessage(),
+                    $exception->getTraceAsString()
+                ),
+                0,
+                $exception
+            );
+        } finally {
+            $this->registry->unregister('isSecureArea');
+            $this->registry->register('isSecureArea', $isSecureArea);
+        }
+    }
+
+    /**
+     * Replace fixtures references in the data by their value
+     *
+     * Supported formats:
+     * - $fixture$
+     * - $fixture.attribute$
+     *
+     * @param array $data
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function resolveVariables(array $data): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->resolveVariables($value);
+            } else {
+                if (is_string($value) && preg_match('/^\$\w+(\.\w+)?\$$/', $value)) {
+                    list($fixtureName, $attribute) = array_pad(explode('.', trim($value, '$')), 2, null);
+                    $fixtureData = DataFixtureStorageManager::getStorage()->get($fixtureName);
+                    if (!$fixtureData) {
+                        throw new \InvalidArgumentException("Unable to resolve fixture reference '$value'");
+                    }
+                    $data[$key] = $attribute ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
+                }
+            }
+        }
+
+        return $data;
+    }
+}
