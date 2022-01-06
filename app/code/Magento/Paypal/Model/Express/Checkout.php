@@ -1167,6 +1167,8 @@ class Checkout
 
         $quote->setCustomerId(null)
             ->setCustomerEmail($email)
+            ->setCustomerFirstname($billingAddress->getFirstname())
+            ->setCustomerLastname($billingAddress->getLastname())
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
         return $this;
