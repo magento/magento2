@@ -70,8 +70,7 @@ class ConfigOptionsListTest extends TestCase
             ->method('getConfigData')
             ->willReturn($isDeploymentConfigExists);
 
-        $isConnectionToBeTested = $isDeploymentConfigExists &&
-            isset(
+        $isConnectionToBeTested = $isDeploymentConfigExists && isset(
                 $input['remote-storage-region'],
                 $input['remote-storage-bucket']
             );
