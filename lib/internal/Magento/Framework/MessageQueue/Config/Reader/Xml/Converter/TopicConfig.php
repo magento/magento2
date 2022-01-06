@@ -5,8 +5,10 @@
  */
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Config\Validator;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
@@ -19,7 +21,7 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
  */
 class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {
-    const DEFAULT_TYPE = 'amqp';
+    const DEFAULT_TYPE = 'db';
     const DEFAULT_EXCHANGE = 'magento';
     const DEFAULT_INSTANCE = ConsumerInterface::class;
 
@@ -39,20 +41,31 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     private $communicationConfig;
 
     /**
+     * Default value provider.
+     *
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
+    /**
      * Initialize dependencies.
      *
      * @param MethodsMap $methodsMap
      * @param Validator $xmlValidator
      * @param CommunicationConfig $communicationConfig
+     * @param DefaultValueProvider|null $defaultValueProvider
      */
     public function __construct(
         MethodsMap $methodsMap,
         Validator $xmlValidator,
-        CommunicationConfig $communicationConfig
+        CommunicationConfig $communicationConfig,
+        DefaultValueProvider $defaultValueProvider = null
     ) {
         $this->methodsMap = $methodsMap;
         $this->xmlValidator = $xmlValidator;
         $this->communicationConfig = $communicationConfig;
+        $this->defaultValueProvider = $defaultValueProvider
+            ?? ObjectManager::getInstance()->get(DefaultValueProvider::class);
     }
 
     /**
@@ -256,7 +269,11 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
             $topicName = $this->getAttributeValue($brokerNode, 'topic');
             $output[$topicName] = [
                 ConfigInterface::TOPIC_NAME => $topicName,
-                'type' => $this->getAttributeValue($brokerNode, 'type', self::DEFAULT_TYPE),
+                'type' => $this->getAttributeValue(
+                    $brokerNode,
+                    'type',
+                    $this->defaultValueProvider->getConnection()
+                ),
                 'exchange' => $this->getAttributeValue($brokerNode, 'exchange', self::DEFAULT_EXCHANGE),
                 'consumerInstance' => $this->getAttributeValue($brokerNode, 'consumerInstance'),
                 'maxMessages' => $this->getAttributeValue($brokerNode, 'maxMessages'),
