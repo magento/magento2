@@ -119,6 +119,7 @@
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2"/>
 
         <actionGroup ref="StorefrontClickPrintOrderLinkOnViewOrderPageActionGroup" stepKey="clickPrintLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered"/>
         <switchToWindow stepKey="switchToWindow"/>
         <switchToNextTab stepKey="switchToTab"/>
         <seeInCurrentUrl url="sales/order/print/order_id" stepKey="seePrintPage"/>
