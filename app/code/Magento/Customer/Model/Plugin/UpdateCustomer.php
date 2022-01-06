@@ -11,6 +11,7 @@ namespace Magento\Customer\Model\Plugin;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Update customer by id from request param
@@ -23,11 +24,18 @@ class UpdateCustomer
     private $request;
 
     /**
-     * @param RestRequest $request
+     * @var UserContextInterface
      */
-    public function __construct(RestRequest $request)
+    private $userContext;
+
+    /**
+     * @param RestRequest $request
+     * @param UserContextInterface|null $userContext
+     */
+    public function __construct(RestRequest $request, ?UserContextInterface $userContext = null)
     {
         $this->request = $request;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -43,10 +51,13 @@ class UpdateCustomer
         CustomerInterface $customer,
         ?string $passwordHash = null
     ): array {
+        $customerSessionId = $this->userContext->getUserType() == 3 ? $this->userContext->getUserId() : 0;
         $customerId = $this->request->getParam('customerId');
         $bodyParams = $this->request->getBodyParams();
         if (!isset($bodyParams['customer']['Id']) && $customerId) {
-            $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
+            if ($customerId == $customerSessionId || $customerSessionId == 0) {
+                $customer = $this->getUpdatedCustomer($customerRepository->getById($customerId), $customer);
+            }
         }
 
         return [$customer, $passwordHash];

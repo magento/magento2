@@ -22,6 +22,11 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="updateCustomerByIdFromRequest" type="Magento\Customer\Model\Plugin\UpdateCustomer" />
     </type>
+    <type name="Magento\Customer\Model\Plugin\UpdateCustomer">
+        <arguments>
+            <argument name="userContext" xsi:type="object">Magento\Authorization\Model\UserContextInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
         <arguments>
             <argument name="authorizationChecks" xsi:type="array">
