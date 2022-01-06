@@ -52,7 +52,7 @@ define([
                         doc.execCommand('stop');
                         self.iframe.remove();
                     }
-                    self.modal.data('modal').modal.remove();
+                    self.modal.data('mageModal').modal.remove();
                     $(window).off('resize.modal');
                 }
             });
@@ -63,7 +63,7 @@ define([
          * @private
          */
         _getHeight: function () {
-            var modal = this.modal.data('modal').modal,
+            var modal = this.modal.data('mageModal').modal,
                 modalHead = modal.find('header'),
                 modalHeadHeight = modalHead.outerHeight(),
                 modalHeight = modal.outerHeight(),

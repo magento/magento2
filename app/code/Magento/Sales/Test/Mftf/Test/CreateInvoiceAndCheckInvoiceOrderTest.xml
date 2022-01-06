@@ -47,13 +47,18 @@
         <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
         <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder1">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickCreatedOrderInGrid"/>
+
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
         <actionGroup ref="AdminFillQtyToInvoiceOnCreateInvoicePageActionGroup" stepKey="fillInvoiceQuantity"/>
         <actionGroup ref="AdminClickUpdateQtysButtonOnCreateInvoicePageActionGroup" stepKey="clickUpdateQtyInvoiceBtn"/>
@@ -62,16 +67,17 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
 
         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceGridByOrderId">
-            <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
         <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="opeCreatedInvoice"/>
         <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForInvoiceDetailsPageToLoad"/>
         <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdForAssertingInvoiceBtn">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridByIdForAssertingInvoiceBtn"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder2">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickOrderInGrid"/>
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="clickInvoicesTabOrdersPage"/>
         <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearInvoiceFilters"/>
         <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="openOrderInvoicesGridFilters"/>
@@ -91,7 +97,7 @@
         <dontSeeElement selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="assertThatInvoiceGridNotEmpty"/>
        
         <actionGroup ref="FilterInvoiceGridByOrderIdWithCleanFiltersActionGroup" stepKey="filterInvoiceByOrderId">
-            <argument name="orderId" value="$getOrderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
         <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="openInvoice"/>
         <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
