@@ -26,8 +26,6 @@ class LogoPathResolver implements LogoPathResolverInterface, ArgumentInterface
     private $scopeConfig;
 
     /**
-     * Core registry
-     *
      * @var Registry
      */
     private $coreRegistry;
