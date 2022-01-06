@@ -8,10 +8,10 @@ namespace Magento\RemoteStorage\Test\Unit\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryPool;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 use Magento\RemoteStorage\Setup\ConfigOptionsList;
-use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -71,9 +71,9 @@ class ConfigOptionsListTest extends TestCase
             ->willReturn($isDeploymentConfigExists);
 
         $isConnectionToBeTested = $isDeploymentConfigExists && isset(
-                $input['remote-storage-region'],
-                $input['remote-storage-bucket']
-            );
+            $input['remote-storage-region'],
+            $input['remote-storage-bucket']
+        );
 
         if ($isConnectionToBeTested) {
             $driverFactoryMock = $this->getMockBuilder(DriverFactoryInterface::class)
