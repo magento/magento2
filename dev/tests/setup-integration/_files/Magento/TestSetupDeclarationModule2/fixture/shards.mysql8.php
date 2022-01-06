@@ -8,12 +8,12 @@ return [
   `smallint` smallint NOT NULL AUTO_INCREMENT,
   `varchar` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`smallint`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
     'test_table_two' => 'CREATE TABLE `test_table_two` (
   `smallint` smallint NOT NULL AUTO_INCREMENT,
   `varchar` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`smallint`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
     'reference_table' => 'CREATE TABLE `reference_table` (
   `tinyint_ref` tinyint NOT NULL AUTO_INCREMENT,
   `tinyint_without_padding` tinyint NOT NULL DEFAULT \'0\',
@@ -27,10 +27,10 @@ return [
   `bigint_default_nullable` bigint unsigned DEFAULT \'1\',
   `bigint_not_default_not_nullable` bigint unsigned NOT NULL,
   PRIMARY KEY (`tinyint_ref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
     'auto_increment_test' => 'CREATE TABLE `auto_increment_test` (
   `int_auto_increment_with_nullable` int unsigned NOT NULL AUTO_INCREMENT,
   `int_disabled_auto_increment` smallint unsigned DEFAULT \'0\',
   UNIQUE KEY `AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE` (`int_auto_increment_with_nullable`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3'
 ];

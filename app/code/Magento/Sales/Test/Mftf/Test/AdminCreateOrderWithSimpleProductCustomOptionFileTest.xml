@@ -50,6 +50,8 @@
             <argument name="productQty" value="$simpleProduct.quantity$"/>
         </actionGroup>
         <!--Verify, admin able to change file for custom option.-->
-        <actionGroup ref="AdminChangeCustomerOptionFileActionGroup" stepKey="changeFile"/>
+        <actionGroup ref="AdminChangeCustomerOptionFileActionGroup" stepKey="changeFile">
+            <argument name="file" value="{{TestImageAdobe.file}}"/>
+        </actionGroup>
     </test>
 </tests>
