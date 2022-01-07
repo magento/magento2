@@ -36,8 +36,6 @@ class Bundle extends AbstractView
     protected $options;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct;
