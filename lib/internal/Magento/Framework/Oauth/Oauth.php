@@ -8,6 +8,7 @@ namespace Magento\Framework\Oauth;
 
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Phrase;
+use Magento\Framework\Oauth\Exception as AuthException;
 
 /**
  * Authorization service.
@@ -56,11 +57,11 @@ class Oauth implements OauthInterface
     /**
      * Retrieve array of supported signature methods.
      *
-     * @return string[] - Supported HMAC-SHA1 and HMAC-SHA256 signature methods.
+     * @return string[]
      */
     public static function getSupportedSignatureMethods()
     {
-        return [self::SIGNATURE_SHA1, self::SIGNATURE_SHA256];
+        return [self::SIGNATURE_SHA256];
     }
 
     /**
@@ -141,7 +142,7 @@ class Oauth implements OauthInterface
     public function buildAuthorizationHeader(
         $params,
         $requestUrl,
-        $signatureMethod = self::SIGNATURE_SHA1,
+        $signatureMethod = self::SIGNATURE_SHA256,
         $httpMethod = 'POST'
     ) {
         $required = ["oauth_consumer_key", "oauth_consumer_secret", "oauth_token", "oauth_token_secret"];
@@ -202,7 +203,7 @@ class Oauth implements OauthInterface
         );
 
         if (!Security::compareStrings($calculatedSign, $params['oauth_signature'])) {
-            throw new Exception(new Phrase('The signature is invalid. Verify and try again.'));
+            throw new AuthException(new Phrase('The signature is invalid. Verify and try again.'));
         }
     }
 
