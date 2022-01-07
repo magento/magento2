@@ -246,7 +246,7 @@ class AddProductsToCart
      */
     private function addQuoteItem(Quote $quote, Item $quoteItem): void
     {
-        if ($quoteItem->getOriginalItem() && $quoteItem->getOriginalItem()->getId()) {
+        if ($quoteItem->getOriginalItem()) {
             $quote->deleteItem($quoteItem->getOriginalItem());
             $quoteItem->unsOriginalItem();
         }
