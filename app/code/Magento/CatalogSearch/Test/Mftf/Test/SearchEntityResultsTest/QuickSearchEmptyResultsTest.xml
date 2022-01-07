@@ -17,6 +17,7 @@
             <testCaseId value="MC-14793"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

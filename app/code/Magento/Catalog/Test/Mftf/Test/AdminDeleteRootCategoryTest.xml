@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
