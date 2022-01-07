@@ -250,7 +250,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $this->_productIds
         )->addAttributeToSelect(
             $this->_quoteConfig->getProductAttributes()
-        )->addPriceData();
+        );
         $this->skipStockStatusFilter($productCollection);
         $productCollection->addOptionsToResult()->addStoreFilter()->addUrlRewrite();
 

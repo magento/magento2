@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
 
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Catalog EAV collection resource abstract model
  *
@@ -225,6 +228,55 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $select = parent::_addLoadAttributesSelectValues($select, $table, $type);
         }
         return $select;
+    }
+
+    /**
+     * Initialize entity object property value
+     *
+     * Update attribute value if attribute scope is global
+     *
+     * Parameter $valueInfo is _getLoadAttributesSelect fetch result row
+     *
+     * @param array $valueInfo
+     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @throws LocalizedException
+     */
+    protected function _setItemAttributeValue($valueInfo)
+    {
+        $entityIdField = $this->getEntity()->getEntityIdField();
+        $entityId = $valueInfo[$entityIdField];
+        if (!isset($this->_itemsById[$entityId])) {
+            throw new LocalizedException(
+                __('A header row is missing for an attribute. Verify the header row and try again.')
+            );
+        }
+
+        $attribute = $this->_eavConfig->getAttribute(
+            $this->getEntity()->getType(),
+            $valueInfo['attribute_id']
+        );
+        $attributeCode = $attribute->getAttributeCode();
+        if ($attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL) {
+            $attributeTable = $attribute->getBackend()->getTable();
+            $linkField = $attribute->getEntity()->getLinkField();
+
+            $select = $this->getConnection()
+                ->select()
+                ->from(['attr_table' => $attributeTable], "attr_table.value")
+                ->where("attr_table.attribute_id = ?", $valueInfo['attribute_id'])
+                ->where("attr_table.{$linkField} = ?", $entityId)
+                ->where('attr_table.store_id = ?', $this->getDefaultStoreId(), \Zend_Db::INT_TYPE);
+            $data = $this->getConnection()->fetchOne($select);
+            if ($data) {
+                $valueInfo['value'] = $data;
+            }
+        }
+
+        foreach ($this->_itemsById[$entityId] as $object) {
+            $object->setData($attributeCode, $valueInfo['value']);
+        }
+
+        return $this;
     }
 
     /**
