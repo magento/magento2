@@ -18,8 +18,10 @@ namespace Magento\Variable\Model;
  */
 class Variable extends \Magento\Framework\Model\AbstractModel
 {
+    /**
+     * Variable value types.
+     */
     public const TYPE_TEXT = 'text';
-
     public const TYPE_HTML = 'html';
 
     /**
@@ -141,7 +143,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Retrieve variables option array
-     * 
+     *
      * @todo: extract method as separate class
      * @param bool $withGroup
      * @return array
