@@ -427,7 +427,7 @@ class CartFixedTest extends TestCase
     public function multishippingDataProvider(): array
     {
         return [
-            'Discount < 1stOrderSubtotal: only 1st order gets discount' => [
+            'Discount $5 proportionally spread between products' => [
                 5,
                 [
                     'subtotal' => 10.00,
@@ -443,54 +443,12 @@ class CartFixedTest extends TestCase
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
+                    'discount_amount' => -0.71,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
+                    'grand_total' => 4.2900,
                 ]
             ],
-            'Discount = 1stOrderSubtotal: only 1st order gets discount' => [
-                10,
-                [
-                    'subtotal' => 10.00,
-                    'discount_amount' => -2.8600,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 12.1400,
-                ],
-                [
-                    'subtotal' => 20.00,
-                    'discount_amount' => -5.71,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 19.2900,
-                ],
-                [
-                    'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
-                    'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
-                ]
-            ],
-            'Discount > 1stOrderSubtotal: 1st order get 100% discount and 2nd order get the remaining discount' => [
-                15,
-                [
-                    'subtotal' => 10.00,
-                    'discount_amount' => -4.2900,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 10.71,
-                ],
-                [
-                    'subtotal' => 20.00,
-                    'discount_amount' => -8.5700,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 16.43,
-                ],
-                [
-                    'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
-                    'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
-                ]
-            ],
-            'Discount = 1stOrderSubtotal + 2ndOrderSubtotal: 1st order and 2nd order get 100% discount' => [
+            'Discount $30 proportionally spread between products' => [
                 30,
                 [
                     'subtotal' => 10.00,
@@ -506,34 +464,65 @@ class CartFixedTest extends TestCase
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
+                    'discount_amount' => -4.29,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
+                    'grand_total' => 0.7100,
                 ]
             ],
-            'Discount > 1stOrdSubtotal + 2ndOrdSubtotal: 1st order and 2nd order get 100% discount'
-            . ' and 3rd order get remaining discount' => [
-                31,
+            'Discount $50 which is more then all subtotals combined proportionally spread between products' => [
+                50,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -8.8600,
+                    'discount_amount' => -10.0000,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 6.14,
+                    'grand_total' => 5.0000,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -17.7100,
+                    'discount_amount' => -20.0000,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 7.29,
+                    'grand_total' => 5.0000,
                 ],
                 [
                     'subtotal' => 5.00,
                     'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
+                    'grand_total' => 0.0000,
                 ]
-            ]
+            ],
         ];
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_50_percent_off_no_condition.php
+     * @magentoDataFixture Magento/SalesRule/_files/cart_fixed_10_discount.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_products.php
+     * @return void
+     */
+    public function testDiscountsWhenByPercentRuleAppliedFirstAndCartFixedRuleSecond(): void
+    {
+        $totalDiscount = -20.99;
+        $discounts = [
+            'simple1' => 5.72,
+            'simple2' => 15.27,
+        ];
+        $quote = $this->getQuote('test_quote_with_simple_products');
+        $quote->setCouponCode('2?ds5!2d');
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+        $this->assertEquals(21.98, $quote->getBaseSubtotal());
+        $this->assertEquals($totalDiscount, $quote->getShippingAddress()->getDiscountAmount());
+        $items = $quote->getAllItems();
+        $this->assertCount(2, $items);
+        $item = array_shift($items);
+        $this->assertEquals('simple1', $item->getSku());
+        $this->assertEquals(5.99, $item->getPrice());
+        $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
+        $item = array_shift($items);
+        $this->assertEquals('simple2', $item->getSku());
+        $this->assertEquals(15.99, $item->getPrice());
+        $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
     }
 
     /**

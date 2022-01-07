@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Error\DebugFlag;
+use GraphQL\GraphQL;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -28,15 +30,14 @@ class QueryProcessor
     private $queryComplexityLimiter;
 
     /**
-     * @var \Magento\Framework\GraphQl\Query\ErrorHandlerInterface
+     * @var ErrorHandlerInterface
      */
     private $errorHandler;
 
     /**
-     * @param ExceptionFormatter                                     $exceptionFormatter
-     * @param QueryComplexityLimiter                                 $queryComplexityLimiter
-     *
-     * @param \Magento\Framework\GraphQl\Query\ErrorHandlerInterface $errorHandler
+     * @param ExceptionFormatter $exceptionFormatter
+     * @param QueryComplexityLimiter $queryComplexityLimiter
+     * @param ErrorHandlerInterface $errorHandler
      * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function __construct(
@@ -54,7 +55,7 @@ class QueryProcessor
      *
      * @param Schema $schema
      * @param string $source
-     * @param ContextInterface $contextValue
+     * @param ContextInterface|null $contextValue
      * @param array|null $variableValues
      * @param string|null $operationName
      * @return Promise|array
@@ -66,14 +67,14 @@ class QueryProcessor
         ContextInterface $contextValue = null,
         array $variableValues = null,
         string $operationName = null
-    ) : array {
+    ): array {
         if (!$this->exceptionFormatter->shouldShowDetail()) {
             $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();
         }
 
         $rootValue = null;
-        return \GraphQL\GraphQL::executeQuery(
+        return GraphQL::executeQuery(
             $schema,
             $source,
             $rootValue,
@@ -83,8 +84,7 @@ class QueryProcessor
         )->setErrorsHandler(
             [$this->errorHandler, 'handle']
         )->toArray(
-            $this->exceptionFormatter->shouldShowDetail() ?
-                \GraphQL\Error\Debug::INCLUDE_DEBUG_MESSAGE : false
+            (int) ($this->exceptionFormatter->shouldShowDetail() ? DebugFlag::INCLUDE_DEBUG_MESSAGE : false)
         );
     }
 }

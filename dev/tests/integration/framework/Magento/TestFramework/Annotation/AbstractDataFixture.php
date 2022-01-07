@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class consist of dataFixtures base logic
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractDataFixture
 {
     /**
-     * Fixtures that have been applied
-     *
      * @var array
      */
     protected $_appliedFixtures = [];
@@ -45,8 +45,21 @@ abstract class AbstractDataFixture
 
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($annotationKey);
-        $annotations = $scope === null ? $this->getAnnotations($test) : $test->getAnnotations()[$scope];
-        $existingFixtures = $annotations[$annotationKey] ?? [];
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
+        $annotations = $scope === null ? $this->getAnnotations($test) : $annotations[$scope];
+        $existingFixtures = [];
+        $objectManager = Bootstrap::getObjectManager();
+        $fixtureDirectivesParser = $objectManager->get(DataFixtureDirectivesParser::class);
+        $fixtureDataProviderAnnotation = $objectManager->get(DataFixtureDataProvider::class);
+        $fixtureDataProvider = $fixtureDataProviderAnnotation->getDataProvider($test);
+        foreach ($annotations[$annotationKey] ?? [] as $fixture) {
+            $metadata = $fixtureDirectivesParser->parse($fixture);
+            if ($metadata['name'] && empty($metadata['data']) && isset($fixtureDataProvider[$metadata['name']])) {
+                $metadata['data'] = $fixtureDataProvider[$metadata['name']];
+            }
+            $existingFixtures[] = $metadata;
+        }
+
         /* Need to be applied even test does not have added fixtures because fixture can be added via config */
         $this->fixtures[$annotationKey][$this->getTestKey($test)] = $resolver->applyDataFixtures(
             $test,
@@ -67,37 +80,9 @@ abstract class AbstractDataFixture
      */
     protected function getAnnotations(TestCase $test): array
     {
-        $annotations = $test->getAnnotations();
-        return array_replace((array)$annotations['class'], (array)$annotations['method']);
-    }
+        $annotations = TestCaseAnnotation::getInstance()->getAnnotations($test);
 
-    /**
-     * Execute single fixture script
-     *
-     * @param string|array $fixture
-     * @return void
-     * @throws \Exception
-     */
-    protected function _applyOneFixture($fixture)
-    {
-        try {
-            if (is_callable($fixture)) {
-                call_user_func($fixture);
-            } else {
-                require $fixture;
-            }
-        } catch (\Exception $e) {
-            throw new Exception(
-                sprintf(
-                    "Error in fixture: %s.\n %s\n %s",
-                    json_encode($fixture),
-                    $e->getMessage(),
-                    $e->getTraceAsString()
-                ),
-                500,
-                $e
-            );
-        }
+        return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 
     /**
@@ -109,17 +94,18 @@ abstract class AbstractDataFixture
      */
     protected function _applyFixtures(array $fixtures, TestCase $test)
     {
-        /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
-        $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\TestFramework\Annotation\TestsIsolation::class
-        );
+        $objectManager = Bootstrap::getObjectManager();
+        $testsIsolation = $objectManager->get(TestsIsolation::class);
         $dbIsolationState = $this->getDbIsolationState($test);
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
-
+        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         /* Execute fixture scripts */
-        foreach ($fixtures as $oneFixture) {
-            $this->_applyOneFixture($oneFixture);
-            $this->_appliedFixtures[] = $oneFixture;
+        foreach ($fixtures as $fixture) {
+            if (is_callable([get_class($test), $fixture['factory']])) {
+                $fixture['factory'] = get_class($test) . '::' . $fixture['factory'];
+            }
+            $fixture['result'] = $dataFixtureSetup->apply($fixture);
+            $this->_appliedFixtures[] = $fixture;
         }
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType(null);
@@ -133,35 +119,20 @@ abstract class AbstractDataFixture
      */
     protected function _revertFixtures(?TestCase $test = null)
     {
+        $objectManager = Bootstrap::getObjectManager();
+        $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($this->getAnnotation());
         $appliedFixtures = array_reverse($this->_appliedFixtures);
         foreach ($appliedFixtures as $fixture) {
-            if (is_callable($fixture)) {
-                $fixture[1] .= 'Rollback';
-                if (is_callable($fixture)) {
-                    $this->_applyOneFixture($fixture);
-                }
-            } else {
-                $fileInfo = pathinfo($fixture);
-                $extension = '';
-                if (isset($fileInfo['extension'])) {
-                    $extension = '.' . $fileInfo['extension'];
-                }
-                $rollbackScript = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '_rollback' . $extension;
-                if (file_exists($rollbackScript)) {
-                    $this->_applyOneFixture($rollbackScript);
-                }
-            }
+            $dataFixtureSetup->revert($fixture);
         }
         $this->_appliedFixtures = [];
         $resolver->setCurrentFixtureType(null);
 
         if (null !== $test) {
-            /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
-            $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\TestFramework\Annotation\TestsIsolation::class
-            );
+            /** @var TestsIsolation $testsIsolation */
+            $testsIsolation = $objectManager->get(TestsIsolation::class);
             $dbIsolationState = $this->getDbIsolationState($test);
             $testsIsolation->checkTestIsolation($test, $dbIsolationState);
         }
@@ -176,9 +147,7 @@ abstract class AbstractDataFixture
     protected function getDbIsolationState(TestCase $test)
     {
         $annotations = $this->getAnnotations($test);
-        return isset($annotations[DbIsolation::MAGENTO_DB_ISOLATION])
-            ? $annotations[DbIsolation::MAGENTO_DB_ISOLATION]
-            : null;
+        return $annotations[DbIsolation::MAGENTO_DB_ISOLATION] ?? null;
     }
 
     /**

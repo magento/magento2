@@ -18,6 +18,7 @@
             <testCaseId value="MC-35954"/>
             <group value="layeredNavigation"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

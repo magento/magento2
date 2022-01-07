@@ -52,6 +52,7 @@ class PeriodTest extends TestCase
     {
         $html = $this->block->toHtml();
         $dropDownList = [
+            __('Today'),
             __('Last 24 Hours'),
             __('Last 7 Days'),
             __('Current Month'),
