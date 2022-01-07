@@ -104,8 +104,8 @@ class GalleryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadDataFromTableByValueId(): void
     {
         $tableNameAlias = 'catalog_product_entity_media_gallery_value_video';
@@ -203,8 +203,8 @@ class GalleryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testLoadDataFromTableByValueIdNoColsWithWhere(): void
     {
         $tableNameAlias = 'catalog_product_entity_media_gallery_value_video';
@@ -293,8 +293,8 @@ class GalleryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testBindValueToEntityRecordExists(): void
     {
         $valueId = 14;
@@ -377,7 +377,8 @@ class GalleryTest extends TestCase
             ->with(
                 [
                     'main' => $getTableReturnValue,
-                ], [
+                ],
+                [
                     'value_id',
                     'file' => 'value',
                     'media_type'
@@ -387,10 +388,9 @@ class GalleryTest extends TestCase
         $this->select
             ->method('where')
             ->withConsecutive(
-                ['main.attribute_id = ?', $attributeId], ['main.disabled = 0'], [
-                'entity.entity_id = ?',
-                $productId
-            ]
+                ['main.attribute_id = ?', $attributeId],
+                ['main.disabled = 0'],
+                ['entity.entity_id = ?', $productId]
             )
             ->willReturnOnConsecutiveCalls($this->select, $this->select, $this->select);
         $this->select
@@ -428,8 +428,8 @@ class GalleryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testInsertGalleryValueInStore(): void
     {
         $data = [
@@ -457,8 +457,8 @@ class GalleryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteGalleryValueInStore(): void
     {
         $valueId = 4;
@@ -484,8 +484,8 @@ class GalleryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCountImageUses(): void
     {
         $results = [

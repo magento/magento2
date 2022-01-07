@@ -1,10 +1,9 @@
 <?php
 /**
- * Origin filesystem driver
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -38,7 +37,7 @@ class File implements DriverInterface
      */
     public function __construct(bool $stateful = false)
     {
-        $this->stateful = $stateful ?? false;
+        $this->stateful = $stateful;
     }
 
     /**
@@ -177,10 +176,13 @@ class File implements DriverInterface
     public function fileGetContents($path, $flag = null, $context = null)
     {
         $filename = $this->getScheme() . $path;
+
         if (!$this->stateful) {
             clearstatcache(false, $filename);
         }
+        $flag = $flag ?? false;
         $result = @file_get_contents($filename, $flag, $context);
+
         if (false === $result) {
             throw new FileSystemException(
                 new Phrase(
@@ -626,10 +628,13 @@ class File implements DriverInterface
      */
     public function filePutContents($path, $content, $mode = null)
     {
+        $mode = $mode ?? 0;
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
+
         if ($this->stateful) {
             clearstatcache(true, $this->getScheme() . $path);
         }
+
         if ($result === false) {
             throw new FileSystemException(
                 new Phrase(
@@ -638,6 +643,7 @@ class File implements DriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -962,7 +968,8 @@ class File implements DriverInterface
         // check if the path given is already an absolute path containing the
         // basepath. so if the basepath starts at position 0 in the path, we
         // must not concatinate them again because path is already absolute.
-        if (0 === strpos($path, $basePath)) {
+        $path = $path !== null ? $path : '';
+        if ('' !== $basePath && strpos($path, $basePath) === 0) {
             return $this->getScheme($scheme) . $path;
         }
 
@@ -978,7 +985,7 @@ class File implements DriverInterface
      */
     public function getRelativePath($basePath, $path = null)
     {
-        $path = $this->fixSeparator($path);
+        $path = $path !== null ? $this->fixSeparator($path) : '';
         if (strpos($path, $basePath) === 0 || $basePath == $path . '/') {
             $result = substr($path, strlen($basePath));
         } else {
@@ -1060,6 +1067,10 @@ class File implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
+        if ($path === null) {
+            return '';
+        }
+
         //Check backslashes
         $path = preg_replace(
             '/\\\\+/',

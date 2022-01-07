@@ -30,8 +30,6 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_template = 'Magento_UrlRewrite::categories.phtml';
 
     /**
-     * Adminhtml data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_adminhtmlData = null;
@@ -60,9 +58,9 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
      * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
@@ -159,12 +157,9 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     {
         $result = [
             'id' => (int)$node->getId(),
-            'parent_id' => (int)$node->getParentId(),
             'children_count' => (int)$node->getChildrenCount(),
-            'is_active' => (bool)$node->getIsActive(),
             // Scrub names for raw js output
             'name' => $this->escapeHtml($node->getName()),
-            'level' => (int)$node->getLevel(),
             'product_count' => (int)$node->getProductCount(),
         ];
 
@@ -178,7 +173,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
                 $result['children'][] = $this->_getNodesArray($childNode);
             }
         }
-        $result['cls'] = ($result['is_active'] ? '' : 'no-') . 'active-category';
+        $result['cls'] = ($node->getIsActive() ? '' : 'no-') . 'active-category';
         $result['expanded'] = !empty($result['children']);
 
         return $result;

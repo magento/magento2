@@ -207,6 +207,7 @@ class PriceTest extends TestCase
         /* price for option taking into account quantity discounts */
         $childProductMock->expects($this->any())->method('getFinalPrice')->with(5)->willReturn(5);
 
+        $associatedProducts = [];
         for ($i = 0; $i <= 2; $i++) {
             $childProduct = clone $childProductMock;
             $childProduct->expects($this->once())->method('getId')->willReturn($i);

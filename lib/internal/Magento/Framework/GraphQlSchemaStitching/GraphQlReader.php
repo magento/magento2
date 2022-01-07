@@ -12,6 +12,7 @@ use GraphQL\Utils\BuildSchema;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\GraphQl\Type\TypeManagement;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType;
 
@@ -28,8 +29,6 @@ class GraphQlReader implements ReaderInterface
     public const GRAPHQL_INTERFACE = 'graphql_interface';
 
     /**
-     * File locator
-     *
      * @var FileResolverInterface
      */
     private $fileResolver;
@@ -70,6 +69,8 @@ class GraphQlReader implements ReaderInterface
         $this->typeReader = $typeReader;
         $this->defaultScope = $defaultScope;
         $this->fileName = $fileName;
+        $typeManagement = new TypeManagement();
+        $typeManagement->overrideStandardGraphQLTypes();
     }
 
     /**
