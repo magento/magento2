@@ -65,39 +65,34 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     private $storeManagerMock;
 
     /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
+     * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isSetFlag', 'getValue'])
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()
+            ->onlyMethods(['isSetFlag', 'getValue'])
             ->getMock();
 
-        $this->resultMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setIsAllowed'])
+        $this->resultMock = $this->getMockBuilder(DataObject::class)->disableOriginalConstructor()
+            ->addMethods(['setIsAllowed'])
             ->getMock();
 
-        $this->eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
+        $this->eventMock = $this->getMockBuilder(Event::class)->disableOriginalConstructor()
+            ->addMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
-        $this->observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEvent'])
+        $this->observerMock = $this->getMockBuilder(Observer::class)->disableOriginalConstructor()
+            ->onlyMethods(['getEvent'])
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeManagerMock
-            ->method('getStore')
-            ->with(self::STUB_STORE_ID)
+        $this->storeManagerMock->method('getStore')
+            ->with($this->storeMock)
             ->willReturn($this->storeMock);
 
         $this->isAllowedGuestCheckoutObserver = (new ObjectManagerHelper($this))
@@ -111,41 +106,38 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue
-     *
      * @param $productType
      * @param $isAllowed
+     *
+     * @return void
+     * @dataProvider dataProviderForTestisAllowedGuestCheckoutConfigSetToTrue
      */
     public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed): void
     {
         if ($isAllowed) {
-            $this->resultMock->expects($this->at(0))
+            $this->resultMock
                 ->method('setIsAllowed')
                 ->with(false);
         }
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId'])
+        $product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
+            ->onlyMethods(['getTypeId'])
             ->getMock();
 
         $product->expects($this->once())
             ->method('getTypeId')
             ->willReturn($productType);
 
-        $item = $this->getMockBuilder(QuoteItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+        $item = $this->getMockBuilder(QuoteItem::class)->disableOriginalConstructor()
+            ->onlyMethods(['getProduct'])
             ->getMock();
 
         $item->expects($this->once())
             ->method('getProduct')
             ->willReturn($product);
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllItems'])
+        $quote = $this->getMockBuilder(Quote::class)->disableOriginalConstructor()
+            ->onlyMethods(['getAllItems'])
             ->getMock();
 
         $quote->expects($this->once())
@@ -194,15 +186,18 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
     {
         return [
             1 => [Type::TYPE_DOWNLOADABLE, true],
-            2 => ['unknown', false],
+            2 => ['unknown', false]
         ];
     }
 
+    /**
+     * @return void
+     */
     public function testIsAllowedGuestCheckoutConfigSetToFalse(): void
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId'])
+            ->onlyMethods(['getTypeId'])
             ->getMock();
 
         $product->expects($this->once())
@@ -211,7 +206,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $item = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct'])
+            ->onlyMethods(['getProduct'])
             ->getMock();
 
         $item->expects($this->once())
@@ -220,7 +215,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAllItems'])
+            ->onlyMethods(['getAllItems'])
             ->getMock();
 
         $quote->expects($this->once())

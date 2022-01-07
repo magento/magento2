@@ -15,6 +15,9 @@
             <title value="Newsletter Updating Test"/>
             <description value="Admin should be able update created Newsletter Template"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-39506"/>
+            <useCaseId value="MAGETWO-69597"/>
+            <group value="newsletter"/>
             <group value="reports"/>
             <group value="mtf_migrated"/>
             <group value="WYSIWYGDisabled"/>
@@ -40,6 +43,7 @@
             </actionGroup>
             <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openCreatedNewsletterTemplate"/>
         </before>
+
         <after>
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterGridPage">
                 <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
@@ -74,8 +78,8 @@
             <argument name="subject" value="{{updatedNewsletter.subject}}"/>
         </actionGroup>
         <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findUpdatedNewsletterTemplate">
-            <argument name="name" value="Updated Newsletter Template"/>
-            <argument name="subject" value="Updated Newsletter Subject"/>
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
         </actionGroup>
         <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
         <actionGroup ref="AssertAdminNewsletterTemplateFormActionGroup" stepKey="assertNewsletterForm">

@@ -47,8 +47,6 @@ define([
         var params = {
             paymentToken: data.orderID,
             payerId: data.payerID,
-            quoteId: clientConfig.quoteId || '',
-            customerId: clientConfig.customerId || '',
             'form_key': clientConfig.formKey
         };
 
@@ -66,7 +64,7 @@ define([
     }
 
     return function (clientConfig, element) {
-        paypalSdk(clientConfig.sdkUrl).done(function (paypal) {
+        paypalSdk(clientConfig.sdkUrl, clientConfig.dataAttributes).done(function (paypal) {
             paypal.Buttons({
                 style: clientConfig.styles,
 

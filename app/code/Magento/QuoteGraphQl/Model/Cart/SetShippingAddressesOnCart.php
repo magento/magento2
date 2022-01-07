@@ -7,15 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Set single shipping address for a specified shopping cart
  */
 class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 {
+    /**
+     * @var QuoteIdToMaskedQuoteIdInterface
+     */
+    private $quoteIdToMaskedQuoteId;
+
+    /**
+     * @var GetCartForUser
+     */
+    private $getCartForUser;
+
     /**
      * @var AssignShippingAddressToCart
      */
@@ -27,15 +40,30 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $getShippingAddress;
 
     /**
+     * @var QuoteRepository
+     */
+    private $quoteRepository;
+
+    /**
+     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * @param GetCartForUser $getCartForUser
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
+     * @param QuoteRepository|null $quoteRepository
      */
     public function __construct(
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
+        GetCartForUser $getCartForUser,
         AssignShippingAddressToCart $assignShippingAddressToCart,
-        GetShippingAddress $getShippingAddress
+        GetShippingAddress $getShippingAddress,
+        QuoteRepository $quoteRepository = null
     ) {
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->getCartForUser = $getCartForUser;
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
         $this->getShippingAddress = $getShippingAddress;
+        $this->quoteRepository = $quoteRepository
+            ?? ObjectManager::getInstance()->get(QuoteRepository::class);
     }
 
     /**
@@ -70,5 +98,10 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             throw $e;
         }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+
+        // reload updated cart & trigger quote re-evaluation after address change
+        $maskedId = $this->quoteIdToMaskedQuoteId->execute((int)$cart->getId());
+        $cart = $this->getCartForUser->execute($maskedId, $context->getUserId(), $cart->getStoreId());
+        $this->quoteRepository->save($cart);
     }
 }

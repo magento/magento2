@@ -150,6 +150,10 @@
                 <item name="cacheFlushCommand" xsi:type="object">Magento\Backend\Console\Command\CacheFlushCommand</item>
                 <item name="cacheCleanCommand" xsi:type="object">Magento\Backend\Console\Command\CacheCleanCommand</item>
                 <item name="cacheStatusCommand" xsi:type="object">Magento\Backend\Console\Command\CacheStatusCommand</item>
+                <item name="maintenanceAllowIps" xsi:type="object">Magento\Backend\Console\Command\MaintenanceAllowIpsCommand</item>
+                <item name="maintenanceDisable" xsi:type="object">Magento\Backend\Console\Command\MaintenanceDisableCommand</item>
+                <item name="maintenanceEnableCommand" xsi:type="object">Magento\Backend\Console\Command\MaintenanceDisableCommand</item>
+                <item name="maintenanceStatusCommand" xsi:type="object">Magento\Backend\Console\Command\MaintenanceStatusCommand</item>
             </argument>
         </arguments>
     </type>
@@ -182,6 +186,14 @@
         <arguments>
             <argument name="menuItemChecker" xsi:type="object">Magento\Backend\Block\MenuItemChecker</argument>
             <argument name="anchorRenderer" xsi:type="object">Magento\Backend\Block\AnchorRenderer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="frontNameValidator" xsi:type="object">Magento\Backend\Model\Validator\UrlKey\FrontName</item>
+                <item name="restrictedWordsValidator" xsi:type="object">Magento\Backend\Model\Validator\UrlKey\RestrictedWords</item>
+            </argument>
         </arguments>
     </type>
 </config>

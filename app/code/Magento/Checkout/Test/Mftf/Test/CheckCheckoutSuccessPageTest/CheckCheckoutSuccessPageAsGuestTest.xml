@@ -23,7 +23,22 @@
         </before>
 
         <after>
+            <!--Cancel orders-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrdersPage"/>
+            <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
+                <argument name="columnLabel" value="Customer Email"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterOrdersByCustomerEmail">
+                <argument name="filterInputName" value="customer_email"/>
+                <argument name="filterValue" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilters"/>
+            <actionGroup ref="AdminGridBulkActionGroup" stepKey="cancelOrders">
+                <argument name="actionLabel" value="Cancel"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
         </after>
 
@@ -47,9 +62,9 @@
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
 
-        <!--Click Place Order button-->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+        <!--Click Place Order button--> 
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoadSuccessPage"/>
 
         <!--See success messages-->
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>

@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute;
+use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Search\Request\Config;
@@ -16,6 +18,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute.
+ */
 class AttributeTest extends TestCase
 {
     /**
@@ -53,6 +58,14 @@ class AttributeTest extends TestCase
      */
     private $config;
 
+    /**
+     * @var EavConfig
+     */
+    private $eavConfig;
+
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -78,11 +91,16 @@ class AttributeTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['reset'])
             ->getMock();
+        $this->eavConfig = $this->createPartialMock(
+            EavConfig::class,
+            ['getEntityType']
+        );
         $this->model = $this->objectManager->getObject(
             Attribute::class,
             [
                 'indexerRegistry' => $this->indexerRegistryMock,
-                'config' => $this->config
+                'config' => $this->config,
+                'eavConfig' => $this->eavConfig
             ]
         );
     }
@@ -123,19 +141,24 @@ class AttributeTest extends TestCase
             [
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'config' => $this->config,
+                'eavConfig' => $this->eavConfig,
                 'saveNeedInvalidation' => $saveNeedInvalidation,
                 'saveIsNew' => $saveIsNew,
             ]
         );
+        if ($saveIsNew || $saveNeedInvalidation) {
+            $this->config->expects($this->once())
+                ->method('reset');
+            $catalogProductEntity = $this->createMock(Product::class);
+            $this->eavConfig->expects($this->once())
+                ->method('getEntityType')
+                ->with(Product::ENTITY)
+                ->willReturn($catalogProductEntity);
+        }
 
         if ($saveNeedInvalidation) {
             $this->indexerMock->expects($this->once())->method('invalidate');
             $this->prepareIndexer();
-        }
-
-        if ($saveIsNew || $saveNeedInvalidation) {
-            $this->config->expects($this->once())
-                ->method('reset');
         }
 
         $this->assertEquals(

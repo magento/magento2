@@ -76,13 +76,15 @@
 
         <!-- 5. Open admin tab with page with products. Reload this page twice. -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-        <reloadPage stepKey="reloadAdminCatalogPageFirst"/>
-        <waitForPageLoad stepKey="waitForReloadFirst"/>
-        <reloadPage stepKey="reloadAdminCatalogPageSecond"/>
-        <waitForPageLoad stepKey="waitForReloadSecond"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadAdminCatalogPageFirst"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReloadFirst"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadAdminCatalogPageSecond"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReloadSecond"/>
 
         <seeInTitle userInput="Products / Inventory / Catalog / Magento Admin" stepKey="seeAdminProductsPageTitle"/>
-        <see userInput="Products" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeAdminProductsPageHeader"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeAdminProductsPageHeader">
+            <argument name="value" value="Products"/>
+        </actionGroup>
 
         <switchToNextTab stepKey="switchToFrontendTab"/>
         <closeTab stepKey="closeFrontendTab"/>

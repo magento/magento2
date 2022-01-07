@@ -63,10 +63,18 @@ define([
 
             this._bind();
 
+            this._isInitializingItems = true;
+            this._initializedItemCount = 0;
+            this._lastInitializedElement = null;
+
             $.each(this.options.images, $.proxy(function (index, imageData) {
                 this.element.trigger('addItem', imageData);
             }, this));
 
+            this._updateImagesRoles();
+            this._contentUpdated();
+
+            this._isInitializingItems = false;
             this.options.initialized = true;
         },
 
@@ -186,14 +194,29 @@ define([
          * @private
          */
         _addItem: function (event, imageData) {
-            var count = this.element.find(this.options.imageSelector).length,
-                element,
-                imgElement;
+            var element,
+                imgElement,
+                lastElement,
+                count,
+                position;
 
+            if (this._isInitializingItems) {
+                count = this._initializedItemCount++;
+                lastElement = this._lastInitializedElement;
+            } else {
+                count = this.element.find(this.options.imageSelector).length;
+                lastElement = this.element.find(this.options.imageSelector + ':last');
+            }
+
+            position = count + 1;
+
+            if (lastElement && lastElement.length === 1) {
+                position = parseInt(lastElement.data('imageData').position || count, 10) + 1;
+            }
             imageData = $.extend({
                 'file_id': imageData['value_id'] ? imageData['value_id'] : Math.random().toString(33).substr(2, 18),
                 'disabled': imageData.disabled ? imageData.disabled : 0,
-                'position': count + 1,
+                'position': position,
                 sizeLabel: bytesToSize(imageData.size)
             }, imageData);
 
@@ -206,8 +229,10 @@ define([
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
-                element.insertAfter(this.element.find(this.options.imageSelector + ':last'));
+                element.insertAfter(lastElement);
             }
+
+            this._lastInitializedElement = element;
 
             if (!this.options.initialized &&
                 this.options.images.length === 0 ||
@@ -230,8 +255,10 @@ define([
                 }
             }, this));
 
-            this._updateImagesRoles();
-            this._contentUpdated();
+            if (!this._isInitializingItems) {
+                this._updateImagesRoles();
+                this._contentUpdated();
+            }
         },
 
         /**

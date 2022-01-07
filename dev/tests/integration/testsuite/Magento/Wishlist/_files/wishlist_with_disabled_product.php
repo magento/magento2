@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -30,6 +29,11 @@ $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
 $product = $productRepository->get('product_disabled');
 $wishlist->loadByCustomerId($customer->getId(), true);
+/** @var \Magento\Catalog\Helper\Product $productHelper */
+$productHelper = $objectManager->get(\Magento\Catalog\Helper\Product::class);
+$isSkipSaleableCheck = $productHelper->getSkipSaleableCheck();
+$productHelper->setSkipSaleableCheck(true);
 $item = $wishlist->addNewItem($product);
+$productHelper->setSkipSaleableCheck($isSkipSaleableCheck);
 $wishlist->setSharingCode('wishlist_disabled_item');
 $wishListResource->save($wishlist);

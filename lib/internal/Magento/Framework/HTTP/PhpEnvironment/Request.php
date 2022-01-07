@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Laminas\Http\Header\HeaderInterface;
@@ -794,7 +795,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     public function getBaseUrl()
     {
         $url = urldecode(parent::getBaseUrl());
-        $url = str_replace('\\', '/', $url);
+        $url = str_replace(['\\', '/' . DirectoryList::PUB .'/'], '/', $url);
         return $url;
     }
 

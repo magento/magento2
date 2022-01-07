@@ -148,7 +148,7 @@ Quantity,Quantity
 Edit,Edit
 "Are you sure?","Are you sure?"
 "Change Status","Change Status"
-"Update Attributes","Update Attributes"
+"Mass Update Attributes","Mass Update Attributes"
 "start typing to search category","start typing to search category"
 "New Category","New Category"
 "Images (.gif, .jpg, .png)","Images (.gif, .jpg, .png)"
@@ -209,6 +209,7 @@ Catalog,Catalog
 "You saved the product attribute.","You saved the product attribute."
 "An attribute with this code already exists.","An attribute with this code already exists."
 "An attribute with the same code (%1) already exists.","An attribute with the same code (%1) already exists."
+"Code (%1) is a reserved key and cannot be used as attribute code.","Code (%1) is a reserved key and cannot be used as attribute code."
 "The value of Admin must be unique.","The value of Admin must be unique."
 "The value of Admin scope can't be empty.","The value of Admin scope can't be empty."
 "You duplicated the product.","You duplicated the product."

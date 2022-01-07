@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBundleProductPriceValidationErrorDisappearedAfterSwitchToDynamicPriceTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create/Edit bundle product in Admin"/>
+            <title value="Assert error message for price field"/>
+            <description value="Verify error message for price field is not visible when toggle Dynamic Price is disabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40309"/>
+            <useCaseId value="MC-30152"/>
+            <group value="bundle"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewBundleProductPage">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleSwitchDynamicPriceOnProductEditPageActionGroup" stepKey="disableDynamicPrice"/>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="fillProductPriceField">
+            <argument name="price" value="test"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminValidationErrorAppearedForPriceFieldOnProductEditPageActionGroup" stepKey="assertVisibleError">
+            <argument name="errorMessage" value="Please enter a number 0 or greater in this field."/>
+        </actionGroup>
+        <actionGroup ref="AdminToggleSwitchDynamicPriceOnProductEditPageActionGroup" stepKey="enableDynamicPrice"/>
+        <actionGroup ref="AssertAdminNoValidationErrorForPriceFieldOnProductEditPageActionGroup" stepKey="assertNotVisibleError"/>
+    </test>
+</tests>

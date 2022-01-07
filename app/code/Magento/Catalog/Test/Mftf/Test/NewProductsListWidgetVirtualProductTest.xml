@@ -26,8 +26,10 @@
         <!-- Create a Virtual Product to appear in the widget -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductButton"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickAddVirtualProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="toggleAddProductButton"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="123.45" stepKey="fillProductPrice"/>

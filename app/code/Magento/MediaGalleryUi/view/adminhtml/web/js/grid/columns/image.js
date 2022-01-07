@@ -18,6 +18,7 @@ define([
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
+            gridSelector: '[data-id="media-gallery-masonry-grid"]',
             selected: null,
             allowedActions: [],
             fields: {
@@ -281,6 +282,7 @@ define([
          */
         addMessage: function (code, message) {
             this.messages().add(code, message);
+            this.closeContextMenu();
             this.scrollToMessageContent();
             this.messages().scheduleCleanup();
         },
@@ -296,6 +298,13 @@ define([
                 !this.massaction().massActionMode()) {
                 this.deselectImage();
             }
+        },
+
+        /**
+         * Action to close the context menu in media gallery.
+         */
+        closeContextMenu: function () {
+            $(this.gridSelector).trigger('click');
         },
 
         /**

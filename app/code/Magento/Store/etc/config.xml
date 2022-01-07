@@ -124,6 +124,7 @@
                     <pl>pl</pl>
                     <py>py</py>
                     <asp>asp</asp>
+                    <aspx>aspx</aspx>
                     <sh>sh</sh>
                     <cgi>cgi</cgi>
                     <htm>htm</htm>
@@ -133,6 +134,8 @@
                     <phpt>phpt</phpt>
                     <pht>pht</pht>
                     <svg>svg</svg>
+                    <xml>xml</xml>
+                    <xhtml>xhtml</xhtml>
                 </protected_extensions>
                 <public_files_valid_paths>
                     <protected>

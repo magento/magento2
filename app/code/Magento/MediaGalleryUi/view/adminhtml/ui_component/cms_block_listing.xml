@@ -21,6 +21,8 @@
                         <item name="identityColumn" xsi:type="string">block_id</item>
                         <item name="filterPlaceholder" xsi:type="string" translate="true">Asset Title</item>
                         <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find assets</item>
+                        <item name="filterRateLimit" xsi:type="string" translate="true">1000</item>
+                        <item name="filterRateLimitMethod" xsi:type="string" translate="true">notifyWhenChangesStop</item>
                         <item name="searchOptions" xsi:type="boolean">true</item>
                         <item name="filterOptions" xsi:type="boolean">true</item>
                         <item name="searchUrl" xsi:type="url" path="media_gallery/asset/search" />

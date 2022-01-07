@@ -37,7 +37,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedArguments, $exchangeArguments);
 
         /** @var BindingInterface $binding */
-        $binding = current($exchange->getBindings());
+        $binding = $exchange->getBindings()->current();
         $this->assertEquals('topicBasedRouting1', $binding->getId());
         $this->assertEquals('anotherTopic1', $binding->getTopic());
         $this->assertEquals('queue', $binding->getDestinationType());
@@ -66,7 +66,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedArguments, $exchangeArguments);
 
         /** @var BindingInterface $binding */
-        $binding = current($exchange->getBindings());
+        $binding = $exchange->getBindings()->current();
         $this->assertEquals('topicBasedRouting2', $binding->getId());
         $this->assertEquals('anotherTopic2', $binding->getTopic());
         $this->assertEquals('queue', $binding->getDestinationType());

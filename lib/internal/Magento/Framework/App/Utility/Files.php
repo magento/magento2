@@ -24,26 +24,26 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    const INCLUDE_APP_CODE = 1;
+    public const INCLUDE_APP_CODE = 1;
 
-    const INCLUDE_TESTS = 2;
+    public const INCLUDE_TESTS = 2;
 
-    const INCLUDE_DEV_TOOLS = 4;
+    public const INCLUDE_DEV_TOOLS = 4;
 
-    const INCLUDE_TEMPLATES = 8;
+    public const INCLUDE_TEMPLATES = 8;
 
-    const INCLUDE_LIBS = 16;
+    public const INCLUDE_LIBS = 16;
 
-    const INCLUDE_PUB_CODE = 32;
+    public const INCLUDE_PUB_CODE = 32;
 
-    const INCLUDE_NON_CLASSES = 64;
+    public const INCLUDE_NON_CLASSES = 64;
 
-    const INCLUDE_SETUP = 128;
+    public const INCLUDE_SETUP = 128;
 
     /**
      * Return as data set
      */
-    const AS_DATA_SET = 1024;
+    public const AS_DATA_SET = 1024;
 
     /**
      * @var ComponentRegistrar
@@ -371,11 +371,11 @@ class Files
             }
             $globPaths = [BP . '/app/etc/config.xml', BP . '/app/etc/*/config.xml'];
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
-            $files = [[]];
+            $files = [];
             foreach ($configXmlPaths as $xmlPath) {
                 $files[] = glob($xmlPath, GLOB_NOSORT);
             }
-            self::$_cache[$cacheKey] = array_merge(...$files);
+            self::$_cache[$cacheKey] = array_merge([], ...$files);
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
@@ -644,23 +644,19 @@ class Files
                         $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/layout/(?P<path>.+)$#i';
                         if (preg_match($regex, $moduleFile, $matches)) {
                             $files[] = [
-                                $matches['area'],
-                                '',
-                                $moduleName,
-                                $matches['path'],
-                                $moduleFile,
+                                [$matches['area'], '', $moduleName, $matches['path'], $moduleFile]
                             ];
                         } else {
                             throw new \UnexpectedValueException("Could not parse modular layout file '$moduleFile'");
                         }
                     }
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $moduleFiles);
+                    $files[] = $moduleFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -691,14 +687,14 @@ class Files
 
                 if ($params['with_metainfo']) {
                     // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
+                    $files[] = [array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme))];
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $themeFiles);
+                    $files[] = $themeFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -940,7 +936,7 @@ class Files
                 ];
                 $this->_accumulateFilesByPatterns($paths, $filePattern, $files);
                 $regex = '#^' . $themePath .
-                    '/((?P<module>[a-z\d]+_[a-z\d]+)/)?web/(i18n/(?P<locale>[a-z_]+)/)?(?P<path>.+)$#i';
+                    '/((?P<module>[a-z\d]+_[a-z_\d]+)/)?web/(i18n/(?P<locale>[a-z_]+)/)?(?P<path>.+)$#i';
                 foreach ($files as $file) {
                     if (preg_match($regex, $file, $matches)) {
                         $result[] = [
@@ -1665,9 +1661,8 @@ class Files
     {
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
-            self::$_cache[$key] = file_exists(
-                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
-            );
+            $componentPath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            self::$_cache[$key] = $componentPath && file_exists($componentPath);
         }
 
         return self::$_cache[$key];

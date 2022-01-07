@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
+use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
@@ -145,6 +146,11 @@ class CommonTaxCollector extends AbstractTotal
     private $quoteDetailsItemExtensionFactory;
 
     /**
+     * @var CustomerAccountManagement
+     */
+    private $customerAccountManagement;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Tax\Model\Config $taxConfig
@@ -156,6 +162,8 @@ class CommonTaxCollector extends AbstractTotal
      * @param CustomerAddressRegionFactory $customerAddressRegionFactory
      * @param TaxHelper|null $taxHelper
      * @param QuoteDetailsItemExtensionInterfaceFactory|null $quoteDetailsItemExtensionInterfaceFactory
+     * @param CustomerAccountManagement|null $customerAccountManagement
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Tax\Model\Config $taxConfig,
@@ -166,7 +174,8 @@ class CommonTaxCollector extends AbstractTotal
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
         TaxHelper $taxHelper = null,
-        QuoteDetailsItemExtensionInterfaceFactory $quoteDetailsItemExtensionInterfaceFactory = null
+        QuoteDetailsItemExtensionInterfaceFactory $quoteDetailsItemExtensionInterfaceFactory = null,
+        ?CustomerAccountManagement $customerAccountManagement = null
     ) {
         $this->taxCalculationService = $taxCalculationService;
         $this->quoteDetailsDataObjectFactory = $quoteDetailsDataObjectFactory;
@@ -178,6 +187,8 @@ class CommonTaxCollector extends AbstractTotal
         $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         $this->quoteDetailsItemExtensionFactory = $quoteDetailsItemExtensionInterfaceFactory ?:
             ObjectManager::getInstance()->get(QuoteDetailsItemExtensionInterfaceFactory::class);
+        $this->customerAccountManagement = $customerAccountManagement ??
+            ObjectManager::getInstance()->get(CustomerAccountManagement::class);
     }
 
     /**
@@ -367,7 +378,7 @@ class CommonTaxCollector extends AbstractTotal
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                $itemDataObjects[] = $parentItemDataObject;
+                $itemDataObjects[] = [$parentItemDataObject];
                 foreach ($item->getChildren() as $child) {
                     $childItemDataObject = $this->mapItem(
                         $itemDataObjectFactory,
@@ -376,31 +387,29 @@ class CommonTaxCollector extends AbstractTotal
                         $useBaseCurrency,
                         $parentItemDataObject->getCode()
                     );
-                    $itemDataObjects[] = $childItemDataObject;
+                    $itemDataObjects[] = [$childItemDataObject];
                     $extraTaxableItems = $this->mapItemExtraTaxables(
                         $itemDataObjectFactory,
                         $item,
                         $priceIncludesTax,
                         $useBaseCurrency
                     );
-                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                    $itemDataObjects[] = $extraTaxableItems;
                 }
             } else {
                 $itemDataObject = $this->mapItem($itemDataObjectFactory, $item, $priceIncludesTax, $useBaseCurrency);
-                $itemDataObjects[] = $itemDataObject;
+                $itemDataObjects[] = [$itemDataObject];
                 $extraTaxableItems = $this->mapItemExtraTaxables(
                     $itemDataObjectFactory,
                     $item,
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                $itemDataObjects[] = $extraTaxableItems;
             }
         }
 
-        return $itemDataObjects;
+        return array_merge([], ...$itemDataObjects);
     }
 
     /**
@@ -413,7 +422,24 @@ class CommonTaxCollector extends AbstractTotal
     public function populateAddressData(QuoteDetailsInterface $quoteDetails, QuoteAddress $address)
     {
         $quoteDetails->setBillingAddress($this->mapAddress($address->getQuote()->getBillingAddress()));
-        $quoteDetails->setShippingAddress($this->mapAddress($address));
+        if ($address->getAddressType() === QuoteAddress::ADDRESS_TYPE_BILLING
+            && !$address->getCountryId()
+            && $address->getQuote()->isVirtual()
+            && $address->getQuote()->getCustomerId()
+        ) {
+            $defaultBillingAddress = $this->customerAccountManagement->getDefaultBillingAddress(
+                $address->getQuote()->getCustomerId()
+            );
+            $addressCopy = $address;
+            if ($defaultBillingAddress) {
+                $addressCopy = clone $address;
+                $addressCopy->importCustomerAddressData($defaultBillingAddress);
+            }
+
+            $quoteDetails->setShippingAddress($this->mapAddress($addressCopy));
+        } else {
+            $quoteDetails->setShippingAddress($this->mapAddress($address));
+        }
         return $quoteDetails;
     }
 
@@ -565,21 +591,24 @@ class CommonTaxCollector extends AbstractTotal
             /** @var TaxDetailsItemInterface $baseTaxDetail */
             $baseTaxDetail = $itemTaxDetail[self::KEY_BASE_ITEM];
             $quoteItem = $keyedAddressItems[$code];
-            $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
 
-            //Update aggregated values
-            if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
-                //avoid double counting
-                continue;
+            if (!$quoteItem->isDeleted()) {
+                $this->updateItemTaxInfo($quoteItem, $taxDetail, $baseTaxDetail, $store);
+
+                //Update aggregated values
+                if ($quoteItem->getHasChildren() && $quoteItem->isChildrenCalculated()) {
+                    //avoid double counting
+                    continue;
+                }
+                $subtotal += $taxDetail->getRowTotal();
+                $baseSubtotal += $baseTaxDetail->getRowTotal();
+                $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
+                $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
+                $tax += $taxDetail->getRowTax();
+                $baseTax += $baseTaxDetail->getRowTax();
+                $subtotalInclTax += $taxDetail->getRowTotalInclTax();
+                $baseSubtotalInclTax += $baseTaxDetail->getRowTotalInclTax();
             }
-            $subtotal += $taxDetail->getRowTotal();
-            $baseSubtotal += $baseTaxDetail->getRowTotal();
-            $discountTaxCompensation += $taxDetail->getDiscountTaxCompensationAmount();
-            $baseDiscountTaxCompensation += $baseTaxDetail->getDiscountTaxCompensationAmount();
-            $tax += $taxDetail->getRowTax();
-            $baseTax += $baseTaxDetail->getRowTax();
-            $subtotalInclTax += $taxDetail->getRowTotalInclTax();
-            $baseSubtotalInclTax += $baseTaxDetail->getRowTotalInclTax();
         }
 
         //Set aggregated values

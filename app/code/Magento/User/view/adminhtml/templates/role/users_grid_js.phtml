@@ -51,8 +51,8 @@ if (is_object($myBlock) && $myBlock->getJsObjectName()):
 
                 if (checked) {
                     confirm({
-                        content: "{$myBlock->escapeJs(__('Warning!\r\nThis action will remove this user from already ' .
-                                                         'assigned role\r\nAre you sure?'))}",
+                        content: "{$myBlock->escapeJs(__('Warning!<br>This action will remove this user from already ' .
+                                                         'assigned role.<br>Are you sure?'))}",
                         actions: {
                             confirm: function () {
                                 checkbox[0].checked = false;
@@ -102,7 +102,7 @@ if (is_object($myBlock) && $myBlock->getJsObjectName()):
             allCheckbox.checked = true;
             confirm({
                 content: "{$myBlock->escapeJs(
-                    __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?')
+                    __('Warning!<br>This action will remove those users from already assigned roles.<br>Are you sure?')
                     )}",
                 actions: {
                     confirm: function () {

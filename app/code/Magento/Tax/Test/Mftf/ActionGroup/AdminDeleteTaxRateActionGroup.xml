@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteTaxRateActionGroup">
+        <annotations>
+            <description>Delete Tax Rate.</description>
+        </annotations>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDeleteRate"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOk"/>
+    </actionGroup>
+</actionGroups>

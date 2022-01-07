@@ -31,8 +31,7 @@
         </after>
 
         <!--Create cart price rule as per data and verify AssertCartPriceRuleSuccessSaveMessage-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.name}}" stepKey="fillRuleName"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{CartPriceRuleConditionAndFreeShippingApplied.description}}" stepKey="fillDescription"/>
@@ -108,6 +107,8 @@
             <argument name="total" value="$280.00"/>
         </actionGroup>
         <see selector="{{CheckoutCartSummarySection.shipping}}" userInput="$0.00" stepKey="seeAssertFreeShippingConditionApplied"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$280.00" stepKey="seeAssertDiscountAmountAppliedForMatchingItemsConditionIsTrue"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeAssertDiscountAmountAppliedForMatchingItemsConditionIsTrue">
+            <argument name="discount" value="280.00"/>
+        </actionGroup>
     </test>
 </tests>

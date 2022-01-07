@@ -31,7 +31,9 @@
         <element name="addLinkFileUrlInput" type="input" selector="input[name='downloadable[link][{{var1}}][link_url]']" parameterized="true" />
         <element name="addLinkSampleUploadFile" type="file" selector="div[data-index='container_links'] tr[data-repeat-index='{{var1}}'] fieldset[data-index='container_sample'] input[type='file']" parameterized="true" />
         <element name="addLinkSampleUrlInput" type="input" selector="input[name='downloadable[link][{{var1}}][sample][url]']" parameterized="true" />
-        
+        <element name="linkFileNameOrUrl" type="text" parameterized="true" selector="//div[@data-index='container_links']//tr[@data-repeat-index='{{index}}']//fieldset[@data-index='container_file']//div[@class='file-uploader-filename']//a|//input[@name='downloadable[link][{{index}}][link_url]']"/>
+        <element name="linkSampleFileNameOrUrl" type="text" parameterized="true" selector="//div[@data-index='container_links']//tr[@data-repeat-index='{{index}}']//fieldset[@data-index='container_sample']//div[@class='file-uploader-filename']//a|//input[@name='downloadable[link][{{index}}][sample][url]']"/>
+
         <element name="samplesTitleInput" type="input" selector="input[name='product[samples_title]']"/>
         <element name="samplesAddLinkButton" type="button" selector="div[data-index='container_samples'] button[data-action='add_new_row']" />
 
@@ -41,5 +43,6 @@
         <element name="addSampleRemoveRowButton" type="button" selector="div[data-index='container_links'] tr[data-repeat-index='{{var1}}'] button[data-action='remove_row']" parameterized="true" />
         <element name="addSampleFileUploadFile" type="file" selector="div[data-index='container_samples'] tr[data-repeat-index='{{var1}}'] input[type='file']" parameterized="true" />
         <element name="addSampleFileUrlInput" type="input" selector="input[name='downloadable[sample][{{var1}}][sample_url]']" parameterized="true" />
+        <element name="sampleFileNameOrUrl" type="text" parameterized="true" selector="//div[@data-index='sample']//tr[@data-repeat-index='{{index}}']//fieldset[@data-index='container_sample']//div[@class='file-uploader-filename']//a|//input[@name='downloadable[sample][{{index}}][sample_url]']"/>
     </section>
 </sections>

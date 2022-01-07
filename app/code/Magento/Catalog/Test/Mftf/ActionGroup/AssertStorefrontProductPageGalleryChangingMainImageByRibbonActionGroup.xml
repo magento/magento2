@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryChangingMainImageByRibbonActionGroup">
+        <annotations>
+            <description>Changing main image on product page media gallery by clicking on the images in the fotorama ribbon</description>
+        </annotations>
+        <arguments>
+            <argument name="startImage" type="string" />
+            <argument name="expectedImage" type="string" />
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="waitActiveImageDefault"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeActiveImageThumbnail"/>
+        <click selector="{{StorefrontProductMediaSection.productImageInFotorama(expectedImage)}}" stepKey="firstClickOnImageInRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(expectedImage)}}" stepKey="seeExpectedImageSelectedInRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(expectedImage)}}" stepKey="seeChangedImageAfterFirstClick"/>
+        <click selector="{{StorefrontProductMediaSection.productImageInFotorama(startImage)}}" stepKey="secondClickOnImageInRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imgSelectedInThumbnail(startImage)}}" stepKey="seeStartImageSelectedInRibbonAfterSecondClick"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImage(startImage)}}" stepKey="seeChangedImageAfterSecondClick"/>
+    </actionGroup>
+</actionGroups>

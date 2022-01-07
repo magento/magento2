@@ -27,9 +27,9 @@
             <createData entity="SimpleProduct2" stepKey="createProduct2"/>
             <createData entity="Simple_US_Customer_Two_Addresses" stepKey="createCustomer"/>
             <!-- Set configurations -->
-            <magentoCLI command="config:set {{EnableFreeShippingMethod.path}} {{EnableFreeShippingMethod.value}}" stepKey="enableFreeShipping"/>
-            <magentoCLI command="config:set {{EnableFlatRateShippingMethod.path}} {{EnableFlatRateShippingMethod.value}}" stepKey="enableFlatRateShipping"/>
-            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShipping"/>
+            <actionGroup ref="CliEnableFlatRateShippingMethodActionGroup" stepKey="enableFlatRateShipping"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$createCustomer$$"/>
@@ -42,7 +42,7 @@
             <!-- Need logout before customer delete. Fatal error appears otherwise -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

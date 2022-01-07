@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
@@ -45,6 +46,7 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\PageCache\Model\Cache\Type as PageCache;
+use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Exception;
@@ -54,6 +56,8 @@ use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
+use ReflectionException;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -355,6 +359,11 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
         $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
+        $script[] = [
+            'Validating remote storage configuration...',
+            'validateRemoteStorageConfiguration',
+            [$request]
+        ];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -384,8 +393,13 @@ class Installer
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
             $this->log->log($message);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            call_user_func_array([$this, $method], $params);
+            try {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array([$this, $method], $params);
+            } catch (RuntimeException | DriverException $e) {
+                $this->revertRemoteStorageConfiguration();
+                throw $e;
+            }
             $this->logProgress();
         }
         $this->log->logSuccess('Magento installation complete.');
@@ -920,17 +934,24 @@ class Installer
      * Installs data fixtures
      *
      * @param array $request
+     * @param boolean $keepCacheStatuses
      * @return void
      * @throws Exception
      * @throws \Magento\Framework\Setup\Exception
      */
-    public function installDataFixtures(array $request = [])
+    public function installDataFixtures(array $request = [], $keepCacheStatuses = false)
     {
         $frontendCaches = [
             PageCache::TYPE_IDENTIFIER,
             BlockCache::TYPE_IDENTIFIER,
             LayoutCache::TYPE_IDENTIFIER,
         ];
+
+        if ($keepCacheStatuses) {
+            $disabledCaches = $this->getDisabledCacheTypes($frontendCaches);
+
+            $frontendCaches = array_diff($frontendCaches, $disabledCaches);
+        }
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
@@ -942,11 +963,20 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->log->log('Disabling caches:');
-        $this->updateCaches(false, $frontendCaches);
-        $this->handleDBSchemaData($setup, 'data', $request);
-        $this->log->log('Enabling caches:');
-        $this->updateCaches(true, $frontendCaches);
+
+        if ($frontendCaches) {
+            $this->log->log('Disabling caches:');
+            $this->updateCaches(false, $frontendCaches);
+        }
+
+        try {
+            $this->handleDBSchemaData($setup, 'data', $request);
+        } finally {
+            if ($frontendCaches) {
+                $this->log->log('Enabling caches:');
+                $this->updateCaches(true, $frontendCaches);
+            }
+        }
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -995,7 +1025,7 @@ class Installer
      */
     private function handleDBSchemaData($setup, $type, array $request)
     {
-        if (!($type === 'schema' || $type === 'data')) {
+        if ($type !== 'schema' && $type !== 'data') {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw  new Exception("Unsupported operation type $type is requested");
         }
@@ -1014,17 +1044,13 @@ class Installer
                 'objectManager' => $this->objectManagerProvider->get()
             ]
         );
+
+        $patchApplierParams = $type === 'schema' ?
+            ['schemaSetup' => $setup] :
+            ['moduleDataSetup' => $setup, 'objectManager' => $this->objectManagerProvider->get()];
+
         /** @var PatchApplier $patchApplier */
-        if ($type === 'schema') {
-            $patchApplier = $this->patchApplierFactory->create(['schemaSetup' => $setup]);
-        } elseif ($type === 'data') {
-            $patchApplier = $this->patchApplierFactory->create(
-                [
-                    'moduleDataSetup' => $setup,
-                    'objectManager' => $this->objectManagerProvider->get()
-                ]
-            );
-        }
+        $patchApplier = $this->patchApplierFactory->create($patchApplierParams);
 
         foreach ($moduleNames as $moduleName) {
             if ($this->isDryRun($request)) {
@@ -1086,11 +1112,11 @@ class Installer
 
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
-            $handlerType = 'schema-recurring';
         } elseif ($type === 'data') {
             $this->log->log('Data post-updates:');
-            $handlerType = 'data-recurring';
         }
+        $handlerType = $type === 'schema' ? 'schema-recurring' : 'data-recurring';
+
         foreach ($moduleNames as $moduleName) {
             if ($this->isDryRun($request)) {
                 $this->log->log("Module '{$moduleName}':");
@@ -1182,6 +1208,31 @@ class Installer
         /** @var SearchConfig $searchConfig */
         $searchConfig = $this->objectManagerProvider->get()->get(SearchConfig::class);
         $searchConfig->saveConfiguration($data);
+    }
+
+    /**
+     * Validate remote storage on install.  Since it is a deployment-based configuration, the config is already present,
+     * but this function confirms it can connect after Object Manager
+     * has all necessary dependencies loaded to do so.
+     *
+     * @param array $data
+     * @throws ValidationException
+     * @throws Exception
+     */
+    public function validateRemoteStorageConfiguration(array $data)
+    {
+        try {
+            $remoteStorageValidator = $this->objectManagerProvider->get()->get(RemoteStorageValidator::class);
+        } catch (ReflectionException $e) { // RemoteStorage module is not available; return early
+            return;
+        }
+
+        $validationErrors = $remoteStorageValidator->validate($data, $this->deploymentConfig);
+
+        if (!empty($validationErrors)) {
+            $this->revertRemoteStorageConfiguration();
+            throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
+        }
     }
 
     /**
@@ -1725,5 +1776,43 @@ class Installer
     {
         $this->triggerCleaner->removeTriggers();
         $this->cleanCaches();
+    }
+
+    /**
+     * Returns list of disabled cache types
+     *
+     * @param array $cacheTypesToCheck
+     * @return array
+     */
+    private function getDisabledCacheTypes(array $cacheTypesToCheck): array
+    {
+        $disabledCaches = [];
+
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->create(CacheManager::class);
+        $cacheStatus = $cacheManager->getStatus();
+
+        foreach ($cacheTypesToCheck as $cacheType) {
+            if (isset($cacheStatus[$cacheType]) && $cacheStatus[$cacheType] === 0) {
+                $disabledCaches[] = $cacheType;
+            }
+        }
+
+        return $disabledCaches;
+    }
+
+    /**
+     * Revert remote storage configuration back to local file driver
+     */
+    private function revertRemoteStorageConfiguration()
+    {
+        if (!$this->deploymentConfigWriter->checkIfWritable()) {
+            return;
+        }
+
+        $remoteStorageData = new ConfigData(ConfigFilePool::APP_ENV);
+        $remoteStorageData->set('remote_storage', ['driver' => 'file']);
+        $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
+        $this->deploymentConfigWriter->saveConfig($configData, true);
     }
 }

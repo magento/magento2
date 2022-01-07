@@ -8,16 +8,6 @@
 /** @var $block \Magento\Catalog\Block\Product\Image */
 /** @var $escaper \Magento\Framework\Escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/**
- * Enable lazy loading for images with borders and if variable enable_lazy_loading_for_images_without_borders
- * is enabled in view.xml. Otherwise small size images without borders may be distorted. So max-width is used for them
- * to prevent stretching and lazy loading does not work.
- */
-$borders = (bool)$block->getVar('product_image_white_borders', 'Magento_Catalog');
-$enableLazyLoadingWithoutBorders = (bool)$block->getVar(
-    'enable_lazy_loading_for_images_without_borders',
-    'Magento_Catalog'
-);
 $width = (int)$block->getWidth();
 $paddingBottom = $block->getRatio() * 100;
 ?>
@@ -25,17 +15,12 @@ $paddingBottom = $block->getRatio() * 100;
     <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
-                <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+                <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtml($value) ?>"
             <?php endforeach; ?>
             src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
             loading="lazy"
-            <?php if ($borders || $enableLazyLoadingWithoutBorders): ?>
-                width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
-                height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
-            <?php else: ?>
-                max-width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
-                max-height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
-            <?php endif; ?>
+            width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
+            height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
 </span>
 <?php

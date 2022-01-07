@@ -58,15 +58,12 @@ class GiftMessage implements ResolverInterface
         if (!isset($value['id'])) {
             throw new GraphQlInputException(__('"id" value should be specified'));
         }
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $orderId = (int)base64_decode($value['id']) ?: (int)$value['id'];
         try {
-            $orderGiftMessage = $this->orderRepository->get($value['id']);
+            $orderGiftMessage = $this->orderRepository->get($orderId);
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__('Can\'t load gift message for order'));
-        }
-
-        if (!isset($orderGiftMessage)) {
-            return null;
         }
 
         return [

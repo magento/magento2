@@ -13,6 +13,6 @@
             <description>Runs bin/magento command to enable WYSIWYG</description>
         </annotations>
 
-        <magentoCLI stepKey="enableWYSIWYG" command="config:set cms/wysiwyg/enabled enabled"/>
+        <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}" stepKey="enableWYSIWYG"/>
     </actionGroup>
 </actionGroups>

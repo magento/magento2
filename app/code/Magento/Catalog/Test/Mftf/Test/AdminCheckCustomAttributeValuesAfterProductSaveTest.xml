@@ -33,9 +33,7 @@
             </createData>
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCatalogSearch">
-                <argument name="indices" value="catalogsearch_fulltext"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexCatalogSearch"/>
             <!-- Login to Admin page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>

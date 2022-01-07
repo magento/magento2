@@ -11,7 +11,8 @@ define([
     'underscore',
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'jquery/jstree/jquery.jstree',
-    'Magento_Ui/js/lib/view/utils/async'
+    'Magento_Ui/js/lib/view/utils/async',
+    'Magento_MediaGalleryUi/js/directory/directories'
 ], function ($, Component, layout, _, createDirectory) {
     'use strict';
 
@@ -19,12 +20,14 @@ define([
         defaults: {
             allowedActions: [],
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            bookmarkProvider: 'componentType = bookmark, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             createDirectoryUrl: 'media_gallery/directories/create',
             deleteDirectoryUrl: 'media_gallery/directories/delete',
             jsTreeReloaded: null,
             modules: {
+                bookmarks: '${ $.bookmarkProvider }',
                 directories: '${ $.name }_directories',
                 filterChips: '${ $.filterChipsProvider }'
             },
@@ -50,6 +53,7 @@ define([
                 this.directoryTreeSelector,
                 this,
                 function () {
+                    this.initJsTreeEvents();
                     this.renderDirectoryTree().then(function () {
                         this.initEvents();
                     }.bind(this));
@@ -101,7 +105,7 @@ define([
                 return deferred.promise();
             }
 
-            if (this.isDirectoryExist(directories[0], requestedDirectory)) {
+            if (this.isDirectoryExist(directories, requestedDirectory)) {
                 deferred.resolve(false);
 
                 return deferred.promise();
@@ -110,7 +114,7 @@ define([
             pathArray = this.convertPathToPathsArray(requestedDirectory);
 
             $.each(pathArray, function (i, val) {
-                if (this.isDirectoryExist(directories[0], val)) {
+                if (this.isDirectoryExist(directories, val)) {
                     pathArray.splice(i, 1);
                 }
             }.bind(this));
@@ -144,7 +148,7 @@ define([
                 var i;
 
                 for (i = 0; i < data.length; i++) {
-                    if (data[i].attr.id === id) {
+                    if (data[i].id === id) {
                         found = data[i];
                         break;
                     } else if (data[i].children && data[i].children.length) {
@@ -204,15 +208,13 @@ define([
          * Remove ability to multiple select on nodes
          */
         disableMultiselectBehavior: function () {
-            $.jstree.defaults.ui['select_range_modifier'] = false;
-            $.jstree.defaults.ui['select_multiple_modifier'] = false;
+            $.jstree.defaults.core.multiple = false;
         },
 
         /**
          *  Handle jstree events
          */
         initEvents: function () {
-            this.initJsTreeEvents();
             this.disableMultiselectBehavior();
 
             $(window).on('reload.MediaGallery', function () {
@@ -236,7 +238,7 @@ define([
          */
         initJsTreeEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                this.setActiveNodeFilter($(data.rslt.obj).data('path'));
+                this.setActiveNodeFilter(data.node.id);
                 this.setJsTreeReloaded(false);
             }.bind(this));
 
@@ -259,6 +261,15 @@ define([
                 return;
             }
 
+            if (!_.isUndefined(this.bookmarks())) {
+                if (!_.size(this.bookmarks().getViewData(this.bookmarks().defaultIndex))) {
+                    setTimeout(function () {
+                        this.updateSelectedDirectory();
+                    }.bind(this), 500);
+
+                    return;
+                }
+            }
             currentTreePath = this.isFilterApplied(currentFilterPath) || _.isNull(requestedDirectory) ?
                 currentFilterPath : requestedDirectory;
 
@@ -276,7 +287,7 @@ define([
          */
         folderExistsInTree: function (path) {
             if (!_.isUndefined(path)) {
-                return $('#' + path.replace(/\//g, '\\/')).length === 1;
+                return $(this.directoryTreeSelector).jstree('get_node', path);
             }
 
             return false;
@@ -307,12 +318,14 @@ define([
          * @param {String} path
          */
         locateNode: function (path) {
-            if (path === $(this.directoryTreeSelector).jstree('get_selected').attr('id')) {
+            if ($(this.directoryTreeSelector).jstree('is_selected', path)) {
                 return;
             }
-            path = path.replace(/\//g, '\\/');
-            $(this.directoryTreeSelector).jstree('open_node', '#' + path);
-            $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
+            $(this.directoryTreeSelector).jstree('deselect_node',
+                $(this.directoryTreeSelector).jstree('get_selected')
+            );
+            $(this.directoryTreeSelector).jstree('open_node', path);
+            $(this.directoryTreeSelector).jstree('select_node', path, true);
 
         },
 
@@ -385,7 +398,9 @@ define([
          * Remove active node from directory tree, and select next
          */
         removeNode: function () {
-            $(this.directoryTreeSelector).jstree('remove');
+            $(this.directoryTreeSelector).jstree('delete_node',
+                $(this.directoryTreeSelector).jstree('get_selected')
+            );
         },
 
         /**
@@ -409,9 +424,9 @@ define([
             var deferred = $.Deferred();
 
             this.getJsonTree().then(function (data) {
-                this.createTree(data);
+                $(this.directoryTreeSelector).jstree(true).settings.core.data = data;
+                $(this.directoryTreeSelector).jstree(true).refresh(false, true);
                 this.setJsTreeReloaded(true);
-                this.initEvents();
                 deferred.resolve();
             }.bind(this));
 
@@ -459,28 +474,22 @@ define([
          * @param {Array} data
          */
         createTree: function (data) {
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             $(this.directoryTreeSelector).jstree({
-                plugins: ['json_data', 'themes',  'ui', 'crrm', 'types', 'hotkeys'],
-                vcheckbox: {
-                    'two_state': true,
-                    'real_checkboxes': true
+                plugins: [],
+                checkbox: {
+                    three_state: false,
+                    cascade: ''
                 },
-                'json_data': {
-                    data: data
-                },
-                hotkeys: {
-                    space: this._changeState,
-                    'return': this._changeState
-                },
-                types: {
-                    'types': {
-                        'disabled': {
-                            'check_node': true,
-                            'uncheck_node': true
-                        }
+                core: {
+                    data: data,
+                    check_callback: true,
+                    themes: {
+                        dots: false
                     }
                 }
             });
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         }
     });
 });
