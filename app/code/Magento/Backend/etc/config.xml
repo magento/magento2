@@ -44,6 +44,10 @@
             <seo>
                 <use_rewrites>0</use_rewrites>
             </seo>
+            <secure>
+                <use_in_frontend>1</use_in_frontend>
+                <use_in_adminhtml>1</use_in_adminhtml>
+            </secure>
         </web>
     </default>
     <stores>
