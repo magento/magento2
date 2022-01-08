@@ -171,7 +171,7 @@ class Variable extends AbstractModel
     }
 
     /**
-     * Retrieve variables option array
+     * Retrieve variables option array.
      *
      * @todo: extract method as separate class
      * @param bool $withGroup
