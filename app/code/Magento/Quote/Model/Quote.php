@@ -1356,7 +1356,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $old = $this->getAddressesCollection()->getItemById($address->getId())
             ?? $this->getBillingAddress();
-        if ($old != null) {
+        if ($old !== null) {
             $old->addData($address->getData());
         } else {
             $this->addAddress($address->setAddressType(Address::TYPE_BILLING));
@@ -1378,7 +1378,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         } else {
             $old = $this->getAddressesCollection()->getItemById($address->getId())
                 ?? $this->getShippingAddress();
-            if ($old != null) {
+            if ($old !== null) {
                 $old->addData($address->getData());
             } else {
                 $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
