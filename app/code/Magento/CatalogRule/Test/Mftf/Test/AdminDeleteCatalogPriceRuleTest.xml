@@ -71,31 +71,57 @@
         <!-- Create a catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
         <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
-        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
+        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApply"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccess">
+            <argument name="message" value="You saved the rule."/>
+        </actionGroup>
 
         <!-- Verify that category page shows the discount -->
-        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage1"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(ApiSimpleProduct.name)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct1"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(ApiSimpleProduct.name)}}" userInput="$110.70" stepKey="seeSimpleProductDiscount1"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(_defaultProduct.name)}}" userInput="{{_defaultProduct.name}}" stepKey="seeConfigurableProduct1"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(_defaultProduct.name)}}" userInput="$0.90" stepKey="seeConfigurableProductDiscount1"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryPage1">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeSimpleProduct1">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeSimpleProductDiscount1">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$110.70"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeConfigurableProduct1">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeConfigurableProductDiscount1">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productPrice" value="$0.90"/>
+        </actionGroup>
 
         <!-- Verify that the simple product page shows the discount -->
-        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName1"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSimpleProductPage1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName1">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku1">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$110.70" stepKey="seeCorrectPrice1"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeCorrectPrice1">
+            <argument name="productPrice" value="$110.70"/>
+        </actionGroup>
 
         <!-- Verify that the configurable product page the catalog price rule discount -->
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName2"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToConfigurableProductPage1">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName2">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku2">
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$0.90" stepKey="seeCorrectPrice2"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeCorrectPrice2">
+            <argument name="productPrice" value="$0.90"/>
+        </actionGroup>
 
         <!-- Delete the rule -->
         <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
@@ -112,26 +138,50 @@
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Verify that category page shows the original prices -->
-        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage2"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(ApiSimpleProduct.name)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeSimpleProduct2"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(ApiSimpleProduct.name)}}" userInput="$123.00" stepKey="seeSimpleProductDiscount2"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductTitleByName(_defaultProduct.name)}}" userInput="{{_defaultProduct.name}}" stepKey="seeConfigurableProduct2"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductPriceByName(_defaultProduct.name)}}" userInput="$1.00" stepKey="seeConfigurableProductDiscount2"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryPage2">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeSimpleProduct2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeSimpleProductDiscount2">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productPrice" value="$123.00"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeConfigurableProduct2">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeConfigurableProductDiscount2">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productPrice" value="$1.00"/>
+        </actionGroup>
 
         <!-- Verify that the simple product page shows the original price -->
-        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName3"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSimpleProductPage2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName3">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku3">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$123.00" stepKey="seeCorrectPrice3"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeCorrectPrice3">
+            <argument name="productPrice" value="$123.00"/>
+        </actionGroup>
 
         <!-- Verify that the configurable product page shows the original price -->
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName4"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToConfigurableProductPage2">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeCorrectName4">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku4">
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$1.00" stepKey="seeCorrectPrice4"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeCorrectPrice4">
+            <argument name="productPrice" value="$1.00"/>
+        </actionGroup>
     </test>
 </tests>
