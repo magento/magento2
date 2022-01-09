@@ -195,15 +195,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        $root = BP;
-        $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
-        if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
-            // The Dependency test is skipped for vendor/magento build
-            self::markTestSkipped(
-                'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
-            );
-        }
-
         self::$routeMapper = new RouteMapper();
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
@@ -347,21 +338,6 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Get full path to app/code directory, assuming these tests are run from the dev/tests directory.
-     *
-     * @return string
-     * @throws \LogicException
-     */
-    private static function getAppCodeDir()
-    {
-        $appCode = BP . '/app/code';
-        if (!$appCode) {
-            throw new \LogicException('app/code directory cannot be located');
-        }
-        return $appCode;
-    }
-
-    /**
      * Get a map of tables to primary modules.
      *
      * Primary module is the one which initially defines the table (versus the module extending its declaration).
@@ -372,20 +348,29 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     private static function getTableToPrimaryModuleMap(): array
     {
-        $appCode = self::getAppCodeDir();
         $tableToPrimaryModuleMap = [];
-        foreach (glob($appCode . '/*/*/etc/db_schema_whitelist.json') as $file) {
-            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file));
-            preg_match('|.*/(.*)/(.*)/etc/db_schema_whitelist.json|', $file, $matches);
-            $moduleName = $matches[1] . '\\' . $matches[2];
-            $isStagingModule = (substr_compare($moduleName, 'Staging', -strlen('Staging')) === 0);
-            if ($isStagingModule) {
+
+        /** @var \Magento\Framework\Component\ComponentFile[] $configs */
+        $configs = Files::init()->getConfigFiles(
+            'db_schema_whitelist.json',
+            [],
+            false,
+            true
+        );
+        foreach ($configs as $file) {
+            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file->getFullPath()));
+            $isStagingModule = (substr_compare($file->getComponentName(), 'Staging', -strlen('Staging')) === 0);
+            if ($isStagingModule || $file->getComponentName() === 'Magento_MultipleWishlist') {
                 // even though staging modules modify the constraints, they almost never declare new tables
                 continue;
             }
             foreach ($dbSchemaWhitelist as $tableName => $tableMetadata) {
                 if (isset($tableMetadata->constraint)) {
-                    $tableToPrimaryModuleMap[$tableName] = $moduleName;
+                    $tableToPrimaryModuleMap[$tableName] = str_replace(
+                        '_',
+                        "\\",
+                        $file->getComponentName()
+                    );
                 }
             }
         }
@@ -404,15 +389,24 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     private static function getTableToAnyModuleMap(): array
     {
-        $appCode = self::getAppCodeDir();
         $tableToAnyModuleMap = [];
-        foreach (glob($appCode . '/*/*/etc/db_schema_whitelist.json') as $file) {
-            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file));
+        /** @var \Magento\Framework\Component\ComponentFile[] $configs */
+        $configs = Files::init()->getConfigFiles(
+            'db_schema_whitelist.json',
+            [],
+            false,
+            true
+        );
+
+        foreach ($configs as $file) {
+            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file->getFullPath()));
             $tables = array_keys($dbSchemaWhitelist);
-            preg_match('|.*/(.*)/(.*)/etc/db_schema_whitelist.json|', $file, $matches);
-            $moduleName = $matches[1] . '\\' . $matches[2];
             foreach ($tables as $table) {
-                $tableToAnyModuleMap[$table] = $moduleName;
+                $tableToAnyModuleMap[$table] = str_replace(
+                    '_',
+                    "\\",
+                    $file->getComponentName()
+                );
             }
         }
         return $tableToAnyModuleMap;

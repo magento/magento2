@@ -11,6 +11,7 @@ use Exception;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentFile;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Exception\NoSuchActionException;
 
 /**
@@ -128,6 +129,21 @@ class RouteMapper
     ];
 
     /**
+     * @var Files
+     */
+    private $filesUtilities;
+
+    /**
+     * @param Files|null $files
+     *
+     * @throws LocalizedException
+     */
+    public function __construct(Files $files = null)
+    {
+        $this->filesUtilities = $files ?? Files::init();
+    }
+
+    /**
      * Provide routing declaration by router_id
      *
      * @param string $routerId
@@ -240,13 +256,27 @@ class RouteMapper
             $routerId = (string)$router['id'];
             foreach ($router->xpath('route') as $route) {
                 $routeId = (string)$route['id'];
-                if (!isset($this->routers[$routerId][$routeId])) {
-                    $this->routers[$routerId][$routeId] = [];
-                }
-                if (!in_array($module, $this->routers[$routerId][$routeId])) {
-                    $this->routers[$routerId][$routeId][] = $module;
-                }
+                $this->saveRouteId($routerId, $routeId, $module);
+                $routeId = (string)$route['frontName'];
+                $this->saveRouteId($routerId, $routeId, $module);
             }
+        }
+    }
+
+    /**
+     * Save route id into runtime cache.
+     *
+     * @param string $routerId
+     * @param string $routeId
+     * @param string $module
+     */
+    private function saveRouteId(string $routerId, string $routeId, string $module): void
+    {
+        if (!isset($this->routers[$routerId][$routeId])) {
+            $this->routers[$routerId][$routeId] = [];
+        }
+        if (!in_array($module, $this->routers[$routerId][$routeId])) {
+            $this->routers[$routerId][$routeId][] = $module;
         }
     }
 
@@ -258,7 +288,12 @@ class RouteMapper
     private function getListRoutesXml()
     {
         if (empty($this->routeConfigFiles)) {
-            $files = Files::init()->getConfigFiles('*/routes.xml', [], false, true);
+            $files = $this->filesUtilities->getConfigFiles(
+                '*/routes.xml',
+                [],
+                false,
+                true
+            );
             /** @var ComponentFile $componentFile */
             foreach ($files as $componentFile) {
                 $module = str_replace('_', '\\', $componentFile->getComponentName());
@@ -277,7 +312,7 @@ class RouteMapper
     private function getActionsMap(): array
     {
         if (empty($this->actions)) {
-            $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE);
+            $files = $this->filesUtilities->getPhpFiles(Files::INCLUDE_APP_CODE);
             $actionsMap = [];
             foreach ($this->getRoutersMap() as $routerId => $routes) {
                 $actionsMapPerArea = [];
@@ -303,12 +338,18 @@ class RouteMapper
      * @param string $module
      * @param string $routerId
      * @param array $files
+     *
      * @return array
+     * @throws LocalizedException
      */
     private function getModuleActionsMapping(string $module, string $routerId, array $files): array
     {
-        $subdirectoryPattern = str_replace('\\', DIRECTORY_SEPARATOR, $module);
-        $subdirectoryPattern .= DIRECTORY_SEPARATOR . 'Controller/';
+        $moduleParts = explode('\\', $module);
+        $subdirectoryPattern = $this->filesUtilities->getModuleFile(
+            $moduleParts[0],
+            $moduleParts[1],
+            'Controller/'
+        );
         if (array_search($routerId, [Area::AREA_ADMINHTML, Area::AREA_ADMIN], true) !== false) {
             $subdirectoryPattern .= ucfirst(Area::AREA_ADMINHTML) . DIRECTORY_SEPARATOR;
         } else {
