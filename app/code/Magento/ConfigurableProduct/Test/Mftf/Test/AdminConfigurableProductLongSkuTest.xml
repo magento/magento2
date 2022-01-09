@@ -41,7 +41,6 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
-
         <after>
             <!--Clean up products-->
             <actionGroup ref="DeleteProductByNameActionGroup" stepKey="cleanUpProducts">
@@ -53,23 +52,26 @@
             <!--Clean up category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
-
          <!--Create a configurable product with long name and sku-->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'configurable')}}" stepKey="goToProductCreatePage"/>
-        <waitForPageLoad stepKey="waitForProductCreatePage"/>
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{ProductWithLongNameSku.name}}" stepKey="fillProductName"/>
-        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{ProductWithLongNameSku.sku}}" stepKey="fillProductSku"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductCreatePage"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="waitForProductCreatePage">
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillProductName">
+            <argument name="product" value="ProductWithLongNameSku"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="fillProductPrice"/>
-        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="selectCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
         <!--Setup configurations-->
         <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
-
          <!--See SKU length errors in Current Variations grid-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductFail"/>
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'configurable')}}" stepKey="seeRemainOnCreateProductPage"/>
@@ -80,35 +82,67 @@
         <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('2')}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="fixConfigurationSku2"/>
         <!--Save product successfully-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductSuccess"/>
-        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
-
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveProductMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
          <!--Assert configurations on the product edit pag-->
         <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="2" stepKey="seeNumberOfRows"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{ProductWithLongNameSku.name}}-$$getConfigAttributeOption1.label$$" stepKey="seeChildProductName1"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="{{ProductWithLongNameSku.name}}-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductName2"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="seeChildProductSku1"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductSku2"/>
-        <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
-
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeChildProductName1">
+            <argument name="attribute" value="name_container"/>
+            <argument name="value" value="{{ProductWithLongNameSku.name}}-$getConfigAttributeOption1.label$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeChildProductName2">
+            <argument name="attribute" value="name_container"/>
+            <argument name="value" value="{{ProductWithLongNameSku.name}}-$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeChildProductSku1">
+            <argument name="attribute" value="sku_container"/>
+            <argument name="value" value="LongSku-$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeChildProductSku2">
+            <argument name="attribute" value="sku_container"/>
+            <argument name="value" value="LongSku-$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminChildProductDataOnParentProductEditPageActionGroup" stepKey="seeConfigurationsPrice">
+            <argument name="attribute" value="price_container"/>
+            <argument name="value" value="{{ProductWithLongNameSku.price}}"/>
+        </actionGroup>
         <!--Run re-index task-->
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-
          <!--Assert storefront category list page-->
-        <amOnPage url="/" stepKey="amOnStorefront"/>
-        <waitForPageLoad stepKey="waitForStorefrontLoad"/>
-        <click userInput="$$createCategory.name$$" stepKey="clickOnCategoryName"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <see userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductPresent"/>
-        <see userInput="{{ProductWithLongNameSku.price}}" stepKey="assertProductPricePresent"/>
-
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="amOnStorefront"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontLoad"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="clickOnCategoryName">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertProductPricePresent">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+            <argument name="productPrice" value="{{ProductWithLongNameSku.price}}"/>
+        </actionGroup>
         <!--Assert storefront product details page-->
-        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(ProductWithLongNameSku.name)}}" stepKey="clickOnProductName"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="clickOnProductName">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoad"/>
         <seeInTitle userInput="{{ProductWithLongNameSku.name}}" stepKey="assertProductNameTitle"/>
-        <see userInput="{{ProductWithLongNameSku.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
-        <see userInput="{{ProductWithLongNameSku.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_frontend_label$$" stepKey="seeColorAttributeName1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeInDropDown1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="$$getConfigAttributeOption2.label$$" stepKey="seeInDropDown2"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="assertProductName">
+            <argument name="productName" value="{{ProductWithLongNameSku.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="assertProductSku">
+            <argument name="productSku" value="{{ProductWithLongNameSku.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeLabelVisibleActionGroup" stepKey="seeColorAttributeName1">
+            <argument name="productAttributeLabel" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown1">
+            <argument name="productAttributeOption" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
+            <argument name="productAttributeOption" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
     </test>
 </tests>
