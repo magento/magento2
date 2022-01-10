@@ -37,6 +37,10 @@
         </after>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfProductsPerPage">
+            <argument name="perPage" value="100"/>
+        </actionGroup>
         <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
@@ -50,10 +54,10 @@
         </actionGroup>
 
         <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickDropdown"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOption"/> 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBulkUpdatePage"/> 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeInUrl"/> 
-    
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOption"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBulkUpdatePage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeInUrl"/>
+
         <actionGroup ref="AdminCheckNameToggleOnProductsMassAttributesUpdateActionGroup" stepKey="toggleToChangeName"/>
 
         <actionGroup ref="AdminClickSaveOnProductsMassAttributesUpdateActionGroup" stepKey="save"/>

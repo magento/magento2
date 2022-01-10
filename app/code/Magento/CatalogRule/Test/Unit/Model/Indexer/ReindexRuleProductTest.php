@@ -52,6 +52,9 @@ class ReindexRuleProductTest extends TestCase
      */
     private $ruleMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
@@ -70,6 +73,9 @@ class ReindexRuleProductTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteIfRuleInactive(): void
     {
         $ruleMock = $this->createMock(Rule::class);
@@ -79,6 +85,9 @@ class ReindexRuleProductTest extends TestCase
         self::assertFalse($this->model->execute($ruleMock, 100, true));
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteIfRuleWithoutWebsiteIds(): void
     {
         $ruleMock = $this->createMock(Rule::class);
@@ -91,6 +100,9 @@ class ReindexRuleProductTest extends TestCase
         self::assertFalse($this->model->execute($ruleMock, 100, true));
     }
 
+    /**
+     * @return void
+     */
     public function testExecute(): void
     {
         $websiteId = 3;
@@ -99,7 +111,7 @@ class ReindexRuleProductTest extends TestCase
         $productIds = [
             4 => [$websiteId => 1],
             5 => [$websiteId => 1],
-            6 => [$websiteId => 1],
+            6 => [$websiteId => 1]
         ];
 
         $this->prepareResourceMock();
@@ -108,7 +120,7 @@ class ReindexRuleProductTest extends TestCase
         $this->localeDateMock->method('getConfigTimezone')
             ->willReturnMap([
                 [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $adminTimeZone],
-                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $websiteTz],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $websiteTz]
             ]);
 
         $batchRows = [
@@ -122,7 +134,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ],
             [
                 'rule_id' => 100,
@@ -134,7 +146,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ]
         ];
 
@@ -149,20 +161,23 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ]
         ];
 
-        $this->connectionMock->expects(self::at(0))
+        $this->connectionMock
             ->method('insertMultiple')
-            ->with('catalogrule_product_replica', $batchRows);
-        $this->connectionMock->expects(self::at(1))
-            ->method('insertMultiple')
-            ->with('catalogrule_product_replica', $rowsNotInBatch);
+            ->withConsecutive(
+                ['catalogrule_product_replica', $batchRows],
+                ['catalogrule_product_replica', $rowsNotInBatch]
+            );
 
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithExcludedWebsites(): void
     {
         $websitesIds = [1, 2, 3];
@@ -171,14 +186,14 @@ class ReindexRuleProductTest extends TestCase
         $productIds = [
             1 => [1 => 1],
             2 => [2 => 1],
-            3 => [3 => 1],
+            3 => [3 => 1]
         ];
 
         $this->prepareResourceMock();
         $this->prepareRuleMock($websitesIds, $productIds, [10, 20]);
 
         $extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
-            ->setMethods(['getExtensionAttributes', 'getExcludeWebsiteIds'])
+            ->addMethods(['getExtensionAttributes', 'getExcludeWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->ruleMock->expects(self::once())->method('getExtensionAttributes')
@@ -191,7 +206,7 @@ class ReindexRuleProductTest extends TestCase
                 [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $adminTimeZone],
                 [ScopeInterface::SCOPE_WEBSITE, 1, $websiteTz],
                 [ScopeInterface::SCOPE_WEBSITE, 2, $websiteTz],
-                [ScopeInterface::SCOPE_WEBSITE, 3, $websiteTz],
+                [ScopeInterface::SCOPE_WEBSITE, 3, $websiteTz]
             ]);
 
         $batchRows = [
@@ -205,7 +220,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ],
             [
                 'rule_id' => 100,
@@ -217,7 +232,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ],
             [
                 'rule_id' => 100,
@@ -229,7 +244,7 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ],
             [
                 'rule_id' => 100,
@@ -241,40 +256,41 @@ class ReindexRuleProductTest extends TestCase
                 'action_operator' => 'simple_action',
                 'action_amount' => 43,
                 'action_stop' => true,
-                'sort_order' => 1,
+                'sort_order' => 1
             ]
         ];
 
-        $this->connectionMock->expects(self::at(0))
+        $this->connectionMock
             ->method('insertMultiple')
             ->with('catalogrule_product_replica', $batchRows);
 
         self::assertTrue($this->model->execute($this->ruleMock, 100, true));
     }
 
+    /**
+     * @return void
+     */
     private function prepareResourceMock(): void
     {
         $this->tableSwapperMock->expects(self::once())
             ->method('getWorkingTableName')
             ->with('catalogrule_product')
             ->willReturn('catalogrule_product_replica');
-        $this->resourceMock->expects(self::at(0))
+        $this->resourceMock
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-        $this->resourceMock->expects(self::at(1))
+        $this->resourceMock
             ->method('getTableName')
-            ->with('catalogrule_product')
-            ->willReturn('catalogrule_product');
-        $this->resourceMock->expects(self::at(2))
-            ->method('getTableName')
-            ->with('catalogrule_product_replica')
-            ->willReturn('catalogrule_product_replica');
+            ->withConsecutive(['catalogrule_product'], ['catalogrule_product_replica'])
+            ->willReturnOnConsecutiveCalls('catalogrule_product', 'catalogrule_product_replica');
     }
 
     /**
      * @param array $websiteId
      * @param array $productIds
      * @param array $customerGroupIds
+     *
+     * @return void
      */
     private function prepareRuleMock(array $websiteId, array $productIds, array $customerGroupIds): void
     {

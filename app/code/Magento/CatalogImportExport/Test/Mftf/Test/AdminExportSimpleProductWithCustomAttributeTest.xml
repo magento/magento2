@@ -18,6 +18,7 @@
             <testCaseId value="MC-14007"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create simple product with custom attribute set -->

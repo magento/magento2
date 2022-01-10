@@ -77,6 +77,9 @@ class ProcessorTest extends TestCase
      */
     private $processor;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->importerFactoryMock = $this->getMockBuilder(ImporterFactory::class)
@@ -120,9 +123,11 @@ class ProcessorTest extends TestCase
      * @param bool $doImport
      * @param bool $skipImport
      * @param array $warningMessages
+     *
+     * @return void
      * @dataProvider importDataProvider
      */
-    public function testImport($doImport, $skipImport, array $warningMessages)
+    public function testImport(bool $doImport, bool $skipImport, array $warningMessages): void
     {
         $configData = ['some data'];
         $messages = ['The import is complete'];
@@ -168,12 +173,12 @@ class ProcessorTest extends TestCase
             $this->configHashMock->expects($this->never())
                 ->method('regenerate');
         } else {
-            $this->outputMock->expects($this->at(0))
+            $this->outputMock
                 ->method('writeln')
-                ->with('<info>Processing configurations data from configuration file...</info>');
-            $this->outputMock->expects($this->at(1))
-                ->method('writeln')
-                ->with($expectsMessages);
+                ->withConsecutive(
+                    ['<info>Processing configurations data from configuration file...</info>'],
+                    [$expectsMessages]
+                );
             $importerMock->expects($this->once())
                 ->method('import')
                 ->with($configData)
@@ -188,33 +193,36 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function importDataProvider()
+    public function importDataProvider(): array
     {
         return [
             [
                 'doImport' => false,
                 'skipImport' => false,
-                'warningMessages' => [],
+                'warningMessages' => []
             ],
             [
                 'doImport' => true,
                 'skipImport' => false,
-                'warningMessages' => [],
+                'warningMessages' => []
             ],
             [
                 'doImport' => true,
                 'skipImport' => false,
-                'warningMessages' => ['Some message'],
+                'warningMessages' => ['Some message']
             ],
             [
                 'doImport' => false,
                 'skipImport' => true,
-                'warningMessages' => ['Some message'],
+                'warningMessages' => ['Some message']
             ],
         ];
     }
 
-    public function testImportWithException()
+    /**
+     * @return void
+     */
+    public function testImportWithException(): void
     {
         $this->expectException('Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('Import failed: Some error');
@@ -237,7 +245,10 @@ class ProcessorTest extends TestCase
         $this->processor->execute($this->inputMock, $this->outputMock);
     }
 
-    public function testImportWithValidation()
+    /**
+     * @return void
+     */
+    public function testImportWithValidation(): void
     {
         $this->expectException('Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('Import failed: error message');
@@ -280,9 +291,11 @@ class ProcessorTest extends TestCase
     /**
      * @param array $importers
      * @param bool $isValid
+     *
+     * @return void
      * @dataProvider importNothingToImportDataProvider
      */
-    public function testImportNothingToImport(array $importers, $isValid)
+    public function testImportNothingToImport(array $importers, bool $isValid): void
     {
         $this->configImporterPoolMock->expects($this->once())
             ->method('getImporters')
@@ -297,7 +310,7 @@ class ProcessorTest extends TestCase
         $this->loggerMock->expects($this->never())
             ->method('error');
 
-        $this->outputMock->expects($this->at(0))
+        $this->outputMock
             ->method('writeln')
             ->with('<info>Nothing to import.</info>');
 
@@ -307,12 +320,12 @@ class ProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function importNothingToImportDataProvider()
+    public function importNothingToImportDataProvider(): array
     {
         return [
             ['importers' => [], 'isValid' => false],
             ['importers' => [], 'isValid' => true],
-            ['importers' => ['someImporter'], 'isValid' => false],
+            ['importers' => ['someImporter'], 'isValid' => false]
         ];
     }
 }

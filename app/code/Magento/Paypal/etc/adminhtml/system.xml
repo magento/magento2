@@ -28,13 +28,13 @@
             <group id="other_paypal_payment_solutions" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Other PayPal Payment Solutions:</label>
                 <fieldset_css>paypal-top-section paypal-other-header</fieldset_css>
-                <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>
             <group id="other_payment_methods" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Other Payment Methods:</label>
                 <attribute type="expanded">1</attribute>
                 <fieldset_css>paypal-top-section payments-other-header</fieldset_css>
-                <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>
         </section>
         <section id="payment_all_paypal" showInDefault="0" showInWebsite="0" showInStore="0">
@@ -51,8 +51,8 @@
             </group>
             <group id="payments_pro_hosted_solution_without_bml_and_paylater" extends="payments_pro_hosted_solution_without_bml">
                 <group id="pphs_required_settings">
-                    <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                    <group id="pphs_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                    <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
+                    <group id="pphs_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                 </group>
             </group>
             <include path="Magento_Paypal::system/payments_pro_hosted_solution_with_express_checkout.xml"/>
@@ -155,15 +155,8 @@
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="advertise_paylater">
-                            <field id="paylater_enabled" translate="label comment">
-                                <comment>
-                                    <![CDATA[Display pay later messaging on your site for offers like Pay in 3,
-                                    which lets customers pay with 3 interest- free monthly payments. We’ll show messages
-                                    on your site to promote this feature for you. You may not promote pay later offers
-                                    with any other content, marketing, or materials.]]>
-                                </comment>
-                            </field>
+                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1">
+                            <field id="paylater_enabled" showInDefault="1" showInWebsite="1"/>
                         </group>
                     </group>
                 </group>
@@ -185,20 +178,7 @@
                         <group id="wpp_advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                 </group>
-                <group id="payments_pro_hosted_solution_with_express_checkout" extends="payment_all_paypal/payments_pro_hosted_solution_with_express_checkout">
-                    <group id="pphs_required_settings">
-                        <group id="pphs_advertise_paylater">
-                            <field id="paylater_enabled" translate="label comment">
-                                <comment>
-                                    <![CDATA[Display pay later messaging on your site for offers like Pay in 3, which
-                                    lets customers pay with 3 interest- free monthly payments. We’ll show messages on
-                                    your site to promote this feature for you. You may not promote pay later offers
-                                    with any other content, marketing, or materials.]]>
-                                </comment>
-                            </field>
-                        </group>
-                    </group>
-                </group>
+                <include path="Magento_Paypal::system/payments_pro_hosted_solution_with_express_checkout.xml"/>
                 <group id="wps_express" translate="label comment" extends="payment_all_paypal/express_checkout" sortOrder="50">
                     <label>Website Payments Standard</label>
                     <comment>Accept credit card and PayPal payments securely.</comment>
@@ -217,17 +197,9 @@
                         </field>
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="advertise_paylater">
-                            <field id="paylater_enabled" translate="label comment">
-                                <comment>
-                                    <![CDATA[Display pay later messaging on your site for offers like Pay in 3,
-                                    which lets customers pay with 3 interest- free monthly payments. We’ll show messages
-                                    on your site to promote this feature for you. You may not promote pay later offers
-                                    with any other content, marketing, or materials.]]>
-                                </comment>
-                            </field>
-                        </group>
+                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_ec" translate="label">
                         <label>Basic Settings - PayPal Website Payments Standard</label>
@@ -268,9 +240,9 @@
                 <group id="express_checkout_required">
                     <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                     <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                    <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                    <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                     <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                    <group id="advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                    <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
                 </group>
             </group>
             <group id="paypal_group_all_in_one" translate="label comment" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -300,9 +272,9 @@
                         </field>
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_ec">
                         <label>Basic Settings - PayPal Website Payments Standard</label>
@@ -348,8 +320,8 @@
                             <config_path>payment/paypal_payment_pro/active</config_path>
                             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
                         </field>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                        <group id="paypal_payflow_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
+                        <group id="paypal_payflow_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                     <group id="settings_paypal_payflow">
                         <label>Basic Settings - PayPal Payments Pro</label>
@@ -357,17 +329,17 @@
                 </group>
                 <group id="paypal_payflowpro_ca" extends="payment_all_paypal/paypal_payflowpro" sortOrder="40">
                     <group id="paypal_payflow_required">
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                        <group id="paypal_payflow_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
+                        <group id="paypal_payflow_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                 </group>
                 <group id="payflow_link_ca" extends="payment_all_paypal/payflow_link" sortOrder="50">
                     <group id="payflow_link_required">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
                         <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
+                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                         <group id="payflow_link_advertise_bml" showInDefault="0" showInWebsite="0"/>
-                        <group id="payflow_link_advertise_paylater" showInDefault="0" showInWebsite="0"/>
+                        <group id="payflow_link_advertise_paylater" showInDefault="1" showInWebsite="1"/>
                     </group>
                 </group>
             </group>
@@ -380,13 +352,8 @@
                 </group>
             </group>
             <group id="paypal_group_all_in_one">
-                <group id="wps_other" sortOrder="12">
-                    <group id="express_checkout_required">
-                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
-                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1"/>
-                    </group>
-                </group>
-                <group id="payments_pro_hosted_solution_au" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="10"/>
+                <group id="wps_other" sortOrder="12"/>
+                <group id="payments_pro_hosted_solution_au" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml_and_paylater" sortOrder="10"/>
             </group>
             <group id="paypal_payment_gateways" showInDefault="1" showInWebsite="1" showInStore="1">
                 <group id="paypal_payflowpro_au" extends="payment_all_paypal/paypal_payflowpro" sortOrder="20"/>
@@ -406,66 +373,14 @@
                 <group id="express_checkout_required">
                     <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
                     <group id="advertise_paylater" showInDefault="1" showInWebsite="1">
-                        <field id="paylater_enabled">
-                            <comment>
-                                <![CDATA[Affichez le Paiement en 4X PayPal sur votre site. Le Paiement en 4X PayPal
-                                    permet aux consommateurs français de payer en 4 versements égaux. Vous pouvez
-                                    promouvoir le Paiement en 4X PayPal uniquement si vous êtes un commerçant basé en
-                                    France, avec un site internet en français et une intégration PayPal standard. Les
-                                    marchands ayant l’outil Vaulting (coffre-fort numérique) ou une intégration de
-                                    paiements récurrents/abonnement, ainsi que ceux présentant certaines activités
-                                    (vente de biens numériques / de biens non physiques) ne sont pas éligibles pour
-                                    promouvoir le Paiement en 4X PayPal. Nous afficherons des messages sur votre site
-                                    pour promouvoir le Paiement en 4X PayPal. Vous ne pouvez pas promouvoir le Paiement
-                                    en 4X PayPal avec un autre contenu, quel qu’il soit.]]>
-                            </comment>
-                        </field>
+                        <field id="paylater_enabled" showInDefault="1" showInWebsite="1"/>
                     </group>
                 </group>
             </group>
             <group id="paypal_group_all_in_one">
-                <group id="wps_other" sortOrder="12">
-                    <group id="express_checkout_required">
-                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
-                        <group id="advertise_paylater" showInDefault="1" showInWebsite="1">
-                            <field id="paylater_enabled">
-                                <comment>
-                                    <![CDATA[Affichez le Paiement en 4X PayPal sur votre site. Le Paiement en 4X PayPal
-                                    permet aux consommateurs français de payer en 4 versements égaux. Vous pouvez
-                                    promouvoir le Paiement en 4X PayPal uniquement si vous êtes un commerçant basé en
-                                    France, avec un site internet en français et une intégration PayPal standard. Les
-                                    marchands ayant l’outil Vaulting (coffre-fort numérique) ou une intégration de
-                                    paiements récurrents/abonnement, ainsi que ceux présentant certaines activités
-                                    (vente de biens numériques / de biens non physiques) ne sont pas éligibles pour
-                                    promouvoir le Paiement en 4X PayPal. Nous afficherons des messages sur votre site
-                                    pour promouvoir le Paiement en 4X PayPal. Vous ne pouvez pas promouvoir le Paiement
-                                    en 4X PayPal avec un autre contenu, quel qu’il soit.]]>
-                                </comment>
-                            </field>
-                        </group>
-                    </group>
-                </group>
-                <group id="payments_pro_hosted_solution_fr" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="10">
+                <group id="wps_other" sortOrder="12"/>
+                <group id="payments_pro_hosted_solution_fr" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml_and_paylater" sortOrder="10">
                     <label>Integral Evolution</label>
-                    <group id="pphs_required_settings">
-                        <field id="enable_paypal_paylater_experience" showInDefault="1" showInWebsite="1"/>
-                        <group id="pphs_advertise_paylater">
-                            <field id="paylater_enabled">
-                                <comment>
-                                    <![CDATA[Affichez le Paiement en 4X PayPal sur votre site. Le Paiement en 4X PayPal
-                                    permet aux consommateurs français de payer en 4 versements égaux. Vous pouvez
-                                    promouvoir le Paiement en 4X PayPal uniquement si vous êtes un commerçant basé en
-                                    France, avec un site internet en français et une intégration PayPal standard. Les
-                                    marchands ayant l’outil Vaulting (coffre-fort numérique) ou une intégration de
-                                    paiements récurrents/abonnement, ainsi que ceux présentant certaines activités
-                                    (vente de biens numériques / de biens non physiques) ne sont pas éligibles pour
-                                    promouvoir le Paiement en 4X PayPal. Nous afficherons des messages sur votre site
-                                    pour promouvoir le Paiement en 4X PayPal. Vous ne pouvez pas promouvoir le Paiement
-                                    en 4X PayPal avec un autre contenu, quel qu’il soit.]]>
-                                </comment>
-                            </field>
-                        </group>
-                    </group>
                 </group>
             </group>
         </section>
@@ -500,12 +415,7 @@
                 <group id="wps_other"/>
             </group>
             <group id="paypal_payment_gateways" showInDefault="1" showInWebsite="1" showInStore="1">
-                <group id="paypal_payflowpro_nz" extends="payment_all_paypal/paypal_payflowpro">
-                    <group id="paypal_payflow_required">
-                        <field id="enable_paypal_paylater_experience" showInDefault="0" showInWebsite="0"/>
-                        <group id="paypal_payflow_advertise_paylater" showInDefault="0" showInWebsite="0"/>
-                    </group>
-                </group>
+                <group id="paypal_payflowpro_nz" extends="payment_all_paypal/paypal_payflowpro"/>
             </group>
         </section>
     </system>

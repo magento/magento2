@@ -2333,7 +2333,7 @@
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": "lib/web/jquery/jquery-ui.js",
                     "twbs/bootstrap": "lib/web/jquery/jquery.tabs.js",
-                    "tinymce/tinymce": "lib/web/tiny_mce_4"
+                    "tinymce/tinymce": "lib/web/tiny_mce_5"
                 },
                 "map": [
                     [
@@ -2665,8 +2665,8 @@
                         "lib/web/spacer.gif"
                     ],
                     [
-                        "lib/web/tiny_mce_4",
-                        "lib/web/tiny_mce_4"
+                        "lib/web/tiny_mce_5",
+                        "lib/web/tiny_mce_5"
                     ],
                     [
                         "lib/web/underscore.js",
@@ -10429,7 +10429,7 @@
                     "phpseclib/bootstrap.php"
                 ],
                 "psr-4": {
-                    "phpseclib\\": "phpseclib/"
+                    "phpseclib3\\": "phpseclib/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-
 /**
  * Provides configuration values for PayPal PayLater Banners
  */
@@ -35,24 +33,16 @@ class PayLaterConfig
     private $config;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var array
      */
     private $configData = [];
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
      * @param ConfigFactory $configFactory
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         ConfigFactory $configFactory
     ) {
-        $this->scopeConfig = $scopeConfig;
         $this->config = $configFactory->create();
     }
 
@@ -76,9 +66,9 @@ class PayLaterConfig
     /**
      * Check that PayPal Credit enabled with any PayPal express method
      *
-     * @return
+     * @return bool
      */
-    private function isPPCreditEnabled()
+    private function isPPCreditEnabled(): bool
     {
         $isEnabled = false;
         if ($this->config->setMethod(Config::METHOD_EXPRESS)->getValue('in_context')) {
@@ -106,32 +96,54 @@ class PayLaterConfig
             $this->configData[$section] = [
                 'display' => (boolean)$this->config->getPayLaterConfigValue("${sectionName}_display"),
                 'position' => $this->config->getPayLaterConfigValue("${sectionName}_position"),
-                'style' => [
-                    'data-pp-style-layout' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_stylelayout"
-                    ),
-                    'data-pp-style-logo-type' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_logotype"
-                    ),
-                    'data-pp-style-logo-position' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_logoposition"
-                    ),
-                    'data-pp-style-text-color' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_textcolor"
-                    ),
-                    'data-pp-style-text-size' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_textsize"
-                    ),
-                    'data-pp-style-color' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_color"
-                    ),
-                    'data-pp-style-ratio' => $this->config->getPayLaterConfigValue(
-                        "${sectionName}_ratio"
-                    )
-                ]
+                'style' => $this->getConfigStyles($sectionName)
             ];
         }
 
         return $this->configData[$section][$key];
+    }
+
+    /**
+     * Get only the config styles that are needed
+     *
+     * @param string $sectionName
+     * @return array
+     */
+    private function getConfigStyles(string $sectionName): array
+    {
+        $logoType = $logoPosition = $textColor = $textSize = null;
+        $color = $ratio = null;
+        $styleLayout = $this->config->getPayLaterConfigValue("${sectionName}_stylelayout");
+        if ($styleLayout === 'text') {
+            $logoType = $this->config->getPayLaterConfigValue("${sectionName}_logotype");
+            if ($logoType === 'primary' || $logoType === 'alternative') {
+                $logoPosition = $this->config->getPayLaterConfigValue("${sectionName}_logoposition");
+            }
+            $textColor = $this->config->getPayLaterConfigValue("${sectionName}_textcolor");
+            $textSize = $this->config->getPayLaterConfigValue("${sectionName}_textsize");
+        } elseif ($styleLayout === 'flex') {
+            $color = $this->config->getPayLaterConfigValue("${sectionName}_color");
+            $ratio = $this->config->getPayLaterConfigValue("${sectionName}_ratio");
+        }
+
+        return [
+            'data-pp-style-layout' => $styleLayout,
+            'data-pp-style-logo-type' => $logoType,
+            'data-pp-style-logo-position' => $logoPosition,
+            'data-pp-style-text-color' => $textColor,
+            'data-pp-style-text-size' => $textSize,
+            'data-pp-style-color' => $color,
+            'data-pp-style-ratio' => $ratio
+        ];
+    }
+
+    /**
+     * Check if billing agreement is enabled
+     *
+     * @return bool
+     */
+    public function isPPBillingAgreementEnabled(): bool
+    {
+        return $this->config->isMethodActive(Config::METHOD_BILLING_AGREEMENT);
     }
 }
