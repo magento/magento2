@@ -256,19 +256,36 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $valueInfo['attribute_id']
         );
         $attributeCode = $attribute->getAttributeCode();
-        if ($attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL) {
+        if ((int)$attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL) {
+            $entityLinkField = $this->getEntity()->getLinkField();
             $attributeTable = $attribute->getBackend()->getTable();
             $linkField = $attribute->getEntity()->getLinkField();
 
-            $select = $this->getConnection()
-                ->select()
-                ->from(['attr_table' => $attributeTable], "attr_table.value")
-                ->where("attr_table.attribute_id = ?", $valueInfo['attribute_id'])
-                ->where("attr_table.{$linkField} = ?", $entityId)
-                ->where('attr_table.store_id = ?', $this->getDefaultStoreId(), \Zend_Db::INT_TYPE);
-            $data = $this->getConnection()->fetchOne($select);
-            if ($data) {
-                $valueInfo['value'] = $data;
+            $select = $this->getConnection()->select()
+                ->from(
+                    ['e' => $this->getEntity()->getEntityTable()],
+                    ['entity_id']
+                )
+                ->join(
+                    ['t_d' => $attributeTable],
+                    "e.{$entityLinkField} = t_d.{$linkField}",
+                    ['t_d.value']
+                )->where(
+                    " e.entity_id = ?",
+                    $entityId,
+                    \Zend_Db::INT_TYPE
+                )->where(
+                    't_d.attribute_id = ?',
+                    $attribute->getAttributeId(),
+                    \Zend_Db::INT_TYPE
+                )->where(
+                    't_d.store_id = ?',
+                    $this->getDefaultStoreId(),
+                    \Zend_Db::INT_TYPE
+                );
+            $data = $this->getConnection()->fetchRow($select);
+            if ($data && is_array($data)) {
+                $valueInfo['value'] = $data['value'];
             }
         }
 
