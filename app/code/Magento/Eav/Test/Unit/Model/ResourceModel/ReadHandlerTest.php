@@ -20,6 +20,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Eav attributes read handler tests
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ReadHandlerTest extends TestCase
 {
     /**

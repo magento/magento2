@@ -123,6 +123,7 @@ class ReadHandler implements AttributeInterface
      * @throws ConfigurationMismatchException
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
