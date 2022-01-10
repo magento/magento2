@@ -106,13 +106,16 @@ class AddProductsToCart
         }
 
         $failedCartItems = $this->addItemsToCart($cart, $cartItems);
-        $saveCart = !empty($cartItems) && empty($failedCartItems);
+        $saveCart = empty($failedCartItems);
         if (!empty($failedCartItems)) {
-            /* Revert changes introduced by add to cart processes in case of an error */
-            $cart->getItemsCollection()->clear();
-            $newFailedCartItems = $this->addItemsToCart($cart, array_diff_key($cartItems, $failedCartItems));
-            $failedCartItems += $newFailedCartItems;
-            $saveCart = empty($newFailedCartItems);
+            /* Check if some cart items were successfully added to the cart */
+            if (count($failedCartItems) < count($cartItems)) {
+                /* Revert changes introduced by add to cart processes in case of an error */
+                $cart->getItemsCollection()->clear();
+                $newFailedCartItems = $this->addItemsToCart($cart, array_diff_key($cartItems, $failedCartItems));
+                $failedCartItems += $newFailedCartItems;
+                $saveCart = empty($newFailedCartItems);
+            }
             foreach (array_keys($cartItems) as $cartItemPosition) {
                 if (isset($failedCartItems[$cartItemPosition])) {
                     array_push($allErrors, ...$failedCartItems[$cartItemPosition]);
@@ -169,7 +172,10 @@ class AddProductsToCart
         $product = null;
 
         if ($cartItem->getQuantity() <= 0) {
-            $errors[] = $this->createError(__('The product quantity should be greater than 0')->render());
+            $errors[] = $this->createError(
+                __('The product quantity should be greater than 0')->render(),
+                $cartItemPosition
+            );
         } else {
             try {
                 $product = $this->productRepository->get($sku, false, null, true);
@@ -202,7 +208,7 @@ class AddProductsToCart
     }
 
     /**
-     * Add order line item error
+     * Returns an error object
      *
      * @param string $message
      * @param int $cartItemPosition
