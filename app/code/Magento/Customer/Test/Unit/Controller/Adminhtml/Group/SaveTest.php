@@ -34,56 +34,59 @@ use PHPUnit\Framework\TestCase;
 class SaveTest extends TestCase
 {
     /** @var Save */
-    protected $controller;
+    private $controller;
 
     /** @var Context|MockObject */
-    protected $contextMock;
+    private $contextMock;
 
     /** @var Registry|MockObject */
-    protected $registryMock;
+    private $registryMock;
 
     /** @var GroupRepositoryInterface|MockObject */
-    protected $groupRepositoryMock;
+    private $groupRepositoryMock;
 
     /** @var GroupInterfaceFactory|MockObject */
-    protected $groupInterfaceFactoryMock;
+    private $groupInterfaceFactoryMock;
 
     /** @var ForwardFactory|MockObject */
-    protected $forwardFactoryMock;
+    private $forwardFactoryMock;
 
     /** @var PageFactory|MockObject */
-    protected $pageFactoryMock;
+    private $pageFactoryMock;
 
     /** @var DataObjectProcessor|MockObject */
-    protected $dataObjectProcessorMock;
+    private $dataObjectProcessorMock;
 
     /** @var RequestInterface|MockObject */
-    protected $request;
+    private $requestMock;
 
     /** @var RedirectFactory|MockObject */
-    protected $resultRedirectFactory;
+    private $resultRedirectFactoryMock;
 
     /** @var Redirect|MockObject */
-    protected $resultRedirect;
+    private $resultRedirectMock;
 
     /** @var ManagerInterface|MockObject */
-    protected $messageManager;
+    private $messageManagerMock;
 
     /** @var Forward|MockObject */
-    protected $resultForward;
+    private $resultForwardMock;
 
     /** @var GroupInterface|MockObject */
-    protected $group;
+    private $groupMock;
 
     /** @var Session|MockObject */
-    protected $session;
+    private $sessionMock;
 
-    /** @var GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory|MockObject */
-    private $groupExtensionInterfaceFactory;
+    /** @var GroupExtensionInterfaceFactory|MockObject $groupExtensionFactoryMock */
+    private $groupExtensionFactoryMock;
 
-    /** @var GroupExtension/MockObject */
-    private $groupExtension;
+    /** @var GroupExtension|MockObject */
+    private $groupExtensionMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -98,7 +101,7 @@ class SaveTest extends TestCase
             ->getMock();
         $this->forwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->pageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
@@ -106,46 +109,47 @@ class SaveTest extends TestCase
         $this->dataObjectProcessorMock = $this->getMockBuilder(DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
-        $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirect = $this->getMockBuilder(Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->resultForward = $this->getMockBuilder(Forward::class)
+        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->group = $this->getMockBuilder(GroupInterface::class)
-            ->setMethods(['setExtensionAttributes'])
+        $this->groupMock = $this->getMockBuilder(GroupInterface::class)
+            ->onlyMethods(['setExtensionAttributes'])
             ->getMockForAbstractClass();
-        $this->session = $this->getMockBuilder(Session::class)
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomerGroupData'])
+            ->addMethods(['setCustomerGroupData'])
             ->getMock();
-        $this->groupExtensionInterfaceFactory = $this->getMockBuilder(GroupExtensionInterfaceFactory::class)
-            ->setMethods(['create'])
+        $this->groupExtensionFactoryMock = $this->getMockBuilder(GroupExtensionInterfaceFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->groupExtension = $this->getMockBuilder(GroupExtension::class)
+        $this->groupExtensionMock = $this->getMockBuilder(GroupExtension::class)
+            ->addMethods(['setExcludeWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->contextMock->expects(self::once())
             ->method('getMessageManager')
-            ->willReturn($this->messageManager);
+            ->willReturn($this->messageManagerMock);
         $this->contextMock->expects(self::once())
             ->method('getRequest')
-            ->willReturn($this->request);
+            ->willReturn($this->requestMock);
         $this->contextMock->expects(self::once())
             ->method('getResultRedirectFactory')
-            ->willReturn($this->resultRedirectFactory);
+            ->willReturn($this->resultRedirectFactoryMock);
         $this->contextMock->expects(self::once())
             ->method('getSession')
-            ->willReturn($this->session);
+            ->willReturn($this->sessionMock);
 
         $this->controller = new Save(
             $this->contextMock,
@@ -155,17 +159,20 @@ class SaveTest extends TestCase
             $this->forwardFactoryMock,
             $this->pageFactoryMock,
             $this->dataObjectProcessorMock,
-            $this->groupExtensionInterfaceFactory
+            $this->groupExtensionFactoryMock
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithTaxClassAndException(): void
     {
         $taxClass = '3';
         $groupId = 0;
         $code = 'NOT LOGGED IN';
 
-        $this->request->method('getParam')
+        $this->requestMock->method('getParam')
             ->willReturnMap(
                 [
                     ['tax_class', null, $taxClass],
@@ -174,73 +181,80 @@ class SaveTest extends TestCase
                     ['customer_group_excluded_websites', null, '']
                 ]
             );
-        $this->groupExtensionInterfaceFactory->expects(self::once())
+        $this->groupExtensionFactoryMock->expects(self::once())
             ->method('create')
-            ->willReturn($this->groupExtension);
-        $this->groupExtension->expects(self::once())
+            ->willReturn($this->groupExtensionMock);
+        $this->groupExtensionMock->expects(self::once())
             ->method('setExcludeWebsiteIds')
             ->with([])
             ->willReturnSelf();
-        $this->group->expects(self::once())
+        $this->groupMock->expects(self::once())
             ->method('setExtensionAttributes')
-            ->with($this->groupExtension)
+            ->with($this->groupExtensionMock)
             ->willReturnSelf();
-        $this->resultRedirectFactory->expects($this->once())
+        $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->resultRedirect);
+            ->willReturn($this->resultRedirectMock);
         $this->groupRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($groupId)
-            ->willReturn($this->group);
-        $this->group->expects(self::once())
+            ->willReturn($this->groupMock);
+        $this->groupMock->expects(self::once())
             ->method('getCode')
             ->willReturn($code);
-        $this->group->expects(self::once())
+        $this->groupMock->expects(self::once())
             ->method('setCode')
             ->with($code);
-        $this->group->expects(self::once())
+        $this->groupMock->expects(self::once())
             ->method('setTaxClassId')
             ->with($taxClass);
         $this->groupRepositoryMock->expects(self::once())
             ->method('save')
-            ->with($this->group);
-        $this->messageManager->expects(self::once())
+            ->with($this->groupMock);
+        $this->messageManagerMock->expects(self::once())
             ->method('addSuccessMessage')
             ->with(__('You saved the customer group.'));
-        $exception = new \Exception('Exception');
-        $this->resultRedirect->expects(self::at(0))
-            ->method('setPath')
-            ->with('customer/group')
-            ->willThrowException($exception);
-        $this->messageManager->expects(self::once())
+        $this->messageManagerMock->expects(self::once())
             ->method('addErrorMessage')
             ->with('Exception');
         $this->dataObjectProcessorMock->expects(self::once())
             ->method('buildOutputDataArray')
-            ->with($this->group, GroupInterface::class)
+            ->with($this->groupMock, GroupInterface::class)
             ->willReturn(['code' => $code]);
-        $this->session->expects(self::once())
+        $this->sessionMock->expects(self::once())
             ->method('setCustomerGroupData')
             ->with(['customer_group_code' => $code]);
-        $this->resultRedirect->expects(self::at(1))
+        $exception = new \Exception('Exception');
+        $this->resultRedirectMock
             ->method('setPath')
-            ->with('customer/group/edit', ['id' => $groupId]);
-        self::assertSame($this->resultRedirect, $this->controller->execute());
+            ->withConsecutive(
+                ['customer/group'],
+                ['customer/group/edit', ['id' => $groupId]]
+            )
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException($exception),
+                null
+            );
+
+        self::assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithoutTaxClass(): void
     {
-        $this->request->expects(self::once())
+        $this->requestMock->expects(self::once())
             ->method('getParam')
             ->with('tax_class')
             ->willReturn(null);
         $this->forwardFactoryMock->expects(self::once())
             ->method('create')
-            ->willReturn($this->resultForward);
-        $this->resultForward->expects(self::once())
+            ->willReturn($this->resultForwardMock);
+        $this->resultForwardMock->expects(self::once())
             ->method('forward')
             ->with('new')
             ->willReturnSelf();
-        self::assertSame($this->resultForward, $this->controller->execute());
+        self::assertSame($this->resultForwardMock, $this->controller->execute());
     }
 }

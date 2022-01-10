@@ -21,10 +21,11 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontSwatchAttributeDisplayedInWidgetCMSTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <createData entity="NewRootCategory" stepKey="createRootCategory"/>
         </before>
 
@@ -38,6 +39,10 @@
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
             </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!--delete root category-->
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createRootCategory.name$$')}}" stepKey="clickOnDefaultRootCategory"/>
@@ -47,7 +52,7 @@
             <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
             <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <!--logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

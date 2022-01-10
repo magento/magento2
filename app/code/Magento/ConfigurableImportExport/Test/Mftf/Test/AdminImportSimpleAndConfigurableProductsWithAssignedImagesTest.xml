@@ -82,6 +82,11 @@
                 <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}" />
             </actionGroup>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>

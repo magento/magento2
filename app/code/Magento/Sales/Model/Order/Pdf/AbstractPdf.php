@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Sales\Model\RtlTextHandler;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Sales Order PDF abstract model
@@ -42,11 +43,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     /**
      * Predefined constants
      */
-    const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
+    public const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
 
-    const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
+    public const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
 
-    const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
+    public const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
     /**
      * Zend PDF object
@@ -68,8 +69,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     abstract public function getPdf();
 
     /**
-     * Payment data
-     *
      * @var \Magento\Payment\Helper\Data
      */
     protected $_paymentData;
@@ -266,10 +265,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      */
     protected function insertLogo(&$page, $store = null)
     {
-        $this->y = $this->y ? $this->y : 815;
+        $this->y = $this->y ?: 815;
         $image = $this->_scopeConfig->getValue(
             'sales/identity/logo',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($image) {
@@ -328,16 +327,14 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
         $font = $this->_setFontRegular($page, 10);
         $page->setLineWidth(0);
-        $this->y = $this->y ? $this->y : 815;
+        $this->y = $this->y ?: 815;
         $top = 815;
-        $values = explode(
-            "\n",
-            $this->_scopeConfig->getValue(
-                'sales/identity/address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
+        $configAddress = $this->_scopeConfig->getValue(
+            'sales/identity/address',
+            ScopeInterface::SCOPE_STORE,
+            $store
         );
+        $values = $configAddress ? explode("\n", $configAddress) : [];
         foreach ($values as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
@@ -523,6 +520,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
+            $shippingAddress = $shippingAddress ?? [];
             foreach ($shippingAddress as $value) {
                 if ($value !== '') {
                     $text = [];
@@ -587,9 +585,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $methodStartY = $this->y;
             $this->y -= 15;
 
-            foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
-                $page->drawText(strip_tags(trim($_value)), 285, $this->y, 'UTF-8');
-                $this->y -= 15;
+            if (isset($shippingMethod) && \is_string($shippingMethod)) {
+                foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
+                    $page->drawText(strip_tags(trim($_value)), 285, $this->y, 'UTF-8');
+                    $this->y -= 15;
+                }
             }
 
             $yShipments = $this->y;
