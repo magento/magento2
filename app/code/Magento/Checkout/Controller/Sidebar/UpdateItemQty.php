@@ -66,7 +66,7 @@ class UpdateItemQty extends Action
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
+        $itemQty = (int)$this->getRequest()->getParam('item_qty') * 1;
         $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
 
         try {
