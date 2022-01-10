@@ -99,8 +99,8 @@ class TagScopeTest extends TestCase
             ->method('clean')
             ->with(
                 \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                ['test_tag_one', 'test_tag_two', 'enforced_tag'])
-            ->willReturn($expectedResult);
+                ['test_tag_one', 'test_tag_two', 'enforced_tag']
+            )->willReturn($expectedResult);
         $actualResult = $this->_object->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
             ['test_tag_one', 'test_tag_two']

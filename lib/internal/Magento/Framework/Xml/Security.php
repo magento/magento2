@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Xml;
 
 use DOMDocument;
 
 /**
- * Class Security
+ * The XML Security feature
  */
 class Security
 {
@@ -40,6 +41,9 @@ class Security
      * @return bool
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings("unused")
      */
     public function scan($xmlContent)
     {
@@ -56,6 +60,7 @@ class Security
 
         if (version_compare(PHP_VERSION, '8.0') < 0) {
             // this function no longer has an effect in PHP 8.0, but it's required in earlier versions
+            // phpcs:ignore
             $loadEntities = libxml_disable_entity_loader(true);
         }
         $useInternalXmlErrors = libxml_use_internal_errors(true);
@@ -63,21 +68,33 @@ class Security
         /**
          * Load XML with network access disabled (LIBXML_NONET)
          * error disabled with @ for PHP-FPM scenario
+         * Works for PHP < 8
          */
         set_error_handler(
             function ($errno, $errstr) {
                 if (substr_count($errstr, 'DOMDocument::loadXML()') > 0) {
-                    return true;
+                    return true; // ignore default php error handler, $document->loadXML return false
                 }
                 return false;
             },
             E_WARNING
         );
 
-        $result = (bool)$document->loadXML($xmlContent, LIBXML_NONET);
+        try {
+            $result = (bool)$document->loadXML($xmlContent, LIBXML_NONET);
+        } catch (\ValueError $exception) {
+            // In PHP 8, $document->loadXML with an empty content will generate a ValueError.
+            // This check emulates the previous (php 7) behaviour.
+            if (substr_count($exception->getMessage(), 'DOMDocument::loadXML()') > 0) {
+                $result = false;
+            } else {
+                throw $exception;
+            }
+        }
         restore_error_handler();
         // Entity load to previous setting
         if (isset($loadEntities)) {
+            // phpcs:ignore
             libxml_disable_entity_loader($loadEntities);
         }
         libxml_use_internal_errors($useInternalXmlErrors);

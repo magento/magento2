@@ -96,7 +96,7 @@ class GetCartForUser
             throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
         }
 
-        $this->updateCartCurrency($cart, $storeId);
+        $cart = $this->updateCartCurrency($cart, $storeId);
 
         $cartCustomerId = (int)$cart->getCustomerId();
 
@@ -151,10 +151,11 @@ class GetCartForUser
      *
      * @param Quote $cart
      * @param int $storeId
+     * @return Quote
      * @throws GraphQlInputException
      * @throws NoSuchEntityException
      */
-    private function updateCartCurrency(Quote $cart, int $storeId)
+    private function updateCartCurrency(Quote $cart, int $storeId): Quote
     {
         $cartStore = $this->storeRepository->getById($cart->getStoreId());
         $currentCartCurrencyCode = $cartStore->getCurrentCurrency()->getCode();
@@ -171,8 +172,11 @@ class GetCartForUser
         } elseif ($cart->getQuoteCurrencyCode() !== $currentCartCurrencyCode) {
             $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency());
         } else {
-            return;
+            return $cart;
         }
         $this->cartRepository->save($cart);
+        $cart = $this->cartRepository->get($cart->getId());
+
+        return $cart;
     }
 }
