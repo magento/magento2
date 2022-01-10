@@ -106,13 +106,14 @@ class AddProductsToCart
         }
 
         $failedCartItems = $this->addItemsToCart($cart, $cartItems);
-        $saveCart = true;
         if (count($failedCartItems) !== count($cartItems)) {
             /* Revert changes introduced by add to cart processes in case of an error */
             $cart->getItemsCollection()->clear();
             $newFailedCartItems = $this->addItemsToCart($cart, array_diff_key($cartItems, $failedCartItems));
-            $saveCart = empty($newFailedCartItems);
             $failedCartItems += $newFailedCartItems;
+            $saveCart = empty($newFailedCartItems);
+        } else {
+            $saveCart = false;
         }
 
         foreach (array_keys($cartItems) as $cartItemPosition) {
