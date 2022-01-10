@@ -4,4 +4,5 @@
  * See COPYING.txt for license details.
  */
 
-// Empty fixture rollback script for test purpose
+// Empty fixture script for test purpose
+putenv('sample_fixture_three=3');
