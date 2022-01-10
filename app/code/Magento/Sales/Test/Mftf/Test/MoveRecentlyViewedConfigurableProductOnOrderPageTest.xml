@@ -118,7 +118,13 @@
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert products in items ordered grid -->
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$123.00" stepKey="seeProductPrice"/>
+        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
+            <argument name="expectedValue" value="$$createConfigProduct.name$$"/>
+        </actionGroup>    
+        <actionGroup ref="AdminSeeProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductPrice">
+            <argument name="columnName" value="Price"/>
+            <argument name="expectedValue" value="$123.00"/>
+        </actionGroup>   
+    
     </test>
 </tests>
