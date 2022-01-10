@@ -149,7 +149,7 @@ class ShippingInformationManagementTest extends TestCase
                     'importCustomerAddressData',
                     'save',
                     'getShippingRateByCode',
-                    'getShippingMethod',
+                    'getShippingMethod'
                 ]
             )
             ->disableOriginalConstructor()
@@ -168,7 +168,7 @@ class ShippingInformationManagementTest extends TestCase
                     'collectTotals',
                     'getExtensionAttributes',
                     'setExtensionAttributes',
-                    'setBillingAddress',
+                    'setBillingAddress'
                 ]
             )
             ->disableOriginalConstructor()
@@ -195,7 +195,7 @@ class ShippingInformationManagementTest extends TestCase
                 'shippingAssignmentFactory' => $this->shippingAssignmentFactoryMock,
                 'cartExtensionFactory' => $this->cartExtensionFactoryMock,
                 'shippingFactory' => $this->shippingFactoryMock,
-                'addressValidator' => $this->addressValidatorMock,
+                'addressValidator' => $this->addressValidatorMock
             ]
         );
     }
@@ -227,9 +227,10 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Sets shipping assignments
+     * Sets shipping assignments.
      *
      * @param string $shippingMethod
+     *
      * @return void
      */
     private function setShippingAssignmentsMocks($shippingMethod): void
@@ -286,7 +287,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `StateException`
+     * Save address with `StateException`.
      *
      * @return void
      */
@@ -317,7 +318,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `LocalizedException`
+     * Save address with `LocalizedException`.
      *
      * @return void
      */
@@ -385,7 +386,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `InputException`
+     * Save address with `InputException`.
      *
      * @return void
      */
@@ -450,7 +451,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address with `NoSuchEntityException`
+     * Save address with `NoSuchEntityException`.
      *
      * @return void
      */
@@ -525,7 +526,7 @@ class ShippingInformationManagementTest extends TestCase
     }
 
     /**
-     * Save address info test
+     * Save address info test.
      *
      * @return void
      */

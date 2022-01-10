@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Category;
@@ -45,7 +46,7 @@ class AfterImportDataObserver implements ObserverInterface
     /**
      * Url Key Attribute
      */
-    const URL_KEY_ATTRIBUTE_CODE = 'url_key';
+    public const URL_KEY_ATTRIBUTE_CODE = 'url_key';
 
     /**
      * @var StoreViewService
@@ -209,9 +210,10 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
-        if (!isset($mergeDataProviderFactory)) {
-            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
-        }
+
+        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()->get(
+            MergeDataProviderFactory::class
+        );
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
         $this->categoryCollectionFactory = $categoryCollectionFactory ?:
             ObjectManager::getInstance()->get(CategoryCollectionFactory::class);
@@ -397,7 +399,7 @@ class AfterImportDataObserver implements ObserverInterface
      */
     private function isGlobalScope($storeId)
     {
-        return null === $storeId || $storeId == Store::DEFAULT_STORE_ID;
+        return null === $storeId || Store::DEFAULT_STORE_ID === (int) $storeId;
     }
 
     /**

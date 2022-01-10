@@ -51,6 +51,9 @@ class ThemeModularTest extends TestCase
      */
     private $componentRegistrar;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->themeDirectory = $this->createPartialMock(
@@ -77,7 +80,10 @@ class ThemeModularTest extends TestCase
         );
     }
 
-    public function testGetFilesWrongTheme()
+    /**
+     * @return void
+     */
+    public function testGetFilesWrongTheme(): void
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
@@ -94,9 +100,10 @@ class ThemeModularTest extends TestCase
      * @param string $filePath
      * @param string $pathPattern
      *
+     * @return void
      * @dataProvider getFilesDataProvider
      */
-    public function testGetFiles($files, $filePath, $pathPattern)
+    public function testGetFiles($files, $filePath, $pathPattern): void
     {
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $themePath = 'area/theme/path';
@@ -124,29 +131,33 @@ class ThemeModularTest extends TestCase
             ->willReturnArgument(0);
 
         $checkResult = [];
+        $withArgs = $willReturnArgs = [];
+
         foreach ($files as $key => $file) {
             $checkResult[$key] = new File($file['handle'], $file['module'], $theme);
             $checkResult[$key] = $this->createMock(File::class);
-            $this->fileFactory
-                ->expects($this->at($key))
-                ->method('create')
-                ->with(sprintf($handlePath, $file['module'], $file['handle']), $file['module'], $theme)
-                ->willReturn($checkResult[$key]);
+            $withArgs[] = [sprintf($handlePath, $file['module'], $file['handle']), $file['module'], $theme];
+            $willReturnArgs[] = $checkResult[$key];
         }
+        $this->fileFactory
+            ->method('create')
+            ->withConsecutive(...$withArgs)
+            ->willReturnOnConsecutiveCalls(...$willReturnArgs);
+
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
     }
 
     /**
      * @return array
      */
-    public function getFilesDataProvider()
+    public function getFilesDataProvider(): array
     {
         return [
             [
                 [
                     ['handle' => '1.xml', 'module' => 'Module_One'],
                     ['handle' => '2.xml', 'module' => 'Module_One'],
-                    ['handle' => '3.xml', 'module' => 'Module_Two'],
+                    ['handle' => '3.xml', 'module' => 'Module_Two']
                 ],
                 '*.xml',
                 '[^/]*\\.xml'
@@ -157,7 +168,7 @@ class ThemeModularTest extends TestCase
                 ],
                 'preset/4',
                 'preset/4'
-            ],
+            ]
         ];
     }
 }

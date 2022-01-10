@@ -19,7 +19,9 @@ use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
 {
-    /** @var Link */
+    /**
+     * @var Link
+     */
     protected $link;
 
     /** @var ObjectManagerHelper */
@@ -55,6 +57,9 @@ class LinkTest extends TestCase
      */
     protected $downloadHelper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -66,36 +71,45 @@ class LinkTest extends TestCase
             ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
             ->onlyMethods(['sendResponse'])
             ->getMockForAbstractClass();
-        $this->fileHelper = $this->createPartialMock(File::class, [
-            'getFilePath'
-        ]);
-        $this->downloadHelper = $this->createPartialMock(Download::class, [
-            'setResource',
-            'getFilename',
-            'getContentType',
-            'output',
-            'getFileSize',
-            'getContentDisposition'
-        ]);
+        $this->fileHelper = $this->createPartialMock(
+            File::class,
+            ['getFilePath']
+        );
+        $this->downloadHelper = $this->createPartialMock(
+            Download::class,
+            [
+                'setResource',
+                'getFilename',
+                'getContentType',
+                'output',
+                'getFileSize',
+                'getContentDisposition'
+            ]
+        );
         $this->linkModel = $this->getMockBuilder(Link::class)
-            ->addMethods([
-                'load',
-                'getId',
-                'getLinkType',
-                'getLinkUrl',
-                'getSampleUrl',
-                'getSampleType',
-                'getBasePath',
-                'getBaseSamplePath',
-                'getLinkFile',
-                'getSampleFile'
-            ])
+            ->addMethods(
+                [
+                    'load',
+                    'getId',
+                    'getLinkType',
+                    'getLinkUrl',
+                    'getSampleUrl',
+                    'getSampleType',
+                    'getBasePath',
+                    'getBaseSamplePath',
+                    'getLinkFile',
+                    'getSampleFile'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManager = $this->createPartialMock(ObjectManager::class, [
-            'create',
-            'get'
-        ]);
+        $this->objectManager = $this->createPartialMock(
+            ObjectManager::class,
+            [
+                'create',
+                'get'
+            ]
+        );
 
         $this->link = $this->objectManagerHelper->getObject(
             Link::class,
@@ -108,17 +122,19 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param string $fileType
+     *
+     * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testExecuteFile($fileType)
+    public function testExecuteFile(string $fileType): void
     {
         $fileSize = 58493;
         $fileName = 'link.jpg';
-        $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
-            ->willReturn(1);
-        $this->request->expects($this->at(1))->method('getParam')->with('type', 0)
-            ->willReturn($fileType);
+        $this->request
+            ->method('getParam')
+            ->withConsecutive(['id', 0], ['type', 0])
+            ->willReturnOnConsecutiveCalls(1, $fileType);
         $this->response->expects($this->once())->method('setHttpResponseCode')->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response
@@ -129,19 +145,17 @@ class LinkTest extends TestCase
                 [
                     'Cache-Control',
                     'must-revalidate, post-check=0, pre-check=0',
-                    true,
+                    true
                 ],
                 ['Content-type', 'text/html'],
                 ['Content-Length', $fileSize],
                 ['Content-Disposition', 'attachment; filename=' . $fileName]
             )->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
-        $this->objectManager->expects($this->at(1))->method('get')->with(File::class)
-            ->willReturn($this->fileHelper);
-        $this->objectManager->expects($this->at(2))->method('get')->with(\Magento\Downloadable\Model\Link::class)
-            ->willReturn($this->linkModel);
-        $this->objectManager->expects($this->at(3))->method('get')->with(Download::class)
-            ->willReturn($this->downloadHelper);
+        $this->objectManager
+            ->method('get')
+            ->withConsecutive([File::class], [\Magento\Downloadable\Model\Link::class], [Download::class])
+            ->willReturnOnConsecutiveCalls($this->fileHelper, $this->linkModel, $this->downloadHelper);
         $this->fileHelper->expects($this->once())->method('getFilePath')
             ->willReturn('filepath/' . $fileType . '.jpg');
         $this->downloadHelper->expects($this->once())->method('setResource')
@@ -169,20 +183,24 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param string $fileType
+     *
+     * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testExecuteUrl($fileType)
+    public function testExecuteUrl(string $fileType): void
     {
-        $this->request->expects($this->at(0))->method('getParam')
-            ->with('id', 0)->willReturn(1);
-        $this->request->expects($this->at(1))->method('getParam')
-            ->with('type', 0)->willReturn($fileType);
+        $this->request
+            ->method('getParam')
+            ->withConsecutive(['id', 0], ['type', 0])
+            ->willReturnOnConsecutiveCalls(1, $fileType);
         $this->response->expects($this->once())->method('setHttpResponseCode')->willReturnSelf();
         $this->response->expects($this->once())->method('clearBody')->willReturnSelf();
         $this->response->expects($this->any())->method('setHeader')->willReturnSelf();
         $this->response->expects($this->once())->method('sendHeaders')->willReturnSelf();
-        $this->objectManager->expects($this->at(1))->method('get')->with(Download::class)
+        $this->objectManager
+            ->method('get')
+            ->with(Download::class)
             ->willReturn($this->downloadHelper);
         $this->downloadHelper->expects($this->once())->method('setResource')
             ->willReturnSelf();
@@ -213,7 +231,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public function executeDataProvider(): array
     {
         return [
             ['link'],
