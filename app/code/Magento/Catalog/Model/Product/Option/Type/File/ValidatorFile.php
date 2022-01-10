@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Math\Random;
-use Magento\Framework\App\ObjectManager;
 use Magento\MediaStorage\Model\File\Uploader;
 
 /**
@@ -254,8 +255,12 @@ class ValidatorFile extends Validator
 
         // Directory listing and hotlink secure
         $path = $this->path . '/.htaccess';
-        if (!$this->mediaDirectory->isFile($path)) {
-            $this->mediaDirectory->writeFile($path, "Order deny,allow\nDeny from all");
+        $driver = $this->mediaDirectory->getDriver();
+        $absolutePath = $driver->getAbsolutePath($this->mediaDirectory->getAbsolutePath(), $path);
+        if (!$driver->isFile($absolutePath)) {
+            $resource = $driver->fileOpen($absolutePath, 'w+');
+            $driver->fileWrite($resource, "Order deny,allow\nDeny from all");
+            $driver->fileClose($resource);
         }
     }
 

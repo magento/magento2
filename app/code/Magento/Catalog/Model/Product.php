@@ -883,8 +883,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         $this->getTypeInstance()->beforeSave($this);
 
-        $hasOptions = $this->getData('has_options') === "1";
-        $hasRequiredOptions = $this->getData('required_options') === "1";
+        $hasOptions = $this->getData('has_options') === "1" && $this->isProductHasOptions();
+        $hasRequiredOptions = $this->getData('required_options') === "1" && $this->isProductHasOptions();
 
         /**
          * $this->_canAffectOptions - set by type instance only
@@ -932,6 +932,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $this->setOrigData('website_ids', $websiteIds);
         }
         parent::beforeSave();
+    }
+
+    /**
+     * Check based on options data
+     *
+     * @return bool
+     */
+    private function isProductHasOptions() : bool
+    {
+        if ($this->getData('options') === null) {
+            $result = true;
+        } else {
+            $result = is_array($this->getData('options')) && count($this->getData('options')) > 0;
+        }
+        return $result;
     }
 
     /**

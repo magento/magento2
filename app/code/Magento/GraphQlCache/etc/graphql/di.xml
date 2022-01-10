@@ -24,6 +24,9 @@
         <plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>
     </type>
     <type name="Magento\Integration\Api\UserTokenIssuerInterface">
-        <plugin name="set-context-after-token" type="Magento\GraphQlCache\Model\Plugin\Integration\Api\UserTokenIssuer"/>
+        <plugin name="set-context-after-token" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenIssuer"/>
+    </type>
+    <type name="Magento\Integration\Api\UserTokenRevokerInterface">
+        <plugin name="set-guest-after-revoke" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenRevoker"/>
     </type>
 </config>

@@ -11,6 +11,7 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
 use Magento\Framework\Setup\FilePermissions;
+use Magento\Setup\Exception as SetupException;
 
 class ConfigModel
 {
@@ -68,8 +69,10 @@ class ConfigModel
         $optionLists = $this->collector->collectOptionsLists();
 
         foreach ($optionLists as $optionList) {
-            $optionCollection = array_merge($optionCollection, $optionList->getOptions());
+            $optionCollection[] = $optionList->getOptions();
         }
+
+        $optionCollection = array_merge([], ...$optionCollection);
 
         foreach ($optionCollection as $option) {
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
@@ -100,7 +103,7 @@ class ConfigModel
             foreach ($configData as $config) {
                 $fileConfigStorage = [];
                 if (!$config instanceof ConfigData) {
-                    throw new \Exception(
+                    throw new SetupException(
                         'In module : '
                         . $moduleName
                         . 'ConfigOption::createConfig should return an array of ConfigData instances'
@@ -134,8 +137,10 @@ class ConfigModel
         $options = $this->getAvailableOptions();
         foreach ($options as $option) {
             try {
-                if ($inputOptions[$option->getName()] !== null) {
-                    $option->validate($inputOptions[$option->getName()]);
+                $inputValue = $inputOptions[$option->getName()] ?? null;
+
+                if ($inputValue !== null) {
+                    $option->validate($inputValue);
                 }
             } catch (\InvalidArgumentException $e) {
                 $errors[] = $e->getMessage();
@@ -146,10 +151,10 @@ class ConfigModel
         $options = $this->collector->collectOptionsLists();
 
         foreach ($options as $option) {
-            $errors = array_merge($errors, $option->validate($inputOptions, $this->deploymentConfig));
+            $errors[] = $option->validate($inputOptions, $this->deploymentConfig);
         }
 
-        return $errors;
+        return array_merge([], ...$errors);
     }
 
     /**
@@ -163,7 +168,7 @@ class ConfigModel
         $results = $this->filePermissions->getMissingWritablePathsForInstallation();
         if ($results) {
             $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
-            throw new \Exception($errorMsg);
+            throw new SetupException($errorMsg);
         }
     }
 }
