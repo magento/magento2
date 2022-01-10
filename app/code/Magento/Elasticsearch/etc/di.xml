@@ -304,7 +304,7 @@
     <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
         <plugin name="indexerDependencyUpdaterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin"/>
     </type>
-    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\Match">
+    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery">
         <arguments>
             <argument name="preprocessorContainer" xsi:type="array">
                 <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
@@ -563,5 +563,17 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="updateElasticsearchIndexerMapping" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute"/>
+    </type>
+    <type name="Magento\Elasticsearch\Model\Indexer\IndexerHandler">
+        <arguments>
+            <argument name="cacheContext" xsi:type="object">Magento\Framework\Indexer\CacheContext\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
+        <arguments>
+            <argument name="reservedAttributes" xsi:type="array">
+                <item name="category_name" xsi:type="string">category_name</item>
+            </argument>
+        </arguments>
     </type>
 </config>

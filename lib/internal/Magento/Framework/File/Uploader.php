@@ -219,6 +219,7 @@ class Uploader
         Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
 
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
@@ -230,7 +231,6 @@ class Uploader
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
         $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
-        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -496,7 +496,7 @@ class Uploader
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
         // account for excessively long filenames that cannot be stored completely in database
-        $maxFilenameLength = 200;
+        $maxFilenameLength = 90;
 
         if (strlen($fileInfo['basename']) > $maxFilenameLength) {
             throw new \LengthException(
@@ -709,6 +709,7 @@ class Uploader
      * @param array $fileId
      * @return void
      * @throws \InvalidArgumentException
+     * @throws FileSystemException
      */
     private function validateFileId(array $fileId): void
     {
@@ -719,6 +720,7 @@ class Uploader
             if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
+                    $this->directoryList->getPath(DirectoryList::SYS_TMP),
                     $this->directoryList->getPath(DirectoryList::MEDIA),
                     $this->directoryList->getPath(DirectoryList::VAR_DIR),
                     $this->directoryList->getPath(DirectoryList::TMP),
@@ -730,14 +732,16 @@ class Uploader
                 ];
 
                 foreach ($allowedFolders as $allowedFolder) {
-                    if (stripos($tmpName, $allowedFolder) === 0) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($allowedFolder);
+                    if ($dir->isExist($tmpName)) {
                         $isValid = true;
                         break;
                     }
                 }
 
                 foreach ($disallowedFolders as $disallowedFolder) {
-                    if (stripos($tmpName, $disallowedFolder) === 0) {
+                    $dir = $this->targetDirectory->getDirectoryReadByPath($disallowedFolder);
+                    if ($dir->isExist($tmpName)) {
                         $isValid = false;
                         break;
                     }

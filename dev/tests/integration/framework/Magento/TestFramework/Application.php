@@ -559,6 +559,39 @@ class Application
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
+        $this->runPostInstallCommands();
+
+        // enable only specified list of caches
+        $initParamsQuery = $this->getInitParamsQuery();
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
+            [BP . '/bin/magento', $initParamsQuery]
+        );
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
+            [
+                BP . '/bin/magento',
+                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+                $initParamsQuery,
+            ]
+        );
+
+        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
+        if (!$db->isDbDumpExists() && $this->dumpDb) {
+            $this->getDbInstance()->storeDbDump();
+        }
+    }
+
+    /**
+     * Run commands after installation configured in post-install-setup-command-config.php
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function runPostInstallCommands()
+    {
         // run post-install setup commands
         $postInstallSetupCommands = $this->getPostInstallSetupCommands();
 
@@ -594,29 +627,6 @@ class Application
                     array_values($argumentsAndOptions)
                 ),
             );
-        }
-
-        // enable only specified list of caches
-        $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
-            [BP . '/bin/magento', $initParamsQuery]
-        );
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
-            [
-                BP . '/bin/magento',
-                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-                $initParamsQuery,
-            ]
-        );
-
-        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists() && $this->dumpDb) {
-            $this->getDbInstance()->storeDbDump();
         }
     }
 
