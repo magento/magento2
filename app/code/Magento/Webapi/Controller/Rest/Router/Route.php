@@ -1,15 +1,19 @@
 <?php
 /**
- * Route to services available via REST API.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Webapi\Controller\Rest\Router;
 
 use Magento\Framework\App\RequestInterface as Request;
 use Magento\Framework\App\RouterInterface;
 
+/**
+ * Route to services available via REST API.
+ */
 class Route implements RouterInterface
 {
     /**
@@ -46,6 +50,11 @@ class Route implements RouterInterface
      * @var string
      */
     protected $route;
+
+    /**
+     * @var int|null
+     */
+    private $inputArraySizeLimit;
 
     /**
      * @param string $route
@@ -250,5 +259,25 @@ class Route implements RouterInterface
     public function getRoutePath()
     {
         return $this->route;
+    }
+
+    /**
+     * Get array size limit of input data
+     *
+     * @return int|null
+     */
+    public function getInputArraySizeLimit(): ?int
+    {
+        return $this->inputArraySizeLimit;
+    }
+
+    /**
+     * Set array size limit of input data
+     *
+     * @param int|null $limit
+     */
+    public function setInputArraySizeLimit(?int $limit): void
+    {
+        $this->inputArraySizeLimit = $limit;
     }
 }

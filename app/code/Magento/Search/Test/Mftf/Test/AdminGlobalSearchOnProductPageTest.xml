@@ -29,9 +29,7 @@
             </actionGroup>
 
             <!-- Delete category -->
-            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
-                <argument name="categoryEntity" value="_defaultCategory"/>
-            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="deleteCreatedNewRootCategory"/>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -46,10 +44,7 @@
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
 
-        <!-- Create new category for product -->
-        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
-            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="FillNewProductCategory"/>
 
         <!-- Save product form -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>

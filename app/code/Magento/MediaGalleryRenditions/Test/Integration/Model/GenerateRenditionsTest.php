@@ -63,7 +63,7 @@ class GenerateRenditionsTest extends TestCase
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaDirectory->create(self::TEST_DIR);
-        $this->driver = $this->objectManager->get(DriverInterface::class);
+        $this->driver = $this->mediaDirectory->getDriver();
         $this->renditionSizeConfig = $this->objectManager->get(Config::class);
         $config = $this->objectManager->get(ScopeConfigInterface::class);
         $this->origConfigValue = $config->getValue(
@@ -114,10 +114,9 @@ class GenerateRenditionsTest extends TestCase
     public function testExecute(string $path, string $renditionPath): void
     {
         $this->copyImage($path);
-        $this->generateRenditions->execute([self::TEST_DIR . '/' . $path]);
-        $expectedRenditionPath = $this->mediaDirectory->getAbsolutePath($renditionPath);
-        list($imageWidth, $imageHeight) = getimagesize($expectedRenditionPath);
-        $this->assertFileExists($expectedRenditionPath);
+        $this->generateRenditions->execute([self::TEST_DIR . DIRECTORY_SEPARATOR . $path]);
+        list($imageWidth, $imageHeight) = getimagesizefromstring($this->mediaDirectory->readFile($renditionPath));
+        $this->assertTrue($this->mediaDirectory->isExist($renditionPath));
         $this->assertLessThanOrEqual(
             $this->renditionSizeConfig->getWidth(),
             $imageWidth,
@@ -131,16 +130,18 @@ class GenerateRenditionsTest extends TestCase
     }
 
     /**
-     * @param array $paths
+     * Copies file from the integration test directory to the media directory
+     *
+     * @param string $path
      * @throws FileSystemException
      */
     private function copyImage(string $path): void
     {
-        $imagePath = realpath(__DIR__ . '/../../_files' . $path);
-        $modifiableFilePath = $this->mediaDirectory->getAbsolutePath(self::TEST_DIR . $path );
-        $this->driver->copy(
-            $imagePath,
-            $modifiableFilePath
+        $imagePath = realpath(__DIR__ . '/../../_files/' . $path);
+        $modifiableFilePath = $this->mediaDirectory->getAbsolutePath(self::TEST_DIR . DIRECTORY_SEPARATOR . $path);
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($imagePath)
         );
     }
 
@@ -151,11 +152,11 @@ class GenerateRenditionsTest extends TestCase
     {
         return [
             'rendition_image_not_generated' => [
-                'paths' => '/magento_medium_image.jpg',
+                'path' => 'magento_medium_image.jpg',
                 'renditionPath' => ".renditions/" . self::TEST_DIR . "/magento_medium_image.jpg"
             ],
             'rendition_image_generated' => [
-                'paths' => '/magento_large_image.jpg',
+                'path' => 'magento_large_image.jpg',
                 'renditionPath' => ".renditions/" . self::TEST_DIR . "/magento_large_image.jpg"
             ]
         ];

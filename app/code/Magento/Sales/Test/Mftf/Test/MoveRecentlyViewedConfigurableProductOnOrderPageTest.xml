@@ -104,6 +104,9 @@
 
         <!-- Click create order -->
         <actionGroup ref="AdminClickCreateOrderButtonOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectStoreViewIfAppears"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad2"/>
 
         <!-- Add configure to product -->
         <click selector="{{AdminCustomerActivitiesRecentlyViewedSection.addToOrderConfigure($$createConfigProduct.name$$)}}" stepKey="configureProduct"/>

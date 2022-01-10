@@ -21,9 +21,9 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
-    const SORT_ORDER_ASC = 'ASC';
+    public const SORT_ORDER_ASC = 'ASC';
 
-    const SORT_ORDER_DESC = 'DESC';
+    public const SORT_ORDER_DESC = 'DESC';
 
     /**
      * Collection items
@@ -834,6 +834,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return \ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $this->load();
@@ -845,6 +846,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         $this->load();
