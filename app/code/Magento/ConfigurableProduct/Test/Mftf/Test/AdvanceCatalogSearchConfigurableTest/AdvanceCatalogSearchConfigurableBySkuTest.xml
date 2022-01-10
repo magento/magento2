@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-144"/>
             <group value="ConfigurableProduct"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>

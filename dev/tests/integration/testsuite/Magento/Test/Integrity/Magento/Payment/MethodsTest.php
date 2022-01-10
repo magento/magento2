@@ -26,7 +26,7 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
-        if ($code == 'vault') {
+        if (in_array($code, ['free', 'substitution', 'vault', 'payflowpro_cc_vault', 'fake_vault'])) {
             return;
         }
         Bootstrap::getObjectManager()->configure($this->getTestConfiguration());
@@ -71,7 +71,6 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
             /** @var $block \Magento\Framework\View\Element\Template */
             $block = $blockFactory->createBlock($blockClass);
             $block->setArea('frontend');
-            $this->assertFileExists((string)$block->getTemplateFile(), $message);
             if ($model->canUseInternal()) {
                 try {
                     Bootstrap::getObjectManager()->get(
