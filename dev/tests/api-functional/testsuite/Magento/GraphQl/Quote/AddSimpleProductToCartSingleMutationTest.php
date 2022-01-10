@@ -316,16 +316,16 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         self::assertCount(3, $result['cart']['items']);
 
         $cartItem = $result['cart']['items'][0];
-        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
-        self::assertEquals(1, $cartItem['quantity']);
-        self::assertEquals(10, $cartItem['prices']['price']['value']);
-        self::assertEquals(10, $cartItem['prices']['row_total']['value']);
-
-        $cartItem = $result['cart']['items'][1];
         self::assertEquals($product1->getSku(), $cartItem['product']['sku']);
         self::assertEquals(2, $cartItem['quantity']);
         self::assertEquals(10, $cartItem['prices']['price']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
+
+        $cartItem = $result['cart']['items'][1];
+        self::assertEquals($product2->getSku(), $cartItem['product']['sku']);
+        self::assertEquals(1, $cartItem['quantity']);
+        self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['row_total']['value']);
 
         $cartItem = $result['cart']['items'][2];
         self::assertEquals($product3->getSku(), $cartItem['product']['sku']);

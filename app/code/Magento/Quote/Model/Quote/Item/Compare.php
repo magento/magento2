@@ -68,10 +68,6 @@ class Compare
      */
     public function compare(Item $target, Item $compared)
     {
-        if ($target === $compared) {
-            return true;
-        }
-
         if ($target->getProductId() != $compared->getProductId()) {
             return false;
         }

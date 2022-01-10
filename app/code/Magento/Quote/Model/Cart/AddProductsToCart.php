@@ -15,8 +15,6 @@ use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Quote\Model\Quote\Item;
-use Magento\Quote\Model\QuoteFactory;
 
 /**
  * Unified approach to add products to the Shopping Cart.
@@ -68,29 +66,21 @@ class AddProductsToCart
     private $requestBuilder;
 
     /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
      * @param ProductRepositoryInterface $productRepository
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
-     * @param QuoteFactory $quoteFactory
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        BuyRequestBuilder $requestBuilder,
-        QuoteFactory $quoteFactory
+        BuyRequestBuilder $requestBuilder
     ) {
         $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
-        $this->quoteFactory = $quoteFactory;
     }
 
     /**
@@ -115,14 +105,25 @@ class AddProductsToCart
             }
         }
 
-        foreach ($cartItems as $cartItemPosition => $cartItem) {
-            $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
-            if ($errors) {
-                array_push($allErrors, ...$errors);
+        $failedCartItems = $this->addItemsToCart($cart, $cartItems);
+        $saveCart = true;
+        if (count($failedCartItems) !== count($cartItems)) {
+            /* Revert changes introduced by add to cart processes in case of an error */
+            $cart->getItemsCollection()->clear();
+            $newFailedCartItems = $this->addItemsToCart($cart, array_diff_key($cartItems, $failedCartItems));
+            $saveCart = empty($newFailedCartItems);
+            $failedCartItems += $newFailedCartItems;
+        }
+
+        foreach (array_keys($cartItems) as $cartItemPosition) {
+            if (isset($failedCartItems[$cartItemPosition])) {
+                array_push($allErrors, ...$failedCartItems[$cartItemPosition]);
             }
         }
 
-        $this->cartRepository->save($cart);
+        if ($saveCart) {
+            $this->cartRepository->save($cart);
+        }
 
         if (count($allErrors) !== 0) {
             /* Revert changes introduced by add to cart processes in case of an error */
@@ -130,6 +131,27 @@ class AddProductsToCart
         }
 
         return $this->prepareErrorOutput($cart, $allErrors);
+    }
+
+    /**
+     * Add cart items to cart
+     *
+     * @param Quote $cart
+     * @param array $cartItems
+     * @return array
+     */
+    public function addItemsToCart(Quote $cart, array $cartItems): array
+    {
+        $failedCartItems = [];
+
+        foreach ($cartItems as $cartItemPosition => $cartItem) {
+            $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
+            if ($errors) {
+                $failedCartItems[$cartItemPosition] = $errors;
+            }
+        }
+
+        return $failedCartItems;
     }
 
     /**
@@ -146,8 +168,6 @@ class AddProductsToCart
         $errors = [];
         $result = null;
         $product = null;
-        $tempCart = $this->cloneQuote($cart);
-        $tempCart->setHasError(false);
 
         if ($cartItem->getQuantity() <= 0) {
             $errors[] = $this->createError(__('The product quantity should be greater than 0')->render());
@@ -163,7 +183,7 @@ class AddProductsToCart
 
             if ($product !== null) {
                 try {
-                    $result = $tempCart->addProduct($product, $this->requestBuilder->build($cartItem));
+                    $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
                 } catch (\Throwable $e) {
                     $errors[] = $this->createError(
                         __($e->getMessage())->render(),
@@ -177,10 +197,6 @@ class AddProductsToCart
                     }
                 }
             }
-        }
-
-        if (empty($errors)) {
-            $this->addQuoteItem($cart, $result);
         }
 
         return $errors;
@@ -235,78 +251,5 @@ class AddProductsToCart
         $cart->setHasError(false);
 
         return $output;
-    }
-
-    /**
-     * Add quote item from temporary quote to real quote
-     *
-     * @param Quote $quote
-     * @param Item $quoteItem
-     * @return void
-     */
-    private function addQuoteItem(Quote $quote, Item $quoteItem): void
-    {
-        if ($quoteItem->getOriginalItem()) {
-            $quote->deleteItem($quoteItem->getOriginalItem());
-            $quoteItem->unsOriginalItem();
-        }
-
-        $quoteItem->setQuote($quote);
-        $quote->addItem($quoteItem);
-        if ($quoteItem->getHasChildren()) {
-            foreach ($quoteItem->getChildren() as $childQuoteItem) {
-                $childQuoteItem->setQuote($quote);
-                $quote->addItem($childQuoteItem);
-            }
-        }
-
-        $parentQuoteItem = $quoteItem->getParentItem();
-        if ($parentQuoteItem) {
-            $parentQuoteItem->setQuote($quote);
-            $quote->addItem($parentQuoteItem);
-        }
-    }
-
-    /**
-     * Create a clone quote.
-     *
-     * @param Quote $quote
-     * @return Quote
-     */
-    private function cloneQuote(Quote $quote)
-    {
-        // copy data to temporary quote
-        /** @var $temporaryQuote \Magento\Quote\Model\Quote */
-        $temporaryQuote = $this->quoteFactory->create();
-        $temporaryQuote->setData($quote->getData());
-        $temporaryQuote->setId(null);//as it is clone, we need to flush ids
-        $temporaryQuote->setStore($quote->getStore())->setIsSuperMode($quote->getIsSuperMode());
-
-        /** @var Item $quoteItem */
-        foreach ($quote->getAllItems() as $quoteItem) {
-            $temporaryItem = clone $quoteItem;
-            $temporaryItem->setQuote($temporaryQuote);
-            $temporaryQuote->addItem($temporaryItem);
-            $quoteItem->setClonnedItem($temporaryItem);
-        }
-        /** @var Item $quoteItem */
-        foreach ($quote->getAllItems() as $quoteItem) {
-            $temporaryItem = $quoteItem->getClonnedItem();
-            //Check for parent item
-            $parentItem = null;
-            if ($quoteItem->getParentItem()) {
-                $parentItem = $quoteItem->getParentItem();
-                $temporaryItem->setParentProductId(null);
-            } elseif ($quoteItem->getParentProductId()) {
-                $parentItem = $quote->getItemById($quoteItem->getParentProductId());
-            }
-            if ($parentItem && $parentItem->getClonnedItem()) {
-                $temporaryItem->setParentItem($parentItem->getClonnedItem());
-            }
-            $quoteItem->unsClonnedItem();
-            $temporaryItem->setOriginalItem($quoteItem);
-        }
-
-        return $temporaryQuote;
     }
 }
