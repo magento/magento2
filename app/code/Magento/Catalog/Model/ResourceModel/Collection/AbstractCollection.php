@@ -28,7 +28,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     protected $_storeId;
 
     /**
-     * Store manager
+     * Manager of store
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */

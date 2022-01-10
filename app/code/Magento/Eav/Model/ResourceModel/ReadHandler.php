@@ -178,7 +178,9 @@ class ReadHandler implements AttributeInterface
             $attributes = $connection->fetchAll($orderedUnionSelect);
             foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
-                    if (isset($attributeScopeGlobal[$attributeValue['attribute_id']]) && $attributeScopeGlobal[$attributeValue['attribute_id']]) {
+                    if (isset($attributeScopeGlobal[$attributeValue['attribute_id']]) &&
+                        $attributeScopeGlobal[$attributeValue['attribute_id']]
+                    ) {
                         if ((int)$attributeValue['store_id'] !== \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
                             continue;
                         }
