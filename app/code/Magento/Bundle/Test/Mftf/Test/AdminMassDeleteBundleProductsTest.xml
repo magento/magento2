@@ -85,25 +85,6 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad2"/>
 
         <!--Create bundle product 2-->
-<<<<<<< HEAD
-        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
-        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption32"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions2"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle2"/>
-        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType2"/>
-        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption2"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptionsx2">
-            <argument name="product" value="$$simpleProduct3$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRowx2"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions22">
-            <argument name="product" value="$$simpleProduct4$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow22"/>
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts2"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty12"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty22"/>
-=======
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItems2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickAddOption32"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptions2"/>
@@ -124,7 +105,6 @@
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty12"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty22"/>
->>>>>>> 2.4-develop
 
         <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="fillProductName2">
             <argument name="productName" value="{{BundleProduct.name2}}"/>
