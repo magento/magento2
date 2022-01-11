@@ -138,12 +138,14 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function getProductIdsBySaleability(): array
     {
         $ids = [];
+        $this->collection->setFlag('has_stock_status_sort_order', true);
 
         if (!$this->hasShowOutOfStockStatus()) {
             return $ids;
         }
 
-        if ($this->collection->getFlag('has_stock_status_filter')) {
+        if ($this->collection->getFlag('has_stock_status_filter')
+            || $this->collection->getFlag('has_category_filter')) {
             $categoryId = null;
             $searchCriteria = $this->searchResult->getSearchCriteria();
             foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
@@ -172,7 +174,7 @@ class SearchResultApplier implements SearchResultApplierInterface
      * @param int $categoryId
      * @return array
      */
-    private function categoryProductByCustomSortOrder($categoryId): array
+    private function categoryProductByCustomSortOrder(int $categoryId): array
     {
         $storeId = $this->collection->getStoreId();
         $searchCriteria = $this->searchResult->getSearchCriteria();
@@ -208,7 +210,7 @@ class SearchResultApplier implements SearchResultApplierInterface
                 $selectColumns[] = 'product.value AS name';
                 $query->join(
                     ['product' => $this->collection->getTable('catalog_product_entity_varchar')],
-                    'product.row_id = e.entity_id ' .
+                    'product.row_id = e.row_id ' .
                     'AND product.attribute_id = (' .
                     'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")',
                     []
@@ -238,7 +240,7 @@ class SearchResultApplier implements SearchResultApplierInterface
             $searchCriteria->getPageSize(),
             $searchCriteria->getCurrentPage() * $searchCriteria->getPageSize()
         );
-        return $connection->fetchAssoc($query);
+        return $connection->fetchAssoc($query) ?? [];
     }
 
     /**

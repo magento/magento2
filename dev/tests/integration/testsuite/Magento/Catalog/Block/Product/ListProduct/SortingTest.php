@@ -14,6 +14,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -466,5 +467,63 @@ class SortingTest extends TestCase
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, null);
         $this->renderBlock($category, $direction);
         $this->assertBlockSorting($sortBy, $expected);
+    }
+
+    /**
+     * Test product list ordered by product name with out-of-stock configurable product options.
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_category_and_stock_status.php
+     * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
+     * @magentoConfigFixture default/catalog/search/engine mysql
+     * @dataProvider productListWithShowOutOfStockSortOrderDataProvider
+     * @param string $sortBy
+     * @param string $direction
+     * @param array $expected
+     * @return void
+     */
+    public function testProductListOutOfStockSortOrderBySaleability(
+        string $sortBy,
+        string $direction,
+        array $expected
+    ): void {
+        $this->updateConfigShowOutOfStockFlag(1);
+        $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
+    }
+
+    /**
+     * Updates store config 'cataloginventory/options/show_out_of_stock' flag.
+     *
+     * @param int $showOutOfStock
+     * @return void
+     */
+    private function updateConfigShowOutOfStockFlag(int $showOutOfStock): void
+    {
+        $this->scopeConfig->setValue(
+            Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            $showOutOfStock,
+            ScopeInterface::SCOPE_STORE,
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+        );
+    }
+
+    /**
+     * Product list with out-of-stock sort order data provider
+     *
+     * @return array
+     */
+    public function productListWithShowOutOfStockSortOrderDataProvider(): array
+    {
+        return [
+            'default_order_name_asc' => [
+                'sort' => 'name',
+                'direction' => 'ASC',
+                'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
+            ],
+            'default_order_name_desc' => [
+                'sort' => 'name',
+                'direction' => 'DESC',
+                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
+            ],
+        ];
     }
 }
