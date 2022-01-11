@@ -77,24 +77,11 @@
             <expectedResult type="string">50</expectedResult>
             <actualResult type="string">$grabbedSecondBundleOptionQuantity</actualResult>
         </assertEquals>
-<<<<<<< HEAD
-        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
-            <argument name="optionIndex" value="0"/>
-            <argument name="productIndex" value="0"/>
-            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty2">
-            <argument name="optionIndex" value="0"/>
-            <argument name="productIndex" value="1"/>
-            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
-        </actionGroup>
-=======
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty2"/>
 
         <!--Fill out ancillary data on bundle product-->
->>>>>>> 2.4-develop
         <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
@@ -105,17 +92,6 @@
 
         <scrollToTopOfPage stepKey="scroll"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
-<<<<<<< HEAD
-        <seeElement stepKey="LookingForBundleItemPresence" selector="{{AdminProductFormBundleSection.listedBundleItem}}"/>
-        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="GoToProductPage">
-            <argument name="productUrlKey" value="{{BundleProduct.urlKey}}"/>
-        </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoad"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LookingForAbilityToAddOptions"/>
-
-        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonToCustomize"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitCustomizationDropDown"/>
-=======
         <seeElement selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="LookingForBundleItemPresence"/>
 
         <!--Checking on customer side-->
@@ -126,44 +102,14 @@
         <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="LookingForAbilityToAddOptions"/>
         <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickButtonToCustomize"/>
         <waitForPageLoad stepKey="waitCustomizationDropDown"/>
->>>>>>> 2.4-develop
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption}}" stepKey="seeBundleItem"/>
 
         <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
-<<<<<<< HEAD
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
-=======
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
->>>>>>> 2.4-develop
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForClear"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-<<<<<<< HEAD
-        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="clickOnBundleProductToEdit"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenSectionBundleItemsToEdit"/>
-        <actionGroup ref="AdminClickAddOptionOnBundleProductEditPageActionGroup" stepKey="clickAddOption"/>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleOptionsToAppear"/>
-        <actionGroup ref="AdminFillBundleOptionTitleActionGroup" stepKey="fillNewestOptionTitle">
-            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}_new"/>
-            <argument name="index" value="1"/>
-        </actionGroup>    
-        <actionGroup ref="AdminFillBundleOptionTypeActionGroup" stepKey="selectNewInputType">
-            <argument name="optionIndex" value="1"/>
-        </actionGroup>
-        <actionGroup ref="AdminClickAddProductToOptionByOptionIndexActionGroup" stepKey="clickAddProductsToNewOption">
-            <argument name="optionIndex" value="2"/>
-        </actionGroup>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterNewBundleProductOptions">
-            <argument name="product" value="$$simpleProduct2$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectNewFirstGridRow"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterNewBundleProductOptions2">
-            <argument name="product" value="$$simpleProduct3$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectNewFirstGridRow2"/>
-        <actionGroup ref="AdminClickAddSelectedProductsOnAddProductsToOptionPanelActionGroup" stepKey="clickAddNewSelectedBundleProducts"/>
-=======
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickOnBundleProductToEdit">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
@@ -187,7 +133,6 @@
         </actionGroup>
 
         <!-- Check that existing Bundle Options do not loose user input quantity values  -->
->>>>>>> 2.4-develop
         <grabValueFrom selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" stepKey="grabbedFirstBundleOptionQuantityAfterUserInput"/>
         <assertEquals stepKey="assertFirstBundleOptionDefaultQuantityAfterUserInput">
             <expectedResult type="string">50</expectedResult>
@@ -198,31 +143,6 @@
             <expectedResult type="string">50</expectedResult>
             <actualResult type="string">$grabbedSecondBundleOptionQuantityAfterUserInput</actualResult>
         </assertEquals>
-<<<<<<< HEAD
-        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillNewProductDefaultQty1">
-            <argument name="optionIndex" value="1"/>
-            <argument name="productIndex" value="0"/>
-            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillNewProductDefaultQty2">
-            <argument name="optionIndex" value="1"/>
-            <argument name="productIndex" value="1"/>
-            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAgain"/>
-        <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
-        <scrollToTopOfPage stepKey="scrollAgain"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="conditionallyOpenNewSectionBundleItems2"/>
-        <see userInput="$$simpleProduct2.sku$$" selector="{{AdminProductFormBundleSection.bundleItem}}" stepKey="LookingForNewBundleItemPresence"/>
-
-        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="GoToProductPageAgain">
-            <argument name="productUrlKey" value="{{BundleProduct.urlKey}}"/>
-        </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductPageToLoadAgain"/>
-        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="LookingForAbilityToAddBothOptions"/>
-        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonAgainToCustomize"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBothCustomizationDropDown"/>
-=======
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillNewProductDefaultQty1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillNewProductDefaultQty2"/>
         <!--Save the product-->
@@ -244,7 +164,6 @@
         <seeElement selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="LookingForAbilityToAddBothOptions"/>
         <click selector="{{StorefrontBundledSection.customizeProduct}}" stepKey="clickButtonAgainToCustomize"/>
         <waitForPageLoad stepKey="waitForBothCustomizationDropDown"/>
->>>>>>> 2.4-develop
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption2}}" stepKey="seeBundleItems"/>
     </test>
 </tests>
