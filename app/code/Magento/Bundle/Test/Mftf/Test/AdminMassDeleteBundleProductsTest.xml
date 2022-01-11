@@ -103,24 +103,8 @@
             <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
             <argument name="inputType" value="{{BundleProduct.optionInputType1}}"/>
         </actionGroup>
-<<<<<<< HEAD
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow22"/>
-        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts2"/>
-        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty12">
-            <argument name="optionIndex" value="0"/>
-            <argument name="productIndex" value="0"/>
-            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
-        </actionGroup>
-
-        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty22">
-            <argument name="optionIndex" value="0"/>
-            <argument name="productIndex" value="1"/>
-            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
-        </actionGroup>
-=======
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty12"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductDefaultQty22"/>
->>>>>>> 2.4-develop
 
         <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="fillProductName2">
             <argument name="productName" value="{{BundleProduct.name2}}"/>
