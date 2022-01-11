@@ -36,6 +36,7 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 /**
  * @inheritdoc
  *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -522,6 +523,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(ProductInterface $product, $saveOptions = false)
     {
