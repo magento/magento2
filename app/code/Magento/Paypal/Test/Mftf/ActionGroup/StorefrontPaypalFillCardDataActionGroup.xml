@@ -16,6 +16,7 @@
             <argument name="cardData" defaultValue="PaymentAndShippingInfo"/>
         </arguments>
 
+        <waitForElementVisible selector="{{StorefrontPaypalCheckoutSection.cardNumber}}" stepKey="waitForCardNumber"/>
         <fillField selector="{{StorefrontPaypalCheckoutSection.cardNumber}}" userInput="{{cardData.cardNumber}}" stepKey="setCartNumber"/>
         <fillField selector="{{StorefrontPaypalCheckoutSection.verificationNumber}}" userInput="{{cardData.cvv}}" stepKey="setVerificationNumber"/>
         <selectOption selector="{{StorefrontPaypalCheckoutSection.expirationMonth}}" userInput="{{cardData.month}}" stepKey="setMonth"/>
