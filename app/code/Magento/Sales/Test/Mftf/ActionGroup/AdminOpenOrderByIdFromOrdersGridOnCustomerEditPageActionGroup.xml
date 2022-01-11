@@ -16,7 +16,7 @@
             <argument name="orderId" type="string"/>
         </arguments>
 
-        <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderId')}}" stepKey="selectOrderById"/>
+        <click selector="{{AdminEditCustomerOrdersSection.orderIdInGridUsingClassName('$orderId')}}" stepKey="selectOrderById"/>
         <waitForPageLoad stepKey="waitForOrderPageToOpen"/>
         
     </actionGroup>
