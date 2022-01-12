@@ -1,10 +1,8 @@
 <?php
 /**
- * Google AdWords conversation value type source
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Google AdWords conversion value type source
  */
+declare(strict_types=1);
 namespace Magento\GoogleAnalytics\Model\Config\Source;
 
 class DefaultYes implements \Magento\Framework\Option\ArrayInterface
