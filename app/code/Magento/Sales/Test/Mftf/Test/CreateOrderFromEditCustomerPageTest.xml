@@ -99,8 +99,8 @@
             <argument name="customerId" value="$$simpleCustomer.id$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer"/>
-        <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad"/>
         <actionGroup ref="AdminClickCreateOrderButtonOnEditCustomerPageActionGroup" stepKey="clickOnCreateOrderButton"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToLoad"/>
         <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
