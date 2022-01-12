@@ -14,7 +14,9 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 try {
     Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_rollback.php');
-    Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable_stock_status_rollback.php');
+    Resolver::getInstance()->requireDataFixture(
+        'Magento/ConfigurableProduct/_files/product_configurable_stock_status_rollback.php'
+    );
 
     /** @var Registry $registry */
     $registry = Bootstrap::getObjectManager()->get(Registry::class);
@@ -31,6 +33,5 @@ try {
     $registry->unregister('isSecureArea');
     $registry->register('isSecureArea', false);
 } catch (\Exception $e) {
-    echo $e->getMessage();
     // Nothing to remove
 }

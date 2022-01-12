@@ -34,7 +34,9 @@ try {
     $registry->register('isSecureArea', false);
 
     Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
-    Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable_stock_status.php');
+    Resolver::getInstance()->requireDataFixture(
+        'Magento/ConfigurableProduct/_files/product_configurable_stock_status.php'
+    );
 
     /** @var CategoryLinkManagementInterface $categoryLinkManagement */
     $categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);
@@ -55,6 +57,5 @@ try {
         $categoryLinkManagement->assignProductToCategories($sku, [$categoryHelper->getId(), 333]);
     }
 } catch (\Exception $e) {
-    echo $e->getMessage();
     // Nothing to remove
 }
