@@ -85,10 +85,7 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
         $cms = $this->pageFactory->create();
         $cms->load('home', 'identifier');
         // @codingStandardsIgnoreStart
-        $reportLayoutUpdate = '<!--
-    <referenceContainer name="right">
-        <referenceBlock name="catalog.compare.sidebar" remove="true" />
-    </referenceContainer>-->';
+        $reportLayoutUpdate = '<!-- <referenceContainer name="right"><referenceBlock name="catalog.compare.sidebar" remove="true"/></referenceContainer> -->';
         // @codingStandardsIgnoreEnd
         /*
          * Merge and save old layout update data with report layout data
