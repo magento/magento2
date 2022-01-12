@@ -6,11 +6,13 @@
 
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Resolve specific attributes for search criteria.
@@ -43,24 +45,32 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $scopeConfig;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param Collection $collection
      * @param SearchResultInterface $searchResult
      * @param int $size
      * @param int $currentPage
      * @param ScopeConfigInterface|null $scopeConfig
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         Collection $collection,
         SearchResultInterface $searchResult,
         int $size,
         int $currentPage,
-        ?ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
         $this->size = $size;
         $this->currentPage = $currentPage;
         $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -138,7 +148,6 @@ class SearchResultApplier implements SearchResultApplierInterface
     private function getProductIdsBySaleability(): array
     {
         $ids = [];
-        $this->collection->setFlag('has_stock_status_sort_order', true);
 
         if (!$this->hasShowOutOfStockStatus()) {
             return $ids;
@@ -188,54 +197,44 @@ class SearchResultApplier implements SearchResultApplierInterface
             ->reset(\Magento\Framework\DB\Select::LIMIT_COUNT)
             ->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET)
             ->reset(\Magento\Framework\DB\Select::COLUMNS);
-
-        $selectColumns = [
-            'e.entity_id',
-            'cat_index.position AS cat_index_position',
-            'stock_status_index.stock_status AS is_salable'
-        ];
-        $query->join(
+        $query->from(
+            ['e' => $this->collection->getTable('catalog_product_entity')],
+            ['e.entity_id']
+        )->join(
             ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
             'stock_status_index.product_id = e.entity_id',
-            []
+            ['stock_status_index.stock_status AS is_salable']
         )->join(
             ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
             'cat_index.product_id = e.entity_id'
             . ' AND cat_index.category_id = ' . $categoryId
             . ' AND cat_index.store_id = ' . $storeId,
-            []
+            ['cat_index.position AS cat_index_position']
         );
         foreach ($searchOrders as $field => $dir) {
             if ($field === 'name') {
-                $selectColumns[] = 'product_var.value AS name';
-
+                $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+                $linkField = $entityMetadata->getLinkField();
                 $query->join(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
-                    'product_var.row_id = e.row_id ' .
-                    'AND product_var.attribute_id = (' .
-                    'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")',
-                    []
+                    "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
+                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code='name')",
+                    ['product_var.value AS name']
                 );
             } elseif ($field === 'price') {
-                $selectColumns[] = 'price_index.max_price AS price';
                 $query->join(
                     ['price_index' => $this->collection->getTable('catalog_product_index_price')],
                     'price_index.entity_id = e.entity_id'
                     . ' AND price_index.customer_group_id = 0'
                     . ' AND price_index.website_id = (Select website_id FROM store WHERE store_id = '
                     . $storeId . ')',
-                    []
+                    ['price_index.max_price AS price']
                 );
             }
             if (in_array($field, $defaultColumnsFilter, true)) {
                 $query->order(new \Zend_Db_Expr("{$field} {$dir}"));
             }
         }
-
-        $query->from(
-            ['e' => $this->collection->getTable('catalog_product_entity')],
-            $selectColumns
-        );
 
         $query->limit(
             $searchCriteria->getPageSize(),
