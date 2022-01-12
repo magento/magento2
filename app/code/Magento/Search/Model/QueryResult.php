@@ -5,10 +5,6 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
-use Magento\Store\Model\StoreManagerInterface;
-
 /**
  * @api
  * @since 100.0.2
@@ -18,7 +14,7 @@ class QueryResult
     /**
      * @var string
      */
-    private string $queryText;
+    private $queryText;
 
     /**
      * @var int
@@ -26,55 +22,28 @@ class QueryResult
     private $resultsCount;
 
     /**
-     * @var QueryCollectionFactory
+     * @param string $queryText
+     * @param string $resultsCount
      */
-    private QueryCollectionFactory $queryCollectionFactory;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private StoreManagerInterface $storeManager;
-
-    /**
-     * @param $queryText
-     * @param $resultsCount
-     * @param QueryCollectionFactory $queryCollectionFactory
-     * @param StoreManagerInterface $storeManager
-     */
-    public function __construct(
-        $queryText,
-        $resultsCount,
-        QueryCollectionFactory $queryCollectionFactory,
-        StoreManagerInterface  $storeManager
-    ) {
+    public function __construct($queryText, $resultsCount)
+    {
         $this->queryText = $queryText;
         $this->resultsCount = $resultsCount;
-        $this->queryCollectionFactory = $queryCollectionFactory;
-        $this->storeManager = $storeManager;
     }
 
     /**
      * @return string
      */
-    public function getQueryText(): string
+    public function getQueryText()
     {
         return $this->queryText;
     }
 
     /**
      * @return int
-     * @throws NoSuchEntityException
      */
-    public function getResultsCount(): int
+    public function getResultsCount()
     {
-        $collection = $this->queryCollectionFactory->create()->setStoreId(
-            $this->storeManager->getStore()->getId()
-        )->setQueryFilter(
-            $this->getQueryText()
-        );
-        foreach ($collection as $item) {
-            $this->resultsCount = $item->getData('num_results');
-        }
         return $this->resultsCount;
     }
 }

@@ -40,4 +40,7 @@
         </arguments>
     </type>
     <preference for="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface" type="Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProvider" />
+    <type name="Magento\Search\Model\QueryResult">
+        <plugin name="getSearchSuggestionResultsCount" type="Magento\AdvancedSearch\Plugin\Model\SearchSuggestionResultsCount" sortOrder="1"/>
+    </type>
 </config>
