@@ -28,8 +28,6 @@ class UpdateCustomer
      */
     private $userContext;
 
-    private const USER_TYPE_CUSTOMER = 3;
-
     /**
      * @param RestRequest $request
      * @param UserContextInterface|null $userContext
