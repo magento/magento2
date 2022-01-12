@@ -53,7 +53,7 @@ class UpdateCustomer
         CustomerInterface $customer,
         ?string $passwordHash = null
     ): array {
-        $customerSessionId = $this->userContext->getUserType() === self::USER_TYPE_CUSTOMER ?
+        $customerSessionId = $this->userContext->getUserType() === $this->userContext::USER_TYPE_CUSTOMER ?
                              $this->userContext->getUserId() : 0;
         $customerId = (int)$this->request->getParam('customerId');
         $bodyParams = $this->request->getBodyParams();
