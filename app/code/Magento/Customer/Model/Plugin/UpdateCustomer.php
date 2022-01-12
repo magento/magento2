@@ -35,7 +35,7 @@ class UpdateCustomer
     public function __construct(RestRequest $request, ?UserContextInterface $userContext = null)
     {
         $this->request = $request;
-        $this->userContext = $userContext;
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
