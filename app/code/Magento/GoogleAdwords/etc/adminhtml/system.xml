@@ -16,13 +16,14 @@
                 </field>
                 <field id="conversion_id" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Conversion ID</label>
-                    <backend_model>Magento\GoogleAdwords\Model\Config\Backend\ConversionId</backend_model>
-                    <validate>required-entry validate-number</validate>
+                    <comment>(ex. AW-XXXXXXXX)</comment>
+                    <validate>required-entry</validate>
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
                 </field>
                 <field id="conversion_language" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <comment>Optional</comment>
                     <label>Conversion Language</label>
                     <source_model>Magento\GoogleAdwords\Model\Config\Source\Language</source_model>
                     <depends>
@@ -31,18 +32,20 @@
                 </field>
                 <field id="conversion_format" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Format</label>
+                    <comment>Optional</comment>
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
                 </field>
                 <field id="conversion_color" translate="label" type="text" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Color</label>
+                    <comment>Optional</comment>
                     <backend_model>Magento\GoogleAdwords\Model\Config\Backend\Color</backend_model>
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>
                 </field>
-                <field id="conversion_label" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="conversion_label" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Label</label>
                     <depends>
                         <field id="*/*/active">1</field>
@@ -50,6 +53,7 @@
                 </field>
                 <field id="conversion_value_type" translate="label" type="select" sortOrder="16" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Value Type</label>
+                    <comment>Optional</comment>
                     <source_model>Magento\GoogleAdwords\Model\Config\Source\ValueType</source_model>
                     <depends>
                         <field id="*/*/active">1</field>
@@ -57,6 +61,7 @@
                 </field>
                 <field id="conversion_value" translate="label" type="text" sortOrder="17" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Conversion Value</label>
+                    <comment>Optional</comment>
                     <depends>
                         <field id="*/*/active">1</field>
                         <field id="*/*/conversion_value_type">0</field>
@@ -64,6 +69,7 @@
                 </field>
                 <field id="send_currency" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Send Order Currency</label>
+                    <comment>Optional</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="*/*/active">1</field>

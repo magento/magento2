@@ -13,6 +13,7 @@
                 <conversion_language>en</conversion_language>
                 <conversion_format>2</conversion_format>
                 <conversion_color>FFFFFF</conversion_color>
+                <conversion_label>Thank you for shopping!</conversion_label>
                 <conversion_value_type>1</conversion_value_type>
                 <conversion_value>0</conversion_value>
                 <send_currency>0</send_currency>
@@ -65,8 +66,6 @@
                     <zh_TW>zh_Hant</zh_TW>
                     <iw>he</iw>
                 </language_convert>
-                <conversion_js_src>https://www.googleadservices.com/pagead/conversion.js</conversion_js_src>
-                <conversion_img_src>https://www.googleadservices.com/pagead/conversion/%s/?label=%s&amp;guid=ON&amp;script=0</conversion_img_src>
             </adwords>
         </google>
     </default>

@@ -52,7 +52,7 @@ class DataTest extends TestCase
     {
         return [
             [true, 1234, true],
-            [true, 'conversionId', false],
+            [true, 'conversionId', true],
             [true, '', false],
             [false, '', false]
         ];
@@ -140,8 +140,8 @@ class DataTest extends TestCase
         );
         $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
-
     /**
+     * @deprecated
      * @return void
      */
     public function testGetConversionImgSrc(): void
@@ -161,6 +161,7 @@ class DataTest extends TestCase
     }
 
     /**
+     * @deprecated
      * @return void
      */
     public function testGetConversionJsSrc(): void
@@ -184,7 +185,7 @@ class DataTest extends TestCase
     public function dataProviderForTestStoreConfig(): array
     {
         return [
-            ['getConversionId', Data::XML_PATH_CONVERSION_ID, 123],
+            ['getConversionId', Data::XML_PATH_CONVERSION_ID, 'AW-123'],
             ['getConversionLanguage', Data::XML_PATH_CONVERSION_LANGUAGE, 'en'],
             ['getConversionFormat', Data::XML_PATH_CONVERSION_FORMAT, '2'],
             ['getConversionColor', Data::XML_PATH_CONVERSION_COLOR, 'ffffff'],

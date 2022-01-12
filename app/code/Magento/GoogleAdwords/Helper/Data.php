@@ -1,7 +1,5 @@
 <?php
 /**
- * Google AdWords Data Helper
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -25,9 +23,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@+
      * Google AdWords conversion src
      */
-    const XML_PATH_CONVERSION_JS_SRC = 'google/adwords/conversion_js_src';
-
-    const XML_PATH_CONVERSION_IMG_SRC = 'google/adwords/conversion_img_src';
+    const GTAG_GLOBAL_SITE_TAG_SRC = 'https://www.googletagmanager.com/gtag/js?id=';
 
     /**#@-*/
 
@@ -115,6 +111,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Is Google AdWords congifurable
+     *
+     * @return bool
+     */
+    public function isGoogleAdwordsConfigurable()
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) && $this->getConversionId();
+    }
+
+    /**
      * Retrieve language codes from config
      *
      * @return string[]
@@ -138,21 +147,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Get conversion path to js src
-     *
+     * @deprecated
+     * @see getConversionGtagGlobalSiteTagSrc()
      * @return string
      */
     public function getConversionJsSrc()
     {
+        trigger_error('function is deprecated', E_USER_DEPRECATED);
         return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
     }
 
     /**
      * Get conversion img src
-     *
+     * @deprecated
+     * @see getConversionGtagGlobalSiteTagSrc()
      * @return string
      */
     public function getConversionImgSrc()
     {
+        trigger_error('function is deprecated', E_USER_DEPRECATED);
         return sprintf(
             $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
             $this->getConversionId(),
@@ -161,13 +174,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get conversion js src
+     *
+     * @return string
+     */
+    public function getConversionGtagGlobalSiteTagSrc()
+    {
+        $siteSrc = self::GTAG_GLOBAL_SITE_TAG_SRC;
+        $cId = $this->getConversionId();
+        return $siteSrc . $cId;
+    }
+
+    /**
      * Get Google AdWords conversion id
      *
-     * @return int
+     * @return string
      */
     public function getConversionId()
     {
-        return (int)$this->scopeConfig->getValue(
+        return (string)$this->scopeConfig->getValue(
             self::XML_PATH_CONVERSION_ID,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );

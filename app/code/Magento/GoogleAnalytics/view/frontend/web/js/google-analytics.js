@@ -16,7 +16,9 @@ define([
     return function (config) {
         var allowServices = false,
             allowedCookies,
-            allowedWebsites;
+            allowedWebsites,
+            accountId,
+            anonymizedIp;
 
         if (config.isCookieRestrictionModeEnabled) {
             allowedCookies = $.mage.cookies.get(config.cookieName);
@@ -31,51 +33,38 @@ define([
         } else {
             allowServices = true;
         }
-
+        
         if (allowServices) {
-            (function (i, s, o, g, r, a, m) {
-                i.GoogleAnalyticsObject = r;
-                i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
-                a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-            // Process page info
-            ga('create', config.pageTrackingData.accountId, 'auto');
-
-            if (config.pageTrackingData.isAnonymizedIpActive) {
-                ga('set', 'anonymizeIp', true);
-            }
-
-            // Process orders data
-            if (config.ordersTrackingData.hasOwnProperty('currency')) {
-                ga('require', 'ec', 'ec.js');
-
-                ga('set', 'currencyCode', config.ordersTrackingData.currency);
-
-                // Collect product data for GA
-                if (config.ordersTrackingData.products) {
-                    $.each(config.ordersTrackingData.products, function (index, value) {
-                        ga('ec:addProduct', value);
-                    });
+            /* Global site tag (gtag.js) - Google Analytics */
+            accountId = config.pageTrackingData.accountId;
+            anonymizedIp = config.pageTrackingData.isAnonymizedIpActive;
+            if (window.gtag) {
+                gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
+                // Purchase Event
+                if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                    var purchaseObject = config.ordersTrackingData.orders[0];
+                    purchaseObject['items'] = config.ordersTrackingData.products;
+                    gtag('event', 'purchase', purchaseObject);
                 }
-
-                // Collect orders data for GA
-                if (config.ordersTrackingData.orders) {
-                    $.each(config.ordersTrackingData.orders, function (index, value) {
-                        ga('ec:setAction', 'purchase', value);
-                    });
-                }
-
-                ga('send', 'pageview');
             } else {
-                // Process Data if not orders
-                ga('send', 'pageview' + config.pageTrackingData.optPageUrl);
+                (function(d,s,u){
+                    var gtagScript = d.createElement(s);
+                    gtagScript.type = 'text/javascript';
+                    gtagScript.async = true;
+                    gtagScript.src = u;
+                    d.head.insertBefore(gtagScript, d.head.children[0]);
+                    })(document, 'script', 'https://www.googletagmanager.com/gtag/js?id=' + accountId);
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('set', 'developer_id.dYjhlMD', true);
+                gtag('config', accountId, { 'anonymize_ip': anonymizedIp });
+                // Purchase Event
+                if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                    var purchaseObject = config.ordersTrackingData.orders[0];
+                    purchaseObject['items'] = config.ordersTrackingData.products;
+                    gtag('event', 'purchase', purchaseObject);
+                }
             }
         }
     }

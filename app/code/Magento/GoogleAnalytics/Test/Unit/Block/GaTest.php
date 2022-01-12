@@ -101,9 +101,14 @@ class GaTest extends TestCase
             ]
         );
     }
-
+    
+    /**
+     * @deprecated because gtag was introduced, replacing legacy analtyics.js
+     * @see app/code/Magento/GoogleAnalytics/view/frontend/web/js/google-analytics.js
+     */
     public function testOrderTrackingCode()
     {
+        trigger_error('testOrderTrackingCode is deprecated', E_USER_DEPRECATED);
         $this->salesOrderCollectionMock->expects($this->once())
             ->method('create')
             ->willReturn($this->createCollectionMock());
@@ -150,22 +155,26 @@ class GaTest extends TestCase
         $this->assertEquals($websiteId, $this->gaBlock->getCurrentWebsiteId());
     }
 
+    /**
+     * Test for getOrdersTrackingData()
+     * @return void
+     */
     public function testOrderTrackingData()
     {
+
         $this->salesOrderCollectionMock->expects($this->once())
             ->method('create')
             ->willReturn($this->createCollectionMock());
         $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
-
         $expectedResult = [
             'orders' => [
                 [
-                    'id' => 100,
+                    'transaction_id' => 100,
                     'affiliation' => 'test',
-                    'revenue' => 10,
-                    'tax' => 2,
-                    'shipping' => 1
+                    'value' => null,
+                    'tax' => null,
+                    'shipping' => null
                 ]
             ],
             'products' => [
@@ -178,29 +187,28 @@ class GaTest extends TestCase
             ],
             'currency' => 'USD'
         ];
-
         $this->gaBlock->setOrderIds([1, 2]);
-        $this->assertEquals($expectedResult, $this->gaBlock->getOrdersTrackingData());
+        $tempResults = $this->gaBlock->getOrdersTrackingData();
+        $this->assertEquals($expectedResult, $tempResults);
     }
 
     public function testGetPageTrackingData()
     {
         $pageName = '/page/name';
-        $accountId = 100;
+        $accountId = "100";
         $expectedResult = [
             'optPageUrl' => ", '" . $pageName . "'",
             'isAnonymizedIpActive' => true,
             'accountId' => $accountId
         ];
         $this->gaBlock->setData('page_name', $pageName);
-        $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')->willReturn(true);
-
+        $this->googleAnalyticsDataMock->expects($this->once())->method('isAnonymizedIpActive')
+            ->willReturn(true);
         $this->assertEquals($expectedResult, $this->gaBlock->getPageTrackingData($accountId));
     }
 
     /**
      * Create Order mock with $orderItemCount items
-     *
      * @param int $orderItemCount
      * @return Order|MockObject
      */
@@ -235,6 +243,8 @@ class GaTest extends TestCase
      */
     protected function createCollectionMock()
     {
+        $this->googleAnalyticsDataMock->expects($this->once())->method('isUniversalAnalyticsAccount')
+            ->willReturn(true);
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
