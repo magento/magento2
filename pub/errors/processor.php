@@ -270,7 +270,7 @@ class Processor
         $errorPath = strpos($errorDir, $indexDir) === 0 ?
             str_replace($indexDir, '', $errorDir) : $errorPathSuffix;
 
-        return $this->getBaseUrl() . $errorPath . $this->_config->skin . '/';
+        return ltrim($this->getBaseUrl() . $errorPath . $this->_config->skin . '/','.');
     }
 
     /**
@@ -595,7 +595,7 @@ class Processor
      */
     private function isReportIdValid(string $reportId): bool
     {
-        return (bool)preg_match('/[a-fA-F0-9]{64}/', $reportId);
+        return (bool)preg_match('/^[a-fA-F0-9]{64}$/', $reportId);
     }
 
     /**
