@@ -197,21 +197,24 @@ class SearchResultApplier implements SearchResultApplierInterface
         $query->join(
             ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
             'stock_status_index.product_id = e.entity_id',
+            []
         )->join(
             ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
             'cat_index.product_id = e.entity_id'
             . ' AND cat_index.category_id = ' . $categoryId
-            . ' AND cat_index.store_id = ' . $storeId
+            . ' AND cat_index.store_id = ' . $storeId,
+            []
         );
         foreach ($searchOrders as $field => $dir) {
             if ($field === 'name') {
-                $selectColumns[] = 'p.value AS name';
+                $selectColumns[] = 'product_var.value AS name';
 
                 $query->join(
-                    ['p' => $this->collection->getTable('catalog_product_entity_varchar')],
-                    'p.row_id = e.row_id ' .
-                    'AND p.attribute_id = (' .
-                    'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")'
+                    ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
+                    'product_var.row_id = e.row_id ' .
+                    'AND product_var.attribute_id = (' .
+                    'SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code="name")',
+                    []
                 );
             } elseif ($field === 'price') {
                 $selectColumns[] = 'price_index.max_price AS price';
@@ -220,7 +223,8 @@ class SearchResultApplier implements SearchResultApplierInterface
                     'price_index.entity_id = e.entity_id'
                     . ' AND price_index.customer_group_id = 0'
                     . ' AND price_index.website_id = (Select website_id FROM store WHERE store_id = '
-                    . $storeId . ')'
+                    . $storeId . ')',
+                    []
                 );
             }
             if (in_array($field, $defaultColumnsFilter, true)) {
