@@ -22,6 +22,11 @@
                 <tbody class="<?= /* @noEscape */ $_i%2 ? 'odd' : 'even' ?>">
                     <?= $block->getItemHtml($_item) ?>
                     <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
+                    <?php $item = $_item->getOrderItem(); ?>
+                    <?php if ($item->getQtyShipped()): ?>
+                        <input type="hidden" name="shipment[items][<?= $_item->getId()?>]"
+                               value="<?= /** @noEscape */ (float) $item->getQtyShipped(); ?>">
+                    <?php endif; ?>
                 </tbody>
             <?php endif; ?>
         <?php endforeach; ?>
