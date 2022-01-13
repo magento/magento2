@@ -479,31 +479,28 @@ class SortingTest extends TestCase
      * @param string $sortBy
      * @param string $direction
      * @param array $expected
+     * @param string $defaultSortBy
      * @return void
      */
     public function testProductListOutOfStockSortOrderBySaleability(
         string $sortBy,
         string $direction,
-        array $expected
+        array $expected,
+        string $defaultSortBy
     ): void {
-        $this->updateConfigShowOutOfStockFlag(1);
-        $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
-    }
-
-    /**
-     * Updates store config 'cataloginventory/options/show_out_of_stock' flag.
-     *
-     * @param int $showOutOfStock
-     * @return void
-     */
-    private function updateConfigShowOutOfStockFlag(int $showOutOfStock): void
-    {
+        $this->scopeConfig->setValue(
+            Config::XML_PATH_LIST_DEFAULT_SORT_BY,
+            $defaultSortBy,
+            ScopeInterface::SCOPE_STORE,
+            Store::DEFAULT_STORE_ID
+        );
         $this->scopeConfig->setValue(
             Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-            $showOutOfStock,
+            1,
             ScopeInterface::SCOPE_STORE,
             \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
         );
+        $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
     /**
@@ -514,15 +511,41 @@ class SortingTest extends TestCase
     public function productListWithShowOutOfStockSortOrderDataProvider(): array
     {
         return [
+            'default_order_price_asc' => [
+                'sort' => 'price',
+                'direction' => 'ASC',
+                'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
+                'default_sort' => 'position'
+            ],
+            'default_order_price_desc' => [
+                'sort' => 'price',
+                'direction' => 'DESC',
+                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
+                'default_sort' => 'position'
+            ],
+            'default_order_position_asc' => [
+                'sort' => 'position',
+                'direction' => 'ASC',
+                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
+                'default_sort' => 'price'
+            ],
+            'default_order_position_desc' => [
+                'sort' => 'position',
+                'direction' => 'DESC',
+                'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
+                'default_sort' => 'price'
+            ],
             'default_order_name_asc' => [
                 'sort' => 'name',
                 'direction' => 'ASC',
                 'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
+                'default_sort' => 'price'
             ],
             'default_order_name_desc' => [
                 'sort' => 'name',
                 'direction' => 'DESC',
                 'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
+                'default_sort' => 'price'
             ],
         ];
     }

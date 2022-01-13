@@ -187,8 +187,8 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         $storeId = $this->collection->getStoreId();
         $searchCriteria = $this->searchResult->getSearchCriteria();
-        $searchOrders = $searchCriteria->getSortOrders();
-        $searchOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $searchOrders);
+        $sortOrders = $searchCriteria->getSortOrders();
+        $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
         $defaultColumnsFilter = ['is_salable', 'position', 'name', 'price', 'entity_id'];
 
         $connection = $this->collection->getConnection();
@@ -211,7 +211,7 @@ class SearchResultApplier implements SearchResultApplierInterface
             . ' AND cat_index.store_id = ' . $storeId,
             ['cat_index.position AS cat_index_position']
         );
-        foreach ($searchOrders as $field => $dir) {
+        foreach ($sortOrders as $field => $dir) {
             if ($field === 'name') {
                 $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
                 $linkField = $entityMetadata->getLinkField();
