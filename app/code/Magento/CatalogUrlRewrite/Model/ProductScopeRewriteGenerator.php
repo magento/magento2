@@ -171,11 +171,6 @@ class ProductScopeRewriteGenerator
     public function generateForSpecificStoreView($storeId, $productCategories, Product $product, $rootCategoryId = null)
     {
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
-
-        if (!$this->isGlobalScope($storeId) && !$this->isProductBelongToStore($product, $storeId)) {
-            return $mergeDataProvider->getData();
-        }
-
         $categories = [];
         foreach ($productCategories as $category) {
             if (!$this->isCategoryProperForGenerating($category, $storeId)) {
@@ -280,16 +275,5 @@ class ProductScopeRewriteGenerator
     private function isCategoryRewritesEnabled()
     {
         return (bool)$this->config->getValue('catalog/seo/generate_category_product_rewrites');
-    }
-
-    /**
-     * Check if product is available for specified storeId
-     *
-     * @param Product $product
-     * @param int $storeId
-     * @return bool
-     */
-    private function isProductBelongToStore(Product $product, int $storeId): bool {
-        return in_array($storeId, $product->getStoreIds());
     }
 }
