@@ -138,7 +138,7 @@
         </actionGroup>
 
         <!-- Click 'Create Order' -->
-        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+        <actionGroup ref="AdminClickCreateOrderButtonOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
 
         <!-- Add configure to first product -->
         <click selector="{{AdminCustomerActivitiesComparisonListSection.addToOrderConfigure($$createFirstConfigProduct.name$$)}}" stepKey="configureFirstProduct"/>

@@ -98,7 +98,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickEditButton"/>
 
         <!-- Click create order -->
-        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+        <actionGroup ref="AdminClickCreateOrderButtonOnEditCustomerPageActionGroup" stepKey="clickCreateOrder"/>
 
         <!-- Add configure to bundle product -->
         <click selector="{{AdminCustomerActivitiesRecentlyViewedSection.addToOrderConfigure($$createBundleProduct.name$$)}}" stepKey="configureProduct"/>
