@@ -183,6 +183,7 @@ class ReadHandler implements AttributeInterface
                     if ($attributeScopeGlobal[$attributeValue['attribute_id']] &&
                         (int)$attributeValue['store_id'] !== Store::DEFAULT_STORE_ID
                     ) {
+                        $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                         continue;
                     }
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
