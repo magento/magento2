@@ -47,7 +47,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param Collection $collection
