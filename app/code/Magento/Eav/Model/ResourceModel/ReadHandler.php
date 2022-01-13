@@ -180,7 +180,7 @@ class ReadHandler implements AttributeInterface
             $attributes = $connection->fetchAll($orderedUnionSelect);
             foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
-                    if (isset($attributeScopeGlobal[$attributeValue['attribute_id']]) &&
+                    if ($attributeScopeGlobal[$attributeValue['attribute_id']] &&
                         (int)$attributeValue['store_id'] !== Store::DEFAULT_STORE_ID
                     ) {
                         continue;
