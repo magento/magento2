@@ -270,7 +270,7 @@ class Processor
         $errorPath = strpos($errorDir, $indexDir) === 0 ?
             str_replace($indexDir, '', $errorDir) : $errorPathSuffix;
 
-        return ltrim($this->getBaseUrl() . $errorPath . $this->_config->skin . '/','.');
+        return $this->getBaseUrl() . $errorPath . $this->_config->skin . '/';
     }
 
     /**
