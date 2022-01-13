@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportDownloadableProductsWithUrlLinksTest">
+
+        <before>
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copySmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyThumbnailImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+            </helper>
+
+            <!-- Copy Images to Import Directory for Downloadable Links -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
+                <argument name="path">{"local":"pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}","s3":"media/import/{{ImportProduct_Downloadable_UrlLinks.name}}"}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyImportFile">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.fileName}}</argument>
+                <argument name="destination">{"local":"pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.fileName}}","s3":"media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.fileName}}"}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyBaseImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.baseImage}}</argument>
+                <argument name="destination">{"local":"pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}","s3":"media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.baseImage}}"}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copySmallImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.smallImage}}</argument>
+                <argument name="destination">{"local":"pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}","s3":"media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.smallImage}}"}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="copyFromLocal" stepKey="copyThumbnailImage3">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}</argument>
+                <argument name="destination">{"local":"pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}","s3":"media/import/{{ImportProduct_Downloadable_UrlLinks.name}}/{{ImportProduct_Downloadable_UrlLinks.thumbnailImage}}"}</argument>
+            </helper>
+        </before>
+
+        <after>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\FileAssertions" method="deleteDirectory" stepKey="deleteDownloadableLinkFilesDirectory">
+                <argument name="path">{"local":"pub/media/import/{{ImportProduct_Downloadable_UrlLinks.name}}","s3":"media/import/{{ImportProduct_Downloadable_UrlLinks.name}}"}</argument>
+            </helper>
+        </after>
+    </test>
+</tests>
