@@ -628,6 +628,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
@@ -642,6 +643,10 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {
             return '';
+        }
+        try {
+            $this->validateWidgetParameters($container);
+        } catch (LocalizedException $e) {
         }
         $parameters = $this->getWidgetParameters();
         $xml = '<body><referenceContainer name="' . $container . '">';
