@@ -92,7 +92,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
-        $bindingId = 'binding1';
+        $bindingId = 'queue--topology.config.queue--overlapping.topic.declaration';
         $this->assertArrayHasKey($bindingId, $bindings);
         $binding = $bindings[$bindingId];
         $this->assertEquals('queue', $binding->getDestinationType());
@@ -103,7 +103,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
-        $bindingId = 'binding2';
+        $bindingId = 'queue--topology.config.queue--deprecated.config.async.string.topic';
         $this->assertArrayHasKey($bindingId, $bindings);
         $binding = $bindings[$bindingId];
         $this->assertEquals('queue', $binding->getDestinationType());
