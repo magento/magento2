@@ -16,6 +16,8 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ValidatorInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Creditmemo QuantityValidator
@@ -74,23 +76,13 @@ class QuantityValidator implements ValidatorInterface
 
         $totalQuantity = 0;
         foreach ($entity->getItems() as $item) {
-            if (!isset($orderItemsById[$item->getOrderItemId()])) {
-                $messages[] = __(
-                    'The creditmemo contains product SKU "%1" that is not part of the original order.',
-                    $item->getSku()
-                );
-                continue;
-            }
-            $orderItem = $orderItemsById[$item->getOrderItemId()];
-
-            if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
-                !$this->isQtyAvailable($orderItem, $item->getQty())
-            ) {
-                $messages[] =__(
-                    'The quantity to creditmemo must not be greater than the unrefunded quantity'
-                    . ' for product SKU "%1".',
-                    $orderItem->getSku()
-                );
+            $message = $this->validateTotalQuantityRefundable(
+                $orderItemsById,
+                $item,
+                $invoiceQtysRefundLimits
+            );
+            if ($message) {
+                $messages[] = $message;
             } else {
                 $totalQuantity += $item->getQty();
             }
@@ -103,6 +95,60 @@ class QuantityValidator implements ValidatorInterface
         }
 
         return $messages;
+    }
+
+    /**
+     * To check the refund qty is decimal if getIsQtyDecimal is unset.
+     *
+     * @param mixed $isQtyDecimal
+     * @param float $itemQty
+     * @return bool
+     */
+    private function isValidDecimalRefundQty($isQtyDecimal, float $itemQty): bool
+    {
+        if (!$isQtyDecimal && (floor($itemQty) !== $itemQty)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Calculate total quantity.
+     *
+     * @param array $orderItemsById
+     * @param CreditmemoItemInterface $item
+     * @param array $invoiceQtysRefundLimits
+     * @return Phrase|void
+     */
+    private function validateTotalQuantityRefundable(
+        array $orderItemsById,
+        CreditmemoItemInterface $item,
+        array $invoiceQtysRefundLimits
+    ) {
+        if (!isset($orderItemsById[$item->getOrderItemId()])) {
+            return __(
+                'The creditmemo contains product SKU "%1" that is not part of the original order.',
+                $item->getSku()
+            );
+        }
+        $orderItem = $orderItemsById[$item->getOrderItemId()];
+
+        if (!$this->isValidDecimalRefundQty($orderItem->getIsQtyDecimal(), $item->getQty())) {
+            return __(
+                'We found an invalid quantity to refund item "%1".',
+                $orderItem->getSku()
+            );
+        }
+
+        if (!$this->canRefundItem($orderItem, $item->getQty(), $invoiceQtysRefundLimits) ||
+            !$this->isQtyAvailable($orderItem, $item->getQty())
+        ) {
+            return __(
+                'The quantity to creditmemo must not be greater than the unrefunded quantity'
+                . ' for product SKU "%1".',
+                $orderItem->getSku()
+            );
+        }
     }
 
     /**
