@@ -39,8 +39,8 @@ use Magento\Customer\Model\Customer;
  */
 class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 {
-    const NEW_CUSTOMER_EMAIL = 'new.customer@example.com';
-    const CUSTOMER_ID = 1;
+    private const NEW_CUSTOMER_EMAIL = 'new.customer@example.com';
+    private const CUSTOMER_ID = 1;
 
     /** @var AccountManagementInterface */
     private $accountManagement;
@@ -685,7 +685,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $customerOrders = $this->orderRepository->getList($searchCriteria);
 
         foreach ($customerOrders as $customerOrder) {
-            $this->assertEquals('customer@null.com', $customerOrder->getCustomerEmail());
+            $this->assertEquals('customer@example.com', $customerOrder->getCustomerEmail());
         }
     }
 }
