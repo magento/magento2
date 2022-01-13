@@ -186,7 +186,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         $selections = explode(
             Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            $rowData['bundle_values']
+            str_replace('?', '', $rowData['bundle_values'])
         );
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
