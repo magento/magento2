@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,7 +10,7 @@ $category->isObjectNew(true);
 $category->setId(
     333
 )->setCreatedAt(
-    '2014-06-23 09:50:07'
+    '2021-01-14 09:50:07'
 )->setName(
     'Category 1'
 )->setParentId(
@@ -19,9 +20,11 @@ $category->setId(
 )->setLevel(
     2
 )->setAvailableSortBy(
-    ['position', 'name']
+    ['position', 'name', 'price']
 )->setDefaultSortBy(
     'name'
+)->addData(
+    ['available_sort_by' => 'position,name,price']
 )->setIsActive(
     true
 )->setPosition(

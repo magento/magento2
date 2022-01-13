@@ -51,7 +51,7 @@ for ($i = 1; $i <= 3; $i++) {
             ->setId($productId)
             ->setAttributeSetId($attributeSetId)
             ->setWebsiteIds([1])
-            ->setName('Configurable Option' . $option->getLabel())
+            ->setName('Configurable Option_' . $productId)
             ->setSku('simple_' . $productId)
             ->setPrice($productId)
             ->setTestConfigurable($option->getValue())
@@ -72,7 +72,7 @@ for ($i = 1; $i <= 3; $i++) {
         $stockItem->setUseConfigManageStock(1);
         $stockItem->setQty(1000);
         $stockItem->setIsQtyDecimal(0);
-        $stockItem->setIsInStock($is_in_stock);
+        $stockItem->setIsInStock(1);
         $stockItem->save();
 
         $attributeValues[] = [
@@ -140,7 +140,7 @@ for ($i = 1; $i <= 3; $i++) {
         ->setSku('configurable_' . $i)
         ->setVisibility(Visibility::VISIBILITY_BOTH)
         ->setStatus(Status::STATUS_ENABLED)
-        ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => $is_in_stock]);
+        ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 
     $productRepository->save($product);
 

@@ -14,6 +14,11 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/category.php');
+Resolver::getInstance()->requireDataFixture(
+    'Magento/ConfigurableProduct/_files/product_configurable_stock_status.php'
+);
+
 try {
     $objectManager = Bootstrap::getObjectManager();
 
@@ -30,13 +35,9 @@ try {
         ScopeInterface::SCOPE_DEFAULT,
         0
     );
+
     $registry->unregister('isSecureArea');
     $registry->register('isSecureArea', false);
-
-    Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
-    Resolver::getInstance()->requireDataFixture(
-        'Magento/ConfigurableProduct/_files/product_configurable_stock_status.php'
-    );
 
     /** @var CategoryLinkManagementInterface $categoryLinkManagement */
     $categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\ListProduct;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Model\Config;
@@ -69,6 +70,11 @@ class SortingTest extends TestCase
     private $scopeConfig;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -81,6 +87,7 @@ class SortingTest extends TestCase
         $this->categoryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->scopeConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
         parent::setUp();
     }
 
@@ -336,7 +343,8 @@ class SortingTest extends TestCase
     {
         $this->assertArrayHasKey($sortBy, $this->block->getAvailableOrders());
         $this->assertEquals($sortBy, $this->block->getSortBy());
-        $this->assertEquals($expectation, $this->block->getLoadedProductCollection()->getColumnValues('sku'));
+        $skus = $this->block->getLoadedProductCollection()->getColumnValues('sku');
+        $this->assertEquals($expectation, $skus);
     }
 
     /**
@@ -474,7 +482,6 @@ class SortingTest extends TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_category_and_stock_status.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListWithShowOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -500,6 +507,11 @@ class SortingTest extends TestCase
             ScopeInterface::SCOPE_STORE,
             \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
         );
+        foreach (['simple_102', 'simple_202', 'configurable_2'] as $sku) {
+            $product = $this->productRepository->get($sku);
+            $product->setStockData(['is_in_stock' => 0]);
+            $this->productRepository->save($product);
+        }
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
     }
 
@@ -527,25 +539,25 @@ class SortingTest extends TestCase
                 'sort' => 'position',
                 'direction' => 'ASC',
                 'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
-                'default_sort' => 'price'
+                'default_sort' => 'name'
             ],
             'default_order_position_desc' => [
                 'sort' => 'position',
                 'direction' => 'DESC',
-                'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
-                'default_sort' => 'price'
+                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
+                'default_sort' => 'name'
             ],
             'default_order_name_asc' => [
                 'sort' => 'name',
                 'direction' => 'ASC',
                 'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
-                'default_sort' => 'price'
+                'default_sort' => 'position'
             ],
             'default_order_name_desc' => [
                 'sort' => 'name',
                 'direction' => 'DESC',
                 'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
-                'default_sort' => 'price'
+                'default_sort' => 'position'
             ],
         ];
     }

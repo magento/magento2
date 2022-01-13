@@ -80,7 +80,6 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         if (empty($this->searchResult->getItems())) {
             $this->collection->getSelect()->where('NULL');
-
             return;
         }
 
@@ -141,7 +140,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     }
 
     /**
-     * Fetch filtered product ids sorted by the salability and other applied sort orders
+     * Fetch filtered product ids sorted by the saleability and other applied sort orders
      *
      * @return array
      */
@@ -215,14 +214,14 @@ class SearchResultApplier implements SearchResultApplierInterface
             if ($field === 'name') {
                 $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
                 $linkField = $entityMetadata->getLinkField();
-                $query->join(
+                $query->joinLeft(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
                     "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
                     (SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code='name')",
                     ['product_var.value AS name']
                 );
             } elseif ($field === 'price') {
-                $query->join(
+                $query->joinLeft(
                     ['price_index' => $this->collection->getTable('catalog_product_index_price')],
                     'price_index.entity_id = e.entity_id'
                     . ' AND price_index.customer_group_id = 0'
@@ -251,6 +250,9 @@ class SearchResultApplier implements SearchResultApplierInterface
      */
     private function hasShowOutOfStockStatus(): bool
     {
-        return (bool) $this->scopeConfig->getValue('cataloginventory/options/show_out_of_stock');
+        return (bool) $this->scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }
