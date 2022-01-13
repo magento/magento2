@@ -15,6 +15,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -66,7 +67,7 @@ class ReadHandlerTest extends TestCase
         $this->configMock = $args['config'];
         $this->scopeResolverMock = $args['scopeResolver'];
 
-        $scopeMock = $this->getMockBuilder(\Magento\Framework\Model\Entity\ScopeInterface::class)
+        $scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fallback = clone $scopeMock;

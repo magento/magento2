@@ -19,6 +19,7 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\Model\Entity\ScopeResolver;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -180,12 +181,9 @@ class ReadHandler implements AttributeInterface
             foreach ($attributes as $attributeValue) {
                 if (isset($attributesMap[$attributeValue['attribute_id']])) {
                     if (isset($attributeScopeGlobal[$attributeValue['attribute_id']]) &&
-                        $attributeScopeGlobal[$attributeValue['attribute_id']]
+                        (int)$attributeValue['store_id'] !== Store::DEFAULT_STORE_ID
                     ) {
-                        if ((int)$attributeValue['store_id'] !== \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
-                            continue;
-                        }
-                        $entityData[$attributesMap[$attributeValue['attribute_id']]] =  $attributeValue['value'];
+                        continue;
                     }
                     $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
                 } else {

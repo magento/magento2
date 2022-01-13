@@ -255,20 +255,15 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $this->getEntity()->getType(),
             $valueInfo['attribute_id']
         );
-        $attributeCode = $attribute->getAttributeCode();
         if ((int)$attribute->getIsGlobal() === ScopedAttributeInterface::SCOPE_GLOBAL) {
-            $entityLinkField = $this->getEntity()->getLinkField();
-            $attributeTable = $attribute->getBackend()->getTable();
-            $linkField = $attribute->getEntity()->getLinkField();
-
             $select = $this->getConnection()->select()
                 ->from(
                     ['e' => $this->getEntity()->getEntityTable()],
                     ['entity_id']
                 )
                 ->join(
-                    ['t_d' => $attributeTable],
-                    "e.{$entityLinkField} = t_d.{$linkField}",
+                    ['t_d' => $attribute->getBackend()->getTable()],
+                    "e.{$this->getEntity()->getLinkField()} = t_d.{$attribute->getEntity()->getLinkField()}",
                     ['t_d.value']
                 )->where(
                     " e.entity_id = ?",
@@ -290,7 +285,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         }
 
         foreach ($this->_itemsById[$entityId] as $object) {
-            $object->setData($attributeCode, $valueInfo['value']);
+            $object->setData($attribute->getAttributeCode(), $valueInfo['value']);
         }
 
         return $this;
