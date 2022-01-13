@@ -643,7 +643,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {
             return '';
         }
-        $this->validateWidgetParameters($container);
         $parameters = $this->getWidgetParameters();
         $xml = '<body><referenceContainer name="' . $container . '">';
         $template = '';
