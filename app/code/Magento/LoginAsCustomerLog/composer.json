@@ -2,7 +2,7 @@
     "name": "magento/module-login-as-customer-log",
     "description": "",
     "require": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-customer": "*",
