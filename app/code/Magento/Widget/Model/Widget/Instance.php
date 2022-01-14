@@ -628,7 +628,6 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @throws LocalizedException
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
@@ -644,12 +643,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         if (!$this->getId() && !$this->isCompleteToCreate() || $templatePath && !is_readable($templateFilename)) {
             return '';
         }
-        try {
-            $this->validateWidgetParameters($container);
-        } catch (LocalizedException $e) {
-            throw new LocalizedException(__('Layout update is invalid'));
-        }
         $parameters = $this->getWidgetParameters();
+        $this->validateWidgetParameters($container);
         $xml = '<body><referenceContainer name="' . $container . '">';
         $template = '';
         if (isset($parameters['template'])) {
