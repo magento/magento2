@@ -15,5 +15,7 @@
         <font src="fonts/Luma-Icons.woff2"/>
         <link rel="preload" as="image" src="images/logo.svg" />
         <link rel="preload" as="style" src="css/styles-m.css" />
+        <link rel="preload" as="style" src="css/styles-a.css" />
+        <css src="css/styles-b.css"/>
     </head>
 </page>
