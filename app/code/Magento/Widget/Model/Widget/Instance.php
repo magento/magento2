@@ -647,7 +647,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         try {
             $this->validateWidgetParameters($container);
         } catch (LocalizedException $e) {
-            throw new LocalizedException(__('Invalid Parameter'));
+            throw new LocalizedException(__('Layout update is invalid'));
         }
         $parameters = $this->getWidgetParameters();
         $xml = '<body><referenceContainer name="' . $container . '">';
