@@ -778,7 +778,6 @@ class Config
         $attributes = [];
         if ($attributesData === null) {
             if ($attributeSetId) {
-                $attributeCollection = $this->_universalFactory->create($entityType->getEntityAttributeCollection());
                 $attributesData = $attributeCollection->setEntityTypeFilter(
                     $entityType
                 )->setAttributeSetFilter(
