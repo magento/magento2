@@ -392,14 +392,7 @@ class Renderer implements RendererInterface
                 }
                 break;
 
-            case 'css':
-                if (strpos($attributes, 'rel="preload"') !== false) {
-                    $groupTemplate = '<link rel="preload" as="style" href="%s" />' . "\n" . '<link' . $attributes . ' href="%s" />' . "\n";
-                } else {
-                    $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
-                }
-                break;
-                
+            case 'css':                
             default:
                 $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
                 break;
