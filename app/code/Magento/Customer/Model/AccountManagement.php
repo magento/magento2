@@ -28,6 +28,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
@@ -55,7 +56,6 @@ use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\AuthorizationInterface;
 
 /**
  * Handle various customer account actions
@@ -424,6 +424,8 @@ class AccountManagement implements AccountManagementInterface
      * @param AllowedCountries|null $allowedCountriesReader
      * @param SessionCleanerInterface|null $sessionCleaner
      * @param AuthorizationInterface|null $authorization
+     * @param AuthenticationInterface|null $authentication
+     * @param Backend|null $eavValidator
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -465,7 +467,9 @@ class AccountManagement implements AccountManagementInterface
         GetCustomerByToken $getByToken = null,
         AllowedCountries $allowedCountriesReader = null,
         SessionCleanerInterface $sessionCleaner = null,
-        AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization = null,
+        AuthenticationInterface $authentication = null,
+        Backend $eavValidator = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -506,22 +510,8 @@ class AccountManagement implements AccountManagementInterface
             ?: $objectManager->get(AllowedCountries::class);
         $this->sessionCleaner = $sessionCleaner ?? $objectManager->get(SessionCleanerInterface::class);
         $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
-    }
-
-    /**
-     * Get authentication
-     *
-     * @return AuthenticationInterface
-     */
-    private function getAuthentication()
-    {
-        if (!($this->authentication instanceof AuthenticationInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Customer\Model\AuthenticationInterface::class
-            );
-        } else {
-            return $this->authentication;
-        }
+        $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
+        $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
     }
 
     /**
@@ -617,11 +607,11 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customerId = $customer->getId();
-        if ($this->getAuthentication()->isLocked($customerId)) {
+        if ($this->authentication->isLocked($customerId)) {
             throw new UserLockedException(__('The account is locked.'));
         }
         try {
-            $this->getAuthentication()->authenticate($customerId, $password);
+            $this->authentication->authenticate($customerId, $password);
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
@@ -1056,7 +1046,7 @@ class AccountManagement implements AccountManagementInterface
     private function changePasswordForCustomer($customer, $currentPassword, $newPassword)
     {
         try {
-            $this->getAuthentication()->authenticate($customer->getId(), $currentPassword);
+            $this->authentication->authenticate($customer->getId(), $currentPassword);
         } catch (InvalidEmailOrPasswordException $e) {
             throw new InvalidEmailOrPasswordException(
                 __("The password doesn't match this account. Verify the password and try again.")
@@ -1088,19 +1078,6 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Get EAV validator
-     *
-     * @return Backend
-     */
-    private function getEavValidator()
-    {
-        if ($this->eavValidator === null) {
-            $this->eavValidator = ObjectManager::getInstance()->get(Backend::class);
-        }
-        return $this->eavValidator;
-    }
-
-    /**
      * @inheritdoc
      */
     public function validate(CustomerInterface $customer)
@@ -1113,13 +1090,13 @@ class AccountManagement implements AccountManagementInterface
         );
         $customer->setAddresses($oldAddresses);
 
-        $result = $this->getEavValidator()->isValid($customerModel);
-        if ($result === false && is_array($this->getEavValidator()->getMessages())) {
+        $result = $this->eavValidator->isValid($customerModel);
+        if ($result === false && is_array($this->eavValidator->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
-                    array_values($this->getEavValidator()->getMessages())
+                    array_values($this->eavValidator->getMessages())
                 )
             );
         }
@@ -1487,15 +1464,14 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-        if (is_string($passwordLinkToken)) {
-            $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $customerSecure->setRpToken($passwordLinkToken);
-            $customerSecure->setRpTokenCreatedAt(
-                $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
-            );
-            $this->setIgnoreValidationFlag($customer);
-            $this->customerRepository->save($customer);
-        }
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
+        $customerSecure->setRpToken($passwordLinkToken);
+        $customerSecure->setRpTokenCreatedAt(
+            $this->dateTimeFactory->create()->format(DateTime::DATETIME_PHP_FORMAT)
+        );
+        $this->setIgnoreValidationFlag($customer);
+        $this->customerRepository->save($customer);
+
         return true;
     }
 
