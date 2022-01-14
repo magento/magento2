@@ -392,7 +392,7 @@ class Renderer implements RendererInterface
                 }
                 break;
 
-            case 'css':                
+            case 'css':
             default:
                 $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
                 break;
