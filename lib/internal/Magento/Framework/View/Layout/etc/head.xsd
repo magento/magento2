@@ -25,7 +25,6 @@
                 <xs:restriction base="xs:string">
                     <xs:enumeration value="font" />
                     <xs:enumeration value="script" />
-                    <xs:enumeration value="style" /> 
                     <xs:enumeration value="image" />                     
                     <xs:enumeration value="fetch" />
                 </xs:restriction>
