@@ -12,8 +12,8 @@
         <annotations>
             <features value="Tax"/>
             <stories value="Order taxes"/>
-            <title value="FPT correct Total amount in Order Summary section for multiple product amount"/>
-            <description value="Tax information is calculated properly when order contains multiple amount of the product"/>
+            <title value="Correct subtotal including FPT in product information section of order summary"/>
+            <description value="Tax information is calculated properly in product information section when order contains multiple amount of the product"/>
             <severity value="CRITICAL"/>
             <useCaseId value="ACP2E-350"/>
             <testCaseId value="AC-2110"/>
@@ -37,12 +37,10 @@
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
 
-            <!--  Simple product is created  Price = 100 -->
+            <!--  Simple product is created with Price = 100 and FPT = 2 for Germany -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">100.00</field>
             </createData>
-
-            <!-- FPT for Germany is set to 2 -->
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
                 <argument name="productId" value="$createSimpleProduct.id$"/>
             </actionGroup>
@@ -61,7 +59,7 @@
             <!-- Return Tax configuration including FPT to default status -->
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <createData entity="WeeeConfigDisable" stepKey="useSystemValueFTP"/>
-            <!-- Delete product and clear products filter-->
+            <!-- Delete product and clear products filter -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
@@ -72,8 +70,9 @@
         <!--  Test Steps  -->
 
         <!--  Add simple product with qty 100 to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="productName" value="$createSimpleProduct.name$"/>
             <argument name="productQty" value="100"/>
@@ -90,8 +89,7 @@
 
         <!-- Select shipping and payment methods -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" stepKey="waitNextButtonAppears"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
 
         <!-- Open summary section for product -->
