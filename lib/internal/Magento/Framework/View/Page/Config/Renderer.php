@@ -360,11 +360,7 @@ class Renderer implements RendererInterface
         }
 
         if ($contentType === 'css') {
-            if (strpos($attributes, 'rel="preload"') !== false) {
-                return $attributes;
-            } else {
-                return ' rel="stylesheet" type="text/css"' . ($attributes ?: ' media="all"');
-            }
+            return ' rel="stylesheet" type="text/css"' . ($attributes ?: ' media="all"');
         }
 
         if ($this->canTypeBeFont($contentType)) {
@@ -397,6 +393,13 @@ class Renderer implements RendererInterface
                 break;
 
             case 'css':
+                if (strpos($attributes, 'rel="preload"') !== false) {
+                    $groupTemplate = '<link rel="preload" as="style" href="%s" />' . "\n" . '<link' . $attributes . ' href="%s" />' . "\n";
+                } else {
+                    $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
+                }
+                break;
+                
             default:
                 $groupTemplate = '<link' . $attributes . ' href="%s" />' . "\n";
                 break;
