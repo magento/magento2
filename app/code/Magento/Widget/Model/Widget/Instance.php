@@ -644,8 +644,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             return '';
         }
         $parameters = $this->getWidgetParameters();
-        $this->validateWidgetParameters($container);
-        $xml = '<body><referenceContainer name="' . $container . '">';
+        $xml = '<body><referenceContainer name="' . $this->_escaper->escapeHtmlAttr($container) . '">';
         $template = '';
         if (isset($parameters['template'])) {
             unset($parameters['template']);
