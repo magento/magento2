@@ -186,7 +186,7 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         $storeId = $this->collection->getStoreId();
         $searchCriteria = $this->searchResult->getSearchCriteria();
-        $sortOrders = $searchCriteria->getSortOrders();
+        $sortOrders = $searchCriteria->getSortOrders() ?? [];
         $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
         $defaultColumnsFilter = ['is_salable', 'position', 'name', 'price', 'entity_id'];
 
