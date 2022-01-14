@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Import entity of bundle product type
+ *
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -29,25 +28,25 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Delimiter before product option value.
      */
-    const BEFORE_OPTION_VALUE_DELIMITER = ';';
+    public const BEFORE_OPTION_VALUE_DELIMITER = ';';
 
-    const PAIR_VALUE_SEPARATOR = '=';
+    public const PAIR_VALUE_SEPARATOR = '=';
 
     /**
      * Dynamic value.
      */
-    const VALUE_DYNAMIC = 'dynamic';
+    public const VALUE_DYNAMIC = 'dynamic';
 
     /**
      * Fixed value.
      */
-    const VALUE_FIXED = 'fixed';
+    public const VALUE_FIXED = 'fixed';
 
-    const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
+    public const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
 
-    const SELECTION_PRICE_TYPE_FIXED = 0;
+    public const SELECTION_PRICE_TYPE_FIXED = 0;
 
-    const SELECTION_PRICE_TYPE_PERCENT = 1;
+    public const SELECTION_PRICE_TYPE_PERCENT = 1;
 
     /**
      * Array of cached options.
@@ -91,7 +90,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Custom fields mapping.
      *
-     * @inherited
+     * @var array
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',

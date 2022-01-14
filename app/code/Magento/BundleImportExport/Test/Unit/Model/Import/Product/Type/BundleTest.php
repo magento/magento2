@@ -131,7 +131,6 @@ class BundleTest extends AbstractImportTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->entityModel = $this->createPartialMock(
             Product::class,
             [
@@ -413,6 +412,66 @@ class BundleTest extends AbstractImportTestCase
         ]);
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
+    }
+
+    /**
+     * Test bundle values with question mark forfor method saveData()
+     *
+     * @return void
+     */
+    public function testSaveDataWithQuestionMark(): void
+    {
+        $this->entityModel->expects($this->any())->method('getBehavior')->willReturn(Import::BEHAVIOR_APPEND);
+        $this->entityModel->expects($this->once())->method('getNewSku')->willReturn([
+            'sku' => ['sku' => 'sku', 'entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'bundle']
+        ]);
+        $bundleMock = $this->createPartialMock(
+            Bundle::class,
+            [
+                'parseSelections'
+            ]
+        );
+        $rowData = ['bundle_values' => [
+            'name'=>'Sprite Stasis Ball Ball?',
+            'type'=>'radio',
+            'required' => 1,
+            'sku' => 'sku',
+            'price' => 0,
+            'default' => 1,
+            'default_qty' => 1.0000,
+            'price_type' => 'fixed',
+            'can_change_qty' => 1
+        ]];
+        $entityId = 3;
+        $bundleMock
+            ->method('parseSelections')
+            ->with($rowData,$entityId)
+            ->willReturn([
+                'bundle_values' =>
+                    [
+                        'name'=>'Sprite Stasis Ball Ball',
+                        'type'=>'radio',
+                        'required' => 1,
+                        'sku' => 'sku',
+                        'price' => 0,
+                        'default' => 1,
+                        'default_qty' => 1.0000,
+                        'price_type' => 'fixed',
+                        'can_change_qty' => 1
+                    ]
+            ]);
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
+        $select = $this->createMock(Select::class);
+        $this->connection->expects($this->any())->method('select')->willReturn($select);
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->willReturn([
+            ['id1', 'id2', 'id_3']
+        ]);
+        $bundle = $this->bundle->saveData();
+        $this->assertNotNull($bundle);
+
     }
 
     /**
