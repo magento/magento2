@@ -23,7 +23,7 @@
         </annotations>
 
         <before>
-            <!-- Preconditions  -->
+            <!-- Preconditions -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Store -> Configuration -> Sales -> Tax FPT Enable -->
             <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
@@ -31,13 +31,13 @@
             <magentoCLI command="config:set tax/weee/display_sales 2" stepKey="displayPricesInSalesExcludingIncluding"/>
             <magentoCLI command="config:set tax/weee/include_in_subtotal 1" stepKey="enableIncludeInSubtotal"/>
 
-            <!--  Fixed Product Tax attribute is created and added to default attribute set -->
+            <!-- Fixed Product Tax attribute is created and added to default attribute set -->
             <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
 
-            <!--  Simple product is created with Price = 100 and FPT = 2 for Germany -->
+            <!-- Simple product is created with Price = 100 and FPT = 2 for Germany -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">100.00</field>
             </createData>
@@ -67,9 +67,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <!--  Test Steps  -->
+        <!-- Test Steps -->
 
-        <!--  Add simple product with qty 100 to shopping cart -->
+        <!-- Add simple product with qty 100 to shopping cart -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
