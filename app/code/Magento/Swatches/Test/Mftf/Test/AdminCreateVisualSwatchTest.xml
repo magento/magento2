@@ -33,6 +33,13 @@
             <click selector="{{AdminManageSwatchSection.nthDelete('3')}}" stepKey="deleteSwatch3"/>
             <waitForPageLoad stepKey="waitToClickSave"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
+            <waitForPageLoad stepKey="waitForSave"/>
+
+            <!-- Change back to dropdown -->
+            <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="select" stepKey="selectDropdown"/>
+            <waitForPageLoad stepKey="waitToClickSave2"/>
+            <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit2"/>
+            <waitForPageLoad stepKey="waitForSave2"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>

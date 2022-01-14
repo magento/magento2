@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31239"/>
             <group value="SearchEngineElasticsearch" />
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create product attribute with 3 options -->

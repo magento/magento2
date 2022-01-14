@@ -2,7 +2,7 @@
     "name": "magento/module-remote-storage",
     "description": "N/A",
     "require": {
-        "php": "~7.4.0||~8.0.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*"
     },
     "suggest": {
@@ -12,6 +12,8 @@
         "magento/module-downloadable": "*",
         "magento/module-catalog": "*",
         "magento/module-media-storage": "*",
+        "magento/module-media-gallery-metadata": "*",
+        "magento/module-media-gallery-synchronization": "*",
         "magento/module-import-export": "*",
         "magento/module-catalog-import-export": "*",
         "magento/module-downloadable-import-export": "*",
