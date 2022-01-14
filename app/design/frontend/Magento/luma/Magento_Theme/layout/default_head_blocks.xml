@@ -20,6 +20,6 @@
         <css src="css/styles-b.css"/>
         <css src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/7.4.1/swiper-bundle.min.css" src_type="url"/>
         <link rel="preload" as="style" src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/7.4.1/swiper-bundle.min.css" />
-        <css src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" src_type="url"/>
+        <css src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     </head>
 </page>
