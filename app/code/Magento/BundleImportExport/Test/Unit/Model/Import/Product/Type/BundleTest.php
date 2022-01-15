@@ -445,7 +445,7 @@ class BundleTest extends AbstractImportTestCase
         $entityId = 3;
         $bundleMock
             ->method('parseSelections')
-            ->with($rowData,$entityId)
+            ->with($rowData, $entityId)
             ->willReturn([
                 'bundle_values' =>
                     [
@@ -471,7 +471,6 @@ class BundleTest extends AbstractImportTestCase
         ]);
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
-
     }
 
     /**

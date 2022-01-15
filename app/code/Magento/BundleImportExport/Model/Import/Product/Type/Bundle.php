@@ -1,7 +1,5 @@
 <?php
 /**
- *
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -88,7 +86,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Custom fields mapping.
+     * Custom fields mapping for bundle product.
      *
      * @var array
      */
@@ -101,7 +99,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Bundle field mapping.
+     * Bundle field mapping for bundle product with selection.
      *
      * @var array
      */
@@ -112,7 +110,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
-     * Option type mapping.
+     * Option type mapping for bundle product.
      *
      * @var array
      */
