@@ -63,18 +63,7 @@ class Request
      * @param string $contentTypeHeader
      * @param string $requestBodyString
      * @param string $requestUrl
-     * @return array
-     * merged array of oauth protocols and request parameters. eg :
-     * <pre>
-     * array (
-     *         'oauth_version' => '1.0',
-     *         'oauth_signature_method' => 'HMAC-SHA1',
-     *         'oauth_nonce' => 'rI7PSWxTZRHWU3R',
-     *         'oauth_timestamp' => '1377183099',
-     *         'oauth_consumer_key' => 'a6aa81cc3e65e2960a4879392445e718',
-     *         'oauth_signature' => 'VNg4mhFlXk7%2FvsxMqqUd5DWIj9s%3D'
-     * )
-     * </pre>
+     * @return array Merged array of oauth protocols and request parameters.
      */
     protected function _processRequest($authHeaderValue, $contentTypeHeader, $requestBodyString, $requestUrl)
     {
@@ -84,7 +73,9 @@ class Request
             return [];
         }
 
-        if ($contentTypeHeader && 0 === strpos($contentTypeHeader, \Zend_Http_Client::ENC_URLENCODED)) {
+        if ($requestBodyString !== null && $contentTypeHeader &&
+            0 === strpos($contentTypeHeader, \Zend_Http_Client::ENC_URLENCODED)
+        ) {
             $protocolParamsNotSet = !$protocolParams;
 
             parse_str($requestBodyString, $protocolBodyParams);

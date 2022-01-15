@@ -49,7 +49,7 @@ define([
                 showLoader: true
             }).done($.proxy(function (data) {
                 if (typeof targetElement === 'function') {
-                    targetElement(data.content);
+                    targetElement(data.content, {text: record['title']});
                 } else if (targetElement.is('textarea')) {
                     this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();

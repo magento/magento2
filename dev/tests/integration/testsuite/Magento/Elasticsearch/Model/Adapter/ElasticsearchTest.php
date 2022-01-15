@@ -10,13 +10,17 @@ namespace Magento\Elasticsearch\Model\Adapter;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Setup\CategorySetup;
+use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Indexer\Model\Indexer;
+use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -80,9 +84,6 @@ class ElasticsearchTest extends TestCase
         $this->client = $connectionManager->getConnection();
         $this->indexBuilder = $this->objectManager->get(BuilderInterface::class);
         $this->arrayManager = $this->objectManager->get(ArrayManager::class);
-        $indexer = $this->objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
     }
 
     /**
@@ -90,7 +91,9 @@ class ElasticsearchTest extends TestCase
      */
     public function tearDown(): void
     {
-        $this->deleteIndex($this->newIndex);
+        if ($this->newIndex) {
+            $this->deleteIndex($this->newIndex);
+        }
     }
 
     /**
@@ -101,12 +104,48 @@ class ElasticsearchTest extends TestCase
      */
     public function testRetryOnIndexNotFoundException(): void
     {
+        $this->reindex();
         $this->updateElasticsearchIndex();
         $this->createNewAttribute();
         $mapping = $this->client->getMapping(['index' => $this->newIndex]);
         $pathField = $this->arrayManager->findPath('properties', $mapping);
         $attributes = $this->arrayManager->get($pathField, $mapping, []);
         $this->assertArrayHasKey('multiselect_attribute', $attributes);
+    }
+
+    /**
+     * Test that new fields are not added during document indexing that were not explicitly defined in the mapping
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoDbIsolation disabled
+     */
+    public function testMappingShouldNotChangeAfterReindex(): void
+    {
+        $index = 'catalogsearch_fulltext';
+        $storeId = (int) $this->storeManager->getStore('fixture_second_store')->getId();
+        // Create empty index and save the initial mapping
+        $dimensionFactory = $this->objectManager->get(DimensionFactory::class);
+        $dimensions = [
+            StoreDimensionProvider::DIMENSION_NAME => $dimensionFactory->create(
+                StoreDimensionProvider::DIMENSION_NAME,
+                (string) $storeId
+            )
+        ];
+        $indexHandlerFactory = $this->objectManager->get(IndexerHandlerFactory::class);
+        $indexHandler = $indexHandlerFactory->create(
+            [
+                'data' => [
+                    'indexer_id' => $index
+                ]
+            ]
+        );
+        $indexHandler->cleanIndex($dimensions);
+        $indexHandler->saveIndex($dimensions, new \ArrayIterator([]));
+        $propertiesBefore = $this->getIndexMapping($storeId);
+        $this->reindex();
+        $propertiesAfter = $this->getIndexMapping($storeId);
+        $this->assertEquals($propertiesBefore, $propertiesAfter);
     }
 
     /**
@@ -140,7 +179,7 @@ class ElasticsearchTest extends TestCase
                 'used_in_product_listing' => 0,
                 'used_for_sort_by' => 0,
                 'frontend_label' => ['Multiselect Attribute'],
-                'backend_type' => 'varchar',
+                'backend_type' => 'text',
                 'backend_model' => ArrayBackend::class,
                 'option' => [
                     'value' => [
@@ -190,5 +229,27 @@ class ElasticsearchTest extends TestCase
         if ($this->client->indexExists($newIndex)) {
             $this->client->deleteIndex($newIndex);
         }
+    }
+
+    /**
+     * @return void
+     */
+    private function reindex(): void
+    {
+        $indexer = $this->objectManager->create(Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
+    }
+
+    /**
+     * @param int $storeId
+     * @return array
+     */
+    private function getIndexMapping(int $storeId): array
+    {
+        $indexName = $this->indexNameResolver->getIndexName($storeId, 'product', []);
+        $mapping = $this->client->getMapping(['index' => $indexName]);
+        $pathField = $this->arrayManager->findPath('properties', $mapping);
+        return $this->arrayManager->get($pathField, $mapping, []);
     }
 }

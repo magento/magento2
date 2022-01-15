@@ -44,6 +44,10 @@
                 <argument name="productAttributeLabel" value="{{productAttributeColor.default_label}}"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridSecond"/>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -208,9 +212,11 @@
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$-Updated"  stepKey="seeConfigurableProductName"/>
         <see userInput="{{productAttributeColor.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeColorAttributeName"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="selectFirstOption"/>
+        <waitForPageLoad stepKey="waitForFirstOptionLoad"/>
         <see userInput="{{virtualProductWithRequiredFields.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertFirstOptionProductPrice"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="seeFirstImage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"  userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="selectSecondOption"/>
+        <waitForPageLoad stepKey="waitForSecondOptionLoad"/>
         <see userInput="{{virtualProductWithRequiredFields.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeSecondOptionProductPrice"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="seeSecondImage"/>
     </test>
