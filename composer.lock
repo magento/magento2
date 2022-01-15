@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d795fdbb8befb7cd004925238304944",
+    "content-hash": "b4aae31977900a4401c2c04a033c2fb7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3787,16 +3787,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.8.x-dev",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "b48b298fe1ebbe4ed0effc547ec8aced2a5cb00b"
+                "reference": "244c03cf437f6ae6de1650421f30e8a4fa70a02c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/b48b298fe1ebbe4ed0effc547ec8aced2a5cb00b",
-                "reference": "b48b298fe1ebbe4ed0effc547ec8aced2a5cb00b",
+                "url": "https://api.github.com/repos/magento/composer/zipball/244c03cf437f6ae6de1650421f30e8a4fa70a02c",
+                "reference": "244c03cf437f6ae6de1650421f30e8a4fa70a02c",
                 "shasum": ""
             },
             "require": {
@@ -3821,9 +3821,9 @@
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
             "support": {
                 "issues": "https://github.com/magento/composer/issues",
-                "source": "https://github.com/magento/composer/tree/develop"
+                "source": "https://github.com/magento/composer/tree/1.8.0"
             },
-            "time": "2021-11-09T20:35:45+00:00"
+            "time": "2022-01-14T01:29:51+00:00"
         },
         {
             "name": "magento/composer-dependency-version-audit-plugin",
@@ -12761,12 +12761,6 @@
     ],
     "aliases": [
         {
-            "package": "magento/composer",
-            "version": "1.8.9999999.9999999-dev",
-            "alias": "1.8.0",
-            "alias_normalized": "1.8.0.0"
-        },
-        {
             "package": "magento/zendframework1",
             "version": "1.14.6.0-beta2",
             "alias": "1.14.6",
@@ -12775,7 +12769,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20,
         "magento/magento-composer-installer": 10,
         "magento/zendframework1": 10
     },
