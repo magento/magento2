@@ -343,8 +343,7 @@ class SortingTest extends TestCase
     {
         $this->assertArrayHasKey($sortBy, $this->block->getAvailableOrders());
         $this->assertEquals($sortBy, $this->block->getSortBy());
-        $skus = $this->block->getLoadedProductCollection()->getColumnValues('sku');
-        $this->assertEquals($expectation, $skus);
+        $this->assertEquals($expectation, $this->block->getLoadedProductCollection()->getColumnValues('sku'));
     }
 
     /**
@@ -480,13 +479,12 @@ class SortingTest extends TestCase
     /**
      * Test product list ordered by product name with out-of-stock configurable product options.
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_category_and_stock_status.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_show_out_of_stock.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @dataProvider productListWithShowOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expected
-     * @param string $defaultSortBy
      * @return void
      */
     public function testProductListOutOfStockSortOrderBySaleability(
