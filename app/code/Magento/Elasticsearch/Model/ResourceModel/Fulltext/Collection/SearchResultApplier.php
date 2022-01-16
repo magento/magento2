@@ -138,7 +138,6 @@ class SearchResultApplier implements SearchResultApplierInterface
     {
         return ($pageNumber - 1) * $pageSize;
     }
-
     /**
      * Fetch filtered product ids sorted by the saleability and other applied sort orders
      *
@@ -181,6 +180,8 @@ class SearchResultApplier implements SearchResultApplierInterface
      *
      * @param int $categoryId
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     private function categoryProductByCustomSortOrder(int $categoryId): array
     {
@@ -212,12 +213,13 @@ class SearchResultApplier implements SearchResultApplierInterface
         );
         foreach ($sortOrders as $field => $dir) {
             if ($field === 'name') {
+                $entityTypeId = $this->collection->getEntity()->getTypeId();
                 $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
                 $linkField = $entityMetadata->getLinkField();
                 $query->joinLeft(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
                     "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
-                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id=4 AND attribute_code='name')",
+                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId} AND attribute_code='name')",
                     ['product_var.value AS name']
                 );
             } elseif ($field === 'price') {

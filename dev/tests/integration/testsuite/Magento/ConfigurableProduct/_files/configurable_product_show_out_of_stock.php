@@ -14,12 +14,12 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/category.php');
-Resolver::getInstance()->requireDataFixture(
-    'Magento/ConfigurableProduct/_files/product_configurable_stock_status.php'
-);
-
 try {
+    Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
+    Resolver::getInstance()->requireDataFixture(
+        'Magento/Catalog/_files/multiple_mixed_products.php'
+    );
+
     $objectManager = Bootstrap::getObjectManager();
 
     /** @var Registry $registry */
@@ -44,16 +44,17 @@ try {
     /** @var DefaultCategory $categoryHelper */
     $categoryHelper = $objectManager->get(DefaultCategory::class);
 
-    $s = ['simple_10', 'simple_20', 'configurable_'];
-    $productSkus = [];
-    for ($i = 1; $i <= 3; $i++) {
-        $suffixed_array = array_map(static function ($s) use ($i): string {
-            return $s . $i;
-        }, $s);
-        $productSkus[] = $suffixed_array;
-    }
-    $productSkus = array_merge([], ...$productSkus);
-
+    $productSkus = [
+        'simple_31',
+        'simple_32',
+        'configurable',
+        'simple_41',
+        'simple_42',
+        'configurable_12345',
+        'simple1',
+        'simple2',
+        'simple3'
+    ];
     foreach ($productSkus as $sku) {
         $categoryLinkManagement->assignProductToCategories($sku, [$categoryHelper->getId(), 333]);
     }

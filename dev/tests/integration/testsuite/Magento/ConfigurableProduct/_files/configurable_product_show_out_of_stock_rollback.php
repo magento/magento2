@@ -15,7 +15,7 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 try {
     Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_rollback.php');
     Resolver::getInstance()->requireDataFixture(
-        'Magento/ConfigurableProduct/_files/product_configurable_stock_status_rollback.php'
+        'Magento/Catalog/_files/multiple_mixed_products_rollback.php'
     );
 
     /** @var Registry $registry */

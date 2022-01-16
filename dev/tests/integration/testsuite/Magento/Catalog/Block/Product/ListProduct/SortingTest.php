@@ -492,12 +492,11 @@ class SortingTest extends TestCase
     public function testProductListOutOfStockSortOrderBySaleability(
         string $sortBy,
         string $direction,
-        array $expected,
-        string $defaultSortBy
+        array $expected
     ): void {
         $this->scopeConfig->setValue(
             Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            $defaultSortBy,
+            $sortBy,
             ScopeInterface::SCOPE_STORE,
             Store::DEFAULT_STORE_ID
         );
@@ -507,12 +506,23 @@ class SortingTest extends TestCase
             ScopeInterface::SCOPE_STORE,
             \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
         );
-        foreach (['simple_102', 'simple_202', 'configurable_2'] as $sku) {
+
+        /** @var CategoryInterface $category */
+        $category = $this->categoryRepository->get(333);
+        if ($category->getId()) {
+            $category->setAvailableSortBy(['position', 'name', 'price']);
+            $category->addData(['available_sort_by' => 'position,name,price']);
+            $category->setDefaultSortBy($sortBy);
+            $this->categoryRepository->save($category);
+        }
+
+        foreach (['simple_41', 'simple_42', 'configurable_12345'] as $sku) {
             $product = $this->productRepository->get($sku);
             $product->setStockData(['is_in_stock' => 0]);
             $this->productRepository->save($product);
         }
-        $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expected);
+        $this->renderBlock($category, $direction);
+        $this->assertBlockSorting($sortBy, $expected);
     }
 
     /**
@@ -523,41 +533,35 @@ class SortingTest extends TestCase
     public function productListWithShowOutOfStockSortOrderDataProvider(): array
     {
         return [
-            'default_order_price_asc' => [
-                'sort' => 'price',
-                'direction' => 'ASC',
-                'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
-                'default_sort' => 'position'
-            ],
-            'default_order_price_desc' => [
-                'sort' => 'price',
-                'direction' => 'DESC',
-                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
-                'default_sort' => 'position'
-            ],
             'default_order_position_asc' => [
                 'sort' => 'position',
                 'direction' => 'ASC',
-                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
-                'default_sort' => 'name'
+                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
             ],
             'default_order_position_desc' => [
                 'sort' => 'position',
                 'direction' => 'DESC',
-                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
-                'default_sort' => 'name'
+                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
+            ],
+            'default_order_price_asc' => [
+                'sort' => 'price',
+                'direction' => 'ASC',
+                'expectation' => ['simple1', 'simple2', 'configurable', 'configurable_12345'],
+            ],
+            'default_order_price_desc' => [
+                'sort' => 'price',
+                'direction' => 'DESC',
+                'expectation' => ['configurable', 'simple2', 'simple1', 'configurable_12345'],
             ],
             'default_order_name_asc' => [
                 'sort' => 'name',
                 'direction' => 'ASC',
-                'expectation' => ['configurable_1', 'configurable_3', 'configurable_2'],
-                'default_sort' => 'position'
+                'expectation' => ['configurable', 'simple1', 'simple2', 'configurable_12345'],
             ],
             'default_order_name_desc' => [
                 'sort' => 'name',
                 'direction' => 'DESC',
-                'expectation' => ['configurable_3', 'configurable_1', 'configurable_2'],
-                'default_sort' => 'position'
+                'expectation' => ['simple2', 'simple1', 'configurable', 'configurable_12345'],
             ],
         ];
     }
