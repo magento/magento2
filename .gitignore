@@ -29,6 +29,7 @@ atlassian*
 /node_modules
 /.grunt
 /Gruntfile.js
+/package.json
 /.php_cs
 /.php_cs.cache
 /.php-cs-fixer.php
