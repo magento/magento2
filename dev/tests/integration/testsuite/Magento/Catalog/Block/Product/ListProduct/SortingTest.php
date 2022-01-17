@@ -480,7 +480,6 @@ class SortingTest extends TestCase
      * Test product list ordered by product name with out-of-stock configurable product options.
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_show_out_of_stock.php
-     * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @dataProvider productListWithShowOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction

@@ -219,7 +219,8 @@ class SearchResultApplier implements SearchResultApplierInterface
                 $query->joinLeft(
                     ['product_var' => $this->collection->getTable('catalog_product_entity_varchar')],
                     "product_var.{$linkField} = e.{$linkField} AND product_var.attribute_id =
-                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId} AND attribute_code='name')",
+                    (SELECT attribute_id FROM eav_attribute WHERE entity_type_id={$entityTypeId}
+                    AND attribute_code='name')",
                     ['product_var.value AS name']
                 );
             } elseif ($field === 'price') {
