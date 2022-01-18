@@ -27,7 +27,7 @@ class ActionList
     /**
      * Not allowed string in route's action path to avoid disclosing admin url
      */
-    const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
+    public const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
 
     /**
      * List of application actions
