@@ -363,9 +363,11 @@ define([
                     ajaxUrl = url[dialog].replace(':id', integrationId).replace(':isReauthorize', isReauthorize);
 
                     try {
+                        let html = $(ctx).parents('tr').find('.col-name').html();
+
+                        html = html.trim();
                         // Get integration name either from current element or from neighbor column
-                        integrationName = $(ctx).attr('data-row-name') ||
-                            $(ctx).parents('tr').find('.col-name').html().trim();
+                        integrationName = $(ctx).attr('data-row-name') || html;
 
                         if (integrationName.indexOf('<span') > -1) {
                             // Remove unsecure URL warning from popup window title if it is present
