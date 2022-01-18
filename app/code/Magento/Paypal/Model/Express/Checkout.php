@@ -614,7 +614,7 @@ class Checkout
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function returnFromPaypal($token, string $payerIdentifier = null)
+    public function returnFromPaypal($token, string $payerIdentifier = null, $fundingSource = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -689,6 +689,9 @@ class Checkout
         $payment = $quote->getPayment();
         $payment->setMethod($this->_methodType);
         $this->_paypalInfo->importToPayment($this->_getApi(), $payment);
+        if ($fundingSource) {
+            $payment->setPaypalFundingSource($fundingSource);
+        }
         $payerId = $payerIdentifier ? : $this->_getApi()->getPayerId();
         $payment->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_PAYER_ID, $payerId)
             ->setAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_TOKEN, $token);

@@ -306,4 +306,12 @@ class Review extends \Magento\Framework\View\Element\Template
 
         return parent::_beforeToHtml();
     }
+
+    public function getPaypalFundingSource()
+    {
+        if ($this->_quote->getPayment()->getPaypalFundingSource()) {
+            return ucfirst($this->_quote->getPayment()->getPaypalFundingSource());
+        }
+        return null;
+    }
 }

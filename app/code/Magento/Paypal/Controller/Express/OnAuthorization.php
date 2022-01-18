@@ -116,6 +116,7 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
         $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         $payerId = $this->getRequest()->getParam('payerId');
         $tokenId = $this->getRequest()->getParam('paymentToken');
+        $fundingSource = $this->getRequest()->getParam('paypalFundingSource');
 
         try {
             $quote = $this->_getQuote();
@@ -128,7 +129,7 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
             /** Populate checkout object with new data */
             $this->_initCheckout($quote);
             /**  Populate quote  with information about billing and shipping addresses*/
-            $this->_checkout->returnFromPaypal($tokenId, $payerId);
+            $this->_checkout->returnFromPaypal($tokenId, $payerId, $fundingSource);
             if ($this->_checkout->canSkipOrderReviewStep()) {
                 $this->_checkout->place($tokenId);
                 $order = $this->_checkout->getOrder();

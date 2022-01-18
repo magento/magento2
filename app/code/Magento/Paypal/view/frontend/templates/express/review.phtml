@@ -101,7 +101,7 @@ use Magento\Paypal\Block\Express\Review;
             <div class="box box-order-billing-address">
                 <strong class="box-title"><span><?= $escaper->escapeHtml(__('Payment Method')) ?></span></strong>
                 <div class="box-content">
-                    <?= $escaper->escapeHtml($block->getPaymentMethodTitle()) ?><br>
+                    <?= $escaper->escapeHtml($block->getPaypalFundingSource() ?? $block->getPaymentMethodTitle()) ?><br>
                     <?= $escaper->escapeHtml($block->getEmail()) ?> <br>
                     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png"
                          alt="<?= $block->escapeHtml(__('Buy now with PayPal')) ?>"/>
