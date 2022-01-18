@@ -176,7 +176,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 function (&$priceData) {
                     /* convert string value to float */
                     $priceData['price_qty'] *= 1;
-                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_BOTH) {
+                    if ($this->getConfigTaxDisplayType() !== Config::DISPLAY_TYPE_INCLUDING_TAX) {
                         $exclTaxPrice = $this->calculator->getAmount($priceData['price'], $this->product);
                         $priceData['excl_tax_price'] = $exclTaxPrice;
                     }

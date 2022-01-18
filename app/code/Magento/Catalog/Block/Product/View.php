@@ -183,8 +183,19 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         foreach ($tierPricesList as $tierPrice) {
             $tierPriceData = [
                 'qty' => $tierPrice['price_qty'],
-                'price' => $tierPrice['website_price'],
+                'price' => $tierPrice['website_price']
             ];
+
+            if (
+                isset($tierPrice['excl_tax_price']) &&
+                $tierPrice['excl_tax_price'] instanceof \Magento\Framework\Pricing\Amount\AmountInterface
+            ) {
+                $tierPriceData['excl_tax_price'] =
+                    $this->priceCurrency->convertAndRound(
+                        $tierPrice['excl_tax_price']->getValue(['tax'])
+                    );
+            }
+
             $tierPrices[] = $tierPriceData;
         }
 
