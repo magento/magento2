@@ -183,7 +183,7 @@ class ActionListTest extends TestCase
                 'Namespace',
                 'Index',
                 [],
-                'false',
+                false,
                 null
             ],
             [
@@ -192,7 +192,7 @@ class ActionListTest extends TestCase
                 'adminhtml_product',
                 'index',
                 'magento\module\controller\adminhtml\product\index' => '$mockClassName',
-                'false',
+                false,
                 null
             ],
         ];
