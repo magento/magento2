@@ -152,12 +152,14 @@ class CartTest extends TestCase
     public function testInvalidTotalsGetAllItems($values, $transferDiscount)
     {
         $expectedSubtotal = $this->_prepareInvalidModelData($values, $transferDiscount);
+        $baseShippingDiscountTaxCompensationAmount = $values['base_shipping_discount_tax_compensation_amount'] ??
+            $values['base_shipping_discount_tax_compensation_amnt'];
         $this->assertEmpty($this->_model->getAllItems());
         $this->assertEquals($expectedSubtotal, $this->_model->getSubtotal());
         $this->assertEquals(
             $values['base_tax_amount'] +
             $values['base_discount_tax_compensation_amount'] +
-            $values['base_shipping_discount_tax_compensation_amnt'],
+            $baseShippingDiscountTaxCompensationAmount,
             $this->_model->getTax()
         );
         $this->assertEquals($values['base_shipping_amount'], $this->_model->getShipping());
@@ -177,6 +179,7 @@ class CartTest extends TestCase
                 [
                     'base_discount_tax_compensation_amount' => 0,
                     'base_shipping_discount_tax_compensation_amnt' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => null,
                     'base_subtotal' => 0,
                     'base_tax_amount' => 0,
                     'base_shipping_amount' => 0,
@@ -188,7 +191,8 @@ class CartTest extends TestCase
             [
                 [
                     'base_discount_tax_compensation_amount' => 1,
-                    'base_shipping_discount_tax_compensation_amnt' => 2,
+                    'base_shipping_discount_tax_compensation_amount' => 2,
+                    'base_shipping_discount_tax_compensation_amnt' => null,
                     'base_subtotal' => 3,
                     'base_tax_amount' => 4,
                     'base_shipping_amount' => 5,
@@ -267,8 +271,12 @@ class CartTest extends TestCase
     {
         $taxContainer = new DataObject(
             [
-                'base_discount_tax_compensation_amount' => $data['base_discount_tax_compensation_amount'],
-                'base_shipping_discount_tax_compensation_amnt' => $data['base_shipping_discount_tax_compensation_amnt'],
+                'base_discount_tax_compensation_amount' =>
+                    $data['base_discount_tax_compensation_amount'],
+                'base_shipping_discount_tax_compensation_amnt' =>
+                    $data['base_shipping_discount_tax_compensation_amnt'],
+                'base_shipping_discount_tax_compensation_amount' =>
+                    $data['base_shipping_discount_tax_compensation_amount']
             ]
         );
         $expectedSubtotal = $data['base_subtotal'];
