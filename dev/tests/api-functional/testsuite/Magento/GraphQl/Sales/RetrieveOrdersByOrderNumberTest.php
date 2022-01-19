@@ -417,7 +417,7 @@ QUERY;
   customer {
     orders(
       sort: {
-        sort_field: ORDER_ID,
+        sort_field: NUMBER,
         sort_direction: DESC
       }
     ) {
@@ -444,6 +444,7 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $expectedOrderNumbers = ['100000008', '100000007','100000006', '100000005', '100000004','100000002'];
+
 
         foreach ($expectedOrderNumbers as $key) {
             $orderItemInResponse = $customerOrderItemsInResponse[$key];
