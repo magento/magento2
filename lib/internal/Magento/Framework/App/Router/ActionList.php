@@ -10,10 +10,14 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\App\Utility\ReflectionClassFactory;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Serialize\SerializerInterface;
+use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class to retrieve action class.
@@ -23,7 +27,7 @@ class ActionList
     /**
      * Not allowed string in route's action path to avoid disclosing admin url
      */
-    const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
+    public const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
 
     /**
      * List of application actions
@@ -56,12 +60,21 @@ class ActionList
     private $actionInterface;
 
     /**
+     * @var ReflectionClassFactory|null
+     */
+    private $reflectionClassFactory;
+
+    /**
      * @param CacheInterface $cache
      * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
      * @param SerializerInterface|null $serializer
+     * @param State|null $state
+     * @param DirectoryList|null $directoryList
+     * @param ReflectionClassFactory|null $reflectionClassFactory
+     * @throws FileSystemException
      */
     public function __construct(
         CacheInterface $cache,
@@ -69,16 +82,20 @@ class ActionList
         $actionInterface = ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = [],
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        State $state = null,
+        DirectoryList $directoryList = null,
+        ReflectionClassFactory $reflectionClassFactory = null
     ) {
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
-        $objectManager = ObjectManager::getInstance();
-        $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
-        $state = $objectManager->get(State::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
+        $state = $state ?: ObjectManager::getInstance()->get(State::class);
+        $this->reflectionClassFactory = $reflectionClassFactory
+            ?: ObjectManager::getInstance()->get(ReflectionClassFactory::class);
 
         if ($state->getMode() === State::MODE_PRODUCTION) {
-            $directoryList = $objectManager->get(DirectoryList::class);
+            $directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
             $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA)
                 . '/' . $cacheKey . '.' . 'php';
 
@@ -106,6 +123,7 @@ class ActionList
      * @param string $namespace
      * @param string $action
      * @return null|string
+     * @throws ReflectionException
      */
     public function get($module, $area, $namespace, $action)
     {
@@ -126,11 +144,35 @@ class ActionList
                 $module . '\\controller' . $area . '\\' . $namespace . '\\' . $action
             )
         );
-        if (isset($this->actions[$fullPath])) {
-            return is_subclass_of($this->actions[$fullPath], $this->actionInterface)
-                ? $this->actions[$fullPath]
-                : null;
+        try {
+            if ($this->validateActionClass($fullPath)) {
+                return $this->actions[$fullPath];
+            }
+        } catch (ReflectionException $e) {
+            return null;
         }
+
         return null;
+    }
+
+    /**
+     * Validate Action Class
+     *
+     * @param string $fullPath
+     * @return bool
+     * @throws ReflectionException
+     */
+    private function validateActionClass(string $fullPath): bool
+    {
+        if (isset($this->actions[$fullPath])) {
+            if (!is_subclass_of($this->actions[$fullPath], $this->actionInterface)) {
+                return false;
+            }
+            $reflectionClass = $this->reflectionClassFactory->create($this->actions[$fullPath]);
+            if ($reflectionClass->isInstantiable()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
