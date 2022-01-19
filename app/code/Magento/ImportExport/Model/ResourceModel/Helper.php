@@ -26,6 +26,7 @@ class Helper extends \Magento\Framework\DB\Helper
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'importexport')
     {
