@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressManagementInterface
 {
-    const XML_PATH_CUSTOMER_ADDRESS_COMPANY_SHOW = 'customer/address/company_show';
+    private const XML_PATH_CUSTOMER_ADDRESS_COMPANY_SHOW = 'customer/address/company_show';
 
     /**
      * Quote repository.
