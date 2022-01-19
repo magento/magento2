@@ -8,7 +8,12 @@
     ],
     "config": {
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "laminas/laminas-dependency-plugin": true,
+            "magento/*": true
+        }
     },
     "require": {
         "php": "~7.4.0||~8.1.0",
@@ -63,8 +68,8 @@
         "league/flysystem-aws-s3-v3": "^2.0",
         "magento/composer": "~1.8.0",
         "magento/composer-dependency-version-audit-plugin": "~0.1",
-        "magento/magento-composer-installer": "0.3.*@beta",
-        "magento/zendframework1": "1.14.6-beta2 as 1.14.6",
+        "magento/magento-composer-installer": ">=0.3.0",
+        "magento/zendframework1": "~1.15.0",
         "monolog/monolog": "^2.3",
         "pelago/emogrifier": "^6.0.0",
         "php-amqplib/php-amqplib": "~3.1.0",
