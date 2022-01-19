@@ -33,16 +33,19 @@ use Magento\Quote\Api\GuestCartRepositoryInterface;
 class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
 {
     /**
+     * @var PayPalConfig
      * @inheritdoc
      */
     protected $_configType = PayPalConfig::class;
 
     /**
+     * @var PayPalConfig
      * @inheritdoc
      */
     protected $_configMethod = PayPalConfig::METHOD_WPP_EXPRESS;
 
     /**
+     * @var PayPalCheckout
      * @inheritdoc
      */
     protected $_checkoutType = PayPalCheckout::class;
@@ -53,8 +56,6 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
     private $cartRepository;
 
     /**
-     * Url Builder
-     *
      * @var UrlInterface
      */
     private $urlBuilder;
