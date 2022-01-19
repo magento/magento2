@@ -90,7 +90,7 @@ class ShippingAddressManagementTest extends TestCase
         $this->addressMock->expects($this->any())->method('getSaveInAddressBook')->willReturn(1);
         $this->quote->expects($this->any())->method('getShippingAddress')->willReturn($this->addressMock);
         $this->scopeConfig->expects($this->any())->method('getValue')
-            ->with(ShippingAddressManagement::XML_PATH_CUSTOMER_ADDRESS_COMPANY_SHOW)
+            ->with('customer/address/company_show')
             ->willReturn(false);
         $this->addressMock->expects($this->any())->method('getCountryId')->willReturn(null);
         $this->quoteRepositoryMock->expects($this->any())->method('getActive')->willReturn($this->quote);
