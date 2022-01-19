@@ -125,15 +125,12 @@ class Form extends Template
     public function getAttributeValue($attribute, $part = null)
     {
         $value = $this->getRequest()->getQuery($attribute->getAttributeCode());
+
         if ($part && $value) {
-            if (isset($value[$part])) {
-                $value = $value[$part];
-            } else {
-                $value = '';
-            }
+            $value = $value[$part] ?? '';
         }
 
-        return $value;
+        return is_array($value) ? '' : $value;
     }
 
     /**

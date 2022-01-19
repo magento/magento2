@@ -197,12 +197,15 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
             }
-            if ($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea') {
-                if (!trim($values[$attribute->getAttributeCode()])) {
-                    continue;
-                }
-            }
+
             $value = $values[$attribute->getAttributeCode()];
+
+            if (($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea')
+                && (!is_string($value) || !trim($value))
+            ) {
+                continue;
+            }
+
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
             if (false === $preparedSearchValue) {
                 continue;
