@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
@@ -140,6 +141,13 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         return $quote->getShippingAddress();
     }
 
+    /**
+     * Apply validation on quote before merging it with old one.
+     *
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Api\Data\AddressInterface $address
+     * @return void
+     */
     private function validateBeforeMerge($quote, $address): void
     {
         $this->addressValidator->validateForCart($quote, $address);
