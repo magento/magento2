@@ -109,7 +109,15 @@
         <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert product in items ordered grid -->
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$123.00" stepKey="seeProductPrice"/>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$123.00"/>
+        </actionGroup>
     </test>
 </tests>
