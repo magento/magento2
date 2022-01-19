@@ -139,6 +139,9 @@ class OrderService implements OrderManagementInterface
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory)
     {
         $order = $this->orderRepository->get($id);
+        if(!$statusHistory->getStatus()){
+            $statusHistory->setStatus($order->getStatus());
+        }
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
         $notify = isset($statusHistory['is_customer_notified']) ? $statusHistory['is_customer_notified'] : false;
