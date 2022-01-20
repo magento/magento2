@@ -12,6 +12,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\Option\TextConfigOption;
 
 /**
  * Deployment configuration consumers options needed for Setup application
@@ -22,16 +23,19 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Input key for the option
      */
     const INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES ='consumers-wait-for-messages';
+    const INPUT_KEY_QUEUE_DEFAULT_CONNECTION ='default-connection';
 
     /**
-     * Path to the value in the deployment config
+     * Path to the values in the deployment config
      */
     const CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES = 'queue/consumers_wait_for_messages';
+    const CONFIG_PATH_QUEUE_DEFAULT_CONNECTION = 'queue/default_connection';
 
     /**
      * Default value
      */
     const DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
+    const DEFAULT_CONNECTION = 'db';
 
     /**
      * The available configuration values
@@ -54,6 +58,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Should consumers wait for a message from the queue? 1 - Yes, 0 - No',
                 self::DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES
             ),
+            new TextConfigOption(
+                self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_QUEUE_DEFAULT_CONNECTION,
+                'Default queue connection. Can be db, amqp or a custom one.',
+                self::DEFAULT_CONNECTION
+            ),
         ];
     }
 
@@ -72,6 +83,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             );
         }
 
+        if (!$this->isDataEmpty($data, self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION)) {
+            $configData->set(
+                self::CONFIG_PATH_QUEUE_DEFAULT_CONNECTION,
+                $data[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION]
+            );
+        }
+
         return [$configData];
     }
 
@@ -85,6 +103,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         if (!$this->isDataEmpty($options, self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES)
             && !in_array($options[self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES], $this->selectOptions)) {
             $errors[] = 'You can use only 1 or 0 for ' . self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES . ' option';
+        }
+
+        if ($this->isDataEmpty($options, self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION)) {
+            $errors[] = self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION . ' option cannot be empty';
+        }
+
+        if (!$this->isDataEmpty($options, self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION)
+            && !is_string($options[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION])) {
+            $errors[] = 'You can use only string type variable for '
+                . self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION . ' option';
         }
 
         return $errors;

@@ -59,10 +59,10 @@ class DefaultValueProvider
         // get amqp or default_connection if it is set in deployment configuration
         // otherwise use db as a default connection
         if (isset($this->config)) {
-            if ($this->config->get('queue/amqp') && count($this->config->get('queue/amqp')) > 0) {
-                $this->connection = 'amqp';
-            } elseif ($this->config->get('queue/default_connection')) {
+            if ($this->config->get('queue/default_connection')) {
                 $this->connection = $this->config->get('queue/default_connection');
+            } elseif ($this->config->get('queue/amqp') && count($this->config->get('queue/amqp')) > 0) {
+                $this->connection = 'amqp';
             }
         }
         return $this->connection;

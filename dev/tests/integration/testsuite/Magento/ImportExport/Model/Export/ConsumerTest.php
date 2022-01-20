@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Model\Export;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -47,11 +46,6 @@ class ConsumerTest extends TestCase
     private $filePath;
 
     /**
-     * @var DeploymentConfig|null
-     */
-    private $deploymentConfig;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -64,7 +58,6 @@ class ConsumerTest extends TestCase
         $this->consumer = $this->objectManager->get(Consumer::class);
         $filesystem = $this->objectManager->get(Filesystem::class);
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
-        $this->deploymentConfig =  $this->objectManager->get(DeploymentConfig::class);
     }
 
     /**
@@ -89,7 +82,6 @@ class ConsumerTest extends TestCase
      */
     public function testProcess(): void
     {
-        echo "Deployment config for queue is: " . json_encode($this->deploymentConfig->get('queue'));
         $envelope = $this->queue->dequeue();
         $decodedMessage = $this->messageEncoder->decode('import_export.export', $envelope->getBody());
         $this->consumer->process($decodedMessage);
