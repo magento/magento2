@@ -13,13 +13,13 @@ use Magento\Ui\Component\Form\Element\Input as ElementInput;
  */
 class Input extends AbstractFilter
 {
-    const NAME = 'filter_input';
+    public const NAME = 'filter_input';
 
-    const COMPONENT = 'input';
+    public const COMPONENT = 'input';
+
+    private const DEFAULT_CONDITION_TYPE = 'like';
 
     /**
-     * Wrapped component
-     *
      * @var ElementInput
      */
     protected $wrappedComponent;
@@ -64,17 +64,23 @@ class Input extends AbstractFilter
      */
     protected function applyFilter(): void
     {
-        if (isset($this->filterData[$this->getName()])) {
-            $value = str_replace(['%', '_'], ['\%', '\_'], $this->filterData[$this->getName()]);
-
-            if ($value || $value === '0') {
-                $filter = $this->filterBuilder->setConditionType('like')
-                    ->setField($this->getName())
-                    ->setValue(sprintf('%%%s%%', $value))
-                    ->create();
-
-                $this->getContext()->getDataProvider()->addFilter($filter);
+        $value = $this->filterData[$this->getName()] ?? '';
+        if (strlen($value) > 0) {
+            $conditionType = self::DEFAULT_CONDITION_TYPE;
+            $filterConfig = $this->getData('config/filter');
+            if (is_array($filterConfig) && isset($filterConfig['conditionType'])) {
+                $conditionType = $filterConfig['conditionType'];
             }
+            if ($conditionType === self::DEFAULT_CONDITION_TYPE) {
+                $value = sprintf('%%%s%%', str_replace(['%', '_'], ['\%', '\_'], $value));
+            }
+
+            $filter = $this->filterBuilder->setConditionType($conditionType)
+                ->setField($this->getName())
+                ->setValue($value)
+                ->create();
+
+            $this->getContext()->getDataProvider()->addFilter($filter);
         }
     }
 }
