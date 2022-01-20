@@ -20,7 +20,9 @@ use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\Laye
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Builder\Aggregations;
 
 /**
- * @inheritdoc
+ * Category layer builder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category implements LayerBuilderInterface
 {
