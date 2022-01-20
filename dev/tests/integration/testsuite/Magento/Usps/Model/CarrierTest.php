@@ -306,6 +306,7 @@ class CarrierTest extends TestCase
      *
      * @magentoConfigFixture default_store carriers/usps/active 1
      * @magentoConfigFixture default_store carriers/usps/free_method 1
+     * @magentoConfigFixture default_store carriers/usps/debug 1
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @magentoDataFixture Magento/Usps/Fixtures/cart_rule_coupon_free_shipping.php
      * @magentoDataFixture setFreeShippingForProduct1
@@ -340,7 +341,7 @@ class CarrierTest extends TestCase
         $this->assertEquals('ALL', $firstRequest->Package->Service);
         $this->assertEquals('20', $firstRequest->Package->Pounds);
         $this->assertEquals('Priority', $secondRequest->Package->Service);
-        $this->assertEquals('10', $secondRequest->Package->Pounds);
+        $this->assertEquals('20', $secondRequest->Package->Pounds);
         $price = $this->getShippingMethodAmount($methods, 'usps', '1');
         $this->assertEquals(6.70, $price);
     }

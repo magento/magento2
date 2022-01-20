@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4aae31977900a4401c2c04a033c2fb7",
+    "content-hash": "e8672a0cd472d584dd216eebf4f5e6b0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3869,7 +3869,7 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.3.0-beta.1",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
@@ -3943,26 +3943,26 @@
                 "magento"
             ],
             "support": {
-                "source": "https://github.com/magento/magento-composer-installer/tree/0.3.0-beta.1"
+                "source": "https://github.com/magento/magento-composer-installer/tree/0.3.0"
             },
             "time": "2021-12-17T20:04:15+00:00"
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.14.6-beta2",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "7b4cb1f74a2515c16113812543f47742207b4a7f"
+                "reference": "f241f5be1820784e7f54a36115e1324b5bb8a4ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/7b4cb1f74a2515c16113812543f47742207b4a7f",
-                "reference": "7b4cb1f74a2515c16113812543f47742207b4a7f",
+                "url": "https://api.github.com/repos/magento/zf1/zipball/f241f5be1820784e7f54a36115e1324b5bb8a4ab",
+                "reference": "f241f5be1820784e7f54a36115e1324b5bb8a4ab",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.11"
+                "php": ">=7.0.0"
             },
             "require-dev": {
                 "phpunit/dbunit": "1.3.*",
@@ -3994,9 +3994,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/zf1/issues",
-                "source": "https://github.com/magento/zf1/tree/1.14.6-beta2"
+                "source": "https://github.com/magento/zf1/tree/1.15.0"
             },
-            "time": "2021-12-10T22:41:02+00:00"
+            "time": "2022-01-18T21:55:54+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -12759,19 +12759,9 @@
             "time": "2016-07-21T11:18:01+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "magento/zendframework1",
-            "version": "1.14.6.0-beta2",
-            "alias": "1.14.6",
-            "alias_normalized": "1.14.6.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "magento/magento-composer-installer": 10,
-        "magento/zendframework1": 10
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -12795,5 +12785,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
