@@ -20,6 +20,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework\TestCase
 {
