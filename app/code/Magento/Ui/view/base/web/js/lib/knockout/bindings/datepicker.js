@@ -28,8 +28,11 @@ define([
          * For more info about options take a look at "mage/calendar" and jquery.ui.datepicker widget.
          * @param {HTMLElement} el - Element, that binding is applied to
          * @param {Function} valueAccessor - Function that returns value, passed to binding
+         * @param {object} allBindings
+         * @param {object} viewModel
+         * @param {object} bindingContext
          */
-        init: function (el, valueAccessor) {
+        init: function (el, valueAccessor, allBindings, viewModel, bindingContext) {
             var config = valueAccessor(),
                 observable,
                 options = {};
@@ -50,6 +53,15 @@ define([
                     observable(this.value);
                 });
             });
+
+            // Binding context value can be cleared by another component (such
+            // as filters), make sure datepicker element value is cleared, too.
+            bindingContext.$data.value.subscribe(function (newVal) {
+                if (!newVal) {
+                    $(el).val('');
+                }
+            }, this);
+
         },
 
         /**
