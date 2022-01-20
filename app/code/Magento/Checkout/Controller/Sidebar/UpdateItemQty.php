@@ -62,9 +62,14 @@ class UpdateItemQty extends Action
 
     /**
      * @return $this
+     * @throws LocalizedException
      */
     public function execute()
     {
+        if (!$this->getRequest()->isPost()) {
+            throw new LocalizedException(__('Wrong request.'));
+        }
+
         $itemId = (int)$this->getRequest()->getParam('item_id');
         $itemQty = (float)$this->getRequest()->getParam('item_qty') * 1;
         $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
