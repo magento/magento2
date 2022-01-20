@@ -31,9 +31,7 @@
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <!--Enable Flat Catalog Category -->
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
@@ -64,14 +62,12 @@
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{CatNotActive.name}}" stepKey="seeUpdatedCategoryTitle"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveCategory"/>
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         <!--Open Index Management Page -->
         <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Category In Store Front-->
-        <amOnPage url="/$$createCategory.name$$.html"  stepKey="openCategoryPage1"/>
+        <amOnPage url="/$$createCategory.custom_attributes[url_key]$$.html"  stepKey="openCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
         <seeElement selector="{{StorefrontBundledSection.pageNotFound}}" stepKey="seeWhoopsOurBadMessage"/>
         <!--Verify category is not visible in First Store View -->

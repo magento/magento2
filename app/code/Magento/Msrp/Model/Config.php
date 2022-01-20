@@ -11,20 +11,22 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Escaper;
 
 /**
- * Class Config
+ * @api
  */
 class Config
 {
     /**#@+
      * Minimum advertise price constants
      */
-    const XML_PATH_MSRP_ENABLED = 'sales/msrp/enabled';
-    const XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE = 'sales/msrp/display_price_type';
-    const XML_PATH_MSRP_EXPLANATION_MESSAGE = 'sales/msrp/explanation_message';
-    const XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS = 'sales/msrp/explanation_message_whats_this';
+    public const XML_PATH_MSRP_ENABLED = 'sales/msrp/enabled';
+    public const XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE = 'sales/msrp/display_price_type';
+    public const XML_PATH_MSRP_EXPLANATION_MESSAGE = 'sales/msrp/explanation_message';
+    public const XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS = 'sales/msrp/explanation_message_whats_this';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var ScopeConfigInterface
+     */
     protected $scopeConfig;
 
     /**
@@ -75,7 +77,6 @@ class Config
      * Check if Minimum Advertised Price is enabled
      *
      * @return bool
-     * @api
      */
     public function isEnabled()
     {

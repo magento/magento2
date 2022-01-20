@@ -224,12 +224,12 @@
         &-ratings {
             float: left;
             margin-bottom: 0;
-            max-width: @review-ratings-left - @indent__xl;
+            min-width: @review-ratings-left - @indent__xl;
+            padding-right: @indent__xl;
         }
 
-        &-ratings ~ &-content,
-        &-ratings ~ &-details {
-            margin-left: @review-ratings-left;
+        &-ratings ~ &-content-container {
+            overflow: hidden;
         }
     }
 
@@ -419,7 +419,7 @@
         .product-details {
             &:extend(.abs-add-clearfix all);
             &:extend(.abs-margin-for-blocks-and-widgets all);
-            
+
             .rating-average-label {
                 &:extend(.abs-visually-hidden all);
             }
@@ -441,7 +441,7 @@
 
             .customer-review-rating {
                 margin-bottom: @indent__base;
-                
+
                 .item {
                     margin-bottom: @indent__s;
 

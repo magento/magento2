@@ -214,7 +214,7 @@ define([
             });
         }
 
-        jQuery(document).ready(function () {
+        jQuery(function () {
             if (jQuery('#frontend_input').val() !== 'swatch_text') {
                 jQuery('.swatch-text-field-0').removeClass('required-option');
             }

@@ -20,6 +20,7 @@
                 <issueId value="https://github.com/magento/magento2/issues/25468"/>
             </skip>
             <group value="Catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create a Website -->
