@@ -89,7 +89,7 @@ class ConsumerTest extends TestCase
      */
     public function testProcess(): void
     {
-        $this->objectManager->get('Psr\Log\LoggerInterface')->info('Amqp config ' . implode(" ", $this->deploymentConfig->get('queue/amqp')));
+        echo "Deployment config for queue is: " . json_encode($this->deploymentConfig->get('queue'));
         $envelope = $this->queue->dequeue();
         $decodedMessage = $this->messageEncoder->decode('import_export.export', $envelope->getBody());
         $this->consumer->process($decodedMessage);
