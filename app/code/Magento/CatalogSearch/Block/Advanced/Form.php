@@ -26,15 +26,11 @@ use Magento\CatalogSearch\Helper\Data as CatalogSearchHelper;
 class Form extends Template
 {
     /**
-     * Currency factory
-     *
      * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
-     * Catalog search advanced
-     *
      * @var Advanced
      */
     protected $_catalogSearchAdvanced;
