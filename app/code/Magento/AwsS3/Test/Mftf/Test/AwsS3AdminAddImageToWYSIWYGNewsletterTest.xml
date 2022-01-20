@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AwsS3AdminAddImageToWYSIWYGNewsletterTest" extends="AdminAddImageToWYSIWYGNewsletterTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Apply new WYSIWYG in Newsletter"/>
+            <group value="Newsletter"/>
+            <title value="AWS S3 Admin should be able to add image to WYSIWYG content of Newsletter"/>
+            <description value="Admin should be able to add image to WYSIWYG content Newsletter"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38716"/>
+            <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+        </annotations>
+        <before>
+            <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
+        </before>
+        <after>
+            <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
+        </after>
+    </test>
+</tests>

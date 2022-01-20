@@ -20,7 +20,6 @@ use Magento\Framework\App\DeploymentConfig;
 /**
  * Admin user model
  *
- * @api
  * @method string getLogdate()
  * @method \Magento\User\Model\User setLogdate(string $value)
  * @method int getLognum()
@@ -42,32 +41,35 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @deprecated New functionality has been added
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
-    const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
+    public const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
     /**
      * @deprecated New functionality has been added
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
-    const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
+    public const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     /**
      * @deprecated New functionality has been added
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
-    const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
+    public const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
     /**
      * Configuration paths for admin user reset password email template
      *
      * @deprecated New functionality has been added
      */
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
+    public const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
-    const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
+    public const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
 
     /**
-     * Model event prefix
-     *
+     * Tag to use for user assigned role caching.
+     */
+    private const CACHE_TAG = 'user_assigned_role';
+
+    /**
      * @var string
      */
     protected $_eventPrefix = 'admin_user';
@@ -80,15 +82,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_role;
 
     /**
-     * Available resources flag
-     *
      * @var bool
      */
     protected $_hasResources = true;
 
     /**
-     * User data
-     *
      * @var \Magento\User\Helper\Data
      */
     protected $_userData = null;
@@ -120,11 +118,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      * @deprecated 101.1.0
      */
     protected $_transportBuilder;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 101.1.0
      */
     protected $_storeManager;
@@ -145,9 +145,18 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $notificator;
 
     /**
+     * @var DeploymentConfig
      * @deprecated 101.1.0
      */
     private $deploymentConfig;
+
+    /**
+     * @var array
+     */
+    protected $_cacheTag = [
+        \Magento\Backend\Block\Menu::CACHE_TAGS,
+        self::CACHE_TAG,
+    ];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -684,7 +693,27 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function hasAssigned2Role($user)
     {
-        return $this->getResource()->hasAssigned2Role($user);
+        if ($user instanceof AbstractModel) {
+            $userId = $user->getUserId();
+        } elseif (is_numeric($user) && (int)$user !== 0) {
+            $userId = $user;
+        } else {
+            return null;
+        }
+        $data = $this->_cacheManager->load('assigned_role_' . $userId);
+        if (false === $data) {
+            $data = $this->getResource()->hasAssigned2Role($user);
+
+            $this->_cacheManager->save(
+                $this->serializer->serialize($data),
+                'assigned_role_' . $userId,
+                [self::CACHE_TAG]
+            );
+        } else {
+            $data = $this->serializer->unserialize($data);
+        }
+
+        return $data;
     }
 
     /**

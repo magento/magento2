@@ -5,10 +5,11 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-checkout": "*",
-        "magento/module-payment": "*"
+        "magento/module-payment": "*",
+        "magento/module-quote": "*"
     },
     "suggest": {
         "magento/module-config": "*"

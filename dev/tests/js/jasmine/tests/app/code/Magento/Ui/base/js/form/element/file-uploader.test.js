@@ -358,6 +358,27 @@ define([
             });
         });
 
+        describe('onFail handler', function () {
+            it('it logs responseText and status', function () {
+                var fakeEvent = {
+                        target: document.createElement('input')
+                    },
+                    data = {
+                        jqXHR: {
+                            responseText: 'Failed',
+                            status: '500'
+                        }
+                    };
+
+                spyOn(console, 'error');
+
+                component.onFail(fakeEvent, data);
+                expect(console.error).toHaveBeenCalledWith(data.jqXHR.responseText);
+                expect(console.error).toHaveBeenCalledWith(data.jqXHR.status);
+                expect(console.error).toHaveBeenCalledTimes(2);
+            });
+        });
+
         describe('aggregateError method', function () {
             it('should append onto aggregatedErrors array when called', function () {
                 spyOn(component.aggregatedErrors, 'push');

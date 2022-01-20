@@ -30,14 +30,15 @@
             <deleteData createDataKey="thirdCustomer" stepKey="deleteThirdCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
         <!-- Select all from dropdown -->
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" />
         <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
         <!-- Deselect third customer -->
         <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(($$thirdCustomer.email$$)}}" stepKey="selectThirdCustomer"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$thirdCustomer.email$$)}}" stepKey="checkThirdCustomerCheckboxIsUnchecked"/>
         <!-- Click select all on page checkbox -->
-        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectAllCustomersOnPage"/>
+        <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomersOnPage"/>
         <seeElement selector="{{AdminCustomerGridMainActionsSection.multicheckTick}}" stepKey="waitForElement"/>
         <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.multicheckTick}}" stepKey="checkAllSelectedCheckBoxIsChecked"/>
         <!-- Check all created records selected -->
@@ -45,7 +46,7 @@
         <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$secondCustomer.email$$)}}" stepKey="checkSecondCustomerIsCheckedAfterSelectPage"/>
         <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$thirdCustomer.email$$)}}" stepKey="checkThirdCustomerIsCheckedAfterSelectPage"/>
         <!-- Click deselect all on page checkbox -->
-        <actionGroup ref="AdminSelectAllCustomers" stepKey="deselectAllCustomersCheckbox"/>
+        <actionGroup ref="AdminGridDeselectAllActionGroup" stepKey="deselectAllCustomersCheckbox"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.multicheckTick}}" stepKey="checkAllSelectedCheckBoxUnchecked"/>
         <!-- Check all created records unselected -->
         <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$firstCustomer.email$$)}}" stepKey="checkFirstCustomerIsUncheckedAfterSelectPage"/>

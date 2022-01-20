@@ -1,8 +1,31 @@
 # Magento_ReleaseNotification module
 
-The **Release Notification Module** serves to provide a notification delivery platform for displaying new features of a Magento installation or upgrade as well as any other required release notifications.
+This module serves to provide a notification delivery platform for displaying new features of a Magento installation or upgrade as well as any other required release notifications.
 
-## Purpose and Content
+## Installation
+
+The Magento_ReleaseNotification module creates the `release_notification_viewer_log` table in the database.
+
+All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
+
+For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+
+## Extensibility
+
+Extension developers can interact with the Magento_ReleaseNotification module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_ReleaseNotification module.
+
+### UI components
+
+You can extend release notification updates using the configuration files located in the `view/adminhtml/ui_component` directory:
+- `release_notification`
+
+For information about a UI component in Magento 2, see [Overview of UI components](http://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+
+## Additional information
+
+### Purpose and Content
 
 * Provides a method of notifying administrators of changes, features, and functionality being introduced in a Magento release.
 * Displays a modal containing a high level overview of the features included in the installed or upgraded release of Magento upon the initial login of each administrator into the Admin Panel for a given Magento version.
@@ -10,11 +33,11 @@ The **Release Notification Module** serves to provide a notification delivery pl
 * Each modal page includes detailed information about a highlighted feature of the Magento release or other notification.
 * Release Notification modal content is determined and provided by Magento Marketing.
 
-## Content Retrieval
+### Content Retrieval
 
 Release notification content is maintained by Magento for each Magento version, edition, and locale. To retrieve the content, a response is returned from a request with the following parameters:
 
-*  **version** = The Magento version that the client has installed (ex. 2.3.0).
+*  **version** = The Magento version that the client has installed (ex. 2.4.0).
 *  **edition** = The Magento edition that the client has installed (ex. Community).
 *  **locale** = The chosen locale of the admin user (ex. en_US).
 
@@ -26,7 +49,7 @@ The module will make three attempts to retrieve content for the parameters in th
 
 If there is no content to be retrieved after these requests, the release notification modal will not be displayed to the admin user.
 
-## Content Guidelines
+### Content Guidelines
 
 The modal system in the ReleaseNotification module can have up to four modal pages. The admin user can navigate between pages using the "< Prev" and "Next >" buttons at the bottom of the modal. The last modal page will have a "Done" button that will close the modal and record that the admin user has seen the notification. 
 
@@ -48,6 +71,6 @@ The Sub Heading section is ideally used on the first modal page as a way to desc
 
 A clickable link to internal or external content in any text field will be created by using the following format and opened in a new browser tab. Providing the URL for the link followed by the text to be displayed for that link in brackets will cause a clickable link to be created. The text between the brackets [text] will be the text that the clickable link shows.
 
-### Link Format Example:
+#### Link Format Example:
 
 The text: `https://devdocs.magento.com/ [Magento DevDocs].` will appear as [Magento DevDocs](https://devdocs.magento.com/).

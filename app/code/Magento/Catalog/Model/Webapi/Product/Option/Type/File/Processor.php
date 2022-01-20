@@ -40,8 +40,11 @@ class Processor
     }
 
     /**
+     * Saves file
+     *
      * @param ImageContentInterface $imageContent
      * @return string
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function saveFile(ImageContentInterface $imageContent)
     {
@@ -50,6 +53,8 @@ class Processor
     }
 
     /**
+     * Save file content and return file details
+     *
      * @param ImageContentInterface $imageContent
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -58,16 +63,19 @@ class Processor
     {
         $filePath = $this->saveFile($imageContent);
 
-        $fileAbsolutePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($filePath);
-        $fileHash = md5($this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->readFile($filePath));
-        $imageSize = getimagesize($fileAbsolutePath);
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $fileAbsolutePath = $mediaDirectory->getAbsolutePath($filePath);
+        $fileContent = $mediaDirectory->readFile($filePath);
+        $fileHash = hash('sha256', $fileContent);
+        $imageSize = getimagesizefromstring($fileContent);
+        $stat = $mediaDirectory->stat($fileAbsolutePath);
         $result = [
             'type' => $imageContent->getType(),
             'title' => $imageContent->getName(),
             'fullpath' => $fileAbsolutePath,
             'quote_path' => $filePath,
             'order_path' => $filePath,
-            'size' => filesize($fileAbsolutePath),
+            'size' => $stat['size'],
             'width' => $imageSize ? $imageSize[0] : 0,
             'height' => $imageSize ? $imageSize[1] : 0,
             'secret_key' => substr($fileHash, 0, 20),

@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery",
     "description": "Magento module responsible for media handling",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
         "magento/module-cms": "*"

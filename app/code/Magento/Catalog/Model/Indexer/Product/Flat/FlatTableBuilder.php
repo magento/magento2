@@ -261,7 +261,7 @@ class FlatTableBuilder
 
         $select->from(
             ['et' => $entityTemporaryTableName],
-            array_merge(...$allColumns)
+            array_merge([], ...$allColumns)
         )->joinInner(
             ['e' => $this->resource->getTableName('catalog_product_entity')],
             'e.entity_id = et.entity_id',
@@ -306,7 +306,7 @@ class FlatTableBuilder
                 $allColumns[] = $columnValueNames;
             }
         }
-        $sql = $select->insertFromSelect($temporaryFlatTableName, array_merge(...$allColumns), false);
+        $sql = $select->insertFromSelect($temporaryFlatTableName, array_merge([], ...$allColumns), false);
         $this->_connection->query($sql);
     }
 

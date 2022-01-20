@@ -5,12 +5,16 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use Magento\Framework\GetParameterClassTrait;
+
 /**
  * The class arguments reader
  */
 class ArgumentsReader
 {
-    const NO_DEFAULT_VALUE = 'NO-DEFAULT';
+    use GetParameterClassTrait;
+
+    public const NO_DEFAULT_VALUE = 'NO-DEFAULT';
 
     /**
      * @var NamespaceResolver
@@ -98,13 +102,19 @@ class ArgumentsReader
      */
     private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
-        if ($parameter->getClass()) {
-            return NamespaceResolver::NS_SEPARATOR . $parameter->getClass()->getName();
+        $parameterClass = $this->getParameterClass($parameter);
+
+        if ($parameterClass) {
+            return NamespaceResolver::NS_SEPARATOR . $parameterClass->getName();
         }
 
-        $type =  $parameter->detectType();
+        $type = $parameter->detectType();
 
-        if ($type === 'null') {
+        /**
+         * $type === null if it is unspecified
+         * $type === 'null' if it is used in doc block
+         */
+        if ($type === null || $type === 'null') {
             return null;
         }
 

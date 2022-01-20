@@ -1,0 +1,26 @@
+{
+    "name": "magento/module-jwt-user-token",
+    "description": "Introduces JWT token support for web API authentication",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "*",
+        "magento/module-integration": "*",
+        "magento/module-authorization": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\JwtUserToken\\": ""
+        }
+    }
+}

@@ -7,20 +7,25 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminStandaloneMediaGalleryEditImageDetailsTest">
+    <test name="AdminStandaloneMediaGalleryEditImageDetailsTest" deprecated="Use AdminStandaloneMediaGalleryEditImageDetailsFromDialogTest instead">
         <annotations>
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/724"/>
-            <title value="User edits image meta data in standalone media gallery"/>
+            <title value="DEPRECATED. User edits image meta data in standalone media gallery"/>
             <stories value="[Story # 38] User views basic image attributes in Media Gallery"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3961351"/>
             <description value="User edits image meta data in Standalone Media Gallery"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminStandaloneMediaGalleryEditImageDetailsFromDialogTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>

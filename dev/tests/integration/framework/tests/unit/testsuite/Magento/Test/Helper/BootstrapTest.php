@@ -47,10 +47,11 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Application::class,
             ['getTempDir', 'getInitParams', 'reinitialize', 'run']
         );
-        $this->_bootstrap = $this->createPartialMock(
-            \Magento\TestFramework\Bootstrap::class,
-            ['getApplication', 'getDbVendorName']
-        );
+        $this->_bootstrap = $this->getMockBuilder(\Magento\TestFramework\Bootstrap::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getDbVendorName'])
+            ->onlyMethods(['getApplication'])
+            ->getMock();
         $this->_bootstrap->expects(
             $this->any()
         )->method(

@@ -16,8 +16,11 @@ use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Type\Text;
+use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -43,7 +46,9 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     protected $optionRepository;
 
     /**
-     * Option type percent
+     * Option type percent.
+     *
+     * @var string
      * @since 101.0.0
      */
     protected static $typePercent = 'percent';
@@ -51,22 +56,24 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     /**#@+
      * Constants
      */
-    const KEY_PRODUCT_SKU = 'product_sku';
-    const KEY_OPTION_ID = 'option_id';
-    const KEY_TITLE = 'title';
-    const KEY_TYPE = 'type';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_IS_REQUIRE = 'is_require';
-    const KEY_PRICE = 'price';
-    const KEY_PRICE_TYPE = 'price_type';
-    const KEY_SKU = 'sku';
-    const KEY_FILE_EXTENSION = 'file_extension';
-    const KEY_MAX_CHARACTERS = 'max_characters';
-    const KEY_IMAGE_SIZE_Y = 'image_size_y';
-    const KEY_IMAGE_SIZE_X = 'image_size_x';
+    public const KEY_PRODUCT_SKU = 'product_sku';
+    public const KEY_OPTION_ID = 'option_id';
+    public const KEY_TITLE = 'title';
+    public const KEY_TYPE = 'type';
+    public const KEY_SORT_ORDER = 'sort_order';
+    public const KEY_IS_REQUIRE = 'is_require';
+    public const KEY_PRICE = 'price';
+    public const KEY_PRICE_TYPE = 'price_type';
+    public const KEY_SKU = 'sku';
+    public const KEY_FILE_EXTENSION = 'file_extension';
+    public const KEY_MAX_CHARACTERS = 'max_characters';
+    public const KEY_IMAGE_SIZE_Y = 'image_size_y';
+    public const KEY_IMAGE_SIZE_X = 'image_size_x';
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var Product
+     */
     protected $product;
 
     /**
@@ -124,6 +131,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private $customOptionValuesFactory;
 
     /**
+     * @var CalculateCustomOptionCatalogRule
+     */
+    private $calculateCustomOptionCatalogRule;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -138,6 +150,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionTypesToGroups
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,14 +167,17 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         array $data = [],
         ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
         array $optionGroups = [],
-        array $optionTypesToGroups = []
+        array $optionTypesToGroups = [],
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
         $this->string = $string;
         $this->validatorPool = $validatorPool;
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
+            ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
+        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule ??
+            ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
         $this->optionGroups = $optionGroups ?: [
             self::OPTION_GROUP_DATE => Date::class,
             self::OPTION_GROUP_FILE => File::class,
@@ -462,11 +478,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == self::$typePercent) {
-            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+        if ($flag && $this->getPriceType() === self::$typePercent) {
+            $price = $this->calculateCustomOptionCatalogRule->execute(
+                $this->getProduct(),
+                (float)$this->getData(self::KEY_PRICE),
+                $this->getPriceType() === Value::TYPE_PERCENT
+            );
+
+            if ($price === null) {
+                $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
+                $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            }
+
             return $price;
         }
+
         return $this->_getData(self::KEY_PRICE);
     }
 
@@ -981,9 +1007,10 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     private function cleanFileExtensions()
     {
-        $rawExtensions = $this->getFileExtension();
+        $rawExtensions = is_string($this->getFileExtension()) ? strtolower($this->getFileExtension()) : '';
         $matches = [];
         preg_match_all('/(?<extensions>[a-z0-9]+)/i', strtolower($rawExtensions), $matches);
+
         if (!empty($matches)) {
             $extensions = implode(', ', array_unique($matches['extensions']));
             $this->setFileExtension($extensions);

@@ -7,6 +7,10 @@
 <?php
 /** @var $block \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$fieldNameSourceFile = \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE;
+$uploaderErrorMessage = $block->escapeHtml(
+    __('Content of uploaded file was changed, please re-upload the file')
+);
 ?>
 
 <?php $scriptString = <<<script
@@ -48,6 +52,12 @@ require([
          * @type {string}
          */
         sampleFilesBaseUrl: '{$block->escapeJs($block->getUrl('*/*/download/', ['filename' => 'entity-name']))}',
+
+        /**
+        * Loaded file last modified
+        * @type {int|null}
+        */
+        loadedFileLastModified: null,
 
         /**
          * Reset selected index
@@ -163,10 +173,49 @@ require([
         },
 
         /**
+         * Refresh loaded file last modified
+         */
+        refreshLoadedFileLastModified: function(e) {
+            if (jQuery(e)[0].files.length > 0) {
+                this.loadedFileLastModified = jQuery(e)[0].files[0].lastModified;
+            } else {
+                this.loadedFileLastModified = null;
+            }
+        },
+
+        /**
          * Post form data to dynamic iframe.
          * @param {string} newActionUrl OPTIONAL Change form action to this if specified
          */
         postToFrame: function(newActionUrl) {
+            var fileUploader = document.getElementById('{$fieldNameSourceFile}');
+
+            if (fileUploader.files.length > 0) {
+                var file = fileUploader.files[0],
+                    ifrElName = this.ifrElemName,
+                    reader = new FileReader();
+
+                reader.readAsText(file, "UTF-8");
+
+                reader.onerror = function () {
+                    jQuery('body').loader('hide');
+                    alert({
+                        content: '{$uploaderErrorMessage}'
+                    });
+                    fileUploader.value = null;
+                    jQuery('iframe#' + ifrElName).remove();
+                    return;
+                }
+
+                if (file.lastModified !== this.loadedFileLastModified) {
+                    alert({
+                        content: '{$uploaderErrorMessage}'
+                    });
+                    fileUploader.value = null;
+                    return;
+                }
+            }
+
             if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
                 jQuery('body').append('<iframe name="' + this.ifrElemName + '" id="' + this.ifrElemName + '"/>');
                 jQuery('iframe#' + this.ifrElemName).attr('display', 'none');

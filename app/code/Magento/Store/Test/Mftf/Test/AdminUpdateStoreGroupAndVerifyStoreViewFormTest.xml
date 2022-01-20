@@ -41,8 +41,8 @@
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="openCreatedStoreGroupInGrid">
             <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
         </actionGroup>
-        <click selector="{{AdminStoresGridSection.firstRow}}" stepKey="clickFirstRow"/>
-        <waitForPageLoad stepKey="AdminSystemStoreGroupPageToOpen"/>
+        <actionGroup ref="AdminOpenFirstRowInStoresGridActionGroup" stepKey="clickFirstRow"/>
+
         <!--Update created Store group as per requirement-->
         <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createNewCustomStoreGroup">
             <argument name="website" value="{{_defaultWebsite.name}}"/>

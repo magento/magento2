@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Model\Query;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
@@ -32,6 +33,11 @@ class ContextFactory implements ContextFactoryInterface
     private $contextParametersProcessors;
 
     /**
+     * @var ContextInterface
+     */
+    private $context;
+
+    /**
      * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param ObjectManagerInterface $objectManager
      * @param ContextParametersProcessorInterface[] $contextParametersProcessors
@@ -49,7 +55,7 @@ class ContextFactory implements ContextFactoryInterface
     /**
      * @inheritdoc
      */
-    public function create(): ContextInterface
+    public function create(?UserContextInterface $userContext = null): ContextInterface
     {
         $contextParameters = $this->objectManager->create(ContextParametersInterface::class);
 
@@ -58,6 +64,9 @@ class ContextFactory implements ContextFactoryInterface
                 throw new LocalizedException(
                     __('ContextParametersProcessors must implement %1', ContextParametersProcessorInterface::class)
                 );
+            }
+            if ($userContext && $contextParametersProcessor instanceof UserContextParametersProcessorInterface) {
+                $contextParametersProcessor->setUserContext($userContext);
             }
             $contextParameters = $contextParametersProcessor->execute($contextParameters);
         }
@@ -77,6 +86,18 @@ class ContextFactory implements ContextFactoryInterface
                 'extensionAttributes' => $extensionAttributes,
             ]
         );
+        $this->context = $context;
         return $context;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(): ContextInterface
+    {
+        if (!$this->context) {
+            $this->create();
+        }
+        return $this->context;
     }
 }

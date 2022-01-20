@@ -22,5 +22,6 @@
         <element name="expandRootCategory" type="text" selector="img.x-tree-elbow-end-plus"/>
         <element name="expandRootCategoryByName" type="button" selector="//div[@class='x-tree-root-node']/li/div/a/span[contains(., '{{categoryName}}')]/../../img[contains(@class, 'x-tree-elbow-end-plus')]" parameterized="true" timeout="30"/>
         <element name="categoryByName" type="text" selector="//div[contains(@class, 'categories-side-col')]//a/span[contains(text(), '{{categoryName}}')]" parameterized="true" timeout="30"/>
+        <element name="expandCategoryByName" type="text" selector="//span[contains(text(),'{{categoryName}}')]/ancestor::div[contains(@class,'x-tree-node-el')]//img[contains(@class,'x-tree-elbow-end-plus') or contains(@class,'x-tree-elbow-plus')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

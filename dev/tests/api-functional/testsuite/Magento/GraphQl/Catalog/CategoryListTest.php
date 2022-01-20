@@ -42,6 +42,7 @@ class CategoryListTest extends GraphQlAbstract
 {
     categoryList(filters: { $field : { $condition : "$value" } }){
         id
+        uid
         name
         url_key
         url_path
@@ -71,6 +72,7 @@ QUERY;
 {
     categoryList(filters: { $field : { $condition : $value } }){
         id
+        uid
         name
         url_key
         url_path
@@ -337,6 +339,7 @@ QUERY;
 {
     categoryList{
         id
+        uid
         name
         url_key
         url_path
@@ -354,6 +357,7 @@ QUERY;
         $this->assertArrayHasKey('categoryList', $result);
         $this->assertEquals('Default Category', $result['categoryList'][0]['name']);
         $this->assertEquals($storeRootCategoryId, $result['categoryList'][0]['id']);
+        $this->assertEquals(base64_encode($storeRootCategoryId), $result['categoryList'][0]['uid']);
     }
 
     /**
@@ -370,6 +374,7 @@ QUERY;
 {
     categoryList(filters: {name: {match: "mo"}}){
         id
+        uid
         name
         url_key
         url_path
@@ -542,6 +547,22 @@ QUERY;
                 '4',
                 [
                     'id' => '4',
+                    'uid' => base64_encode('4'),
+                    'name' => 'Category 1.1',
+                    'url_key' => 'category-1-1',
+                    'url_path' => 'category-1/category-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4',
+                    'position' => '1'
+                ]
+            ],
+            [
+                'category_uid',
+                'eq',
+                base64_encode('4'),
+                [
+                    'id' => '4',
+                    'uid' => base64_encode('4'),
                     'name' => 'Category 1.1',
                     'url_key' => 'category-1-1',
                     'url_path' => 'category-1/category-1-1',
@@ -556,6 +577,7 @@ QUERY;
                 'Movable Position 2',
                 [
                     'id' => '10',
+                    'uid' => base64_encode('10'),
                     'name' => 'Movable Position 2',
                     'url_key' => 'movable-position-2',
                     'url_path' => 'movable-position-2',
@@ -596,6 +618,7 @@ QUERY;
                 [
                     [
                         'id' => '4',
+                        'uid' => base64_encode('4'),
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
@@ -605,6 +628,7 @@ QUERY;
                     ],
                     [
                         'id' => '9',
+                        'uid' => base64_encode('9'),
                         'name' => 'Movable Position 1',
                         'url_key' => 'movable-position-1',
                         'url_path' => 'movable-position-1',
@@ -614,6 +638,45 @@ QUERY;
                     ],
                     [
                         'id' => '10',
+                        'uid' => base64_encode('10'),
+                        'name' => 'Movable Position 2',
+                        'url_key' => 'movable-position-2',
+                        'url_path' => 'movable-position-2',
+                        'children_count' => '0',
+                        'path' => '1/2/10',
+                        'position' => '6'
+                    ]
+                ]
+            ],
+            //Filter by multiple UIDs
+            [
+                'category_uid',
+                'in',
+                '["' . base64_encode('4') . '", "' . base64_encode('9') . '", "' . base64_encode('10') . '"]',
+                [
+                    [
+                        'id' => '4',
+                        'uid' => base64_encode('4'),
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '9',
+                        'uid' => base64_encode('9'),
+                        'name' => 'Movable Position 1',
+                        'url_key' => 'movable-position-1',
+                        'url_path' => 'movable-position-1',
+                        'children_count' => '0',
+                        'path' => '1/2/9',
+                        'position' => '5'
+                    ],
+                    [
+                        'id' => '10',
+                        'uid' => base64_encode('10'),
                         'name' => 'Movable Position 2',
                         'url_key' => 'movable-position-2',
                         'url_path' => 'movable-position-2',
@@ -631,6 +694,7 @@ QUERY;
                 [
                     [
                         'id' => '13',
+                        'uid' => base64_encode('13'),
                         'name' => 'Category 1.2',
                         'url_key' => 'category-1-2',
                         'url_path' => 'category-1/category-1-2',
@@ -640,6 +704,7 @@ QUERY;
                     ],
                     [
                         'id' => '7',
+                        'uid' => base64_encode('7'),
                         'name' => 'Movable',
                         'url_key' => 'movable',
                         'url_path' => 'movable',
@@ -657,6 +722,7 @@ QUERY;
                 [
                     [
                         'id' => '9',
+                        'uid' => base64_encode('9'),
                         'name' => 'Movable Position 1',
                         'url_key' => 'movable-position-1',
                         'url_path' => 'movable-position-1',
@@ -666,6 +732,7 @@ QUERY;
                     ],
                     [
                         'id' => '10',
+                        'uid' => base64_encode('10'),
                         'name' => 'Movable Position 2',
                         'url_key' => 'movable-position-2',
                         'url_path' => 'movable-position-2',
@@ -675,6 +742,7 @@ QUERY;
                     ],
                     [
                         'id' => '11',
+                        'uid' => base64_encode('11'),
                         'name' => 'Movable Position 3',
                         'url_key' => 'movable-position-3',
                         'url_path' => 'movable-position-3',
@@ -725,6 +793,7 @@ QUERY;
     categoryList(filters: {ids: {eq: "6"}}){
         ... on CategoryTree {
             id
+            uid
             name
             url_key
             url_path
@@ -739,6 +808,7 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
         $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['uid'], base64_encode('6'));
         $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
     }
 
@@ -756,6 +826,7 @@ QUERY;
 
 fragment Cat on CategoryTree {
     id
+    uid
     name
     url_key
     url_path
@@ -768,6 +839,84 @@ QUERY;
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertCount(1, $result['categoryList']);
         $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['uid'], base64_encode('6'));
         $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
+    }
+
+    /**
+     * Test when there is recursive category node fragment
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryRecursiveFragment() : void
+    {
+        $query = <<<'QUERY'
+query GetCategoryTree($filters: CategoryFilterInput!) {
+    categoryList(filters: $filters) {
+        ...recursiveCategoryNode
+    }
+}
+
+fragment recursiveCategoryNode on CategoryTree {
+  ...categoryNode
+  children {
+    ...categoryNode
+  }
+}
+
+fragment categoryNode on CategoryTree {
+  id
+}
+QUERY;
+        $variables = [
+            'filters' => [
+                'ids' => [
+                    'eq' => '2',
+                ],
+            ],
+        ];
+        $result = $this->graphQlQuery($query, $variables);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertCount(2, $result['categoryList'][0]);
+        $this->assertArrayHasKey('id', $result['categoryList'][0]);
+        $this->assertArrayHasKey('children', $result['categoryList'][0]);
+        $this->assertEquals($result['categoryList'][0]['id'], '2');
+        $this->assertCount(7, $result['categoryList'][0]['children']);
+        $this->assertCount(1, $result['categoryList'][0]['children'][0]);
+        $this->assertArrayHasKey('id', $result['categoryList'][0]['children'][0]);
+        $this->assertEquals($result['categoryList'][0]['children'][0]['id'], '3');
+    }
+
+    /**
+     * Test category list is filtered based on store in header
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoApiDataFixture Magento/Store/_files/store_with_second_root_category.php
+     */
+    public function testFilterStoreRootCategory() : void
+    {
+        $query = <<<'QUERY'
+{
+categoryList(filters: {name: {match: "Category"}}) {
+    uid
+    level
+    name
+    breadcrumbs {
+        category_uid
+        category_name
+        category_level
+        category_url_key
+    }
+}
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(7, $result['categoryList']);
+
+        $result = $this->graphQlQuery($query, [], '', ['store' => 'test_store_1']);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
     }
 }

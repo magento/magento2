@@ -18,10 +18,15 @@
             <group value="Catalog"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
     </test>
 </tests>

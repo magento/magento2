@@ -21,6 +21,7 @@
         }}
     </span>
     <label data-bind="i18n: 'This is test data', attr: {for: 'more-test-data-'}"></label>
+    <label data-bind="I18N: 'This is test data with uppercase binding', attr: {for: 'more-test-data-'}"></label>
     <label data-bind="attr: {for: 'more-test-data-' + $parent.getCode()}"><span data-bind="i18n: 'This is test data at right side of attr'"></span></label>
     <label data-bind="i18n: 'This is \' test \' data', attr: {for: 'more-test-data-' + $parent.getCode()}"></label>
     <label data-bind="i18n: 'This is \" test \" data', attr: {for: 'more-test-data-' + $parent.getCode()}"></label>
@@ -29,5 +30,14 @@
     <label data-bind="i18n: ''"></label>
     <label data-bind="i18n: '\''"></label>
     <label data-bind="i18n: '\\\\ '"></label>
+    <span><translate args="'This is test content in translate tag'" /></span>
+    <span><TRANSLATE args="'This is test content in the uppercase translate tag'" /></span>
+    <span translate="'This is test content in translate attribute'"></span>
+    <span TRANSLATE="'This is test content in uppercase translate attribute'"></span>
+    <a data-bind="attr: { title: $T('This is test data for invalid attribute translation'), href: '#'} "></a>
+    <a data-bind="attr: { title: $t('This is \' test \' data for attribute translation with single quotes'), href: '#'} "></a>
+    <a data-bind="attr: { title: $t('This is test data for attribute translation with a quote after\'\''), href: '#'} "></a>
+    <a data-bind="attr: { title: $t('This is test data for attribute translation with a quote after\' \' '), href: '#'} "></a>
+    <input type="text" data-bind="attr: { placeholder: $t('Attribute translation - Placeholder'), title: $t('Attribute translation - Title') }" />
 </body>
 </html>

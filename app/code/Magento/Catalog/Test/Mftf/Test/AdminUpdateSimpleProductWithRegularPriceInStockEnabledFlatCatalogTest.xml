@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest">
+        <annotations>
+            <stories value="Update Simple Product"/>
+            <title value="Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
+            <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
+            <testCaseId value="MC-10818"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI stepKey="setFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 1"/>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{simpleProductEnabledFlat.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI stepKey="unsetFlatCatalogProduct" command="config:set catalog/frontend/flat_catalog_product 0"/>
+        </after>
+
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetManageStockConfigActionGroup" stepKey="setManageStockConfig">
+            <argument name="value" value="No"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
+
+        <actionGroup ref="AdminAssignTwoCategoriesToProductActionGroup" stepKey="assignCategories">
+            <argument name="categoryName" value="$$initialCategoryEntity.name$$"/>
+            <argument name="categoryTwoName" value="$$categoryEntity.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillMainProductFormActionGroup" stepKey="fillSimpleProductInfo">
+            <argument name="product" value="simpleProductEnabledFlat"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
+
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeSimpleProductSavedSuccessMessage"/>
+
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage1"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openProductPage1">
+            <argument name="product" value="simpleProductEnabledFlat"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickTheAdvancedInventoryLink1"/>
+        <actionGroup ref="AssertAdminManageStockOnEditPageActionGroup" stepKey="assertManageStock1">
+            <argument name="manageStock" value="No"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButtonOnAdvancedInventorySection1"/>
+
+        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="checkifProductIsAssignedToInitialCategory">
+            <argument name="categoryName" value="$$initialCategoryEntity.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="checkifProductIsAssignedToCategoryTwo">
+            <argument name="categoryName" value="$$categoryEntity.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminProductInfoOnEditPageActionGroup" stepKey="assertProductInfo">
+            <argument name="product" value="simpleProductEnabledFlat"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="category" value="$categoryEntity$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeSimpleProductNameOnCategoryPage">
+            <argument name="productName" value="{{simpleProductEnabledFlat.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="{{simpleProductEnabledFlat.urlKey}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeSimpleProductNameOnStoreFrontPage">
+            <argument name="productName" value="{{simpleProductEnabledFlat.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage">
+            <argument name="productPrice" value="{{simpleProductEnabledFlat.price}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSKUOnStoreFrontPage">
+            <argument name="productSku" value="{{simpleProductEnabledFlat.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeSimpleProductStockStatusOnStoreFrontPage">
+            <argument name="productStockStatus" value="{{simpleProductEnabledFlat.storefrontStatus}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchForSku">
+            <argument name="phrase" value="{{simpleProductEnabledFlat.sku}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductFromQuickSearchActionGroup" stepKey="openAndCheckProduct">
+            <argument name="productName" value="{{simpleProductEnabledFlat.name}}"/>
+            <argument name="productUrlKey" value="{{simpleProductEnabledFlat.urlKey}}"/>
+        </actionGroup>
+
+    </test>
+</tests>

@@ -22,7 +22,7 @@ class TriggerFactory
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -33,6 +33,6 @@ class TriggerFactory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create(self::INSTANCE_NAME, $data);
+        return $this->objectManager->create(self::INSTANCE_NAME, $data);
     }
 }

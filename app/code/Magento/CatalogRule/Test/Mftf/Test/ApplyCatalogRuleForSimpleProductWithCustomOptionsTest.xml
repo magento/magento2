@@ -7,16 +7,20 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest">
+    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest" deprecated="Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
-            <title value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <title value="Deprecated. Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
             <description value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14769"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -68,15 +72,11 @@
 
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
 
         <!-- Check product 1 price on store front category page -->
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$51.10" stepKey="storefrontProduct1Price"/>
@@ -97,7 +97,7 @@
         <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$56.78" stepKey="storefrontProduct3RegularPrice"/>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
@@ -112,7 +112,7 @@
         </actionGroup>
 
         <!-- Navigate to product 2 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage2"/>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown3 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices2">
@@ -127,7 +127,7 @@
         </actionGroup>
 
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct3.name$)}}" stepKey="goToProductPage3"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct3.custom_attributes[url_key]$)}}" stepKey="goToProductPage3"/>
 
         <!-- Add product 3 to cart with no custom option -->
         <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct3ToCart">

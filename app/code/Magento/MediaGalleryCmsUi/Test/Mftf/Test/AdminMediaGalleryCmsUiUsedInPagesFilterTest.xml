@@ -9,9 +9,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMediaGalleryCmsUiUsedInPagesFilterTest">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1825"/>
-            </skip>
             <features value="AdminMediaGalleryUsedInPagesFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
             <title value="Used in pages filter"/>
@@ -21,9 +18,31 @@
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
+
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
+
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters2"/>
+            <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="findCreatedCmsPage">
+                <argument name="urlKey" value="test-page-1"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
+                <argument name="urlKey" value="test-page-1"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickApplyFiltersButton"/>
+        </after>
 
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <actionGroup ref="FillOutCustomCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore">
@@ -33,7 +52,15 @@
         </actionGroup>
 
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad" />
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetMediaGallery"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -41,9 +68,10 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="savePage"/>
+        <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="savePage"/>
 
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Used in Pages"/>
@@ -53,20 +81,15 @@
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
             <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
-                <argument name="imageName" value="{{ImageMetadata.title}}"/>
-        </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
-
-        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
-        <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="findCreatedCmsPage">
-            <argument name="urlKey" value="test-page-1"/>
-        </actionGroup>
-         <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
-            <argument name="urlKey" value="test-page-1"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="resetAdminDataGridToDefaultView"/>
+        <comment userInput="BIC workaround" stepKey="enableMassActionToDeleteImages"/>
+        <comment userInput="BIC workaround" stepKey="selectFirstImageToDelete"/>
+        <comment userInput="BIC workaround" stepKey="clickDeleteSelectedButton"/>
+        <comment userInput="BIC workaround" stepKey="deleteImages"/>
+        <comment userInput="BIC workaround" stepKey="navigateToCmsPageGrid"/>
+        <comment userInput="BIC workaround" stepKey="clearGridFilters2"/>
+        <comment userInput="BIC workaround" stepKey="findCreatedCmsPage"/>
+        <comment userInput="BIC workaround" stepKey="deleteCmsPage"/>
+        <comment userInput="BIC workaround" stepKey="clickApplyFiltersButton"/>
    </test>
 </tests>

@@ -3,10 +3,12 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-page-cache": "*",
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-authorization": "*",
+        "magento/module-integration": "*"
     },
     "license": [
         "OSL-3.0",

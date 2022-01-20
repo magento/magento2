@@ -257,11 +257,7 @@ class ViewfileTest extends TestCase
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
         $fileFactoryMock = $this->createMock(
-            FileFactory::class,
-            [],
-            [],
-            '',
-            false
+            FileFactory::class
         );
 
         $controller = $this->objectManager->getObject(

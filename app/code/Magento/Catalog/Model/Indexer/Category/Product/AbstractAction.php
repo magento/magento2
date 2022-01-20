@@ -430,7 +430,7 @@ abstract class AbstractAction
                 $field,
                 $select,
                 $range,
-                \Magento\Framework\DB\Query\BatchIteratorInterface::NON_UNIQUE_FIELD_ITERATOR
+                \Magento\Framework\DB\Query\BatchIteratorInterface::UNIQUE_FIELD_ITERATOR
             );
 
             $queries = [];
