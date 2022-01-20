@@ -163,12 +163,14 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
      * Test for multistore properties of the product to be respected in generated UrlRewrites
      * during the mass update for visibility change
      *
+     * phpcs:disable Generic.Files.LineLength.TooLong
      * @magentoDataFixture Magento\Store\Test\Fixture\Website as:w1
      * @magentoDataFixture Magento\Store\Test\Fixture\Store as:s1
      * @magentoDataFixture Magento\Store\Test\Fixture\Group as:g1 with:{"website_id": "$w1.id$", "default_store_id": "$s1.id$"}
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Category as:c1
      * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"category_ids":["$c1.id$"], "visibility": "1", "extension_attributes": {"website_ids": [1, "$w1.id$"]}} as:p1
      * @magentoAppIsolation enabled
+     * phpcs:enable Generic.Files.LineLength.TooLong
      */
     public function testMassActionUrlRewriteForStore()
     {
