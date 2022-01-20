@@ -21,15 +21,11 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     private const XML_PATH_CUSTOMER_ADDRESS_COMPANY_SHOW = 'customer/address/company_show';
 
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * Logger.
-     *
      * @var Logger
      */
     protected $logger;
