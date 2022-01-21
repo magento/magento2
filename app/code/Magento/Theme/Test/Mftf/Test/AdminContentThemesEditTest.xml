@@ -32,7 +32,9 @@
             <argument name="title" value="{{AdminMenuContentDesignThemes.pageTitle}}"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClickViewThemeActionGroup" stepKey="editTheme"/>
+        <actionGroup ref="AdminClickViewThemeBySpecifiedThemeActionGroup" stepKey="editTheme">
+            <argument name="title" value="{{MagentoBlankTheme.themeTitle}}"/>
+        </actionGroup>
 
         <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seeEditPageTitle">
             <argument name="title" value="{{MagentoBlankTheme.pageTitle}}"/>
