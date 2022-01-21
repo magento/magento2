@@ -5,6 +5,7 @@
  */
 namespace Magento\Customer\Model\Indexer;
 
+use Magento\Customer\Model\Config\Source\FilterConditionType;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Indexer\FieldsetInterface;
 use Magento\Eav\Model\Config;
@@ -15,7 +16,7 @@ class AttributeProvider implements FieldsetInterface
     /**
      * EAV entity
      */
-    const ENTITY = Customer::ENTITY;
+    public const ENTITY = Customer::ENTITY;
 
     /**
      * @var Attribute[]
@@ -97,11 +98,15 @@ class AttributeProvider implements FieldsetInterface
                         'bind' => isset($fieldset['references']['customer']['to'])
                             ? $fieldset['references']['customer']['to']
                             : null,
+                        'index' => $attribute->canBeFilterableInGrid()
+                            && (int) $attribute->getGridFilterConditionType() === FilterConditionType::FULL_MATCH
                     ];
                 }
             } else {
                 $fields[$attribute->getName()] = [
                     'type' => $this->getType($attribute),
+                    'index' => $attribute->canBeFilterableInGrid()
+                        && (int) $attribute->getGridFilterConditionType() === FilterConditionType::FULL_MATCH
                 ];
             }
         }
