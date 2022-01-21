@@ -32,6 +32,9 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductRegularPriceCustomOptions.sku}}"/>
             </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cliCacheFlushActionGroup">
+                <argument name="tags" value="" />
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -97,7 +100,7 @@
         <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPriceCustomOptions.quantity}}" stepKey="seeSimpleProductQuantity"/>
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPriceCustomOptions.status}}" stepKey="seeSimpleProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPriceCustomOptions.weight}}" stepKey="seeSimpleProductWeight"/>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDownToVerify"/>
         <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
