@@ -13,7 +13,6 @@ return [
             '--remote-storage-driver' => 'aws-s3',
             '--remote-storage-bucket' => 'myBucket',
             '--remote-storage-region' => 'us-east-1',
-            '--default-connection' => 'db'
         ]
     ]
     */
