@@ -108,7 +108,6 @@ class GaTest extends TestCase
      */
     public function testOrderTrackingCode()
     {
-        trigger_error('testOrderTrackingCode is deprecated', E_USER_DEPRECATED);
         $this->salesOrderCollectionMock->expects($this->once())
             ->method('create')
             ->willReturn($this->createCollectionMock());

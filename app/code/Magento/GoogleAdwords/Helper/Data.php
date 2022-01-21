@@ -153,7 +153,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionJsSrc()
     {
-        trigger_error('function is deprecated', E_USER_DEPRECATED);
         return (string)$this->scopeConfig->getValue(self::XML_PATH_CONVERSION_JS_SRC, 'default');
     }
 
@@ -165,7 +164,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConversionImgSrc()
     {
-        trigger_error('function is deprecated', E_USER_DEPRECATED);
         return sprintf(
             $this->scopeConfig->getValue(self::XML_PATH_CONVERSION_IMG_SRC, 'default'),
             $this->getConversionId(),
