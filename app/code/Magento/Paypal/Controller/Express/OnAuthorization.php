@@ -129,8 +129,9 @@ class OnAuthorization extends AbstractExpress implements HttpPostActionInterface
 
             /** Populate checkout object with new data */
             $this->_initCheckout($quote);
+            $quote->getPayment()->setAdditionalInformation(PayPalCheckout::PAYMENT_INFO_FUNDING_SOURCE, $fundingSource);
             /**  Populate quote  with information about billing and shipping addresses*/
-            $this->_checkout->returnFromPaypal($tokenId, $payerId, $fundingSource);
+            $this->_checkout->returnFromPaypal($tokenId, $payerId);
             if ($this->_checkout->canSkipOrderReviewStep()) {
                 $this->_checkout->place($tokenId);
                 $order = $this->_checkout->getOrder();

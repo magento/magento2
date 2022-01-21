@@ -456,7 +456,6 @@
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Data"/>
         <column xsi:type="varchar" name="cc_ss_issue" nullable="true" length="255" comment="Cc Ss Issue"/>
         <column xsi:type="text" name="additional_information" nullable="true" comment="Additional Information"/>
-        <column xsi:type="varchar" name="paypal_funding_source" nullable="true" length="255" comment="Funding source"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="payment_id"/>
         </constraint>
