@@ -15,6 +15,7 @@
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{StorefrontProductActionSection.addToCart}}"  stepKey="scrollToAddToCartButton"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="waitForAddToCartButtonToRemoveDisabledState"/>
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
