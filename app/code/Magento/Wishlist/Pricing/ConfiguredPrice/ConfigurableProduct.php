@@ -57,8 +57,10 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getValue()
     {
-        $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
-
+        $price = $this->getProduct()->getMinimalPrice();
+        if(!$price) {
+            $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
+        }
         return max(0, $price);
     }
 
