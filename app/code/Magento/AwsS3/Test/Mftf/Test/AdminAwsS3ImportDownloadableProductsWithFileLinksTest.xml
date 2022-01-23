@@ -50,6 +50,22 @@
             <comment userInput="BIC workaround" stepKey="copyBaseImageInS3" after="createDirectoryForImportFilesInS3"/>
             <comment userInput="BIC workaround" stepKey="copySmallImageInS3" after="copyBaseImageInS3"/>
             <comment userInput="BIC workaround" stepKey="copyThumbnailImageInS3" after="copySmallImageInS3"/>
+
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportDownloadableLinkFiles">
+                <argument name="path">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyBaseImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copySmallImage2">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyThumbnailImage3">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+                <argument name="destination">pub/media/import/{{ImportProduct_Downloadable_FileLinks.name}}/{{ImportProduct_Downloadable_FileLinks.thumbnailImage}}</argument>
+            </helper>
         </before>
 
         <after>
