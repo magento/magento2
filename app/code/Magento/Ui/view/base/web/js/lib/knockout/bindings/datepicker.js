@@ -54,7 +54,7 @@ define([
                 });
             });
 
-            if(bindingContext.$data) {
+            if (bindingContext.$data) {
                 bindingContext.$data.value.subscribe(function (newVal) {
                     if (!newVal) {
                         $(el).val('');
