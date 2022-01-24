@@ -54,13 +54,14 @@ define([
                 });
             });
 
-            // Binding context value can be cleared by another component (such
-            // as filters), make sure datepicker element value is cleared, too.
-            bindingContext.$data.value.subscribe(function (newVal) {
-                if (!newVal) {
-                    $(el).val('');
-                }
-            }, this);
+            if(bindingContext.$data) {
+                bindingContext.$data.value.subscribe(function (newVal) {
+                    if (!newVal) {
+                        $(el).val('');
+                    }
+                }, this);
+            }
+
 
         },
 
