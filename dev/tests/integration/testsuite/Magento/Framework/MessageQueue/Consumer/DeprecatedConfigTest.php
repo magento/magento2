@@ -53,7 +53,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('deprecatedConfigAsyncMixedConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.3', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('db', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertNull($consumer->getMaxMessages());
 
@@ -72,7 +72,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('deprecatedConfigSyncBoolConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.4', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('db', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertNull($consumer->getMaxMessages());
 
@@ -91,7 +91,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('deprecatedConfigAsyncStringConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.1', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('db', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\BatchConsumer::class, $consumer->getConsumerInstance());
         $this->assertEquals(200, $consumer->getMaxMessages());
 
