@@ -26,7 +26,8 @@
         <before>
             <comment userInput="BIC workaround" stepKey="createDirectoryForImportFiles" after="createCustomer"/>
             <comment userInput="BIC workaround" stepKey="copyImportFile" after="createDirectoryForImportFiles"/>
-            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+            <remove keyForRemoval="createDirectoryForImportImages"/>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportFilesInS3">
                 <argument name="path">var/import/images/{{ImportProduct_Downloadable_UrlLinks.name}}</argument>
             </helper>
             <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyBaseImage">
@@ -45,9 +46,7 @@
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="copyThumbnailImage"/>
             <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
 
-            <!-- Copy to Import Directory in AWS S3 -->
-            <comment userInput="BIC workaround" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage"/>
-            <comment userInput="BIC workaround" stepKey="copyBaseImageInS3" after="createDirectoryForImportFilesInS3"/>
+            <comment userInput="BIC workaround" stepKey="copyBaseImageInS3" after="syncRemoteStorage"/>
             <comment userInput="BIC workaround" stepKey="copySmallImageInS3" after="copyBaseImageInS3"/>
             <comment userInput="BIC workaround" stepKey="copyThumbnailImageInS3" after="copySmallImageInS3"/>
         </before>

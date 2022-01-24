@@ -24,13 +24,10 @@
         </annotations>
 
         <before>
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="createCustomer"/>
-            <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
-
-            <comment userInput="BIC workaround" stepKey="createDirectoryForImportFiles" after="syncRemoteStorage"/>
+            <comment userInput="BIC workaround" stepKey="createDirectoryForImportFiles" after="createCustomer"/>
             <comment userInput="BIC workaround" stepKey="copyImportFile" after="createDirectoryForImportFiles"/>
-
-            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+            <remove keyForRemoval="createDirectoryForImportImages"/>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportFilesInS3">
                 <argument name="path">var/import/images/{{ImportProduct_Bundle.name}}</argument>
             </helper>
             <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copyFromLocal" stepKey="copyProduct1BaseImage">
@@ -46,8 +43,10 @@
                 <argument name="destination">var/import/images/{{ImportProduct_Bundle.name}}/{{ImportProductSimple3_Bundle.thumbnailImage}}</argument>
             </helper>
 
-            <comment userInput="BIC workaround" stepKey="createDirectoryForImportFilesInS3" after="copyProduct3BaseImage"/>
-            <comment userInput="BIC workaround" stepKey="copyProduct1BaseImageInS3" after="createDirectoryForImportFilesInS3"/>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="copyProduct3BaseImage"/>
+            <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
+
+            <comment userInput="BIC workaround" stepKey="copyProduct1BaseImageInS3" after="syncRemoteStorage"/>
             <comment userInput="BIC workaround" stepKey="copyProduct2BaseImageInS3" after="copyProduct1BaseImageInS3"/>
             <comment userInput="BIC workaround" stepKey="copyProduct3BaseImageInS3" after="copyProduct2BaseImageInS3"/>
         </before>

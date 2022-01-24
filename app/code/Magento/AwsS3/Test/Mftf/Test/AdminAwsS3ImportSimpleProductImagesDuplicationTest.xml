@@ -41,11 +41,9 @@
                 <argument name="destination">var/import/images/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
             </helper>
 
-            <!-- Enable AWS S3 Remote Storage & Sync -->
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="copyProductThumbImage"/>
             <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
 
-            <!-- Copy to Import Directory in AWS S3 -->
             <comment userInput="BIC workaround" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage"/>
             <comment userInput="BIC workaround" stepKey="copyProductBaseImageS3" after="createDirectoryForImportFilesInS3"/>
             <comment userInput="BIC workaround" stepKey="copyProductSmallImageS3" after="copyProductBaseImageS3"/>
