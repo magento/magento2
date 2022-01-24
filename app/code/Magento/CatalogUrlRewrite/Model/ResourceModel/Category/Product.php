@@ -24,7 +24,7 @@ class Product extends AbstractDb
     /**
      * Chunk for mass insert
      */
-    private const CHUNK_SIZE = 100;
+    public const CHUNK_SIZE = 100;
 
     /**
      * Primary key auto increment flag
