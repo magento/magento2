@@ -21,6 +21,10 @@
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Reindex all indexers -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
