@@ -13,7 +13,8 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class Constant implements InterpreterInterface
 {
     /**
-     * {@inheritdoc}
+     *
+     * @inheritdoc
      * @return mixed
      * @throws \InvalidArgumentException
      */

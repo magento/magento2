@@ -30,8 +30,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
-     * Argument interpreter.
-     *
      * @var InterpreterInterface
      */
     private $argumentInterpreter;
@@ -59,7 +57,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($source)
     {

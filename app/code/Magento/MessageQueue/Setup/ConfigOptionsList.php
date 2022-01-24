@@ -22,20 +22,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Input key for the option
      */
-    const INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES ='consumers-wait-for-messages';
-    const INPUT_KEY_QUEUE_DEFAULT_CONNECTION ='default-connection';
+    public const INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES ='consumers-wait-for-messages';
+    public const INPUT_KEY_QUEUE_DEFAULT_CONNECTION ='default-connection';
 
     /**
      * Path to the values in the deployment config
      */
-    const CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES = 'queue/consumers_wait_for_messages';
-    const CONFIG_PATH_QUEUE_DEFAULT_CONNECTION = 'queue/default_connection';
+    public const CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES = 'queue/consumers_wait_for_messages';
+    public const CONFIG_PATH_QUEUE_DEFAULT_CONNECTION = 'queue/default_connection';
 
     /**
      * Default value
      */
-    const DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
-    const DEFAULT_QUEUE_CONNECTION = 'db';
+    public const DEFAULT_CONSUMERS_WAIT_FOR_MESSAGES = 1;
+    public const DEFAULT_QUEUE_CONNECTION = 'db';
 
     /**
      * The available configuration values

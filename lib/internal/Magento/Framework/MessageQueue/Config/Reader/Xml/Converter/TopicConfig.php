@@ -21,9 +21,9 @@ use Magento\Framework\MessageQueue\ConsumerInterface;
  */
 class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {
-    const DEFAULT_TYPE = 'db';
-    const DEFAULT_EXCHANGE = 'magento';
-    const DEFAULT_INSTANCE = ConsumerInterface::class;
+    public const DEFAULT_TYPE = 'db';
+    public const DEFAULT_EXCHANGE = 'magento';
+    public const DEFAULT_INSTANCE = ConsumerInterface::class;
 
     /**
      * @var Validator
@@ -41,7 +41,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     private $communicationConfig;
 
     /**
-     * Default value provider.
      *
      * @var DefaultValueProvider
      */
@@ -69,7 +68,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function convert($source)
     {

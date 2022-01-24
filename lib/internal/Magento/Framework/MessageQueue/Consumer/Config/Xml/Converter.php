@@ -26,8 +26,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $configParser;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;

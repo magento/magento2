@@ -27,7 +27,7 @@ class MessageIdGenerator implements MessageIdGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generate($topicName)
     {

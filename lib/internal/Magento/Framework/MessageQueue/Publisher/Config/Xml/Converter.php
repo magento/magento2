@@ -21,8 +21,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;
@@ -40,7 +38,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function convert($source)
     {

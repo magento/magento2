@@ -40,7 +40,8 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     *
+     * @inheritdoc
      * @since 103.0.0
      */
     public function getConnectionType($connectionName)
