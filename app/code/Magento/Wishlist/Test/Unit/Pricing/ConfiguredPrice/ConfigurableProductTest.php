@@ -124,7 +124,7 @@ class ConfigurableProductTest extends TestCase
 
         $this->saleableItem->expects($this->once())
             ->method('getMinimalPrice')
-            ->willReturn(100);
+            ->willReturn($priceValue);
 
         $this->assertEquals(100, $this->model->getValue());
     }
