@@ -19,12 +19,12 @@ class Product extends AbstractDb
     /**
      * Product/Category relation table name
      */
-    const TABLE_NAME = 'catalog_url_rewrite_product_category';
+    public const TABLE_NAME = 'catalog_url_rewrite_product_category';
 
     /**
      * Chunk for mass insert
      */
-    const CHUNK_SIZE = 100;
+    public const CHUNK_SIZE = 100;
 
     /**
      * Primary key auto increment flag
@@ -53,12 +53,12 @@ class Product extends AbstractDb
     {
         $connection = $this->getConnection();
         if (count($insertData) <= self::CHUNK_SIZE) {
-            return $connection->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
+            return $connection->insertOnDuplicate($this->getTable(self::TABLE_NAME), $insertData);
         }
         $data = array_chunk($insertData, self::CHUNK_SIZE);
         $totalCount = 0;
         foreach ($data as $insertData) {
-            $totalCount += $connection->insertMultiple($this->getTable(self::TABLE_NAME), $insertData);
+            $totalCount += $connection->insertOnDuplicate($this->getTable(self::TABLE_NAME), $insertData);
         }
         return $totalCount;
     }
