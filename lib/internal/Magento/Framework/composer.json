@@ -10,7 +10,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.4.0||~8.1.0",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -34,7 +34,7 @@
         "laminas/laminas-stdlib": "^3.6.0",
         "laminas/laminas-uri": "^2.9.1",
         "laminas/laminas-validator": "^2.15.0",
-        "magento/zendframework1": "dev-master as 1.14.6",
+        "magento/zendframework1": "1.14.6-beta2 as 1.14.6",
         "monolog/monolog": "^2.3",
         "ramsey/uuid": "~4.2.0",
         "symfony/console": "~4.4.0",

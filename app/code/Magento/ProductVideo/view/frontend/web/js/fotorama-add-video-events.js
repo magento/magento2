@@ -269,7 +269,7 @@ define([
                 i;
 
             if (isJSON) {
-                inputData = $.parseJSON(inputData);
+                inputData = JSON.parse(inputData);
             }
 
             for (i = 0; i < inputData.length; i++) {
