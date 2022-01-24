@@ -417,7 +417,7 @@ QUERY;
   customer {
     orders(
       sort: {
-        sort_field: ORDER_ID,
+        sort_field: CREATED_AT,
         sort_direction: DESC
       }
     ) {
@@ -445,11 +445,11 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $expectedOrderNumbers = ['100000008', '100000007','100000006', '100000005', '100000004','100000002'];
 
-        foreach ($expectedOrderNumbers as $key) {
+        foreach ($expectedOrderNumbers as $key => $data) {
             $orderItemInResponse = $customerOrderItemsInResponse[$key];
             $this->assertEquals(
                 $orderItemInResponse['number'],
-                $expectedOrderNumbers[$key],
+                $data,
                 "The order number is different than the expected for order - {$orderItemInResponse['number']}"
             );
         }
