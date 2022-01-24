@@ -17,7 +17,7 @@ class ConfigurableProduct extends AbstractPrice
     /**
      * Price type final.
      */
-    const PRICE_CODE = 'final_price';
+    public const PRICE_CODE = 'final_price';
 
     /**
      * @var ItemInterface
@@ -57,8 +57,9 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getValue()
     {
+
         $price = $this->getProduct()->getMinimalPrice();
-        if(!$price) {
+        if (!$price) {
             $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
         }
         return max(0, $price);

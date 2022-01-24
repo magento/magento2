@@ -55,6 +55,7 @@ class ConfigurableProductTest extends TestCase
             ->setMethods([
                 'getPriceInfo',
                 'getCustomOption',
+                'getMinimalPrice'
             ])
             ->getMockForAbstractClass();
 
@@ -100,11 +101,11 @@ class ConfigurableProductTest extends TestCase
         $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $wishlistItemOptionMock->expects($this->once())
+        $wishlistItemOptionMock->expects($this->atLeastOnce())
             ->method('getProduct')
             ->willReturn($productMock);
 
-        $this->saleableItem->expects($this->once())
+        $this->saleableItem->expects($this->atLeastOnce())
             ->method('getCustomOption')
             ->with('simple_product')
             ->willReturn($wishlistItemOptionMock);
@@ -116,25 +117,14 @@ class ConfigurableProductTest extends TestCase
     {
         $priceValue = 100;
 
-        $priceMock = $this->getMockBuilder(PriceInterface::class)
-            ->getMockForAbstractClass();
-        $priceMock->expects($this->once())
-            ->method('getValue')
-            ->willReturn($priceValue);
-
         $this->saleableItem->expects($this->once())
             ->method('getCustomOption')
             ->with('simple_product')
             ->willReturn(null);
 
         $this->saleableItem->expects($this->once())
-            ->method('getPriceInfo')
-            ->willReturn($this->priceInfoMock);
-
-        $this->priceInfoMock->expects($this->once())
-            ->method('getPrice')
-            ->with(ConfigurableProduct::PRICE_CODE)
-            ->willReturn($priceMock);
+            ->method('getMinimalPrice')
+            ->willReturn(100);
 
         $this->assertEquals(100, $this->model->getValue());
     }
