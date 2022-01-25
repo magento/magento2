@@ -38,11 +38,13 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class CustomerRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'customerCustomerRepositoryV1';
-    const RESOURCE_PATH = '/V1/customers';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'customerCustomerRepositoryV1';
+    public const RESOURCE_PATH = '/V1/customers';
 
     private const STUB_INVALID_CUSTOMER_GROUP_ID = 777;
+
+    private const STUB_RETAILER_GROUP_ID = 3;
 
     /**
      * @var CustomerRepositoryInterface
@@ -515,6 +517,40 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertEquals($expectedMessage, $errorObj['message']);
         }
+    }
+
+    /**
+     * Test customer update quote with valid customer group id change
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testUpdateCustomerQuoteOnGroupIdChange(): void
+    {
+        $customerId = 1;
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->getCustomerData($customerId),
+            Customer::class
+        );
+        $customerData[Customer::GROUP_ID] = self::STUB_RETAILER_GROUP_ID;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData['customer'] = $customerData;
+
+        $updateResults = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertEquals($updateResults['group_id'], self::STUB_RETAILER_GROUP_ID);
     }
 
     /**
@@ -1057,5 +1093,208 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerData = $this->customerHelper->createSampleCustomer($additionalData);
         $this->currentCustomerId[] = $customerData['id'];
         return $customerData;
+    }
+
+    /**
+     * Test customer create with invalid name's.
+     *
+     * @param string $fieldName
+     * @param string $fieldValue
+     * @param string $expectedMessage
+     * @return void
+     *
+     * @dataProvider customerDataProvider
+     */
+    public function testCreateCustomerWithInvalidCustomerFirstName(
+        string $fieldName,
+        string $fieldValue,
+        string $expectedMessage
+    ): void {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            Customer::class
+        );
+        $customerData[$fieldName] = $fieldValue;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = ['customer' => $customerData];
+
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
+    }
+
+    /**
+     * Invalid customer data provider
+     *
+     * @return array
+     */
+    public function customerDataProvider(): array
+    {
+        return [
+            ['firstname', 'Jane ☺ ', 'First Name is not valid!'],
+            ['lastname', '☏ - Doe', 'Last Name is not valid!'],
+            ['middlename', '⚐ $(date)', 'Middle Name is not valid!'],
+            [
+                'firstname',
+                str_repeat('खाना अच्छा है', 20),
+                'First Name is not valid!',
+            ],
+            [
+                'lastname',
+                str_repeat('المغلوطة حول استنكار  النشوة وتمجيد الألمالمغلوطة حول', 5),
+                'Last Name is not valid!',
+            ],
+        ];
+    }
+
+    /**
+     * Test customer create with ultibyte chanracters in name's.
+     *
+     * @param string $fieldName
+     * @param string $fieldValue
+     * @return void
+     *
+     * @dataProvider customerWithMultiByteDataProvider
+     */
+    public function testCreateCustomerWithMultibyteCharacters(string $fieldName, string $fieldValue): void
+    {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            Customer::class
+        );
+        $customerData[$fieldName] = $fieldValue;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = ['customer' => $customerData];
+
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertNotNull($response);
+        $this->assertEquals($fieldValue, $response[$fieldName]);
+    }
+
+    /**
+     * Customer with multibyte characters data provider.
+     *
+     * @return array
+     */
+    public function customerWithMultiByteDataProvider(): array
+    {
+        return [
+            [
+                'firstname',
+                str_repeat('हैखान', 51),
+            ],
+            [
+                'lastname',
+                str_repeat('مغلوطة حول استنكار  النشوة وتمجيد الألمالمغلوطة حول', 5),
+            ],
+        ];
+    }
+
+    /**
+     * Test customer create with valid name's.
+     *
+     * @param string $fieldName
+     * @param string $fieldValue
+     * @return void
+     *
+     * @dataProvider customerValidNameDataProvider
+     */
+    public function testCreateCustomerWithValidName(string $fieldName, string $fieldValue): void
+    {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            Customer::class
+        );
+        $customerData[$fieldName] = $fieldValue;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = ['customer' => $customerData];
+
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertNotNull($response);
+        $this->assertEquals($fieldValue, $response[$fieldName]);
+    }
+
+    /**
+     * Customer valid name data provider.
+     *
+     * @return array
+     */
+    public function customerValidNameDataProvider(): array
+    {
+        return [
+            [
+                'firstname',
+                'Anne-Marie',
+            ],
+            [
+                'lastname',
+                'D\'Artagnan',
+            ],
+            [
+                'lastname',
+                'Guðmundsdóttir',
+            ],
+            [
+                'lastname',
+                'María José Carreño Quiñones',
+            ],
+            [
+                'lastname',
+                'Q. Public',
+            ],
+            [
+                'firstname',
+                'Elizabeth II',
+            ],
+            [
+                'firstname',
+                'X Æ A-12 Musk',
+            ],
+        ];
     }
 }

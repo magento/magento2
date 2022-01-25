@@ -17,6 +17,8 @@ use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
@@ -29,9 +31,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class CategoryRepositoryTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/categories';
-    const SERVICE_NAME = 'catalogCategoryRepositoryV1';
+    private const RESOURCE_PATH = '/V1/categories';
+    private const SERVICE_NAME = 'catalogCategoryRepositoryV1';
 
+    /**
+     * @var int
+     */
     private $modelId = 333;
 
     /**
@@ -55,6 +60,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     private $createdCategories;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -64,6 +74,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
         $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -184,28 +195,57 @@ class CategoryRepositoryTest extends WebapiAbstract
 
     /**
      * @dataProvider deleteSystemOrRootDataProvider
+     *
+     * @param int $categoryId
+     * @param string $exceptionMsg
+     * @return void
      */
-    public function testDeleteSystemOrRoot()
+    public function testDeleteSystemOrRoot(int $categoryId, string $exceptionMsg): void
     {
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage($exceptionMsg);
 
-        $this->deleteCategory($this->modelId);
+        $this->deleteCategory($categoryId);
     }
 
-    public function deleteSystemOrRootDataProvider()
+    /**
+     * @return array
+     */
+    public function deleteSystemOrRootDataProvider(): array
     {
         return [
-            [Category::TREE_ROOT_ID],
-            [2] //Default root category
+            'system_category' => [
+                'category_id' => Category::TREE_ROOT_ID,
+                'exception_message' => $this->buildExceptionMessage(Category::TREE_ROOT_ID),
+            ],
+            'root_category' => [
+                'category_id' => 2,
+                'exception_message' => $this->buildExceptionMessage(2),
+            ],
         ];
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * Build response error message
+     *
+     * @param int $categoryId
+     * @return string
+     */
+    private function buildExceptionMessage(int $categoryId): string
+    {
+        $translatedMsg = (string)__('Cannot delete category with id %1');
+
+        return TESTS_WEB_API_ADAPTER === self::ADAPTER_REST
+            ? sprintf('{"message":"%s","parameters":["%u"]}', $translatedMsg, $categoryId)
+            : $translatedMsg;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
     public function testUpdate()
     {
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Update Category Test',
             'is_active' => false,
@@ -256,13 +296,13 @@ class CategoryRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
     public function testUpdateUrlKey()
     {
         $this->_markTestAsRestOnly('Functionality available in REST mode only.');
 
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Update Category Test Old Name',
             'custom_attributes' => [
@@ -561,11 +601,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * Check if repository does not override default values for attributes out of request
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Category as:category
      */
     public function testUpdateScopeAttribute()
     {
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Scope Specific Value',
         ];

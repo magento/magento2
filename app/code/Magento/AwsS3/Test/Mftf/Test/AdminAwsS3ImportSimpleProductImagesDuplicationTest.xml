@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAwsS3ImportSimpleProductImagesDuplicationTest" extends="AdminImportSimpleProductImagesDuplicationTest">
+        <annotations>
+            <features value="AwsS3"/>
+            <stories value="Import Products"/>
+            <title value="S3 - Duplicated images should not be created if the CSV file is imported more than once"/>
+            <description value="Duplicated images should not be created if the CSV file is imported more than once"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-42986"/>
+            <useCaseId value="MC-42330"/>
+            <group value="catalog_import_export"/>
+            <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+            <group value="remote_storage_disabled"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <!-- Locally Copy Import Files to Unique Media Import Directory -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">pub/media/import/test_image_duplication</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderBaseImage.file}}</argument>
+                <argument name="destination">pub/media/import/test_image_duplication/{{placeholderBaseImage.file}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductSmallImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderSmallImage.file}}</argument>
+                <argument name="destination">pub/media/import/test_image_duplication/{{placeholderSmallImage.file}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProductThumbImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{placeholderThumbnailImage.file}}</argument>
+                <argument name="destination">pub/media/import/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
+            </helper>
+
+            <!-- Enable AWS S3 Remote Storage & Sync -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" after="copyProductThumbImage"/>
+            <magentoCLI command="remote-storage:sync" timeout="120" stepKey="syncRemoteStorage" after="enableRemoteStorage"/>
+
+            <!-- Copy to Import Directory in AWS S3 -->
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="createDirectory" stepKey="createDirectoryForImportFilesInS3" after="syncRemoteStorage">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProductBaseImageS3" after="createDirectoryForImportFilesInS3">
+                <argument name="source">media/import/test_image_duplication/{{placeholderBaseImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderBaseImage.file}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProductSmallImageS3" after="copyProductBaseImageS3">
+                <argument name="source">media/import/test_image_duplication/{{placeholderSmallImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderSmallImage.file}}</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="copy" stepKey="copyProductThumbImageS3" after="copyProductSmallImageS3">
+                <argument name="source">media/import/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
+                <argument name="destination">var/import/images/test_image_duplication/{{placeholderThumbnailImage.file}}</argument>
+            </helper>
+        </before>
+
+        <after>
+            <!-- Delete S3 Data -->
+            <remove keyForRemoval="deleteProductImageDirectory"/>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryS3" after="deleteCategory">
+                <argument name="path">media/import/test_image_duplication</argument>
+            </helper>
+            <helper class="Magento\AwsS3\Test\Mftf\Helper\S3FileAssertions" method="deleteDirectory" stepKey="deleteImportImagesFilesDirectoryS3" after="deleteImportFilesDirectoryS3">
+                <argument name="path">var/import/images/test_image_duplication</argument>
+            </helper>
+
+            <!-- Disable AWS S3 Remote Storage & Delete Local Data -->
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteImportFilesDirectoryLocal" after="disableRemoteStorage">
+                <argument name="path">pub/media/import/test_image_duplication</argument>
+            </helper>
+        </after>
+    </test>
+</tests>

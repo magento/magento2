@@ -74,9 +74,7 @@ define([
                             [this.getNewFolderPath(folderName)]
                         ).then(function () {
                             this.directoryTree().reloadJsTree().then(function () {
-                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
-                                }.bind(this));
+                                this.directoryTree().locateNode(this.getNewFolderPath(folderName));
                             }.bind(this));
                         }.bind(this)).fail(function (error) {
                             uiAlert({
@@ -192,7 +190,7 @@ define([
             }
 
             this.selectedFolder(folderId);
-            $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
+            $(this.deleteButtonSelector).prop('disabled', false).removeClass('disabled');
         }
     });
 });

@@ -154,10 +154,7 @@
             <argument name="discountAmount" value="{{SimpleCatalogPriceRule.discount_amount}}"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <!-- Run cron -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value="catalogrule_rule"/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <!-- Open first simple product page on storefront -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openFirstSimpleProductPage">
             <argument name="productUrlKey" value="$createFirstProduct.custom_attributes[url_key]$"/>

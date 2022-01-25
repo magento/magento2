@@ -32,6 +32,9 @@
         <after>
             <!-- Disable created order status -->
             <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{EnableCheckmoOrderStatusPending.value}}" stepKey="rollbackNewOrderStatus"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
 
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -42,14 +45,41 @@
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
+            <!-- Unassign order status -->
+            <!-- Must unassign status before canceling order in cases where test fails before creating the order but after creating the custom order status -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStatusPageLoad"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
+            <waitForPageLoad stepKey="waitForGridLoad"/>
+
+            <!-- Cancel order -->
+            <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminChangeStatusOfAllOrdersFromGridActionGroup" stepKey="cancelOrder"/>
+
+            <!-- Unassign order status -->
+            <!-- Must unassign status after canceling order in cases where test does not fail before creating the order -->
+            <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus2"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStatusPageLoad2"/>
+            <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid2">
+                <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
+                <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
+            </actionGroup>
+            <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus2"/>
+            <waitForPageLoad stepKey="waitForGridLoad2"/>
+
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order status -->
-        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatusPage"/>
-        <waitForPageLoad stepKey="waitForOrderStatusPageLoad"/>
-        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderStatusPageLoad"/>
+        <actionGroup ref="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup" stepKey="clickCreateNewStatus"/>
 
         <!-- Fill form and validate message -->
         <actionGroup ref="AdminOrderStatusFormFillAndSave" stepKey="fillFormAndClickSave">
@@ -69,6 +99,9 @@
 
         <!-- Prepare data for constraints -->
         <magentoCLI command="config:set {{EnableCheckmoOrderStatusPending.path}} {{defaultOrderStatus.label}}" stepKey="enableNewOrderStatus"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
 
         <!-- Assert order status in grid -->
         <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
@@ -78,18 +111,26 @@
         <see selector="{{AdminOrderStatusGridSection.gridCell('1', 'State Code and Title')}}" userInput="new[{{defaultOrderStatus.label}}]" stepKey="seeOrderStatusInOrderGrid"/>
 
         <!-- Create order and grab order id -->
-        <actionGroup ref="CreateOrderActionGroup" stepKey="createNewOrder">
-            <argument name="product" value="$$createSimpleProduct$$"/>
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup"  stepKey="orderSelectFlatRateShipping"/>
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="createNewOrder"/>
+        <comment userInput="BIC workaround" stepKey="getOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Assert order status is correct -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="$getOrderId"/>
+        <comment userInput="BIC workaround" stepKey="goToOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridById"/>
+        <comment userInput="BIC workaround" stepKey="clickCreatedOrderInGrid"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="{{defaultOrderStatus.label}}" stepKey="seeOrderStatus"/>
 
         <!-- Login as customer -->
@@ -106,26 +147,16 @@
 
         <!-- Assert order not visible on My Orders -->
         <see selector="{{StorefrontOrderInformationMainSection.emptyMessage}}" userInput="You have placed no orders." stepKey="seeEmptyMessage"/>
+        <comment userInput="BIC workaround" stepKey="goToAdminOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="filterOrdersGridByOrderId"/>
+        <comment userInput="BIC workaround" stepKey="selectOrder"/>
+        <comment userInput="BIC workaround" stepKey="selectCancelOrderAction"/>
+        <comment userInput="BIC workaround" stepKey="seeSuccessMessage"/>
+        <comment userInput="BIC workaround" stepKey="goToOrderStatus"/>
+        <comment userInput="BIC workaround" stepKey="waitForStatusPageLoad"/>
+        <comment userInput="BIC workaround" stepKey="filterStatusGrid"/>
+        <comment userInput="BIC workaround" stepKey="unassignOrderStatus"/>
+        <comment userInput="BIC workaround" stepKey="seeMessage"/>
 
-        <!-- Cancel order -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridByOrderId">
-            <argument name="orderId" value="$getOrderId"/>
-        </actionGroup>
-        <checkOption selector="{{AdminOrdersGridSection.checkOrder}}" stepKey="selectOrder"/>
-        <actionGroup ref="SelectActionForOrdersActionGroup" stepKey="selectCancelOrderAction">
-            <argument name="action" value="{{OrderActions.cancel}}"/>
-        </actionGroup>
-        <see selector="{{AdminMessagesSection.success}}" userInput="We canceled 1 order(s)." stepKey="seeSuccessMessage"/>
-
-        <!-- Unassign order status -->
-        <amOnPage url="{{AdminOrderStatusPage.url}}" stepKey="goToOrderStatus"/>
-        <waitForPageLoad stepKey="waitForStatusPageLoad"/>
-        <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
-            <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
-            <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
-        </actionGroup>
-        <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You have unassigned the order status." stepKey="seeMessage"/>
     </test>
 </tests>

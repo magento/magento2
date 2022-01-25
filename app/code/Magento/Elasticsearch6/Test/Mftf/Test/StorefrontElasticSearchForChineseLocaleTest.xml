@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-91625"/>
             <group value="elasticsearch"/>
             <group value="SearchEngineElasticsearch"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Set search engine to Elastic, set Locale to China, create category and product, then go to Storefront -->
@@ -26,9 +27,7 @@
             <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForChina.scope}} --scope-code={{GeneralLocalCodeConfigsForChina.scope_code}} {{GeneralLocalCodeConfigsForChina.path}} {{GeneralLocalCodeConfigsForChina.value}}" stepKey="setLocaleToChina"/>
             <comment userInput="Moved to appropriate test suite" stepKey="enableElasticsearch6"/>
             <comment userInput="Moved to appropriate test suite" stepKey="checkConnection"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
