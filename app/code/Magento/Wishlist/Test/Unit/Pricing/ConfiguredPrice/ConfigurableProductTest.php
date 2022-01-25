@@ -55,7 +55,7 @@ class ConfigurableProductTest extends TestCase
             ->setMethods([
                 'getPriceInfo',
                 'getCustomOption',
-                'getMinimalPrice'
+                'getProductOptionsCollection'
             ])
             ->getMockForAbstractClass();
 
@@ -101,11 +101,11 @@ class ConfigurableProductTest extends TestCase
         $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $wishlistItemOptionMock->expects($this->atLeastOnce())
+        $wishlistItemOptionMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($productMock);
 
-        $this->saleableItem->expects($this->atLeastOnce())
+        $this->saleableItem->expects($this->once())
             ->method('getCustomOption')
             ->with('simple_product')
             ->willReturn($wishlistItemOptionMock);
@@ -117,14 +117,29 @@ class ConfigurableProductTest extends TestCase
     {
         $priceValue = 100;
 
+        $priceMock = $this->getMockBuilder(PriceInterface::class)
+            ->getMockForAbstractClass();
+        $priceMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn($priceValue);
+
         $this->saleableItem->expects($this->once())
             ->method('getCustomOption')
             ->with('simple_product')
             ->willReturn(null);
 
         $this->saleableItem->expects($this->once())
-            ->method('getMinimalPrice')
-            ->willReturn($priceValue);
+            ->method('getProductOptionsCollection')
+            ->willReturn(null);
+
+        $this->saleableItem->expects($this->once())
+            ->method('getPriceInfo')
+            ->willReturn($this->priceInfoMock);
+
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with(ConfigurableProduct::PRICE_CODE)
+            ->willReturn($priceMock);
 
         $this->assertEquals(100, $this->model->getValue());
     }
