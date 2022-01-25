@@ -23,6 +23,10 @@ class CurrencyTest extends TestCase
      */
     protected $currency;
 
+    /**
+     * @var string
+     */
+
     protected $currencyCode = 'USD';
 
     /**
