@@ -40,7 +40,6 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
     }
 
     /**
-     *
      * @inheritdoc
      * @since 103.0.0
      */

@@ -6,6 +6,8 @@
 namespace Magento\Framework\MessageQueue\Consumer;
 
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\Iterator as HandlerIterator;
+use Magento\TestModuleMessageQueueConfiguration\AsyncHandler;
+use Magento\TestModuleMessageQueueConfiguration\SyncHandler;
 
 /**
  * Test access to consumer configuration declared in deprecated queue.xml configs using Consumer\ConfigInterface.
@@ -40,9 +42,9 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(2, $handlers);
         $this->assertEquals('methodWithBoolParam', $handlers[0]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\AsyncHandler::class, $handlers[0]->getType());
+        $this->assertEquals(AsyncHandler::class, $handlers[0]->getType());
         $this->assertEquals('methodWithMixedParam', $handlers[1]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\AsyncHandler::class, $handlers[1]->getType());
+        $this->assertEquals(AsyncHandler::class, $handlers[1]->getType());
     }
 
     public function testGetConsumerCustomHandler()
@@ -61,7 +63,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(1, $handlers);
         $this->assertEquals('methodWithMixedParam', $handlers[0]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\AsyncHandler::class, $handlers[0]->getType());
+        $this->assertEquals(AsyncHandler::class, $handlers[0]->getType());
     }
 
     public function testGetConsumerCustomConnectionSync()
@@ -80,7 +82,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(1, $handlers);
         $this->assertEquals('methodWithBoolParam', $handlers[0]->getMethod());
-        $this->assertEquals(\Magento\TestModuleMessageQueueConfiguration\SyncHandler::class, $handlers[0]->getType());
+        $this->assertEquals(SyncHandler::class, $handlers[0]->getType());
     }
 
     public function testGetConsumerCustomConsumerAndMaxMessages()

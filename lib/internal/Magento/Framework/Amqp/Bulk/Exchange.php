@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Amqp\Bulk;
 
-use Magento\Framework\MessageQueue\Bulk\ExchangeInterface;
-use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
+use Magento\Framework\MessageQueue\Bulk\ExchangeInterface;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
+use PhpAmqpLib\Message\AMQPMessage;
 
 /**
  * Used to send messages in bulk in AMQP queue.
@@ -76,10 +76,12 @@ class Exchange implements ExchangeInterface
         $exchange = $publisher->getConnection()->getExchange();
 
         foreach ($envelopes as $envelope) {
-            $msg = new AMQPMessage(
-                $envelope->getBody(),
-                array_merge(['delivery_mode' => 2], $envelope->getProperties())
-            );
+            $properties =[];
+            $properties['delivery_mode'] = 2;
+            foreach ($envelope->getProperties() as $key =>$value) {
+                $properties[$key] = $value;
+            }
+            $msg = new AMQPMessage($envelope->getBody(), $properties);
             $channel->batch_basic_publish($msg, $exchange, $topic);
         }
         $channel->publish_batch();
