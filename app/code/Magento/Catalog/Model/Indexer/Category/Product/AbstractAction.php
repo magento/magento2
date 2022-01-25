@@ -704,7 +704,7 @@ abstract class AbstractAction
 
             foreach ($this->connection->fetchAll($select) as $category) {
                 foreach (explode('/', $category['path']) as $parentId) {
-                    if ((int)$category['entity_id'] !== 1) {
+                    if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
                     }
                 }
