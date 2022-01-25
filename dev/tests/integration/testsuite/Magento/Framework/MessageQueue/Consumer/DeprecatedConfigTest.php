@@ -13,6 +13,7 @@ use Magento\TestModuleMessageQueueConfiguration\SyncHandler;
  * Test access to consumer configuration declared in deprecated queue.xml configs using Consumer\ConfigInterface.
  *
  * @magentoCache config disabled
+ * @SuppressWarnings(PHPMD)
  */
 class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
 {

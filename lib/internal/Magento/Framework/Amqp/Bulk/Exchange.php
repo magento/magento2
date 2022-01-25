@@ -57,6 +57,7 @@ class Exchange implements ExchangeInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD)
      */
     public function enqueue($topic, array $envelopes)
     {
@@ -76,12 +77,10 @@ class Exchange implements ExchangeInterface
         $exchange = $publisher->getConnection()->getExchange();
 
         foreach ($envelopes as $envelope) {
-            $properties =[];
-            $properties['delivery_mode'] = 2;
-            foreach ($envelope->getProperties() as $key =>$value) {
-                $properties[$key] = $value;
-            }
-            $msg = new AMQPMessage($envelope->getBody(), $properties);
+            $msg = new AMQPMessage(
+                $envelope->getBody(),
+                array_merge(['delivery_mode' => 2], $envelope->getProperties())
+            );
             $channel->batch_basic_publish($msg, $exchange, $topic);
         }
         $channel->publish_batch();
