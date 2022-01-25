@@ -17,7 +17,7 @@ class ConfigurableProduct extends AbstractPrice
     /**
      * Price type final.
      */
-    const PRICE_CODE = 'final_price';
+    public const PRICE_CODE = 'final_price';
 
     /**
      * @var ItemInterface
