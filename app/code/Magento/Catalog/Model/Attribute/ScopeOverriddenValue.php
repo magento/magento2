@@ -15,7 +15,6 @@ use Magento\Store\Model\Store;
 use Magento\Framework\App\ResourceConnection;
 
 /**
- * Class ScopeOverriddenValue
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ScopeOverriddenValue
@@ -186,5 +185,15 @@ class ScopeOverriddenValue
             )->create()
         );
         return $searchResult->getItems();
+    }
+
+    /**
+     * Clear attributes values cache
+     *
+     * @return void
+     */
+    public function clearAttributeValues(): void
+    {
+        $this->attributesValues = null;
     }
 }
