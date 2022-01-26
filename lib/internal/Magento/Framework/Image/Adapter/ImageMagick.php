@@ -163,7 +163,7 @@ class ImageMagick extends AbstractAdapter
      */
     protected function _applyOptions()
     {
-        $this->_imageHandler->setImageCompressionQuality($this->quality());
+        $this->_imageHandler->setImageCompressionQuality((int)$this->quality());
         $this->_imageHandler->setImageCompression(\Imagick::COMPRESSION_JPEG);
         $this->_imageHandler->setImageUnits(\Imagick::RESOLUTION_PIXELSPERINCH);
         $this->_imageHandler->setImageResolution(
