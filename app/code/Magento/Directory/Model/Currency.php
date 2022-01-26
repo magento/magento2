@@ -28,11 +28,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * CONFIG path constants
      */
-    const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
+    public const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
 
-    const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
+    public const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
 
-    const XML_PATH_CURRENCY_BASE = 'currency/options/base';
+    public const XML_PATH_CURRENCY_BASE = 'currency/options/base';
 
     /**
      * @var Filter
@@ -439,7 +439,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
 
         if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
                 && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
-            $formattedCurrency = preg_replace(['/[^0-9.,۰٫]+/', '/ /'], '', $formattedCurrency);
+            if ($this->isArabicSymbols($formattedCurrency)) {
+                /* Workaround. We need to provide Arabic symbols range and Unicode modifier into expression
+                   to bypass issue when preg_replace with Arabic symbol return corrupted result */
+                $formattedCurrency = preg_replace(['/[^0-9\x{0600}-\x{06FF}.,۰٫]+/u', '/ /'], '', $formattedCurrency);
+            } else {
+                $formattedCurrency = preg_replace(['/[^0-9.,۰٫]+/', '/ /'], '', $formattedCurrency);
+            }
         }
 
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
@@ -596,5 +602,16 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $string = preg_replace('/^'.$match[1].'/u', '', $string);
         }
         return $string;
+    }
+
+    /**
+     * Checks if given string is of Arabic symbols
+     *
+     * @param string $string
+     * @return bool
+     */
+    private function isArabicSymbols(string $string): bool
+    {
+        return preg_match('/[\p{Arabic}]/u', $string) > 0;
     }
 }
