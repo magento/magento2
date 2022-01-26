@@ -23,6 +23,10 @@ class CurrencyTest extends TestCase
      */
     protected $currency;
 
+    /**
+     * @var string
+     */
+
     protected $currencyCode = 'USD';
 
     /**
@@ -128,10 +132,18 @@ class CurrencyTest extends TestCase
                 'expected' => '$%s',
                 'locale' => 'en_US'
             ],
-            'arabic_unicode' => [
+            'arabic_ar_SA' => [
+                'expected' =>  '%s' . json_decode('"\u00A0"') . 'US$',
+                'locale' => 'ar_SA'
+            ],
+            'arabic_fa_IR' => [
                 'expected' => json_decode('"\u200E"') . '$%s',
                 'locale' => 'fa_IR'
-            ]
+            ],
+            'arabic_ar_KW' => [
+                'expected' => '%s' . json_decode('"\u00A0"') . 'US$',
+                'locale' => 'ar_KW'
+            ],
         ];
     }
 
