@@ -65,10 +65,9 @@ class Reader implements ReaderInterface
     public function read($scope = null)
     {
         $result = [];
-        $connectionName = $this->defaultValueProvider->getConnection();
         $connections = [
-            $connectionName => [
-                'name' => $connectionName,
+            'amqp' => [
+                'name' => 'amqp',
                 'exchange' => $this->defaultValueProvider->getExchange(),
                 'disabled' => false,
             ]
