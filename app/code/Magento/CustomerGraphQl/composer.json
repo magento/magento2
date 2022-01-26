@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/module-authorization": "*",
         "magento/module-customer": "*",
         "magento/module-eav": "*",
@@ -12,7 +12,9 @@
         "magento/module-integration": "*",
         "magento/module-store": "*",
         "magento/framework": "*",
-        "magento/module-directory": "*"
+        "magento/module-directory": "*",
+        "magento/module-tax": "*",
+        "magento/module-graph-ql-cache": "*"
     },
     "license": [
         "OSL-3.0",

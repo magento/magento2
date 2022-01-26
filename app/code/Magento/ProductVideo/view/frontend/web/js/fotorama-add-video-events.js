@@ -123,7 +123,7 @@ define([
         isFullscreen: false,
         FTCF: '[data-gallery-role="fotorama__fullscreen-icon"]',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
-        MobileMaxWidth: 767,
+        MobileMaxWidth: 768,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
         videoData: null,
         videoDataPlaceholder: [{
@@ -269,7 +269,7 @@ define([
                 i;
 
             if (isJSON) {
-                inputData = $.parseJSON(inputData);
+                inputData = JSON.parse(inputData);
             }
 
             for (i = 0; i < inputData.length; i++) {
@@ -602,7 +602,7 @@ define([
             }
 
             if (this.isFullscreen && this.fotoramaItem.data('fotorama').activeFrame.i === number) {
-                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].click();
+                this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
             }
         },
 
@@ -748,14 +748,14 @@ define([
                         if (window.Froogaloop) {
                             clearInterval(waitForFroogaloop);
                             fotorama.requestFullScreen();
-                            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].click();
+                            this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
                             this.Base = false;
                         }
                     }, this), 50);
                 } else { //if not a vimeo - play it immediately with a little lag in case for fotorama fullscreen
                     setTimeout($.proxy(function () {
                         fotorama.requestFullScreen();
-                        this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].click();
+                        this.fotoramaItem.data('fotorama').activeFrame.$stageFrame[0].trigger('click');
                         this.Base = false;
                     }, this), 50);
                 }
