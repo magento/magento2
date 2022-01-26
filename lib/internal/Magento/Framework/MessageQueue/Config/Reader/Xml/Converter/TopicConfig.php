@@ -164,7 +164,6 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      *
      * @param array $topics
      * @return array
-     * @SuppressWarnings(PHPMD)
      */
     private function processWildcard($topics)
     {
