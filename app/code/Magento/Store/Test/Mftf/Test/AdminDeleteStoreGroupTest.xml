@@ -30,6 +30,10 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
+            <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
+                <argument name="backup" value="WebSetupWizardBackup"/>
+            </actionGroup>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -47,9 +51,6 @@
         <!--Go to backup index page and verify AssertBackupInGrid-->
         <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
-        <!--Delete database backup-->
-        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
-            <argument name="backup" value="WebSetupWizardBackup"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="deleteDatabaseBackup"/>
     </test>
 </tests>
