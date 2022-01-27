@@ -103,15 +103,11 @@ class Installer
     private $filePermissions;
 
     /**
-     * The deployment configuration repository
-     *
      * @var Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * The deployment configuration reader
-     *
      * @var Reader
      */
     private $deploymentConfigReader;
