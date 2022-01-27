@@ -2,7 +2,7 @@
     "name": "magento/module-media-gallery-integration",
     "description": "Magento module responsible for integration of enhanced media gallery",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-media-gallery-ui-api": "*",
         "magento/module-media-gallery-api": "*",

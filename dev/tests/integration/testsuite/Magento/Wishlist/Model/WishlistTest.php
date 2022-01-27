@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Model;
 use Magento\Bundle\Model\Product\OptionList;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\CatalogInventory\Model\StockStateException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -203,7 +204,7 @@ class WishlistTest extends TestCase
     {
         $product = $this->productRepository->get('simple_ms_out_of_stock');
         $wishlist = $this->getWishlistByCustomerId->execute(1);
-        $this->expectExceptionObject(new LocalizedException(__('Cannot add product without stock to wishlist.')));
+        $this->expectExceptionObject(new StockStateException(__('Cannot add product without stock to wishlist.')));
         $wishlist->addNewItem($product);
     }
 

@@ -36,10 +36,11 @@
             <argument name="dob" value="{{EN_US_DATE.short4DigitYear}}"/>
         </actionGroup>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
+            <argument name="indices" value="customer_grid"/>
         </actionGroup>
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
     </test>
 </tests>

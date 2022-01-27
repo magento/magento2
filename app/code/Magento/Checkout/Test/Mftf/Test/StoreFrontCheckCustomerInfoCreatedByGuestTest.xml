@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontCheckCustomerInfoOnOrderPageCreatedByGuestTest instead.</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -28,9 +29,7 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
 
         <after>
@@ -39,7 +38,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <amOnPage url="$$product.name$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$product.name$$"/>
@@ -59,9 +58,12 @@
         <fillField selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}" userInput="{{CustomerEntityOne.password}}" stepKey="TypeConfirmationPassword"/>
         <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickOnCreateAccount"/>
         <see userInput="Thank you for registering" stepKey="verifyAccountCreated"/>
+
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
-        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForCreatedOrderPage"/>
         <see stepKey="seeCustomerName" userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminShipmentOrderInformationSection.customerName}}"/>
     </test>
 </tests>

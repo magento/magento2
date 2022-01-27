@@ -60,14 +60,14 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @var string
      */
-    const CODE = 'ups';
+    public const CODE = 'ups';
 
     /**
      * Delivery Confirmation level based on origin/destination
      */
-    const DELIVERY_CONFIRMATION_SHIPMENT = 1;
+    public const DELIVERY_CONFIRMATION_SHIPMENT = 1;
 
-    const DELIVERY_CONFIRMATION_PACKAGE = 2;
+    public const DELIVERY_CONFIRMATION_PACKAGE = 2;
 
     /**
      * Code of the carrier
@@ -91,22 +91,16 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_result;
 
     /**
-     * Base currency rate
-     *
      * @var float
      */
     protected $_baseCurrencyRate;
 
     /**
-     * Xml access request
-     *
      * @var string
      */
     protected $_xmlAccessRequest;
 
     /**
-     * Default cgi gateway url
-     *
      * @var string
      */
     protected $_defaultCgiGatewayUrl = 'https://www.ups.com/using/services/rave/qcostcgi.cgi';
@@ -154,7 +148,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $configHelper;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'UserId',
@@ -376,27 +370,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destCountry = self::USA_COUNTRY_ID;
         }
 
-        //for UPS, puerto rico state for US will assume as puerto rico country
-        if ($destCountry == self::USA_COUNTRY_ID
-            && ($request->getDestPostcode() == '00912'
-                || $request->getDestRegionCode() == self::PUERTORICO_COUNTRY_ID)
-        ) {
-            $destCountry = self::PUERTORICO_COUNTRY_ID;
-        }
-
-        // For UPS, Guam state of the USA will be represented by Guam country
-        if ($destCountry == self::USA_COUNTRY_ID && $request->getDestRegionCode() == self::GUAM_REGION_CODE) {
-            $destCountry = self::GUAM_COUNTRY_ID;
-        }
-
-        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
-        if ($destCountry === 'ES' &&
-            ($request->getDestRegionCode() === 'Las Palmas'
-                || $request->getDestRegionCode() === 'Santa Cruz de Tenerife')
-        ) {
-            $destCountry = 'IC';
-        }
-
         $country = $this->_countryFactory->create()->load($destCountry);
         $rowRequest->setDestCountry($country->getData('iso2_code') ?: $destCountry);
 
@@ -405,6 +378,22 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         if ($request->getDestPostcode()) {
             $rowRequest->setDestPostal($request->getDestPostcode());
         }
+
+        $rowRequest->setOrigCountry(
+            $this->getNormalizedCountryCode(
+                $rowRequest->getOrigCountry(),
+                $rowRequest->getOrigRegionCode(),
+                $rowRequest->getOrigPostal()
+            )
+        );
+
+        $rowRequest->setDestCountry(
+            $this->getNormalizedCountryCode(
+                $rowRequest->getDestCountry(),
+                $rowRequest->getDestRegionCode(),
+                $rowRequest->getDestPostal()
+            )
+        );
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
 
@@ -430,6 +419,40 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_rawRequest = $rowRequest;
 
         return $this;
+    }
+
+    /**
+     * Return country code according to UPS
+     *
+     * @param string $countryCode
+     * @param string $regionCode
+     * @param string $postCode
+     * @return string
+     */
+    private function getNormalizedCountryCode($countryCode, $regionCode, $postCode)
+    {
+        //for UPS, puerto rico state for US will assume as puerto rico country
+        if ($countryCode == self::USA_COUNTRY_ID
+            && ($postCode == '00912'
+                || $regionCode == self::PUERTORICO_COUNTRY_ID)
+        ) {
+            $countryCode = self::PUERTORICO_COUNTRY_ID;
+        }
+
+        // For UPS, Guam state of the USA will be represented by Guam country
+        if ($countryCode == self::USA_COUNTRY_ID && $regionCode == self::GUAM_REGION_CODE) {
+            $countryCode = self::GUAM_COUNTRY_ID;
+        }
+
+        // For UPS, Las Palmas and Santa Cruz de Tenerife will be represented by Canary Islands country
+        if ($countryCode === 'ES' &&
+            ($regionCode === 'Las Palmas'
+                || $regionCode === 'Santa Cruz de Tenerife')
+        ) {
+            $countryCode = 'IC';
+        }
+
+        return $countryCode;
     }
 
     /**
@@ -807,21 +830,24 @@ XMLRequest;
         $httpResponse = $this->asyncHttpClient->request(
             new Request($url, Request::METHOD_POST, ['Content-Type' => 'application/xml'], $xmlRequest)
         );
-
+        $debugData['request'] = $xmlParams;
         return $this->deferredProxyFactory->create(
             [
                 'deferred' => new CallbackDeferred(
-                    function () use ($httpResponse) {
+                    function () use ($httpResponse, $debugData) {
                         $responseResult = null;
                         $xmlResponse = '';
                         try {
                             $responseResult = $httpResponse->get();
-                        } catch (HttpException $exception) {
-                            $this->_logger->critical($exception);
+                        } catch (HttpException $e) {
+                            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
+                            $this->_logger->critical($e);
                         }
                         if ($responseResult) {
                             $xmlResponse = $responseResult->getStatusCode() >= 400 ? '' : $responseResult->getBody();
                         }
+                        $debugData['result'] = $xmlResponse;
+                        $this->_debug($debugData);
 
                         return $this->_parseXmlResponse($xmlResponse);
                     }
@@ -885,7 +911,7 @@ XMLRequest;
             $success = (int)$arr[0];
             if ($success === 1) {
                 $arr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment");
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                $allowedMethods = explode(",", $this->getConfigData('allowed_methods') ?? '');
 
                 // Negotiated rates
                 $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
@@ -1125,6 +1151,7 @@ XMLAuth;
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
         $tracking = '';
+        $debugData = [];
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1141,7 +1168,7 @@ XMLAuth;
     <IncludeFreight>01</IncludeFreight>
 </TrackRequest>
 XMLAuth;
-
+            $debugData[$tracking] = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest];
             $trackingResponses[$tracking] = $this->asyncHttpClient->request(
                 new Request(
                     $url,
@@ -1155,6 +1182,8 @@ XMLAuth;
             $httpResponse = $response->get();
             $xmlResponse = $httpResponse->getStatusCode() >= 400 ? '' : $httpResponse->getBody();
 
+            $debugData[$tracking]['result'] = $xmlResponse;
+            $this->_debug($debugData);
             $this->_parseXmlTrackingResponse($tracking, $xmlResponse);
         }
 
@@ -1321,11 +1350,8 @@ XMLAuth;
                 }
             }
         }
-        if (empty($statuses)) {
-            $statuses = __('Empty response');
-        }
 
-        return $statuses;
+        return $statuses ?: __('Empty response');
     }
 
     /**
@@ -1673,6 +1699,22 @@ XMLAuth;
      */
     private function requestQuotes(DataObject $request): array
     {
+        $request->setShipperAddressCountryCode(
+            $this->getNormalizedCountryCode(
+                $request->getShipperAddressCountryCode(),
+                $request->getShipperAddressStateOrProvinceCode(),
+                $request->getShipperAddressPostalCode(),
+            )
+        );
+
+        $request->setRecipientAddressCountryCode(
+            $this->getNormalizedCountryCode(
+                $request->getRecipientAddressCountryCode(),
+                $request->getRecipientAddressStateOrProvinceCode(),
+                $request->getRecipientAddressPostalCode(),
+            )
+        );
+
         /** @var HttpResponseDeferredInterface[] $quotesRequests */
         //Getting quotes
         $this->_prepareShipmentRequest($request);

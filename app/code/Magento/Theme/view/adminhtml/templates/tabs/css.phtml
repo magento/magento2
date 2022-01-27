@@ -34,10 +34,10 @@ require([
         add: function (e, data) {
             var uploadButton = $('#css_uploader_button');
             /** Unbind click event on file change */
-            uploadButton.unbind('click');
-            uploadButton.removeAttr('disabled');
+            uploadButton.off('click');
+            uploadButton.prop('disabled', false);
 
-            uploadButton.click(function () {
+            uploadButton.on('click', function () {
                 $('#messages').html('');
                 $(this).attr('disabled', 'disabled');
                 data.submit();

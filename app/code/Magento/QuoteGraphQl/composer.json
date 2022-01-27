@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-quote": "*",
         "magento/module-checkout": "*",
@@ -14,10 +14,13 @@
         "magento/module-sales": "*",
         "magento/module-directory": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-gift-message": "*"
+        "magento/module-gift-message": "*",
+        "magento/module-catalog-inventory": "*"
     },
     "suggest": {
-        "magento/module-graph-ql-cache": "*"
+        "magento/module-graph-ql-cache": "*",
+        "magento/module-catalog-inventory-graph-ql": "*",
+        "magento/module-payment-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

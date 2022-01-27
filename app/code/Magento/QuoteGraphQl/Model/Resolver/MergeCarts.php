@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -16,10 +18,14 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\MergeCarts\CartQuantityValidatorInterface;
 
 /**
  * Merge Carts Resolver
@@ -49,16 +55,36 @@ class MergeCarts implements ResolverInterface
     private $quoteIdToMaskedQuoteId;
 
     /**
+     * @var CartItemRepositoryInterface
+     */
+    private $cartItemRepository;
+
+    /**
+     * @var StockRegistryInterface
+     */
+    private $stockRegistry;
+
+    /**
+     * @var CartQuantityValidatorInterface
+     */
+    private $cartQuantityValidator;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
      * @param CustomerCartResolver|null $customerCartResolver
      * @param QuoteIdToMaskedQuoteIdInterface|null $quoteIdToMaskedQuoteId
+     * @param CartItemRepositoryInterface|null $cartItemRepository
+     * @param StockRegistryInterface|null $stockRegistry
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartRepositoryInterface $cartRepository,
         CustomerCartResolver $customerCartResolver = null,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null,
+        CartItemRepositoryInterface $cartItemRepository = null,
+        StockRegistryInterface $stockRegistry = null,
+        CartQuantityValidatorInterface $cartQuantityValidator = null
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartRepository = $cartRepository;
@@ -66,6 +92,12 @@ class MergeCarts implements ResolverInterface
             ?: ObjectManager::getInstance()->get(CustomerCartResolver::class);
         $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId
             ?: ObjectManager::getInstance()->get(QuoteIdToMaskedQuoteIdInterface::class);
+        $this->cartItemRepository = $cartItemRepository
+            ?: ObjectManager::getInstance()->get(CartItemRepositoryInterface::class);
+        $this->stockRegistry = $stockRegistry
+            ?: ObjectManager::getInstance()->get(StockRegistryInterface::class);
+        $this->cartQuantityValidator = $cartQuantityValidator
+            ?: ObjectManager::getInstance()->get(CartQuantityValidatorInterface::class);
     }
 
     /**
@@ -127,6 +159,13 @@ class MergeCarts implements ResolverInterface
             $currentUserId,
             $storeId
         );
+        if ($this->cartQuantityValidator->validateFinalCartQuantities($customerCart, $guestCart)) {
+            $guestCart = $this->getCartForUser->execute(
+                $guestMaskedCartId,
+                null,
+                $storeId
+            );
+        }
         $customerCart->merge($guestCart);
         $guestCart->setIsActive(false);
         $this->cartRepository->save($customerCart);
