@@ -77,7 +77,8 @@ type SelectedConfigurableOption @doc(description: "Contains details about a sele
 }
 
 type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item."){
-    child_sku: String! @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
+    child_sku: String! @deprecated(reason: "Use `ConfigurableWishlistItem.selected_variant_sku` instead.") @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
+    selected_variant_sku: String @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\SelectedVariantSku")
     configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc(description: "An array of selected configurable options.")
 }
 
