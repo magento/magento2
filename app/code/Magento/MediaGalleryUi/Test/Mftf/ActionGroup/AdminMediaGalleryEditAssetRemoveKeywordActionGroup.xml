@@ -16,6 +16,8 @@
             <argument name="keyword" type="string"/>
         </arguments>
 
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryEditDetailsSection.removeSelectedKeyword(keyword)}}" stepKey="waitForKeywords"/>
+        <waitForElementClickable selector="{{AdminEnhancedMediaGalleryEditDetailsSection.removeSelectedKeyword(keyword)}}" stepKey="waitForKeywordClickable"/>
         <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.removeSelectedKeyword(keyword)}}" stepKey="removeKeyword"/>
     </actionGroup>
 </actionGroups>
