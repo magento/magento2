@@ -33,7 +33,8 @@ define([
          * @return {jQuery.Deferred}
          */
         saveShippingInformation: function () {
-            var payload;
+            var payload,
+                email;
 
             if (!quote.billingAddress() && quote.shippingAddress().canUseForBilling()) {
                 selectBillingAddressAction(quote.shippingAddress());
@@ -58,7 +59,12 @@ define([
             ).done(
                 function (response) {
                     quote.setTotals(response.totals);
-                    paymentService.setPaymentMethods(methodConverter(response['payment_methods']));
+                    email = quote.shippingAddress().email;
+
+                    if (!_.isUndefined(email) && email) {
+                        paymentService.setPaymentMethods(methodConverter(response['payment_methods']));
+                    }
+
                     fullScreenLoader.stopLoader();
                 }
             ).fail(
