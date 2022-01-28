@@ -68,35 +68,32 @@ use ReflectionException;
  */
 class Installer
 {
-    /**#@+
+    /**
      * Parameters for enabling/disabling modules
      */
-    const ENABLE_MODULES = 'enable-modules';
-    const DISABLE_MODULES = 'disable-modules';
-    /**#@- */
+    public const ENABLE_MODULES = 'enable-modules';
+    public const DISABLE_MODULES = 'disable-modules';
 
-    /**#@+
+    /**
      * Formatting for progress log
      */
-    const PROGRESS_LOG_RENDER = '[Progress: %d / %d]';
-    const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
-    /**#@- */
+    public const PROGRESS_LOG_RENDER = '[Progress: %d / %d]';
+    public const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
 
-    /**#@+
+    /**
      * Instance types for schema and data handler
      */
-    const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
-    const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
-    const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
-    const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
-    /**#@- */
+    public const SCHEMA_INSTALL = \Magento\Framework\Setup\InstallSchemaInterface::class;
+    public const SCHEMA_UPGRADE = \Magento\Framework\Setup\UpgradeSchemaInterface::class;
+    public const DATA_INSTALL = \Magento\Framework\Setup\InstallDataInterface::class;
+    public const DATA_UPGRADE = \Magento\Framework\Setup\UpgradeDataInterface::class;
 
-    const INFO_MESSAGE = 'message';
+    public const INFO_MESSAGE = 'message';
 
     /**
      * The lowest supported MySQL verion
      */
-    const MYSQL_VERSION_REQUIRED = '5.6.0';
+    public const MYSQL_VERSION_REQUIRED = '5.6.0';
 
     /**
      * File permissions checker
@@ -106,22 +103,16 @@ class Installer
     private $filePermissions;
 
     /**
-     * Deployment configuration repository
-     *
      * @var Writer
      */
     private $deploymentConfigWriter;
 
     /**
-     * Deployment configuration reader
-     *
      * @var Reader
      */
     private $deploymentConfigReader;
 
     /**
-     * Module list
-     *
      * @var ModuleListInterface
      */
     private $moduleList;
@@ -134,8 +125,6 @@ class Installer
     private $moduleLoader;
 
     /**
-     * Admin account factory
-     *
      * @var AdminAccountFactory
      */
     private $adminAccountFactory;
@@ -232,8 +221,6 @@ class Installer
     protected $sampleDataState;
 
     /**
-     * Component Registrar
-     *
      * @var ComponentRegistrar
      */
     private $componentRegistrar;
@@ -1063,7 +1050,7 @@ class Installer
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
             // Schema/Data is installed
-            if ($currentVersion !== '') {
+            if ($configVer !== null && $currentVersion !== '') {
                 $status = version_compare($configVer, $currentVersion);
                 if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
