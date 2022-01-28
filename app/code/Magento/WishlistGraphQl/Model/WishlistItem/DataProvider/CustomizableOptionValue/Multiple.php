@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\WishlistGraphQl\Model\WishlistItem\DataProvider\CustomizableOptionValue;
 
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Item\Option as SelectedOption;
@@ -29,20 +28,21 @@ class Multiple implements CustomizableOptionValueInterface
      */
     private $priceUnitLabel;
 
-    /** @var Uid */
+    /**
+     * @var Uid
+     */
     private $uidEncoder;
 
     /**
      * @param PriceUnitLabel $priceUnitLabel
-     * @param Uid|null $uidEncoder
+     * @param Uid $uidEncoder
      */
     public function __construct(
         PriceUnitLabel $priceUnitLabel,
-        Uid $uidEncoder = null
+        Uid $uidEncoder
     ) {
         $this->priceUnitLabel = $priceUnitLabel;
-        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
-            ->get(Uid::class);
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**

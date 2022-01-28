@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model\WishlistItem\DataProvider;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Wishlist\Model\Item as WishlistItem;
@@ -27,20 +26,21 @@ class CustomizableOption
      */
     private $customizableOptionValue;
 
-    /** @var Uid */
+    /**
+     * @var Uid
+     */
     private $uidEncoder;
 
     /**
      * @param CustomizableOptionValueInterface $customOptionValueDataProvider
-     * @param Uid|null $uidEncoder
+     * @param Uid $uidEncoder
      */
     public function __construct(
         CustomizableOptionValueInterface $customOptionValueDataProvider,
-        Uid $uidEncoder = null
+        Uid $uidEncoder
     ) {
         $this->customizableOptionValue = $customOptionValueDataProvider;
-        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
-            ->get(Uid::class);
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**
