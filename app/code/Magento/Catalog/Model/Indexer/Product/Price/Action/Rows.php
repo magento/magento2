@@ -55,6 +55,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @param TableMaintainer|null $tableMaintainer
      * @param int|null $batchSize
+     * @param CacheContext|null $cacheContext
      * @SuppressWarnings(PHPMD.NPathComplexity) Added to backward compatibility with abstract class
      * @SuppressWarnings(PHPMD.CyclomaticComplexity) Added to backward compatibility with abstract class
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) Added to backward compatibility with abstract class
