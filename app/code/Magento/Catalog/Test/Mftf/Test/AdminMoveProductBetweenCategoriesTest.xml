@@ -62,10 +62,14 @@
         </actionGroup>
 
         <!-- Create subcategory <Sub1> of the anchored category -->
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
+        <actionGroup ref="AdminClickOnAddSubcategoryButtonActionGroup" stepKey="clickOnAddSubCategoryButton"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="addSubCategoryName">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveSuccessMessage">
+            <argument name="message" value="You saved the category."/>
+        </actionGroup>
 
         <!-- Assign <product1> to the <Sub1> -->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
@@ -87,7 +91,9 @@
         <selectOption userInput="Yes" selector="{{AdminCatalogSearchEngineConfigurationSection.selectUseCategoriesPatForProductUrls}}" stepKey="selectYes"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSaving"/>
-        <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeMessage">
+            <argument name="message" value="You saved the configuration."/>
+        </actionGroup>
 
         <!-- Navigate to the Catalog > Products -->
         <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="onCatalogProductPage"/>
@@ -108,13 +114,15 @@
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="pushButtonSave"/>
 
         <!--Product is saved -->
-        <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
-        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="onCachePage"/>
         <waitForPageLoad stepKey="waitForCacheManagementPage"/>
 
         <checkOption selector="{{AdminCacheManagementSection.configurationCheckbox}}" stepKey="checkConfigCache"/>
@@ -125,36 +133,53 @@
         <click selector="{{AdminCacheManagementSection.massActionSubmit}}" stepKey="clickSubmit"/>
         <waitForPageLoad stepKey="waitForRefresh"/>
 
-        <see userInput="2 cache type(s) refreshed." stepKey="seeCacheRefreshedMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeCacheRefreshedMessage">
+            <argument name="message" value="2 cache type(s) refreshed."/>
+        </actionGroup>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         <!-- Open frontend -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontend"/>
-
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onFrontend"/>
         <!-- Open <Cat2> from navigation menu -->
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategory.name$$)}}" stepKey="openCat2"/>
-        <waitForPageLoad stepKey="waitForCategory2Page"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCat2">
+            <argument name="categoryName" value="$$createSecondCategory.name$$" />
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory2Page"/>
 
         <!-- # <Cat 2> should open # <product1> should be present on the page -->
-        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryName"/>
-        <see userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProduct"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleActionGroup" stepKey="seeCategoryName">
+            <argument name="categoryTitle" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProduct">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
 
         <!-- Open <product1>  -->
-        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProduct"/>
-        <waitForPageLoad stepKey="waitForProductPageLoading"/>
+        <actionGroup ref="StorefrontOpenProductFromCategoryPageActionGroup" stepKey="openProduct">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductPageLoading"/>
 
         <!-- # Product page should open successfully # Breadcrumb for product should be like <Cat 2> -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
-        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCategoryInBreadcrumbs"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontRightBreadcrumbsAreShownActionGroup" stepKey="seeCategoryInBreadcrumbs">
+            <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
 
         <!-- Open <Cat1_anchored> category -->
         <click selector="{{StorefrontNavigationSection.topCategory($$createAnchoredCategory1.name$$)}}" stepKey="clickCat1"/>
         <waitForPageLoad stepKey="waitForCategory1PageLoad"/>
 
         <!-- # Category should open successfully # <product1> should be absent on the page -->
-        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategory1Name"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleActionGroup" stepKey="seeCategory1Name">
+            <argument name="categoryTitle" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
-        <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontseeProduct">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
 
         <!-- Log in to the backend: Admin user is logged in-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
@@ -177,32 +202,47 @@
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Product is saved successfully -->
-        <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSaveMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Run cron -->
         <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
 
         <!-- Open frontend -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>
+        <!--<actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>-->
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onFrontendPage"/>
 
         <!-- Open <Cat2> from navigation menu -->
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSecondCategory.name$$)}}" stepKey="openSecondCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryPage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openSecondCategory">
+            <argument name="categoryName" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSecondCategoryPage"/>
 
         <!-- # <Cat 2> should open # <product1> should be absent on the page -->
-        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeSecondCategory1Name"/>
-        <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeSimpleProduct"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleActionGroup" stepKey="seeSecondCategory1Name">
+            <argument name="categoryTitle" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontseeSimpleProduct">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
 
         <!-- Click on <Cat1_anchored> category -->
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createAnchoredCategory1.name$$)}}" stepKey="clickAnchoredCategory"/>
         <waitForPageLoad stepKey="waitForAnchoredCategoryPage"/>
 
         <!-- # Category should open successfully # <product1> should be present on the page -->
-        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="see1CategoryName"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductNameOnCategory1Page"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleActionGroup" stepKey="see1CategoryName">
+            <argument name="categoryTitle" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductNameOnCategory1Page">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
 
         <!-- Breadcrumb for product should be like <Cat1_anchored>/<product> (if you clicks from anchor category) -->
-        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCat1inBreadcrumbs"/>
+        <actionGroup ref="AssertStorefrontRightBreadcrumbsAreShownActionGroup" stepKey="seeCat1inBreadcrumbs">
+            <argument name="categoryName" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
         <dontSee userInput="{$grabNameSubCategory}" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="dontSeeSubCategoryInBreadCrumbs"/>
 
         <!-- <Cat1_anchored>/<Sub1>/<product> (if you clicks from Sub1 category) -->
@@ -210,10 +250,18 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName({$grabNameSubCategory})}}" stepKey="clickSubCat"/>
         <waitForPageLoad stepKey="waitForSubCategoryPageLoad"/>
 
-        <see userInput="{$grabNameSubCategory}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeSubCategoryName"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductNameOnSubCategoryPage"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleActionGroup" stepKey="seeSubCategoryName">
+            <argument name="categoryTitle" value="{$grabNameSubCategory}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductNameOnSubCategoryPage">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
 
-        <see userInput="{$grabNameSubCategory}" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeSubCategoryInBreadcrumbs"/>
-        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCat1InBreadcrumbs"/>
+        <actionGroup ref="AssertStorefrontRightBreadcrumbsAreShownActionGroup" stepKey="seeSubCategoryInBreadcrumbs">
+            <argument name="categoryName" value="{$grabNameSubCategory}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontRightBreadcrumbsAreShownActionGroup" stepKey="seeCat1InBreadcrumbs">
+            <argument name="categoryName" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
     </test>
 </tests>
