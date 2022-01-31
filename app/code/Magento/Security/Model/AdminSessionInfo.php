@@ -27,22 +27,22 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     /**
      * Admin logged in
      */
-    const LOGGED_IN = 1;
+    public const LOGGED_IN = 1;
 
     /**
      * Admin logged out
      */
-    const LOGGED_OUT = 0;
+    public const LOGGED_OUT = 0;
 
     /**
      * User has been logged out by another login with the same credentials
      */
-    const LOGGED_OUT_BY_LOGIN = 2;
+    public const LOGGED_OUT_BY_LOGIN = 2;
 
     /**
      * User has been logged out manually from another session
      */
-    const LOGGED_OUT_MANUALLY = 3;
+    public const LOGGED_OUT_MANUALLY = 3;
 
     /**
      * All other open sessions were terminated
