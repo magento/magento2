@@ -75,6 +75,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected $_cachedOptionSelectQuery = [];
 
     /**
+     * Array of queries selecting cached options without title.
+     *
+     * @var array
+     */
+    protected $_cachedOptionSelectWithoutTitleQuery = [];
+
+    /**
      * Column names that holds values with particular meaning.
      *
      * @var string[]
@@ -183,7 +190,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         $selections = explode(
             Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            str_replace('?', '&#63;', $rowData['bundle_values'])
+            $rowData['bundle_values']
         );
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
@@ -191,6 +198,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             if (isset($option['sku']) && isset($option['name'])) {
                 if (!isset($this->_cachedOptions[$entityId])) {
                     $this->_cachedOptions[$entityId] = [];
+                    $this->_cachedOptionSelectWithoutTitleQuery[] =
+                        $this->connection->quoteInto(
+                            '(parent_id = ?)',
+                            (int)$entityId
+                        );
                 }
                 $this->_cachedSkus[] = $option['sku'];
                 if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
@@ -483,7 +495,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 'bo.option_id = bov.option_id',
                 ['value_id', 'title']
             )->where(
-                implode(' OR ', $this->_cachedOptionSelectQuery)
+                implode(' OR ', $this->_cachedOptionSelectWithoutTitleQuery)
             )
         );
         foreach ($existingOptions as $optionId => $option) {
@@ -758,6 +770,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     {
         $this->_cachedOptions = [];
         $this->_cachedOptionSelectQuery = [];
+        $this->_cachedOptionSelectWithoutTitleQuery = [];
         $this->_cachedSkus = [];
         $this->_cachedSkuToProducts = [];
         return $this;
