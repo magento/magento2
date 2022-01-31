@@ -25,7 +25,9 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
-        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForProduct"/>
+        <actionGroup ref="AdminSelectWeightTypeOnProductFormActionGroup" stepKey="selectWeightForProduct">
+            <argument name="weightOption" value="This item has weight"/>
+        </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <!--Assert simple product on Admin product page grid-->
         <comment userInput="Assert simple product in Admin product page grid" stepKey="commentAssertProductOnAdmin"/>
