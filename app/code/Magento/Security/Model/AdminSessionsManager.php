@@ -25,12 +25,12 @@ class AdminSessionsManager
     /**
      * Admin Session lifetime (sec)
      */
-    const ADMIN_SESSION_LIFETIME = 86400;
+    public const ADMIN_SESSION_LIFETIME = 86400;
 
     /**
      * Logout reason when current user has been locked out
      */
-    const LOGOUT_REASON_USER_LOCKED = 10;
+    public const LOGOUT_REASON_USER_LOCKED = 10;
 
     /**
      * @var ConfigInterface
