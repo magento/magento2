@@ -323,7 +323,7 @@ class Product extends AbstractResource
     {
         $this->removeNotInSetAttributeValues($product);
         $this->_saveWebsiteIds($product)->_saveCategories($product);
-        $this->scopeOverriddenValue->clearAttributeValues();
+        $this->scopeOverriddenValue->clearAttributesValues(ProductInterface::class, $product);
         return parent::_afterSave($product);
     }
 
