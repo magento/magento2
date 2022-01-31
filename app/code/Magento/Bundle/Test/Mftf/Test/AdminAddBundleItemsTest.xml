@@ -19,24 +19,23 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <!--Creating data-->
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <magentoCron stepKey="runCronIndex" groups="index"/>
-            <!--Admin login-->
             <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
         </before>
         <after>
-            <!--Deleting data-->
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="simpleProduct0" stepKey="deleteSimpleProduct0"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
-            <!--Logging out-->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
+                <argument name="sku" value="{{BundleProduct.sku}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to bundle product creation page-->
@@ -86,14 +85,11 @@
         <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts">
             <argument name="bundleProduct" value="BundleProduct"/>
         </actionGroup>
-
-        <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
             <argument name="message" value="You saved the product."/>
         </actionGroup>
 
-        <!--Checking on admin side-->
         <scrollToTopOfPage stepKey="scroll"/>
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems2"/>
         <seeElement selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="LookingForBundleItemPresence"/>
@@ -108,8 +104,6 @@
         <waitForPageLoad stepKey="waitCustomizationDropDown"/>
         <seeElement selector="{{StorefrontBundledSection.customizableBundleItemOption}}" stepKey="seeBundleItem"/>
 
-        <!--Add another bundle option with 2 items-->
-        <!--Go to bundle product creation page-->
         <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="WaitForClear"/>
