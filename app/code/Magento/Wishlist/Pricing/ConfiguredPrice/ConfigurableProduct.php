@@ -61,9 +61,9 @@ class ConfigurableProduct extends AbstractPrice
         $price = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
 
         if ($product->getProductOptionsCollection()) {
-            foreach ($product->getProductOptionsCollection() as $configurationOptionsVal) {
+            foreach ($product->getProductOptionsCollection() as $k => $configurationOptionsVal) {
                 $configurableOptionsData = $configurationOptionsVal->getValues();
-                foreach($configurableOptionsData as $configurableOptionData) {
+                foreach ($configurableOptionsData as $configurableOptionData) {
                     $price += $configurableOptionData->getPrice();
                 }
             }

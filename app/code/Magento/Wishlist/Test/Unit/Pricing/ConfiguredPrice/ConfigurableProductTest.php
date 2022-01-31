@@ -103,6 +103,7 @@ class ConfigurableProductTest extends TestCase
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $productMock->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
@@ -153,7 +154,8 @@ class ConfigurableProductTest extends TestCase
         $this->assertEquals(100, $this->model->getValue());
     }
 
-    public function testGetValueWithCustomOption() {
+    public function testGetValueWithCustomOption()
+    {
         $priceValue = 10;
         $customOptionPrice = 5;
 
@@ -194,13 +196,13 @@ class ConfigurableProductTest extends TestCase
         $productOptionMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Option\Collection')
             ->disableOriginalConstructor()
             ->addMethods(['getValues'])
-            ->onlyMethods(['getIterator','getData'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
 
-        $productValMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option\Value')
+        $productValMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection')
             ->disableOriginalConstructor()
-            ->addMethods(['getIterator'])
-            ->onlyMethods(['getPrice'])
+            ->addMethods(['getPrice'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
 
         $productMock->expects($this->atLeastOnce())
