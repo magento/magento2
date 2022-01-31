@@ -281,7 +281,9 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
             <argument name="productUrl" value="{{ImportProduct_Configurable.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="As low as ${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Configurable.baseImageName)}}" stepKey="seeBaseImage"/>
@@ -291,7 +293,9 @@
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
             <argument name="optionLabel" value="{{ProductAttributeOptionOneForExportImport.label}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName2"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName2">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice2"/>
         <waitForPageLoad stepKey="waitForImageLoad1"/>
@@ -302,7 +306,9 @@
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
             <argument name="optionLabel" value="{{ProductAttributeOptionTwoForExportImport.label}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName3"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName3">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku3"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple2_Configurable.price}}" stepKey="seePrice3"/>
         <waitForPageLoad stepKey="waitForImageLoad2"/>
@@ -313,7 +319,9 @@
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
             <argument name="optionLabel" value="{{ProductAttributeOptionThreeForImport.label}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName4"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName4">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku4"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple3_Configurable.price}}" stepKey="seePrice4"/>
         <waitForPageLoad stepKey="waitForImageLoad3"/>
