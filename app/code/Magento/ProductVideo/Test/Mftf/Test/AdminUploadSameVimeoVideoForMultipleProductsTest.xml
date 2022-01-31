@@ -35,7 +35,9 @@
         </after>
 
         <!-- Open product 1 edit page -->
-        <amOnPage url="{{AdminProductEditPage.url($createProduct1.id$)}}" stepKey="goToProduct1EditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1EditPage">
+            <argument name="productId" value="$createProduct1.id$"/>
+        </actionGroup>
         <!-- Add product video -->
         <actionGroup ref="AddProductVideoActionGroup" stepKey="addProductVideoToProduct1">
             <argument name="video" value="VimeoProductVideo"/>
@@ -44,7 +46,9 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormOfProduct1"/>
 
         <!-- Open product 2 edit page -->
-        <amOnPage url="{{AdminProductEditPage.url($createProduct2.id$)}}" stepKey="goToProduct2EditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct2EditPage">
+            <argument name="productId" value="$createProduct2.id$"/>
+        </actionGroup>
         <!-- Add product video -->
         <actionGroup ref="AddProductVideoActionGroup" stepKey="saveProductFormOfProduct2">
             <argument name="video" value="VimeoProductVideo"/>

@@ -138,7 +138,9 @@
         </actionGroup>
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSetWithDropdownAttribute"/>
         <!--Assign dropdown attribute to child product of configurable-->
-        <amOnPage url="{{AdminProductEditPage.url($createFirstSimpleProduct.id$)}}" stepKey="visitAdminEditProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminEditProductPage">
+            <argument name="productId" value="$createFirstSimpleProduct.id$"/>
+        </actionGroup>
         <waitForElementVisible selector="{{AdminProductFormSection.customSelectField('$createDropdownAttribute.attribute_code$')}}" stepKey="waitForDropdownAttributeSelectVisible"/>
         <selectOption selector="{{AdminProductFormSection.customSelectField('$createDropdownAttribute.attribute_code$')}}" userInput="$getFirstDropdownOption.label$" stepKey="selectValueOfNewAttribute"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
