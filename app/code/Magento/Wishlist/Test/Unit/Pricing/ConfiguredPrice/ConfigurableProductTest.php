@@ -22,6 +22,10 @@ use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Collection as optionCollection;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as optionValueCollection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+
 class ConfigurableProductTest extends TestCase
 {
     /**
