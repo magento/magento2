@@ -52,8 +52,10 @@
         <!-- Save attribute set -->
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
         <!-- Go to create new product page -->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <!-- Assert attribute can be used in product creation -->
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText($$attribute.attribute[frontend_labels][0][label]$$)}}" stepKey="seeLabel"/>
     </test>

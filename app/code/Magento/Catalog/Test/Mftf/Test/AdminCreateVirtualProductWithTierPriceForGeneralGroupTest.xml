@@ -37,7 +37,10 @@
         </after>
 
         <!-- Create virtual product-->
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId,'virtual')}}" stepKey="openVirtualProductCreatePage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openVirtualProductCreatePage">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
         <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillNewProductData">
             <argument name="product" value="virtualProductGeneralGroup"/>
         </actionGroup>

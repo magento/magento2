@@ -53,8 +53,10 @@
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave2"/>
 
         <!-- Go to new product page and see a default attribute -->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="attributeSetId" value="4"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="expandSEOSection"/>
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="seeMetaKeyword"/>
         <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="dontSeeTestGroupName"/>
