@@ -19,6 +19,8 @@ use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Collection as optionCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection as optionValueCollection;
 
 class ConfigurableProductTest extends TestCase
 {
@@ -52,6 +54,16 @@ class ConfigurableProductTest extends TestCase
      */
     private $productCustomOption;
 
+    /**
+     * @var optionCollection|MockObject
+     */
+    private $productOptionMock;
+
+    /**
+     * @var optionValueCollection|MockObject
+     */
+    private $productValMock;
+
     protected function setUp(): void
     {
         $this->priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
@@ -73,6 +85,18 @@ class ConfigurableProductTest extends TestCase
 
         $this->productCustomOption = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();
+
+        $this->productOptionMock = $this->getMockBuilder(optionCollection::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getValues'])
+            ->onlyMethods(['getIterator'])
+            ->getMock();
+
+        $this->productValMock = $this->getMockBuilder(optionValueCollection::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getPrice'])
+            ->onlyMethods(['getIterator'])
+            ->getMock();
 
         $this->model = new ConfigurableProduct(
             $this->saleableItem,
@@ -180,6 +204,9 @@ class ConfigurableProductTest extends TestCase
         $productMock->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
+        $productMock->expects($this->atLeastOnce())
+            ->method('getProductOptionsCollection')
+            ->willReturn($this->productOptionMock);
 
         $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
@@ -193,37 +220,18 @@ class ConfigurableProductTest extends TestCase
             ->with('simple_product')
             ->willReturn($wishlistItemOptionMock);
 
-        $productOptionMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Option\Collection')
-            ->disableOriginalConstructor()
-            ->addMethods(['getValues'])
-            ->onlyMethods(['getIterator'])
-            ->getMock();
-
-        $productValMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection')
-            ->disableOriginalConstructor()
-            ->addMethods(['getPrice'])
-            ->onlyMethods(['getIterator'])
-            ->getMock();
-
-        $productMock->expects($this->atLeastOnce())
-            ->method('getProductOptionsCollection')
-            ->willReturn($productOptionMock);
-
-        $productOptionMock->expects($this->any())->method('getIterator')
-            ->willReturn(new \ArrayIterator([$productOptionMock]));
-
-        $productOptionMock->expects($this->any())
+        $this->productOptionMock->expects($this->any())->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->productOptionMock]));
+        $this->productOptionMock->expects($this->any())
             ->method('getValues')
-            ->willReturn($productValMock);
+            ->willReturn($this->productValMock);
 
-        $productValMock->expects($this->any())->method('getIterator')
-            ->willReturn(new \ArrayIterator([$productValMock]));
-
-        $productValMock->expects($this->any())
+        $this->productValMock->expects($this->any())->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->productValMock]));
+        $this->productValMock->expects($this->any())
             ->method('getPrice')
             ->willReturn($customOptionPrice);
 
-        $totalPrice = $priceValue + $customOptionPrice;
-        $this->assertEquals($totalPrice, $this->model->getValue());
+        $this->assertEquals($priceValue + $customOptionPrice, $this->model->getValue());
     }
 }
