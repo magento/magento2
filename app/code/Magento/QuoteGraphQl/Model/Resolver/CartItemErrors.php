@@ -75,12 +75,12 @@ class CartItemErrors implements ResolverInterface
                 'CartItemErrorType',
                 (string)$errorType
             );
-            $errors[] = [
+            $errors[$message] = [
                 'code' => $errorEnumCode,
                 'message' => $message
             ];
         }
 
-        return $errors;
+        return array_values($errors);
     }
 }
