@@ -41,8 +41,8 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
         <click selector="{{AdminProductFormBundleSection.dynamicSkuToggle}}" stepKey="disableDynamicSku"/>
         <click selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="clickDynamicPriceSwitcher"/>
         <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="100" stepKey="fillBundlePrice"/>
