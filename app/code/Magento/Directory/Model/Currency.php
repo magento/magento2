@@ -437,11 +437,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $formattedCurrency = preg_replace('/ /u', '', $formattedCurrency, 1);
         }
 
-        if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
-                && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
-            $formattedCurrency = preg_replace(['/[^0-9.,۰٫]+/', '/ /'], '', $formattedCurrency);
-        }
-
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
     }
 
@@ -453,13 +448,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function getNumberFormatter(array $options): \Magento\Framework\NumberFormatter
     {
-        $key = 'currency_' . hash(
-            'sha256',
-            ($this->localeResolver->getLocale() . $this->serializer->serialize($options))
-        );
+        $locale = $this->localeResolver->getLocale() . ($this->getCode() ? '@currency=' . $this->getCode() : '');
+        $key = 'currency_' . hash('sha256', $locale . $this->serializer->serialize($options));
         if (!isset($this->numberFormatterCache[$key])) {
             $this->numberFormatter = $this->numberFormatterFactory->create(
-                ['locale' => $this->localeResolver->getLocale(), 'style' => \NumberFormatter::CURRENCY]
+                ['locale' => $locale, 'style' => \NumberFormatter::CURRENCY]
             );
 
             $this->setOptions($options);
@@ -596,5 +589,16 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $string = preg_replace('/^'.$match[1].'/u', '', $string);
         }
         return $string;
+    }
+
+    /**
+     * Checks if given string is of Arabic symbols
+     *
+     * @param string $string
+     * @return bool
+     */
+    private function isArabicSymbols(string $string): bool
+    {
+        return preg_match('/[\p{Arabic}]/u', $string) > 0;
     }
 }
