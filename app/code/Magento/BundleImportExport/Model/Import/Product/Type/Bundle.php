@@ -190,7 +190,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         $selections = explode(
             Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            $rowData['bundle_values']
+            str_replace('?', '&#63;', $rowData['bundle_values'])
         );
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
@@ -495,7 +495,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 'bo.option_id = bov.option_id',
                 ['value_id', 'title']
             )->where(
-                implode(' OR ', $this->_cachedOptionSelectWithoutTitleQuery)
+                implode(' OR ', $this->_cachedOptionSelectQuery)
             )
         );
         foreach ($existingOptions as $optionId => $option) {
