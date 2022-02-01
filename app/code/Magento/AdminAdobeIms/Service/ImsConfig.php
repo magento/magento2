@@ -10,6 +10,7 @@ class ImsConfig
     public const XML_PATH_ENABLED = 'adobe_ims/integration/enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
+    public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
 
     /**
      * @var ScopeConfigInterface

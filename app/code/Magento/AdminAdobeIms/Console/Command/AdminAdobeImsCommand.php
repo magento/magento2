@@ -11,8 +11,6 @@ namespace Magento\AdminAdobeIms\Console\Command;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\InvalidArgumentException;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
