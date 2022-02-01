@@ -139,9 +139,10 @@ class Observer
             self::XML_PATH_ERROR_RECIPIENT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+        $errorRecipients = !empty($errorRecipient) ? explode(',', $errorRecipient) : [];
         if (count($importWarnings) == 0) {
             $this->_currencyFactory->create()->saveRates($rates);
-        } elseif ($errorRecipient) {
+        } elseif (count($errorRecipients) > 0) {
             //if $errorRecipient is not set, there is no sense send email to nobody
             $this->inlineTranslation->suspend();
 
@@ -162,7 +163,7 @@ class Observer
                     self::XML_PATH_ERROR_IDENTITY,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
-            )->addTo($errorRecipient);
+            )->addTo($errorRecipients);
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();
 
