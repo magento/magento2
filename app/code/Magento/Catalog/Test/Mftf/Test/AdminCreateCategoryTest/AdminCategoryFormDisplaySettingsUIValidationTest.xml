@@ -26,7 +26,9 @@
     </after>
     <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
     <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
-    <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+    <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="enterCategoryName">
+        <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+    </actionGroup>
     <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="clickOnDisplaySettingsTab"/>
      <waitForElementVisible selector="{{CategoryDisplaySettingsSection.filterPriceRangeUseConfig}}" stepKey="wait"/>
     <scrollTo selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" stepKey="scrollToLayeredNavigationField"/>

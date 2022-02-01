@@ -40,13 +40,17 @@
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickAddSubCategoryButton"/>
         <waitForPageLoad stepKey="waitForAddSubCategoryClick1"/>
         <waitForElementVisible selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" stepKey="waitForSubCategoryName1"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{FirstLevelSubCat.name}}" stepKey="fillSubCategoryName"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillSubCategoryName">
+            <argument name="categoryName" value="{{FirstLevelSubCat.name}}"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstLevelSubCategory"/>
         <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButtonAgain"/>
         <waitForPageLoad stepKey="waitForAddSubCategoryClick2"/>
         <waitForElementVisible selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" stepKey="waitForSubCategoryName2"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SecondLevelSubCat.name}}" stepKey="fillSecondLevelSubCategoryName"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="fillSecondLevelSubCategoryName">
+            <argument name="categoryName" value="{{SecondLevelSubCat.name}}"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSecondLevelSubCategory"/>
         <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#" />

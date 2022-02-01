@@ -155,7 +155,9 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
         <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="enterCategoryNameAsDefaultCategory">
+            <argument name="categoryName" value="Default Category"/>
+        </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryDefaultCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>
     </test>

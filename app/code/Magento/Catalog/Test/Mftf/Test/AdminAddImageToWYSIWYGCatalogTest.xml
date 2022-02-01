@@ -25,7 +25,9 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
         <comment userInput="BIC workaround" stepKey="wait2"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
+        <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="enterCategoryName">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
         <scrollTo  selector="{{TinyMCESection.InsertImageIcon}}" stepKey="scrollToImageIcon"/>
