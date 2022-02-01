@@ -758,7 +758,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     {
         $this->_cachedOptions = [];
         $this->_cachedOptionSelectQuery = [];
-        $this->_cachedOptionSelectWithoutTitleQuery = [];
         $this->_cachedSkus = [];
         $this->_cachedSkuToProducts = [];
         return $this;
