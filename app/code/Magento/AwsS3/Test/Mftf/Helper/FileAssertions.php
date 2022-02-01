@@ -305,15 +305,4 @@ class FileAssertions extends Helper implements FileAssertionsInterface
         }
         return $filePathJson;
     }
-
-//    /**
-//     * Returns path for current storage type
-//     *
-//     * @param string $filePath
-//     * @return mixed|string
-//     */
-//    public function getPath(string $filePath)
-//    {
-//        return $this->extractFilePath($filePath);
-//    }
 }
