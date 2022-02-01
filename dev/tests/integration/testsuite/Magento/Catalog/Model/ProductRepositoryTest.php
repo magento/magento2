@@ -12,8 +12,6 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
@@ -23,10 +21,9 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -94,7 +91,7 @@ class ProductRepositoryTest extends TestCase
     private $productSkusToDelete = [];
 
     /**
-     * @var \Magento\TestFramework\Fixture\DataFixtureStorage
+     * @var DataFixtureStorage
      */
     private $fixtures;
 
@@ -437,11 +434,17 @@ class ProductRepositoryTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public static function setPriceScopeToWebsite(): void
     {
         self::setConfig(['catalog/price/scope' => 1]);
     }
 
+    /**
+     * @return void
+     */
     public static function setPriceScopeToWebsiteRollback(): void
     {
         self::setConfig(['catalog/price/scope' => null]);
