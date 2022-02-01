@@ -86,12 +86,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
             }
 
+            // @codingStandardsIgnoreStart
             if (isset($result[$name . '--' . $connection]['bindings']) && count($bindings) > 0) {
                 $bindings = array_merge($result[$name . '--' . $connection]['bindings'], $bindings);
             }
             if (isset($result[$name . '--' . $connection]['arguments']) && count($exchangeArguments) > 0) {
                 $exchangeArguments = array_merge($result[$name . '--' . $connection]['arguments'], $exchangeArguments);
             }
+            // @codingStandardsIgnoreEnd
 
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
             $result[$name . '--' . $connection] = [

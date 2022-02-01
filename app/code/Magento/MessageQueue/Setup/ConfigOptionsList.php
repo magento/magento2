@@ -62,7 +62,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_QUEUE_DEFAULT_CONNECTION,
-                'Default queue connection. Can be db, amqp or a custom one.',
+                'Message queues default connection. Can be db, amqp or a custom one.',
                 self::DEFAULT_QUEUE_CONNECTION
             ),
         ];

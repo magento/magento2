@@ -180,7 +180,9 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
             foreach (array_keys($topicDefinitions) as $topicName) {
                 if (preg_match($pattern, $topicName)) {
                     if (isset($topics[$topicName])) {
+                        // @codingStandardsIgnoreStart
                         $topics[$topicName] = array_merge($topics[$topicName], $topics[$wildcardKey]);
+                        // @codingStandardsIgnoreEnd
                     } else {
                         $topics[$topicName] = $topics[$wildcardKey];
                     }
