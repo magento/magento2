@@ -185,6 +185,51 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that Bundle options with question mark are updated correctly by import
+     *
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testBundleImportUpdateValuesWithQuestionMark(): void
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/../../_files/import_bundle_with_question_mark.csv';
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        // import data from CSV file to update values
+        $pathToFile2 = __DIR__ . '/../../_files/import_bundle_with_question_mark.csv';
+        $errors = $this->doImport($pathToFile2, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+
+        $resource = $this->objectManager->get(ProductResource::class);
+        $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
+        $this->assertIsNumeric($productId);
+        /** @var Product $product */
+        $product = $this->objectManager->create(Product::class);
+        $product->load($productId);
+
+        $this->assertFalse($product->isObjectNew());
+        $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
+        $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
+        $this->assertEquals(1, $product->getShipmentType());
+
+        $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
+        $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(1, $bundleOptionCollection);
+        foreach ($bundleOptionCollection as $optionKey => $option) {
+            $this->assertEquals('checkbox', $option->getData('type'));
+            $this->assertEquals('Option&#63;', $option->getData('title'));
+            $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
+
+        }
+        $this->importedProductSkus = ['Simple 1', 'Bundle 1'];
+    }
+
+    /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
