@@ -162,13 +162,11 @@ class ScopeOverriddenValue
                 \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
             $attributes = $metadata->getEntityConnection()->fetchAll((string)$unionSelect);
-            $values = array_merge(
-                $this->getAttributesValues($entityType, $entity),
-                array_fill_keys($storeIds, [])
-            );
+            $values = array_fill_keys($storeIds, []);
             foreach ($attributes as $attribute) {
                 $values[$attribute['store_id']][$attribute['attribute_code']] = $attribute['value'];
             }
+            $values += $this->getAttributesValues($entityType, $entity);
             $this->setAttributesValues($entityType, $entity, $values);
         }
     }
