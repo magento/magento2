@@ -168,6 +168,7 @@ class Date extends AbstractElement
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(
                 'Output format is not specified. ' .
                 'Please specify "format" key in constructor, or set it using setFormat().'
