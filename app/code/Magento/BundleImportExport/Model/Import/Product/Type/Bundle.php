@@ -75,13 +75,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected $_cachedOptionSelectQuery = [];
 
     /**
-     * Array of queries selecting cached options without title.
-     *
-     * @var array
-     */
-    protected $_cachedOptionSelectWithoutTitleQuery = [];
-
-    /**
      * Column names that holds values with particular meaning.
      *
      * @var string[]
@@ -198,11 +191,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             if (isset($option['sku']) && isset($option['name'])) {
                 if (!isset($this->_cachedOptions[$entityId])) {
                     $this->_cachedOptions[$entityId] = [];
-                    $this->_cachedOptionSelectWithoutTitleQuery[] =
-                        $this->connection->quoteInto(
-                            '(parent_id = ?)',
-                            (int)$entityId
-                        );
                 }
                 $this->_cachedSkus[] = $option['sku'];
                 if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
