@@ -4,6 +4,7 @@ namespace Magento\AdminAdobeIms\Service;
 
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 class ImsConfig
 {
@@ -20,18 +21,22 @@ class ImsConfig
     /**
      * @var WriterInterface
      */
-    private WriterInterface $configWriter;
+    private WriterInterface $writer;
+    private EncryptorInterface $encryptor;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param WriterInterface $configWriter
+     * @param WriterInterface $writer
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        WriterInterface $configWriter
+        WriterInterface $writer,
+        EncryptorInterface $encryptor
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->configWriter = $configWriter;
+        $this->writer = $writer;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -55,7 +60,7 @@ class ImsConfig
      */
     public function updateConfig(string $path, string $value): void
     {
-        $this->configWriter->save(
+        $this->writer->save(
             $path,
             $value
         );

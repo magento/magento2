@@ -1,16 +1,9 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Exception\InvalidArgumentException;
-use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
 class ImsConnection
@@ -23,17 +16,10 @@ class ImsConnection
     private CurlFactory $curlFactory;
 
     /**
-     * @var ImsConfig
-     */
-    private ImsConfig $imsConfig;
-
-    /**
      * @param CurlFactory $curlFactory
-     * @param ImsConfig $imsConfig
      */
     public function __construct(
-        CurlFactory $curlFactory,
-        ImsConfig $imsConfig
+        CurlFactory $curlFactory
     ) {
         $this->curlFactory = $curlFactory;
         $this->imsConfig = $imsConfig;
@@ -59,7 +45,7 @@ class ImsConnection
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function testAuth(string $clientId): bool
+    public function testConnection(string $clientId): bool
     {
         $location = $this->auth($clientId);
         return $location !== '';
