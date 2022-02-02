@@ -51,7 +51,9 @@
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
         <click selector="{{StorefrontNavigationSection.topCategory($$createCategory.name$$)}}" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="$$createCategory.name$$" stepKey="seeOnCategoryPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeOnCategoryPage">
+            <argument name="categoryTitle" value="$$createCategory.name$$"/>
+        </actionGroup>
         <!--Add configurable product to cart-->
         <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductTitleByName(BaseConfigurableProduct.name)}}" stepKey="hoverProductInGrid"/>
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(BaseConfigurableProduct.name)}}" stepKey="tryAddToCartFromCategoryPage"/>

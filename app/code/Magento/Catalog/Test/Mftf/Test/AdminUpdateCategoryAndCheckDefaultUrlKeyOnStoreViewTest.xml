@@ -69,6 +69,8 @@
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeUpdatedCatergoryInStoreFront"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategoryOnStoreFront"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(_defaultCategory.name)}}" stepKey="seeTheUpdatedCategoryTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeTheUpdatedCategoryTitle">
+            <argument name="categoryTitle" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

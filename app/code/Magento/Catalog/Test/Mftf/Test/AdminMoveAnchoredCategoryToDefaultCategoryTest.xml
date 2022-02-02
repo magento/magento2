@@ -109,7 +109,9 @@
         <!--Open Category in store front-->
         <amOnPage url="{{StorefrontCategoryPage.url(SimpleSubCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryInTitle">
+            <argument name="categoryTitle" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryOnStoreNavigationBarAfterMove"/>
         <click selector="{{StorefrontCategoryMainSection.productLink}}" stepKey="openSearchedProduct1"/>
         <waitForPageLoad  stepKey="waitForProductToLoad2"/>

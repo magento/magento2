@@ -88,7 +88,9 @@
         </actionGroup>
 
         <!-- The category is still empty -->
-        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryA1Name"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryA1Name">
+            <argument name="categoryTitle" value="$$createCategoryA.name$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1"/>
 
@@ -100,7 +102,9 @@
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
 
         <!-- Category A displays product A1 now -->
-        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeTitleCategoryA1">
+            <argument name="categoryTitle" value="$$createCategoryA.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductA1"/>
 
         <!--6.  Open Admin > Catalog > Products > Product A1. Unassign category A from product A1 -->
@@ -118,7 +122,9 @@
         </actionGroup>
 
         <!-- Category A still contains product A1 -->
-        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryAOnPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryAOnPage">
+            <argument name="categoryTitle" value="$$createCategoryA.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductA1"/>
 
         <!-- 8. Run cron reindex (Ensure that at least one minute passed since last cron run) -->
@@ -129,7 +135,9 @@
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshCategoryAPage"/>
 
         <!-- Category A is empty now -->
-        <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeOnPageCategoryAName">
+            <argument name="categoryTitle" value="$$createCategoryA.name$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeOnPageEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1OnPage"/>
 
@@ -140,7 +148,9 @@
         </actionGroup>
 
         <!-- Category B displays product B1, C1 and C2 -->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryBOnPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryBOnPage">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductB1"/>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductC2"/>
@@ -160,7 +170,9 @@
         </actionGroup>
 
         <!-- Category B displays product B1, C1 and C2 -->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="categoryBOnPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="categoryBOnPage">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductB1"/>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC2"/>
@@ -172,7 +184,9 @@
         </actionGroup>
 
         <!-- Category C still displays products C1 and C2 -->
-        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="categoryCOnPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="categoryCOnPage">
+            <argument name="categoryTitle" value="$$createCategoryC.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC1inCategoryC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC2InCategoryC2"/>
 
@@ -186,7 +200,9 @@
         </actionGroup>
 
         <!-- Category B displays product B1 and C2 only-->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryBOnPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeTitleCategoryBOnPage">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryBPageProductB1"/>
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeOnCategoryBPageProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryBPageProductC2"/>
@@ -198,7 +214,9 @@
         </actionGroup>
 
         <!-- Category C displays only product C2 now -->
-        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleOnCategoryCPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeTitleOnCategoryCPage">
+            <argument name="categoryTitle" value="$$createCategoryC.name$$"/>
+        </actionGroup>
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeOnCategoryCPageProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCPageProductC2"/>
 
@@ -219,7 +237,9 @@
         </actionGroup>
 
         <!-- Category B displays product B1 and C2 -->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="titleCategoryBOnPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="titleCategoryBOnPage">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBPageProductB1"/>
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryBPageProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBPageProductC2"/>
@@ -231,7 +251,9 @@
         </actionGroup>
 
         <!-- Category C displays product C2 -->
-        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="titleOnCategoryCPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="titleOnCategoryCPage">
+            <argument name="categoryTitle" value="$$createCategoryC.name$$"/>
+        </actionGroup>
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeCategoryCPageProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryCPageProductC2"/>
 
@@ -245,7 +267,9 @@
         </actionGroup>
 
         <!--  Category B displays products B1, C1, C2 again, but only after reindex. -->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="onPageSeeCategoryBTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="onPageSeeCategoryBTitle">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryBProductB1"/>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryBProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryBProductC2"/>
@@ -257,7 +281,9 @@
         </actionGroup>
 
         <!-- Category C displays products C1, C2 again, but only after reindex.-->
-        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="onPageSeeCategoryCTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="onPageSeeCategoryCTitle">
+            <argument name="categoryTitle" value="$$createCategoryC.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryCProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="onPageSeeCategoryCProductC2"/>
 
@@ -280,7 +306,9 @@
         </actionGroup>
 
         <!--  Category B displays products B1, C1, C2 again, but only after reindex. -->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryBTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryBTitle">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBProductB1"/>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryBProductC2"/>
@@ -292,7 +320,9 @@
         </actionGroup>
 
         <!-- Category C displays products C1, C2 again, but only after reindex.-->
-        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryCTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryCTitle">
+            <argument name="categoryTitle" value="$$createCategoryC.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnCategoryCProductC2"/>
 
@@ -306,7 +336,9 @@
         </actionGroup>
 
         <!-- Category B displays product B1 and C2 only-->
-        <see userInput="$$createCategoryB.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryB"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeTitleCategoryB">
+            <argument name="categoryTitle" value="$$createCategoryB.name$$"/>
+        </actionGroup>
         <see userInput="$$createProductB1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeTitleProductB1"/>
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeCategoryBProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeTitleProductC2"/>
@@ -318,7 +350,9 @@
         </actionGroup>
 
         <!-- Category C displays product C2 again, but only after reindex.-->
-        <see userInput="$$createCategoryC.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryC"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeTitleCategoryC">
+            <argument name="categoryTitle" value="$$createCategoryC.name$$"/>
+        </actionGroup>
         <dontSee userInput="$$createProductC1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeOnCategoryCProductC1"/>
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeOnPageTitleProductC2"/>
     </test>
