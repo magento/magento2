@@ -11,7 +11,6 @@ namespace Magento\AdminAdobeIms\Model;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InvalidArgumentException;
-use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 

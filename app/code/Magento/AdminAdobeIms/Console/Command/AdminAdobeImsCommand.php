@@ -221,7 +221,6 @@ class AdminAdobeImsCommand extends Command
      */
     private function disableModule(OutputInterface $output): void
     {
-        //disable Adobe IMS Module
         $this->imsConfig->updateConfig(
             ImsConfig::XML_PATH_ENABLED,
             '0'
@@ -229,8 +228,7 @@ class AdminAdobeImsCommand extends Command
 
         $this->imsConfig->deleteConfig(ImsConfig::XML_PATH_ORGANIZATION_ID);
         $this->imsConfig->deleteConfig(ImsConfig::XML_PATH_API_KEY);
-
-        $output->writeln(__('Adobe IMS disabled'));
+        $this->imsConfig->deleteConfig(ImsConfig::XML_PATH_PRIVATE_KEY);
     }
 
     /**
