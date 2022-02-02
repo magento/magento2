@@ -40,7 +40,7 @@
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
-        <!-- Add two bundle items -->
+         <!--Add two bundle items-->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <scrollTo stepKey="scrollToBundleItems" selector="{{AdminProductFormBundleSection.bundledItems}}"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
@@ -60,14 +60,18 @@
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
 
-        <click stepKey="saveProductBundle" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductBundle"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccess">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!-- Go to the storefront bundled product page -->
-        <amOnPage url="/{{BundleProduct.urlKey}}.html" stepKey="visitStoreFrontBundle"/>
-        <waitForPageLoad stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="visitStoreFrontBundle">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefront"/>
         <click stepKey="customizeAndAddToCart" selector="{{StorefrontBundledSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitCustomizableOptionsPopUp"/>
 
@@ -90,9 +94,10 @@
         <waitForElementVisible stepKey="waitForInfoDropdown" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad3"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalBefore"/>
-        <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
-        <waitForPageLoad stepKey="waitForStorefront2"/>
-
+        <actionGroup ref="StorefrontUpdateCartItemEditParametersProductActionGroup" stepKey="clickEdit">
+            <argument name="rowNumber" value="1"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefront2"/>
         <!-- Check second one option to choose both of the options on the storefront -->
         <click selector="{{StorefrontBundledSection.nthBundledOption('1','2')}}" stepKey="selectSecondBundleOption2"/>
 
