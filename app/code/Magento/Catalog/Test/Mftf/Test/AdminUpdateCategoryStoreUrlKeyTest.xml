@@ -51,7 +51,9 @@
         <amOnPage url="" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForFrontendLoad"/>
         <click stepKey="clickCategory" selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="assertCategoryOnStorefront">
+            <argument name="categoryTitle" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle"/>
         <seeInCurrentUrl stepKey="verifyUrlKey" url="{{_defaultCategory.name_lwr}}-hattest.html"/>
 
@@ -69,7 +71,9 @@
         <amOnPage url="" stepKey="goToStorefrontAfterOriginalSeoKey"/>
         <waitForPageLoad stepKey="waitForFrontendLoadAfterOriginalSeoKey"/>
         <click stepKey="clickCategoryAfterOriginalSeoKey" selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="assertCategoryOnStorefront2"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="assertCategoryOnStorefront2">
+            <argument name="categoryTitle" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
         <seeInTitle userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNameInTitle2"/>
         <seeInCurrentUrl stepKey="verifyUrlKeyAfterOriginalSeoKey" url="{{_defaultCategory.name_lwr}}.html"/>
     </test>

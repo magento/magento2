@@ -81,7 +81,9 @@
         <!-- Verify Category in store front after moving category to another position in category tree -->
         <amOnPage url="{{StorefrontCategoryPage.url(SecondLevelSubCat.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.CategoryTitle(SecondLevelSubCat.name)}}" stepKey="seeCategoryInTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryInTitle">
+            <argument name="categoryTitle" value="{{SecondLevelSubCat.name}}"/>
+        </actionGroup>
         <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(SecondLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBarAfterMove"/>
         <!-- Verify breadcrumbs in store front page after moving category to another position in category tree -->
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SecondLevelSubCat.name)}}" stepKey="clickCategoryOnNavigation"/>

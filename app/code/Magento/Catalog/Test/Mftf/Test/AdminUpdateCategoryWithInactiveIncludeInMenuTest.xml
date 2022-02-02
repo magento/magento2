@@ -61,7 +61,9 @@
         <!--Verify Updated Category UrlKey directs to category Store Front-->
         <amOnPage url="{{SimpleRootSubCategory.url_key}}.html" stepKey="seeTheCategoryInStoreFrontPage"/>
         <waitForPageLoad time="60" stepKey="waitForStoreFrontPageLoad"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleRootSubCategory.name)}}" stepKey="seeUpdatedCategoryInStoreFrontPage"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeUpdatedCategoryInStoreFrontPage">
+            <argument name="categoryTitle" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
 
         <!--Verify Updated fields in Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>

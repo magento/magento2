@@ -83,7 +83,9 @@
 
         <!--Check in grid view-->
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertCategoryNameInTitle"/>
-        <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="assertCategoryName">
+            <argument name="categoryTitle" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
         <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresence"/>
         <see userInput="{{BundleProduct.name}}" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitle"/>
@@ -92,7 +94,9 @@
         <!--Check in list view-->
         <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListView"/>
         <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertCategoryNameInTitleAgain"/>
-        <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNamAgain"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="assertCategoryNamAgain">
+            <argument name="categoryTitle" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCountAgain"/>
         <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresenceAgain"/>
         <see userInput="{{BundleProduct.name}}" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitleAgain"/>

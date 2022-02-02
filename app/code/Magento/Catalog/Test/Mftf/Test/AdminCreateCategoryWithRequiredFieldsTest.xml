@@ -38,6 +38,8 @@
         <!--Verify Category is listed in store front page menu/>-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryPageTitle">
+            <argument name="categoryTitle" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

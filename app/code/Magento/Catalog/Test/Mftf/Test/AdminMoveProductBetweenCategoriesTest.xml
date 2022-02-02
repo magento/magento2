@@ -136,7 +136,9 @@
         <waitForPageLoad stepKey="waitForCategory2Page"/>
 
         <!-- # <Cat 2> should open # <product1> should be present on the page -->
-        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryName"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategoryName">
+            <argument name="categoryTitle" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
         <see userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProduct"/>
 
         <!-- Open <product1>  -->
@@ -152,7 +154,9 @@
         <waitForPageLoad stepKey="waitForCategory1PageLoad"/>
 
         <!-- # Category should open successfully # <product1> should be absent on the page -->
-        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategory1Name"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeCategory1Name">
+            <argument name="categoryTitle" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
         <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
 
@@ -190,7 +194,9 @@
         <waitForPageLoad stepKey="waitForSecondCategoryPage"/>
 
         <!-- # <Cat 2> should open # <product1> should be absent on the page -->
-        <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeSecondCategory1Name"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeSecondCategory1Name">
+            <argument name="categoryTitle" value="$$createSecondCategory.name$$"/>
+        </actionGroup>
         <dontSee userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeSimpleProduct"/>
 
         <!-- Click on <Cat1_anchored> category -->
@@ -198,7 +204,9 @@
         <waitForPageLoad stepKey="waitForAnchoredCategoryPage"/>
 
         <!-- # Category should open successfully # <product1> should be present on the page -->
-        <see userInput="$$createAnchoredCategory1.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="see1CategoryName"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="see1CategoryName">
+            <argument name="categoryTitle" value="$$createAnchoredCategory1.name$$"/>
+        </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductNameOnCategory1Page"/>
 
         <!-- Breadcrumb for product should be like <Cat1_anchored>/<product> (if you clicks from anchor category) -->
@@ -210,7 +218,9 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName({$grabNameSubCategory})}}" stepKey="clickSubCat"/>
         <waitForPageLoad stepKey="waitForSubCategoryPageLoad"/>
 
-        <see userInput="{$grabNameSubCategory}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeSubCategoryName"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="seeSubCategoryName">
+            <argument name="categoryTitle" value="{$grabNameSubCategory}"/>
+        </actionGroup>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductNameOnSubCategoryPage"/>
 
         <see userInput="{$grabNameSubCategory}" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeSubCategoryInBreadcrumbs"/>

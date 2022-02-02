@@ -59,6 +59,8 @@
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
             <argument name="categoryUrl" value="{{_defaultCategory.urlKey}}"/>
         </actionGroup>
-        <see userInput="{{_defaultCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
+        <actionGroup ref="StorefrontAssertCategoryTitleActionGroup" stepKey="assertCategoryNameOnStorefront">
+            <argument name="categoryTitle" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>
