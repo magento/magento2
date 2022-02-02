@@ -217,10 +217,9 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
         $this->assertEquals(1, $product->getShipmentType());
 
-        $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
         $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
         $this->assertCount(1, $bundleOptionCollection);
-        foreach ($bundleOptionCollection as $optionKey => $option) {
+        foreach ($bundleOptionCollection as $option) {
             $this->assertEquals('checkbox', $option->getData('type'));
             $this->assertEquals('Option&#63;', $option->getData('title'));
             $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
