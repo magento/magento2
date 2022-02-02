@@ -42,8 +42,10 @@
         </actionGroup>
 
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage" />
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
 
         <!--Categories-->
         <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="dropDownCategories"/>
@@ -73,29 +75,48 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <magentoCron stepKey="runCronReindex" groups="index"/>
 
         <!--Go to category page-->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="cartClickCategory"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="cartClickCategory">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
 
         <!--Check in grid view-->
-        <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertCategoryNameInTitle"/>
-        <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleOnCategoryPageActionGroup" stepKey="assertCategoryNameInTitle">
+            <argument name="categoryTitle" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertCategoryName"/>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCount"/>
         <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresence"/>
-        <see userInput="{{BundleProduct.name}}" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitle"/>
-        <see userInput="$1,230.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" stepKey="checkPrice"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="checkTitle">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="checkPrice">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+            <argument name="productPrice" value="$1,230.00"/>
+        </actionGroup>
+
 
         <!--Check in list view-->
         <click selector="{{StorefrontCategoryProductSection.categoryListView}}" stepKey="switchToListView"/>
-        <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertCategoryNameInTitleAgain"/>
-        <see userInput="{{SimpleSubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNamAgain"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertCategoryNameInTitleAgain"/>
+        <actionGroup ref="AssertStorefrontCategoryTitleOnCategoryPageActionGroup" stepKey="assertCategoryNamAgain">
+            <argument name="categoryTitle" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
         <see userInput="1" selector="{{StorefrontCategoryMainSection.productCount}} span" stepKey="assertProductCountAgain"/>
         <seeElement selector="{{StorefrontCategoryProductSection.listedProduct('1')}}" stepKey="assertBundleProductPresenceAgain"/>
-        <see userInput="{{BundleProduct.name}}" selector="{{StorefrontCategoryProductSection.ProductTitleByNumber('1')}}" stepKey="checkTitleAgain"/>
-        <see userInput="$1,230.00" selector="{{StorefrontCategoryProductSection.ProductPriceByNumber('1')}}" stepKey="checkPriceAgain"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="checkTitleAgain">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="checkPriceAgain">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+            <argument name="productPrice" value="$1,230.00"/>
+        </actionGroup>
     </test>
 </tests>
