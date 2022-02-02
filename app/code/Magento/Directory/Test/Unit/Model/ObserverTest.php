@@ -106,7 +106,6 @@ class ObserverTest extends TestCase
     public function testScheduledUpdateCurrencyRates(): void
     {
         $importWarnings = ['WARNING: error1', 'WARNING: error2'];
-        $senderValues = ['name' => self::STUB_SENDER, 'email' => self::STUB_SENDER];
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->withConsecutive(
@@ -141,7 +140,6 @@ class ObserverTest extends TestCase
                 'test1@email.com,test2@email.com',
                 self::STUB_ERROR_TEMPLATE,
                 self::STUB_SENDER
-
             );
         $import = $this->getMockForAbstractClass(ImportInterface::class);
         $import->expects($this->once())->method('fetchRates')
