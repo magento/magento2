@@ -9,10 +9,15 @@ namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\InventoryApi\Api\Data\StockInterface;
+use Magento\InventoryCatalogApi\Api\DefaultStockProviderInterface;
+use Magento\InventoryIndexer\Model\StockIndexTableNameResolverInterface;
+use Magento\InventorySalesApi\Model\StockByWebsiteIdResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Resolve specific attributes for search criteria.
@@ -50,12 +55,37 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $metadataPool;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
+     * @var StockByWebsiteIdResolverInterface
+     */
+    private $stockByWebsiteIdResolver;
+
+    /**
+     * @var StockIndexTableNameResolverInterface|mixed
+     */
+    private $stockIndexTableNameResolver;
+
+    /**
+     * @var DefaultStockProviderInterface
+     */
+    private $defaultStockProvider;
+
+    /**
      * @param Collection $collection
      * @param SearchResultInterface $searchResult
      * @param int $size
      * @param int $currentPage
      * @param ScopeConfigInterface|null $scopeConfig
      * @param MetadataPool|null $metadataPool
+     * @param StoreManagerInterface|null $storeManager
+     * @param StockByWebsiteIdResolverInterface|null $stockByWebsiteIdResolver
+     * @param StockIndexTableNameResolverInterface|null $stockIndexTableNameResolver
+     * @param DefaultStockProviderInterface|null $defaultStockProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Collection $collection,
@@ -63,7 +93,11 @@ class SearchResultApplier implements SearchResultApplierInterface
         int $size,
         int $currentPage,
         ?ScopeConfigInterface $scopeConfig = null,
-        ?MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?StockByWebsiteIdResolverInterface $stockByWebsiteIdResolver = null,
+        ?StockIndexTableNameResolverInterface $stockIndexTableNameResolver = null,
+        ?DefaultStockProviderInterface $defaultStockProvider = null
     ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
@@ -71,6 +105,10 @@ class SearchResultApplier implements SearchResultApplierInterface
         $this->currentPage = $currentPage;
         $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
+        $this->_storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->stockByWebsiteIdResolver = $stockByWebsiteIdResolver ?? ObjectManager::getInstance()->get(StockByWebsiteIdResolverInterface::class);
+        $this->stockIndexTableNameResolver = $stockIndexTableNameResolver ?? ObjectManager::getInstance()->get(StockIndexTableNameResolverInterface::class);
+        $this->defaultStockProvider = $defaultStockProvider ?? ObjectManager::getInstance()->get(DefaultStockProviderInterface::class);
     }
 
     /**
@@ -185,6 +223,9 @@ class SearchResultApplier implements SearchResultApplierInterface
      */
     private function categoryProductByCustomSortOrder(int $categoryId): array
     {
+        $websiteId = $this->_storeManager->getStore()->getWebsiteId();
+        $stock = $this->stockByWebsiteIdResolver->execute($websiteId);
+        $stockTable = $this->stockIndexTableNameResolver->execute((int)$stock->getStockId());
         $storeId = $this->collection->getStoreId();
         $searchCriteria = $this->searchResult->getSearchCriteria();
         $sortOrders = $searchCriteria->getSortOrders() ?? [];
@@ -200,11 +241,22 @@ class SearchResultApplier implements SearchResultApplierInterface
         $query->from(
             ['e' => $this->collection->getTable('catalog_product_entity')],
             ['e.entity_id']
-        )->join(
-            ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
-            'stock_status_index.product_id = e.entity_id',
-            ['stock_status_index.stock_status AS is_salable']
-        )->join(
+        );
+
+        if (!$this->isDefaultStock($stock)) {
+            $query->join(
+                ['inventory_stock' => $stockTable],
+                'inventory_stock.sku = e.sku',
+                ['inventory_stock.is_salable']
+            );
+        } else {
+            $query->join(
+                ['stock_status_index' => $this->collection->getTable('cataloginventory_stock_status')],
+                'stock_status_index.product_id = e.entity_id',
+                ['stock_status_index.stock_status AS is_salable']
+            );
+        }
+        $query->join(
             ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
             'cat_index.product_id = e.entity_id'
             . ' AND cat_index.category_id = ' . $categoryId
@@ -257,5 +309,16 @@ class SearchResultApplier implements SearchResultApplierInterface
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Checks if inventory stock is DB view
+     *
+     * @param StockInterface $stock
+     * @return bool
+     */
+    private function isDefaultStock(StockInterface $stock): bool
+    {
+        return (int)$stock->getStockId() === $this->defaultStockProvider->getId();
     }
 }
