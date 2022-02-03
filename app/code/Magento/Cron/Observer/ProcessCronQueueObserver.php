@@ -378,7 +378,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             );
             if (!$e instanceof \Exception) {
                 $e = new \RuntimeException(
-                    'Error when running a cron job',
+                    'Error when running a cron job: ' . $e->getMessage(),
                     0,
                     $e
                 );
