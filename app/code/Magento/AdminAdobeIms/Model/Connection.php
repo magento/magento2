@@ -10,6 +10,7 @@ namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 
 class Connection
@@ -20,12 +21,30 @@ class Connection
     private CurlFactory $curlFactory;
 
     /**
+     * @var ImsConfig
+     */
+    private ImsConfig $imsConfig;
+
+    /**
      * @param CurlFactory $curlFactory
+     * @param ImsConfig $imsConfig
      */
     public function __construct(
-        CurlFactory $curlFactory
+        CurlFactory $curlFactory,
+        ImsConfig $imsConfig
     ) {
         $this->curlFactory = $curlFactory;
+        $this->imsConfig = $imsConfig;
+    }
+
+    /**
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public function auth(): string
+    {
+        $authUrl = $this->imsConfig->getAuthUrl();
+        return $this->getAuthorizationLocation($authUrl);
     }
 
     /**
@@ -33,43 +52,54 @@ class Connection
      * @return bool
      * @throws InvalidArgumentException
      */
-    public function testConnection(string $clientId): bool
+    public function testAuth(string $clientId): bool
     {
-        $location = $this->auth($clientId);
+        $authUrl = $this->imsConfig->getAuthUrlWithClientId($clientId);
+        $location = $this->getAuthorizationLocation($authUrl);
+
         return $location !== '';
     }
 
     /**
-     * @param string $clientId
+     * @param string $authUrl
      * @return string
      * @throws InvalidArgumentException
      */
-    public function auth(string $clientId): string
+    private function getAuthorizationLocation(string $authUrl): string
     {
         $curl = $this->curlFactory->create();
 
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
+        $curl->post($authUrl, []);
 
-//        $authUrl = $this->config->getAuthUrl();
-        $authUrl = 'https://ims-na1-stg1.adobelogin.com/ims/authorize/v2';
+        $this->validateResponse($curl);
 
-        $curl->post(
-            $authUrl,
-            [
-                'client_id' => $clientId,
-//                'scope' => 'openid,additional_info.company,profile,role', // results in "invalid_scope"
-                'scope' => 'openid',
-                'response_type' => 'token',
-                'redirect_uri' => 'https://adobe.loc'
-            ]
-        );
+        return $curl->getHeaders()['location'] ?? '';
+    }
+
+    /**
+     * @param Curl $curl
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    private function validateResponse(Curl $curl): void
+    {
+        if (isset($curl->getHeaders()['location'])) {
+            if (preg_match(
+                '/error=([a-z_]+)/i',
+                $curl->getHeaders()['location'],
+                $error)
+            ) {
+                if (isset($error[0], $error[1])) {
+                    throw new InvalidArgumentException(__('Could not connect to Adobe IMS Service: %1.', $error[1]));
+                }
+            }
+        }
 
         if ($curl->getStatus() !== 302) {
             throw new InvalidArgumentException(__('Could not connect to Adobe IMS Service.'));
         }
-
-        return $curl->getHeaders()['location'] ?? '';
     }
 }
 

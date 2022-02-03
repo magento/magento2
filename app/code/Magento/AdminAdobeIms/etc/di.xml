@@ -6,8 +6,6 @@
      */
     -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\AdminImsAuth\Api\GetProfileInterface" type="Magento\AdminImsAuth\Model\GetProfile"/>
-
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -23,5 +21,10 @@
     <type name="Magento\AdobeIms\Model\Config">
         <plugin name="ims_config_plugin"
                 type="Magento\AdminAdobeIms\Plugin\ConfigPlugin"/>
+    </type>
+
+    <type name="Magento\AdobeIms\Model\Config">
+        <plugin name="ims_config_plugin"
+                type="Magento\AdminImsAuth\Plugin\ConfigPlugin"/>
     </type>
 </config>
