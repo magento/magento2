@@ -17,6 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckZeroSubtotalOrderIsInProcessingStatusTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>

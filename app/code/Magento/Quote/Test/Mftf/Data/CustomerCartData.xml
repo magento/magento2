@@ -34,5 +34,5 @@
     <entity name="GetOrderData" type="CustomerCart">
         <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
     </entity>
-    
+
 </entities>
