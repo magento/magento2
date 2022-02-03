@@ -37,8 +37,7 @@ class UpdateStockChangedAuto
      */
     public function beforeSave(ItemResourceModel $subject, StockItem $stockItem): void
     {
-        if (
-            !$stockItem->getIsInStock() &&
+        if (!$stockItem->getIsInStock() &&
             !$stockItem->hasStockStatusChangedAutomaticallyFlag() &&
             $this->getProductTypeById->execute($stockItem->getProductId()) == Configurable::TYPE_CODE
         ) {
