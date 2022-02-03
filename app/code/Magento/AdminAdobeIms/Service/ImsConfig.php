@@ -30,6 +30,10 @@ class ImsConfig
      * @var WriterInterface
      */
     private WriterInterface $writer;
+
+    /**
+     * @var EncryptorInterface
+     */
     private EncryptorInterface $encryptor;
 
     /**
