@@ -9,9 +9,9 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
 use Magento\CatalogInventory\Model\Stock;
 use Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto;
-use Magento\Catalog\Api\GetProductTypeByIdInterface;
+use Magento\Catalog\Model\ResourceModel\GetProductTypeById;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
-use Magento\CatalogInventory\Model\Stock\Item as StockItem;
+use Magento\Framework\Model\AbstractModel as StockItem;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +39,9 @@ class UpdateStockChangedAutoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getProductTypeByIdMock = $this->getMockForAbstractClass(GetProductTypeByIdInterface::class);
+        $this->getProductTypeByIdMock = $this->getMockBuilder(GetProductTypeById::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->plugin = new UpdateStockChangedAuto($this->getProductTypeByIdMock);
     }
 
@@ -53,7 +55,10 @@ class UpdateStockChangedAutoTest extends TestCase
         $itemResourceModel = $this->getMockBuilder(ItemResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stockItem = $this->createMock(StockItem::class);
+        $stockItem = $this->getMockBuilder(StockItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getIsInStock', 'setStockStatusChangedAuto'])
+            ->getMock();
         $stockItem->expects(self::once())
             ->method('getIsInStock')
             ->willReturn(Stock::STOCK_IN_STOCK);

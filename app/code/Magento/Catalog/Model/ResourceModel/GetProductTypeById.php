@@ -8,12 +8,12 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Api\GetProductTypeByIdInterface;
 
 /**
- * @inheritdoc
+ * Get product type ID by product ID.
+ *
  */
-class GetProductTypeById implements GetProductTypeByIdInterface
+class GetProductTypeById
 {
     /**
      * @var ResourceConnection
@@ -30,7 +30,10 @@ class GetProductTypeById implements GetProductTypeByIdInterface
     }
 
     /**
-     * @inheritDoc
+     * Retrieve product type by its product ID
+     *
+     * @param int $productId
+     * @return string
      */
     public function execute(int $productId)
     {

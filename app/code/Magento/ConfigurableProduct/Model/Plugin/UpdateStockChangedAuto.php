@@ -6,24 +6,24 @@
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
-use Magento\Catalog\Api\GetProductTypeByIdInterface;
+use Magento\Catalog\Model\ResourceModel\GetProductTypeById;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
-use Magento\CatalogInventory\Model\Stock\Item as StockItem;
+use Magento\Framework\Model\AbstractModel as StockItem;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class UpdateStockChangedAuto
 {
     /**
-     * @var GetProductTypeByIdInterface
+     * @var GetProductTypeById
      */
     protected $getProductTypeById;
 
     /**
      * UpdateStockChangedAuto constructor
      *
-     * @param GetProductTypeByIdInterface $getProductTypeById
+     * @param GetProductTypeById $getProductTypeById
      */
-    public function __construct(GetProductTypeByIdInterface $getProductTypeById)
+    public function __construct(GetProductTypeById $getProductTypeById)
     {
         $this->getProductTypeById = $getProductTypeById;
     }
