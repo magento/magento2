@@ -8,23 +8,21 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
 use Magento\CatalogInventory\Model\Stock;
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
-use Magento\ConfigurableProduct\Model\Plugin\UpdateStockStatus;
+use Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto;
 use Magento\Catalog\Api\GetProductTypeByIdInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResourceModel;
-use Magento\CatalogInventory\Api\Data\StockItemInterface as StockItem;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit test for Magento\ConfigurableProduct\Model\Plugin\UpdateStockStatus class.
+ * Unit test for Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto class.
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateStockStatusTest  extends TestCase
+class UpdateStockChangedAutoTest extends TestCase
 {
     /**
      * @var MockObject
@@ -32,12 +30,7 @@ class UpdateStockStatusTest  extends TestCase
     private $getProductTypeByIdMock;
 
     /**
-     * @var MockObject
-     */
-    protected $stockStatusRepositoryMock;
-
-    /**
-     * @var UpdateStockStatus
+     * @var UpdateStockChangedAuto
      */
     private $plugin;
 
@@ -47,10 +40,25 @@ class UpdateStockStatusTest  extends TestCase
     protected function setUp(): void
     {
         $this->getProductTypeByIdMock = $this->getMockForAbstractClass(GetProductTypeByIdInterface::class);
-        $this->stockStatusRepositoryMock = $this->getMockForAbstractClass(
-            StockStatusRepositoryInterface::class
-        );
-        $this->plugin = new UpdateStockStatus($this->getProductTypeByIdMock, $this->stockStatusRepositoryMock);
+        $this->plugin = new UpdateStockChangedAuto($this->getProductTypeByIdMock);
+    }
+
+    /**
+     * Verify before Stock Item save. Negative scenario
+     *
+     * @return void
+     */
+    public function testBeforeSaveForInStock()
+    {
+        $itemResourceModel = $this->getMockBuilder(ItemResourceModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $stockItem = $this->createMock(StockItem::class);
+        $stockItem->expects(self::once())
+            ->method('getIsInStock')
+            ->willReturn(Stock::STOCK_IN_STOCK);
+        $stockItem->expects(self::never())->method('setStockStatusChangedAuto');
+        $this->plugin->beforeSave($itemResourceModel, $stockItem);
     }
 
     /**
@@ -58,19 +66,6 @@ class UpdateStockStatusTest  extends TestCase
      *
      * @return void
      */
-    public function testBeforeSaveForOutOfStock()
-    {
-        $itemResourceModel = $this->getMockBuilder(ItemResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stockItem = $this->getMockForAbstractClass(StockItem::class);
-        $stockItem->expects(self::once())
-            ->method('getIsInStock')
-            ->willReturn(Stock::STOCK_OUT_OF_STOCK);
-        $this->getProductTypeByIdMock->expects(self::never())->method('execute');
-        $this->plugin->beforeSave($itemResourceModel, $stockItem);
-    }
-
     public function testBeforeSaveForConfigurableInStock()
     {
         $productType = Configurable::TYPE_CODE;
@@ -78,29 +73,29 @@ class UpdateStockStatusTest  extends TestCase
         $itemResourceModel = $this->getMockBuilder(ItemResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $stockItem = $this->getMockForAbstractClass(StockItem::class);
+        $stockItem = $this->getMockBuilder(StockItem::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getIsInStock',
+                'getProductId',
+                'hasStockStatusChangedAutomaticallyFlag',
+                'setStockStatusChangedAuto'
+            ])
+            ->getMock();
         $stockItem->expects(self::once())
             ->method('getIsInStock')
-            ->willReturn(Stock::STOCK_IN_STOCK);
+            ->willReturn(Stock::STOCK_OUT_OF_STOCK);
         $stockItem->expects(self::once())
-            ->method('getStockStatusChangedAuto')
-            ->willReturn(true);
-        $stockItem->expects($this->exactly(2))
+            ->method('hasStockStatusChangedAutomaticallyFlag')
+            ->willReturn(false);
+        $stockItem->expects(self::once())
             ->method('getProductId')
             ->willReturn($productId);
         $this->getProductTypeByIdMock->expects(self::once())
             ->method('execute')
             ->with($productId)
             ->willReturn($productType);
-        $stockStatusMock = $this->getMockForAbstractClass(StockStatusInterface::class);
-        $stockStatusMock->expects(static::once())
-            ->method('setStockStatus')
-            ->with(Stock::STOCK_IN_STOCK);
-        $this->stockStatusRepositoryMock->expects(static::atLeastOnce())
-            ->method('get')
-            ->with($productId)
-            ->willReturn($stockStatusMock);
-        $this->stockStatusRepositoryMock->expects(self::once())->method('save');
+        $stockItem->expects(self::once())->method('setStockStatusChangedAuto')->with(0);
 
         $this->plugin->beforeSave($itemResourceModel, $stockItem);
     }

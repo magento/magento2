@@ -281,6 +281,6 @@
         </arguments>
     </type>
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="updateStockStatus" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockStatus" />
+        <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
     </type>
 </config>
