@@ -50,38 +50,42 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function getValueDataProvider(): array
     {
-        $testTimestamp = strtotime('2014-05-18 12:08:16');
-        $date = new \DateTime('@' . $testTimestamp);
-        return [
-            [
+        $testTimestamps = [strtotime('2020-05-18 12:08:16'), strtotime('1920-10-25 10:10:10')];
+        $dates = [new \DateTime($testTimestamps[0]),  new \DateTime($testTimestamps[1])];
+        $data = [];
+        foreach ($testTimestamps as $key => $testTimestamp) {
+            $data[$key] = [
                 [
-                    'date_format' => 'MM/d/yy',
-                    'time_format' => 'h:mm a',
-                    'value' => $testTimestamp,
+                    [
+                        'date_format' => 'MM/d/yy',
+                        'time_format' => 'h:mm a',
+                        'value' => $testTimestamp,
+                    ],
+                    $dates[$key]->format('m/j/y g:i A'),
                 ],
-                $date->format('m/j/y g:i A'),
-            ],
-            [
                 [
-                    'time_format' => 'h:mm a',
-                    'value' => $testTimestamp,
+                    [
+                        'time_format' => 'h:mm a',
+                        'value' => $testTimestamp,
+                    ],
+                    $dates[$key]->format('g:i A'),
                 ],
-                $date->format('g:i A'),
-            ],
-            [
                 [
-                    'date_format' => 'MM/d/yy',
-                    'value' => $testTimestamp,
+                    [
+                        'date_format' => 'MM/d/yy',
+                        'value' => $testTimestamp,
+                    ],
+                    $dates[$key]->format('m/j/y'),
                 ],
-                $date->format('m/j/y'),
-            ],
-            [
                 [
-                    'date_format' => 'd-MM-Y',
-                    'value' => $date->format('d-m-Y'),
+                    [
+                        'date_format' => 'd-MM-Y',
+                        'value' => $dates[$key]->format('d-m-Y'),
+                    ],
+                    $dates[$key]->format('d-m-Y'),
                 ],
-                $date->format('d-m-Y'),
-            ],
-        ];
+            ];
+        }
+        return array_merge($data[0], $data[1]);
     }
 }
