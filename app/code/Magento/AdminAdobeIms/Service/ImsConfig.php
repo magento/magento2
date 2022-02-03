@@ -8,16 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
+use Magento\AdobeIms\Model\Config;
+use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\UrlInterface;
 
-class ImsConfig
+class ImsConfig extends Config
 {
     public const XML_PATH_ENABLED = 'adobe_ims/integration/enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
     public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
     public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
+    public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
 
     /**
      * @var ScopeConfigInterface
@@ -36,17 +40,20 @@ class ImsConfig
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param UrlInterface $url
      * @param WriterInterface $writer
      * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
+        UrlInterface $url,
         WriterInterface $writer,
         EncryptorInterface $encryptor
     ) {
-        $this->scopeConfig = $scopeConfig;
+        parent::__construct($scopeConfig, $url);
         $this->writer = $writer;
         $this->encryptor = $encryptor;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
