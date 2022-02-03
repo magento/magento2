@@ -50,8 +50,9 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     public function getValueDataProvider(): array
     {
-        $testTimestamps = [strtotime('2020-05-18 12:08:16'), strtotime('1920-10-25 10:10:10')];
-        $dates = [new \DateTime($testTimestamps[0]),  new \DateTime($testTimestamps[1])];
+        $stringDates = ['2020-05-18 12:08:16', '1920-10-25 10:10:10'];
+        $testTimestamps = [strtotime($stringDates[0]), strtotime($stringDates[1])];
+        $dates = [new \DateTime($stringDates[0]),  new \DateTime($stringDates[1])];
         $data = [];
         foreach ($testTimestamps as $key => $testTimestamp) {
             $data[$key] = [
