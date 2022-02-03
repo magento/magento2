@@ -54,7 +54,9 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" userInput="{{tierPriceOnDefault.qty_1}}" stepKey="fillProductTierPriceQuantityInput1"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('1')}}" userInput="{{tierPriceOnDefault.price_1}}" stepKey="selectProductTierPriceFixedPrice1"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductOutOfStock.quantity}}" stepKey="fillVirtualProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillVirtualProductQuantity">
+            <argument name="productQty" value="{{virtualProductOutOfStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{virtualProductOutOfStock.status}}" stepKey="selectStockStatusOutOfStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />

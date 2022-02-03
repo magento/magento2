@@ -41,7 +41,9 @@
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{virtualProductWithoutManageStock.special_price}}" stepKey="fillSpecialPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductWithoutManageStock.quantity}}" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="{{virtualProductWithoutManageStock.quantity}}"/>
+        </actionGroup>
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickAdvancedInventoryLink"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" stepKey="clickManageStock"/>
         <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
