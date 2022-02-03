@@ -19,6 +19,12 @@ use Magento\Framework\DB\Select;
 class StockStatusFilter implements StockStatusFilterInterface
 {
     private const TABLE_NAME = 'cataloginventory_stock_status';
+
+    /**
+     * @var bool|null
+     */
+    private ?bool $searchResultApplier = null;
+
     /**
      * @var ResourceConnection
      */
@@ -39,6 +45,26 @@ class StockStatusFilter implements StockStatusFilterInterface
     ) {
         $this->resource = $resource;
         $this->stockConfiguration = $stockConfiguration;
+    }
+
+    /**
+     * Set flag, if the request is originated from SearchResultApplier
+     *
+     * @param bool $status
+     */
+    public function setSearchResultApplier(bool $status): void
+    {
+        $this->searchResultApplier = $status;
+    }
+
+    /**
+     * Get flag, if the request is originated from SearchResultApplier
+     *
+     * @return bool
+     */
+    public function getSearchResultApplier() : bool
+    {
+        return $this->searchResultApplier;
     }
 
     /**
@@ -67,7 +93,9 @@ class StockStatusFilter implements StockStatusFilterInterface
             implode(' AND ', $joinCondition),
             []
         );
-        $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
+        if (!$this->getSearchResultApplier()) {
+            $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
+        }
 
         return $select;
     }
