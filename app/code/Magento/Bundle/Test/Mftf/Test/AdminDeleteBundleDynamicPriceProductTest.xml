@@ -50,7 +50,9 @@
         </actionGroup>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoopsMessage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoopsMessage">
+            <argument name="value" value="Whoops, our bad..."/>
+        </actionGroup>
         <!-- Search for the product by sku -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku">
             <argument name="query" value="$createDynamicBundleProduct.sku$"/>
