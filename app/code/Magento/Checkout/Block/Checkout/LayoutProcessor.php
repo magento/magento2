@@ -134,7 +134,7 @@ class LayoutProcessor implements LayoutProcessorInterface
 
             foreach ($options as $key => $value) {
                 $elements[$code]['options'][] = [
-                    'value' => $key,
+                    'value' => $value,
                     'label' => $value,
                 ];
             }
