@@ -16,7 +16,7 @@ class UpdateStockChangedAuto
     /**
      * @var GetProductTypeById
      */
-    protected $getProductTypeById;
+    private $getProductTypeById;
 
     /**
      * UpdateStockChangedAuto constructor
