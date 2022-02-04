@@ -25,7 +25,7 @@ class StockStatusFilter implements StockStatusFilterInterface
      *
      * @var bool
      */
-    private ?bool $searchResultApplier = false;
+    private $searchResultApplier = false;
 
     /**
      * @var ResourceConnection
