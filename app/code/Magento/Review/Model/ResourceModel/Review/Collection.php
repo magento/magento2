@@ -125,7 +125,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->getSelect()->join(
             ['detail' => $this->getReviewDetailTable()],
             'main_table.review_id = detail.review_id',
-            ['detail_id', 'title', 'detail', 'nickname', 'customer_id']
+            ['detail_id', 'store_id', 'title', 'detail', 'nickname', 'customer_id']
         );
         return $this;
     }
