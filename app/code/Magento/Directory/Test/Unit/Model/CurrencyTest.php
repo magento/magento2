@@ -225,8 +225,6 @@ class CurrencyTest extends TestCase
                 ['display' => Currency::NO_SYMBOL],
                 "\u{0669}\u{066C}\u{0669}\u{0669}\u{0669}\u{066B}\u{0660}\u{0660}"
             ],
-            ['pl_PL', 'USD', '9999', ['display' => Currency::NO_SYMBOL], "9\u{00A0}999,00"],
-            ['pl_PL', 'PLN', '9999', ['display' => Currency::NO_SYMBOL], "9\u{00A0}999,00"],
             ['en_US', 'USD', ' 9999', ['display' => Currency::NO_SYMBOL], '9,999.00'],
             ['en_US', 'USD', '9999', ['precision' => 1], '$9,999.0'],
             ['en_US', 'USD', '9999', ['precision' => 2, 'symbol' => '#'], '#9,999.00'],
