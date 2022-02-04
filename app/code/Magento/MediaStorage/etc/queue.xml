@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
-    <broker topic="media.storage.catalog.image.resize" exchange="magento-db" type="db">
-        <queue name="media.storage.catalog.image.resize" consumer="media.storage.catalog.image.resize" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\MediaStorage\Model\ConsumerImageResize::process" />
+    <broker topic="media.storage.catalog.image.resize" exchange="magento">
+        <queue name="media.storage.catalog.image.resize" consumer="media.storage.catalog.image.resize" handler="Magento\MediaStorage\Model\ConsumerImageResize::process" />
     </broker>
 </config>
