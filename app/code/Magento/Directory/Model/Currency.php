@@ -28,11 +28,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     /**
      * CONFIG path constants
      */
-    const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
+    public const XML_PATH_CURRENCY_ALLOW = 'currency/options/allow';
 
-    const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
+    public const XML_PATH_CURRENCY_DEFAULT = 'currency/options/default';
 
-    const XML_PATH_CURRENCY_BASE = 'currency/options/base';
+    public const XML_PATH_CURRENCY_BASE = 'currency/options/base';
 
     /**
      * @var Filter
