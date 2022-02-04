@@ -437,6 +437,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $formattedCurrency = preg_replace('/ /u', '', $formattedCurrency, 1);
         }
 
+        if ((array_key_exists(LocaleCurrency::CURRENCY_OPTION_DISPLAY, $options)
+            && $options[LocaleCurrency::CURRENCY_OPTION_DISPLAY] === \Magento\Framework\Currency::NO_SYMBOL)) {
+            $formattedCurrency = str_replace(' ', '', $formattedCurrency);
+        }
+
         return preg_replace('/^\s+|\s+$/u', '', $formattedCurrency);
     }
 
