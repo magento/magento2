@@ -62,10 +62,10 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
     {
         /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
-        $topology = $config->getExchange('overlappingDeprecatedExchange', 'amqp');
+        $topology = $config->getExchange('overlappingDeprecatedExchange', 'db');
         $this->assertEquals('overlappingDeprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
-        $this->assertEquals('amqp', $topology->getConnection());
+        $this->assertEquals('db', $topology->getConnection());
         $this->assertTrue($topology->isDurable());
         $this->assertFalse($topology->isAutoDelete());
         $this->assertFalse($topology->isInternal());
@@ -92,7 +92,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
-        $bindingId = 'binding1';
+        $bindingId = 'queue--topology.config.queue--overlapping.topic.declaration';
         $this->assertArrayHasKey($bindingId, $bindings);
         $binding = $bindings[$bindingId];
         $this->assertEquals('queue', $binding->getDestinationType());
@@ -103,7 +103,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
-        $bindingId = 'binding2';
+        $bindingId = 'queue--topology.config.queue--deprecated.config.async.string.topic';
         $this->assertArrayHasKey($bindingId, $bindings);
         $binding = $bindings[$bindingId];
         $this->assertEquals('queue', $binding->getDestinationType());
