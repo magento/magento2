@@ -17,6 +17,8 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Resolve specific attributes for search criteria.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SearchResultApplier implements SearchResultApplierInterface
 {

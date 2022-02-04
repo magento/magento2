@@ -21,9 +21,11 @@ class StockStatusFilter implements StockStatusFilterInterface
     private const TABLE_NAME = 'cataloginventory_stock_status';
 
     /**
-     * @var bool|null
+     * Storefront search result applier flag
+     *
+     * @var bool
      */
-    private ?bool $searchResultApplier = null;
+    private ?bool $searchResultApplier = false;
 
     /**
      * @var ResourceConnection
@@ -62,7 +64,7 @@ class StockStatusFilter implements StockStatusFilterInterface
      *
      * @return bool
      */
-    public function getSearchResultApplier() : bool
+    public function hasSearchResultApplier() : bool
     {
         return $this->searchResultApplier;
     }
@@ -93,7 +95,7 @@ class StockStatusFilter implements StockStatusFilterInterface
             implode(' AND ', $joinCondition),
             []
         );
-        if (!$this->getSearchResultApplier()) {
+        if (!$this->hasSearchResultApplier()) {
             $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
         }
 
