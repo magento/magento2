@@ -36,8 +36,8 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
         <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
         <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
             <argument name="x" value="0"/>
