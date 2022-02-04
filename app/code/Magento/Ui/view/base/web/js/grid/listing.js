@@ -203,6 +203,9 @@ define([
         applyPositions: function (positions) {
             var sorting;
 
+            if (!positions) {
+                return this;
+            }
             sorting = this.elems.map(function (elem) {
                 return {
                     elem: elem,
