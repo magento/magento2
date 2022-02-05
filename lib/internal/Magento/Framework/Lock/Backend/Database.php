@@ -162,7 +162,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
      */
     private function getPrefix(): string
     {
-        if ($this->prefix === null) {
+        if ($this->prefix === null || $this->prefix === '') {
             $this->prefix = (string)$this->deploymentConfig->get(
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
                 . '/'
