@@ -201,7 +201,6 @@ class SearchResultApplier implements SearchResultApplierInterface
         $searchCriteria = $this->searchResult->getSearchCriteria();
         $sortOrders = $searchCriteria->getSortOrders() ?? [];
         $sortOrders = array_merge(['is_salable' => \Magento\Framework\DB\Select::SQL_DESC], $sortOrders);
-        $defaultColumnsFilter = ['is_salable', 'position', 'name', 'price', 'entity_id'];
 
         $connection = $this->collection->getConnection();
         $query = clone $connection->select()
@@ -220,7 +219,7 @@ class SearchResultApplier implements SearchResultApplierInterface
             'cat_index.product_id = e.entity_id'
             . ' AND cat_index.category_id = ' . $categoryId
             . ' AND cat_index.store_id = ' . $storeId,
-            ['cat_index.position AS cat_index_position']
+            ['cat_index.position']
         );
         foreach ($sortOrders as $field => $dir) {
             if ($field === 'name') {
@@ -244,7 +243,12 @@ class SearchResultApplier implements SearchResultApplierInterface
                     ['price_index.max_price AS price']
                 );
             }
-            if (in_array($field, $defaultColumnsFilter, true)) {
+            $columnFilters = [];
+            $columnsParts = $query->getPart('columns');
+            foreach ($columnsParts as $columns) {
+                $columnFilters[] = $columns[2] ?? $columns[1];
+            }
+            if (in_array($field, $columnFilters, true)) {
                 $query->order(new \Zend_Db_Expr("{$field} {$dir}"));
             }
         }

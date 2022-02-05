@@ -95,7 +95,10 @@ class StockStatusFilter implements StockStatusFilterInterface
             implode(' AND ', $joinCondition),
             []
         );
-        if (!$this->hasSearchResultApplier()) {
+
+        if ($this->hasSearchResultApplier()) {
+            $select->columns(["{$stockStatusTableAlias}.stock_status AS is_salable"]);
+        } else {
             $select->where("{$stockStatusTableAlias}.stock_status = ?", StockStatusInterface::STATUS_IN_STOCK);
         }
 
