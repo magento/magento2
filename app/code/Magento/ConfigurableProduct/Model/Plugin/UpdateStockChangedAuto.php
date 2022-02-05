@@ -19,8 +19,6 @@ class UpdateStockChangedAuto
     private $getProductTypeById;
 
     /**
-     * UpdateStockChangedAuto constructor
-     *
      * @param GetProductTypeById $getProductTypeById
      */
     public function __construct(GetProductTypeById $getProductTypeById)
