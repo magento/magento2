@@ -68,6 +68,8 @@ define([
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
                             $.merge([], el.childNodes);
                     } catch (e) {
+                        console.error(e);
+
                         return [];
                     }
                 });

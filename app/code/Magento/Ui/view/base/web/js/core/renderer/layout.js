@@ -90,8 +90,19 @@ define([
         var loaded = $.Deferred(),
             source = node.component;
 
+        console.info('componentStartLoading', {
+            component: node.component
+        });
+
         require([source], function (constr) {
+            console.info('componentFinishLoading', {
+                component: node.component
+            });
             loaded.resolve(node, constr);
+        }, function () {
+            console.error('componentLoadingFail', {
+                component: node.component
+            });
         });
 
         return loaded.promise();
@@ -105,6 +116,11 @@ define([
      */
     function initComponent(node, Constr) {
         var component = new Constr(_.omit(node, 'children'));
+
+        console.info('componentStartInitialization', {
+            component: node.component,
+            componentName: node.name
+        });
 
         registry.set(node.name, component);
     }
