@@ -3,7 +3,7 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.4.0||~8.0.0",
+        "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-quote": "*",
         "magento/module-checkout": "*",
@@ -18,7 +18,9 @@
         "magento/module-catalog-inventory": "*"
     },
     "suggest": {
-        "magento/module-graph-ql-cache": "*"
+        "magento/module-graph-ql-cache": "*",
+        "magento/module-catalog-inventory-graph-ql": "*",
+        "magento/module-payment-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

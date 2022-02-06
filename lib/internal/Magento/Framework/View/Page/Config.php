@@ -11,6 +11,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\View;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * An API for page configuration
@@ -33,29 +34,29 @@ class Config
     /**#@+
      * Constants of available types
      */
-    const ELEMENT_TYPE_BODY = 'body';
-    const ELEMENT_TYPE_HTML = 'html';
-    const ELEMENT_TYPE_HEAD = 'head';
+    public const ELEMENT_TYPE_BODY = 'body';
+    public const ELEMENT_TYPE_HTML = 'html';
+    public const ELEMENT_TYPE_HEAD = 'head';
     /**#@-*/
 
-    const META_DESCRIPTION = 'description';
-    const META_CONTENT_TYPE = 'content_type';
-    const META_MEDIA_TYPE = 'media_type';
-    const META_CHARSET = 'charset';
-    const META_TITLE = 'title';
-    const META_KEYWORDS = 'keywords';
-    const META_ROBOTS = 'robots';
-    const META_X_UI_COMPATIBLE = 'x_ua_compatible';
+    public const META_DESCRIPTION = 'description';
+    public const META_CONTENT_TYPE = 'content_type';
+    public const META_MEDIA_TYPE = 'media_type';
+    public const META_CHARSET = 'charset';
+    public const META_TITLE = 'title';
+    public const META_KEYWORDS = 'keywords';
+    public const META_ROBOTS = 'robots';
+    public const META_X_UI_COMPATIBLE = 'x_ua_compatible';
 
     /**
      * Constant body attribute class
      */
-    const BODY_ATTRIBUTE_CLASS = 'class';
+    public const BODY_ATTRIBUTE_CLASS = 'class';
 
     /**
      * Constant html language attribute
      */
-    const HTML_ATTRIBUTE_LANG = 'lang';
+    public const HTML_ATTRIBUTE_LANG = 'lang';
 
     /**
      * @var Escaper
@@ -192,10 +193,11 @@ class Config
         $this->title = $title;
         $this->localeResolver = $localeResolver;
         $this->isIncludesAvailable = $isIncludesAvailable;
+        $locale = $this->localeResolver->getLocale();
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            strstr($this->localeResolver->getLocale(), '_', true)
+            $locale !== null ? strstr($locale, '_', true) : false
         );
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
@@ -321,7 +323,7 @@ class Config
         if (empty($this->metadata[self::META_MEDIA_TYPE])) {
             $this->metadata[self::META_MEDIA_TYPE] = $this->scopeConfig->getValue(
                 'design/head/default_media_type',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata[self::META_MEDIA_TYPE];
@@ -349,7 +351,7 @@ class Config
         if (empty($this->metadata[self::META_CHARSET])) {
             $this->metadata[self::META_CHARSET] = $this->scopeConfig->getValue(
                 'design/head/default_charset',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata[self::META_CHARSET];
@@ -377,7 +379,7 @@ class Config
         if (empty($this->metadata[self::META_DESCRIPTION])) {
             $this->metadata[self::META_DESCRIPTION] = $this->scopeConfig->getValue(
                 'design/head/default_description',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata[self::META_DESCRIPTION];
@@ -432,7 +434,7 @@ class Config
         if (empty($this->metadata[self::META_KEYWORDS])) {
             $this->metadata[self::META_KEYWORDS] = $this->scopeConfig->getValue(
                 'design/head/default_keywords',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata[self::META_KEYWORDS];
@@ -464,7 +466,7 @@ class Config
         if (empty($this->metadata[self::META_ROBOTS])) {
             $this->metadata[self::META_ROBOTS] = $this->scopeConfig->getValue(
                 'design/search_engine_robots/default_robots',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->metadata[self::META_ROBOTS];
@@ -651,12 +653,12 @@ class Config
      */
     public function getIncludes()
     {
-        if (empty($this->includes) && $this->isIncludesAvailable) {
+        if ($this->includes === null && $this->isIncludesAvailable) {
             $this->includes = $this->scopeConfig->getValue(
                 'design/head/includes',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->includes;
+        return $this->includes ??= '';
     }
 }
