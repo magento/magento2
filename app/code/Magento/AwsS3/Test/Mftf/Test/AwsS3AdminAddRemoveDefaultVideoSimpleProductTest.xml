@@ -16,9 +16,11 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-38693"/>
             <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
             <skip>
                 <issueId value="MC-33903"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
