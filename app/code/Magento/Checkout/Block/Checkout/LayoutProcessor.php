@@ -132,7 +132,7 @@ class LayoutProcessor implements LayoutProcessorInterface
             $elements[$code]['dataType'] = 'select';
             $elements[$code]['formElement'] = 'select';
 
-            foreach ($options as $key => $value) {
+            foreach ($options as $value) {
                 $elements[$code]['options'][] = [
                     'value' => $value,
                     'label' => $value,

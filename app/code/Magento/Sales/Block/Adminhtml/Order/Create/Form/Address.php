@@ -235,10 +235,10 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         if ($prefixElement) {
             $prefixOptions = $this->options->getNamePrefixOptions($this->getStore());
             if (!empty($prefixOptions)) {
-                $mappedPrefixOptions = array ();
-				foreach ($prefixOptions as $prefix) {
-					$mappedPrefixOptions[$prefix] = $prefix;
-				}
+                $mappedPrefixOptions = [];
+                foreach ($prefixOptions as $prefix) {
+                    $mappedPrefixOptions[$prefix] = $prefix;
+                }
                 $fieldset->removeField($prefixElement->getId());
                 $prefixField = $fieldset->addField($prefixElement->getId(), 'select', $prefixElement->getData(), '^');
                 $prefixField->setValues($mappedPrefixOptions);
