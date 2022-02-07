@@ -104,12 +104,10 @@ define([
         initDefaultView: function () {
             var data = this.getViewData(this.defaultIndex);
 
-            if (!_.size(data)) {
-                if (this.current.columns && this.current.positions) {
+            if (!_.size(data) && (this.current.columns && this.current.positions)) {
                     this.setViewData(this.defaultIndex, this.current)
                         .saveView(this.defaultIndex);
                     this.defaultDefined = true;
-                }
             }
 
             return this;
