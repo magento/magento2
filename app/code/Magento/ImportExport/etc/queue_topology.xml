@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento-db" type="topic" connection="db">
-        <binding id="exportBinding" topic="import_export.export" destinationType="queue" destination="export"/>
+    <exchange name="magento">
+        <binding id="exportBinding" topic="import_export.export" destination="export"/>
     </exchange>
 </config>
