@@ -62,7 +62,7 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
     }
 
     /**
-     * @return $this
+     * @inheritdoc
      */
     public function execute()
     {
