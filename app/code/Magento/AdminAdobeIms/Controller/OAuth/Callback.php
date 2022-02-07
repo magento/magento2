@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminImsAuth\Controller\OAuth;
 
+use Magento\AdminImsAuth\Model\Connection;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -23,34 +24,41 @@ class Callback extends Action implements HttpPostActionInterface, HttpGetActionI
     protected $resultJsonFactory;
 
     /**
+     * @var Connection
+     */
+    private Connection $connection;
+
+    /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
+     * @param Connection $connection
      */
     public function __construct(
         Context $context,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        Connection $connection
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->connection = $connection;
     }
 
     /**
-     * View  page action
-     *
-     * @return ResultInterface
+     * @return \Magento\Framework\App\ResponseInterface|ResultInterface|void
+     * @throws \Magento\Framework\Exception\AuthorizationException
      */
     public function execute()
     {
-        var_dump(getallheaders());
-        die();
-        var_dump($this->getRequest()->isPost());
-        var_dump($this->getRequest()->getParams());
-        var_dump($_SERVER['REQUEST_URI']);
-        die();
+        $code = $this->getRequest()->getParam('code');
 
-        $result = $this->resultJsonFactory->create();
-        $data = ['message' => 'Hello world!'];
+        /**
+         * todo: add error-handling for empty code or invalid/empty accessToken
+         */
 
-        return $result->setData($data);
+        $accessToken = $this->connection->getAccessToken($code);
+
+        $profile = $this->connection->getProfile($accessToken);
+
+        return $this->resultJsonFactory->create()->setData($profile);
     }
 }
