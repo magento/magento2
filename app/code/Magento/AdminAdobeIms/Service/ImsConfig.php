@@ -22,6 +22,7 @@ class ImsConfig extends Config
     public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
     public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
+    public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
 
     /**
      * @var ScopeConfigInterface
@@ -71,6 +72,16 @@ class ImsConfig extends Config
     /**
      * Update config
      *
+     * @return string
+     */
+    public function getProfileUrl(): string
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_PROFILE_URL
+        );
+    }
+
+    /**
      * @param string $path
      * @param string $value
      * @return void
