@@ -9360,16 +9360,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "16",
+            "version": "17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "9dd071e644bd9f4e4c08ad8ad345270cecc66a2a"
+                "reference": "7fbdf31a451d29e412b836209459d0e2675128be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/9dd071e644bd9f4e4c08ad8ad345270cecc66a2a",
-                "reference": "9dd071e644bd9f4e4c08ad8ad345270cecc66a2a",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/7fbdf31a451d29e412b836209459d0e2675128be",
+                "reference": "7fbdf31a451d29e412b836209459d0e2675128be",
                 "shasum": ""
             },
             "require": {
@@ -9378,7 +9378,7 @@
                 "php": ">=7.3",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "rector/rector": "^0.12.4",
-                "squizlabs/php_codesniffer": "^3.6",
+                "squizlabs/php_codesniffer": "^3.6.1",
                 "webonyx/graphql-php": "^14.9"
             },
             "require-dev": {
@@ -9402,9 +9402,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v16"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v17"
             },
-            "time": "2021-11-23T11:54:35+00:00"
+            "time": "2022-01-11T11:59:48+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -9562,9 +9562,6 @@
             },
             "require": {
                 "php": "^7.1 || ^8.0"
-            },
-            "replace": {
-                "myclabs/deep-copy": "self.version"
             },
             "require-dev": {
                 "doctrine/collections": "^1.0",
@@ -12802,5 +12799,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
