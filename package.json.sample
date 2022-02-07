@@ -26,7 +26,7 @@
     "grunt-styledocco": "~0.3.0",
     "grunt-template-jasmine-requirejs": "~0.2.3",
     "grunt-text-replace": "~0.4.0",
-    "imagemin-svgo": "~7.1.0",
+    "imagemin-svgo": "~9.0.0",
     "less": "3.13.1",
     "load-grunt-config": "~4.0.1",
     "morgan": "~1.10.0",
