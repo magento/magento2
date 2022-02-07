@@ -20,21 +20,21 @@ use Magento\Eav\Model\AttributeDataFactory;
 class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
 {
     /**
-     * Customer form factory
+     * Customer Metadata form factory
      *
      * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_customerFormFactory;
 
     /**
-     * Json encoder
+     * Framework Json encoder
      *
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * Directory helper
+     * Directory helper Data
      *
      * @var \Magento\Directory\Helper\Data
      */
@@ -48,28 +48,28 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     protected $options;
 
     /**
-     * Address service
+     * Address service - AddressRepositoryInterface
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     protected $addressService;
 
     /**
-     * Address helper
+     * Customer Address helper
      *
      * @var \Magento\Customer\Helper\Address
      */
     protected $_addressHelper;
 
     /**
-     * Search criteria builder
+     * Search criteria builder for getList calls
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Filter builder
+     * Filter builder for getList calls
      *
      * @var \Magento\Framework\Api\FilterBuilder
      */
