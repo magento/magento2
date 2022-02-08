@@ -6,6 +6,8 @@
      */
     -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AdminImsAuth\Api\GetProfileInterface" type="Magento\AdminImsAuth\Model\GetProfile"/>
+
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">

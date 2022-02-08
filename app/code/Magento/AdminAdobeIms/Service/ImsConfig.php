@@ -8,14 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
-use Magento\AdobeIms\Model\Config;
-use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\UrlInterface;
 
-class ImsConfig extends Config
+class ImsConfig
 {
     public const XML_PATH_ENABLED = 'adobe_ims/integration/enabled';
     public const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
@@ -32,29 +28,18 @@ class ImsConfig extends Config
     /**
      * @var WriterInterface
      */
-    private WriterInterface $writer;
-
-    /**
-     * @var EncryptorInterface
-     */
-    private EncryptorInterface $encryptor;
+    private WriterInterface $configWriter;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param UrlInterface $url
-     * @param WriterInterface $writer
-     * @param EncryptorInterface $encryptor
+     * @param WriterInterface $configWriter
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        UrlInterface $url,
-        WriterInterface $writer,
-        EncryptorInterface $encryptor
+        WriterInterface $configWriter
     ) {
-        parent::__construct($scopeConfig, $url);
-        $this->writer = $writer;
-        $this->encryptor = $encryptor;
         $this->scopeConfig = $scopeConfig;
+        $this->configWriter = $configWriter;
     }
 
     /**
@@ -90,7 +75,7 @@ class ImsConfig extends Config
      */
     public function updateConfig(string $path, string $value): void
     {
-        $this->writer->save(
+        $this->configWriter->save(
             $path,
             $value
         );
