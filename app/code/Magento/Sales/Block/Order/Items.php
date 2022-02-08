@@ -99,6 +99,7 @@ class Items extends AbstractItems
      */
     public function isPagerDisplayed()
     {
+        //echo $this->itemCollection->getSize().' :: '.$this->itemsPerPage;exit;
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
         return $pagerBlock && ($this->itemCollection->getSize() > $this->itemsPerPage);
     }
@@ -148,7 +149,7 @@ class Items extends AbstractItems
      */
     private function preparePager(AbstractBlock $pagerBlock): void
     {
-        $collectionToPager = $this->createItemsCollection();
+        $collectionToPager = $this->itemCollection;
         $collectionToPager->addFieldToFilter('parent_item_id', ['null' => true]);
         $pagerBlock->setCollection($collectionToPager);
 
