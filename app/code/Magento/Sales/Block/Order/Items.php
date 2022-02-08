@@ -28,15 +28,11 @@ use Magento\Theme\Block\Html\Pager;
 class Items extends AbstractItems
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Order items per page.
-     *
      * @var int
      */
     private $itemsPerPage;
