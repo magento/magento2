@@ -26,70 +26,70 @@ class Lock implements ConfigOptionsListInterface
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_PROVIDER = 'lock-provider';
+    public const INPUT_KEY_LOCK_PROVIDER = 'lock-provider';
 
     /**
      * The name of an option to set DB prefix
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_DB_PREFIX = 'lock-db-prefix';
+    public const INPUT_KEY_LOCK_DB_PREFIX = 'lock-db-prefix';
 
     /**
      * The name of an option to set Zookeeper host
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_ZOOKEEPER_HOST = 'lock-zookeeper-host';
+    public const INPUT_KEY_LOCK_ZOOKEEPER_HOST = 'lock-zookeeper-host';
 
     /**
      * The name of an option to set Zookeeper path
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_ZOOKEEPER_PATH = 'lock-zookeeper-path';
+    public const INPUT_KEY_LOCK_ZOOKEEPER_PATH = 'lock-zookeeper-path';
 
     /**
      * The name of an option to set File path
      *
      * @const string
      */
-    const INPUT_KEY_LOCK_FILE_PATH = 'lock-file-path';
+    public const INPUT_KEY_LOCK_FILE_PATH = 'lock-file-path';
 
     /**
      * The configuration path to save lock provider
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_PROVIDER = 'lock/provider';
+    public const CONFIG_PATH_LOCK_PROVIDER = 'lock/provider';
 
     /**
      * The configuration path to save DB prefix
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_DB_PREFIX = 'lock/config/prefix';
+    public const CONFIG_PATH_LOCK_DB_PREFIX = 'lock/config/prefix';
 
     /**
      * The configuration path to save Zookeeper host
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_ZOOKEEPER_HOST = 'lock/config/host';
+    public const CONFIG_PATH_LOCK_ZOOKEEPER_HOST = 'lock/config/host';
 
     /**
      * The configuration path to save Zookeeper path
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_ZOOKEEPER_PATH = 'lock/config/path';
+    public const CONFIG_PATH_LOCK_ZOOKEEPER_PATH = 'lock/config/path';
 
     /**
      * The configuration path to save locks directory path
      *
      * @const string
      */
-    const CONFIG_PATH_LOCK_FILE_PATH = 'lock/config/path';
+    public const CONFIG_PATH_LOCK_FILE_PATH = 'lock/config/path';
 
     /**
      * The list of lock providers
