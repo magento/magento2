@@ -15,6 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Format;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * Confugurable product view type
@@ -25,6 +27,8 @@ use Magento\Store\Model\Store;
  */
 class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 {
+    private const XML_PATH_TAX_DISPLAY_TYPE = 'tax/display/type';
+
     /**
      * @var \Magento\Catalog\Helper\Product
      */
@@ -79,6 +83,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     private $variationPrices;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -91,6 +100,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * @param Format|null $localeFormat
      * @param Session|null $customerSession
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
+     * @param ScopeConfigInterface|null $scopeConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -105,7 +115,8 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         array $data = [],
         Format $localeFormat = null,
         Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
@@ -118,6 +129,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $this->variationPrices = $variationPrices ?: ObjectManager::getInstance()->get(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices::class
         );
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
 
         parent::__construct(
             $context,
@@ -332,9 +344,13 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $tierPrices = [];
         $tierPriceModel = $product->getPriceInfo()->getPrice('tier_price');
         foreach ($tierPriceModel->getTierPriceList() as $tierPrice) {
+            $price = $this->localeFormat->getNumber($tierPrice['price']->getValue());
+            if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                $price = $this->localeFormat->getNumber($tierPrice['price']->getBaseAmount());
+            }
             $tierPriceData = [
                 'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                'price' => $price,
                 'percentage' => $this->localeFormat->getNumber(
                     $tierPriceModel->getSavePercent($tierPrice['price'])
                 ),
@@ -348,6 +364,16 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         }
 
         return $tierPrices;
+    }
+
+    /**
+     * Returns config tax display type
+     *
+     * @return int
+     */
+    private function getConfigTaxDisplayType(): int
+    {
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_TAX_DISPLAY_TYPE);
     }
 
     /**
