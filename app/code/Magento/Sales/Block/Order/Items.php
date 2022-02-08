@@ -99,7 +99,6 @@ class Items extends AbstractItems
      */
     public function isPagerDisplayed()
     {
-        //echo $this->itemCollection->getSize().' :: '.$this->itemsPerPage;exit;
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
         return $pagerBlock && ($this->itemCollection->getSize() > $this->itemsPerPage);
     }
