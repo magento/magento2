@@ -232,7 +232,6 @@ class ProductTest extends AbstractBackendController
             ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
-        $this->assertStringContainsString('toggleproduct_form_short_description', $body);
     }
 
     /**
@@ -247,7 +246,7 @@ class ProductTest extends AbstractBackendController
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('toggleproduct_form_short_description', $body);
+        $this->assertStringContainsString('buttonsproduct_form_short_description', $body);
     }
 
     /**
