@@ -134,7 +134,6 @@ class Lock implements ConfigOptionsListInterface
      */
     private $defaultConfigValues = [
         self::INPUT_KEY_LOCK_PROVIDER => LockBackendFactory::LOCK_DB,
-        self::INPUT_KEY_LOCK_DB_PREFIX => null,
         self::INPUT_KEY_LOCK_ZOOKEEPER_PATH => ZookeeperLock::DEFAULT_PATH,
     ];
 
@@ -317,7 +316,10 @@ class Lock implements ConfigOptionsListInterface
         string $lockProvider
     ) {
         foreach ($this->mappingInputKeyToConfigPath[$lockProvider] as $input => $path) {
-            $configData->set($path, $deploymentConfig->get($path, $this->getDefaultValue($input)));
+            // do not set default value null for lock db prefix
+            if ($input !== self::INPUT_KEY_LOCK_DB_PREFIX) {
+                $configData->set($path, $deploymentConfig->get($path, $this->getDefaultValue($input)));
+            }
         }
 
         return $configData;
@@ -333,10 +335,6 @@ class Lock implements ConfigOptionsListInterface
      */
     private function getDefaultValue(string $inputKey)
     {
-        if (isset($this->defaultConfigValues[$inputKey])) {
-            return $this->defaultConfigValues[$inputKey];
-        } else {
-            return null;
-        }
+        return $this->defaultConfigValues[$inputKey] ?? null;
     }
 }
