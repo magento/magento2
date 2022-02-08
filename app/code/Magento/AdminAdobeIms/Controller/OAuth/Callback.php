@@ -59,6 +59,15 @@ class Callback extends Action implements HttpPostActionInterface, HttpGetActionI
 
         $profile = $this->connection->getProfile($accessToken);
 
+        /**
+         * wip
+         */
+//        if ($this->userService->exists($profile['email'])) {
+            // create session and redirect to 2FA or Admin Dashboard
+//        }
+
+        //user doesn't exists, redirect to admin login and show error.
+
         return $this->resultJsonFactory->create()->setData($profile);
     }
 }
