@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminImsAuth\Controller\OAuth;
+namespace Magento\AdminAdobeIms\Controller\OAuth;
 
-use Magento\AdminImsAuth\Model\Connection;
+use Magento\AdminAdobeIms\Model\Connection;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
