@@ -85,6 +85,7 @@ class LockTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function createConfigDataProvider(): array
     {
