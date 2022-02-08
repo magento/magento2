@@ -25,6 +25,6 @@
 
     <type name="Magento\AdobeIms\Model\Config">
         <plugin name="ims_config_plugin"
-                type="Magento\AdminImsAuth\Plugin\ConfigPlugin"/>
+                type="Magento\AdminAdobeIms\Plugin\ConfigPlugin"/>
     </type>
 </config>
