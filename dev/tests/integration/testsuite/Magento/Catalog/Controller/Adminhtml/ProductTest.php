@@ -196,7 +196,6 @@ class ProductTest extends AbstractBackendController
 
     /**
      * Testing existing product edit page.
-     *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testEditAction()
@@ -233,6 +232,22 @@ class ProductTest extends AbstractBackendController
             ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
+        $this->assertStringContainsString('toggleproduct_form_short_description', $body);
+    }
+
+    /**
+     * Testing product short description has Wysiwyg after creating category short_description attribute.
+     * @magentoDataFixture Magento/Catalog/_files/category_custom_short_description_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductShorDescriptionHasWysiwygEditor()
+    {
+        /** @var ProductRepository $repository */
+        $repository = $this->repositoryFactory->create();
+        $product = $repository->get('simple');
+        $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('toggleproduct_form_short_description', $body);
     }
 
     /**
