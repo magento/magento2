@@ -12,7 +12,6 @@ use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\InvalidArgumentException;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -115,12 +114,6 @@ class AdminAdobeImsCommand extends Command
                     'c',
                     InputOption::VALUE_OPTIONAL,
                     'Set the client ID for Adobe IMS configuration. Required when enabling the module'
-                ),
-                new InputOption(
-                    self::CLIENT_SECRET_ARGUMENT,
-                    's',
-                    InputOption::VALUE_OPTIONAL,
-                    'Set the client Secret for Adobe IMS configuration. Required when enabling the module'
                 )
             ]);
 
