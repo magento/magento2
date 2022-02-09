@@ -28,8 +28,10 @@
                 <argument name="storeGroupName" value="{{customStore.name}}"/>
                 <argument name="storeGroupCode" value="{{customStore.code}}"/>
             </actionGroup>
+            <waitForElementVisible time="120" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="waitForStoreGridReload"/>
         </before>
         <after>
+            <waitForElementVisible time="130" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="waitForStoreGridReload"/>
             <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
             <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
                 <argument name="backup" value="WebSetupWizardBackup"/>
