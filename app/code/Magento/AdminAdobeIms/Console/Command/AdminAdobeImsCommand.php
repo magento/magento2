@@ -114,6 +114,12 @@ class AdminAdobeImsCommand extends Command
                     'c',
                     InputOption::VALUE_OPTIONAL,
                     'Set the client ID for Adobe IMS configuration. Required when enabling the module'
+                ),
+                new InputOption(
+                    self::CLIENT_SECRET_ARGUMENT,
+                    's',
+                    InputOption::VALUE_OPTIONAL,
+                    'Set the client Secret for Adobe IMS configuration. Required when enabling the module'
                 )
             ]);
 
