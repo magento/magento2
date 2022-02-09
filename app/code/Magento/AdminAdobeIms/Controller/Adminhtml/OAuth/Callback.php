@@ -6,21 +6,19 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Controller\OAuth;
+namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
+use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\Connection;
 use Magento\Backend\Model\UrlInterface;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Message\ManagerInterface;
 
-class Callback extends Action implements HttpPostActionInterface, HttpGetActionInterface
+class Callback extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * @var JsonFactory
@@ -32,6 +30,9 @@ class Callback extends Action implements HttpPostActionInterface, HttpGetActionI
      */
     private Connection $connection;
 
+    /**
+     * @var UrlInterface
+     */
     private UrlInterface $backendUrl;
 
     /**
@@ -49,6 +50,7 @@ class Callback extends Action implements HttpPostActionInterface, HttpGetActionI
         ManagerInterface $messageManager
     ) {
         parent::__construct($context);
+        $this->context = $context;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->connection = $connection;
         $this->backendUrl = $backendUrl;
@@ -67,19 +69,22 @@ class Callback extends Action implements HttpPostActionInterface, HttpGetActionI
          * todo: add error-handling for empty code or invalid/empty accessToken
          */
 
-        $accessToken = $this->connection->getAccessToken($code);
-        $profile = $this->connection->getProfile($accessToken);
+//        $accessToken = $this->connection->getAccessToken($code);
+//        $profile = $this->connection->getProfile($accessToken);
 
-        /**
-         * wip
-         */
-//        if ($this->userService->exists($profile['email'])) {
-            return $this->resultJsonFactory->create()->setData($profile);
-//             create session and redirect to 2FA or Admin Dashboard
-//        }
+        try {
+            if (false) {
 
-//        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-//        $resultRedirect = $this->resultRedirectFactory->create();
-//        return $resultRedirect->setPath($this->backendUrl->getRouteUrl('adminhtml'));
+            }
+
+            throw new AuthenticationException(__('No user found.'));
+
+        } catch (AuthenticationException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+        }
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath($this->_helper->getHomePageUrl());
     }
 }

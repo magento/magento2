@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="standard">
+    <router id="admin">
         <route id="adobe_ims_auth" frontName="adobe_ims_auth">
             <module name="Magento_AdminAdobeIms" />
         </route>
