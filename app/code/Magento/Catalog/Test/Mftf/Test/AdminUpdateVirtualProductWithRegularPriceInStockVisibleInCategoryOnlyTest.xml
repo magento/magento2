@@ -139,7 +139,9 @@
         <!-- Verify customer see updated virtual product and tier price on product page -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice.urlKey)}}" stepKey="goToStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPrice.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{updateVirtualProductRegularPrice.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPrice.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
             <argument name="productSku" value="{{updateVirtualProductRegularPrice.sku}}"/>
