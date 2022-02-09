@@ -87,7 +87,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     public function __construct(
         Product $saleableItem,
-                $quantity,
+        $quantity,
         CalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
