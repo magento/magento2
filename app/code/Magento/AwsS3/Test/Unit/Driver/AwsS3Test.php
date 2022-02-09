@@ -496,4 +496,21 @@ class AwsS3Test extends TestCase
 
         self::assertTrue($this->driver->createDirectory(self::URL . 'test/test2/'));
     }
+
+    public function testRename(): void
+    {
+        $this->adapterMock->expects(self::once())
+            ->method('move')
+            ->with('test/path', 'test/path2');
+
+        self::assertTrue($this->driver->rename('test/path', 'test/path2'));
+    }
+
+    public function testRenameSameDestination(): void
+    {
+        $this->adapterMock->expects(self::never())
+            ->method('move');
+
+        self::assertTrue($this->driver->rename('test/path', 'test/path'));
+    }
 }

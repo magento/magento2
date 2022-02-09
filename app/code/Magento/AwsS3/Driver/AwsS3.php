@@ -524,6 +524,10 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
     {
+        if ($oldPath === $newPath) {
+            return true;
+        }
+
         try {
             $this->adapter->move(
                 $this->normalizeRelativePath($oldPath, true),
