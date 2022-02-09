@@ -72,7 +72,9 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
 
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
@@ -80,6 +82,9 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>

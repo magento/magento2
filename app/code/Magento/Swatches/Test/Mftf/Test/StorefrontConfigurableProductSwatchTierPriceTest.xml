@@ -35,6 +35,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteColorAttribute">
                 <argument name="ProductAttribute" value="ProductColorAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>

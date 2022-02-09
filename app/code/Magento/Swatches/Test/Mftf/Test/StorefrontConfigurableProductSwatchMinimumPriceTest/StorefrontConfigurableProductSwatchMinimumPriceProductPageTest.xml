@@ -38,6 +38,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSizeAttribute">
                 <argument name="ProductAttribute" value="ProductSizeAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
