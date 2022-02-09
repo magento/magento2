@@ -24,10 +24,10 @@
             %>
 
             <% var priceStr = '<span class="price-container price-tier_price">'
-                        + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
-                        + ' data-price-type=""' + ' class="price-wrapper price-including-tax">'
-                        + '<span class="price">' + price + '</span>'
-                        + '</span>' + itemInclExclPrice + '</span>';
+                    + '<span data-price-amount="' + price + '"'
+                    + ' data-price-type=""' + ' class="price-wrapper price-including-tax">'
+                    + '<span class="price">' + price + '</span>'
+                    + '</span>' + itemInclExclPrice + '</span>';
             %>
             <li class="item">
                 <%= '<?= $block->escapeHtml(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
