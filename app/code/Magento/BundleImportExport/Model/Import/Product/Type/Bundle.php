@@ -481,7 +481,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         $orWhere = false;
         foreach ($this->_cachedOptionSelectQuery as $item) {
-            $expItem = explode('=',$item);
+            $expItem = explode('=', $item);
             if ($orWhere) {
                 $select->orWhere($expItem[0].' = '.$expItem[1].' = ?', $expItem[2]);
             } else {
