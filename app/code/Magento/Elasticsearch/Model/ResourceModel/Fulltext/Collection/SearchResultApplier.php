@@ -7,6 +7,7 @@
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Model\ResourceModel\StockStatusApplierInterface;
 use Magento\CatalogInventory\Model\ResourceModel\StockStatusFilterInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -58,6 +59,11 @@ class SearchResultApplier implements SearchResultApplierInterface
     private $stockStatusFilter;
 
     /**
+     * @var StockStatusApplierInterface
+     */
+    private $stockStatusApplier;
+
+    /**
      * @param Collection $collection
      * @param SearchResultInterface $searchResult
      * @param int $size
@@ -65,6 +71,7 @@ class SearchResultApplier implements SearchResultApplierInterface
      * @param ScopeConfigInterface|null $scopeConfig
      * @param MetadataPool|null $metadataPool
      * @param StockStatusFilterInterface|null $stockStatusFilter
+     * @param StockStatusApplierInterface|null $stockStatusApplier
      */
     public function __construct(
         Collection $collection,
@@ -73,7 +80,8 @@ class SearchResultApplier implements SearchResultApplierInterface
         int $currentPage,
         ?ScopeConfigInterface $scopeConfig = null,
         ?MetadataPool $metadataPool = null,
-        ?StockStatusFilterInterface $stockStatusFilter = null
+        ?StockStatusFilterInterface $stockStatusFilter = null,
+        ?StockStatusApplierInterface $stockStatusApplier = null
     ) {
         $this->collection = $collection;
         $this->searchResult = $searchResult;
@@ -82,7 +90,9 @@ class SearchResultApplier implements SearchResultApplierInterface
         $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
         $this->stockStatusFilter = $stockStatusFilter
-            ?: ObjectManager::getInstance()->get(StockStatusFilterInterface::class);
+            ?? ObjectManager::getInstance()->get(StockStatusFilterInterface::class);
+        $this->stockStatusApplier = $stockStatusApplier
+            ?? ObjectManager::getInstance()->get(StockStatusApplierInterface::class);
     }
 
     /**
@@ -212,7 +222,7 @@ class SearchResultApplier implements SearchResultApplierInterface
             ['e' => $this->collection->getTable('catalog_product_entity')],
             ['e.entity_id']
         );
-        $this->stockStatusFilter->setSearchResultApplier(true);
+        $this->stockStatusApplier->setSearchResultApplier(true);
         $query = $this->stockStatusFilter->execute($query, 'e', 'stockItem');
         $query->join(
             ['cat_index' => $this->collection->getTable('catalog_category_product_index_store' . $storeId)],
