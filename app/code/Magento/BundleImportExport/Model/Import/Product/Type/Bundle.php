@@ -183,7 +183,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         $selections = explode(
             Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            str_replace('?', '&#63;', $rowData['bundle_values'])
+            $rowData['bundle_values']
+            //str_replace('?', '&#63;', $rowData['bundle_values'])
         );
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
@@ -199,11 +200,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
                 $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
-                $this->_cachedOptionSelectQuery[] =
-                    $this->connection->quoteInto(
-                        '(parent_id = ' . (int)$entityId . ' AND title = ?)',
-                        $option['name']
-                    );
+                $this->_cachedOptionSelectQuery[] = 'parent_id =' . (int)$entityId . ' AND title =' . $option['name'];
             }
         }
         return $selections;
@@ -474,18 +471,25 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected function populateExistingOptions()
     {
-        $existingOptions = $this->connection->fetchAssoc(
-            $this->connection->select()->from(
-                ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
-                ['option_id', 'parent_id', 'required', 'position', 'type']
-            )->joinLeft(
-                ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
-                'bo.option_id = bov.option_id',
-                ['value_id', 'title']
-            )->where(
-                implode(' OR ', $this->_cachedOptionSelectQuery)
-            )
+        $select = $this->connection->select()->from(
+            ['bo' => $this->_resource->getTableName('catalog_product_bundle_option')],
+            ['option_id', 'parent_id', 'required', 'position', 'type']
+        )->joinLeft(
+            ['bov' => $this->_resource->getTableName('catalog_product_bundle_option_value')],
+            'bo.option_id = bov.option_id',
+            ['value_id', 'title']
         );
+        $orWhere = false;
+        foreach ($this->_cachedOptionSelectQuery as $item) {
+            $expItem = explode('=',$item);
+            if ($orWhere) {
+                $select->orWhere($expItem[0].' = '.$expItem[1].' = ?', $expItem[2]);
+            } else {
+                $select->where($expItem[0].' = '.$expItem[1].' = ?', $expItem[2]);
+                $orWhere = true;
+            }
+        }
+        $existingOptions = $this->connection->fetchAssoc($select);
         foreach ($existingOptions as $optionId => $option) {
             $this->_cachedOptions[$option['parent_id']][$option['title']]['option_id'] = $optionId;
             foreach ($option as $key => $value) {
