@@ -16,8 +16,7 @@
         "magento/module-media-storage": "*",
         "magento/module-quote": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-tax": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-msrp": "*",

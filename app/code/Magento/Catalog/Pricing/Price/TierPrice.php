@@ -87,7 +87,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     public function __construct(
         Product $saleableItem,
-        $quantity,
+                $quantity,
         CalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
@@ -176,9 +176,12 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 function (&$priceData) {
                     /* convert string value to float */
                     $priceData['price_qty'] *= 1;
-                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_BOTH) {
-                        $exclTaxPrice = $this->calculator->getAmount($priceData['price'], $this->product);
+                    $exclTaxPrice = $this->calculator->getAmount($priceData['price'], $this->product);
+                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_EXCLUDING_TAX) {
                         $priceData['excl_tax_price'] = $exclTaxPrice;
+                    }
+                    if ($this->getConfigTaxDisplayType() === Config::DISPLAY_TYPE_BOTH) {
+                        $priceData['incl_excl_tax_price'] = $exclTaxPrice;
                     }
                     $priceData['price'] = $this->applyAdjustment($priceData['price']);
                 }
