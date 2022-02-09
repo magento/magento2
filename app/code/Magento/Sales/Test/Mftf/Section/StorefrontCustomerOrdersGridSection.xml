@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerOrdersGridSection">
-        <element name="orderView" type="button" selector="//td[contains(text(),'{{orderNumber}}')]/following-sibling::td[contains(@class,'col') and contains(@class,'actions')]/a[contains(@class, 'view')]" parameterized="true" timeout="30" />
-        <element name="reorderBtn" type="button" selector="//td[contains(text(),'{{orderNumber}}')]/following-sibling::td[contains(@class,'col') and contains(@class,'actions')]/a[contains(@class, 'order')]" parameterized="true" timeout="30" />
+        <element name="orderView" type="button" selector="//td[(text()='{{orderNumber}}')]/following-sibling::td[contains(@class,'col') and contains(@class,'actions')]/a[contains(@class, 'view')]" parameterized="true" timeout="30" />
+        <element name="reorderBtn" type="button" selector="//td[(text()='{{orderNumber}}')]/following-sibling::td[contains(@class,'col') and contains(@class,'actions')]/a[contains(@class, 'order')]" parameterized="true" timeout="30" />
     </section>
 </sections>
