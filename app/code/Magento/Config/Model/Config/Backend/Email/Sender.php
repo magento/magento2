@@ -24,7 +24,7 @@ class Sender extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         $value = $this->getValue();
-        if (!preg_match("/^[\S ]+$/", $value)) {
+        if ($value === null || !preg_match("/^[\S ]+$/", $value)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The sender name "%1" is not valid. Please use only visible characters and spaces.', $value)
             );
