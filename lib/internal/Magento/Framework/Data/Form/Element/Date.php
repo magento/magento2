@@ -67,6 +67,18 @@ class Date extends AbstractElement
     }
 
     /**
+     * initial scope of method, but keeping the method for compatibility:
+     * If script executes on x64 system, converts large numeric values to timestamp limit
+     *
+     * @param int $value
+     * @return int
+     */
+    protected function _toTimestamp($value)
+    {
+        return $value;
+    }
+
+    /**
      * Set date value
      *
      * @param mixed $value
@@ -84,7 +96,7 @@ class Date extends AbstractElement
         }
         try {
             if (preg_match('/^[\-]{0,1}[0-9]+$/', $value)) {
-                $this->_value = (new \DateTime())->setTimestamp($value);
+                $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
             } elseif (is_string($value) && $this->isDate($value)) {
                 $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
             } else {
