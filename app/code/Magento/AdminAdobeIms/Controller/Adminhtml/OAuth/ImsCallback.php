@@ -16,6 +16,8 @@ use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Message\ManagerInterface;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
@@ -29,17 +31,21 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     /**
      * @param Context $context
      * @param ImsConnection $imsConnection
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
-        ImsConnection $imsConnection
+        ImsConnection $imsConnection,
+        ManagerInterface $messageManager
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
+        $this->messageManager = $messageManager;
     }
 
     /**
      * @return Redirect
+     * @throws AuthorizationException
      */
     public function execute(): Redirect
     {
