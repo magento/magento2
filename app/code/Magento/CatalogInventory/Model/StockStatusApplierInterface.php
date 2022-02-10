@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventory\Model\ResourceModel;
+namespace Magento\CatalogInventory\Model;
 
 /**
  * Search Result Applier interface.

@@ -10,6 +10,7 @@ namespace Magento\CatalogInventory\Model\ResourceModel;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\CatalogInventory\Model\StockStatusApplierInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ObjectManager;

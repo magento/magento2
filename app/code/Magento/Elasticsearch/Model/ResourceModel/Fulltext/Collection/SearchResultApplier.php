@@ -7,7 +7,7 @@
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\CatalogInventory\Model\ResourceModel\StockStatusApplierInterface;
+use Magento\CatalogInventory\Model\StockStatusApplierInterface;
 use Magento\CatalogInventory\Model\ResourceModel\StockStatusFilterInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
