@@ -17,8 +17,10 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Message\ManagerInterface;
 
-class Callback extends Auth implements HttpGetActionInterface
+class ImsCallback extends Auth implements HttpGetActionInterface
 {
+    public const ACTION_NAME = 'imscallback';
+
     /**
      * @var Connection
      */

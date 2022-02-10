@@ -2,19 +2,53 @@
 
 namespace Magento\AdminAdobeIms\App\Action\Plugin;
 
-class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
+use Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsCallback;
+use Magento\Backend\App\Action\Plugin\Authentication as CoreAuthentication;
+use Magento\Backend\App\BackendAppList;
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Message\ManagerInterface;
+
+class Authentication extends CoreAuthentication
 {
     /**
-     * add adobe_ims_auth to allowed actions, so that we can call this controller in the admin login page
-     *
-     * @var string[]
+     * @param Auth $auth
+     * @param UrlInterface $url
+     * @param ResponseInterface $response
+     * @param ActionFlag $actionFlag
+     * @param ManagerInterface $messageManager
+     * @param UrlInterface $backendUrl
+     * @param RedirectFactory $resultRedirectFactory
+     * @param BackendAppList $backendAppList
+     * @param Validator $formKeyValidator
      */
-    protected $_openActions = [
-        'adobe_ims_auth',
-        'forgotpassword',
-        'resetpassword',
-        'resetpasswordpost',
-        'logout',
-        'refresh', // captcha refresh
-    ];
+    public function __construct(
+        Auth $auth,
+        UrlInterface $url,
+        ResponseInterface $response,
+        ActionFlag $actionFlag,
+        ManagerInterface $messageManager,
+        UrlInterface $backendUrl,
+        RedirectFactory $resultRedirectFactory,
+        BackendAppList $backendAppList,
+        Validator $formKeyValidator)
+    {
+        parent::__construct(
+            $auth,
+            $url,
+            $response,
+            $actionFlag,
+            $messageManager,
+            $backendUrl,
+            $resultRedirectFactory,
+            $backendAppList,
+            $formKeyValidator
+        );
+
+        $this->_openActions[] = ImsCallback::ACTION_NAME;
+    }
 }
