@@ -246,7 +246,25 @@ class ProductTest extends AbstractBackendController
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save_and_new"]',
+                $body
+            ),
+            '"Save & New" button isn\'t present on Edit Product page'
+        );
+
+        $this->assertEquals(
+            1,
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                '//*[@id="save_and_duplicate"]',
+                $body
+            ),
+            '"Save & Duplicate" button isn\'t present on Edit Product page'
+        );
         $this->assertStringContainsString('buttonsproduct_form_short_description', $body);
+        $this->assertStringContainsString("{ 'targetElementId': 'product_form_short_description' }", $body);
     }
 
     /**
