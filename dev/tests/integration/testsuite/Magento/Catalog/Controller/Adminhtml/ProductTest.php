@@ -263,7 +263,6 @@ class ProductTest extends AbstractBackendController
             ),
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
-        $this->assertStringContainsString('id=\"toggleproduct_form_short_description\"', $body);
         $this->assertStringContainsString("{ 'targetElementId': 'product_form_short_description' }", $body);
     }
 
