@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "924fe0d5154aa2937a1fd4d9c1403a61",
+    "content-hash": "5d795fdbb8befb7cd004925238304944",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1710,16 +1710,16 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "4.5.0",
+            "version": "4.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "c99ef8e5629c33bfaa3a8f1df773e916af564cd6"
+                "reference": "6fd96d4d913571a2cd056a27b123fa28cb90ac4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/c99ef8e5629c33bfaa3a8f1df773e916af564cd6",
-                "reference": "c99ef8e5629c33bfaa3a8f1df773e916af564cd6",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/6fd96d4d913571a2cd056a27b123fa28cb90ac4e",
+                "reference": "6fd96d4d913571a2cd056a27b123fa28cb90ac4e",
                 "shasum": ""
             },
             "require": {
@@ -1772,7 +1772,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-07T06:00:32+00:00"
+            "time": "2021-12-19T18:06:55+00:00"
         },
         {
             "name": "laminas/laminas-config",
@@ -9360,16 +9360,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "16",
+            "version": "17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "9dd071e644bd9f4e4c08ad8ad345270cecc66a2a"
+                "reference": "7fbdf31a451d29e412b836209459d0e2675128be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/9dd071e644bd9f4e4c08ad8ad345270cecc66a2a",
-                "reference": "9dd071e644bd9f4e4c08ad8ad345270cecc66a2a",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/7fbdf31a451d29e412b836209459d0e2675128be",
+                "reference": "7fbdf31a451d29e412b836209459d0e2675128be",
                 "shasum": ""
             },
             "require": {
@@ -9378,7 +9378,7 @@
                 "php": ">=7.3",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "rector/rector": "^0.12.4",
-                "squizlabs/php_codesniffer": "^3.6",
+                "squizlabs/php_codesniffer": "^3.6.1",
                 "webonyx/graphql-php": "^14.9"
             },
             "require-dev": {
@@ -9402,22 +9402,22 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v16"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v17"
             },
-            "time": "2021-11-23T11:54:35+00:00"
+            "time": "2022-01-11T11:59:48+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.7.3",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "40dd3ebcfcefc8cff70810b3e654e2f9722fc64f"
+                "reference": "a934c0b09038acf61612451732c6a3e8a1faa090"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/40dd3ebcfcefc8cff70810b3e654e2f9722fc64f",
-                "reference": "40dd3ebcfcefc8cff70810b3e654e2f9722fc64f",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/a934c0b09038acf61612451732c6a3e8a1faa090",
+                "reference": "a934c0b09038acf61612451732c6a3e8a1faa090",
                 "shasum": ""
             },
             "require": {
@@ -9492,9 +9492,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.7.3"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/3.8.0"
             },
-            "time": "2021-12-16T20:17:37+00:00"
+            "time": "2022-01-07T17:02:20+00:00"
         },
         {
             "name": "mustache/mustache",
@@ -9562,9 +9562,6 @@
             },
             "require": {
                 "php": "^7.1 || ^8.0"
-            },
-            "replace": {
-                "myclabs/deep-copy": "self.version"
             },
             "require-dev": {
                 "doctrine/collections": "^1.0",
@@ -12782,7 +12779,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.4.0||~8.1.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
@@ -12802,5 +12799,5 @@
         "lib-libxml": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
