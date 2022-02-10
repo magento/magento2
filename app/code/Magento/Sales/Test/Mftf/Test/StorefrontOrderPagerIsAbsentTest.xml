@@ -11,8 +11,8 @@
     <test name="StorefrontOrderPagerIsAbsentTest">
         <annotations>
             <stories value="Storefront order pager"/>
-            <title value="Pager is absent for 20 order items"/>
-            <description value="Pager is disabled for orders with less than 20 items"/>
+            <title value="Pager is absent for 10 order items"/>
+            <description value="Pager is disabled for orders with less than 10 items"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-16166"/>
             <group value="sales"/>
@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="LoginAsAdmin"/>
-           
+
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
                 <requiredEntity createDataKey="createCategory"/>
@@ -52,36 +52,6 @@
             <createData entity="SimpleProduct" stepKey="createProduct10">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="SimpleProduct" stepKey="createProduct11">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="SimpleProduct" stepKey="createProduct12">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct13">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct14">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct15">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct16">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct17">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct18">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct19">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct20">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
 
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
@@ -98,25 +68,15 @@
             <deleteData createDataKey="createProduct08" stepKey="deleteProduct8"/>
             <deleteData createDataKey="createProduct09" stepKey="deleteProduct9"/>
             <deleteData createDataKey="createProduct10" stepKey="deleteProduct10"/>
-            <deleteData createDataKey="createProduct11" stepKey="deleteProduct11"/>
-            <deleteData createDataKey="createProduct12" stepKey="deleteProduct12"/>
-            <deleteData createDataKey="createProduct13" stepKey="deleteProduct13"/>
-            <deleteData createDataKey="createProduct14" stepKey="deleteProduct14"/>
-            <deleteData createDataKey="createProduct15" stepKey="deleteProduct15"/>
-            <deleteData createDataKey="createProduct16" stepKey="deleteProduct16"/>
-            <deleteData createDataKey="createProduct17" stepKey="deleteProduct17"/>
-            <deleteData createDataKey="createProduct18" stepKey="deleteProduct18"/>
-            <deleteData createDataKey="createProduct19" stepKey="deleteProduct19"/>
-            <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
 
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        
+
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCategoryPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToLimiter"/>
@@ -167,47 +127,7 @@
             <requiredEntity createDataKey="createCustomerCart"/>
             <requiredEntity createDataKey="createProduct10"/>
         </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct11">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct11"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct12">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct12"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct13">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct13"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct14">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct14"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct15">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct15"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct16">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct16"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct17">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct17"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct18">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct18"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct19">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct19"/>
-        </createData>
-        <createData entity="CustomerCartItem" stepKey="addProduct20">
-            <requiredEntity createDataKey="createCustomerCart"/>
-            <requiredEntity createDataKey="createProduct20"/>
-        </createData>
-        
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="onCheckout"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="see20Products"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickNextButton"/>
