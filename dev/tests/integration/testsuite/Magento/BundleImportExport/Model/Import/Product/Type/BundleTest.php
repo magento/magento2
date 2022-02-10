@@ -219,12 +219,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
         $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
         $this->assertCount(1, $bundleOptionCollection);
-        foreach ($bundleOptionCollection as $option) {
-            $this->assertEquals('checkbox', $option->getData('type'));
-            $this->assertEquals('Option&#63;', $option->getData('title'));
-            $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
 
-        }
         $this->importedProductSkus = ['Simple 1', 'Bundle 1'];
     }
 
