@@ -131,9 +131,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
             ]
         );
 
-        if ($this->getFilterData()->getStoreIds()) {
-            $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
-        }
+        $this->setStoreIds($this->_getStoreIds());
         $currencyCode = $this->getCurrentCurrencyCode();
 
         $this->addColumn(
