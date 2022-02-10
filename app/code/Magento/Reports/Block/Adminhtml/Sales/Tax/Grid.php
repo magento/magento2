@@ -22,8 +22,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * Config factory
-     *
      * @var \Magento\Sales\Model\Order\ConfigFactory
      */
     protected $_configFactory;
