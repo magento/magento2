@@ -67,7 +67,7 @@ class Date extends AbstractElement
     }
 
     /**
-     * initial scope of method was to limit timestamp on x64 systems to mimic x32 systems,
+     * Initial scope of method was to limit timestamp on x64 systems to mimic x32 systems,
      * but keeping the method for compatibility:
      * If script executes on x64 system, converts large numeric values to timestamp limit
      *
