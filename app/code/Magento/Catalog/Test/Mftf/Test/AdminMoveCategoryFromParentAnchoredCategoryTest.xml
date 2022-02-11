@@ -100,9 +100,6 @@
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
-        <!--<actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMoveMessage">
-            <argument name="message" value="You moved the category."/>
-        </actionGroup>-->
 
         <!--Open category in store front page-->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
