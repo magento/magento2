@@ -33,11 +33,11 @@ class DatetimeDiffPluginTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->helper = Bootstrap::getObjectManager()->create(
-            Helper::class
+            Helper::class,
+            ['modulePrefix' => 'core']
         );
         $this->plugin = Bootstrap::getObjectManager()->create(
-            DatetimeDiffPlugin::class,
-            ['modulePrefix' => 'core']
+            DatetimeDiffPlugin::class
         );
         $this->proceed = function () {
             $this->proceed;
