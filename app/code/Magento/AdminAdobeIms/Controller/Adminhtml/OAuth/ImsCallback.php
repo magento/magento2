@@ -8,8 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
-use Magento\AdminAdobeIms\Model\Connection;
+use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -22,22 +23,22 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     public const ACTION_NAME = 'imscallback';
 
     /**
-     * @var Connection
+     * @var ImsConnection
      */
-    private Connection $connection;
+    private ImsConnection $imsConnection;
 
     /**
      * @param Context $context
-     * @param Connection $connection
+     * @param ImsConnection $imsConnection
      * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
-        Connection $connection,
+        ImsConnection $connection,
         ManagerInterface $messageManager
     ) {
         parent::__construct($context);
-        $this->connection = $connection;
+        $this->imsConnection = $connection;
         $this->messageManager = $messageManager;
     }
 
@@ -53,18 +54,25 @@ class ImsCallback extends Auth implements HttpGetActionInterface
          * todo: add error-handling for empty code or invalid/empty accessToken
          */
 
-        $accessToken = $this->connection->getAccessToken($code);
-        $profile = $this->connection->getProfile($accessToken);
-
         try {
+            $accessToken = $this->imsConnection->getAccessToken($code);
+            $profile = $this->imsConnection->getProfile($accessToken);
+
             if (false) {
 
             }
 
-            throw new AuthenticationException(__('No user found.'));
-
         } catch (AuthenticationException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addComplexErrorMessage('adminAdobeImsMessage',['message' => $e->getMessage()]);
+        } catch (Exception $e) {
+            $this->messageManager->addComplexErrorMessage(
+                'adminAdobeImsMessage',
+                [
+                    'headline' => __('Error signing in')->getText(),
+                    'message' => __('Something went wrong and we could not sign you in. ' .
+                        'Please try again or contact your administrator.')->getText()
+                ]
+            );
         }
 
         /** @var Redirect $resultRedirect */

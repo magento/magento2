@@ -147,7 +147,9 @@ class ImsConnection
         $response = $this->json->unserialize($curl->getBody());
 
         if (!is_array($response) || empty($response['access_token'])) {
-            throw new AuthorizationException(__('Could not login to Adobe IMS.'));
+            throw new AuthorizationException(__('The Adobe ID you\'re using does not belong to the organization ' .
+                'that controlling this Commerce instance. Contact your administrator so he can add your Adobe ID' .
+                'to the organization.'));
         }
 
         return $response['access_token'];
@@ -156,6 +158,7 @@ class ImsConnection
     /**
      * @param string $code
      * @return array|bool|float|int|mixed|string|null
+     * @throws AuthorizationException
      */
     public function getProfile(string $code)
     {
@@ -164,7 +167,12 @@ class ImsConnection
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
 
-        $curl->get('https://ims-na1-stg1.adobelogin.com/ims/profile/v1?client_id=' . $this->imsConfig->getApiKey() . '&bearer_token=' . $code);
+        $curl->get($this->imsConfig->getProfileUrl($code));
+
+        if ($curl->getBody() === '') {
+            throw new AuthorizationException(__('The Adobe ID you\'re using is not added to this Commerce instance' .
+            'Contact your organization administrator to request the access.'));
+        }
 
         return $this->json->unserialize($curl->getBody());
     }
