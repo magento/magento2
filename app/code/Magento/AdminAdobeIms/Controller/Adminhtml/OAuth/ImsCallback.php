@@ -49,10 +49,11 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     public function execute(): Redirect
     {
         $code = $this->getRequest()->getParam('code');
-
-        /**
-         * todo: add error-handling for empty code or invalid/empty accessToken
-         */
+        if ($code === null) {
+            /** @var Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath($this->_helper->getHomePageUrl());
+        }
 
         try {
             $accessToken = $this->imsConnection->getAccessToken($code);
