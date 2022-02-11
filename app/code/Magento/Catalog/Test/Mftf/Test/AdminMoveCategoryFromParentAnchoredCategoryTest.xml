@@ -102,7 +102,7 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You moved the category." stepKey="seeSuccessMoveMessage"/>
 
         <!--Open category in store front page-->
-        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="seeTheCategoryInStoreFrontPage1">
             <argument name="categoryName" value="{{SimpleSubCategory.name}}" />
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontPageLoad1"/>
