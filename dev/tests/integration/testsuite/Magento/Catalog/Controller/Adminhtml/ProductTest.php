@@ -240,7 +240,7 @@ class ProductTest extends AbstractBackendController
      * @magentoDataFixture Magento/Catalog/_files/category_custom_short_description_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testProductShorDescriptionHasWysiwygEditor()
+    public function testProductShortDescriptionHasWysiwygEditor()
     {
         /** @var ProductRepository $repository */
         $repository = $this->repositoryFactory->create();
@@ -249,7 +249,6 @@ class ProductTest extends AbstractBackendController
         $body = $this->getResponse()->getBody();
         $this->assertMatchesRegularExpression('/editorproduct_form_short_description/', $body);
         $this->assertMatchesRegularExpression('/buttonsproduct_form_short_description/', $body);
-
     }
 
     /**
