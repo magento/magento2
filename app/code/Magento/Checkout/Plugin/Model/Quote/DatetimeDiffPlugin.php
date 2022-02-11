@@ -29,8 +29,7 @@ class DatetimeDiffPlugin
         \Closure $proceed,
         $startDate,
         $endDate
-    ): \Zend_Db_Expr
-    {
+    ): \Zend_Db_Expr {
         $dateDiff = "ABS(TIMESTAMPDIFF(DAY, {$endDate}, {$startDate}))";
         return new \Zend_Db_Expr($dateDiff);
     }
