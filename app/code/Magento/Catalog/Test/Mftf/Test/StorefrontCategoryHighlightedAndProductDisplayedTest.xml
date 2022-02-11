@@ -55,7 +55,7 @@
         <!--Click on first category-->
         <comment userInput="Click on first category" stepKey="openFirstCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCategory1Name">
-            <argument name="category" value="$$category1.name$$"/>
+            <argument name="category" value="$$category1$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory1Page"/>
         <!--Check if current category is highlighted and the others are not-->
@@ -77,7 +77,7 @@
         <!--Click on second category-->
         <comment userInput="Click on second category" stepKey="openSecondCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCategory2Name">
-            <argument name="category" value="$$category2.name$$"/>
+            <argument name="category" value="$$category2$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategory2Page"/>
         <!--Check if current category is highlighted  and the others are not-->

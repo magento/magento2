@@ -56,7 +56,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory">
-            <argument name="category" value="{{CatNotActive.name}}"/>
+            <argument name="category" value="{{CatNotActive}}"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>

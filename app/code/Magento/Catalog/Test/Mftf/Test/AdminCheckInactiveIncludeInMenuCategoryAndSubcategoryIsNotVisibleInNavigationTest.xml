@@ -34,7 +34,7 @@
         <!--Create subcategory under parent category -->
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
-            <argument name="category" value="$$createCategory.name$$"/>
+            <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>

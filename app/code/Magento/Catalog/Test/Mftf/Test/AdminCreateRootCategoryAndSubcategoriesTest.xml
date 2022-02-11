@@ -51,7 +51,7 @@
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickOnCreatedNewRootCategory1">
-            <argument name="category" value="{{NewRootCategory.name}}"/>
+            <argument name="category" value="{{NewRootCategory}}"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
         <!--Create another subcategory-->

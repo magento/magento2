@@ -42,7 +42,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickRootCategoryInTree">
-            <argument name="category" value="{{NewRootCategory.name}}"/>
+            <argument name="category" value="{{NewRootCategory}}"/>
         </actionGroup>
 
         <!--Verify Delete button is not displayed-->

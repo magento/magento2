@@ -46,7 +46,7 @@
             <!--delete root category-->
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
             <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickOnDefaultRootCategory">
-                <argument name="category" value="$$createRootCategory.name$$"/>
+                <argument name="category" value="$$createRootCategory$$"/>
             </actionGroup>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageDefaultCategoryEditLoad"/>
             <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>

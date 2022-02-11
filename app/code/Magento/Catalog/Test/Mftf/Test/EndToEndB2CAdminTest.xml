@@ -220,9 +220,7 @@
             <argument name="categoryEntity" value="_defaultCategory"/>
         </actionGroup>
         <!--Create category under newly created category-->
-        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCreatedCategoryInTree">
-            <argument name="category" value="{{_defaultCategory.name}}"/>
-        </actionGroup>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCreatedCategoryInTree"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubCategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>

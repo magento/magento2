@@ -47,7 +47,7 @@
         <comment userInput="BIC workaround" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage1"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openNewRootCategory">
-            <argument name="category" value="$$createNewRootCategoryA.name$$"/>
+            <argument name="category" value="$$createNewRootCategoryA$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageCategoryLoadAfterClickOnNewRootCategory"/>
         <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent"/>
@@ -158,7 +158,7 @@
         <!-- Rename New Root Category to Default category -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickOnNewRootCategoryA">
-            <argument name="category" value="$$createNewRootCategoryA.name$$"/>
+            <argument name="category" value="$$createNewRootCategoryA$$"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageNewRootCategoryALoad"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>

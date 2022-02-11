@@ -34,9 +34,7 @@
         <!-- Open Category Page -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandTree"/>
-        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory">
-            <argument name="category" value="{{_defaultCategory.name}}"/>
-        </actionGroup>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCategory"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad"/>
         <!-- Create three level deep sub Category -->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickAddSubCategoryButton"/>
