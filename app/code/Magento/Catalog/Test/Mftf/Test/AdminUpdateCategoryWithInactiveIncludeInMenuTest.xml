@@ -67,7 +67,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="selectCreatedCategory1">
-            <argument name="category" value="{{SimpleRootSubCategory}}"/>
+            <argument name="category" value="SimpleRootSubCategory"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
