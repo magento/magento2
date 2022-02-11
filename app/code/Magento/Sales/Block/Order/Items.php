@@ -146,10 +146,9 @@ class Items extends AbstractItems
     {
         $collectionToPager = $this->itemCollection;
         $collectionToPager->addFieldToFilter('parent_item_id', ['null' => true]);
-        $pagerBlock->setCollection($collectionToPager);
-
         $pagerBlock->setLimit($this->itemsPerPage);
         $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
+        $pagerBlock->setCollection($collectionToPager);
         $pagerBlock->setShowAmounts($this->isPagerDisplayed());
     }
 
