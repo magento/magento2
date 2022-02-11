@@ -250,13 +250,13 @@
         <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnFirstPage"/>
         <assertEquals stepKey="assertOrderItemsOnFirstPage">
             <actualResult type="const">($orderItemsCountOnFirstPage)</actualResult>
-            <expectedResult type="const">10</expectedResult>
+            <expectedResult type="const">20</expectedResult>
         </assertEquals>
-        <click selector="{{StorefrontCustomerOrderViewSection.pagerLink($createCustomerCart.return$, '3')}}" stepKey="assertPagerLink" />
+        <click selector="{{StorefrontCustomerOrderViewSection.pagerLink($createCustomerCart.return$, '2')}}" stepKey="assertPagerLink" />
         <waitForPageLoad stepKey="waitForPageLoading"/>
-        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnThirdPage"/>
-        <assertEquals stepKey="assertOrderItemsOnThirdPage">
-            <actualResult type="const">($orderItemsCountOnThirdPage)</actualResult>
+        <executeJS function="var len = document.querySelectorAll('{{StorefrontCustomerOrderViewSection.itemCountOnPage}}').length; return len;" stepKey="orderItemsCountOnSecondPage"/>
+        <assertEquals stepKey="assertOrderItemsOnSecondPage">
+            <actualResult type="const">($orderItemsCountOnSecondPage)</actualResult>
             <expectedResult type="const">1</expectedResult>
         </assertEquals>
     </test>
