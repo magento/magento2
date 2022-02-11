@@ -33,7 +33,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * Price type tier
      */
-    const PRICE_CODE = 'tier_price';
+    private const PRICE_CODE = 'tier_price';
 
     /**
      * @var Session
