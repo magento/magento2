@@ -24,6 +24,7 @@ use Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product\Attribute\Repository as ProductAttributeRepository;
 
 /**
  * Test class for Product adminhtml actions
@@ -246,24 +247,9 @@ class ProductTest extends AbstractBackendController
         $product = $repository->get('simple');
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
-        $this->assertEquals(
-            1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//*[@id="save_and_new"]',
-                $body
-            ),
-            '"Save & New" button isn\'t present on Edit Product page'
-        );
+        $this->assertMatchesRegularExpression('/editorproduct_form_short_description/', $body);
+        $this->assertMatchesRegularExpression('/buttonsproduct_form_short_description/', $body);
 
-        $this->assertEquals(
-            1,
-            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//*[@id="save_and_duplicate"]',
-                $body
-            ),
-            '"Save & Duplicate" button isn\'t present on Edit Product page'
-        );
-        $this->assertStringContainsString("{ 'targetElementId': 'product_form_short_description' }", $body);
     }
 
     /**
