@@ -34,11 +34,11 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      */
     public function __construct(
         Context $context,
-        ImsConnection $connection,
+        ImsConnection $imsConnection,
         ManagerInterface $messageManager
     ) {
         parent::__construct($context);
-        $this->imsConnection = $connection;
+        $this->imsConnection = $imsConnection;
         $this->messageManager = $messageManager;
     }
 
