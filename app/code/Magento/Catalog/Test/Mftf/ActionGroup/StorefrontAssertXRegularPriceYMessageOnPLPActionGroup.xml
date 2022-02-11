@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertXRegularPriceYMessageOnPLPActionGroup">
+        <annotations>
+            <description>Asserts the "X Regular Price Y" message on PLP</description>
+        </annotations>
+        <arguments>
+            <argument name="X" type="string"/>
+            <argument name="Y" type="string"/>
+        </arguments>
+       
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal(X)}}" stepKey="assertX"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld(Y)}}" stepKey="assertY"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertTextLabel"/>
+
+    </actionGroup>
+</actionGroups>

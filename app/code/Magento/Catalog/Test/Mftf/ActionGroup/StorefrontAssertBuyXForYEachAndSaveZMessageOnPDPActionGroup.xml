@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertBuyXForYEachAndSaveZMessageOnPDPActionGroup">
+        <annotations>
+            <description>Asserts the "Buy X for Y each and save Z" message on PDP</description>
+        </annotations>
+        <arguments>
+            <argument name="priceIndex" type="string" defaultValue="1"/>
+            <argument name="X" type="string" defaultValue=""/>
+            <argument name="Y" type="string" defaultValue=""/>
+            <argument name="Z" type="string" defaultValue=""/>
+        </arguments>
+       
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel(priceIndex, X)}}" stepKey="assertBuyX"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount(priceIndex, Y)}}" stepKey="assertForY"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount(priceIndex, Z)}}" stepKey="assertSaveZ"/>
+
+    </actionGroup>
+</actionGroups>

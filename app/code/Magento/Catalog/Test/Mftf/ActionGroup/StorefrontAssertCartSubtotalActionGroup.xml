@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertCartSubtotalActionGroup">
+        <annotations>
+            <description>Asserts Cart Subtotal matches expected Value</description>
+        </annotations>
+        <arguments>
+            <argument name="expectedSubtotal" type="string"/>
+        </arguments>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabCartSubtotal"/>
+        <assertEquals message="Shopping cart summary section should contain {{expectedSubtotal}}" stepKey="assertSubtotal">
+            <expectedResult type="string">{{expectedSubtotal}}</expectedResult>
+            <actualResult type="variable">grabCartSubtotal</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

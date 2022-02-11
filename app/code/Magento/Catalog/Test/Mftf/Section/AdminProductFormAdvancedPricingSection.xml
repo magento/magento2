@@ -12,6 +12,7 @@
         <element name="customerGroupPriceAddButton" type="button" selector="[data-action='add_new_row']" timeout="30"/>
         <element name="addCustomerGroupPrice" type="button" selector="//span[text()='Add']/ancestor::button" timeout="30"/>
         <element name="customerGroupPriceDeleteButton" type="button" selector="[data-action='remove_row']" timeout="30"/>
+        <element name="customerGroupPriceDeleteButtonFull" type="button" selector="(//tr//button[@data-action='remove_row'])" timeout="30"/>
         <element name="advancedPricingCloseButton" type="button" selector=".product_form_product_form_advanced_pricing_modal button.action-close" timeout="30"/>
         <element name="productTierPriceWebsiteSelect" type="select" selector="[name='product[tier_price][{{var1}}][website_id]']" parameterized="true"/>
         <element name="productTierPriceCustGroupSelect" type="select" selector="[name='product[tier_price][{{var1}}][cust_group]']" parameterized="true"/>
