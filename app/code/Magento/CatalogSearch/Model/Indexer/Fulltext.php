@@ -38,7 +38,7 @@ class Fulltext implements
     /**
      * Default batch size
      */
-    private const BATCH_SIZE = 100;
+    private const BATCH_SIZE = 1000;
 
     /**
      * @var array index structure

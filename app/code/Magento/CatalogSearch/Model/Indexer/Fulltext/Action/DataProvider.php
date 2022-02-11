@@ -204,7 +204,7 @@ class DataProvider
         array $staticFields,
         $productIds = null,
         $lastProductId = 0,
-        $batch = 100
+        $batch = 1000
     ) {
         $select = $this->selectSearchableProducts->execute(
             (int) $storeId,
@@ -357,10 +357,11 @@ class DataProvider
         $selects = [];
         $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         $linkField = $this->metadata->getLinkField();
-        $productLinkFieldsToEntityIdMap = $this->connection->fetchPairs(
+        $tmpTableName = 'index_fulltext_tmp_' . time();
+        $this->connection->query('CREATE TEMPORARY TABLE ' . $tmpTableName . ' ' .
             $this->connection->select()->from(
                 ['cpe' => $this->getTable('catalog_product_entity')],
-                [$linkField, 'entity_id']
+                $linkField != 'entity_id' ? [$linkField, 'entity_id'] : ['entity_id']
             )->where(
                 'cpe.entity_id IN (?)',
                 $productIds,
@@ -369,41 +370,33 @@ class DataProvider
         );
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
-                $tableName = $this->getTable('catalog_product_entity_' . $backendType);
+                foreach ($attributeIds as $attributeId) {
+                    $tableName = $this->getTable('catalog_product_entity_' . $backendType);
 
-                $select = $this->connection->select()->from(
-                    ['t' => $tableName],
-                    [
-                        $linkField => 't.' . $linkField,
-                        'attribute_id' => 't.attribute_id',
-                        'value' => $this->unifyField($ifStoreValue, $backendType),
-                    ]
-                )->joinLeft(
-                    ['t_store' => $tableName],
-                    $this->connection->quoteInto(
-                        't.' . $linkField . '=t_store.' . $linkField .
-                        ' AND t.attribute_id=t_store.attribute_id' .
-                        ' AND t_store.store_id = ?',
-                        $storeId
-                    ),
-                    []
-                )->joinLeft(
-                    ['t_default' => $tableName],
-                    $this->connection->quoteInto(
-                        't.' . $linkField . '=t_default.' . $linkField .
-                        ' AND t.attribute_id=t_default.attribute_id' .
-                        ' AND t_default.store_id = ?',
-                        0
-                    ),
-                    []
-                )->where(
-                    't.attribute_id IN (?)',
-                    $attributeIds
-                )->where(
-                    't.' . $linkField . ' IN (?)',
-                    array_keys($productLinkFieldsToEntityIdMap)
-                )->distinct();
-                $selects[] = $select;
+                    $select = $this->connection->select()->from(
+                        ['t' => $tmpTableName],
+                        [
+                            'entity_id' => 't.entity_id',
+                            $linkField => 't.' . $linkField,
+                            'value' => $this->unifyField($ifStoreValue, $backendType),
+                        ]
+                    )->joinLeft(
+                        ['t_default' => $tableName],
+                        't.' . $linkField . ' = t_default.' . $linkField
+                        . ' AND t_default.attribute_id = ' . (int) $attributeId
+                        . ' AND t_default.store_id = 0',
+                        ['attribute_id' => 't_default.attribute_id']
+                    )->joinLeft(
+                        ['t_store' => $tableName],
+                        't.' . $linkField . ' = t_store.' . $linkField
+                        . ' AND t_store.attribute_id = '  . (int) $attributeId
+                        . ' AND t_store.store_id = ' . (int) $storeId,
+
+                        []
+                    );
+                    $selects[] = $select;
+                }
+
             }
         }
 
@@ -411,11 +404,11 @@ class DataProvider
             $select = $this->connection->select()->union($selects, Select::SQL_UNION_ALL);
             $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
-                $entityId = $productLinkFieldsToEntityIdMap[$row[$linkField]];
+                $entityId = $row['entity_id'];
                 $result[$entityId][$row['attribute_id']] = $row['value'];
             }
         }
-
+        $this->connection->dropTemporaryTable($tmpTableName);
         return $result;
     }
 

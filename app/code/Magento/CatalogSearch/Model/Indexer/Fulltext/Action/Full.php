@@ -260,7 +260,7 @@ class Full
         $indexIteratorFactory = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         DataProvider $dataProvider = null,
-        $batchSize = 500,
+        $batchSize = 1000,
         ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->resource = $resource;

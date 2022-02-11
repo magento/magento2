@@ -224,6 +224,7 @@ class ExtededTestdox extends \PHPUnit\Util\Printer implements \PHPUnit\Framework
     {
     }
 
+    private $mem;
     /**
      * A test started.
      *
@@ -233,7 +234,7 @@ class ExtededTestdox extends \PHPUnit\Util\Printer implements \PHPUnit\Framework
     {
         if ($test instanceof $this->testTypeOfInterest) {
             $class = get_class($test);
-
+            $this->mem = \memory_get_usage(1);
             if ($this->testClass != $class) {
                 if ($this->testClass != '') {
                     $this->doEndClass();
@@ -277,6 +278,10 @@ class ExtededTestdox extends \PHPUnit\Util\Printer implements \PHPUnit\Framework
             $this->tests[$this->currentTestMethodPrettified]['time'] += $time;
             $this->currentTestClassPrettified = null;
             $this->currentTestMethodPrettified = null;
+            $memDelta = \memory_get_usage(1)  - $this->mem;
+            if ($memDelta > 10000) {
+                echo "Mem: [". number_format($memDelta /1000) . 'k]';
+            }
         }
     }
 

@@ -153,7 +153,21 @@ class Configurable implements DimensionalIndexerInterface
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
             iterator_to_array($entityIds)
         );
-        $this->tableMaintainer->insertFromSelect($select, $temporaryPriceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect(
+            $select,
+            $temporaryPriceTable->getTableName(),
+            [
+                "entity_id",
+                "customer_group_id",
+                "website_id",
+                "tax_class_id",
+                "price",
+                "final_price",
+                "min_price",
+                "max_price",
+                "tier_price",
+            ]
+        );
 
         $this->basePriceModifier->modifyPrice($temporaryPriceTable, iterator_to_array($entityIds));
         $this->applyConfigurableOption($temporaryPriceTable, $dimensions, iterator_to_array($entityIds));

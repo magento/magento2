@@ -72,11 +72,8 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
      */
     public function modifyPrice(IndexTableStructure $priceTable, array $entityIds = []) : void
     {
-        foreach ($entityIds as $entityId) {
+        foreach ($this->getBundleIds($entityIds) as $entityId) {
             $entityId = (int) $entityId;
-            if (!$this->isBundle($entityId)) {
-                continue;
-            }
             foreach ($this->getWebsiteIdsOfProduct($entityId) as $websiteId) {
                 $productIdsDisabledRequired = $this->selectionProductsDisabledRequired
                     ->getChildProductIds($entityId, (int)$websiteId);
@@ -137,5 +134,25 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         $typeId = $connection->fetchOne($select);
         $this->isBundle[$entityId] = $typeId === Type::TYPE_BUNDLE;
         return $this->isBundle[$entityId];
+    }
+
+    /**
+     * @param array $entityIds
+     * @return \Traversable
+     */
+    protected function getBundleIds(array $entityIds): \Traversable
+    {
+        $connection = $this->resourceConnection->getConnection('indexer');
+        $select = $connection->select();
+        $select->from(
+            ['cpe' => $this->resourceConnection->getTableName('catalog_product_entity')],
+            ['entity_id']
+        )->where('cpe.entity_id in ( ? )', $entityIds ?? [0], \Zend_Db::INT_TYPE)
+        ->where('type_id = ?', Type::TYPE_BUNDLE);
+
+        $statement = $select->query();
+        while ($id = $statement->fetchColumn()) {
+            yield $id;
+        }
     }
 }

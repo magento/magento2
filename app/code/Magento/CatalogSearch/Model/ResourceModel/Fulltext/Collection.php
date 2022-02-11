@@ -462,6 +462,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $searchCriteria = $this->getSearchCriteriaResolver()->resolve();
             try {
                 $this->searchResult =  $this->getSearch()->search($searchCriteria);
+                //dump($this->searchResult);
                 $this->_totalRecords = $this->getTotalRecordsResolver($this->searchResult)->resolve();
             } catch (EmptyRequestDataException $e) {
                 $this->searchResult = $this->createEmptyResult();
