@@ -23,15 +23,11 @@ use Magento\TestFramework\Db\ConnectionAdapter;
 class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
 {
     /**
-     * Locator class name
-     *
      * @var string
      */
     protected $_locatorClassName = ObjectManager::class;
 
     /**
-     * Config class name
-     *
      * @var string
      */
     protected $_configClassName = \Magento\TestFramework\ObjectManager\Config::class;
@@ -81,6 +77,30 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
     }
 
     /**
+     * Read config from provided directory
+     *
+     * @param string $directory
+     * @return array
+     * @throws LocalizedException
+     */
+    private function readCustomConfig(string $directory): array
+    {
+        $path = __DIR__ . '/../../../etc/di/' . $directory . '/';
+        $files = glob($path . '*.php');
+
+        $data = [];
+        foreach ($files as $file) {
+            if (!is_readable($file)) {
+                throw new LocalizedException(__("'%1' is not readable file.", $file));
+            }
+            $data[] = include $file;
+        }
+        $data = array_merge([], ...$data);
+
+        return $data;
+    }
+
+    /**
      * Load primary config
      *
      * @param DirectoryList $directoryList
@@ -98,23 +118,25 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
                     'default_setup' => ['type' => ConnectionAdapter::class]
                 ]
             );
-            $diPreferences = [];
-            $diPreferencesPath = __DIR__ . '/../../../etc/di/preferences/';
-
-            $preferenceFiles = glob($diPreferencesPath . '*.php');
-
-            foreach ($preferenceFiles as $file) {
-                if (!is_readable($file)) {
-                    throw new LocalizedException(__("'%1' is not readable file.", $file));
-                }
-                $diPreferences = array_replace($diPreferences, include $file);
-            }
-
+            $diPreferences = $this->readCustomConfig('preferences');
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
                 $diPreferences
             );
         }
         return $this->_primaryConfigData;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function create(array $arguments)
+    {
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
+        $objectManager = parent::create($arguments);
+        $persistedInstances = $this->readCustomConfig('persistedInstances');
+        $objectManager->setPersistedInstances($persistedInstances);
+
+        return $objectManager;
     }
 }
