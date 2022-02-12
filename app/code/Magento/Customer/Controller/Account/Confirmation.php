@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -13,6 +15,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterfac
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -97,25 +100,28 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
                     $this->storeManager->getStore()->getWebsiteId()
                 );
                 $this->messageManager->addSuccessMessage(__('Please check your email for confirmation key.'));
+                $this->session->setUsername($email);
+                $resultRedirect->setPath('*/*/index', ['_secure' => true]);
+
+                return $resultRedirect;
             } catch (InvalidTransitionException $e) {
                 $this->messageManager->addSuccessMessage(__('This email does not require confirmation.'));
-            } catch (\Exception $e) {
-                $this->messageManager->addExceptionMessage($e, __('Wrong email.'));
-                $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
+                $this->session->setUsername($email);
+                $resultRedirect->setPath('*/*/index', ['_secure' => true]);
+
                 return $resultRedirect;
+            } catch (NoSuchEntityException $e) {
+                $this->messageManager->addErrorMessage(__('Wrong email.'));
             }
-            $this->session->setUsername($email);
-            $resultRedirect->setPath('*/*/index', ['_secure' => true]);
-            return $resultRedirect;
         }
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
-            $this->getRequest()->getParam('email', $email)
-        )->setLoginUrl(
-            $this->customerUrl->getLoginUrl()
-        );
+        $resultPage->getLayout()
+            ->getBlock('accountConfirmation')
+            ->setEmail($email)
+            ->setLoginUrl($this->customerUrl->getLoginUrl());
+
         return $resultPage;
     }
 }
