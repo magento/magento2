@@ -186,6 +186,15 @@ class Processor
         $this->_root  = is_dir($this->_indexDir . 'app');
 
         $this->_prepareConfig();
+
+        if (isset($_ENV['MAGE_RUN_CODE'])) {
+            $this->_setSkin($_ENV['MAGE_RUN_CODE']);
+
+            if (isset($_ENV['MAGE_RUN_TYPE'])) {
+                $this->_setSkin($ENV_['MAGE_RUN_TYPE'] . '-' . $_ENV['MAGE_RUN_CODE']);
+            }
+        }
+
         if (isset($_GET['skin'])) {
             $this->_setSkin($_GET['skin']);
         }
