@@ -6,8 +6,7 @@ body:
     attributes:
       label: Have you read our guidelines?
       description: |
-        Please read [our guidelines](https://github.com/magento/magento2/wiki/Issue-reporting-guidelines)
-        before submitting the issue.
+        Please read [our guidelines](https://github.com/magento/magento2/wiki/Issue-reporting-guidelines) before submitting the issue.
       options:
         - label: I have read the guidelines
           required: true
@@ -36,8 +35,8 @@ body:
     attributes:
       label: Environment
       description: |
-        Describe your environment. Provide all the details that will help us
-        to reproduce the bug.
+        Describe your environment.
+        Provide all the details that will help us to reproduce the bug.
       value: |
         - Magento version:
         - OS:
