@@ -50,6 +50,12 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     {
         $code = $this->getRequest()->getParam('code');
         if ($code === null) {
+            $this->errorMessage(
+                'Error signing in',
+                'Something went wrong and we could not sign you in. ' .
+                'Please try again or contact your administrator.'
+            );
+
             /** @var Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath($this->_helper->getHomePageUrl());
@@ -66,18 +72,26 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         } catch (AuthenticationException $e) {
             $this->messageManager->addComplexErrorMessage('adminAdobeImsMessage',['message' => $e->getMessage()]);
         } catch (Exception $e) {
-            $this->messageManager->addComplexErrorMessage(
-                'adminAdobeImsMessage',
-                [
-                    'headline' => __('Error signing in')->getText(),
-                    'message' => __('Something went wrong and we could not sign you in. ' .
-                        'Please try again or contact your administrator.')->getText()
-                ]
+            $this->errorMessage(
+                'Error signing in',
+                'Something went wrong and we could not sign you in. ' .
+                'Please try again or contact your administrator.'
             );
         }
 
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath($this->_helper->getHomePageUrl());
+    }
+
+    private function errorMessage(string $headline, string $message): void
+    {
+        $this->messageManager->addComplexErrorMessage(
+            'adminAdobeImsMessage',
+            [
+                'headline' => __($headline)->getText(),
+                'message' => __($message)->getText()
+            ]
+        );
     }
 }

@@ -1,3 +1,12 @@
-<b><?php echo $block->getData('headline'); ?></b>
-<br>
-<?php echo $block->getData('message'); ?>
+<div class="admin-adobe-ims-message-wrapper">
+    <div class="admin-adobe-ims-message-header">
+        <span>
+            <?php echo $block->getData('headline'); ?>
+        </span>
+    </div>
+    <div class="admin-adobe-ims-message-message">
+        <p>
+            <?php echo $block->getData('message'); ?>
+        </p>
+    </div>
+</div>

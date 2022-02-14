@@ -10,20 +10,18 @@
     <test name="CallbackWithoutCodeRedirectsToAdminLoginTest">
         <annotations>
             <features value="Backend"/>
-            <stories value="Check ImsCallback Controller redirects to admin login page when no code is given"/>
+            <stories value="Check ImsCallback Controller redirects to admin login page and displays error message when no code is given"/>
             <title value="ImsCallback Controller redirects to admin login when no code is given"/>
             <description value="ImsCallback Controller redirects to admin login when no code is given"/>
             <severity value="CRITICAL"/>
             <group value="admin_ims"/>
             <testCaseId value="CABPI-205"/>
         </annotations>
+        <before>
+            <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl"/>
+        </before>
 
-        <!-- Navigate to admin page -->
-        <amOnPage url="{{AdminAdobeImsCallbackPage.url}}" stepKey="openCallbackUrl" />
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <amOnPage url="{{AdminLoginPage.url}}" stepKey="openAdminPanelPage" />
-
-        <!-- Check for Sign in with Adobe Id option -->
+        <!-- Check for Sign in with error message -->
         <actionGroup ref="AssertAdminSignInEmptyCodeErrorMessageTestActionGroup"
                      stepKey="assertAdminLoginShowsErrorMessage"/>
     </test>
