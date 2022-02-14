@@ -9,9 +9,10 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\Framework\MessageQueue\Envelope;
+use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\MysqlMq\Model\QueueManagement;
-use Magento\MysqlMq\Model\ResourceModel\Message;
 use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -27,12 +28,6 @@ class ExportTest extends AbstractBackendController
 {
     private const TOPIC_NAME = 'import_export.export';
 
-    /** @var QueueManagement */
-    private $queueManagement;
-
-    /** @var Message */
-    private $queueMessageResource;
-
     /** @var SerializerInterface */
     private $json;
 
@@ -40,17 +35,26 @@ class ExportTest extends AbstractBackendController
     private $deleteTopicRelatedMessages;
 
     /**
+     * @var QueueRepository
+     */
+    private $queueRepository;
+
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
+    /**
      * @inheridoc
      */
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->queueManagement = $this->_objectManager->get(QueueManagement::class);
-        $this->queueMessageResource = $this->_objectManager->get(Message::class);
         $this->json = $this->_objectManager->get(SerializerInterface::class);
         $this->deleteTopicRelatedMessages = $this->_objectManager->get(DeleteTopicRelatedMessages::class);
         $this->deleteTopicRelatedMessages->execute(self::TOPIC_NAME);
+        $this->queueRepository = $this->_objectManager->get(QueueRepository::class);
+        $this->defaultValueProvider = $this->_objectManager->get(DefaultValueProvider::class);
     }
 
     /**
@@ -85,11 +89,11 @@ class ExportTest extends AbstractBackendController
         $this->dispatch('backend/admin/export/export');
         $this->assertSessionMessages($this->containsEqual($expectedSessionMessage));
         $this->assertRedirect($this->stringContains('/export/index/key/'));
-        $messages = $this->queueManagement->readMessages('export');
-        $this->assertCount(1, $messages);
-        $message = reset($messages);
-        $this->assertEquals(self::TOPIC_NAME, $message[QueueManagement::MESSAGE_TOPIC]);
-        $body = $this->json->unserialize($message[QueueManagement::MESSAGE_BODY]);
+        $queue = $this->queueRepository->get($this->defaultValueProvider->getConnection(), 'export');
+        /** @var Envelope $message */
+        $message = $queue->dequeue();
+        $this->assertEquals(self::TOPIC_NAME, $message->getProperties()['topic_name']);
+        $body = $this->json->unserialize($message->getBody());
         $this->assertStringContainsString(ProductAttributeInterface::ENTITY_TYPE_CODE, $body['file_name']);
         $this->assertEquals($fileFormat, $body['file_format']);
         $actualFilter = $this->json->unserialize($body['export_filter']);

@@ -11,9 +11,10 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\MysqlMq\Model\Driver\Queue;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -36,14 +37,21 @@ class ConsumerTest extends TestCase
     /** @var Consumer */
     private $consumer;
 
-    /** @var Queue */
-    private $queue;
-
     /** @var WriteInterface */
     private $directory;
 
     /** @var string */
     private $filePath;
+
+    /**
+     * @var QueueRepository
+     */
+    private $queueRepository;
+
+    /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
 
     /**
      * @inheritdoc
@@ -53,11 +61,12 @@ class ConsumerTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->queue = $this->objectManager->create(Queue::class, ['queueName' => 'export']);
         $this->messageEncoder = $this->objectManager->get(MessageEncoder::class);
         $this->consumer = $this->objectManager->get(Consumer::class);
         $filesystem = $this->objectManager->get(Filesystem::class);
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $this->queueRepository = $this->objectManager->get(QueueRepository::class);
+        $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
     }
 
     /**
@@ -82,7 +91,8 @@ class ConsumerTest extends TestCase
      */
     public function testProcess(): void
     {
-        $envelope = $this->queue->dequeue();
+        $queue = $this->queueRepository->get($this->defaultValueProvider->getConnection(), 'export');
+        $envelope = $queue->dequeue();
         $decodedMessage = $this->messageEncoder->decode('import_export.export', $envelope->getBody());
         $this->consumer->process($decodedMessage);
         $this->filePath = 'export/' . $decodedMessage->getFileName();
