@@ -1,0 +1,47 @@
+name: Bug report
+description: Technical issue with the Magento 2 core components
+labels: ["bug"]
+body:
+  - type: checkboxes
+    attributes:
+      label: Have you read our guidelines?
+      description: |
+        Please read [our guidelines](https://github.com/magento/magento2/wiki/Issue-reporting-guidelines)
+        before submitting the issue.
+      options:
+        - label: I have read the guidelines
+          required: true
+  - type: textarea
+    attributes:
+      label: Current behavior
+      description: |
+        Tell us what happened. Include error messages and issues.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: |
+        Tell us what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Provide a set of clear steps to reproduce this bug.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment
+      description: |
+        Describe your environment. Provide all the details that will help us
+        to reproduce the bug.
+      value: |
+        - Magento version:
+        - OS:
+        - PHP:
+        ...
+    validations:
+      required: true
