@@ -11,11 +11,13 @@ namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Message\ManagerInterface;
 
@@ -27,20 +29,28 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
+    /**
+     * @var AdminLoginProcessService
+     */
+    private AdminLoginProcessService $adminLoginProcessService;
 
     /**
      * @param Context $context
      * @param ImsConnection $imsConnection
      * @param ManagerInterface $messageManager
+     * @param AdminLoginProcessService $adminLoginProcessService
      */
     public function __construct(
-        Context $context,
-        ImsConnection $imsConnection,
-        ManagerInterface $messageManager
-    ) {
+        Context          $context,
+        ImsConnection    $imsConnection,
+        ManagerInterface $messageManager,
+        AdminLoginProcessService $adminLoginProcessService
+    )
+    {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
         $this->messageManager = $messageManager;
+        $this->adminLoginProcessService = $adminLoginProcessService;
     }
 
     /**
@@ -49,21 +59,19 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      */
     public function execute(): Redirect
     {
-        $code = $this->getRequest()->getParam('code');
-        if ($code === null) {
-
-            /** @var Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath($this->_helper->getHomePageUrl());
-            return $resultRedirect;
-        }
-
         try {
+            $code = $this->getRequest()->getParam('code');
+
+            if (is_null($code)) {
+                throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+            }
+
             $accessToken = $this->imsConnection->getAccessToken($code);
             $profile = $this->imsConnection->getProfile($accessToken);
 
-            if (false) {
-
+            $profile['email'] = 'email@yourcompany.com';
+            if (!empty($profile['email'])) {
+                $this->adminLoginProcessService->execute($profile['email']);
             }
 
         } catch (AdobeImsTokenAuthorizationException $e) {
