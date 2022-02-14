@@ -224,23 +224,31 @@ define([
          */
         updateProductTierPrice: function updateProductTierPrice() {
             var productQty = $(this.qtyInfo).val(),
-                originalPrice = this.options.prices.finalPrice.amount,
                 tierPrice,
-                prices,
+                tierPriceExcl,
                 i;
 
             for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
                 if (productQty >= this.options.priceConfig.tierPrices[i].qty) {
                     tierPrice = this.options.priceConfig.tierPrices[i].price;
+                    tierPriceExcl = this.options.priceConfig.tierPrices[i].excl_tax_price;
                 }
             }
-            prices = {
-                'prices': {
-                    'finalPrice': {
-                        'amount': tierPrice - originalPrice
-                    }
-                }
+
+            var prices = {
+                'prices': {}
             };
+
+            _.each(this.options.prices, function (priceType, index) {
+                var tierPriceType = index === 'basePrice' && tierPriceExcl ?
+                    tierPriceExcl :
+                    tierPrice;
+
+               prices['prices'][index] = {
+                   amount: tierPriceType - priceType.amount
+               };
+            });
+
             this.updatePrice(prices);
         }
     });
