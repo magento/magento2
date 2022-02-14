@@ -7,6 +7,9 @@
 <div class="shipping-address-item" css="'selected-item' : isSelected() , 'not-selected-item':!isSelected()">
     <text args="address().prefix"></text> <text args="address().firstname"></text> <text args="address().middlename"></text>
     <text args="address().lastname"></text> <text args="address().suffix"></text><br/>
+    <if args="address().company">
+        <text args="address().company"></text><br/>
+    </if>
     <text args="_.values(address().street).join(', ')"></text><br/>
     <text args="address().city "></text>, <span text="address().region"></span> <text args="address().postcode"></text><br/>
     <text args="getCountryName(address().countryId)"></text><br/>
