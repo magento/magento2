@@ -69,7 +69,6 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             $accessToken = $this->imsConnection->getAccessToken($code);
             $profile = $this->imsConnection->getProfile($accessToken);
 
-            $profile['email'] = 'email@yourcompany.com';
             if (!empty($profile['email'])) {
                 $this->adminLoginProcessService->execute($profile['email']);
             }
