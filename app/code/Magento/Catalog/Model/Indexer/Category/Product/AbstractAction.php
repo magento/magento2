@@ -29,23 +29,23 @@ abstract class AbstractAction
     /**
      * Chunk size
      */
-    const RANGE_CATEGORY_STEP = 500;
+    public const RANGE_CATEGORY_STEP = 500;
 
     /**
      * Chunk size for product
      */
-    const RANGE_PRODUCT_STEP = 1000000;
+    public const RANGE_PRODUCT_STEP = 1000000;
 
     /**
      * Catalog category index table name
      */
-    const MAIN_INDEX_TABLE = 'catalog_category_product_index';
+    public const MAIN_INDEX_TABLE = 'catalog_category_product_index';
 
     /**
      * Suffix for table to show it is temporary
      * @deprecated see getIndexTable
      */
-    const TEMPORARY_TABLE_SUFFIX = '_tmp';
+    public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
     /**
      * Cached non anchor categories select by store id
@@ -582,7 +582,7 @@ abstract class AbstractAction
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
                 'position' => new \Zend_Db_Expr(
-                    $this->connection->getIfNullSql('ccp2.position', 'ccp.position + 10000')
+                    $this->connection->getIfNullSql('ccp2.position', 'MIN(ccp.position) + 10000')
                 ),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
@@ -823,7 +823,7 @@ abstract class AbstractAction
                     'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
                     'product_id' => 'cp.entity_id',
                     'position' => new \Zend_Db_Expr(
-                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'ccp.position', '0')
+                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'MIN(ccp.position)', '10000')
                     ),
                     'is_parent' => new \Zend_Db_Expr(
                         $this->connection->getCheckSql('ccp.product_id IS NOT NULL', '1', '0')

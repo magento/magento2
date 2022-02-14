@@ -97,7 +97,7 @@
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>
 
-    <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
+    <preference type="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
 
     <preference type="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search" for="Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
 
@@ -113,6 +113,16 @@
     <type name="Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor\CatalogProcessor">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\CatalogGraphQl\Model\ResourceModel\Product\CollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogGraphQl\Model\ResourceModel\Product\Collection</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">Magento\CatalogGraphQl\Model\ResourceModel\Product\CollectionFactory</argument>
         </arguments>
     </type>
 </config>
