@@ -11,6 +11,7 @@
     <?php $scriptString = 'window.authenticationPopup = ' . /* @noEscape */ $block->getSerializedConfig(); ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <!-- ko template: getTemplate() --><!-- /ko -->
+    <?php // phpcs:disable?>
     <script type="text/x-magento-init">
         {
             "#authenticationPopup": {
@@ -24,4 +25,5 @@
             }
         }
     </script>
+    <?php // phpcs:enable?>
 </div>
