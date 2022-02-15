@@ -162,6 +162,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore
         $patches = [
             \SomeDataPatch::class,
+            // phpstan:ignore
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
@@ -180,10 +181,11 @@ class PatchApplierTest extends TestCase
         $patch2->expects($this->once())->method('apply');
         $patch2->expects($this->once())->method('getAliases')->willReturn([]);
 
-        // phpstan:ignore
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
+                // phpstan:ignore
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // phpstan:ignore
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
@@ -243,12 +245,13 @@ class PatchApplierTest extends TestCase
      */
     public function applyDataPatchDataNewModuleProvider()
     {
-        // phpstan:ignore
         return [
             'newly installed module' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
+                    // phpstan:ignore
                     \SomeDataPatch::class,
+                    // phpstan:ignore
                     \OtherDataPatch::class
                 ],
                 'moduleVersionInDb' => null,
@@ -279,6 +282,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore
         $patches = [
             \SomeDataPatch::class,
+            // phpstan:ignore
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(
@@ -302,10 +306,11 @@ class PatchApplierTest extends TestCase
         $patch2->expects(self::once())->method('apply');
         $patch2->expects(self::any())->method('getAliases')->willReturn([]);
 
-        // phpstan:ignore
         $this->objectManagerMock->expects(self::any())->method('create')->willReturnMap(
             [
+                // phpstan:ignore
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // phpstan:ignore
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
@@ -320,12 +325,13 @@ class PatchApplierTest extends TestCase
      */
     public function applyDataPatchDataInstalledModuleProvider()
     {
-        // phpstan:ignore
         return [
             'upgrade module iwth only OtherDataPatch' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
+                    // phpstan:ignore
                     \SomeDataPatch::class,
+                    // phpstan:ignore
                     \OtherDataPatch::class
                 ],
                 'moduleVersionInDb' => '2.0.0',
@@ -359,6 +365,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore
         $patches = [
             \SomeDataPatch::class,
+            // phpstan:ignore
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
@@ -376,10 +383,12 @@ class PatchApplierTest extends TestCase
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $exception = new \Exception('Patch Apply Error');
         $patch2->expects($this->once())->method('apply')->willThrowException($exception);
-        // phpstan:ignore
+
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
+                // phpstan:ignore
                 ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                // phpstan:ignore
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
@@ -485,6 +494,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore
         $patches = [
             \SomeSchemaPatch::class,
+            // phpstan:ignore
             \OtherSchemaPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
@@ -503,10 +513,11 @@ class PatchApplierTest extends TestCase
         $patch2 = $this->createMock(\OtherSchemaPatch::class);
         $patch2->expects($this->once())->method('apply');
         $patch2->expects($this->any())->method('getAliases')->willReturn([]);
-        // phpstan:ignore
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturnMap(
             [
+                // phpstan:ignore
                 [\SomeSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch1],
+                // phpstan:ignore
                 [\OtherSchemaPatch::class, ['schemaSetup' => $this->schemaSetupMock], $patch2],
             ]
         );
@@ -599,12 +610,13 @@ class PatchApplierTest extends TestCase
      */
     public function schemaPatchDataProvider()
     {
-        // phpstan:ignore
         return [
             'upgrade module iwth only OtherSchemaPatch' => [
                 'moduleName' => 'Module1',
                 'schemaPatches' => [
+                    // phpstan:ignore
                     \SomeSchemaPatch::class,
+                    // phpstan:ignore
                     \OtherSchemaPatch::class
                 ],
                 'moduleVersionInDb' => '2.0.0',
