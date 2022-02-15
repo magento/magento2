@@ -22,8 +22,8 @@
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin2"/>
             <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnPageAdminSystemStore"/>
-            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
-            <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickOnResetButton"/>
+            <comment userInput="BIC workaround" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
             <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
             <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
             <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>
@@ -58,8 +58,8 @@
         </actionGroup>
         <!--Assign new created root category to store-->
         <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnPageAdminSystemStore"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
-        <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickOnResetButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
         <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickOnSearchButton"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterSearchButton"/>

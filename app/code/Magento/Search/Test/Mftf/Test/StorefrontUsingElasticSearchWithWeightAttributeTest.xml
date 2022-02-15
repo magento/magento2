@@ -35,6 +35,9 @@
                 <argument name="useInSearchValue" value="No"/>
             </actionGroup>
             <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!-- Logout from admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

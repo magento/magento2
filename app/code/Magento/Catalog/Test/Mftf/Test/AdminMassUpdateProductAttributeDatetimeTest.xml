@@ -40,7 +40,10 @@
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
-            <deleteData createDataKey="createDatetimeProduct" stepKey="deleteDatetimeProduct" />
+            <deleteData createDataKey="createDatetimeProduct" stepKey="deleteDatetimeProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!-- Generate the datetime default value -->

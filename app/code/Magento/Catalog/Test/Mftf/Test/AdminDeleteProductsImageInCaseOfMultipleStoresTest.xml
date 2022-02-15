@@ -80,8 +80,8 @@
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickFirstRow"/>
         <grabValueFrom selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="grabStoreViewCode"/>
         <click selector="{{AdminNewStoreViewActionsSection.backButton}}" stepKey="clickBack"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickResetButton"/>
-        <waitForPageLoad stepKey="waitForStorePageLoad"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickResetButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForStorePageLoad"/>
         <!--Open product page on admin-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$$createProduct.id$$"/>
