@@ -10,10 +10,10 @@ define([
     'use strict';
 
     return function () {
-        var customer = customerData.get('customer');
-
         // When the session is available, this customer menu will be available
         if ($('.customer-menu').length > 0) {
+            var customer = customerData.get('customer');
+
             customerData.getInitCustomerData().done(function () {
                 // Check if the customer data is set in local storage, if not reload data from server
                 if (!customer().firstname) {
