@@ -379,7 +379,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
-                ['\\' . \SomeDataPatch::class , ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
+                ['\\' . \SomeDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
                 ['\\' . \OtherDataPatch::class, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch2],
             ]
         );
