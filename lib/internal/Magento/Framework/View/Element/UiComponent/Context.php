@@ -350,7 +350,7 @@ class Context implements ContextInterface
         $this->acceptType = 'html';
 
         $AcceptTypes = $this->getSortedAcceptHeader();
-        foreach ($AcceptTypes as $key => $value) {
+        foreach (array_keys($AcceptTypes) as $key) {
             if (strpos($key, 'json') !== false) {
                 $this->acceptType = 'json';
             } elseif (strpos($key, 'html') !== false) {
