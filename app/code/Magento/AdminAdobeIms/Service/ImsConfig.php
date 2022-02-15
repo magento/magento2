@@ -72,14 +72,13 @@ class ImsConfig extends Config
     /**
      * Get Profile URL
      *
-     * @param $code
      * @return string
      */
-    public function getProfileUrl($code): string
+    public function getProfileUrl(): string
     {
         return str_replace(
-            ['#{client_id}', '#{code}'],
-            [$this->getApiKey(), $code],
+            ['#{client_id}'],
+            [$this->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_PROFILE_URL)
         );
     }

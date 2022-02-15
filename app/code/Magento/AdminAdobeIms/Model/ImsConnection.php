@@ -166,8 +166,9 @@ class ImsConnection
 
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
+        $curl->addHeader('Authorization', 'Bearer ' . $code);
 
-        $curl->get($this->imsConfig->getProfileUrl($code));
+        $curl->get($this->imsConfig->getProfileUrl());
 
         if ($curl->getBody() === '') {
             throw new AuthorizationException(__('The Adobe ID you\'re using is not added to this Commerce instance' .
