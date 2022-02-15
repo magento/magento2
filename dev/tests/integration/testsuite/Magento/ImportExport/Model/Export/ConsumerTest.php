@@ -7,14 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -53,6 +57,9 @@ class ConsumerTest extends TestCase
      */
     private $defaultValueProvider;
 
+    /** @var ConsumerFactory */
+    private $consumerFactory;
+
     /**
      * @inheritdoc
      */
@@ -67,6 +74,7 @@ class ConsumerTest extends TestCase
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $this->queueRepository = $this->objectManager->get(QueueRepository::class);
         $this->defaultValueProvider = $this->objectManager->get(DefaultValueProvider::class);
+        $this->consumerFactory = $this->objectManager->get(ConsumerFactory::class);
     }
 
     /**
@@ -84,18 +92,28 @@ class ConsumerTest extends TestCase
     /**
      * @magentoConfigFixture default_store admin/security/use_form_key 1
      *
-     * @magentoDataFixture Magento/ImportExport/_files/export_queue_data.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      *
      * @return void
      */
     public function testProcess(): void
     {
-        $queue = $this->queueRepository->get($this->defaultValueProvider->getConnection(), 'export');
-        $envelope = $queue->dequeue();
-        $decodedMessage = $this->messageEncoder->decode('import_export.export', $envelope->getBody());
-        $this->consumer->process($decodedMessage);
-        $this->filePath = 'export/' . $decodedMessage->getFileName();
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ExportInfoFactory $exportInfoFactory */
+        $exportInfoFactory = $objectManager->get(ExportInfoFactory::class);
+        /** @var PublisherInterface $messagePublisher */
+        $messagePublisher = $objectManager->get(PublisherInterface::class);
+        $dataObject = $exportInfoFactory->create(
+            'csv',
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            [ProductInterface::SKU => 'simple2'],
+            []
+        );
+        $messagePublisher->publish('import_export.export', $dataObject);
+        $consumer = $this->consumerFactory->get('exportProcessor');
+        $consumer->process(1);
+        $this->filePath = 'export/' . $dataObject->getFileName();
         $this->assertTrue($this->directory->isExist($this->filePath));
         $data = $this->getCsvData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $data);
