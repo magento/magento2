@@ -275,7 +275,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     public function getDateDiff($startDate, $endDate)
     {
-        $dateDiff = '(TO_DAYS(' . $endDate . ') - TO_DAYS(' . $startDate . '))';
+        $dateDiff = "(TIMESTAMPDIFF(DAY, {$startDate}, {$endDate}))";
         return new \Zend_Db_Expr($dateDiff);
     }
 
