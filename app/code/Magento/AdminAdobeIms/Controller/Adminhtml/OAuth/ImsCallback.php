@@ -14,9 +14,7 @@ use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Message\ManagerInterface;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
@@ -30,35 +28,27 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     /**
      * @param Context $context
      * @param ImsConnection $imsConnection
-     * @param ManagerInterface $messageManager
      */
     public function __construct(
         Context $context,
-        ImsConnection $imsConnection,
-        ManagerInterface $messageManager
+        ImsConnection $imsConnection
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
-        $this->messageManager = $messageManager;
     }
 
     /**
      * @return Redirect
-     * @throws AuthorizationException
      */
     public function execute(): Redirect
     {
         $code = $this->getRequest()->getParam('code');
         if ($code === null) {
-            $this->errorMessage(
-                'Error signing in',
-                'Something went wrong and we could not sign you in. ' .
-                'Please try again or contact your administrator.'
-            );
 
             /** @var Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath($this->_helper->getHomePageUrl());
+            $resultRedirect->setPath($this->_helper->getHomePageUrl());
+            return $resultRedirect;
         }
 
         try {
@@ -69,8 +59,10 @@ class ImsCallback extends Auth implements HttpGetActionInterface
 
             }
 
-        } catch (AuthenticationException $e) {
-            $this->messageManager->addComplexErrorMessage('adminAdobeImsMessage',['message' => $e->getMessage()]);
+        } catch (AuthorizationException $e) {
+            $this->messageManager->addComplexErrorMessage(
+                'adminAdobeImsMessage',
+                ['message' => $e->getMessage()]);
         } catch (Exception $e) {
             $this->errorMessage(
                 'Error signing in',
@@ -81,9 +73,15 @@ class ImsCallback extends Auth implements HttpGetActionInterface
 
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath($this->_helper->getHomePageUrl());
+        $resultRedirect->setPath($this->_helper->getHomePageUrl());
+        return $resultRedirect;
     }
 
+    /**
+     * @param string $headline
+     * @param string $message
+     * @return void
+     */
     private function errorMessage(string $headline, string $message): void
     {
         $this->messageManager->addComplexErrorMessage(
