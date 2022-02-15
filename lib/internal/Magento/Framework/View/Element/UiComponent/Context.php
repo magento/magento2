@@ -349,13 +349,16 @@ class Context implements ContextInterface
     {
         $this->acceptType = 'html';
 
-        $rawAcceptType = $this->request->getHeader('Accept');
-        if (strpos($rawAcceptType, 'json') !== false) {
-            $this->acceptType = 'json';
-        } elseif (strpos($rawAcceptType, 'html') !== false) {
-            $this->acceptType = 'html';
-        } elseif (strpos($rawAcceptType, 'xml') !== false) {
-            $this->acceptType = 'xml';
+        $AcceptTypes = $this->getSortedAcceptHeader();
+        foreach ($AcceptTypes as $key => $value) {
+            if (strpos($key, 'json') !== false) {
+                $this->acceptType = 'json';
+            } elseif (strpos($key, 'html') !== false) {
+                $this->acceptType = 'html';
+            } elseif (strpos($key, 'xml') !== false) {
+                $this->acceptType = 'xml';
+            }
+            break;
         }
     }
 
@@ -407,5 +410,28 @@ class Context implements ContextInterface
     public function getUiComponentFactory()
     {
         return $this->uiComponentFactory;
+    }
+
+    /**
+     * Returns sorted accept header based on q value
+     *
+     * @return array
+     */
+    private function getSortedAcceptHeader()
+    {
+        $AcceptTypes = [];
+        $rawAcceptType = $this->request->getHeader('Accept');
+        $accept = explode(',', $rawAcceptType);
+        foreach ($accept as $a) {
+            // the default quality is 1.
+            $q = 1;
+            // check if there is a different quality
+            if (strpos($a, ';q=') !== false) {
+                list($a, $q) = explode(';q=', $a);
+            }
+            $AcceptTypes[$a] = $q;
+        }
+        arsort($AcceptTypes);
+        return $AcceptTypes;
     }
 }
