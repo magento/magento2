@@ -23,27 +23,34 @@ class SynonymReaderPlugin
     /**
      * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(IndexerRegistry $indexerRegistry) {
+    public function __construct(IndexerRegistry $indexerRegistry)
+    {
         $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
+     * Invalidate fulltext index after synonyms create/ update
+     *
      * @param SynonymGroup $subject
      * @param AbstractDb $synonymGroup
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(SynonymGroup $subject, AbstractDb $synonymGroup) {
+    public function afterSave(SynonymGroup $subject, AbstractDb $synonymGroup)
+    {
         $this->invalidateIndexer();
     }
 
     /**
+     * Invalidate fulltext index after synonyms delete
+     *
      * @param SynonymGroup $subject
      * @param AbstractDb $synonymGroup
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(SynonymGroup $subject, AbstractDb $synonymGroup) {
+    public function afterDelete(SynonymGroup $subject, AbstractDb $synonymGroup)
+    {
         $this->invalidateIndexer();
     }
 
@@ -52,7 +59,8 @@ class SynonymReaderPlugin
      *
      * @return void
      */
-    private function invalidateIndexer() {
+    private function invalidateIndexer()
+    {
         $fulltextIndexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
         if (!$fulltextIndexer->isScheduled()) {
             $fulltextIndexer->invalidate();

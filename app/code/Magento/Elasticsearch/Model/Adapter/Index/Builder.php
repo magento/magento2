@@ -193,7 +193,8 @@ class Builder implements BuilderInterface
      *
      * @throws LocalizedException
      */
-    private function getSynonymFilter(): array {
+    private function getSynonymFilter(): array
+    {
         $connection = $this->synonymReader->getConnection();
         $select = $connection->select()->from($this->synonymReader->getMainTable(), 'synonyms');
         $synonyms = $connection->fetchCol($select);

@@ -9,8 +9,11 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Adapter\Index\Builder;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Search\Model\ResourceModel\SynonymReader;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +35,21 @@ class BuilderTest extends TestCase
     protected $esConfig;
 
     /**
+     * @var SynonymReader|MockObject
+     */
+    private $synonymReaderMock;
+
+    /**
+     * @var AdapterInterface|MockObject
+     */
+    private $connectionMock;
+
+    /**
+     * @var Select|MockObject
+     */
+    private $selectMock;
+
+    /**
      * Setup method
      * @return void
      */
@@ -44,8 +62,27 @@ class BuilderTest extends TestCase
                 'getLocale'
             ])
             ->getMock();
+
         $this->esConfig = $this->getMockBuilder(
             EsConfigInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->synonymReaderMock = $this->getMockBuilder(
+            SynonymReader::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->connectionMock = $this->getMockBuilder(
+            AdapterInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->selectMock = $this->getMockBuilder(
+            Select::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -55,7 +92,8 @@ class BuilderTest extends TestCase
             Builder::class,
             [
                 'localeResolver' => $this->localeResolver,
-                'esConfig' => $this->esConfig
+                'esConfig' => $this->esConfig,
+                'synonymReader' => $this->synonymReaderMock
             ]
         );
     }
@@ -68,6 +106,11 @@ class BuilderTest extends TestCase
      */
     public function testBuild($locale)
     {
+        $synonymsArray = [
+            'mp3,player,sound,audio',
+            'tv,video,television,screen'
+        ];
+
         $this->localeResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn($locale);
@@ -79,6 +122,22 @@ class BuilderTest extends TestCase
                 'default' => 'english',
                 'en_US' => 'english',
             ]);
+
+        $this->synonymReaderMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+
+        $this->connectionMock->expects($this->once())
+            ->method('select')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->once())
+            ->method('from')
+            ->willReturn($this->selectMock);
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->willReturn($synonymsArray);
 
         $result = $this->model->build();
         $this->assertNotNull($result);
