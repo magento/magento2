@@ -22,12 +22,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="ProductTypeIdAttribute"/>
-            </actionGroup>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
