@@ -349,13 +349,13 @@ class Context implements ContextInterface
     {
         $this->acceptType = 'html';
 
-        $AcceptTypes = $this->getSortedAcceptHeader();
-        foreach (array_keys($AcceptTypes) as $key) {
-            if (strpos($key, 'json') !== false) {
+        $acceptTypes = $this->getSortedAcceptHeader();
+        foreach ($acceptTypes as $acceptType) {
+            if (strpos($acceptType, 'json') !== false) {
                 $this->acceptType = 'json';
-            } elseif (strpos($key, 'html') !== false) {
+            } elseif (strpos($acceptType, 'html') !== false) {
                 $this->acceptType = 'html';
-            } elseif (strpos($key, 'xml') !== false) {
+            } elseif (strpos($acceptType, 'xml') !== false) {
                 $this->acceptType = 'xml';
             }
             break;
@@ -419,19 +419,24 @@ class Context implements ContextInterface
      */
     private function getSortedAcceptHeader()
     {
-        $AcceptTypes = [];
-        $rawAcceptType = $this->request->getHeader('Accept');
-        $accept = explode(',', $rawAcceptType);
-        foreach ($accept as $a) {
+        $acceptTypes = [];
+        $acceptHeader = $this->request->getHeader('Accept');
+        $contentTypes = explode(',', $acceptHeader);
+        foreach ($contentTypes as $contentType) {
             // the default quality is 1.
             $q = 1;
             // check if there is a different quality
-            if (strpos($a, ';q=') !== false) {
-                list($a, $q) = explode(';q=', $a);
+            if (strpos($contentType, ';q=') !== false) {
+                list($contentType, $q) = explode(';q=', $contentType);
             }
-            $AcceptTypes[$a] = $q;
+
+            if (array_key_exists($q, $acceptTypes)) {
+                $acceptTypes[$q] = $acceptTypes[$q] . ',' . $contentType;
+            } else {
+                $acceptTypes[$q] = $contentType;
+            }
         }
-        arsort($AcceptTypes);
-        return $AcceptTypes;
+        krsort($acceptTypes);
+        return array_values($acceptTypes);
     }
 }
