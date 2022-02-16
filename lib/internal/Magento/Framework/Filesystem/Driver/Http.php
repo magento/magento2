@@ -246,11 +246,11 @@ class Http extends File
      * @param string $hostname
      * @param int $port
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @return array
+     * @return resource|bool
      */
     protected function open($hostname, $port)
     {
-        $result = @fsockopen($hostname, $port, $errorNumber = null, $errorMessage = null);
+        $result = @fsockopen($hostname, $port, $errorNumber, $errorMessage);
         if ($result === false) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(

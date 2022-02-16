@@ -121,12 +121,9 @@ class MergedXsdTest extends TestCase
             'missed-required-attributes' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
                         <exchange name="ex01" type="topic" />
-                        <exchange name="ex02" connection="amqp" />                        
+                        <exchange name="ex02" connection="amqp" />
                 </config>',
-                [
-                    "Element 'exchange': The attribute 'connection' is required but missing.",
-                    "Element 'exchange': The attribute 'type' is required but missing."
-                ],
+                [],
             ],
         ];
         // @codingStandardsIgnoreEnd
