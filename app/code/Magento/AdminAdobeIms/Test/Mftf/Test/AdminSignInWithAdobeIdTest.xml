@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSignInWithAdobeIdTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Check for Sign in with Adobe ID option on the Admin Login page"/>
+            <title value="Admin should be able to see Sign in with Adobe Id option"/>
+            <description value="Admin should be able to see Sign in with Adobe Id option"/>
+            <severity value="CRITICAL"/>
+            <group value="admin_ims"/>
+            <testCaseId value="CABPI-102"/>
+        </annotations>
+        <before>
+            <magentoCLI command="admin:adobe-ims enable -c {{ClientCredentialsData.client_id}} -s {{ClientCredentialsData.client_key}}" stepKey="enableIms" />
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+        </before>
+        <after>
+            <magentoCLI command="admin:adobe-ims disable" stepKey="disableAdminImsAuthModule"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
+        </after>
+
+        <!-- Navigate to admin page -->
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="openAdminPanelPage" />
+
+        <!-- Check for Sign in with Adobe Id option -->
+        <actionGroup ref="AssertAdminSignInWithAdobeIdTestActionGroup"
+                     stepKey="assertSignInWithAdobeId"/>
+    </test>
+</tests>
