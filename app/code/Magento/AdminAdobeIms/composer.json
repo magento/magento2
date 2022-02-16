@@ -1,0 +1,28 @@
+{
+    "name": "magento/module-admin-adobe-ims",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.4.0||~8.0.0",
+        "magento/framework": "*",
+        "magento/module-backend": "*"
+    },
+    "suggest": {
+        "magento/module-theme": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Backend\\": ""
+        }
+    }
+}
