@@ -50,7 +50,7 @@ define([
             customer({});
         });
 
-        afterAll(function() {
+        afterAll(function () {
             $('#customerMenu').remove();
         });
 
@@ -64,7 +64,7 @@ define([
                     return deferred.promise();
                 });
                 customer({
-                    firstname: "First Name"
+                    firstname: 'First Name'
                 });
                 customerSessionLoader();
 
@@ -72,7 +72,7 @@ define([
                 expect(mocks['Magento_Customer/js/customer-data'].reload).not.toHaveBeenCalled();
             });
 
-            it('Tests that customer data reloads if customer first name data is not there but wait until promise resolved', function () {
+            it('Tests that customer data reloads after init, if customer first name is not there', function () {
                 spyOn(mocks['Magento_Customer/js/customer-data'], 'getInitCustomerData').and.callFake(function () {
                     deferred = $.Deferred();
 
