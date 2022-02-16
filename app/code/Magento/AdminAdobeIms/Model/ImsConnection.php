@@ -9,8 +9,11 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeIms\Model\GetToken;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -27,21 +30,31 @@ class ImsConnection
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
+    /**
+     * @var Json
+     */
     private Json $json;
+    /**
+     * @var GetToken
+     */
+    private GetToken $token;
 
     /**
      * @param CurlFactory $curlFactory
      * @param ImsConfig $imsConfig
      * @param Json $json
+     * @param GetToken $token
      */
     public function __construct(
         CurlFactory $curlFactory,
         ImsConfig $imsConfig,
-        Json $json
+        Json $json,
+        GetToken $token
     ) {
         $this->curlFactory = $curlFactory;
         $this->imsConfig = $imsConfig;
         $this->json = $json;
+        $this->token = $token;
     }
 
     /**
@@ -120,38 +133,19 @@ class ImsConnection
 
     /**
      * @param string $code
-     * @return string
+     * @return TokenResponseInterface
      * @throws AuthorizationException
      */
-    public function getAccessToken(string $code): string
+    public function getTokenResponse(string $code): TokenResponseInterface
     {
-        /**
-         * todo: replace with "GetToken::execute()"
-         * but check return value
-         */
-
-        $curl = $this->curlFactory->create();
-
-        $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
-        $curl->addHeader('cache-control', 'no-cache');
-        $curl->post($this->imsConfig->getTokenUrl(),
-            [
-                'grant_type' => 'authorization_code',
-                'client_id' => $this->imsConfig->getApiKey(),
-                'client_secret' => $this->imsConfig->getPrivateKey(),
-                'code' => $code
-            ]
-        );
-
-        $response = $this->json->unserialize($curl->getBody());
-
-        if (!is_array($response) || empty($response['access_token'])) {
-            throw new AuthorizationException(__('The Adobe ID you\'re using does not belong to the organization ' .
-                'that controlling this Commerce instance. Contact your administrator so he can add your Adobe ID' .
-                'to the organization.'));
+        try {
+            return $this->token->execute($code);
+        } catch (AuthorizationException $exception) {
+            throw new AuthorizationException(__('The Adobe ID you\'re using does not belong to the ' .
+                'organization that controlling this Commerce instance. Contact your administrator so he can add ' .
+                'your Adobe ID to the organization.'));
         }
 
-        return $response['access_token'];
     }
 
     /**
@@ -171,7 +165,7 @@ class ImsConnection
 
         if ($curl->getBody() === '') {
             throw new AuthorizationException(__('The Adobe ID you\'re using is not added to this Commerce instance' .
-            'Contact your organization administrator to request the access.'));
+                'Contact your organization administrator to request the access.'));
         }
 
         return $this->json->unserialize($curl->getBody());
