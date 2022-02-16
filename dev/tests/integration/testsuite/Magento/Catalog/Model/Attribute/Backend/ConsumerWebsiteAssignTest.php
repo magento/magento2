@@ -19,7 +19,7 @@ use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,8 +35,8 @@ class ConsumerWebsiteAssignTest extends TestCase
 {
     private const TOPIC_NAME = 'product_action_attribute.website.update';
 
-    /** @var DeleteTopicRelatedMessages */
-    private static $deleteTopicRelatedMessages;
+    /** @var ClearQueueProcessor */
+    private static $clearQueueProcessor;
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -67,8 +67,8 @@ class ConsumerWebsiteAssignTest extends TestCase
         parent::setUpBeforeClass();
 
         $objectManager = Bootstrap::getObjectManager();
-        self::$deleteTopicRelatedMessages = $objectManager->get(DeleteTopicRelatedMessages::class);
-        self::$deleteTopicRelatedMessages->execute(self::TOPIC_NAME);
+        self::$clearQueueProcessor = $objectManager->get(ClearQueueProcessor::class);
+        self::$clearQueueProcessor->execute('product_action_attribute.website.update');
     }
 
     /**
@@ -93,7 +93,7 @@ class ConsumerWebsiteAssignTest extends TestCase
     protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(Action::class);
-        self::$deleteTopicRelatedMessages->execute(self::TOPIC_NAME);
+        self::$clearQueueProcessor->execute('product_action_attribute.website.update');
 
         parent::tearDown();
     }

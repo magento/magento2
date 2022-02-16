@@ -25,7 +25,7 @@ use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Source\Csv as CsvSource;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,9 +73,9 @@ class ImportWithNotExistImagesTest extends TestCase
         parent::setUpBeforeClass();
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var  DeleteTopicRelatedMessages $deleteMessages */
-        $deleteMessages = $objectManager->get(DeleteTopicRelatedMessages::class);
-        $deleteMessages->execute(self::TOPIC);
+        /** @var  ClearQueueProcessor $clearQueueProcessor */
+        $clearQueueProcessor = $objectManager->get(ClearQueueProcessor::class);
+        $clearQueueProcessor->execute('exportProcessor');
     }
 
     /**

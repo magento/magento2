@@ -20,6 +20,7 @@ use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -101,6 +102,7 @@ class ConsumerTest extends TestCase
     public function testProcess(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $objectManager->get(ClearQueueProcessor::class)->execute('exportProcessor');
         /** @var ExportInfoFactory $exportInfoFactory */
         $exportInfoFactory = $objectManager->get(ExportInfoFactory::class);
         /** @var PublisherInterface $messagePublisher */
