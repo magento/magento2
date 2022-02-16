@@ -15,10 +15,26 @@ use Magento\User\Controller\Adminhtml\Auth\Forgotpassword;
 
 class AdminForgotPasswordPlugin
 {
+    /**
+     * @var RedirectFactory
+     */
     private RedirectFactory $redirectFactory;
+
+    /**
+     * @var ImsConfig
+     */
     private ImsConfig $imsConfig;
+
+    /**
+     * @var MessageManagerInterface
+     */
     private MessageManagerInterface $messageManager;
 
+    /**
+     * @param RedirectFactory $redirectFactory
+     * @param ImsConfig $imsConfig
+     * @param MessageManagerInterface $messageManager
+     */
     public function __construct(
         RedirectFactory $redirectFactory,
         ImsConfig $imsConfig,

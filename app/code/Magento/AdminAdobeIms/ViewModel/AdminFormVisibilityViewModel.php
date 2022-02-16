@@ -7,15 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\ViewModel;
 
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class AdminFormVisibilityViewModel implements ArgumentInterface
 {
+    /**
+     * @var ImsConfig
+     */
+    private ImsConfig $imsConfig;
 
-    private \Magento\AdminAdobeIms\Service\ImsConfig $imsConfig;
-
+    /**
+     * @param ImsConfig $imsConfig
+     */
     public function __construct(
-        \Magento\AdminAdobeIms\Service\ImsConfig $imsConfig
+        ImsConfig $imsConfig
     ) {
         $this->imsConfig = $imsConfig;
     }
