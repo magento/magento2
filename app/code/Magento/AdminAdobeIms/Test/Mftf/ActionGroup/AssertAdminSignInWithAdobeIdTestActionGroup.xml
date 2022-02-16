@@ -13,9 +13,6 @@
             <description>Check for Sign in with Adobe ID button.</description>
         </annotations>
 
-        <seeElement selector="{{AdminSignInWithAdobeIdSection.orText}}"
-                    stepKey="assertAdminSignInWithAdobeIdOrElement"/>
-
         <seeElement selector="{{AdminSignInWithAdobeIdSection.signInButton}}"
                     stepKey="assertAdminSignInWithAdobeIdButtonElement"/>
     </actionGroup>
