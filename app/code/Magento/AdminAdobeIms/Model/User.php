@@ -27,9 +27,9 @@ class User extends AdminUser
 
     /**
      * @param string $email
-     * @return mixed
+     * @return array
      */
-    public function loadByEmail($email)
+    public function loadByEmail(string $email): array
     {
         return $this->getResource()->loadByEmail($email);
     }
