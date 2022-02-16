@@ -48,6 +48,6 @@ body:
     attributes:
       label: Release note
       description: |
-        Help us to provide meaningful release notes to the community. 
+        Help us to provide meaningful release notes to the community.
     validations:
       required: false
