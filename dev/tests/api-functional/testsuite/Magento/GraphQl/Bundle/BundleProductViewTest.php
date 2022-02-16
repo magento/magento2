@@ -21,8 +21,8 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  */
 class BundleProductViewTest extends GraphQlAbstract
 {
-    const KEY_PRICE_TYPE_FIXED = 'FIXED';
-    const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
+    private const KEY_PRICE_TYPE_FIXED = 'FIXED';
+    private const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
@@ -489,7 +489,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_sku_as_next_entity_id.php
      */
-   public function testBundleProductHavingSKUAsNextBundleProductId()
+    public function testBundleProductHavingSKUAsNextBundleProductId()
     {
 
         $productSku = '4bundle-product';
