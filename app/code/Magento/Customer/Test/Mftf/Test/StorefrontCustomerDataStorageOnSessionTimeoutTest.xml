@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerDataStorageOnSessionTimeoutTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Login"/>
+            <title value="Remove customer data storage on session timeout "/>
+            <description value="Verify customer data storage removal on session cookie timeout only"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-2420"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage"/>
+            <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+                <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+            </actionGroup>
+            <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetime">
+                <argument name="cookieLifetime" value="15" />
+            </actionGroup>
+            <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButtonWithString">
+                <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+            </actionGroup>
+            <createData entity="John_Smith_Customer" stepKey="customer" />
+        </before>
+        <after>
+            <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage2"/>
+            <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeFieldWithNumber">
+                <argument name="cookieLifetime" value="3600"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValue">
+                <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButton">
+                <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin" />
+        </after>
+
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="John_Smith_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="Welcome, {{John_Smith_Customer.fullname}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyMessage1"/>
+
+        <wait time="5" stepKey="waitSometime" />
+        <reloadPage stepKey="refreshSessionCookieByPageRefresh" />
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <see userInput="Welcome, {{John_Smith_Customer.fullname}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyMessage2"/>
+
+        <wait time="7" stepKey="waitSometime2" />
+        <reloadPage stepKey="refreshSessionCookieByPageRefresh2" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="Welcome, {{John_Smith_Customer.fullname}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyMessage3"/>
+
+        <wait time="15" stepKey="waitSometime3" />
+        <reloadPage stepKey="refreshSessionCookieByPageRefresh3" />
+        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <dontSee userInput="Welcome, {{John_Smith_Customer.fullname}}" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="verifyMessage4"/>
+
+        <deleteData createDataKey="customer" stepKey="deleteCustomer" />
+    </test>
+</tests>
