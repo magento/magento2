@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
@@ -20,7 +21,10 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -87,6 +91,21 @@ class ProductRepositoryTest extends TestCase
     private $productSkusToDelete = [];
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var int
+     */
+    private $currentStore;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -109,6 +128,9 @@ class ProductRepositoryTest extends TestCase
         $this->mediaConfig = $this->objectManager->get(ConfigInterface::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
+        $this->currentStore = $this->storeManager->getStore()->getId();
     }
 
     /**
@@ -124,6 +146,7 @@ class ProductRepositoryTest extends TestCase
             }
         }
 
+        $this->storeManager->setCurrentStore($this->currentStore);
         parent::tearDown();
     }
 
@@ -329,5 +352,133 @@ class ProductRepositoryTest extends TestCase
                 self::STUB_PRODUCT_NAME,
             ],
         ];
+    }
+
+    /**
+     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
+     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
+     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product1
+     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product2
+     * @magentoDataFixture setPriceScopeToWebsite
+     * @magentoDbIsolation disabled
+     * @magentoAppArea adminhtml
+     */
+    public function testConsecutivePartialProductsUpdateInStoreView(): void
+    {
+        $store1 = $this->storeManager->getStore('default')->getId();
+        $store2 = $this->fixtures->get('store2')->getId();
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $product1Store1Name = $product1->getName();
+        $product2Store1Name = $product2->getName();
+        $product2Store1Price = 10;
+
+        $product1Store2Name = $product1->getName() . ' Store View Value';
+        $product2Store2Name = $product2->getName() . ' Store View Value';
+        $product2Store2Price = 9;
+
+        $this->storeManager->setCurrentStore($store2);
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product2->getSku(),
+                    'price' => $product2Store2Price,
+                ]
+            )
+        );
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product1->getSku(),
+                    'name' => $product1Store2Name,
+                ]
+            )
+        );
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product2->getSku(),
+                    'name' => $product2Store2Name,
+                ]
+            )
+        );
+        $product1 = $this->productRepository->get($product1->getSku(), true, $store2, true);
+        $product2 = $this->productRepository->get($product2->getSku(), true, $store2, true);
+        $this->assertEquals($product1Store2Name, $product1->getName());
+        $this->assertEquals($product2Store2Name, $product2->getName());
+        $this->assertEquals($product2Store2Price, $product2->getPrice());
+
+        $this->storeManager->setCurrentStore($store1);
+
+        $product1 = $this->productRepository->get($product1->getSku(), true, $store1, true);
+        $product2 = $this->productRepository->get($product2->getSku(), true, $store1, true);
+        $this->assertEquals($product1Store1Name, $product1->getName());
+        $this->assertEquals($product2Store1Name, $product2->getName());
+        $this->assertEquals($product2Store1Price, $product2->getPrice());
+    }
+
+    /**
+     * Get Simple Product Data
+     *
+     * @param array $data
+     * @return ProductInterface
+     */
+    private function getProductInstance(array $data = []): ProductInterface
+    {
+        return $this->objectManager->create(
+            ProductInterface::class,
+            [
+                'data' => $data
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public static function setPriceScopeToWebsite(): void
+    {
+        self::setConfig(['catalog/price/scope' => 1]);
+    }
+
+    /**
+     * @return void
+     */
+    public static function setPriceScopeToWebsiteRollback(): void
+    {
+        self::setConfig(['catalog/price/scope' => null]);
+    }
+
+    /**
+     * @param array $config
+     * @return void
+     */
+    private static function setConfig(array $config): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $configFactory = $objectManager->create(\Magento\Config\Model\Config\Factory::class);
+        foreach ($config as $path => $value) {
+            $inherit = $value === null;
+            $pathParts = explode('/', $path);
+            $store = 0;
+            $configData = [
+                'section' => $pathParts[0],
+                'website' => '',
+                'store' => $store,
+                'groups' => [
+                    $pathParts[1] => [
+                        'fields' => [
+                            $pathParts[2] => [
+                                'value' => $value,
+                                'inherit' => $inherit
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            $configFactory->create(['data' => $configData])->save();
+        }
     }
 }
