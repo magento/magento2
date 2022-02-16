@@ -22,9 +22,14 @@ define([
          */
         action = function (loginData, redirectUrl, isGlobal, messageContainer) {
             messageContainer = messageContainer || globalMessageList;
+            let customerLoginUrl = 'customer/ajax/login';
+
+            if(window.authenticationPopup.customerLoginUrl) {
+                customerLoginUrl = window.authenticationPopup.customerLoginUrl;
+            }
 
             return storage.post(
-                'customer/ajax/login',
+                customerLoginUrl,
                 JSON.stringify(loginData),
                 isGlobal
             ).done(function (response) {
