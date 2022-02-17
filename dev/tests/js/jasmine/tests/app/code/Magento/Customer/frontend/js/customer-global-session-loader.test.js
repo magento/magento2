@@ -88,7 +88,7 @@ define([
 
                 deferred.resolve();
 
-                expect(mocks['Magento_Customer/js/customer-data'].reload).toHaveBeenCalledWith(['customer', 'cart'], false);
+                expect(mocks['Magento_Customer/js/customer-data'].reload).toHaveBeenCalledWith([], false);
             });
 
             it('Tests that customer data reloads if customer data is not there', function () {
@@ -103,7 +103,7 @@ define([
 
                 expect(mocks['Magento_Customer/js/customer-data'].get).toHaveBeenCalledWith('customer');
                 expect(mocks['Magento_Customer/js/customer-data'].getInitCustomerData).toHaveBeenCalled();
-                expect(mocks['Magento_Customer/js/customer-data'].reload).toHaveBeenCalledWith(['customer', 'cart'], false);
+                expect(mocks['Magento_Customer/js/customer-data'].reload).toHaveBeenCalledWith([], false);
             });
         });
     });
