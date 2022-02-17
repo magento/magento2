@@ -61,17 +61,17 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             }
 
         } catch (AdobeImsTokenAuthorizationException $e) {
-            $this->errorMessage(
+            $this->imsErrorMessage(
                 'Unable to sign in with the Adobe ID',
                 $e->getMessage()
             );
         } catch (AdobeImsOrganizationAuthorizationException $e) {
-            $this->errorMessage(
+            $this->imsErrorMessage(
                 'You don\'t have access to this Commerce instance',
                 $e->getMessage()
             );
         } catch (Exception $e) {
-            $this->errorMessage(
+            $this->imsErrorMessage(
                 'Error signing in',
                 'Something went wrong and we could not sign you in. ' .
                 'Please try again or contact your administrator.'
@@ -89,7 +89,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @param string $message
      * @return void
      */
-    private function errorMessage(string $headline, string $message): void
+    private function imsErrorMessage(string $headline, string $message): void
     {
         $this->messageManager->addComplexErrorMessage(
             'adminAdobeImsMessage',
