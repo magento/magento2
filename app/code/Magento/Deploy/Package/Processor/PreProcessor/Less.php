@@ -151,7 +151,9 @@ class Less implements ProcessorInterface
                 return true;
             } else {
                 foreach ($map[$parentFile] as $pFile) {
-                    return $this->inParentFiles($fileName, $pFile, $map);
+                    if ($this->inParentFiles($fileName, $pFile, $map)) {
+                        return true;
+                    }
                 }
             }
         }
