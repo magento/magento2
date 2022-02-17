@@ -105,13 +105,21 @@ class UpgradeCommandTest extends TestCase
     public function testExecute($options, $deployMode, $expectedString, $expectedOptions): void
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);
-        $this->installerMock->expects($this->once())
-            ->method('installSchema')
-            ->with($expectedOptions);
         $this->installerMock
             ->method('updateModulesSequence');
-        $this->installerMock
-        ->method('installDataFixtures');
+        if (isset($options['--no-db-upgrade']) && $options['--no-db-upgrade'] === true) {
+            $this->installerMock->expects($this->never())
+                ->method('installSchema')
+                ->with($expectedOptions);
+            $this->installerMock->expects($this->never())
+                ->method('installDataFixtures');
+        } else {
+            $this->installerMock->expects($this->once())
+                ->method('installSchema')
+                ->with($expectedOptions);
+            $this->installerMock
+                ->method('installDataFixtures');
+        }
 
         $this->assertSame(Cli::RETURN_SUCCESS, $this->commandTester->execute($options));
         $this->assertEquals($expectedString, $this->commandTester->getDisplay());
@@ -137,6 +145,7 @@ class UpgradeCommandTest extends TestCase
                     . PHP_EOL . $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
+                    'no-db-upgrade' => false,
                     'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
@@ -154,6 +163,7 @@ class UpgradeCommandTest extends TestCase
                 'expectedString' => $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => true,
+                    'no-db-upgrade' => false,
                     'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
@@ -167,6 +177,7 @@ class UpgradeCommandTest extends TestCase
                 'expectedString' => $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
+                    'no-db-upgrade' => false,
                     'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,
@@ -180,6 +191,26 @@ class UpgradeCommandTest extends TestCase
                 'expectedString' => $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
+                    'no-db-upgrade' => false,
+                    'convert-old-scripts' => false,
+                    'safe-mode' => false,
+                    'data-restore' => false,
+                    'dry-run' => false,
+                    'magento-init-params' => ''
+                ]
+            ],
+            [
+                'options' => [
+                    '--magento-init-params' => '',
+                    '--convert-old-scripts' => false,
+                    '--no-db-upgrade' => true
+                ],
+                'deployMode' => AppState::MODE_PRODUCTION,
+                'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
+                    . PHP_EOL . $mediaGalleryNotice,
+                'expectedOptions' => [
+                    'keep-generated' => false,
+                    'no-db-upgrade' => true,
                     'convert-old-scripts' => false,
                     'safe-mode' => false,
                     'data-restore' => false,

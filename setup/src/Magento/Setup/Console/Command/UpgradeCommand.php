@@ -31,7 +31,11 @@ class UpgradeCommand extends AbstractSetupCommand
     /**
      * Option to skip deletion of generated/code directory.
      */
-    const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
+    private const INPUT_KEY_KEEP_GENERATED = 'keep-generated';
+    /**
+     * Option to skip DB operations if the DB is already up to date, as specified by setup:db:status
+     */
+    private const INPUT_KEY_NO_DB_UPGRADE = 'no-db-upgrade';
 
     /**
      * Installer service factory.
@@ -55,7 +59,7 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     private $searchConfigFactory;
 
-    /*
+    /**
      * @var CacheInterface
      */
     private $cache;
@@ -95,6 +99,12 @@ class UpgradeCommand extends AbstractSetupCommand
                 'Prevents generated files from being deleted. ' . PHP_EOL .
                 'We discourage using this option except when deploying to production. ' . PHP_EOL .
                 'Consult your system integrator or administrator for more information.'
+            ),
+            new InputOption(
+                self::INPUT_KEY_NO_DB_UPGRADE,
+                null,
+                InputOption::VALUE_NONE,
+                'Skip schema and data install/update. Use this flag if setup:db:status output requires no updates.'
             ),
             new InputOption(
                 InstallCommand::CONVERT_OLD_SCRIPTS_KEY,
@@ -137,14 +147,17 @@ class UpgradeCommand extends AbstractSetupCommand
         try {
             $request = $input->getOptions();
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
+            $noDbUpgrade = $input->getOption(self::INPUT_KEY_NO_DB_UPGRADE);
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
             $searchConfig = $this->searchConfigFactory->create();
             $this->cache->clean();
             $searchConfig->validateSearchEngine();
             $installer->removeUnusedTriggers();
-            $installer->installSchema($request);
-            $installer->installDataFixtures($request, true);
+            if (!$noDbUpgrade) {
+                $installer->installSchema($request);
+                $installer->installDataFixtures($request, true);
+            }
 
             if ($this->deploymentConfig->isAvailable()) {
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
