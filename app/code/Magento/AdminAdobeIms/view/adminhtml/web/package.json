@@ -1,0 +1,16 @@
+{
+  "name": "magento_adminadobeims",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@spectrum-css/button": "^6.0.3",
+    "@spectrum-css/page": "^5.0.2",
+    "@spectrum-css/vars": "^6.1.1"
+  }
+}
