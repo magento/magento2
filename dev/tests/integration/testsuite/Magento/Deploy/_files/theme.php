@@ -84,6 +84,22 @@ if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/zoom3')) {
     );
 }
 
+if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Vendor/parent')) {
+    ComponentRegistrar::register(
+        ComponentRegistrar::THEME,
+        'frontend/Vendor/parent',
+        __DIR__ . '/Vendor/parent'
+    );
+}
+
+if (!$registrar->getPath(ComponentRegistrar::THEME, 'frontend/Vendor/child')) {
+    ComponentRegistrar::register(
+        ComponentRegistrar::THEME,
+        'frontend/Vendor/child',
+        __DIR__ . '/Vendor/child'
+    );
+}
+
 /** @var \Magento\Theme\Model\Theme\Registration $themeRegistration */
 $themeRegistration = $objectManager->get(\Magento\Theme\Model\Theme\Registration::class);
 $themeRegistration->register();

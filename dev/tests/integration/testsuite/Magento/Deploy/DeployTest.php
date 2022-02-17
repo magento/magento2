@@ -147,7 +147,11 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         $this->assertLessPreProcessor($actualFileContent);
         $this->assertCssUrlFixerPostProcessor($actualFileContent);
 
-        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3'] as $theme) {
+        $actualFileContent = $this->staticDir->readFile('frontend/Vendor/child/default/css/styles-m.css');
+        $this->assertLessPreProcessor($actualFileContent);
+        $this->assertCssUrlFixerPostProcessor($actualFileContent);
+
+        foreach (['Magento/zoom1', 'Magento/zoom2', 'Magento/zoom3', 'Vendor/parent', 'Vendor/child'] as $theme) {
             $this->assertBundleSize($theme);
             $this->assertExcluded($theme, $this->config->getExcludedFiles());
             $this->assertExcluded($theme, $this->config->getExcludedDir());
