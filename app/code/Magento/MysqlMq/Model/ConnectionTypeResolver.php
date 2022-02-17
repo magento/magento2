@@ -13,8 +13,6 @@ use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
 class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 {
     /**
-     * DB connection names.
-     *
      * @var string[]
      */
     private $dbConnectionNames;
@@ -31,10 +29,10 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConnectionType($connectionName)
     {
-        return in_array($connectionName, $this->dbConnectionNames) ? 'db' : null;
+        return in_array($connectionName, $this->dbConnectionNames, true) ? 'db' : null;
     }
 }
