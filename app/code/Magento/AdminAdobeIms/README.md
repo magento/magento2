@@ -41,3 +41,4 @@ CABPI-196 Login Display
    4. @spectrum-css/card@4.0.11
    5. @spectrum-css/dialog@6.0.1
 6. Build and inlclude a minified css file https://github.com/adobe/spectrum-css#optimizing-spectrum-css
+7. Check out https://spectrum.adobe.com/page/cards/ & https://opensource.adobe.com/spectrum-css/dialog.html

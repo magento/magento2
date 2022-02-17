@@ -5,7 +5,26 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!-- TODO: move this so we only include the built minified version -->
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-global.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-medium.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-light.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/page/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/button/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
+    </head>
     <body>
         <referenceContainer name="login.content">
             <referenceBlock name="admin.login" remove="true"/>
