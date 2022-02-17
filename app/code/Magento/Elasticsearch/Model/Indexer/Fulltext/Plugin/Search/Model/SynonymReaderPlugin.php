@@ -62,8 +62,6 @@ class SynonymReaderPlugin
     private function invalidateIndexer()
     {
         $fulltextIndexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
-        if (!$fulltextIndexer->isScheduled()) {
-            $fulltextIndexer->invalidate();
-        }
+        $fulltextIndexer->invalidate();
     }
 }

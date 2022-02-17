@@ -304,13 +304,6 @@
     <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
         <plugin name="indexerDependencyUpdaterPlugin" type="Magento\Elasticsearch\Model\Indexer\Plugin\DependencyUpdaterPlugin"/>
     </type>
-    <type name="Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery">
-        <arguments>
-            <argument name="preprocessorContainer" xsi:type="array">
-                <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords">
         <arguments>
             <argument name="stopwordsModule" xsi:type="string">Magento_Elasticsearch</argument>

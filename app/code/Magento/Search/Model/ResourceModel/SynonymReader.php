@@ -7,6 +7,7 @@
 namespace Magento\Search\Model\ResourceModel;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -65,6 +66,31 @@ class SynonymReader extends AbstractDb
         }
         $this->_afterLoad($object);
         return $this;
+    }
+
+    /**
+     * Get all synonyms as array
+     *
+     * @throws LocalizedException
+     */
+    public function getSynonymFilter(): array
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()->from($this->getMainTable(), 'synonyms');
+        $synonyms = $connection->fetchCol($select);
+
+        $synonymFilter = [];
+
+        if ($synonyms) {
+            $synonymFilter = [
+                'synonyms' => [
+                    'type' => 'synonym_graph',
+                    'synonyms' => $synonyms
+                ]
+            ];
+        }
+
+        return $synonymFilter;
     }
 
     /**
