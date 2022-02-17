@@ -26,6 +26,9 @@
              type="text/css" />
     </head>
     <body>
+        <attribute name="class" value="spectrum" />
+        <attribute name="class" value="spectrum--medium" />
+        <attribute name="class" value="spectrum--light" />
         <referenceContainer name="login.content">
             <referenceBlock name="admin.login" remove="true"/>
             <block class="Magento\Backend\Block\Template"

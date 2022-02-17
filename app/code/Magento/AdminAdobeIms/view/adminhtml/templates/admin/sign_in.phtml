@@ -17,8 +17,9 @@ $viewModel = $block->getLinkViewModel();
 
     <p><?= $escaper->escapeHtml(__('This Commerce instance is managed by an organization. Contact your organization administrator to request access.')) ?></p>
 
-    <a href="<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>">
-        <?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?>
+    <a class="spectrum-Button spectrum-Button--fill spectrum-Button--accent spectrum-Button--sizeM"
+       href="<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>">
+        <span class="spectrum-Button-label"><?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?></span>
     </a>
 </div>
 <?php endif; ?>
