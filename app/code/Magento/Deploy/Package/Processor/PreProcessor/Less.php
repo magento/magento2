@@ -140,8 +140,7 @@ class Less implements ProcessorInterface
     }
 
     /**
-     * Checks recursively if there is a LESS file in current package
-     * which used for generating given CSS file from parent package
+     * Checks recursively if there is a LESS file in current package which used for generating given CSS from parent package
      *
      * @param string $fileName
      * @param string $parentFile
