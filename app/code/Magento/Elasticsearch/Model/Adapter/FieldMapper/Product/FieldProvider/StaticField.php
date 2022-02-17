@@ -127,6 +127,9 @@ class StaticField implements FieldProviderInterface
      *
      * @param AbstractAttribute $attribute
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getField(AbstractAttribute $attribute): array
     {
@@ -150,7 +153,7 @@ class StaticField implements FieldProviderInterface
             $fieldMapping[$fieldName]['index'] = $index;
         }
 
-        if ($attributeAdapter->isSortable()) {
+        if ($attributeAdapter->isSortable() && !$attributeAdapter->isComplexType()) {
             $sortFieldName = $this->fieldNameResolver->getFieldName(
                 $attributeAdapter,
                 ['type' => FieldMapperInterface::TYPE_SORT]
@@ -188,6 +191,20 @@ class StaticField implements FieldProviderInterface
             $fieldMapping[$childFieldName] = [
                 'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
             ];
+            if ($attributeAdapter->isSortable()) {
+                $sortFieldName = $this->fieldNameResolver->getFieldName(
+                    $attributeAdapter,
+                    ['type' => FieldMapperInterface::TYPE_SORT]
+                );
+                $fieldMapping[$childFieldName]['fields'][$sortFieldName] = [
+                    'type' => $this->fieldTypeConverter->convert(
+                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                    ),
+                    'index' => $this->indexTypeConverter->convert(
+                        IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                    )
+                ];
+            }
         }
 
         return $fieldMapping;
