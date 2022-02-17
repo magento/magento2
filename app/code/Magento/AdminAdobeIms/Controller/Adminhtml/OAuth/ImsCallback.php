@@ -9,12 +9,13 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 
 use Exception;
+use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
+use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\Exception\AuthorizationException;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
@@ -59,10 +60,16 @@ class ImsCallback extends Auth implements HttpGetActionInterface
 
             }
 
-        } catch (AuthorizationException $e) {
-            $this->messageManager->addComplexErrorMessage(
-                'adminAdobeImsMessage',
-                ['message' => $e->getMessage()]);
+        } catch (AdobeImsTokenAuthorizationException $e) {
+            $this->errorMessage(
+                'Unable to sign in with the Adobe ID',
+                $e->getMessage()
+            );
+        } catch (AdobeImsOrganizationAuthorizationException $e) {
+            $this->errorMessage(
+                'You don\'t have access to this Commerce instance',
+                $e->getMessage()
+            );
         } catch (Exception $e) {
             $this->errorMessage(
                 'Error signing in',
