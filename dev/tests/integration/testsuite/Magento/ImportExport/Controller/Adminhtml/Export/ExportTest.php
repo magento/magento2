@@ -13,7 +13,7 @@ use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\Envelope;
 use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\TestFramework\MysqlMq\DeleteTopicRelatedMessages;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -31,8 +31,8 @@ class ExportTest extends AbstractBackendController
     /** @var SerializerInterface */
     private $json;
 
-    /** @var DeleteTopicRelatedMessages */
-    private $deleteTopicRelatedMessages;
+    /** @var ClearQueueProcessor */
+    private $clearQueueProcessor;
 
     /**
      * @var QueueRepository
@@ -51,8 +51,8 @@ class ExportTest extends AbstractBackendController
     {
         parent::setUp();
         $this->json = $this->_objectManager->get(SerializerInterface::class);
-        $this->deleteTopicRelatedMessages = $this->_objectManager->get(DeleteTopicRelatedMessages::class);
-        $this->deleteTopicRelatedMessages->execute(self::TOPIC_NAME);
+        $this->clearQueueProcessor = $this->_objectManager->get(ClearQueueProcessor::class);
+        $this->clearQueueProcessor->execute('exportProcessor');
         $this->queueRepository = $this->_objectManager->get(QueueRepository::class);
         $this->defaultValueProvider = $this->_objectManager->get(DefaultValueProvider::class);
     }
@@ -62,7 +62,7 @@ class ExportTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        $this->deleteTopicRelatedMessages->execute(self::TOPIC_NAME);
+        $this->clearQueueProcessor->execute(self::TOPIC_NAME);
 
         parent::tearDown();
     }
