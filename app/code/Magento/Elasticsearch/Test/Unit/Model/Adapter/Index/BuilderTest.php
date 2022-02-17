@@ -150,7 +150,8 @@ class BuilderTest extends TestCase
             $analysisFilters,
             'Analysis filters must not contain synonyms when they are not defined'
         );
-        $this->assertNotContains($synonymsFilterName,
+        $this->assertNotContains(
+            $synonymsFilterName,
             $prefixSearchAnalyzerFilters,
             'The prefix_search analyzer must not include synonyms filter when it is not present'
         );
@@ -180,8 +181,8 @@ class BuilderTest extends TestCase
         ];
 
         $expectedFilter = [
-                'type' => 'synonym_graph',
-                'synonyms' => $synonyms
+            'type' => 'synonym_graph',
+            'synonyms' => $synonyms
         ];
 
         $this->localeResolver->expects($this->once())
@@ -208,11 +209,13 @@ class BuilderTest extends TestCase
             $analysisFilters,
             'Analysis synonyms filter must match the expected result'
         );
-        $this->assertContains($synonymsFilterName,
+        $this->assertContains(
+            $synonymsFilterName,
             $prefixSearchAnalyzerFilters,
             'The prefix_search analyzer must include synonyms filter'
         );
-        $this->assertContains($synonymsFilterName,
+        $this->assertContains(
+            $synonymsFilterName,
             $skuPrefixSearchAnalyzerFilters,
             'The sku_prefix_search analyzer must include synonyms filter'
         );
