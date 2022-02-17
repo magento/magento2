@@ -62,7 +62,7 @@ class ExportTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        $this->clearQueueProcessor->execute(self::TOPIC_NAME);
+        $this->clearQueueProcessor->execute('exportProcessor');
 
         parent::tearDown();
     }
