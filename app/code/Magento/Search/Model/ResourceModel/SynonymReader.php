@@ -76,7 +76,7 @@ class SynonymReader extends AbstractDb
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable(), 'synonyms');
 
-        return $connection->fetchCol($select);;
+        return $connection->fetchCol($select);
     }
 
     /**
