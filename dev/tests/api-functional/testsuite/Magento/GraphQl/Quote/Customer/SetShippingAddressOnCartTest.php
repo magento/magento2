@@ -141,6 +141,70 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetShippingAddressOnCartWithRegionIdForSimpleProduct()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "Francesco"
+            lastname: "Alba"
+            company: "Magento"
+            street: ["Via Solferino", "45"]
+            city: "Ceriano Laghetto"
+            region: "1"
+            postcode: "20816"
+            country_code: "FR"
+            telephone: "3273581975",
+            save_in_address_book: false
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        region {
+          code
+          label
+        }
+        postcode
+        telephone
+        country {
+          label
+          code
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertShippingAddressWithRegionIdFields($shippingAddressResponse);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
@@ -1814,6 +1878,28 @@ QUERY;
             ['response_field' => 'country', 'expected_value' => ['code' => 'US', 'label' => 'US']],
             ['response_field' => '__typename', 'expected_value' => 'ShippingCartAddress'],
             ['response_field' => 'customer_notes', 'expected_value' => 'Test note']
+        ];
+
+        $this->assertResponseFields($shippingAddressResponse, $assertionMap);
+    }
+
+    /**
+     * Verify the all the whitelisted fields for a New Address with region id Object
+     *
+     * @param array $shippingAddressResponse
+     */
+    private function assertShippingAddressWithRegionIdFields(array $shippingAddressResponse): void
+    {
+        $assertionMap = [
+            ['response_field' => 'firstname', 'expected_value' => 'Francesco'],
+            ['response_field' => 'lastname', 'expected_value' => 'Alba'],
+            ['response_field' => 'company', 'expected_value' => 'Magento'],
+            ['response_field' => 'street', 'expected_value' => [0 => 'Via Solferino', 1 => '45']],
+            ['response_field' => 'city', 'expected_value' => 'Ceriano Laghetto'],
+            ['response_field' => 'postcode', 'expected_value' => '20816'],
+            ['response_field' => 'telephone', 'expected_value' => '3273581975'],
+            ['response_field' => 'region', 'expected_value' => ['code' => '1', 'label' => 'Ain']],
+            ['response_field' => 'country', 'expected_value' => ['code' => 'FR', 'label' => 'FR']]
         ];
 
         $this->assertResponseFields($shippingAddressResponse, $assertionMap);
