@@ -97,6 +97,9 @@
             <!-- Logout customer from storefront and delete -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="signOutCustomer"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheAfterTranslateEnabled">
+                <argument name="tags" value="config full_page layout block_html translate"/>
+            </actionGroup>
         </after>
 
         <!-- Preconditions: Add product to cart on storefront -->
@@ -115,8 +118,8 @@
         <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineForStorefront"/>
 
         <!-- 2. Refresh magento cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateEnabled">
-            <argument name="tags" value="translate full_page"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheAfterTranslateEnabled">
+            <argument name="tags" value="config full_page block_html"/>
         </actionGroup>
 
         <!-- 3. Go to storefront and click on cart button on the top -->
@@ -496,8 +499,8 @@
         <!-- 7. Set *Enabled for Storefront* option to *No* and save configuration -->
         <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
         <!-- 8. Clear magento cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateDisabled">
-            <argument name="tags" value="translate full_page"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheAfterTranslateDisabled">
+            <argument name="tags" value="config full_page block_html"/>
         </actionGroup>
 
         <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
