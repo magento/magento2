@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\Adapter\Index;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Search\Model\ResourceModel\SynonymReader;
@@ -59,7 +60,7 @@ class Builder implements BuilderInterface
         $tokenizer = $this->getTokenizer();
         $filter = $this->getFilter();
         $charFilter = $this->getCharFilter();
-        $synonymFilter = $this->synonymReader->getSynonymFilter();
+        $synonymFilter = $this->getSynonymFilter();
 
         $settings = [
             'analysis' => [
@@ -185,5 +186,27 @@ class Builder implements BuilderInterface
             'type' => $stemmerInfo['type'],
             'language' => $stemmerInfo['default'],
         ];
+    }
+
+    /**
+     * Get filter based on defined synonyms
+     *
+     * @throws LocalizedException
+     */
+    private function getSynonymFilter(): array
+    {
+        $synonyms = $this->synonymReader->getAllSynonyms();
+        $synonymFilter = [];
+
+        if ($synonyms) {
+            $synonymFilter = [
+                'synonyms' => [
+                    'type' => 'synonym_graph',
+                    'synonyms' => $synonyms
+                ]
+            ];
+        }
+
+        return $synonymFilter;
     }
 }

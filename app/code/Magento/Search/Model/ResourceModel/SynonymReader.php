@@ -67,28 +67,16 @@ class SynonymReader extends AbstractDb
     }
 
     /**
-     * Get all synonyms as array
+     * Get all synonyms as an array
      *
      * @throws LocalizedException
      */
-    public function getSynonymFilter(): array
+    public function getAllSynonyms(): array
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable(), 'synonyms');
-        $synonyms = $connection->fetchCol($select);
 
-        $synonymFilter = [];
-
-        if ($synonyms) {
-            $synonymFilter = [
-                'synonyms' => [
-                    'type' => 'synonym_graph',
-                    'synonyms' => $synonyms
-                ]
-            ];
-        }
-
-        return $synonymFilter;
+        return $connection->fetchCol($select);;
     }
 
     /**

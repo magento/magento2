@@ -99,7 +99,7 @@ class BuilderTest extends TestCase
             ->method('getLocale')
             ->willReturn($locale);
         $this->synonymReaderMock->expects($this->once())
-            ->method('getSynonymFilter')
+            ->method('getAllSynonyms')
             ->willReturn([]);
 
         $result = $this->model->build();
@@ -122,6 +122,65 @@ class BuilderTest extends TestCase
             $synonymsFilterName,
             $skuPrefixSearchAnalyzerFilters,
             'The sku_prefix_search analyzer must include synonyms filter when it is not present'
+        );
+    }
+
+    /**
+     * Test build() method with synonyms provided.
+     *
+     * In this case synonyms filter should be created, populated with the list of available synonyms
+     * and referenced in the prefix_search and sku_prefix_search analyzers.
+     *
+     * @param string $locale
+     * @dataProvider buildDataProvider
+     */
+    public function testBuildWithProvidedSynonyms(string $locale)
+    {
+        $synonymsFilterName = 'synonyms';
+
+        $synonyms = [
+            'mp3,player,sound,audio',
+            'tv,video,television,screen'
+        ];
+
+        $expectedFilter = [
+            'type' => 'synonym_graph',
+            'synonyms' => $synonyms
+        ];
+
+        $this->localeResolver->expects($this->once())
+            ->method('getLocale')
+            ->willReturn($locale);
+
+        $this->synonymReaderMock->expects($this->once())
+            ->method('getAllSynonyms')
+            ->willReturn($synonyms);
+
+        $result = $this->model->build();
+
+        $analysisFilters = $result["analysis"]["filter"];
+        $prefixSearchAnalyzerFilters = $result["analysis"]["analyzer"]["prefix_search"]["filter"];
+        $skuPrefixSearchAnalyzerFilters = $result["analysis"]["analyzer"]["sku_prefix_search"]["filter"];
+
+        $this->assertArrayHasKey(
+            $synonymsFilterName,
+            $analysisFilters,
+            'Analysis filters must contain synonyms when defined'
+        );
+        $this->assertContains(
+            $expectedFilter,
+            $analysisFilters,
+            'Analysis synonyms filter must match the expected result'
+        );
+        $this->assertContains(
+            $synonymsFilterName,
+            $prefixSearchAnalyzerFilters,
+            'The prefix_search analyzer must include synonyms filter'
+        );
+        $this->assertContains(
+            $synonymsFilterName,
+            $skuPrefixSearchAnalyzerFilters,
+            'The sku_prefix_search analyzer must include synonyms filter'
         );
     }
 
