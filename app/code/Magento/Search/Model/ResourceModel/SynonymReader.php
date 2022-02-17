@@ -22,8 +22,6 @@ class SynonymReader extends AbstractDb
     private $fullTextSelect;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $storeManager;
