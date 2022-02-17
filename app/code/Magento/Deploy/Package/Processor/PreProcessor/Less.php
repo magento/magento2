@@ -11,10 +11,10 @@ use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFile;
 use Magento\Deploy\Package\Processor\ProcessorInterface;
 use Magento\Deploy\Service\DeployStaticFile;
-use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
-use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\Css\PreProcessor\Instruction\Import;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\NotationResolver;
+use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 use Magento\Framework\View\Asset\Repository;
 
 /**
@@ -140,7 +140,8 @@ class Less implements ProcessorInterface
     }
 
     /**
-     * Checks recursively if there is a LESS file in current package which used for generating given CSS file from parent package
+     * Checks recursively if there is a LESS file in current package
+     * which used for generating given CSS file from parent package
      *
      * @param string $fileName
      * @param string $parentFile
