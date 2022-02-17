@@ -9359,16 +9359,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "17",
+            "version": "18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "7fbdf31a451d29e412b836209459d0e2675128be"
+                "reference": "90918480776ba3627f6440ef8cdae0f5712df36c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/7fbdf31a451d29e412b836209459d0e2675128be",
-                "reference": "7fbdf31a451d29e412b836209459d0e2675128be",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/90918480776ba3627f6440ef8cdae0f5712df36c",
+                "reference": "90918480776ba3627f6440ef8cdae0f5712df36c",
                 "shasum": ""
             },
             "require": {
@@ -9385,13 +9385,13 @@
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
-                "classmap": [
-                    "PHP_CodeSniffer/Tokenizers/"
-                ],
                 "psr-4": {
                     "Magento2\\": "Magento2/",
                     "Magento2Framework\\": "Magento2Framework/"
-                }
+                },
+                "classmap": [
+                    "PHP_CodeSniffer/Tokenizers/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -9401,9 +9401,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v17"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v18"
             },
-            "time": "2022-01-11T11:59:48+00:00"
+            "time": "2022-02-15T16:25:42+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
