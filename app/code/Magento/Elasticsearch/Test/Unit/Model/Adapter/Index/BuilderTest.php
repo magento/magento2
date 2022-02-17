@@ -22,17 +22,17 @@ class BuilderTest extends TestCase
     /**
      * @var Builder
      */
-    protected $model;
+    private $model;
 
     /**
      * @var LocaleResolver|MockObject
      */
-    protected $localeResolver;
+    private $localeResolver;
 
     /**
      * @var EsConfigInterface|MockObject
      */
-    protected $esConfig;
+    private $esConfig;
 
     /**
      * @var SynonymReader|MockObject
@@ -87,42 +87,6 @@ class BuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new ObjectManagerHelper($this);
-        $this->model = $objectManager->getObject(
-            Builder::class,
-            [
-                'localeResolver' => $this->localeResolver,
-                'esConfig' => $this->esConfig,
-                'synonymReader' => $this->synonymReaderMock
-            ]
-        );
-    }
-
-    /**
-     * Test build() method
-     *
-     * @param string $locale
-     * @dataProvider buildDataProvider
-     */
-    public function testBuild($locale)
-    {
-        $synonymsArray = [
-            'mp3,player,sound,audio',
-            'tv,video,television,screen'
-        ];
-
-        $this->localeResolver->expects($this->once())
-            ->method('getLocale')
-            ->willReturn($locale);
-
-        $this->esConfig->expects($this->once())
-            ->method('getStemmerInfo')
-            ->willReturn([
-                'type' => 'stemmer',
-                'default' => 'english',
-                'en_US' => 'english',
-            ]);
-
         $this->synonymReaderMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -135,21 +99,123 @@ class BuilderTest extends TestCase
             ->method('from')
             ->willReturn($this->selectMock);
 
-        $this->connectionMock->expects($this->once())
-            ->method('fetchCol')
-            ->willReturn($synonymsArray);
+        $this->esConfig->expects($this->once())
+            ->method('getStemmerInfo')
+            ->willReturn([
+                'type' => 'stemmer',
+                'default' => 'english',
+                'en_US' => 'english',
+            ]);
 
-        $result = $this->model->build();
-        $this->assertNotNull($result);
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
+            Builder::class,
+            [
+                'localeResolver' => $this->localeResolver,
+                'esConfig' => $this->esConfig,
+                'synonymReader' => $this->synonymReaderMock
+            ]
+        );
     }
 
     /**
-     * Test setStoreId() method
+     * Test build() method without provided synonyms.
+     *
+     * In this case, synonyms filter must not be created or referenced
+     * in the prefix_search and sku_prefix_search analyzers.
+     *
+     * @param string $locale
+     * @dataProvider buildDataProvider
      */
-    public function testSetStoreId()
+    public function testBuildWithoutSynonymsProvided(string $locale)
     {
-        $result = $this->model->setStoreId(1);
-        $this->assertNull($result);
+        $synonymsFilterName = 'synonyms';
+
+        $this->localeResolver->expects($this->once())
+            ->method('getLocale')
+            ->willReturn($locale);
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->willReturn([]);
+
+        $result = $this->model->build();
+
+        $analysisFilters = $result["analysis"]["filter"];
+        $prefixSearchAnalyzerFilters = $result["analysis"]["analyzer"]["prefix_search"]["filter"];
+        $skuPrefixSearchAnalyzerFilters = $result["analysis"]["analyzer"]["sku_prefix_search"]["filter"];
+
+        $this->assertArrayNotHasKey(
+            $synonymsFilterName,
+            $analysisFilters,
+            'Analysis filters must not contain synonyms when they are not defined'
+        );
+        $this->assertNotContains($synonymsFilterName,
+            $prefixSearchAnalyzerFilters,
+            'The prefix_search analyzer must not include synonyms filter when it is not present'
+        );
+        $this->assertNotContains(
+            $synonymsFilterName,
+            $skuPrefixSearchAnalyzerFilters,
+            'The sku_prefix_search analyzer must include synonyms filter when it is not present'
+        );
+    }
+
+    /**
+     * Test build() method with synonyms provided.
+     *
+     * In this case synonyms filter should be created, populated with the list of available synonyms
+     * and referenced in the prefix_search and sku_prefix_search analyzers.
+     *
+     * @param string $locale
+     * @dataProvider buildDataProvider
+     */
+    public function testBuildWithProvidedSynonyms(string $locale)
+    {
+        $synonymsFilterName = 'synonyms';
+
+        $synonyms = [
+            'mp3,player,sound,audio',
+            'tv,video,television,screen'
+        ];
+
+        $expectedFilter = [
+                'type' => 'synonym_graph',
+                'synonyms' => $synonyms
+        ];
+
+        $this->localeResolver->expects($this->once())
+            ->method('getLocale')
+            ->willReturn($locale);
+
+        $this->connectionMock->expects($this->once())
+            ->method('fetchCol')
+            ->willReturn($synonyms);
+
+        $result = $this->model->build();
+
+        $analysisFilters = $result["analysis"]["filter"];
+        $prefixSearchAnalyzerFilters = $result["analysis"]["analyzer"]["prefix_search"]["filter"];
+        $skuPrefixSearchAnalyzerFilters = $result["analysis"]["analyzer"]["sku_prefix_search"]["filter"];
+
+        $this->assertArrayHasKey(
+            $synonymsFilterName,
+            $analysisFilters,
+            'Analysis filters must contain synonyms when defined'
+        );
+        $this->assertContains(
+            $expectedFilter,
+            $analysisFilters,
+            'Analysis synonyms filter must match the expected result'
+        );
+        $this->assertContains($synonymsFilterName,
+            $prefixSearchAnalyzerFilters,
+            'The prefix_search analyzer must include synonyms filter'
+        );
+        $this->assertContains($synonymsFilterName,
+            $skuPrefixSearchAnalyzerFilters,
+            'The sku_prefix_search analyzer must include synonyms filter'
+        );
     }
 
     /**
