@@ -19,7 +19,7 @@ define([
             customerData.getInitCustomerData().done(function () {
                 // Check if the customer data is set in local storage, if not reload data from server
                 if (!customer().firstname) {
-                    customerData.reload([], false);
+                    customerData.reload(['customer', 'cart'], false);
                 }
             });
         }
