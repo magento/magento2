@@ -91,7 +91,7 @@ class User extends AdminUser
      */
     public function verifyIdentityWithoutPassword(): bool
     {
-        if ($this->getIsActive() != '1') {
+        if ((bool)$this->getIsActive() === false) {
             throw new AuthenticationException(
                 __(
                     'The account sign-in was incorrect or your account is disabled temporarily. '

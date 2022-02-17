@@ -12,6 +12,7 @@ use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
@@ -33,6 +34,10 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @var AdminLoginProcessService
      */
     private AdminLoginProcessService $adminLoginProcessService;
+    /**
+     * @var ImsConfig
+     */
+    private ImsConfig $imsConfig;
 
     /**
      * @param Context $context
@@ -44,13 +49,15 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         Context          $context,
         ImsConnection    $imsConnection,
         ManagerInterface $messageManager,
-        AdminLoginProcessService $adminLoginProcessService
+        AdminLoginProcessService $adminLoginProcessService,
+        ImsConfig $imsConfig
     )
     {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
         $this->messageManager = $messageManager;
         $this->adminLoginProcessService = $adminLoginProcessService;
+        $this->imsConfig = $imsConfig;
     }
 
     /**
@@ -59,7 +66,19 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      */
     public function execute(): Redirect
     {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath($this->_helper->getHomePageUrl());
         try {
+            if (!$this->imsConfig->enabled()) {
+                $this->errorMessage(
+                    'Error signing in',
+                    'Adobe Sign-In is disabled.'
+                );
+
+                return $resultRedirect;
+            }
+
             $code = $this->getRequest()->getParam('code');
 
             if (is_null($code)) {
@@ -91,9 +110,6 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             );
         }
 
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setPath($this->_helper->getHomePageUrl());
         return $resultRedirect;
     }
 

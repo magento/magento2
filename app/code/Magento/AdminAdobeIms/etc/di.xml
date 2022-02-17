@@ -23,8 +23,14 @@
                 type="Magento\AdminAdobeIms\Plugin\ConfigPlugin"/>
     </type>
 
-    <type name="Magento\AdobeIms\Model\Config">
-        <plugin name="ims_config_plugin"
-                type="Magento\AdminAdobeIms\Plugin\ConfigPlugin"/>
+    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserverPlugin">
+        <plugin name="captcha_check_user_login_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
     </type>
+
+    <type name="Magento\Captcha\Observer\ResetAttemptForBackendObserver">
+        <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
+    </type>
+
 </config>
