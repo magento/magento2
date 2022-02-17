@@ -13,6 +13,10 @@ $viewModel = $block->getLinkViewModel();
 ?>
 <?php if ($viewModel->isActive()): ?>
 <div class="adobe-id-login-wrapper">
+    <h1><?= $escaper->escapeHtml(__('Sign In')) ?></h1>
+
+    <p><?= $escaper->escapeHtml(__('This Commerce instance is managed by an organization. Contact your organization administrator to request access.')) ?></p>
+
     <a href="<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>">
         <?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?>
     </a>
