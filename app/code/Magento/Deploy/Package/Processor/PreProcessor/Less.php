@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Package\Processor\PreProcessor;
 
 use Magento\Deploy\Console\DeployStaticOptions;
@@ -67,10 +68,10 @@ class Less implements ProcessorInterface
      * @param Minification $minification
      */
     public function __construct(
-        FileNameResolver $fileNameResolver,
+        FileNameResolver        $fileNameResolver,
         NotationResolver\Module $notationResolver,
-        DeployStaticFile $deployStaticFile,
-        Minification $minification
+        DeployStaticFile        $deployStaticFile,
+        Minification            $minification
     ) {
         $this->fileNameResolver = $fileNameResolver;
         $this->notationResolver = $notationResolver;
@@ -139,8 +140,10 @@ class Less implements ProcessorInterface
     }
 
     /**
-     * @param string  $fileName
-     * @param string  $parentFile
+     * Checks recursively if there is a LESS file in current package which used for generating given CSS file from parent package
+     *
+     * @param string $fileName
+     * @param string $parentFile
      * @param array $map
      * @return bool
      */
@@ -173,12 +176,14 @@ class Less implements ProcessorInterface
         $content = $this->deployStaticFile->readTmpFile($filePath, $packagePath);
         $replaceCallback = function ($matchedContent) use ($filePath, $packagePath, $contentType) {
             $matchedFileId = $matchedContent['path'];
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             if (!pathinfo($matchedContent['path'], PATHINFO_EXTENSION)) {
                 $matchedFileId .= '.' . $contentType;
             }
             if (strpos($matchedFileId, Repository::FILE_ID_SEPARATOR) !== false) {
                 $basePath = $packagePath;
             } else {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $basePath = pathinfo($filePath, PATHINFO_DIRNAME);
             }
             $resolvedPath = str_replace(Repository::FILE_ID_SEPARATOR, '/', $matchedFileId);
