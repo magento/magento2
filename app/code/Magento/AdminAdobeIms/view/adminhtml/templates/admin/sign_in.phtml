@@ -13,7 +13,6 @@ $viewModel = $block->getLinkViewModel();
 ?>
 <?php if ($viewModel->isActive()): ?>
 <div class="adobe-id-login-wrapper">
-
     <a href="<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>">
         <?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?>
     </a>

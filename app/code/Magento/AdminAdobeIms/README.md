@@ -31,3 +31,6 @@ CABPI-196 Login Display
     </body>
 </page>
 ```
+
+3. Include css in customer layout handle,
+4. Change/remove blocks when needed based on the handle,
