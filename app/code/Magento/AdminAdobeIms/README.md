@@ -34,3 +34,10 @@ CABPI-196 Login Display
 
 3. Include css in customer layout handle,
 4. Change/remove blocks when needed based on the handle,
+5. Include only specturm elements we need:
+   1. @spectrum-css/inlinealert@4.0.2
+   2. @spectrum-css/button@6.0.2
+   3. @spectrum-css/typography@4.0.10
+   4. @spectrum-css/card@4.0.11
+   5. @spectrum-css/dialog@6.0.1
+6. Build and inlclude a minified css file https://github.com/adobe/spectrum-css#optimizing-spectrum-css
