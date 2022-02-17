@@ -10,6 +10,7 @@
         <adobe_ims>
             <integration>
                 <enabled>0</enabled>
+                <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted">test</organization_id>
                 <auth_url_pattern><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/authorize/v2?client_id=#{client_id}&amp;redirect_uri=#{redirect_uri}&amp;locale=#{locale}&amp;scope=openid,creative_sdk,email,profile&amp;response_type=token]]></auth_url_pattern>
             </integration>
         </adobe_ims>

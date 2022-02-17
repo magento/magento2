@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAdobeImsEnabledInfoCommandTest">
+        <annotations>
+            <features value="Cli"/>
+            <description value="Runs bin/magento admin:adobe-ims info command"/>
+            <severity value="MINOR"/>
+            <group value="admin_ims"/>
+            <testCaseId value="CABPI-186"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableIms" />
+        </before>
+        <after>
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminImsAuthModule" />
+        </after>
+
+        <magentoCLI command="admin:adobe-ims info" stepKey="infoAdobeIms"/>
+    </test>
+</tests>
