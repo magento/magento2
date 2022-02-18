@@ -162,7 +162,7 @@ class SecureHtmlRenderer
         }
 
         $script = <<<script
-            var {$elementVariable}Array = document.querySelectorAll("{$selector}");
+            var {$elementVariable}Array = document.querySelectorAll('{$selector}');
             if({$elementVariable}Array.length !== 'undefined'){
                 {$elementVariable}Array.forEach(function(element) {
                     if (element) {
