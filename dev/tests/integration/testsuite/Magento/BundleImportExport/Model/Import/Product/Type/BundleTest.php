@@ -209,15 +209,14 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertIsNumeric($productId);
         /** @var Product $product */
-        $product = $this->objectManager->create(ProductRepository::class);
-        $product->load($productId);
+        $product = $this->objectManager->create(ProductRepositoryInterface::class);
+        $ProductRepository = $product->get(self::TEST_PRODUCT_NAME);
 
-        $this->assertFalse($product->isObjectNew());
-        $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
-        $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
-        $this->assertEquals(1, $product->getShipmentType());
+        $this->assertEquals(self::TEST_PRODUCT_NAME, $ProductRepository->getName());
+        $this->assertEquals(self::TEST_PRODUCT_TYPE, $ProductRepository->getTypeId());
+        $this->assertEquals(1, $ProductRepository->getShipmentType());
 
-        $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
+        $bundleOptionCollection = $ProductRepository->getExtensionAttributes()->getBundleProductOptions();
         $this->assertCount(1, $bundleOptionCollection);
 
         $this->importedProductSkus = ['Simple 1', 'Bundle 1'];
