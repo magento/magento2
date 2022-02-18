@@ -24,8 +24,8 @@ define([
             messageContainer = messageContainer || globalMessageList;
             let customerLoginUrl = 'customer/ajax/login';
 
-            if (window.authenticationPopup && window.authenticationPopup.customerLoginUrl) {
-                customerLoginUrl = window.authenticationPopup.customerLoginUrl;
+            if (loginData.customerLoginUrl) {
+                customerLoginUrl = loginData.customerLoginUrl;
             }
 
             return storage.post(
