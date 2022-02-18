@@ -72,6 +72,7 @@
         <after>
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
@@ -129,29 +130,7 @@
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createShipmentForFirstOrderEUR"/>
 
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
-            <argument name="product" value="$createProduct$"/>
-        </actionGroup>
-
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
-
-        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingMainWebsite">
-            <argument name="shippingMethod" value="Flat Rate"/>
-            <argument name="customerAddressVar" value="US_Address_CA" />
-        </actionGroup>
-
-        <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
-            <argument name="discountCode" value="{{CatPriceRule.coupon_code}}"/>
-        </actionGroup>
-
-        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderMainWebsite"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumberUSD"/>
-
-        <!--   Create Invoice and Shipment      -->
-        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrderUSD">
-            <argument name="orderId" value="$grabOrderNumberUSD"/>
-        </actionGroup>
-        <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createShipmentForFirstOrderUSD"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
 
         <generateDate stepKey="generateEndDate" date="+1 day" format="m/d/Y"/>
         <generateDate stepKey="generateStartDate" date="-1 day" format="m/d/Y"/>
