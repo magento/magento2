@@ -13,6 +13,7 @@ use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdminAdobeIms\Service\ImsOrganizationAllocationService;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
@@ -29,6 +30,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
+    private ImsOrganizationAllocationService $organizationAllocationService;
 
     /**
      * @var AdminLoginProcessService
@@ -50,15 +52,11 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     public function __construct(
         Context $context,
         ImsConnection $imsConnection,
-        ManagerInterface $messageManager,
-        AdminLoginProcessService $adminLoginProcessService,
-        ImsConfig $imsConfig
+        ImsOrganizationAllocationService $organizationAllocationService
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
-        $this->messageManager = $messageManager;
-        $this->adminLoginProcessService = $adminLoginProcessService;
-        $this->imsConfig = $imsConfig;
+        $this->organizationAllocationService = $organizationAllocationService;
     }
 
     /**
@@ -88,6 +86,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             if (empty($profile['email'])) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
+            $this->organizationAllocationService->checkOrganizationAllocation($accessToken);
             $this->adminLoginProcessService->execute($profile, $tokenResponse);
         } catch (AdobeImsTokenAuthorizationException $e) {
             $this->imsErrorMessage(
