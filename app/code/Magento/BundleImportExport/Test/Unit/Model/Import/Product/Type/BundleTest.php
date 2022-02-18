@@ -131,7 +131,7 @@ class BundleTest extends AbstractImportTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->entityModel = $this->createPartialMock(
             Product::class,
             [
