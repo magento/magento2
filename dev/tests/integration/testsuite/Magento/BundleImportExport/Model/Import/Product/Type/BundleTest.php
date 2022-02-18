@@ -209,7 +209,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertIsNumeric($productId);
         /** @var Product $product */
-        $product = $this->objectManager->create(Product::class);
+        $product = $this->objectManager->create(ProductRepository::class);
         $product->load($productId);
 
         $this->assertFalse($product->isObjectNew());
