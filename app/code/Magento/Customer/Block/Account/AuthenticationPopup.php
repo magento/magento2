@@ -119,4 +119,16 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     {
         return $this->getUrl('customer/account/forgotpassword');
     }
+
+    /**
+     * Get global account sharing is enabled or not
+     *
+     * @return string
+     */
+    public function isGlobalScopeEnabled()
+    {
+        $shareConfig = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Customer\Model\Config\Share::class);
+        return $shareConfig->isGlobalScope();
+    }
 }
