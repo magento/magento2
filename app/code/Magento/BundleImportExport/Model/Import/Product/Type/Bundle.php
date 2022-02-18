@@ -184,7 +184,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $selections = explode(
             Product::PSEUDO_MULTI_LINE_SEPARATOR,
             $rowData['bundle_values']
-            //str_replace('?', '&#63;', $rowData['bundle_values'])
         );
         foreach ($selections as $selection) {
             $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
@@ -200,7 +199,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
                 $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
-                $this->_cachedOptionSelectQuery[] = 'parent_id =' . (int)$entityId . ' AND title =' . $option['name'];
+                $this->_cachedOptionSelectQuery[] = [(int)$entityId, $option['name']];
             }
         }
         return $selections;
@@ -481,11 +480,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         $orWhere = false;
         foreach ($this->_cachedOptionSelectQuery as $item) {
-            $expItem = explode('=', $item);
             if ($orWhere) {
-                $select->orWhere($expItem[0].' = '.$expItem[1].' = ?', $expItem[2]);
+                $select->orWhere('parent_id = '.$item[0].' AND title = ?', $item[1]);
             } else {
-                $select->where($expItem[0].' = '.$expItem[1].' = ?', $expItem[2]);
+                $select->where('parent_id = '.$item[0].' AND title = ?', $item[1]);
                 $orWhere = true;
             }
         }
