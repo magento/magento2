@@ -61,7 +61,7 @@
         <attribute name="class" value="spectrum--medium" />
         <attribute name="class" value="spectrum--light" />
         <attribute name="class" value="adobe-ims-body" />
-        <referenceContainer name="root" htmlTag="div" htmlClass="adobe-ims-root" />
+        <referenceContainer name="root" htmlClass="adobe-ims-root" />
         <referenceContainer name="login.content" htmlClass="admin-ims-login-wrapper" />
         <referenceContainer name="login.content">
             <referenceBlock name="admin.login" remove="true"/>
@@ -81,7 +81,7 @@
             </referenceBlock>
         </referenceContainer>
 
-        <referenceContainer name="login.footer" htmlClass="adobe-ims-footer" htmlTag="div" />
+        <referenceContainer name="login.footer" htmlClass="adobe-ims-footer" />
         <!-- TODO: include these correctly -->
         <referenceContainer name="login.header" remove="true"/>
     </body>
