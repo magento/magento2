@@ -16,6 +16,10 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Search\Request\Builder;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\Search\ResponseInterface;
+use Magento\Framework\Search\SearchEngineInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\QueryResult;
@@ -87,6 +91,16 @@ class SuggestionsTest extends TestCase
     private $query;
 
     /**
+     * @var Builder|MockObject
+     */
+    protected $requestBuilder;
+
+    /**
+     * @var SearchEngineInterface|MockObject
+     */
+    protected $searchEngine;
+
+    /**
      * Set up test environment
      *
      * @return void
@@ -138,6 +152,14 @@ class SuggestionsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->requestBuilder = $this->getMockBuilder(Builder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->searchEngine = $this->getMockBuilder(SearchEngineInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
@@ -151,6 +173,8 @@ class SuggestionsTest extends TestCase
                 'storeManager' => $this->storeManager,
                 'fieldProvider' => $this->fieldProvider,
                 'logger' => $this->logger,
+                'requestBuilder' => $this->requestBuilder,
+                'searchEngine' => $this->searchEngine,
             ]
         );
     }
@@ -197,8 +221,7 @@ class SuggestionsTest extends TestCase
                             'options' => [
                                 'suggestion' => [
                                     'text' => 'query',
-                                    'score' => 1,
-                                    'freq' => 1,
+                                    'score' => 1
                                 ]
                             ]
                         ]
@@ -215,6 +238,7 @@ class SuggestionsTest extends TestCase
 
         $this->queryResultFactory->expects($this->once())
             ->method('create')
+            ->with(['queryText' => 'query', 'resultsCount' => 5])
             ->willReturn($query);
 
         $this->assertEquals([$query], $this->model->getItems($this->query));
@@ -291,5 +315,37 @@ class SuggestionsTest extends TestCase
         $this->connectionManager->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->client);
+
+        $request = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $response = $this->getMockBuilder(ResponseInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['count'])
+            ->getMockForAbstractClass();
+
+        $response->expects($this->any())
+            ->method('count')
+            ->willReturn(5);
+
+        $this->requestBuilder->expects($this->any())
+            ->method('setRequestName')
+            ->with('quick_search_container')
+            ->willReturnSelf();
+
+        $this->requestBuilder->expects($this->any())
+            ->method('bind')
+            ->with('search_term', 'query')
+            ->willReturnSelf();
+
+        $this->requestBuilder->expects($this->any())
+            ->method('create')
+            ->willReturn($request);
+
+        $this->searchEngine->expects($this->any())
+            ->method('search')
+            ->with($request)
+            ->willReturn($response);
     }
 }

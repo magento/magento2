@@ -5,6 +5,7 @@
  */
 namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
+use Countable;
 use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
@@ -13,11 +14,14 @@ use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Search\ResponseInterface;
 use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\QueryResultFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Search\Request\Builder;
+use Magento\Framework\Search\SearchEngineInterface;
 
 /**
  * Default implementation to provide suggestions mechanism for Elasticsearch
@@ -66,6 +70,16 @@ class Suggestions implements SuggestedQueriesInterface
     private $logger;
 
     /**
+     * @var Builder
+     */
+    private $requestBuilder;
+
+    /**
+     * @var SearchEngineInterface
+     */
+    private $searchEngine;
+
+    /**
      * Suggestions constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -76,6 +90,8 @@ class Suggestions implements SuggestedQueriesInterface
      * @param StoreManager $storeManager
      * @param FieldProviderInterface $fieldProvider
      * @param LoggerInterface|null $logger
+     * @param Builder|null $requestBuilder
+     * @param SearchEngineInterface|null $searchEngine
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -85,7 +101,9 @@ class Suggestions implements SuggestedQueriesInterface
         SearchIndexNameResolver $searchIndexNameResolver,
         StoreManager $storeManager,
         FieldProviderInterface $fieldProvider,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        Builder $requestBuilder = null,
+        SearchEngineInterface $searchEngine = null
     ) {
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
@@ -95,6 +113,8 @@ class Suggestions implements SuggestedQueriesInterface
         $this->storeManager = $storeManager;
         $this->fieldProvider = $fieldProvider;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->requestBuilder = $requestBuilder ?: ObjectManager::getInstance()->get(Builder::class);
+        $this->searchEngine = $searchEngine ?: ObjectManager::getInstance()->get(SearchEngineInterface::class);
     }
 
     /**
@@ -115,7 +135,12 @@ class Suggestions implements SuggestedQueriesInterface
             foreach ($suggestions as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
+                    $this->requestBuilder->setRequestName('quick_search_container');
+                    $this->requestBuilder->bind('search_term', $suggestion['text']);
+                    $request = $this->requestBuilder->create();
+                    /** @var ResponseInterface|Countable $searchResult */
+                    $searchResult = $this->searchEngine->search($request);
+                    $count = $searchResult->count();
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
