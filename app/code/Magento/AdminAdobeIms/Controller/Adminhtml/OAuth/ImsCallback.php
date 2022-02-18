@@ -19,7 +19,6 @@ use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Message\ManagerInterface;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
@@ -30,10 +29,12 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
+
     /**
      * @var AdminLoginProcessService
      */
     private AdminLoginProcessService $adminLoginProcessService;
+
     /**
      * @var ImsConfig
      */
@@ -44,15 +45,15 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @param ImsConnection $imsConnection
      * @param ManagerInterface $messageManager
      * @param AdminLoginProcessService $adminLoginProcessService
+     * @param ImsConfig $imsConfig
      */
     public function __construct(
-        Context          $context,
-        ImsConnection    $imsConnection,
+        Context $context,
+        ImsConnection $imsConnection,
         ManagerInterface $messageManager,
         AdminLoginProcessService $adminLoginProcessService,
         ImsConfig $imsConfig
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
         $this->messageManager = $messageManager;
@@ -62,23 +63,19 @@ class ImsCallback extends Auth implements HttpGetActionInterface
 
     /**
      * @return Redirect
-     * @throws AuthorizationException
      */
     public function execute(): Redirect
     {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath($this->_helper->getHomePageUrl());
+
+        if (!$this->imsConfig->enabled()) {
+            $this->getMessageManager()->addErrorMessage('Adobe Sign-In is disabled.');
+            return $resultRedirect;
+        }
+
         try {
-            if (!$this->imsConfig->enabled()) {
-                $this->errorMessage(
-                    'Error signing in',
-                    'Adobe Sign-In is disabled.'
-                );
-
-                return $resultRedirect;
-            }
-
             $code = $this->getRequest()->getParam('code');
 
             if (is_null($code)) {
