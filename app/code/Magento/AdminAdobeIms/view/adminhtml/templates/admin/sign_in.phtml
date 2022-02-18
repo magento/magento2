@@ -12,8 +12,8 @@
 $viewModel = $block->getLinkViewModel();
 ?>
 <?php if ($viewModel->isActive()): ?>
-<div class="spectrum-Modal is-open">
-    <div class="spectrum-Dialog spectrum-Dialog--small" role="dialog" tabindex="-1" aria-modal="true">
+<div class="spectrum-Modal is-open spectrum-Typography">
+    <div class="spectrum-Dialog spectrum-Dialog--medium spectrum-Dialog--noDivider" role="dialog" tabindex="-1" aria-modal="true">
         <div class="spectrum-Dialog-grid">
             <h1 class="spectrum-Dialog-heading"><?= $escaper->escapeHtml(__('Sign In')) ?></h1>
 

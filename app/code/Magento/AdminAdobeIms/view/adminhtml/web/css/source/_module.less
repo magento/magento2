@@ -4,6 +4,28 @@
  */
 
 & when (@media-common = true) {
+    body.adobe-ims-body {
+        background: rgba(0,0,0,0.4);
+        color: rgba(0,0,0,0.4);
+    }
+
+    .adobe-ims-root {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .admin-ims-login-wrapper {
+        flex: 1 0 auto;
+    }
+
+    .adobe-ims-footer {
+        align-self: flex-end;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
     .adobe-id-login-wrapper {
         margin-top: 30px;
 
