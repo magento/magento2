@@ -9,19 +9,47 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <!-- TODO: move this so we only include the built minified version -->
+        <!-- Include global variables first -->
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-global.css"
              rel="stylesheet"
              type="text/css" />
+
+        <!-- Include only the scales your application needs -->
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-medium.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-large.css"
+             rel="stylesheet"
+             type="text/css" />
+
+        <!-- Include only the colorstops your application needs -->
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-lightest.css"
              rel="stylesheet"
              type="text/css" />
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-light.css"
              rel="stylesheet"
              type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-dark.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-darkest.css"
+             rel="stylesheet"
+             type="text/css" />
+
+        <!-- Include index-vars.css for all components you need -->
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/page/dist/index-vars.css"
              rel="stylesheet"
              type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/icon/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/button/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/dialog/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/modal/dist/index-vars.css"
              rel="stylesheet"
              type="text/css" />
     </head>
@@ -29,6 +57,9 @@
         <attribute name="class" value="spectrum" />
         <attribute name="class" value="spectrum--medium" />
         <attribute name="class" value="spectrum--light" />
+        <referenceContainer name="root" htmlClass="adobe-ims-root" />
+        <referenceContainer name="login.content" htmlClass="spectrum-Modal-wrapper" />
+        <referenceContainer name="login.content" htmlClass="spectrum-CSSExample-dialog" />
         <referenceContainer name="login.content">
             <referenceBlock name="admin.login" remove="true"/>
             <block class="Magento\Backend\Block\Template"
@@ -46,5 +77,9 @@
                 </arguments>
             </referenceBlock>
         </referenceContainer>
+
+        <!-- TODO: include these correctly -->
+        <referenceContainer name="login.header" remove="true"/>
+        <referenceContainer name="login.footer" remove="true"/>
     </body>
 </page>

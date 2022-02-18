@@ -40,5 +40,11 @@ CABPI-196 Login Display
    3. @spectrum-css/typography@4.0.10
    4. @spectrum-css/card@4.0.11
    5. @spectrum-css/dialog@6.0.1
-6. Build and inlclude a minified css file https://github.com/adobe/spectrum-css#optimizing-spectrum-css
+6. Build and include a minified css file https://github.com/adobe/spectrum-css#optimizing-spectrum-css
 7. Check out https://spectrum.adobe.com/page/cards/ & https://opensource.adobe.com/spectrum-css/dialog.html
+8. Remove "page-wrapper" class on root,
+9. Add html with correct format
+   1. Background full width,
+   2. Text left,
+   3. Notification right,
+   4. copyright under,

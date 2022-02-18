@@ -12,14 +12,20 @@
 $viewModel = $block->getLinkViewModel();
 ?>
 <?php if ($viewModel->isActive()): ?>
-<div class="adobe-id-login-wrapper">
-    <h1><?= $escaper->escapeHtml(__('Sign In')) ?></h1>
+<div class="spectrum-Modal is-open">
+    <div class="spectrum-Dialog spectrum-Dialog--small" role="dialog" tabindex="-1" aria-modal="true">
+        <div class="spectrum-Dialog-grid">
+            <h1 class="spectrum-Dialog-heading"><?= $escaper->escapeHtml(__('Sign In')) ?></h1>
 
-    <p><?= $escaper->escapeHtml(__('This Commerce instance is managed by an organization. Contact your organization administrator to request access.')) ?></p>
+            <section class="spectrum-Dialog-content">
+                <p><?= $escaper->escapeHtml(__('This Commerce instance is managed by an organization. Contact your organization administrator to request access.')) ?></p>
 
-    <a class="spectrum-Button spectrum-Button--fill spectrum-Button--accent spectrum-Button--sizeM"
-       href="<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>">
-        <span class="spectrum-Button-label"><?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?></span>
-    </a>
+                <button class="spectrum-Button spectrum-Button--fill spectrum-Button--accent spectrum-Button--sizeM"
+                    onclick="location.href='<?= $escaper->escapeUrl($viewModel->getButtonLink()) ?>'">
+                    <span class="spectrum-Button-label"><?= $escaper->escapeHtml(__('Sign in with Adobe ID')) ?></span>
+                </button>
+            </section>
+        </div>
+    </div>
 </div>
 <?php endif; ?>
