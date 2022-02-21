@@ -160,6 +160,11 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getStoreId')->willReturn(null);
         $product->expects($this->any())->method('getStoreIds')->willReturn([1]);
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
             ->willReturn(false);
         $this->initObjectRegistryFactory([]);
@@ -204,6 +209,11 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getStoreId')->willReturn(1);
         $product->expects($this->never())->method('getStoreIds');
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $this->categoryMock->expects($this->any())->method('getParentIds')
             ->willReturn(['root-id', $storeRootCategoryId]);
         $this->categoryMock->expects($this->any())->method('getId')->willReturn($category_id);
