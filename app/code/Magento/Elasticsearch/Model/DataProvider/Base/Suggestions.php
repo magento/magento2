@@ -92,6 +92,8 @@ class Suggestions implements SuggestedQueriesInterface
      * @param LoggerInterface|null $logger
      * @param Builder|null $requestBuilder
      * @param SearchEngineInterface|null $searchEngine
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
