@@ -62,12 +62,12 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      */
     protected function doFormatObject($object, $format = null, $locale = null)
     {
-        $pattern = $dateFormat = $timeFormat = $calendar = null;
+        $pattern = $calendar = null;
 
         if (is_array($format)) {
             list($dateFormat, $timeFormat) = $format;
         } elseif (is_numeric($format)) {
-            $dateFormat = $format;
+            $dateFormat = $timeFormat = $format;
         } elseif (is_string($format) || null == $format) {
             $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;
