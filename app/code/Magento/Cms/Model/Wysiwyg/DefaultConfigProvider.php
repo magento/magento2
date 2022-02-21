@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\Cms\Model\Wysiwyg;
 
 /**
- * Class DefaultConfigProvider returns data required to render tinymce4 editor
+ * Class DefaultConfigProvider returns data required to render tinymce editor
  */
 class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
@@ -27,12 +27,12 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
     {
         $config->addData([
-            'tinymce4' => [
+            'tinymce' => [
                 'toolbar' => 'formatselect | bold italic underline | alignleft aligncenter alignright | '
                     . 'bullist numlist | link table charmap',
                 'plugins' => implode(
@@ -46,7 +46,6 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
                         'media',
                         'noneditable',
                         'table',
-                        'contextmenu',
                         'paste',
                         'code',
                         'help',

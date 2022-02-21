@@ -75,12 +75,8 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
@@ -99,12 +95,12 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <!--Filter and Open the customer edit page -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomer">
-            <argument name="email" value="$$simpleCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$simpleCustomer.id$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickOnCreateOrderButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(_defaultStore.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
@@ -136,14 +132,15 @@
         <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList"/>
         <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList"/>
 
-        <!-- Add products to order from Wish List -->
+        <!-- Move products to order from Wish List -->
         <waitForElementVisible selector="{{AdminCreateOrderWishListSection.addProductToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="waitForCheckBoxToVisible"/>
         <click selector="{{AdminCreateOrderWishListSection.addProductToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="selectProductToAddToOrder"/>
+        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesButton"/>
         <click selector="{{AdminCreateOrderWishListSection.addConfigProductToOrder($$createConfigProduct.name$$)}}" stepKey="AddConfigurableProductToOrder"/>
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" stepKey="waitForConfigurablePopover"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickOnUpdateButton"/>
+        <comment userInput="Action should be removed but replaced with comment due to backward compatibility" stepKey="clickOnUpdateButton"/>
         <waitForPageLoad stepKey="waitForAdminOrderItemsOrderedSectionPageLoad1"/>
 
         <!-- Assert Products in Order item section -->
@@ -171,9 +168,9 @@
         <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="donSeeProductInShoppingCart"/>
         <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct1.name$$" stepKey="dontSeeSecondProductInShoppingCart"/>
 
-        <!-- After move, assert products are present in Wish List section -->
-        <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList1"/>
-        <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList1"/>
+        <!-- After move, assert products are not present in Wish List section -->
+        <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList1"/>
+        <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList1"/>
 
         <!-- After move, assert products are present in order items section -->
         <see selector="{{AdminOrderItemsOrderedSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInOrderItemGrid1"/>
@@ -190,17 +187,20 @@
 
         <!-- Verify order information -->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
 
         <!-- Filter and Open the customer edit page -->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomer1">
-            <argument name="email" value="$$simpleCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage1">
+            <argument name="customerId" value="$$simpleCustomer.id$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.customerEditLinkByEmail($$simpleCustomer.email$$)}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomer1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerEditPageToLoad1"/>
+        
         <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="clickOnOrdersButton"/>
         <waitForPageLoad stepKey="waitForOrderPageToOpen"/>
-        <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderId')}}" stepKey="selectOnOrderID"/>
+        <click selector="{{AdminEditCustomerOrdersSection.orderIdInGrid('$orderNumber')}}" stepKey="selectOnOrderID"/>
 
         <!-- Assert ordered product in customer order section-->
         <waitForPageLoad stepKey="waitForOrderInformationToLoad"/>

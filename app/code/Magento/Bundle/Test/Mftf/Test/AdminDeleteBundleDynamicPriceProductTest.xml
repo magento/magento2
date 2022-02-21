@@ -36,9 +36,7 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
             <!-- TODO: Remove this action when MC-37719 will be fixed -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
-                <argument name="indices" value="cataloginventory_stock"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -52,7 +50,9 @@
         </actionGroup>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoopsMessage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoopsMessage">
+            <argument name="value" value="Whoops, our bad..."/>
+        </actionGroup>
         <!-- Search for the product by sku -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBySku">
             <argument name="query" value="$createDynamicBundleProduct.sku$"/>

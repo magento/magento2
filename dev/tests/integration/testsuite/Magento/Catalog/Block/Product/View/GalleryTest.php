@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Gallery\UpdateHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\LayoutInterface;
@@ -389,6 +390,107 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     array_merge($this->thumbnailExpectation, ['isMain' => true]),
                 ],
             ],
+        ];
+    }
+
+    /**
+     * Tests images positions in store view
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/web/url/catalog_media_url_format image_optimization_parameters
+     * @dataProvider imagesPositionStoreViewDataProvider
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @return void
+     */
+    public function testImagesPositionStoreView(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $images = $product->getData('media_gallery')['images'];
+        $images = array_merge($images, $newImages);
+        $product->setData('media_gallery', ['images' => $images]);
+        $updateHandler = Bootstrap::getObjectManager()->create(UpdateHandler::class);
+        $updateHandler->execute($product);
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $this->block->setData('product', $product);
+        $actualImages = array_map(
+            function ($item) {
+                return [
+                    'img' => parse_url($item['img'], PHP_URL_PATH),
+                    'caption' => $item['caption'],
+                    'position' => $item['position'],
+                ];
+            },
+            $this->serializer->unserialize($this->block->getGalleryImagesJson())
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function imagesPositionStoreViewDataProvider(): array
+    {
+        return [
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_image.jpg',
+                        'caption' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
+                        'caption' => 'Simple Product',
+                        'position' => 2,
+                    ],
+                ]
+            ],
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_image.jpg',
+                        'caption' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
+                        'caption' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
+            ]
         ];
     }
 

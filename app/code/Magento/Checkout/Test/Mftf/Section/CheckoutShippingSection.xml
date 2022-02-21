@@ -15,6 +15,7 @@
         <element name="editAddressButton" type="button" selector=".action-edit-address" timeout="30"/>
         <element name="addressDropdown" type="select" selector="[name=billing_address_id]"/>
         <element name="newAddressButton" type="button" selector=".action-show-popup" timeout="30"/>
+        <element name="newAddressForm" type="text" selector="#co-shipping-form"/>
         <element name="email" type="input" selector="input[id*=customer-email]"/>
         <element name="password" type="input" selector="#customer-password"/>
         <element name="firstName" type="input" selector="input[name=firstname]"/>
@@ -44,5 +45,6 @@
         <element name="addressFieldValidationError" type="text" selector="div.address div.field .field-error"/>
         <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
         <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
+        <element name="shippingAddressRequiredField" type="text" selector="//div[@id='shipping-new-address-form']//div[contains(@class, 'field _required') and contains(@name, 'shippingAddress.{{fieldName}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>

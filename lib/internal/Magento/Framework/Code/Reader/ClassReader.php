@@ -5,11 +5,21 @@
  */
 namespace Magento\Framework\Code\Reader;
 
+use Magento\Framework\GetParameterClassTrait;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionParameter;
+
 /**
  * Class ClassReader
  */
 class ClassReader implements ClassReaderInterface
 {
+    use GetParameterClassTrait;
+
+    /**
+     * @var array
+     */
     private $parentsCache = [];
 
     /**
@@ -17,32 +27,34 @@ class ClassReader implements ClassReaderInterface
      *
      * @param  string $className
      * @return array|null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function getConstructor($className)
     {
-        $class = new \ReflectionClass($className);
+        $class = new ReflectionClass($className);
         $result = null;
         $constructor = $class->getConstructor();
         if ($constructor) {
             $result = [];
-            /** @var $parameter \ReflectionParameter */
+            /** @var $parameter ReflectionParameter */
             foreach ($constructor->getParameters() as $parameter) {
                 try {
+                    $parameterClass = $this->getParameterClass($parameter);
+
                     $result[] = [
                         $parameter->getName(),
-                        $parameter->getClass() !== null ? $parameter->getClass()->getName() : null,
+                        $parameterClass ? $parameterClass->getName() : null,
                         !$parameter->isOptional() && !$parameter->isDefaultValueAvailable(),
                         $this->getReflectionParameterDefaultValue($parameter),
                         $parameter->isVariadic(),
                     ];
-                } catch (\ReflectionException $e) {
+                } catch (ReflectionException $e) {
                     $message = sprintf(
                         'Impossible to process constructor argument %s of %s class',
                         $parameter->__toString(),
                         $className
                     );
-                    throw new \ReflectionException($message, 0, $e);
+                    throw new ReflectionException($message, 0, $e);
                 }
             }
         }
@@ -53,10 +65,10 @@ class ClassReader implements ClassReaderInterface
     /**
      * Get reflection parameter default value
      *
-     * @param  \ReflectionParameter $parameter
+     * @param  ReflectionParameter $parameter
      * @return array|mixed|null
      */
-    private function getReflectionParameterDefaultValue(\ReflectionParameter $parameter)
+    private function getReflectionParameterDefaultValue(ReflectionParameter $parameter)
     {
         if ($parameter->isVariadic()) {
             return [];

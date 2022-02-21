@@ -129,6 +129,11 @@ class BaseFinalPrice
             'pw.website_id = cwd.website_id',
             []
         )->joinLeft(
+            // customer group website limitations
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'cg.customer_group_id = cgw.customer_group_id AND pw.website_id = cgw.website_id',
+            []
+        )->joinLeft(
             // we need this only for BCC in case someone expects table `tp` to be present in query
             ['tp' => $this->getTable('catalog_product_index_tier_price')],
             'tp.entity_id = e.entity_id AND' .
@@ -227,6 +232,9 @@ class BaseFinalPrice
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
+
         /**
          * throw event for backward compatibility
          */
@@ -297,7 +305,7 @@ class BaseFinalPrice
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression): \Zend_Db_Expr
     {
         return $this->getConnection()->getCheckSql(
-            sprintf('%s.value = 0', $tableAlias),
+            sprintf('%s.percentage_value IS NOT NULL', $tableAlias),
             sprintf(
                 'ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)',
                 $priceExpression,

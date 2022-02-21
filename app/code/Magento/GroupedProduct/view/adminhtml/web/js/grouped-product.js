@@ -159,7 +159,9 @@ define([
                         product.id = element.val();
                         product.qty = 0;
                         element.closest('[data-role=row]').find('[data-column]').each(function (index, el) {
-                            product[$(el).data('column')] = $.trim($(el).text());
+                            let text = $(el).text();
+
+                            product[$(el).data('column')] = text.trim();
                         });
                         selectedProductList[product.id] = product;
                     } else {

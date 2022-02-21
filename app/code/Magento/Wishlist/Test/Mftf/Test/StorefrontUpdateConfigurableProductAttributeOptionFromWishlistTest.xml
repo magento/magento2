@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateConfigurableProductAttributeOptionFromWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Update from Wishlist"/>
+            <title value="Update Configurable Product Option from Wishlist"/>
+            <description value="Verify that Configurable Product Option has correct value after navigating to Wishlist Item editing page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40881"/>
+            <useCaseId value="MC-40651"/>
+            <group value="catalog"/>
+            <group value="configurableProduct"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create Product Attribute with two Options -->
+            <createData entity="productDropDownAttribute" stepKey="createConfigurableProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createAttributeFirstOption">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createAttributeSecondOption">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+
+            <!-- Add attribute to Default Attribute Set -->
+            <createData entity="AddToDefaultSet" stepKey="addAttributeToDefaultSet">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+
+            <!-- Get Options of created Attribute -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigurableAttributeFirstOption">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigurableAttributeSecondOption">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </getData>
+
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigurableProduct"/>
+
+            <!-- Create first Simple Product and assign Attribute with Option to it -->
+            <createData entity="ApiSimpleOne" stepKey="createFirstChildProduct">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigurableAttributeFirstOption"/>
+            </createData>
+
+            <!-- Create second Simple Product and assign Attribute with Option to it -->
+            <createData entity="ApiSimpleOne" stepKey="createSecondChildProduct">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigurableAttributeSecondOption"/>
+            </createData>
+
+            <!-- Create Configurable Product Options -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigurableProductOptions">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigurableAttributeFirstOption"/>
+                <requiredEntity createDataKey="getConfigurableAttributeSecondOption"/>
+            </createData>
+
+            <!-- Assign Simple Products to Configurable Product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="addConfigurableProductFirstChild">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createFirstChildProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="addConfigurableProductSecondChild">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createSecondChildProduct"/>
+            </createData>
+
+            <!-- Reindex invalidated indices after Product Attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </before>
+        <after>
+            <!-- Delete Configurable Product data -->
+            <deleteData createDataKey="createFirstChildProduct" stepKey="deleteFirstChildProduct"/>
+            <deleteData createDataKey="createSecondChildProduct" stepKey="deleteSecondChildProduct"/>
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigurableProductAttribute" stepKey="deleteProductAttribute"/>
+
+            <!-- Logout from Customer account -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+
+            <!-- Delete Customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Reindex invalidated indices after Product Attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDelete"/>
+        </after>
+
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Open Product details page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Select first Drop-down Attribute Option and click 'Add to Wish List' button -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="$createConfigurableProductAttribute.default_frontend_label$"/>
+            <argument name="optionLabel" value="$getConfigurableAttributeFirstOption.label$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+        </actionGroup>
+
+        <!-- Click 'Edit Item' button from Wishlist page and assert first Option in Drop-down Attribute -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDropDownOptionValueActionGroup" stepKey="assertAttributeFirstOption">
+            <argument name="attributeLabel" value="$createConfigurableProductAttribute.default_frontend_label$"/>
+            <argument name="optionLabel" value="$getConfigurableAttributeFirstOption.label$"/>
+        </actionGroup>
+
+        <!-- Select second Drop-down Option and click 'Update Wish List' button -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectSecondOption">
+            <argument name="attributeLabel" value="$createConfigurableProductAttribute.default_frontend_label$"/>
+            <argument name="optionLabel" value="$getConfigurableAttributeSecondOption.label$"/>
+        </actionGroup>
+        <click selector="{{StorefrontProductInfoMainSection.productAddToWishlist}}" stepKey="clickUpdateWishlist"/>
+
+        <!-- Click 'Edit Item' button again and assert second Option in Drop-down Attribute -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItemAgain">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDropDownOptionValueActionGroup" stepKey="assertAttributeSecondOption">
+            <argument name="attributeLabel" value="$createConfigurableProductAttribute.default_frontend_label$"/>
+            <argument name="optionLabel" value="$getConfigurableAttributeSecondOption.label$"/>
+        </actionGroup>
+    </test>
+</tests>

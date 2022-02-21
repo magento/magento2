@@ -176,7 +176,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             $this->mediaDirectory->renameFile(
                 $this->mediaConfig->getTmpMediaPath($file),
-                $this->getAttributeSwatchPath($destinationFile)
+                $this->mediaDirectory->getDriver()->getRealPathSafety(
+                    $this->getAttributeSwatchPath($destinationFile)
+                )
             );
         }
 
@@ -197,7 +199,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
                 $file
             );
         } else {
-            $destFile = rtrim(dirname($file), '/.') . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+            $destFile = dirname($file) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                 $this->getOriginalFilePath($file)
             );
         }

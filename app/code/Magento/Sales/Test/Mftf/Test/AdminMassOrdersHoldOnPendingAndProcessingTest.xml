@@ -8,15 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMassOrdersHoldOnPendingAndProcessingTest">
+    <test name="AdminMassOrdersHoldOnPendingAndProcessingTest" deprecated="Use AdminMassOrdersHoldOnProcessingAndPendingTest">
         <annotations>
             <stories value="Mass Update Orders"/>
-            <title value="Mass put orders in statuses Pending, Processing on Hold"/>
+            <title value="DEPRECATED. Mass put orders in statuses Pending, Processing on Hold"/>
             <description value="Put orders in statuses Pending, Processing on Hold"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16185"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMassOrdersHoldOnProcessingAndPendingTest</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -41,9 +45,11 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getFirstOrderId"/>
-        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getFirstOrderId">
-			<actualResult type="const">$getFirstOrderId</actualResult>
+        <comment userInput="BIC workaround" stepKey="getFirstOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber1"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId1"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber1</actualResult>
         </assertNotEmpty>
 
         <!-- Create second order -->
@@ -51,9 +57,11 @@
             <argument name="product" value="$$createProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="getSecondOrderId"/>
-        <assertNotEmpty stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId">
-			<actualResult type="const">$getSecondOrderId</actualResult>
+        <comment userInput="BIC workaround" stepKey="getSecondOrderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber2"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId2"/>
+        <assertNotEmpty stepKey="assertSecondOrderIdIsNotEmpty">
+            <actualResult type="const">$orderNumber2</actualResult>
         </assertNotEmpty>
 
         <!-- Create Invoice for second Order -->
@@ -66,25 +74,25 @@
         <!-- Select Mass Action according to dataset: Hold -->
         <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionHold">
             <argument name="action" value="Hold"/>
-            <argument name="orderId" value="{$getFirstOrderId}"/>
-            <argument name="secondOrderId" value="{$getSecondOrderId}"/>
+            <argument name="orderId" value="{$orderNumber1}"/>
+            <argument name="secondOrderId" value="{$orderNumber2}"/>
         </actionGroup>
         <see userInput="You have put 2 order(s) on hold." stepKey="assertOrderOnHoldSuccessMessage"/>
 
         <!--Assert first order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
-            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="orderId" value="{$orderNumber1}"/>
             <argument name="orderStatus" value="On Hold"/>
         </actionGroup>
-        <see userInput="{$getFirstOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="{$orderNumber1}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
         <see userInput="On Hold" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
 
         <!--Assert second order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
-            <argument name="orderId" value="{$getSecondOrderId}"/>
+            <argument name="orderId" value="{$orderNumber2}"/>
             <argument name="orderStatus" value="On Hold"/>
         </actionGroup>
-        <see userInput="{$getSecondOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="{$orderNumber2}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
         <see userInput="On Hold" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
     </test>
 </tests>

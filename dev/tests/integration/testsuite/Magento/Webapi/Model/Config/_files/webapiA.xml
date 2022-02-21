@@ -35,7 +35,7 @@
             <resource ref="Magento_Test1::resource1"/>
             <resource ref="Magento_Test1::resource2"/>
         </resources>
-        <data>
+        <data input-array-size-limit="50">
             <parameter name="id" force="true">null</parameter>
         </data>
     </route>

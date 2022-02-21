@@ -19,6 +19,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminUpdateCategoryWithProductsDefaultSortingTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -65,16 +66,11 @@
         <!--Verify Category Title-->
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
 
-        <!-- Perform reindex and flush cache -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!--Verify Category in store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}" stepKey="seeDefaultProductPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.urlKey)}}" stepKey="seeDefaultProductPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="selectCategory"/>
@@ -86,7 +82,9 @@
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
 
         <!--Verify product name and price on Store Front-->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{defaultSimpleProduct.price}}" stepKey="assertProductPrice"/>
     </test>
 </tests>

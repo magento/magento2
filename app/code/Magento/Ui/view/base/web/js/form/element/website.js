@@ -26,10 +26,6 @@ define([
         initialize: function () {
             this._super();
 
-            if (this.customerId || this.isGlobalScope) {
-                this.disable(true);
-            }
-
             return this;
         }
     });
