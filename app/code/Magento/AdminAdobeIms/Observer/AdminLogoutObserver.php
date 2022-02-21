@@ -31,7 +31,7 @@ class AdminLogoutObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $res = $this->logOut->execute();
+        $this->logOut->execute();
         return $this;
     }
 }
