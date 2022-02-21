@@ -63,7 +63,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
             'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
             'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
             'baseUrl' => $this->escapeUrl($this->getBaseUrl()),
-            'customerLoginUrl'=> $this->getUrl('customer/ajax/login'),
+            'customerLoginUrl' => $this->getUrl('customer/ajax/login'),
         ];
     }
 

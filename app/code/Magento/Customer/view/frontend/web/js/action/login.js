@@ -26,6 +26,7 @@ define([
 
             if (loginData.customerLoginUrl) {
                 customerLoginUrl = loginData.customerLoginUrl;
+                delete loginData.customerLoginUrl;
             }
 
             return storage.post(
