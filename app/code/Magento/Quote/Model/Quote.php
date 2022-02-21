@@ -112,7 +112,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * Checkout login method key
      */
-    const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
+    public const CHECKOUT_METHOD_LOGIN_IN = 'login_in';
 
     /**
      * @var string
@@ -172,14 +172,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_preventSaving = false;
 
     /**
-     * Catalog product
+     * Product of the catalog
      *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Quote validator
+     * To perform validation on the quote
      *
      * @var \Magento\Quote\Model\QuoteValidator
      */
@@ -213,7 +213,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_customerFactory;
 
     /**
-     * Group repository
+     * Repository for group to perform CRUD operations
      *
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
@@ -260,21 +260,21 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_objectCopyService;
 
     /**
-     * Address repository
+     * Repository for customer address to perform crud operations
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     protected $addressRepository;
 
     /**
-     * Search criteria builder
+     * It is used for building search criteria
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Filter builder
+     * This is used for holding  builder object for filter service
      *
      * @var \Magento\Framework\Api\FilterBuilder
      */
@@ -1356,7 +1356,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $old = $this->getAddressesCollection()->getItemById($address->getId())
             ?? $this->getBillingAddress();
-        if (!empty($old)) {
+        if ($old !== null) {
             $old->addData($address->getData());
         } else {
             $this->addAddress($address->setAddressType(Address::TYPE_BILLING));
@@ -1378,7 +1378,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         } else {
             $old = $this->getAddressesCollection()->getItemById($address->getId())
                 ?? $this->getShippingAddress();
-            if (!empty($old)) {
+            if ($old !== null) {
                 $old->addData($address->getData());
             } else {
                 $this->addAddress($address->setAddressType(Address::TYPE_SHIPPING));
@@ -1557,10 +1557,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         if ($item) {
             $item->setQuote($this);
-            /**
-             * If we remove item from quote - we can't use multishipping mode
-             */
-            $this->setIsMultiShipping(false);
             $item->isDeleted(true);
             if ($item->getHasChildren()) {
                 foreach ($item->getChildren() as $child) {
