@@ -17,7 +17,7 @@ class ConfigurableProduct extends AbstractPrice
     /**
      * Price type final.
      */
-    public const PRICE_CODE = 'final_price';
+    const PRICE_CODE = 'final_price';
 
     /**
      * @var ItemInterface
@@ -57,17 +57,7 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getValue()
     {
-        $product = $this->getProduct();
-        $price = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
-
-        if ($product->getProductOptionsCollection()) {
-            foreach ($product->getProductOptionsCollection() as $configurationOptionsVal) {
-                $configurableOptionsData = $configurationOptionsVal->getValues();
-                foreach ($configurableOptionsData as $configurableOptionData) {
-                    $price += $configurableOptionData->getPrice();
-                }
-            }
-        }
+        $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
 
         return max(0, $price);
     }

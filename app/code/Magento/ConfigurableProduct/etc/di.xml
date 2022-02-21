@@ -30,7 +30,7 @@
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Order\Admin\Item\Plugin\Configurable" sortOrder="50" />
     </type>
     <type name="Magento\Catalog\Helper\Product\Configuration">
-        <plugin name="configurable_product" type="Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin" sortOrder="50" />
+        <plugin name="configurable_product" type="Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin" sortOrder="50" disabled="true"/>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="ConfigurableProduct::skipValidation" type="Magento\ConfigurableProduct\Plugin\Model\Attribute\Backend\AttributeValidation"/>

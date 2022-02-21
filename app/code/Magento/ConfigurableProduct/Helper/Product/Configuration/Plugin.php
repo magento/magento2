@@ -6,6 +6,10 @@
  */
 namespace Magento\ConfigurableProduct\Helper\Product\Configuration;
 
+/**
+ * @deprecated
+ * @see Magento\ConfigurableProduct\Helper\Catalog\Product\Configuration
+ */
 class Plugin
 {
     /**
