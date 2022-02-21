@@ -139,7 +139,7 @@ class OrderService implements OrderManagementInterface
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory)
     {
         $order = $this->orderRepository->get($id);
-        if(!$statusHistory->getStatus()){
+        if (!$statusHistory->getStatus()) {
             $statusHistory->setStatus($order->getStatus());
         }
         $order->addStatusHistory($statusHistory);
