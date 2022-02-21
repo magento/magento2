@@ -9,6 +9,7 @@ use Magento\Customer\Block\DataProviders\AddressAttributeData;
 use Magento\Customer\ViewModel\Address\RegionProvider;
 use Magento\Framework\View\Element\Template;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Customer\ViewModel\CreateAccountButton;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register
@@ -27,7 +28,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Customer\Block\Widget\Company $block */
         $block = Bootstrap::getObjectManager()->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
-            ->setShowAddressFields(true);
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -42,10 +44,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testTelephoneDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -60,10 +62,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testFaxDefault(): void
     {
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -85,10 +87,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -110,10 +112,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -135,10 +137,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
@@ -151,10 +153,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     public function testCityWithStoreLabel(): void
     {
         /** @var \Magento\Customer\Block\Form\Register $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-            ->setShowAddressFields(true);
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setCreateAccountButtonViewModel(Bootstrap::getObjectManager()->create(CreateAccountButton::class));
         $this->setAttributeDataProvider($block);
         $this->setRegionProvider($block);
 
