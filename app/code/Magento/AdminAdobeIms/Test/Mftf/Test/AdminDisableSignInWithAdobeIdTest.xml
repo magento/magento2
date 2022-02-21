@@ -18,7 +18,7 @@
             <testCaseId value="CABPI-110"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminImsAuthModule" />
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
         </before>
         <after />
 

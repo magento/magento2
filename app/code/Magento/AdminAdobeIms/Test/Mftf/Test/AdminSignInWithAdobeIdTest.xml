@@ -18,10 +18,10 @@
             <testCaseId value="CABPI-102"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableIms" />
+            <actionGroup ref="AdminEnableAdobeImsActionGroup" stepKey="enableAdminAdobeImsModule" />
         </before>
         <after>
-            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminImsAuthModule" />
+            <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
         </after>
 
         <!-- Navigate to admin page -->
