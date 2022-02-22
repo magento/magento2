@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Service;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Psr\Log\InvalidArgumentException;
+use Magento\Framework\Exception\InvalidArgumentException;
 
 class ImsOrganizationService
 {
     public const ORGANIZATION_ERROR_MESSAGE = 'The Adobe ID you\'re using does not belong to the organization ' .
-        'that controlling this Commerce instance. Contact your administrator so he can add your Adobe ID' .
+        'that controlling this Commerce instance. Contact your administrator so he can add your Adobe ID ' .
         'to the organization.';
 
     /**
@@ -38,7 +38,7 @@ class ImsOrganizationService
      *
      * @param array $profile
      * @return bool
-     * @throws AdobeImsOrganizationAuthorizationException
+     * @throws AdobeImsOrganizationAuthorizationException|InvalidArgumentException
      */
     public function checkOrganizationAllocation(array $profile): bool
     {

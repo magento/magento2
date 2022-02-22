@@ -13,7 +13,6 @@ use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationAllocationService;
 use Magento\AdminAdobeIms\Service\ImsOrganizationService;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
@@ -21,7 +20,6 @@ use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Message\ManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
