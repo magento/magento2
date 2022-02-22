@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
+use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdobeIms\Model\GetToken;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
@@ -134,18 +135,17 @@ class ImsConnection
     /**
      * @param string $code
      * @return TokenResponseInterface
-     * @throws AuthorizationException
+     * @throws AdobeImsTokenAuthorizationException
      */
     public function getTokenResponse(string $code): TokenResponseInterface
     {
         try {
             return $this->token->execute($code);
         } catch (AuthorizationException $exception) {
-            throw new AuthorizationException(__('The Adobe ID you\'re using does not belong to the ' .
+            throw new AdobeImsTokenAuthorizationException(__('The Adobe ID you\'re using does not belong to the ' .
                 'organization that controlling this Commerce instance. Contact your administrator so he can add ' .
                 'your Adobe ID to the organization.'));
         }
-
     }
 
     /**
@@ -164,7 +164,7 @@ class ImsConnection
         $curl->get($this->imsConfig->getProfileUrl());
 
         if ($curl->getBody() === '') {
-            throw new AuthorizationException(__('The Adobe ID you\'re using is not added to this Commerce instance' .
+            throw new AdobeImsTokenAuthorizationException(__('The Adobe ID you\'re using is not added to this Commerce instance' .
                 'Contact your organization administrator to request the access.'));
         }
 
