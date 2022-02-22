@@ -1653,7 +1653,7 @@
 
         input {
             .lib-css(margin-right, @indent__s);
-            width: calc(~'100% -' @checkout-tooltip-icon__font-size + @indent__s + @indent__xs);
+            width: calc(~'100%' - (@checkout-tooltip-icon__font-size + @indent__s + @indent__xs));
         }
     }
 }
