@@ -14,6 +14,7 @@ use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\ImsOrganizationAllocationService;
+use Magento\AdminAdobeIms\Service\ImsOrganizationService;
 use Magento\Backend\App\Action\Context;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\Backend\Controller\Adminhtml\Auth;
@@ -21,6 +22,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Message\ManagerInterface;
+use Psr\Log\LoggerInterface;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
@@ -30,12 +32,6 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
-    private ImsOrganizationAllocationService $organizationAllocationService;
-
-    /**
-     * @var AdminLoginProcessService
-     */
-    private AdminLoginProcessService $adminLoginProcessService;
 
     /**
      * @var ImsConfig
@@ -43,20 +39,42 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     private ImsConfig $imsConfig;
 
     /**
+     * @var ImsOrganizationService
+     */
+    private ImsOrganizationService $organizationService;
+
+    /**
+     * @var AdminLoginProcessService
+     */
+    private AdminLoginProcessService $adminLoginProcessService;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param Context $context
      * @param ImsConnection $imsConnection
-     * @param ManagerInterface $messageManager
-     * @param AdminLoginProcessService $adminLoginProcessService
      * @param ImsConfig $imsConfig
+     * @param ImsOrganizationService $organizationService
+     * @param AdminLoginProcessService $adminLoginProcessService
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Context $context,
         ImsConnection $imsConnection,
-        ImsOrganizationAllocationService $organizationAllocationService
+        ImsConfig $imsConfig,
+        ImsOrganizationService $organizationService,
+        AdminLoginProcessService $adminLoginProcessService,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
-        $this->organizationAllocationService = $organizationAllocationService;
+        $this->imsConfig = $imsConfig;
+        $this->organizationService = $organizationService;
+        $this->adminLoginProcessService = $adminLoginProcessService;
+        $this->logger = $logger;
     }
 
     /**
@@ -86,7 +104,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             if (empty($profile['email'])) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
-            $this->organizationAllocationService->checkOrganizationAllocation($accessToken);
+            $this->organizationService->checkOrganizationAllocation($profile);
             $this->adminLoginProcessService->execute($profile, $tokenResponse);
         } catch (AdobeImsTokenAuthorizationException $e) {
             $this->imsErrorMessage(
@@ -99,6 +117,8 @@ class ImsCallback extends Auth implements HttpGetActionInterface
                 $e->getMessage()
             );
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage());
+
             $this->imsErrorMessage(
                 'Error signing in',
                 'Something went wrong and we could not sign you in. ' .
