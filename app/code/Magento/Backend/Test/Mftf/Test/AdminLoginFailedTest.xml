@@ -24,6 +24,8 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin">
             <argument name="password" value="INVALID!{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         </actionGroup>
+        <!-- explicit timout (70) -->
+        <waitForElement selector="{{AdminCreateBackupFormSection.backupNameField}}" time="70" stepKey="wait"/>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="assertErrorMessage"/>
     </test>
 </tests>

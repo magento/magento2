@@ -23,6 +23,8 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+        <!-- no explicit timout (should use default) -->
+        <waitForElement selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="wait"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>
 </tests>

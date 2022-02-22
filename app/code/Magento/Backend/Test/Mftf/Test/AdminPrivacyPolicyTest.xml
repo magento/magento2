@@ -22,6 +22,8 @@
 
         <!-- Logging in Magento admin and checking for Privacy policy footer in dashboard -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!-- section element timout (70) -->
+        <waitForElement selector="{{AdminForgotPasswordFormSection.retrievePasswordButton}}" stepKey="wait"/>
         <closeAdminNotification stepKey="closeAdminNotification"/>
         <actionGroup ref="AssertLinkActionGroup" stepKey="seePrivacyPolicyLinkDashboard">
             <argument name="text" value="Privacy Policy"/>
