@@ -68,6 +68,13 @@
                    name="load-icons"
                    template="Magento_AdminAdobeIms::load_icons.phtml" before="login.content" />
         </referenceBlock>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="show_part" xsi:type="string">logo</argument>
+                <argument name="edition" translate="true" xsi:type="string">Adobe Commerce</argument>
+                <argument name="logo_image_src" xsi:type="string">Magento_AdminAdobeIms::images/adobe-commerce-dark.png</argument>
+            </arguments>
+        </referenceBlock>
         <attribute name="class" value="spectrum" />
         <attribute name="class" value="spectrum--medium" />
         <attribute name="class" value="spectrum--light" />
