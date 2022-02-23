@@ -63,6 +63,11 @@
              type="text/css" />
     </head>
     <body>
+        <referenceBlock name="root">
+            <block class="Magento\Framework\View\Element\Template"
+                   name="load-icons"
+                   template="Magento_AdminAdobeIms::load_icons.phtml" before="login.content" />
+        </referenceBlock>
         <attribute name="class" value="spectrum" />
         <attribute name="class" value="spectrum--medium" />
         <attribute name="class" value="spectrum--light" />

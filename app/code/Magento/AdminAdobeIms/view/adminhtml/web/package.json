@@ -25,6 +25,7 @@
     "@spectrum-css/quickaction": "^3.0.16",
     "@spectrum-css/typography": "^4.0.11",
     "@spectrum-css/underlay": "^2.0.22",
-    "@spectrum-css/vars": "^6.1.1"
+    "@spectrum-css/vars": "^6.1.1",
+    "loadicons": "^1.0.0"
   }
 }

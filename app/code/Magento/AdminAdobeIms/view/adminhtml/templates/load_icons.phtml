@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Framework\View\Element\Messages
+ * @var $escaper \Magento\Framework\Escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+$scriptString = <<<script
+require(['loadIcons'], function (loadIcons) {
+        loadIcons("{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::node_modules/@spectrum-css/icon/dist/spectrum-css-icons.svg'))}");
+    });
+script;
+
+echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
+?>

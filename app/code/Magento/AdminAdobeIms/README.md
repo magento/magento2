@@ -17,7 +17,7 @@ If Admin Adobe Ims module is disabled, cli command will show message "Module is 
 CABPI-196 Login Display
 ---
 
-1. Add new layout handle to page if our module is enabled,
+1. Add new layout handle to page if our module is enabled, - done
 2. Update header logo. Using similar to enterprise change for logo? Maybe but just for the login page,
 
 ```xml
@@ -42,10 +42,11 @@ CABPI-196 Login Display
    5. @spectrum-css/dialog@6.0.1
 6. Build and include a minified css file https://github.com/adobe/spectrum-css#optimizing-spectrum-css
 7. Check out https://spectrum.adobe.com/page/cards/ & https://opensource.adobe.com/spectrum-css/dialog.html
-8. Remove "page-wrapper" class on root,
+8. Remove "page-wrapper" class on root, - done
 9. Add html with correct format
    1. Background full width and change image based on viewer size,
    2. Text left, - Done
    3. Notification right, - Done
    4. copyright under, - Done
-   5. Error Message design,
+   5. Error Message design, - Done
+10. Fix MFTF tests
