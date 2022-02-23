@@ -32,8 +32,8 @@ CABPI-196 Login Display
 </page>
 ```
 
-3. Include css in customer layout handle,
-4. Change/remove blocks when needed based on the handle,
+3. Include css in customer layout handle, - Done
+4. Change/remove blocks when needed based on the handle, - Done
 5. Include only specturm elements we need:
    1. @spectrum-css/inlinealert@4.0.2
    2. @spectrum-css/button@6.0.2
@@ -44,7 +44,8 @@ CABPI-196 Login Display
 7. Check out https://spectrum.adobe.com/page/cards/ & https://opensource.adobe.com/spectrum-css/dialog.html
 8. Remove "page-wrapper" class on root,
 9. Add html with correct format
-   1. Background full width,
-   2. Text left,
-   3. Notification right,
-   4. copyright under,
+   1. Background full width and change image based on viewer size,
+   2. Text left, - Done
+   3. Notification right, - Done
+   4. copyright under, - Done
+   5. Error Message design,
