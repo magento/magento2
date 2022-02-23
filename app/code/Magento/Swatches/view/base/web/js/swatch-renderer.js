@@ -1248,10 +1248,9 @@ define([
          */
         _setImageType: function (images) {
             var initial = this.options.mediaGalleryInitial[0].img;
-            var mediaGalleryInitial = this.options.mediaGalleryInitial;
 
-            if (images[0].img === initial && (images.length === mediaGalleryInitial.length)) {
-                images = $.extend(true, [], mediaGalleryInitial);
+            if (images[0].img === initial && images.length === this.options.mediaGalleryInitial.length) {
+                images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
                 images.map(function (img) {
                     if (!img.type) {
