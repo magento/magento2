@@ -262,8 +262,9 @@ class Options extends \Magento\Backend\Block\Template
         $value['intype'] = $inputType;
         $value['id'] = $option['value'];
         $value['sort_order'] = 0;
-
-        foreach ($this->getStores() as $store) {
+        
+        $storeList = $this->getStores();
+        foreach ($storeList as $store) {
             $storeId = $store->getId();
             $value['store' . $storeId] = $storeId ==
             \Magento\Store\Model\Store::DEFAULT_STORE_ID ? $valuePrefix . $this->escapeHtml($option['label']) : '';
