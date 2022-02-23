@@ -58,6 +58,9 @@
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/typography/dist/index-vars.css"
              rel="stylesheet"
              type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/inlinealert/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
     </head>
     <body>
         <attribute name="class" value="spectrum" />
@@ -82,6 +85,16 @@
                 </arguments>
             </referenceBlock>
         </referenceContainer>
+
+        <referenceBlock name="messages">
+            <arguments>
+                <argument name="message_view_model" xsi:type="object">Magento\AdminAdobeIms\ViewModel\MessageViewModel</argument>
+            </arguments>
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_AdminAdobeIms::messages/wrapper.phtml</argument>
+            </action>
+        </referenceBlock>
+        <move element="messages" destination="adminhtml_auth_login_sso" before="-"/>
 
         <referenceContainer name="login.footer" htmlClass="adobe-ims-footer">
             <container name="login.footer.typography.wrapper" htmlTag="div" htmlClass="spectrum-Body spectrum-Body--sizeM" />

@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Backend\Block\Template
+ */
+?>
+<div class="spectrum-InLineAlert spectrum-InLineAlert--error">
+    <svg class="spectrum-Icon spectrum-Icon--sizeM spectrum-InLineAlert-icon" focusable="false" aria-hidden="true">
+        <use xlink:href="#spectrum-icon-18-Alert" />
+    </svg>
+    <div class="spectrum-InLineAlert-header"><?php echo $block->getData('headline'); ?></div>
+    <div class="spectrum-InLineAlert-content"><?php echo $block->getData('message'); ?></div>
+</div>
+

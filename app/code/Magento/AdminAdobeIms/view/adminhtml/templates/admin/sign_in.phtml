@@ -18,6 +18,8 @@ $viewModel = $block->getLinkViewModel();
             <h1 class="spectrum-Dialog-heading spectrum-Heading spectrum-Heading--sizeXL"><?= $escaper->escapeHtml(__('Sign In')) ?></h1>
 
             <section class="spectrum-Dialog-content">
+                <?= $block->getChildHtml('messages') ?>
+
                 <p class="spectrum-Body spectrum-Body--sizeM">
                     <?= $escaper->escapeHtml(__('This Commerce instance is managed by an organization. Contact your organization administrator to request access.')) ?>
                 </p>
