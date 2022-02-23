@@ -70,8 +70,7 @@
             <referenceBlock name="admin.login" remove="true"/>
             <block class="Magento\Backend\Block\Template"
                    name="adminhtml_auth_login_sso"
-                   template="Magento_AdminAdobeIms::admin/sign_in.phtml"
-                   ifconfig="adobe_ims/integration/enabled">
+                   template="Magento_AdminAdobeIms::admin/sign_in.phtml">
                 <arguments>
                     <argument name="link_view_model" xsi:type="object">Magento\AdminAdobeIms\ViewModel\LinkViewModel</argument>
                 </arguments>
@@ -90,5 +89,11 @@
         <move element="copyright" destination="login.footer.typography.wrapper" before="-" />
 
         <move element="login.header" destination="login.content" before="-" />
+        <referenceContainer name="login.header">
+            <block class="Magento\Backend\Block\Template"
+                   name="adminhtml_auth_login_note"
+                   template="Magento_AdminAdobeIms::admin/note.phtml">
+            </block>
+        </referenceContainer>
     </body>
 </page>
