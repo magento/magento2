@@ -55,6 +55,9 @@
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/card/dist/index-vars.css"
              rel="stylesheet"
              type="text/css" />
+        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/typography/dist/index-vars.css"
+             rel="stylesheet"
+             type="text/css" />
     </head>
     <body>
         <attribute name="class" value="spectrum" />
@@ -81,7 +84,11 @@
             </referenceBlock>
         </referenceContainer>
 
-        <referenceContainer name="login.footer" htmlClass="adobe-ims-footer" />
+        <referenceContainer name="login.footer" htmlClass="adobe-ims-footer">
+            <container name="login.footer.typography.wrapper" htmlTag="div" htmlClass="spectrum-Body spectrum-Body--sizeM" />
+        </referenceContainer>
+        <move element="copyright" destination="login.footer.typography.wrapper" before="-" />
+
         <!-- TODO: include these correctly -->
         <referenceContainer name="login.header" remove="true"/>
     </body>
