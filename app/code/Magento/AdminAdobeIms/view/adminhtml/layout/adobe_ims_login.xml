@@ -61,6 +61,8 @@
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/inlinealert/dist/index-vars.css"
              rel="stylesheet"
              type="text/css" />
+
+        <!--<link src="Magento_AdminAdobeIms::js/bootstrap.js"/>-->
     </head>
     <body>
         <referenceBlock name="root">

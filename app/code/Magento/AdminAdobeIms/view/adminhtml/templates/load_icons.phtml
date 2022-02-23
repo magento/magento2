@@ -11,8 +11,11 @@
  */
 $scriptString = <<<script
 require(['loadIcons'], function (loadIcons) {
-        loadIcons("{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::node_modules/@spectrum-css/icon/dist/spectrum-css-icons.svg'))}");
-    });
+    loadIcons(
+        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::node_modules/@spectrum-css/icon/dist/spectrum-css-icons.svg'))}",
+         function(result){ console.log("Loaded Spectrum icons."); }
+    );
+});
 script;
 
 echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
