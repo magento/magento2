@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
@@ -50,6 +51,12 @@ class Product implements RevertibleDataFixtureInterface
         'updated_at' => null,
     ];
 
+    private const DEFAULT_PRODUCT_LINK_DATA = [
+        'sku' => null,
+        'type' => 'related',
+        'position' => 1,
+    ];
+
     /**
      * @var ServiceFactory
      */
@@ -66,17 +73,24 @@ class Product implements RevertibleDataFixtureInterface
     private $dataMerger;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      */
     public function __construct(
         ServiceFactory $serviceFactory,
         ProcessorInterface $dataProcessor,
-        DataMerger $dataMerger
+        DataMerger $dataMerger,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
         $this->dataMerger = $dataMerger;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -122,6 +136,49 @@ class Product implements RevertibleDataFixtureInterface
             unset($data['extension_attributes']['category_links']);
         }
 
+        $data['product_links'] = $this->prepareLinksData($data);
+
         return $this->dataProcessor->process($this, $data);
+    }
+
+    /**
+     * Prepare links data
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareLinksData(array $data): array
+    {
+        $links = [];
+
+        $position = 1;
+        foreach ($data['product_links'] as $link) {
+            $defaultLinkData = self::DEFAULT_PRODUCT_LINK_DATA;
+            $defaultLinkData['position'] = $position;
+            $linkData = [];
+            if (is_numeric($link)) {
+                $product = $this->productRepository->getById($link);
+            } elseif (is_string($link)) {
+                $product = $this->productRepository->get($link);
+            } elseif ($link instanceof ProductInterface) {
+                $product = $this->productRepository->get($link->getSku());
+            } else {
+                $linkData = $link instanceof DataObject ? $link->toArray() : $link;
+                $product = $this->productRepository->get($linkData['sku']);
+            }
+
+            $linkData += $defaultLinkData;
+            $links[] = [
+                'sku' => $data['sku'],
+                'link_type' => $linkData['type'],
+                'linked_product_sku' => $product->getSku(),
+                'linked_product_type' =>  $product->getTypeId(),
+                'position' => $linkData['position'],
+                'extension_attributes' => array_diff_key($linkData, $defaultLinkData),
+            ];
+            $position++;
+        }
+
+        return $links;
     }
 }
