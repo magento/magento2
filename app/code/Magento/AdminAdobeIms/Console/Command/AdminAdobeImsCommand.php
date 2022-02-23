@@ -35,6 +35,11 @@ class AdminAdobeImsCommand extends Command
     private const MODE_ARGUMENT = 'status';
 
     /**
+     * Name of "organization-id" input option
+     */
+    private const ORGANIZATION_ID_ARGUMENT = 'organization-id';
+
+    /**
      * Name of "client-id" input option
      */
     private const CLIENT_ID_ARGUMENT = 'client-id';
@@ -43,6 +48,21 @@ class AdminAdobeImsCommand extends Command
      * Name of "client-secret" input option
      */
     private const CLIENT_SECRET_ARGUMENT = 'client-secret';
+
+    /**
+     * Human readable name for Organization ID input option
+     */
+    private const ORGANIZATION_ID_NAME = 'Organization ID';
+
+    /**
+     * Human readable name for Client ID input option
+     */
+    private const CLIENT_ID_NAME = 'Client ID';
+
+    /**
+     * Human readable name for Client Secret input option
+     */
+    private const CLIENT_SECRET_NAME = 'Client Secret';
 
     /**
      * @var ImsConfig
@@ -83,6 +103,12 @@ class AdminAdobeImsCommand extends Command
                     'The status of the module. Available options are "enable", "disable" or "status"'
                 ),
                 new InputOption(
+                    self::ORGANIZATION_ID_ARGUMENT,
+                    'o',
+                    InputOption::VALUE_OPTIONAL,
+                    'Set Organization ID for Adobe IMS configuration. Required when enabling the module'
+                ),
+                new InputOption(
                     self::CLIENT_ID_ARGUMENT,
                     'c',
                     InputOption::VALUE_OPTIONAL,
@@ -95,6 +121,7 @@ class AdminAdobeImsCommand extends Command
                     'Set the client Secret for Adobe IMS configuration. Required when enabling the module'
                 )
             ]);
+
         parent::configure();
     }
 
@@ -107,52 +134,42 @@ class AdminAdobeImsCommand extends Command
             $mode = $input->getArgument(self::MODE_ARGUMENT);
             switch ($mode) {
                 case self::MODE_DISABLE:
-                    $this->disableAdobeImsModule($output);
+                    $this->disableModule($output);
                     $output->writeln(__('Admin Adobe IMS integration is disabled'));
                     break;
                 case self::MODE_ENABLE:
-                    $clientId = $input->getOption(self::CLIENT_ID_ARGUMENT);
-                    $clientSecret = $input->getOption(self::CLIENT_SECRET_ARGUMENT);
+                    $organizationId = trim($input->getOption(self::ORGANIZATION_ID_ARGUMENT) ?? '');
+                    $clientId = trim($input->getOption(self::CLIENT_ID_ARGUMENT) ?? '');
+                    $clientSecret = trim($input->getOption(self::CLIENT_SECRET_ARGUMENT) ?? '');
+                    $helper = $this->getHelper('question');
 
-                    if ($clientId === null) {
-                        $helper = $this->getHelper('question');
-                        $question = new Question('Please enter your Client ID:', '');
-                        $question->setValidator(function ($value) {
-                            if (trim($value) === '') {
-                                throw new LocalizedException(__('The Client ID is required to enable the Admin Adobe IMS Module'));
-                            }
-                            return $value;
-                        });
-
+                    if (!$organizationId) {
+                        $question = $this->prepareQuestion(self::ORGANIZATION_ID_NAME);
+                        $organizationId = $helper->ask($input, $output, $question);
+                    }
+                    if (!$clientId) {
+                        $question = $this->prepareQuestion(self::CLIENT_ID_NAME);
                         $clientId = $helper->ask($input, $output, $question);
                     }
 
-                    if ($clientSecret === null) {
-                        $helper = $this->getHelper('question');
-                        $question = new Question('Please enter your Client Key:', '');
-                        $question->setHidden(true);
-                        $question->setHiddenFallback(false);
-                        $question->setValidator(function ($value) {
-                            if (trim($value) === '') {
-                                throw new LocalizedException(__('The Client Secret is required to enable the Admin Adobe IMS Module'));
-                            }
-                            return $value;
-                        });
-
+                    if (!$clientSecret) {
+                        $question = $this->prepareHiddenQuestion(self::CLIENT_SECRET_NAME);
                         $clientSecret = $helper->ask($input, $output, $question);
                     }
 
-                    if ($clientId && $clientSecret) {
-                        $enabled = $this->enableAdobeImsModule($output, $clientId, $clientSecret);
+                    if ($clientId && $clientSecret && $organizationId) {
+                        $enabled = $this->enableModule($clientId, $clientSecret, $organizationId);
                         if ($enabled) {
                             $output->writeln(__('Admin Adobe IMS integration is enabled'));
                         }
                     } else {
-                        throw new LocalizedException(__('The Client ID and Client Secret are required when enabling the Admin Adobe IMS Module'));
+                        throw new LocalizedException(
+                            __('The Client ID, Client Secret and Organization ID are required when enabling the Admin Adobe IMS Module')
+                        );
                     }
                     break;
                 case self::MODE_STATUS:
-                    $status = $this->getAdobeImsModuleStatus();
+                    $status = $this->getModuleStatus();
                     $output->writeln(__('Admin Adobe IMS integration is %1', $status));
                     break;
                 default:
@@ -171,9 +188,11 @@ class AdminAdobeImsCommand extends Command
     }
 
     /**
+     * Get Admin Adobe IMS Module status
+     *
      * @return string
      */
-    private function getAdobeImsModuleStatus(): string
+    private function getModuleStatus(): string
     {
         return $this->imsConfig->enabled() ? self::MODE_ENABLE .'d' : self::MODE_DISABLE.'d';
     }
@@ -184,13 +203,14 @@ class AdminAdobeImsCommand extends Command
      * @param OutputInterface $output
      * @return void
      */
-    private function disableAdobeImsModule(OutputInterface $output): void
+    private function disableModule(OutputInterface $output): void
     {
         $this->imsConfig->updateConfig(
             ImsConfig::XML_PATH_ENABLED,
             '0'
         );
 
+        $this->imsConfig->deleteConfig(ImsConfig::XML_PATH_ORGANIZATION_ID);
         $this->imsConfig->deleteConfig(ImsConfig::XML_PATH_API_KEY);
         $this->imsConfig->deleteConfig(ImsConfig::XML_PATH_PRIVATE_KEY);
     }
@@ -198,16 +218,16 @@ class AdminAdobeImsCommand extends Command
     /**
      * Enable Admin Adobe IMS Module and set Client ID and Client Secret when testConnection was successfully
      *
-     * @param OutputInterface $output
      * @param string $clientId
      * @param string $clientSecret
+     * @param string $organizationId
      * @return bool
      * @throws InvalidArgumentException
      */
-    private function enableAdobeImsModule(
-        OutputInterface $output,
+    private function enableModule(
         string $clientId,
-        string $clientSecret
+        string $clientSecret,
+        string $organizationId
     ): bool {
         $testAuth = $this->imsConnection->testAuth($clientId);
 
@@ -215,6 +235,11 @@ class AdminAdobeImsCommand extends Command
             $this->imsConfig->updateConfig(
                 ImsConfig::XML_PATH_ENABLED,
                 '1'
+            );
+
+            $this->imsConfig->updateSecureConfig(
+                ImsConfig::XML_PATH_ORGANIZATION_ID,
+                $organizationId
             );
 
             $this->imsConfig->updateSecureConfig(
@@ -231,5 +256,41 @@ class AdminAdobeImsCommand extends Command
         }
 
         return false;
+    }
+
+    /**
+     * Prepare Question for parameter
+     *
+     * @param string $paramName
+     * @return Question
+     */
+    private function prepareQuestion(string $paramName): Question
+    {
+        $question = new Question('Please enter your ' . $paramName . ':', '');
+        $question->setValidator(function ($value) {
+            if (trim($value) === '') {
+                throw new LocalizedException(
+                    __('This field is required to enable the Admin Adobe IMS Module')
+                );
+            }
+            return $value;
+        });
+
+        return $question;
+    }
+
+    /**
+     * Prepare Hidden Question for parameter
+     *
+     * @param string $paramName
+     * @return Question
+     */
+    private function prepareHiddenQuestion(string $paramName): Question
+    {
+        $question = $this->prepareQuestion($paramName);
+        $question->setHidden(true);
+        $question->setHiddenFallback(false);
+
+        return $question;
     }
 }
