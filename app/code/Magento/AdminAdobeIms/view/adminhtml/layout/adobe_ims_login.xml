@@ -89,7 +89,6 @@
         </referenceContainer>
         <move element="copyright" destination="login.footer.typography.wrapper" before="-" />
 
-        <!-- TODO: include these correctly -->
-        <referenceContainer name="login.header" remove="true"/>
+        <move element="login.header" destination="login.content" before="-" />
     </body>
 </page>
