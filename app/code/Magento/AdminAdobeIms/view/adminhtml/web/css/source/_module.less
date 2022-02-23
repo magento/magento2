@@ -18,6 +18,14 @@
 
     .admin-ims-login-wrapper {
         flex: 1 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .spectrum-Modal {
+            width: 470px;
+            height: 581px;
+        }
     }
 
     .adobe-ims-footer {
@@ -30,25 +38,5 @@
         display: flex;
         justify-content: flex-end;
         padding-right: 15px;
-    }
-
-    .adobe-id-login-wrapper {
-        margin-top: 30px;
-
-        a {
-            appearance: button;
-            background: @color-white;
-            border: 1px solid @color-very-dark-gray-black;
-            border-radius: 10rem;
-            color: initial;
-            display: block;
-            font-weight: bold;
-            padding: 1rem;
-            text-align: center;
-            text-decoration: none;
-            width: 100%;
-            -webkit-appearance: button;
-            -moz-appearance: button;
-        }
     }
 }
