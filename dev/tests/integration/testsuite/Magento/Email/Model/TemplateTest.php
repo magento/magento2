@@ -870,4 +870,31 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->model->setOptions($options);
         $this->assertEquals($options, $this->model->getDesignConfig()->getData());
     }
+
+    /**
+     * @magentoConfigFixture default_store general/store_information/name Test Store
+     * @magentoConfigFixture default_store general/store_information/street_line1 Street 1
+     * @magentoConfigFixture default_store general/store_information/street_line2 Street 2
+     * @magentoConfigFixture default_store general/store_information/city Austin
+     * @magentoConfigFixture default_store general/store_information/zip 78758
+     * @magentoConfigFixture default_store general/store_information/country_id US
+     * @magentoConfigFixture default_store general/store_information/region_id 57
+     */
+    public function testStoreFormattedAddress()
+    {
+        $this->mockModel();
+        $this->model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+
+        /* See app/design/frontend/Magento/luma/Magento_Email/email/footer.html */
+        $template = '{{var store.formatted_address|raw}}';
+        $this->model->setTemplateText($template);
+
+        $result = $this->model->getProcessedTemplate();
+        $this->assertStringContainsString('Test Store', $result);
+        $this->assertStringContainsString('Street 1', $result);
+        $this->assertStringContainsString('Street 2', $result);
+        $this->assertStringContainsString('Austin', $result);
+        $this->assertStringContainsString('Texas', $result);
+        $this->assertStringContainsString('United States', $result);
+    }
 }

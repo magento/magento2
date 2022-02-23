@@ -93,4 +93,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\Store">
+        <plugin name="EmailTemplateStoreAddress" type="Magento\Email\Model\Plugin\StoreAddress"/>
+    </type>
 </config>
