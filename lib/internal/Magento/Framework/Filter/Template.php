@@ -418,6 +418,7 @@ class Template implements \Zend_Filter_Interface
      *
      * @return bool
      * @since 102.0.4
+     * @deprecated The method is not in use anymore.
      */
     public function isStrictMode(): bool
     {
