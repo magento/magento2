@@ -25,7 +25,7 @@ class MessageViewModel implements ArgumentInterface
     }
 
     /**
-     * We are using this as the main block automatically wraps the error messages.
+     * We are using this as the core block automatically wraps the error messages.
      *
      * @see \Magento\Framework\View\Element\Messages::_renderMessagesByType
      * @param array $messages

@@ -11,6 +11,10 @@
 $viewModel = $block->getMessageViewModel();
 ?>
 
-<?php foreach ($block->getMessageTypes() as $messageType): ?>
-    <?= $viewModel->getMessageHtml($block->getMessagesByType($messageType)) ?>
-<?php endforeach; ?>
+<?php if ($block->getMessageCollection()->getCount() !== 0): ?>
+<div class="adobe-ims-error-message-wrapper">
+    <?php foreach ($block->getMessageTypes() as $messageType): ?>
+        <?= $viewModel->getMessageHtml($block->getMessagesByType($messageType)) ?>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
