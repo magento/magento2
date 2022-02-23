@@ -9,7 +9,6 @@ namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
-use Magento\Framework\App\ObjectManager;
 use Magento\Search\Api\SearchInterface;
 
 /**
@@ -35,21 +34,18 @@ class GetSuggestionFrequency implements GetSuggestionFrequencyInterface
     /**
      * Search suggestion frequency constructor.
      *
-     * @param FilterBuilder|null $filterBuilder
-     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
-     * @param SearchInterface|null $search
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SearchInterface $search
      */
     public function __construct(
-        ?FilterBuilder $filterBuilder = null,
-        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        ?SearchInterface $search = null
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchInterface $search
     ) {
-        $this->filterBuilder = $filterBuilder ?:
-                ObjectManager::getInstance()->get(FilterBuilder::class);
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?:
-            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
-        $this->search = $search ?:
-            ObjectManager::getInstance()->get(SearchInterface::class);
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->search = $search;
     }
     /**
      * Get the search suggestion frequency
