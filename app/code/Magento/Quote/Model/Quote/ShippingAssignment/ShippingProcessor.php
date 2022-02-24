@@ -10,6 +10,7 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\ShippingFactory;
 use Magento\Quote\Model\ShippingAddressManagement;
 use Magento\Quote\Model\ShippingMethodManagement;
+use Magento\Sales\Model\Order;
 
 class ShippingProcessor
 {
@@ -65,10 +66,9 @@ class ShippingProcessor
     {
         $this->shippingAddressManagement->assign($quote->getId(), $shipping->getAddress());
         if (!empty($shipping->getMethod()) && $quote->getItemsCount() > 0) {
-            $nameComponents = explode('_', $shipping->getMethod());
-            $carrierCode = array_shift($nameComponents);
-            // carrier method code can contains more one name component
-            $methodCode = implode('_', $nameComponents);
+            $nameComponents = explode(Order::DELIMITER_SHIPPING_METHOD, $shipping->getMethod());
+            $carrierCode = $nameComponents[0];
+            $methodCode = $nameComponents[1];
             $this->shippingMethodManagement->apply($quote->getId(), $carrierCode, $methodCode);
         }
     }
