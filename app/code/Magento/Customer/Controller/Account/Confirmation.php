@@ -115,7 +115,7 @@ class Confirmation extends AbstractAccount implements HttpGetActionInterface, Ht
     }
 
     /**
-     * Returns redirect objects
+     * Returns redirect object
      *
      * @param string $path
      * @param array $params
