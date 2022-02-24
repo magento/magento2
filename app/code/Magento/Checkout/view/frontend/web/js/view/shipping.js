@@ -260,7 +260,7 @@ define([
         isLoading: shippingService.isLoading,
         isSelected: ko.computed(function () {
             return quote.shippingMethod() ?
-                quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
+                quote.shippingMethod()['carrier_code'] + '::' + quote.shippingMethod()['method_code'] :
                 null;
         }),
 
@@ -270,7 +270,7 @@ define([
          */
         selectShippingMethod: function (shippingMethod) {
             selectShippingMethodAction(shippingMethod);
-            checkoutData.setSelectedShippingRate(shippingMethod['carrier_code'] + '_' + shippingMethod['method_code']);
+            checkoutData.setSelectedShippingRate(shippingMethod['carrier_code'] + '::' + shippingMethod['method_code']);
 
             return true;
         },
