@@ -1372,7 +1372,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
-            list($carrierCode, $method) = explode('_', $shippingMethod, 2);
+            list($carrierCode, $method) = preg_split("/::/", $shippingMethod, 2);
             return new \Magento\Framework\DataObject(['carrier_code' => $carrierCode, 'method' => $method]);
         }
     }
