@@ -15,8 +15,4 @@ use Magento\Framework\Exception\AuthorizationException;
  */
 class AdobeImsTokenAuthorizationException extends AuthorizationException
 {
-    /**
-     * @deprecated
-     */
-    const NOT_AUTHORIZED = "The consumer isn't authorized to access %resources.";
 }
