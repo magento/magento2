@@ -118,9 +118,6 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
                     }
                 }
                 $options[$index]['value'] = $option['value'];
-                if (array_key_exists('price', $option)) {
-                    $options[$index]['value'] = $option['value'] .' '. $option['price'];
-                }
             }
         }
 
