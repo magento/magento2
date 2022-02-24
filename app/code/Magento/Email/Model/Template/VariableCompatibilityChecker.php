@@ -13,7 +13,7 @@ use Magento\Framework\Filter\Template\Tokenizer\Variable;
 /**
  * Scan an email template for compatibility with the strict resolver
  */
-class CompatibilityChecker
+class VariableCompatibilityChecker
 {
     private const CONSTRUCTION_DEPEND_PATTERN = '/{{depend\s*(.*?)}}(.*?){{\\/depend\s*}}/si';
     private const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';

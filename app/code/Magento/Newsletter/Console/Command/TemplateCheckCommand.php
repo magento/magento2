@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Console\Command;
 
-use Magento\Newsletter\Model\ResourceModel\Template\Collection;
+use Magento\Email\Console\Command\DatabaseTemplateCompatibilityCommand;
+use Magento\Email\Model\ResourceModel\Template\CollectionFactory as EmailCollectionFactory;
 use Magento\Newsletter\Model\ResourceModel\Template\CollectionFactory;
-use Magento\Newsletter\Model\Template;
-use Magento\Email\Model\Template\CompatibilityChecker;
-use Symfony\Component\Console\Command\Command;
+use Magento\Email\Model\Template\VariableCompatibilityChecker;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Console\Cli;
@@ -19,26 +18,22 @@ use Magento\Framework\Console\Cli;
 /**
  * Scan DB templates for directive incompatibilities
  */
-class TemplateCheckCommand extends Command
+class TemplateCheckCommand extends DatabaseTemplateCompatibilityCommand
 {
     /**
      * @var CollectionFactory
      */
     private CollectionFactory $templateCollection;
 
-    /**
-     * @var CompatibilityChecker
-     */
-    private CompatibilityChecker $compatibilityChecker;
-
     public function __construct(
-        CollectionFactory $templateCollection,
-        CompatibilityChecker $compatibilityChecker,
+        VariableCompatibilityChecker $compatibilityChecker,
+        EmailCollectionFactory $templateCollection,
+        CollectionFactory $newsletterCollectionFactory,
         string $name = null
     ) {
-        parent::__construct($name);
-        $this->templateCollection = $templateCollection;
-        $this->compatibilityChecker = $compatibilityChecker;
+        parent::__construct($compatibilityChecker, $templateCollection, $name);
+
+        $this->templateCollection = $newsletterCollectionFactory;
     }
 
     /**
@@ -46,10 +41,8 @@ class TemplateCheckCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:newsletter-compatibility-check')
-            ->setDescription('Scans newsletter templates for potential compatibility issues');
-
-        parent::configure();
+        $this->setName('dev:email:newsletter-compatibility-check')
+            ->setDescription('Scans newsletter templates for potential variable usage compatibility issues');
     }
 
     /**
@@ -61,53 +54,17 @@ class TemplateCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Collection $collection */
         $collection = $this->templateCollection->create();
         $collection->load();
 
-        $hasErrors = false;
+        $this->hasErrors = false;
         foreach ($collection as $template) {
-            /** @var Template $template */
-            $errors = $this->compatibilityChecker->getCompatibilityIssues($template->getTemplateText());
-            if (!empty($errors)) {
-                $hasErrors = true;
-                $templateName = $template->getTemplateCode();
-                $output->writeln(
-                    '<error>Newsletter "' . $templateName . '" has the following compatibility issues:</error>'
-                );
-                $this->renderErrors($output, $errors);
-            }
-            $errors = $this->compatibilityChecker->getCompatibilityIssues($template->getTemplateSubject());
-            if (!empty($errors)) {
-                $hasErrors = true;
-                $templateName = $template->getTemplateCode();
-                $output->writeln(
-                    '<error>Newsletter "' . $templateName . '" subject has the following compatibility issues:</error>'
-                );
-                $this->renderErrors($output, $errors);
-            }
+            $this->checkTemplate($template, $output);
         }
 
-        if (!$hasErrors) {
+        if (!$this->hasErrors) {
             $output->writeln('<info>No errors detected</info>');
         }
-        return $hasErrors ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * Render given errors
-     *
-     * @param OutputInterface $output
-     * @param array $errors
-     */
-    private function renderErrors(OutputInterface $output, array $errors): void
-    {
-        foreach ($errors as $error) {
-            $error = str_replace(PHP_EOL, PHP_EOL . '   ', $error);
-            $output->writeln(
-                '<error> - ' . $error . '</error>'
-            );
-        }
-        $output->writeln('');
+        return $this->hasErrors ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
     }
 }

@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Email\Console\Command;
 
-use Magento\Email\Model\ResourceModel\Template\Collection;
+use Magento\Email\Model\AbstractTemplate;
 use Magento\Email\Model\ResourceModel\Template\CollectionFactory;
-use Magento\Email\Model\Template;
-use Magento\Email\Model\Template\CompatibilityChecker;
+use Magento\Email\Model\Template\VariableCompatibilityChecker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,7 +18,7 @@ use Magento\Framework\Console\Cli;
 /**
  * Scan DB templates for directive incompatibilities
  */
-class DbTemplateCheckCommand extends Command
+class DatabaseTemplateCompatibilityCommand extends Command
 {
     /**
      * @var CollectionFactory
@@ -27,13 +26,18 @@ class DbTemplateCheckCommand extends Command
     private CollectionFactory $templateCollection;
 
     /**
-     * @var CompatibilityChecker
+     * @var VariableCompatibilityChecker
      */
-    private CompatibilityChecker $compatibilityChecker;
+    private VariableCompatibilityChecker $compatibilityChecker;
+
+    /**
+     * @var bool
+     */
+    protected bool $hasErrors = false;
 
     public function __construct(
+        VariableCompatibilityChecker $compatibilityChecker,
         CollectionFactory $templateCollection,
-        CompatibilityChecker $compatibilityChecker,
         string $name = null
     ) {
         parent::__construct($name);
@@ -46,52 +50,54 @@ class DbTemplateCheckCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:email-override-compatibility-check')
-            ->setDescription('Scans email template overrides for potential compatibility issues');
-
-        parent::configure();
+        $this->setName('dev:email:override-compatibility-check')
+            ->setDescription('Scans email template overrides for potential variable usage compatibility issues');
     }
 
     /**
-     * Executes compatibility checker command
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int|null
+     * @inheritDoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Collection $collection */
         $collection = $this->templateCollection->create();
         $collection->load();
 
-        $hasErrors = false;
+        $this->hasErrors = false;
         foreach ($collection as $template) {
-            /** @var Template $template */
-            $errors = $this->compatibilityChecker->getCompatibilityIssues($template->getTemplateText());
-            if (!empty($errors)) {
-                $hasErrors = true;
-                $templateName = $template->getTemplateCode();
-                $output->writeln(
-                    '<error>Template "' . $templateName . '" has the following compatibility issues:</error>'
-                );
-                $this->renderErrors($output, $errors);
-            }
-            $errors = $this->compatibilityChecker->getCompatibilityIssues($template->getTemplateSubject());
-            if (!empty($errors)) {
-                $hasErrors = true;
-                $templateName = $template->getTemplateCode();
-                $output->writeln(
-                    '<error>Template "' . $templateName . '" subject has the following compatibility issues:</error>'
-                );
-                $this->renderErrors($output, $errors);
-            }
+            $this->checkTemplate($template, $output);
         }
 
-        if (!$hasErrors) {
+        if (!$this->hasErrors) {
             $output->writeln('<info>No errors detected</info>');
         }
-        return $hasErrors ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
+        return $this->hasErrors ? Cli::RETURN_FAILURE : Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Check the given template for compatibility issues
+     *
+     * @param AbstractTemplate $template
+     * @param OutputInterface $output
+     */
+    protected function checkTemplate(AbstractTemplate $template, OutputInterface $output): void
+    {
+        $errors = $this->compatibilityChecker->getCompatibilityIssues($template->getTemplateText());
+        $templateName = $template->getTemplateCode();
+        if (!empty($errors)) {
+            $this->hasErrors = true;
+            $output->writeln(
+                '<error>Template "' . $templateName . '" has the following compatibility issues:</error>'
+            );
+            $this->renderErrors($output, $errors);
+        }
+        $errors = $this->compatibilityChecker->getCompatibilityIssues($template->getTemplateSubject());
+        if (!empty($errors)) {
+            $this->hasErrors = true;
+            $output->writeln(
+                '<error>Template "' . $templateName . '" subject has the following compatibility issues:</error>'
+            );
+            $this->renderErrors($output, $errors);
+        }
     }
 
     /**
