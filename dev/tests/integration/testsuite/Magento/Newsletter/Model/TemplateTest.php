@@ -170,7 +170,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('- some_unique_code - - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 
     /**
@@ -207,6 +207,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 }

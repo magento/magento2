@@ -384,7 +384,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('- some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -417,7 +417,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('- some_unique_code - - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -450,7 +450,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('- some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
