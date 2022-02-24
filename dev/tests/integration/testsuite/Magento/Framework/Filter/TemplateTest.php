@@ -172,7 +172,7 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.format(\'html\')}}';
-        $expected = '<foo>html</foo>';
+        $expected = '';
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
@@ -208,7 +208,7 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.format($arg1,\'bar\',[param1:baz])}}';
-        $expected = 'foo bar baz';
+        $expected = '';
 
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
@@ -228,7 +228,7 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.getFoo($arg1,\'bar\',[param1:baz])}}';
-        $expected = 'foo bar baz';
+        $expected = '';
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
