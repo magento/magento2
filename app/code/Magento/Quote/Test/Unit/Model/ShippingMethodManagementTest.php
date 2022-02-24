@@ -456,7 +456,7 @@ class ShippingMethodManagementTest extends TestCase
             ->willReturn($countryId);
         $this->shippingAddress->expects($this->once())
             ->method('setShippingMethod')
-            ->with($carrierCode . '_' . $methodCode);
+            ->with($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode);
         $this->quote->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
@@ -469,7 +469,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->shippingMock->expects($this->once())
             ->method('setMethod')
-            ->with($carrierCode . '_' . $methodCode);
+            ->with($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode);
 
         $this->shippingAssignmentBuilder->expects($this->once())
             ->method('setShipping')
@@ -527,7 +527,7 @@ class ShippingMethodManagementTest extends TestCase
         $this->shippingAddress->expects($this->once())
             ->method('getCountryId')->willReturn($countryId);
         $this->shippingAddress->expects($this->once())
-            ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
+            ->method('setShippingMethod')->with($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode);
         $this->quote->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
@@ -540,7 +540,7 @@ class ShippingMethodManagementTest extends TestCase
 
         $this->shippingMock->expects($this->once())
             ->method('setMethod')
-            ->with($carrierCode . '_' . $methodCode);
+            ->with($carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode);
 
         $this->shippingAssignmentBuilder->expects($this->once())
             ->method('setShipping')
