@@ -61,8 +61,6 @@
         <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/inlinealert/dist/index-vars.css"
              rel="stylesheet"
              type="text/css" />
-
-        <!--<link src="Magento_AdminAdobeIms::js/bootstrap.js"/>-->
     </head>
     <body>
         <referenceBlock name="root">
@@ -81,6 +79,7 @@
         <attribute name="class" value="spectrum--medium" />
         <attribute name="class" value="spectrum--light" />
         <attribute name="class" value="adobe-ims-body" />
+        <attribute name="dir" value="ltr" />
         <referenceContainer name="root" htmlClass="adobe-ims-root" />
         <referenceContainer name="login.content" htmlClass="admin-ims-login-wrapper" />
         <referenceContainer name="login.content">
