@@ -209,12 +209,16 @@
         <comment userInput="Assert product options in Storefront product page" stepKey="commentAssertProductOptions"/>
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$-1)}}" stepKey="amOnSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoadOnStorefront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$-Updated"  stepKey="seeConfigurableProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeConfigurableProductName">
+            <argument name="value" value="$$createConfigProduct.name$$-Updated"/>
+        </actionGroup>
         <see userInput="{{productAttributeColor.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeColorAttributeName"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="selectFirstOption"/>
+        <waitForPageLoad stepKey="waitForFirstOptionLoad"/>
         <see userInput="{{virtualProductWithRequiredFields.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertFirstOptionProductPrice"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="seeFirstImage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"  userInput="{{colorConfigurableProductAttribute1.name}}" stepKey="selectSecondOption"/>
+        <waitForPageLoad stepKey="waitForSecondOptionLoad"/>
         <see userInput="{{virtualProductWithRequiredFields.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeSecondOptionProductPrice"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="seeSecondImage"/>
     </test>

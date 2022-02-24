@@ -27,7 +27,7 @@ define([
      * @return {String}
      */
     function stringPad(string, times) {
-        return (new Array(times + 1)).join(string);
+        return new Array(times + 1).join(string);
     }
 
     /**

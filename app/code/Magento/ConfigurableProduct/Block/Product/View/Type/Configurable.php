@@ -341,8 +341,13 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             ];
 
             if (isset($tierPrice['excl_tax_price'])) {
-                $excludingTax = $tierPrice['excl_tax_price'];
-                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($excludingTax->getBaseAmount());
+                $exclTax = $tierPrice['excl_tax_price'];
+                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($exclTax->getBaseAmount());
+            }
+
+            if (isset($tierPrice['incl_excl_tax_price'])) {
+                $inclExclTax = $tierPrice['incl_excl_tax_price'];
+                $tierPriceData['incl_excl_tax_price'] = $this->localeFormat->getNumber($inclExclTax->getBaseAmount());
             }
             $tierPrices[] = $tierPriceData;
         }
