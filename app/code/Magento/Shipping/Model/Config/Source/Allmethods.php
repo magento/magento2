@@ -5,6 +5,8 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
+use Magento\Sales\Model\Order;
+
 /**
  * @inheritdoc
  */
@@ -66,7 +68,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
                      continue;
                 }
                 $methods[$carrierCode]['value'][] = [
-                    'value' => $carrierCode . '_' . $methodCode,
+                    'value' => $carrierCode . Order::DELIMITER_SHIPPING_METHOD . $methodCode,
                     'label' => '[' . $carrierCode . '] ' . $methodTitle,
                 ];
             }
