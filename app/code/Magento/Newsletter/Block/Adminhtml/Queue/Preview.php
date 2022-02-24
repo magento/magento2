@@ -14,7 +14,7 @@ namespace Magento\Newsletter\Block\Adminhtml\Queue;
 class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
 {
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $profilerName = "newsletter_queue_proccessing";
 

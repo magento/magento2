@@ -40,8 +40,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     /**
      * Mail object
      *
-     * @deprecated 100.3.0 Unused property
+     * @var \Zend_Mail
      *
+     * @deprecated 100.3.0 Unused property
      */
     protected $_mail;
 
@@ -60,8 +61,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     protected $_request;
 
     /**
-     * Filter factory
-     *
      * @var \Magento\Newsletter\Model\Template\FilterFactory
      */
     protected $_filterFactory;
