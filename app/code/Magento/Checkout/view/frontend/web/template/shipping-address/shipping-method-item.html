@@ -11,8 +11,8 @@
                class="radio"
                ifnot="method.error_message"
                ko-checked="element.isSelected"
-               ko-value="method.carrier_code + '_' + method.method_code"
-               attr="'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code,
+               ko-value="method.carrier_code + '::' + method.method_code"
+               attr="'aria-labelledby': 'label_method_' + method.method_code + '::' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '::' + method.carrier_code,
                     'checked': element.rates().length == 1 || element.isSelected" />
     </td>
     <!-- ko ifnot: (method.error_message) -->
@@ -21,10 +21,10 @@
     </td>
     <!-- /ko -->
     <td class="col col-method"
-        attr="'id': 'label_method_' + method.method_code + '_' + method.carrier_code"
+        attr="'id': 'label_method_' + method.method_code + '::' + method.carrier_code"
         text="method.method_title"></td>
     <td class="col col-carrier"
-        attr="'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code"
+        attr="'id': 'label_carrier_' + method.method_code + '::' + method.carrier_code"
         text="method.carrier_title"></td>
 </tr>
 <tr class="row row-error"
