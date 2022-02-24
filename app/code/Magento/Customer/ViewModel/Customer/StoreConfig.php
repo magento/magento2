@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\ViewModel\Customer;
 
 use Magento\Customer\Model\Config\Share as ConfigShare;

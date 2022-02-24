@@ -13,7 +13,7 @@ $viewModel = $block->getViewModel();
     <?php $scriptString = 'window.authenticationPopup = ' . /* @noEscape */ $block->getSerializedConfig(); ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <!-- ko template: getTemplate() --><!-- /ko -->
-    <?php // phpcs:disable?>
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
         {
             "#authenticationPopup": {
@@ -30,5 +30,4 @@ $viewModel = $block->getViewModel();
             }
         }
     </script>
-    <?php // phpcs:enable?>
 </div>
