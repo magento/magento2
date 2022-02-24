@@ -405,7 +405,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '1',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -439,7 +438,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '0',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'

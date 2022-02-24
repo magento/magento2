@@ -404,6 +404,7 @@ class Template implements \Zend_Filter_Interface
      * @param bool $strictMode Enable strict parsing of directives
      * @return bool The previous mode from before the change
      * @since 102.0.4
+     * @deprecated The method is not in use anymore.
      */
     public function setStrictMode(bool $strictMode): bool
     {

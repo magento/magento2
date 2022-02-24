@@ -188,7 +188,6 @@ class AbstractTemplateTest extends TestCase
                     'filter',
                     'getStoreId',
                     'getInlineCssFiles',
-                    'setStrictMode',
                 ]
             )
             ->disableOriginalConstructor()
@@ -209,10 +208,6 @@ class AbstractTemplateTest extends TestCase
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
-            ->willReturnOnConsecutiveCalls(false, true);
 
         $expectedVariables['store'] = $this->store;
 
@@ -271,7 +266,6 @@ class AbstractTemplateTest extends TestCase
                     'filter',
                     'getStoreId',
                     'getInlineCssFiles',
-                    'setStrictMode',
                 ]
             )
             ->disableOriginalConstructor()
@@ -288,10 +282,6 @@ class AbstractTemplateTest extends TestCase
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(false)], [$this->equalTo(true)])
-            ->willReturnOnConsecutiveCalls(true, false);
 
         $model = $this->getModelMock(
             [
