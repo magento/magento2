@@ -23,8 +23,6 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
     private $webapiAsyncConfig;
 
     /**
-     * Default value provider.
-     *
      * @var DefaultValueProvider
      */
     private $defaultValueProvider;
