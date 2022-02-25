@@ -280,7 +280,4 @@
             <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
-    </type>
 </config>
