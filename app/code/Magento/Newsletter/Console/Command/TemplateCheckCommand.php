@@ -25,6 +25,14 @@ class TemplateCheckCommand extends DatabaseTemplateCompatibilityCommand
      */
     private CollectionFactory $templateCollection;
 
+    /**
+     * Constructor
+     *
+     * @param VariableCompatibilityChecker $compatibilityChecker
+     * @param EmailCollectionFactory $templateCollection
+     * @param CollectionFactory $newsletterCollectionFactory
+     * @param string|null $name
+     */
     public function __construct(
         VariableCompatibilityChecker $compatibilityChecker,
         EmailCollectionFactory $templateCollection,
