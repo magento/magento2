@@ -144,7 +144,7 @@ class Items extends AbstractItems
      */
     private function preparePager(AbstractBlock $pagerBlock): void
     {
-        $collectionToPager = $this->itemCollection;
+        $collectionToPager = $this->createItemsCollection();
         $collectionToPager->addFieldToFilter('parent_item_id', ['null' => true]);
         $pagerBlock->setLimit($this->itemsPerPage);
         $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
@@ -161,6 +161,9 @@ class Items extends AbstractItems
     {
         $collection = $this->itemCollectionFactory->create();
         $collection->setOrderFilter($this->getOrder());
+        $currentPage = (int)$this->getRequest()->getParam('p', 1);
+        $collection->setCurPage($currentPage);
+        $collection->setPageSize($this->itemsPerPage);
 
         return $collection;
     }
