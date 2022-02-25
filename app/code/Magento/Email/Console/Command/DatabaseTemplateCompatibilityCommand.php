@@ -35,6 +35,13 @@ class DatabaseTemplateCompatibilityCommand extends Command
      */
     protected bool $hasErrors = false;
 
+    /**
+     * Constructor
+     *
+     * @param VariableCompatibilityChecker $compatibilityChecker
+     * @param CollectionFactory $templateCollection
+     * @param string $name
+     */
     public function __construct(
         VariableCompatibilityChecker $compatibilityChecker,
         CollectionFactory $templateCollection,

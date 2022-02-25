@@ -20,6 +20,6 @@ class VariableCompatibilityCheckerTest extends TestCase
         $checker = $objectManager->get(VariableCompatibilityChecker::class);
         $errors = $checker->getCompatibilityIssues(file_get_contents(__DIR__ . '/../_files/variables_template.html'));
 
-        self::assertCount(20, $errors);
+        self::assertCount(17, $errors);
     }
 }

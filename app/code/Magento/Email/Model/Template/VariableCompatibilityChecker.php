@@ -35,6 +35,12 @@ class VariableCompatibilityChecker
      */
     private Parameter $parameterTokenizer;
 
+    /**
+     * Constructor
+     *
+     * @param Variable $variableTokenizer
+     * @param Parameter $parameterTokenizer
+     */
     public function __construct(Variable $variableTokenizer, Parameter $parameterTokenizer)
     {
         $this->variableTokenizer = $variableTokenizer;
@@ -44,6 +50,7 @@ class VariableCompatibilityChecker
     /**
      * Detect invalid usage of template filter directives
      *
+     * @param string $template
      */
     public function getCompatibilityIssues(string $template): array
     {
