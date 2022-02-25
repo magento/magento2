@@ -85,6 +85,8 @@ class Rule implements LoaderInterface
     }
 
     /**
+     * Apply ACL with rules
+     *
      * @param \Magento\Framework\Acl $acl
      * @return array[]
      */
@@ -114,7 +116,6 @@ class Rule implements LoaderInterface
     }
 
     /**
-     *
      * For all rules that were not regenerated in authorization_rule table,
      * when adding a new module and without re-saving all roles,
      * consider not present rules with deny permissions
