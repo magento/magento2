@@ -15,4 +15,7 @@ use Magento\Framework\Exception\AuthorizationException;
  */
 class AdobeImsTokenAuthorizationException extends AuthorizationException
 {
+    public const ERROR_MESSAGE = 'The Adobe ID you\'re using does not belong to the ' .
+        'organization that controlling this Commerce instance. Contact your administrator so he can add ' .
+        'your Adobe ID to the organization.';
 }

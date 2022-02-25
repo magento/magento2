@@ -55,7 +55,9 @@ class AdminLoginProcessService
     {
         $adminUser = $this->adminUser->loadByEmail($profile['email']);
         if (empty($adminUser['user_id'])) {
-            throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
+            throw new AuthenticationException(
+                __('An authentication error occurred. Verify and try again.')
+            );
         }
 
         $this->logIn->execute((int)$adminUser['user_id'], $tokenResponse);

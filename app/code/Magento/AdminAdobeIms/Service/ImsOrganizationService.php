@@ -13,10 +13,6 @@ use Magento\Framework\Exception\InvalidArgumentException;
 
 class ImsOrganizationService
 {
-    public const ORGANIZATION_ERROR_MESSAGE = 'The Adobe ID you\'re using does not belong to the organization ' .
-        'that controlling this Commerce instance. Contact your administrator so he can add your Adobe ID ' .
-        'to the organization.';
-
     /**
      * Regex to verify a valid AdobeOrg Organization ID string.
      */
@@ -38,13 +34,13 @@ class ImsOrganizationService
      *
      * @param array $profile
      * @return bool
-     * @throws AdobeImsOrganizationAuthorizationException|InvalidArgumentException
+     * @throws AdobeImsOrganizationAuthorizationException
      */
     public function checkOrganizationAllocation(array $profile): bool
     {
         if (empty($profile['roles'])) {
-            throw new InvalidArgumentException(
-                __('No roles assigned for profile')
+            throw new AdobeImsOrganizationAuthorizationException(
+                __('No roles assigned for profile.')
             );
         }
 
@@ -53,7 +49,7 @@ class ImsOrganizationService
 
         if (!in_array($configuredOrganization, $customerOrganizations, true)) {
             throw new AdobeImsOrganizationAuthorizationException(
-                __(self::ORGANIZATION_ERROR_MESSAGE)
+                __('Profile is not assigned to defined organization.')
             );
         }
 
@@ -65,6 +61,7 @@ class ImsOrganizationService
      *
      * @param array $profileRoles
      * @return array
+     * @throws AdobeImsOrganizationAuthorizationException
      */
     private function getCustomerOrganizationList(array $profileRoles): array
     {
@@ -80,7 +77,7 @@ class ImsOrganizationService
     /**
      * @param string $organizationId
      * @return string
-     * @throws InvalidArgumentException
+     * @throws AdobeImsOrganizationAuthorizationException
      */
     public function validateAndExtractOrganizationId(string $organizationId): string
     {
@@ -90,7 +87,7 @@ class ImsOrganizationService
             }
         }
 
-        throw new InvalidArgumentException(
+        throw new AdobeImsOrganizationAuthorizationException(
             __('No valid organization ID provided')
         );
     }

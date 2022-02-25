@@ -128,7 +128,9 @@ class ImsConnection
         }
 
         if ($curl->getStatus() !== self::HTTP_REDIRECT_CODE) {
-            throw new InvalidArgumentException(__('Could not connect to Adobe IMS Service.'));
+            throw new InvalidArgumentException(
+                __('Could not get a valid response from Adobe IMS Service.')
+            );
         }
     }
 
@@ -142,9 +144,9 @@ class ImsConnection
         try {
             return $this->token->execute($code);
         } catch (AuthorizationException $exception) {
-            throw new AdobeImsTokenAuthorizationException(__('The Adobe ID you\'re using does not belong to the ' .
-                'organization that controlling this Commerce instance. Contact your administrator so he can add ' .
-                'your Adobe ID to the organization.'));
+            throw new AdobeImsTokenAuthorizationException(
+                __($exception->getMessage())
+            );
         }
     }
 
@@ -164,8 +166,9 @@ class ImsConnection
         $curl->get($this->imsConfig->getProfileUrl());
 
         if ($curl->getBody() === '') {
-            throw new AdobeImsTokenAuthorizationException(__('The Adobe ID you\'re using is not added to this Commerce instance' .
-                'Contact your organization administrator to request the access.'));
+            throw new AdobeImsTokenAuthorizationException(
+                __('Profile body is empty')
+            );
         }
 
         return $this->json->unserialize($curl->getBody());
