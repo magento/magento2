@@ -80,12 +80,17 @@ class Rule implements LoaderInterface
      */
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
+        $foundResources = [];
+        $foundRoles = [];
+
         foreach ($this->getRulesArray() as $rule) {
             $role = $rule['role_id'];
             $resource = $rule['resource_id'];
             $privileges = !empty($rule['privileges']) ? explode(',', $rule['privileges']) : null;
 
             if ($acl->has($resource)) {
+                $foundResources[$resource] = $resource;
+                $foundRoles[$role] = $role;
                 if ($rule['permission'] == 'allow') {
                     if ($resource === $this->_rootResource->getId()) {
                         $acl->allow($role, null, $privileges);
@@ -93,6 +98,19 @@ class Rule implements LoaderInterface
                     $acl->allow($role, $resource, $privileges);
                 } elseif ($rule['permission'] == 'deny') {
                     $acl->deny($role, $resource, $privileges);
+                }
+            }
+        }
+
+        /**
+         * for all rules that were not regenerated in authorization_rule table,
+         * when adding a new module and without re-saving all roles,7
+         * consider not present rules with deny permissions
+         * */
+        foreach ($acl->getResources() as $resource) {
+            if (!isset($foundResources[$resource])) {
+                foreach ($foundRoles as $role) {
+                    $acl->deny($role, $resource, null);
                 }
             }
         }
