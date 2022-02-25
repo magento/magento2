@@ -74,6 +74,7 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
         <checkOption selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
+        <waitForPageLoad stepKey="waitForBankTransferLoad"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
         <comment userInput="BIC workaround" stepKey="waitForEditButtonToBeVisible"/>

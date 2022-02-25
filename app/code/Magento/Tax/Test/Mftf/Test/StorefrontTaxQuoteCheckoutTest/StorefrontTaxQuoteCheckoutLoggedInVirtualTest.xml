@@ -121,9 +121,9 @@
             <argument name="Address" value="US_Address_CA"/>
             <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="saveAddress"/>
 
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <comment userInput="BIC workaround" stepKey="waitForAddressSaved"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>

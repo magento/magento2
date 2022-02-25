@@ -55,6 +55,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
         </after>
 
         <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>

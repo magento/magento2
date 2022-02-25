@@ -65,6 +65,7 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
     </test>
 

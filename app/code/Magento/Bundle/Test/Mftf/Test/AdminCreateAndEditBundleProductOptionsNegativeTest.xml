@@ -119,5 +119,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>
