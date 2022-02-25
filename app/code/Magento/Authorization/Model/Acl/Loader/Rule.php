@@ -21,7 +21,7 @@ class Rule implements LoaderInterface
     /**
      * Rules array cache key
      */
-    const ACL_RULE_CACHE_KEY = 'authorization_rule_cached_data';
+    public const ACL_RULE_CACHE_KEY = 'authorization_rule_cached_data';
 
     /**
      * @var ResourceConnection
@@ -80,9 +80,18 @@ class Rule implements LoaderInterface
      */
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
+        $result = $this->applyPermissionsAccordingToRules($acl);
+        $this->applyDenyPermissionsForMissingRules($acl, ...$result);
+    }
+
+    /**
+     * @param \Magento\Framework\Acl $acl
+     * @return array[]
+     */
+    private function applyPermissionsAccordingToRules(\Magento\Framework\Acl $acl): array
+    {
         $foundResources = [];
         $foundRoles = [];
-
         foreach ($this->getRulesArray() as $rule) {
             $role = $rule['role_id'];
             $resource = $rule['resource_id'];
@@ -101,15 +110,25 @@ class Rule implements LoaderInterface
                 }
             }
         }
+        return [$foundResources, $foundRoles];
+    }
 
-        /**
-         * for all rules that were not regenerated in authorization_rule table,
-         * when adding a new module and without re-saving all roles,7
-         * consider not present rules with deny permissions
-         * */
+    /**
+     *
+     * For all rules that were not regenerated in authorization_rule table,
+     * when adding a new module and without re-saving all roles,
+     * consider not present rules with deny permissions
+     *
+     * @param \Magento\Framework\Acl $acl
+     * @param array $resources
+     * @param array $roles
+     * @return void
+     */
+    private function applyDenyPermissionsForMissingRules(\Magento\Framework\Acl $acl, array $resources, array $roles)
+    {
         foreach ($acl->getResources() as $resource) {
-            if (!isset($foundResources[$resource])) {
-                foreach ($foundRoles as $role) {
+            if (!isset($resources[$resource])) {
+                foreach ($roles as $role) {
                     $acl->deny($role, $resource, null);
                 }
             }
