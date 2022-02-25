@@ -30,6 +30,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">
                 <argument name="sku" value="{{updateVirtualProductRegularPrice99OutOfStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

@@ -25,7 +25,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="ApiConfigurableProduct"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">

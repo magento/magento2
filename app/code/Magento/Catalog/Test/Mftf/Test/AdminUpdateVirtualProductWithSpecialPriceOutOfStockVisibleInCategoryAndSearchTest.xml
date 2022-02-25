@@ -31,6 +31,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteDefaultVirtualProduct">
                 <argument name="sku" value="{{updateVirtualProductSpecialPriceOutOfStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -141,6 +142,6 @@
         <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductNameOnStorefrontPage">
             <argument name="productName" value="{{updateVirtualProductSpecialPriceOutOfStock.name}}"/>
         </actionGroup>
-        
+
     </test>
 </tests>

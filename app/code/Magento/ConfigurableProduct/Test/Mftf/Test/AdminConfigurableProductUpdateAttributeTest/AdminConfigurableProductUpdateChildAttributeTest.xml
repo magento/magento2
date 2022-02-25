@@ -137,5 +137,6 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="sku" value="{{ApiConfigurableProduct.sku}}2-simple"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

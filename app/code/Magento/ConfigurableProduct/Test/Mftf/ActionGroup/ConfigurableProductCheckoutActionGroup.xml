@@ -21,7 +21,6 @@
 
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
         <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
-        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
         <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="exposeMiniCart"/>
         <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>

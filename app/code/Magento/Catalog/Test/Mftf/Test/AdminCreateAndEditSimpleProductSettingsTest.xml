@@ -136,6 +136,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

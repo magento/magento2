@@ -36,7 +36,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete store view -->
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCreatedStoreView"/>

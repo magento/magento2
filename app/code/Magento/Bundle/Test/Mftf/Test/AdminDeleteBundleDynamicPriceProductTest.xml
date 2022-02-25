@@ -48,6 +48,7 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
             <argument name="sku" value="$createDynamicBundleProduct.sku$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
         <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoopsMessage">

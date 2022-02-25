@@ -62,7 +62,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct2">
                 <argument name="sku" value="{{simpleProductForMassUpdate2.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
         </after>
 
         <!-- Search and select products -->

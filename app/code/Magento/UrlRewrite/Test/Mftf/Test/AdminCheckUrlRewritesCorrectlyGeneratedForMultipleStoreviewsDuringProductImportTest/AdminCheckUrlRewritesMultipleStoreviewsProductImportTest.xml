@@ -44,7 +44,7 @@
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change category name and URL key for EN Store View-->

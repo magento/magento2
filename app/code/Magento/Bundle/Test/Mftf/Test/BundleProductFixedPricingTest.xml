@@ -35,12 +35,13 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to bundle product creation page-->
         <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
-    
+
         <!-- Add two bundle items -->
         <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
         <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>

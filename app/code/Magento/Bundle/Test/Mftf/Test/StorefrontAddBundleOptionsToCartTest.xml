@@ -47,8 +47,7 @@
             <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
-            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
-                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

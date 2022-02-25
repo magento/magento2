@@ -28,6 +28,7 @@
             <actionGroup ref="DeleteProductsByKeywordActionGroup" stepKey="deleteProductsByKeyword">
                 <argument name="keyword" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategoryAttribute"/>
             <!-- Delete color attribute -->

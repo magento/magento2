@@ -48,6 +48,7 @@
                 <argument name="sku" value="{{ProductWithLongNameSku.sku}}"/>
                 <argument name="name" value="{{ProductWithLongNameSku.name}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <!--Clean up attribute-->
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <!--Clean up category-->
