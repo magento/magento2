@@ -384,7 +384,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -393,7 +393,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
-    public function testLegacyTemplateLoadedFromDbIsFilteredInLegacyMode()
+    public function testLegacyTemplateLoadedFromDbIsFilteredInStrictMode()
     {
         $this->mockModel();
 
@@ -405,7 +405,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '1',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -418,7 +417,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -439,7 +438,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '0',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -452,7 +450,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -869,5 +867,32 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $options = ['area' => 'test area', 'store' => 1];
         $this->model->setOptions($options);
         $this->assertEquals($options, $this->model->getDesignConfig()->getData());
+    }
+
+    /**
+     * @magentoConfigFixture default_store general/store_information/name Test Store
+     * @magentoConfigFixture default_store general/store_information/street_line1 Street 1
+     * @magentoConfigFixture default_store general/store_information/street_line2 Street 2
+     * @magentoConfigFixture default_store general/store_information/city Austin
+     * @magentoConfigFixture default_store general/store_information/zip 78758
+     * @magentoConfigFixture default_store general/store_information/country_id US
+     * @magentoConfigFixture default_store general/store_information/region_id 57
+     */
+    public function testStoreFormattedAddress()
+    {
+        $this->mockModel();
+        $this->model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+
+        /* See app/design/frontend/Magento/luma/Magento_Email/email/footer.html */
+        $template = '{{var store.formatted_address|raw}}';
+        $this->model->setTemplateText($template);
+
+        $result = $this->model->getProcessedTemplate();
+        $this->assertStringContainsString('Test Store', $result);
+        $this->assertStringContainsString('Street 1', $result);
+        $this->assertStringContainsString('Street 2', $result);
+        $this->assertStringContainsString('Austin', $result);
+        $this->assertStringContainsString('Texas', $result);
+        $this->assertStringContainsString('United States', $result);
     }
 }
