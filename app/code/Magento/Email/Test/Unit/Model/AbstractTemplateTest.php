@@ -97,7 +97,7 @@ class AbstractTemplateTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getFrontendName', 'getId'])
+            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects($this->any())
@@ -106,6 +106,9 @@ class AbstractTemplateTest extends TestCase
         $this->store->expects($this->any())
             ->method('getFrontendName')
             ->willReturn('storeId');
+        $this->store->expects($this->any())
+            ->method('getFormattedAddress')
+            ->willReturn("Test Store\n Street 1");
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
