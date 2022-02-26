@@ -30,6 +30,7 @@
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="storeViewChinese"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!--Delete all imported products-->
@@ -45,6 +46,9 @@
             </actionGroup>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteChineseStoreView">
                 <argument name="customStore" value="storeViewChinese"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

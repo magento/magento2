@@ -40,6 +40,7 @@
 
             <!-- Delete store view -->
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCreatedStoreView"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -47,6 +48,7 @@
 
         <!-- Create store view -->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Create Downloadable product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>

@@ -44,7 +44,7 @@
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
             </actionGroup>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters1"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters1"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

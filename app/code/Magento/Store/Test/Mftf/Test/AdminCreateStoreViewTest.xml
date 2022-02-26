@@ -22,6 +22,7 @@
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+                <magentoCron groups="index" stepKey="reindex"/>
             </before>
 
             <after>
@@ -29,6 +30,7 @@
                     <argument name="customStore" value="customStore"/>
                 </actionGroup>
                 <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
+                <magentoCron groups="index" stepKey="reindex"/>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 

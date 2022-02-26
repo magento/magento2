@@ -26,6 +26,7 @@
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
@@ -40,6 +41,7 @@
         <actionGroup ref="DeleteCustomStoreViewBackupEnabledYesActionGroup" stepKey="deleteCustomStoreView">
             <argument name="storeViewName" value="{{storeViewData.name}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Verify deleted store view not present in grid and verify AssertStoreNotInGrid Message-->
         <actionGroup ref="AssertStoreViewNotInGridActionGroup" stepKey="verifyDeletedStoreViewNotInGrid">

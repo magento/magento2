@@ -35,6 +35,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <!--Create a Simple Product 1 -->
             <actionGroup ref="CreateSimpleProductAndAddToWebsiteActionGroup" stepKey="createSimpleProduct1">
@@ -53,6 +54,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
             <!--Delete Products -->

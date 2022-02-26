@@ -22,6 +22,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductOne"/>
             <createData entity="ApiProductWithDescription" stepKey="createProductTwo"/>
             <createData entity="ApiProductNameWithNoSpaces" stepKey="createProductThree"/>
@@ -31,6 +32,7 @@
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createProductThree" stepKey="deleteProductThree"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="AdminDeleteStoreViewActionGroup"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 

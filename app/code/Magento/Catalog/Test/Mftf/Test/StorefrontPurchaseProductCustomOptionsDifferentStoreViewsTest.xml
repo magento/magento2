@@ -45,6 +45,7 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>
@@ -66,6 +67,7 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 

@@ -59,6 +59,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Login to Frontend -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
@@ -261,5 +262,6 @@
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
             <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex2"/>
     </test>
 </tests>

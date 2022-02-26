@@ -28,6 +28,7 @@
                 <argument name="storeGroupName" value="{{customStore.name}}"/>
                 <argument name="storeGroupCode" value="{{customStore.code}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
@@ -42,6 +43,7 @@
         <actionGroup ref="DeleteCustomStoreBackupEnabledYesActionGroup" stepKey="deleteCustomStoreGroup">
             <argument name="storeGroupName" value="{{customStore.name}}"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Verify deleted Store group is not present in grid and verify AssertStoreGroupNotInGrid message-->
         <actionGroup ref="AssertStoreNotInGridActionGroup" stepKey="verifyDeletedStoreGroupNotInGrid">

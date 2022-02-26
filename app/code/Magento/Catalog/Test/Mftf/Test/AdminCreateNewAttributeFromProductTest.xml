@@ -55,6 +55,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="customStoreFR"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Go to created product page and create new attribute-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
