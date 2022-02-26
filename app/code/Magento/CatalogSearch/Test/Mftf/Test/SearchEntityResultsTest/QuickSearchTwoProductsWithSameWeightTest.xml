@@ -70,6 +70,9 @@
                 <argument name="value" value="{{_defaultProduct.name}}"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2b"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>

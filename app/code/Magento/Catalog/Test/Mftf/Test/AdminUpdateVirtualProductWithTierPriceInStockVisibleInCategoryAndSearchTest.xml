@@ -26,9 +26,7 @@
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="RunToScheduleJobs">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
 
         <after>

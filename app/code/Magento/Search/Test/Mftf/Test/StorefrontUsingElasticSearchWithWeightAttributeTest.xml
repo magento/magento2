@@ -50,7 +50,9 @@
         <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
         <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
         <!-- Step 3 -->
-        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Step 4 -->
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="clearFPC">
             <argument name="tags" value="full_page"/>
