@@ -14,10 +14,13 @@
             <description value="Validate VAT Number button for United Kingdom (GB) should work same as for non-EU countries after Brexit 2021"/>
             <features value="Config"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="ACP2E-355"/>
+            <testCaseId value="AC-2064"/>
             <useCaseId value="ACP2E-182"/>
             <stories value="Store VAT Number Validation"/>
             <group value="configuration"/>
+            <skip>
+                <issueId value="AC-2504"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
