@@ -40,25 +40,26 @@ class ImsConnection
     }
 
     /**
+     * @param string|null $clientId
      * @return string
      * @throws InvalidArgumentException
      */
-    public function auth(): string
+    public function auth(?string $clientId): string
     {
-        $authUrl = $this->imsConfig->getAuthUrl();
+        $authUrl = $this->imsConfig->getAdminAdobeImsAuthUrl($clientId);
         return $this->getAuthorizationLocation($authUrl);
     }
 
     /**
+     * Test if given ClientID is valid and is able to return an authorization URL
+     *
      * @param string $clientId
      * @return bool
      * @throws InvalidArgumentException
      */
     public function testAuth(string $clientId): bool
     {
-        $authUrl = $this->imsConfig->getAuthUrlWithClientId($clientId);
-        $location = $this->getAuthorizationLocation($authUrl);
-
+        $location = $this->auth($clientId);
         return $location !== '';
     }
 
@@ -94,7 +95,9 @@ class ImsConnection
                 $error)
             ) {
                 if (isset($error[0], $error[1])) {
-                    throw new InvalidArgumentException(__('Could not connect to Adobe IMS Service: %1.', $error[1]));
+                    throw new InvalidArgumentException(
+                        __('Could not connect to Adobe IMS Service: %1.', $error[1])
+                    );
                 }
             }
         }
