@@ -349,6 +349,7 @@
         <data key="telephone">333-33-333-33</data>
         <data key="country">Germany</data>
         <data key="state">Berlin</data>
+        <data key="vatNumber">DE265675123</data>
     </entity>
     <entity name="US_Address_California">
         <data key="firstname">John</data>
@@ -402,5 +403,6 @@
         <data key="country">United Kingdom</data>
         <data key="state">Greater London</data>
         <data key="default_billing">Yes</data>
+        <data key="vatNumber">GB571903731</data>
     </entity>
 </entities>

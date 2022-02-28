@@ -115,9 +115,13 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected function _isFormatSupported($image, $adapter)
     {
+        if ($image === null || !file_exists($image)) {
+            return false;
+        }
         $data = pathinfo($image);
         $supportedTypes = $adapter->getSupportedFormats();
-        return $image && file_exists($image) && in_array(strtolower($data['extension']), $supportedTypes);
+
+        return isset($data['extension']) && in_array(strtolower($data['extension']), $supportedTypes);
     }
 
     /**

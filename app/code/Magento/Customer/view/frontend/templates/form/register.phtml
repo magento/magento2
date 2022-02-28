@@ -17,6 +17,8 @@ $directoryHelper = $block->getData('directoryHelper');
 /** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
 $regionProvider = $block->getRegionProvider();
 $formData = $block->getFormData();
+/** @var \Magento\Customer\ViewModel\CreateAccountButton $createAccountButtonViewModel */
+$createAccountButtonViewModel = $block->getData('create_account_button_view_model');
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
 <?= $block->getChildHtml('form_fields_before') ?>
@@ -291,7 +293,9 @@ $formData = $block->getFormData();
         <div class="primary">
             <button type="submit"
                     class="action submit primary"
-                    title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>">
+                    title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
+                    id="send2"
+                    <?php if ($createAccountButtonViewModel->disabled()): ?> disabled="disabled" <?php endif; ?>>
                 <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
             </button>
         </div>
@@ -348,6 +352,7 @@ script;
     $regionId = (int) $formData->getRegionId();
     $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
     ?>
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         "#country": {
@@ -365,7 +370,7 @@ script;
     }
 </script>
 <?php endif; ?>
-
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         ".field.password": {
