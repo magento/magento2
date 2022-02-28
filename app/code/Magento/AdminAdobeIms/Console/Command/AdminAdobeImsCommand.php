@@ -50,17 +50,17 @@ class AdminAdobeImsCommand extends Command
     private const CLIENT_SECRET_ARGUMENT = 'client-secret';
 
     /**
-     * Human readable name for Organization ID input option
+     * Human-readable name for Organization ID input option
      */
     private const ORGANIZATION_ID_NAME = 'Organization ID';
 
     /**
-     * Human readable name for Client ID input option
+     * Human-readable name for Client ID input option
      */
     private const CLIENT_ID_NAME = 'Client ID';
 
     /**
-     * Human readable name for Client Secret input option
+     * Human-readable name for Client Secret input option
      */
     private const CLIENT_SECRET_NAME = 'Client Secret';
 
@@ -161,13 +161,14 @@ class AdminAdobeImsCommand extends Command
                         $enabled = $this->enableModule($clientId, $clientSecret, $organizationId);
                         if ($enabled) {
                             $output->writeln(__('Admin Adobe IMS integration is enabled'));
+                            break;
                         }
-                    } else {
-                        throw new LocalizedException(
-                            __('The Client ID, Client Secret and Organization ID are required when enabling the Admin Adobe IMS Module')
-                        );
                     }
-                    break;
+
+                    throw new LocalizedException(
+                        __('The Client ID, Client Secret and Organization ID are required ' .
+                            'when enabling the Admin Adobe IMS Module')
+                    );
                 case self::MODE_STATUS:
                     $status = $this->getModuleStatus();
                     $output->writeln(__('Admin Adobe IMS integration is %1', $status));

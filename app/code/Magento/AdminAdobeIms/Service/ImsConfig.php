@@ -57,6 +57,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Check if module is enabled
+     *
      * @return bool
      */
     public function enabled(): bool
@@ -67,6 +69,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update config
+     *
      * @param string $path
      * @param string $value
      * @return void
@@ -80,6 +84,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update encrypted config setting
+     *
      * @param string $path
      * @param string $value
      * @return void
@@ -99,6 +105,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Delete config value
+     *
      * @param string $path
      * @return void
      */

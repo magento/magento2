@@ -30,6 +30,8 @@ class LinkViewModel implements ArgumentInterface
     }
 
     /**
+     * Check if authorization Url is not empty
+     *
      * @return bool
      */
     public function isActive(): bool
@@ -38,6 +40,8 @@ class LinkViewModel implements ArgumentInterface
     }
 
     /**
+     * Get authorization URL for Login Button
+     *
      * @return string
      */
     public function getButtonLink(): string

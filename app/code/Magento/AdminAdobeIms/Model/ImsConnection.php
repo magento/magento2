@@ -40,11 +40,13 @@ class ImsConnection
     }
 
     /**
+     * Get authorization url
+     *
      * @param string|null $clientId
      * @return string
      * @throws InvalidArgumentException
      */
-    public function auth(?string $clientId): string
+    public function auth(?string $clientId = null): string
     {
         $authUrl = $this->imsConfig->getAdminAdobeImsAuthUrl($clientId);
         return $this->getAuthorizationLocation($authUrl);
@@ -64,6 +66,8 @@ class ImsConnection
     }
 
     /**
+     * Get authorization location from adobeIMS
+     *
      * @param string $authUrl
      * @return string
      * @throws InvalidArgumentException
@@ -82,6 +86,8 @@ class ImsConnection
     }
 
     /**
+     * validate authorization call response
+     *
      * @param Curl $curl
      * @return void
      * @throws InvalidArgumentException
@@ -107,4 +113,3 @@ class ImsConnection
         }
     }
 }
-
