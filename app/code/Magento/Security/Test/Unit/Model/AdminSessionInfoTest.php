@@ -130,6 +130,26 @@ class AdminSessionInfoTest extends TestCase
     /**
      * @return void
      */
+    public function testSessionExpiredWhenUpdatedAtIsNull()
+    {
+        $timestamp = time();
+        $sessionLifetime = '1';
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn($sessionLifetime);
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn($timestamp);
+
+        $this->model->setUpdatedAt(null);
+        $this->assertTrue($this->model->isSessionExpired());
+    }
+    
+    /**
+     * @return void
+     */
     public function testGetFormattedIp()
     {
         $formattedIp = '127.0.0.1';
