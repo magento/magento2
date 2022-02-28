@@ -10,7 +10,7 @@ use Magento\Payment\Gateway\Command\CommandException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class OrderService
+ * Services Related To Order
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
