@@ -4,21 +4,24 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Messages;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
- * @var $block \Magento\Framework\View\Element\Messages
- * @var $escaper \Magento\Framework\Escaper
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var $block Messages
+ * @var $escaper Escaper
+ * @var SecureHtmlRenderer $secureRenderer
  */
 $scriptString = <<<script
 require(['loadIcons'], function (loadIcons) {
     loadIcons(
-        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::node_modules/@spectrum-css/icon/dist/spectrum-css-icons.svg'))}"
+        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-css-icons.svg'))}"
     );
     loadIcons(
-        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::node_modules/@adobe/spectrum-css-workflow-icons/dist/spectrum-icons.svg'))}"
+        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-icons.svg'))}"
     );
 });
 script;
 
 echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
-?>
