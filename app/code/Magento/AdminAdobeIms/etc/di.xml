@@ -23,7 +23,7 @@
                 type="Magento\AdminAdobeIms\Plugin\ConfigPlugin"/>
     </type>
 
-    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserverPlugin">
+    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
         <plugin name="captcha_check_user_login_backend_observer_plugin"
                 type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
     </type>
