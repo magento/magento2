@@ -1249,7 +1249,7 @@ define([
         _setImageType: function (images) {
             var initial = this.options.mediaGalleryInitial[0].img;
 
-            if (images[0].img === initial && images.length === this.options.mediaGalleryInitial.length) {
+            if (images[0].img === initial && images.length === 1) {
                 images = $.extend(true, [], this.options.mediaGalleryInitial);
             } else {
                 images.map(function (img) {
