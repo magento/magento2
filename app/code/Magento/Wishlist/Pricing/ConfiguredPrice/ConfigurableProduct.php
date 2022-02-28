@@ -57,28 +57,26 @@ class ConfigurableProduct extends AbstractPrice
      */
     public function getValue()
     {
-        /** @var \Magento\Catalog\Model\Product $configurableProduct */
-        $configurableProduct = parent::getProduct();
-        
+        $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = parent::getProduct();
         /** @var \Magento\Wishlist\Model\Item\Option $configurableCustomOption */
-        $configurableCustomOption = $configurableProduct->getCustomOption('option_ids');
+        $configurableCustomOption = $product->getCustomOption('option_ids');
         $customPrice = 0;
-        if ($configurableCustomOption) {
+        if ($configurableCustomOption && $configurableCustomOption->getValue()) {
             $item = $this->item;
+            $configurableProduct = $configurableCustomOption->getProduct();
             foreach (explode(',', $configurableCustomOption->getValue()) as $optionId) {
                 $option = $configurableProduct->getOptionById($optionId);
                 if ($option) {
                     $itemOption = $item->getOptionByCode('option_' . $option->getId());
                     /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
                     $group = $option->groupFactory($option->getType())
-                        ->setOption($option)
-                        ->setConfigurationItemOption($itemOption);
-                    $basePrice = $configurableProduct->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
-                    $customPrice += $group->getOptionPrice($itemOption->getValue(), $basePrice);
+                        ->setOption($option);
+                    $customPrice += $group->getOptionPrice($itemOption->getValue(), $price);
                 }
             }
         }
-        $price = $this->getProduct()->getPriceInfo()->getPrice(self::PRICE_CODE)->getValue();
         if ($customPrice) {
             $price = $price + $customPrice;
         }
