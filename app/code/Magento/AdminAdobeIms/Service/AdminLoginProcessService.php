@@ -14,6 +14,7 @@ use Magento\AdminAdobeIms\Model\User;
 use Magento\AdobeIms\Model\LogIn;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 class AdminLoginProcessService
 {
@@ -46,10 +47,13 @@ class AdminLoginProcessService
     }
 
     /**
+     * Check if user exists and then do the login
+     *
      * @param array $profile
-     * @param TokenResponseInterface $accessToken
+     * @param TokenResponseInterface $tokenResponse
      * @return void
      * @throws AuthenticationException
+     * @throws CouldNotSaveException
      */
     public function execute(array $profile, TokenResponseInterface $tokenResponse): void
     {
@@ -64,5 +68,4 @@ class AdminLoginProcessService
 
         $this->auth->loginByUsername($adminUser['username']);
     }
-
 }

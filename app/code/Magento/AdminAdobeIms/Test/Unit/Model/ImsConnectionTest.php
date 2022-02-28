@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Model;
+namespace Magento\AdminAdobeIms\Test\Unit\Model;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Service\ImsConfig;

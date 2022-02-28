@@ -18,6 +18,9 @@ class ImsOrganizationService
      */
     private const ORGANIZATION_REGEX = '/([A-Z0-9]{24})(@AdobeOrg)?/i';
 
+    /**
+     * @var ImsConfig
+     */
     private ImsConfig $imsConfig;
 
     /**
@@ -75,6 +78,8 @@ class ImsOrganizationService
     }
 
     /**
+     * Check if OrganizationID matches pattern
+     *
      * @param string $organizationId
      * @return string
      * @throws AdobeImsOrganizationAuthorizationException

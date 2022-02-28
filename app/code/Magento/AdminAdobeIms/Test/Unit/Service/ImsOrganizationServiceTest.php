@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Model;
+namespace Magento\AdminAdobeIms\Test\Unit\Model;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Service\ImsConfig;
@@ -76,8 +76,8 @@ class ImsOrganizationServiceTest extends TestCase
         $this->expectException(AdobeImsOrganizationAuthorizationException::class);
         $this->expectExceptionMessage('The Adobe ID you\'re using does not belong to the organization ' .
             'that controlling this Commerce instance. ' .
-            'Contact your administrator so he can add your Adobe ID to the organization.'
-        );
+            'Contact your administrator so he can add your Adobe ID to the organization.');
+
         $this->imsOrganizationService->checkOrganizationAllocation([
             'roles' => [
                 ['organization' => '12121212ABCD1211AA11ABCD', 'named_role' => 'test']

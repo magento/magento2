@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Model;
 
 use Magento\Backend\Model\Auth as BackendAuth;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
 
 class Auth extends BackendAuth
@@ -18,7 +19,8 @@ class Auth extends BackendAuth
      *
      * @param string $username
      * @return void
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
+     * @SuppressWarnings(PHPCPD)
      */
     public function loginByUsername(string $username): void
     {

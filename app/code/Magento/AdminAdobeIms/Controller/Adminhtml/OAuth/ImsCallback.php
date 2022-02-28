@@ -76,6 +76,8 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     }
 
     /**
+     * Execute AdobeIMS callback
+     *
      * @return Redirect
      */
     public function execute(): Redirect
@@ -92,7 +94,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         try {
             $code = $this->getRequest()->getParam('code');
 
-            if (is_null($code)) {
+            if ($code === null) {
                 throw new AuthenticationException(__('An authentication error occurred. Verify and try again.'));
             }
 
@@ -132,6 +134,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     }
 
     /**
+     * Add AdminAdobeIMS Error Message
      * @param string $headline
      * @param string $message
      * @return void
