@@ -15,5 +15,11 @@
 
         <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.signInButton}}"
                     stepKey="assertAdminSignInWithAdobeIdButtonElement"/>
+
+        <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.organizationNoteLeft}}"
+                    stepKey="assertAdminSignInWithAdobeIdOrganizationNoteLeft"/>
+
+        <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.organizationNoteRight}}"
+                        stepKey="assertAdminSignInWithAdobeIdOrganizationNoteRight"/>
     </actionGroup>
 </actionGroups>

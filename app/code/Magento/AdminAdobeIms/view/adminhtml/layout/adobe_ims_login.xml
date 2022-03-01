@@ -8,57 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
-        <!-- TODO: move this so we only include the built minified version -->
-        <!-- Include global variables first -->
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-global.css"
-             rel="stylesheet"
-             type="text/css" />
-
-        <!-- Include only the scales your application needs -->
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-medium.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-large.css"
-             rel="stylesheet"
-             type="text/css" />
-
-        <!-- Include only the colorstops your application needs -->
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-lightest.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-light.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-dark.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/vars/dist/spectrum-darkest.css"
-             rel="stylesheet"
-             type="text/css" />
-
-        <!-- Include index-vars.css for all components you need -->
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/page/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/icon/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/button/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/dialog/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/modal/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/card/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/typography/dist/index-vars.css"
-             rel="stylesheet"
-             type="text/css" />
-        <css src="Magento_AdminAdobeIms::node_modules/@spectrum-css/inlinealert/dist/index-vars.css"
+        <css src="Magento_AdminAdobeIms::dist/index.min.css"
              rel="stylesheet"
              type="text/css" />
     </head>

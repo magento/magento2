@@ -28,5 +28,13 @@
     "@spectrum-css/underlay": "^2.0.22",
     "@spectrum-css/vars": "^6.1.1",
     "loadicons": "^1.0.0"
+  },
+  "devDependencies": {
+    "cssnano": "^5.0.17",
+    "postcss": "^8.4.7",
+    "postcss-cli": "^9.1.0",
+    "postcss-dropunusedvars": "^1.2.1",
+    "postcss-import": "^14.0.2",
+    "postcss-varfallback": "^1.1.1"
   }
 }
