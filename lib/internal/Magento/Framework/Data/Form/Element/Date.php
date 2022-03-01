@@ -67,6 +67,8 @@ class Date extends AbstractElement
     }
 
     /**
+     * Initial scope of method was to limit timestamp on x64 systems to mimic x32 systems,
+     * but keeping the method for compatibility:
      * If script executes on x64 system, converts large numeric values to timestamp limit
      *
      * @param int $value
@@ -74,11 +76,6 @@ class Date extends AbstractElement
      */
     protected function _toTimestamp($value)
     {
-        $value = (int)$value;
-        if ($value > 3155760000) {
-            $value = 0;
-        }
-
         return $value;
     }
 
@@ -99,7 +96,7 @@ class Date extends AbstractElement
             return $this;
         }
         try {
-            if (preg_match('/^[0-9]+$/', $value)) {
+            if (preg_match('/^[\-]{0,1}[0-9]+$/', $value)) {
                 $this->_value = (new \DateTime())->setTimestamp($this->_toTimestamp($value));
             } elseif (is_string($value) && $this->isDate($value)) {
                 $this->_value = new \DateTime($value, new \DateTimeZone($this->localeDate->getConfigTimezone()));
@@ -168,6 +165,7 @@ class Date extends AbstractElement
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(
                 'Output format is not specified. ' .
                 'Please specify "format" key in constructor, or set it using setFormat().'

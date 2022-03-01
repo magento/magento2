@@ -23,7 +23,7 @@
 
         <!-- Fill the form with correspondent Order data using search by Zip -->
         <actionGroup ref="StorefrontFillOrdersAndReturnsFormTypeZipActionGroup" stepKey="fillOrderZip" before="clickContinue">
-            <argument name="orderNumber" value="{$getOrderId}"/>
+            <argument name="orderNumber" value="{$orderNumber}"/>
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
