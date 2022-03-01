@@ -191,7 +191,7 @@ class Utility
 
         //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
         //that can not be used as array index
-        $percentKey = $item->getDiscountPercent();
+        $percentKey = (int)$item->getDiscountPercent();
         $rowTotal = $item->getRowTotal();
         if ($percentKey && $rowTotal > 0) {
             $delta = isset($this->_roundingDeltas[$percentKey]) ? $this->_roundingDeltas[$percentKey] : 0;
