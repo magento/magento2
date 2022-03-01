@@ -28,6 +28,7 @@ class AdminAdobeImsCommand extends Command
     private const MODE_ENABLE = 'enable';
     private const MODE_DISABLE = 'disable';
     private const MODE_STATUS = 'status';
+    private const MODE_INFO = 'info';
 
     /**
      * Name of "target application mode" input argument
@@ -50,17 +51,17 @@ class AdminAdobeImsCommand extends Command
     private const CLIENT_SECRET_ARGUMENT = 'client-secret';
 
     /**
-     * Human readable name for Organization ID input option
+     * Human-readable name for Organization ID input option
      */
     private const ORGANIZATION_ID_NAME = 'Organization ID';
 
     /**
-     * Human readable name for Client ID input option
+     * Human-readable name for Client ID input option
      */
     private const CLIENT_ID_NAME = 'Client ID';
 
     /**
-     * Human readable name for Client Secret input option
+     * Human-readable name for Client Secret input option
      */
     private const CLIENT_SECRET_NAME = 'Client Secret';
 
@@ -100,7 +101,7 @@ class AdminAdobeImsCommand extends Command
                 new InputArgument(
                     self::MODE_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'The status of the module. Available options are "enable", "disable" or "status"'
+                    'The status of the module. Available options are "enable", "disable", "info" or "status"'
                 ),
                 new InputOption(
                     self::ORGANIZATION_ID_ARGUMENT,
@@ -161,16 +162,30 @@ class AdminAdobeImsCommand extends Command
                         $enabled = $this->enableModule($clientId, $clientSecret, $organizationId);
                         if ($enabled) {
                             $output->writeln(__('Admin Adobe IMS integration is enabled'));
+                            break;
                         }
-                    } else {
-                        throw new LocalizedException(
-                            __('The Client ID, Client Secret and Organization ID are required when enabling the Admin Adobe IMS Module')
-                        );
                     }
-                    break;
+
+                    throw new LocalizedException(
+                        __('The Client ID, Client Secret and Organization ID are required ' .
+                            'when enabling the Admin Adobe IMS Module')
+                    );
                 case self::MODE_STATUS:
                     $status = $this->getModuleStatus();
                     $output->writeln(__('Admin Adobe IMS integration is %1', $status));
+                    break;
+                case self::MODE_INFO:
+                    if ($this->imsConfig->enabled()) {
+                        $clientId = $this->imsConfig->getApiKey();
+                        if ($this->imsConnection->testAuth($clientId)) {
+                            $output->writeln(self::CLIENT_ID_NAME . ': ' . $clientId);
+                            $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->imsConfig->getOrganizationId());
+                            $clientSecret = $this->imsConfig->getPrivateKey() ? 'configured' : 'not configured';
+                            $output->writeln(self::CLIENT_SECRET_NAME . ' ' . $clientSecret);
+                        }
+                    } else {
+                        $output->writeln(__('Module is disabled'));
+                    }
                     break;
                 default:
                     throw new LocalizedException(__('The mode can\'t be switched to "%1".', $mode));

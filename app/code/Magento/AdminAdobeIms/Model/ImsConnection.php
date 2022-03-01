@@ -40,29 +40,34 @@ class ImsConnection
     }
 
     /**
+     * Get authorization url
+     *
+     * @param string|null $clientId
      * @return string
      * @throws InvalidArgumentException
      */
-    public function auth(): string
+    public function auth(?string $clientId = null): string
     {
-        $authUrl = $this->imsConfig->getAuthUrl();
+        $authUrl = $this->imsConfig->getAdminAdobeImsAuthUrl($clientId);
         return $this->getAuthorizationLocation($authUrl);
     }
 
     /**
+     * Test if given ClientID is valid and is able to return an authorization URL
+     *
      * @param string $clientId
      * @return bool
      * @throws InvalidArgumentException
      */
     public function testAuth(string $clientId): bool
     {
-        $authUrl = $this->imsConfig->getAuthUrlWithClientId($clientId);
-        $location = $this->getAuthorizationLocation($authUrl);
-
+        $location = $this->auth($clientId);
         return $location !== '';
     }
 
     /**
+     * Get authorization location from adobeIMS
+     *
      * @param string $authUrl
      * @return string
      * @throws InvalidArgumentException
@@ -81,6 +86,8 @@ class ImsConnection
     }
 
     /**
+     * Validate authorization call response
+     *
      * @param Curl $curl
      * @return void
      * @throws InvalidArgumentException
@@ -88,14 +95,16 @@ class ImsConnection
     private function validateResponse(Curl $curl): void
     {
         if (isset($curl->getHeaders()['location'])) {
-            if (preg_match(
-                '/error=([a-z_]+)/i',
-                $curl->getHeaders()['location'],
-                $error)
+            if (
+                preg_match(
+                    '/error=([a-z_]+)/i',
+                    $curl->getHeaders()['location'],
+                    $error
+                ) && isset($error[0], $error[1])
             ) {
-                if (isset($error[0], $error[1])) {
-                    throw new InvalidArgumentException(__('Could not connect to Adobe IMS Service: %1.', $error[1]));
-                }
+                throw new InvalidArgumentException(
+                    __('Could not connect to Adobe IMS Service: %1.', $error[1])
+                );
             }
         }
 
@@ -104,4 +113,3 @@ class ImsConnection
         }
     }
 }
-

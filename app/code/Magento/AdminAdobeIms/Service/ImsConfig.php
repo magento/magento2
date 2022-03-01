@@ -57,6 +57,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Check if module is enabled
+     *
      * @return bool
      */
     public function enabled(): bool
@@ -67,6 +69,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update config
+     *
      * @param string $path
      * @param string $value
      * @return void
@@ -80,6 +84,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update encrypted config setting
+     *
      * @param string $path
      * @param string $value
      * @return void
@@ -99,6 +105,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Delete config value
+     *
      * @param string $path
      * @return void
      */
@@ -108,18 +116,32 @@ class ImsConfig extends Config
     }
 
     /**
-     * Generate the AuthUrl for given clientId
+     * Generate the AdminAdobeIms AuthUrl with given clientID or the ClientID stored in the config
      *
-     * @param string $clientId
+     * @param string|null $clientId
      * @return string
      */
-    public function getAuthUrlWithClientId(string $clientId): string
+    public function getAdminAdobeImsAuthUrl(?string $clientId): string
     {
+        if ($clientId === null) {
+            $clientId = $this->getApiKey();
+        }
+
         return str_replace(
             ['#{client_id}', '#{redirect_uri}', '#{locale}'],
-            [$clientId, $this->getCallBackUrl(), $this->getLocale()],
+            [$clientId, $this->getAdminAdobeImsCallBackUrl(), $this->getLocale()],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
         );
+    }
+
+    /**
+     * Get callback url for AdminAdobeIms Module
+     *
+     * @return string
+     */
+    private function getAdminAdobeImsCallBackUrl(): string
+    {
+        return $this->scopeConfig->getValue('web/secure/base_url');
     }
 
     /**
@@ -130,5 +152,15 @@ class ImsConfig extends Config
     private function getLocale(): string
     {
         return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
+    }
+
+    /**
+     * Retrieve Organization Id
+     *
+     * @return string
+     */
+    public function getOrganizationId(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_ID);
     }
 }
