@@ -349,13 +349,16 @@ class Context implements ContextInterface
     {
         $this->acceptType = 'html';
 
-        $rawAcceptType = $this->request->getHeader('Accept');
-        if (strpos($rawAcceptType, 'json') !== false) {
-            $this->acceptType = 'json';
-        } elseif (strpos($rawAcceptType, 'html') !== false) {
-            $this->acceptType = 'html';
-        } elseif (strpos($rawAcceptType, 'xml') !== false) {
-            $this->acceptType = 'xml';
+        $acceptTypes = $this->getSortedAcceptHeader();
+        foreach ($acceptTypes as $acceptType) {
+            if (strpos($acceptType, 'json') !== false) {
+                $this->acceptType = 'json';
+            } elseif (strpos($acceptType, 'html') !== false) {
+                $this->acceptType = 'html';
+            } elseif (strpos($acceptType, 'xml') !== false) {
+                $this->acceptType = 'xml';
+            }
+            break;
         }
     }
 
@@ -407,5 +410,33 @@ class Context implements ContextInterface
     public function getUiComponentFactory()
     {
         return $this->uiComponentFactory;
+    }
+
+    /**
+     * Returns sorted accept header based on q value
+     *
+     * @return array
+     */
+    private function getSortedAcceptHeader()
+    {
+        $acceptTypes = [];
+        $acceptHeader = $this->request->getHeader('Accept');
+        $contentTypes = explode(',', $acceptHeader);
+        foreach ($contentTypes as $contentType) {
+            // the default quality is 1.
+            $q = 1;
+            // check if there is a different quality
+            if (strpos($contentType, ';q=') !== false) {
+                list($contentType, $q) = explode(';q=', $contentType);
+            }
+
+            if (array_key_exists($q, $acceptTypes)) {
+                $acceptTypes[$q] = $acceptTypes[$q] . ',' . $contentType;
+            } else {
+                $acceptTypes[$q] = $contentType;
+            }
+        }
+        krsort($acceptTypes);
+        return array_values($acceptTypes);
     }
 }
