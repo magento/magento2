@@ -13,8 +13,17 @@ We then check if the assigned organization is valid and if the user does exist i
 
 If there went something wrong during the authorization, the user gets redirected to the admin login page and an error message is shown.
 
-CLI command usage:
-bin/magento admin:adobe-ims info
+# Organization ID Validation
+
+During the authorization we check if the configured `Organization ID` provided on the enable CLI command is assigned to the user.
+
+In the profile response from Adobe IMS must be a `roles` array. There we have all assigned organizations to the user.
+
+We compare if the configured organization ID is existend in this array and also the structure of the organization ID is valid.
+
+# CLI command usage:
+
+`bin/magento admin:adobe-ims info`
 
 Example of getting data if Admin Adobe Ims module is enabled:
 Client ID: 1234567890a
