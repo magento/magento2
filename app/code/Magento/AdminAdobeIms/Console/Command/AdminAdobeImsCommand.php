@@ -28,6 +28,7 @@ class AdminAdobeImsCommand extends Command
     private const MODE_ENABLE = 'enable';
     private const MODE_DISABLE = 'disable';
     private const MODE_STATUS = 'status';
+    private const MODE_INFO = 'info';
 
     /**
      * Name of "target application mode" input argument
@@ -100,7 +101,7 @@ class AdminAdobeImsCommand extends Command
                 new InputArgument(
                     self::MODE_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'The status of the module. Available options are "enable", "disable" or "status"'
+                    'The status of the module. Available options are "enable", "disable", "info" or "status"'
                 ),
                 new InputOption(
                     self::ORGANIZATION_ID_ARGUMENT,
@@ -172,6 +173,19 @@ class AdminAdobeImsCommand extends Command
                 case self::MODE_STATUS:
                     $status = $this->getModuleStatus();
                     $output->writeln(__('Admin Adobe IMS integration is %1', $status));
+                    break;
+                case self::MODE_INFO:
+                    if ($this->imsConfig->enabled()) {
+                        $clientId = $this->imsConfig->getApiKey();
+                        if ($this->imsConnection->testAuth($clientId)) {
+                            $output->writeln(self::CLIENT_ID_NAME . ': ' . $clientId);
+                            $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->imsConfig->getOrganizationId());
+                            $clientSecret = $this->imsConfig->getPrivateKey() ? 'configured' : 'not configured';
+                            $output->writeln(self::CLIENT_SECRET_NAME . ' ' . $clientSecret);
+                        }
+                    } else {
+                        $output->writeln(__('Module is disabled'));
+                    }
                     break;
                 default:
                     throw new LocalizedException(__('The mode can\'t be switched to "%1".', $mode));

@@ -153,4 +153,14 @@ class ImsConfig extends Config
     {
         return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
     }
+
+    /**
+     * Retrieve Organization Id
+     *
+     * @return string
+     */
+    public function getOrganizationId(): string
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_ORGANIZATION_ID);
+    }
 }
