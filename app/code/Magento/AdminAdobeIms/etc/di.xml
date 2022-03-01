@@ -18,11 +18,6 @@
         <plugin name="admin_forgot_password_plugin" type="Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin" sortOrder="1"/>
     </type>
 
-    <type name="Magento\AdobeIms\Model\Config">
-        <plugin name="ims_config_plugin"
-                type="Magento\AdminAdobeIms\Plugin\ConfigPlugin"/>
-    </type>
-
     <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
         <plugin name="captcha_check_user_login_backend_observer_plugin"
                 type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
