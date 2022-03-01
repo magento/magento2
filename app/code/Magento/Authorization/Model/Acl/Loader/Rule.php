@@ -26,27 +26,27 @@ class Rule implements LoaderInterface
     /**
      * @var ResourceConnection
      */
-    protected $_resource;
+    private ResourceConnection $_resource;
 
     /**
      * @var RootResource
      */
-    private $_rootResource;
+    private RootResource $_rootResource;
 
     /**
      * @var CacheInterface
      */
-    private $aclDataCache;
+    private CacheInterface $aclDataCache;
 
     /**
      * @var Json
      */
-    private $serializer;
+    private Json $serializer;
 
     /**
      * @var string
      */
-    private $cacheKey;
+    private string $cacheKey;
 
     /**
      * @param RootResource $rootResource
