@@ -104,7 +104,11 @@ class PageTest extends TestCase
         $pageId = 'testPageId';
         $url = 'testUrl';
         $updatedAt = 'testUpdatedAt';
-        $pageIdentifiers = ['testCmsHomePage', 'testCmsNoRoute', 'testCmsNoCookies'];
+        $pageIdentifiers = [
+            'testCmsHomePage|ID' => 'testCmsHomePage',
+            'testCmsNoRoute' => 'testCmsNoRoute',
+            'testCmsNoCookies' => 'testCmsNoCookies',
+        ];
         $storeId = 1;
         $linkField = 'testLinkField';
         $expectedPage = new DataObject();
@@ -147,7 +151,7 @@ class PageTest extends TestCase
             ->method('where')
             ->withConsecutive(
                 [$this->identicalTo('main_table.is_active = 1')],
-                [$this->identicalTo('main_table.identifier NOT IN (?)'), $this->identicalTo($pageIdentifiers)],
+                [$this->identicalTo('main_table.identifier NOT IN (?)'), $this->identicalTo(array_values($pageIdentifiers))],
                 [$this->identicalTo('store_table.store_id IN(?)'), $this->identicalTo([0, $storeId])]
             )->willReturnSelf();
 
@@ -176,7 +180,7 @@ class PageTest extends TestCase
 
         $this->getUtilityPageIdentifiers->expects($this->once())
             ->method('execute')
-            ->willReturn($pageIdentifiers);
+            ->willReturn(array_keys($pageIdentifiers));
 
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
