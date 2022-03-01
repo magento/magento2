@@ -98,9 +98,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->prepareHistoryItemWithId(
                 $_memo->getId(),
                 __('Credit memo #%1 created', $_memo->getIncrementId()),
-                $_memo->getEmailSent(),
+                $_memo->getEmailSent() ?? false,
                 $this->getOrderAdminDate($_memo->getCreatedAt()),
-                'Credit memo created',
+                '',
                 self::HISTORY_TYPE_CREDIT_MEMO
             );
 
@@ -120,8 +120,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->prepareHistoryItemWithId(
                 $_shipment->getId(),
                 __('Shipment #%1 created', $_shipment->getIncrementId()),
-                $_shipment->getEmailSent(),
+                $_shipment->getEmailSent() ?? false,
                 $this->getOrderAdminDate($_shipment->getCreatedAt()),
+                '',
                 self::HISTORY_TYPE_SHIPMENT
             );
 
@@ -141,9 +142,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->prepareHistoryItemWithId(
                 $_invoice->getId(),
                 __('Invoice #%1 created', $_invoice->getIncrementId()),
-                $_invoice->getEmailSent(),
+                $_invoice->getEmailSent() ?? false,
                 $this->getOrderAdminDate($_invoice->getCreatedAt()),
-                'Invoice created',
+                '',
                 self::HISTORY_TYPE_INVOICE
             );
 
@@ -165,7 +166,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
                 __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
                 false,
                 $this->getOrderAdminDate($_track->getCreatedAt()),
-                'Tracking number assigned',
+                '',
                 self::HISTORY_TYPE_TRACKING_NUM
             );
         }
