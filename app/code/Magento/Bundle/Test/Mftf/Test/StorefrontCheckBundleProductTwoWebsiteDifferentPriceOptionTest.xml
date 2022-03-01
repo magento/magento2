@@ -37,7 +37,7 @@
             <magentoCron groups="index" stepKey="reindex"/>
 
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
-            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct" />
+            <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
             <createData entity="CheckboxOption" stepKey="createBundleOption">
                 <requiredEntity createDataKey="createBundleProduct"/>
             </createData>
