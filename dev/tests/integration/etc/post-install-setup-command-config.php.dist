@@ -16,5 +16,9 @@ return [
             '--remote-storage-region' => 'us-east-1'
             */
         ]
+    ],
+    [
+        'command' => 'setup:upgrade',
+        'config' => []
     ]
 ];
