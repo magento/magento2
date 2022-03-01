@@ -1,3 +1,8 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 & when (@media-common = true) {
     .adobe-id-login-wrapper {
         margin-top: 30px;
@@ -21,19 +26,19 @@
         }
 
         a {
+            appearance: button;
+            background: @color-white;
             border: 1px solid @color-very-dark-gray-black;
             border-radius: 10rem;
+            color: initial;
             display: block;
-            width: 100%;
             font-weight: bold;
             padding: 1rem;
-            background: @color-white;
+            text-align: center;
+            text-decoration: none;
+            width: 100%;
             -webkit-appearance: button;
             -moz-appearance: button;
-            appearance: button;
-            text-decoration: none;
-            color: initial;
-            text-align: center;
         }
     }
 }
