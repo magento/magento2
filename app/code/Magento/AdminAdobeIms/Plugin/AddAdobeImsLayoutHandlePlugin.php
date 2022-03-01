@@ -36,9 +36,11 @@ class AddAdobeImsLayoutHandlePlugin
             return $result;
         }
 
-        if ($this->imsConfig->enabled() === true) {
-            $result->addHandle('adobe_ims_login');
+        if ($this->imsConfig->enabled() !== true) {
+            return $result;
         }
+
+        $result->addHandle('adobe_ims_login');
         return $result;
     }
 }

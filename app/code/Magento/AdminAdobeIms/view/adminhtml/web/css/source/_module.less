@@ -10,24 +10,24 @@
     }
 
     .adobe-ims-root {
-        width: 100%;
-        height: 100%;
         display: flex;
         flex-direction: column;
+        height: 100%;
+        width: 100%;
     }
 
     .admin-ims-login-wrapper {
-        flex: 1 0 auto;
-        display: flex;
         align-items: center;
-        justify-content: space-evenly;
         background: url('Magento_AdminAdobeIms::images/AdobeStock_232925587.png') no-repeat;
-        background-size:100% 100%;
+        background-size: 100% 100%;
+        display: flex;
+        flex: 1 0 auto;
+        justify-content: space-evenly;
 
         .spectrum-Modal {
-            width: 470px;
-            height: 581px;
             background: #FFFFFF;
+            height: 581px;
+            width: 470px;
         }
 
         .spectrum-Dialog-content {
@@ -40,8 +40,8 @@
         }
 
         .adobe-ims-button {
-            display: flex;
             align-items: center;
+            display: flex;
             justify-content: flex-end;
         }
 
@@ -55,14 +55,14 @@
     }
 
     .adobe-ims-footer {
-        text-align: right;
-        flex-shrink: 0;
+        align-items: center;
         background: #000000;
         color: #909090;
-        height: 39px;
-        align-items: center;
         display: flex;
+        flex-shrink: 0;
+        height: 39px;
         justify-content: flex-end;
         padding-right: 15px;
+        text-align: right;
     }
 }

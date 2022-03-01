@@ -31,7 +31,7 @@ class MessageViewModel implements ArgumentInterface
      * @param array $messages
      * @return string
      */
-    public function getMessageHtml(array $messages): string
+    public function getMessagesHtml(array $messages): string
     {
         $html = '';
         foreach ($messages as $message) {
