@@ -118,7 +118,7 @@ class ImsConfig extends Config
     /**
      * Generate the AdminAdobeIms AuthUrl with given clientID or the ClientID stored in the config
      *
-     * @return string|null $clientId
+     * @param string|null $clientId
      * @return string
      */
     public function getAdminAdobeImsAuthUrl(?string $clientId): string

@@ -86,7 +86,7 @@ class ImsConnection
     }
 
     /**
-     * validate authorization call response
+     * Validate authorization call response
      *
      * @param Curl $curl
      * @return void
@@ -95,16 +95,16 @@ class ImsConnection
     private function validateResponse(Curl $curl): void
     {
         if (isset($curl->getHeaders()['location'])) {
-            if (preg_match(
-                '/error=([a-z_]+)/i',
-                $curl->getHeaders()['location'],
-                $error)
+            if (
+                preg_match(
+                    '/error=([a-z_]+)/i',
+                    $curl->getHeaders()['location'],
+                    $error
+                ) && isset($error[0], $error[1])
             ) {
-                if (isset($error[0], $error[1])) {
-                    throw new InvalidArgumentException(
-                        __('Could not connect to Adobe IMS Service: %1.', $error[1])
-                    );
-                }
+                throw new InvalidArgumentException(
+                    __('Could not connect to Adobe IMS Service: %1.', $error[1])
+                );
             }
         }
 
