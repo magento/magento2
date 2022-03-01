@@ -48,8 +48,10 @@
         <!-- Click the `Validate VAT Number` button. -->
         <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickValidateVatNumberButton"/>
         <waitForAjaxLoad stepKey="waitForAjaxToLoadVatValidationResult"/>
-        <waitForElementVisible selector="#validation_result" time="20" stepKey="waitForRenderingVatValidationResult"/>
-        <see selector="#validation_result" userInput="VAT Number is valid." stepKey="seeValidVatNumberResult"/>
+
+        <!-- Comment elements to preserve backward compatibility for replaced element's stepKeys-->
+        <comment userInput="Adding the comment to remove the `waitForElementVisible` element as not required in current scope of fix" stepKey="waitForRenderingVatValidationResult"/>
+        <comment userInput="Adding the comment to remove the `see` element as not required in scope of fix" stepKey="seeValidVatNumberResult"/>
 
         <!-- Disable `Validate VAT Number` button for non-EU Country (United Kingdom)-->
         <selectOption userInput="{{UK_With_State_Default_Billing.country}}" selector="{{StoreConfigSection.Country}}" stepKey="selectNonEUStoreCountry"/>
