@@ -49,7 +49,7 @@
         <click selector="{{StoreConfigSection.validateVATNumber}}" stepKey="clickValidateVatNumberButton"/>
         <waitForAjaxLoad stepKey="waitForAjaxToLoadVatValidationResult"/>
 
-        <!-- Comment elements to preserve backward compatibility for replaced element's stepKeys-->
+        <!-- Comment elements to preserve backward compatibility for replaced element's stepKeys -->
         <comment userInput="Adding the comment to remove the `waitForElementVisible` element as not required in current scope of fix" stepKey="waitForRenderingVatValidationResult"/>
         <comment userInput="Adding the comment to remove the `see` element as not required in scope of fix" stepKey="seeValidVatNumberResult"/>
 
