@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Sales\Plugin\Model\AdminOrder;
+
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\AdminOrder\Create;
+
+/**
+ * Plugin to update customer firstname, middlename and lastname after create order
+ */
+class GuestNameUpdate
+{
+    /**
+     * Quote session object
+     *
+     * @var \Magento\Backend\Model\Session\Quote
+     */
+    protected $_session;
+
+    /**
+     * @param \Magento\Backend\Model\Session\Quote $quoteSession
+     */
+    public function __construct(\Magento\Backend\Model\Session\Quote $quoteSession)
+    {
+        $this->_session = $quoteSession;
+    }
+
+    /**
+     * update guest name after create order
+     *
+     * @param Create $subject
+     * @param Order $order
+     * @return Order
+     */
+    public function afterCreateOrder(Create $subject, Order $order): Order
+    {
+        if ($this->_session->getOrder()->getId()) {
+            $oldOrder = $this->_session->getOrder();
+            if ($order->getCustomerIsGuest()) {
+                $order->setCustomerFirstname($oldOrder->getCustomerFirstname());
+                $order->setCustomerLastname($oldOrder->getCustomerLastname());
+                if ($oldOrder->getMiddlename() === null) {
+                    $order->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
+                }
+            }
+            $order->save();
+        }
+        return $order;
+    }
+}
