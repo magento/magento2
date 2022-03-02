@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerInSecondWebsiteWithGlobalAccountSharingEnabled">
+        <annotations>
+            <features value="Customer"/>
+            <title value="Admin create customer in second website when global account sharing is enabled"/>
+            <stories value="Admin create customer in second website when global account sharing is enabled"/>
+            <testCaseId value="AC-2542"/>
+            <useCaseId value="ACP2E-356"/>
+            <severity value="MAJOR"/>
+            <description value="When Admin tries to create a customer in second website with the global account sharing is enabled, then Admin should be able to do so."/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <!--Delete custom website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
+        </after>
+        <!-- Create second website -->
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+            <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+            <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+        </actionGroup>
+        <!-- Create second store -->
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+            <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+        </actionGroup>
+        <!-- Create second store view -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+            <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+            <argument name="customStore" value="SecondStoreUnique"/>
+        </actionGroup>
+        <!--Open New Customer Page -->
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="waitToCustomerPageLoad"/>
+        <!--Change customer website to "Second Website"-->
+        <actionGroup ref="AdminUpdateCustomerWebsiteInCustomerInformationPageActionGroup" stepKey="updateCustomerWebsite">
+            <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+        </actionGroup>
+        <!--Verify that "Second Website" is selected in website selector-->
+        <seeOptionIsSelected selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{secondCustomWebsite.name}}" stepKey="assertThatSecondWebsiteIsSelected"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+    </test>
+</tests>
