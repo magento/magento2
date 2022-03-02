@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Console\Command;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
+use Magento\AdminAdobeIms\Service\ImsCommandValidationService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\InvalidArgumentException;
@@ -65,16 +66,24 @@ class AdminAdobeImsEnableCommand extends Command
     private ImsConnection $imsConnection;
 
     /**
+     * @var ImsCommandValidationService
+     */
+    private ImsCommandValidationService $imsCommandValidationService;
+
+    /**
      * @param ImsConfig $imsConfig
      * @param ImsConnection $imsConnection
+     * @param ImsCommandValidationService $imsCommandValidationService
      */
     public function __construct(
         ImsConfig $imsConfig,
-        ImsConnection $imsConnection
+        ImsConnection $imsConnection,
+        ImsCommandValidationService $imsCommandValidationService
     ) {
         parent::__construct();
         $this->imsConfig = $imsConfig;
         $this->imsConnection = $imsConnection;
+        $this->imsCommandValidationService = $imsCommandValidationService;
 
         $this->setName('admin:adobe-ims:enable')
             ->setDescription('Enable Adobe IMS Module.')
@@ -98,7 +107,6 @@ class AdminAdobeImsEnableCommand extends Command
                     'Set the client Secret for Adobe IMS configuration. Required when enabling the module'
                 )
             ]);
-
     }
 
     /**
@@ -113,16 +121,17 @@ class AdminAdobeImsEnableCommand extends Command
             $helper = $this->getHelper('question');
 
             if (!$organizationId) {
-                $question = $this->prepareQuestion(self::ORGANIZATION_ID_NAME);
+                $question = $this->askForOrganizationId();
                 $organizationId = $helper->ask($input, $output, $question);
             }
+
             if (!$clientId) {
-                $question = $this->prepareQuestion(self::CLIENT_ID_NAME);
+                $question = $this->askForClientId();
                 $clientId = $helper->ask($input, $output, $question);
             }
 
             if (!$clientSecret) {
-                $question = $this->prepareHiddenQuestion(self::CLIENT_SECRET_NAME);
+                $question = $this->askForClientSecret();
                 $clientSecret = $helper->ask($input, $output, $question);
             }
 
@@ -156,13 +165,21 @@ class AdminAdobeImsEnableCommand extends Command
      */
     private function prepareQuestion(string $paramName): Question
     {
-        $question = new Question('Please enter your ' . $paramName . ':', '');
+        return new Question('Please enter your ' . $paramName . ':', '');
+    }
+
+    /**
+     * Prepare Question for organization id
+     *
+     * @return Question
+     */
+    private function askForOrganizationId(): Question
+    {
+        $question = $this->prepareQuestion(self::ORGANIZATION_ID_NAME);
         $question->setValidator(function ($value) {
-            if (trim($value) === '') {
-                throw new LocalizedException(
-                    __('This field is required to enable the Admin Adobe IMS Module')
-                );
-            }
+            $this->imsCommandValidationService->emptyValueValidator($value);
+            $this->imsCommandValidationService->organizationIdValidator($value);
+
             return $value;
         });
 
@@ -170,16 +187,39 @@ class AdminAdobeImsEnableCommand extends Command
     }
 
     /**
-     * Prepare Hidden Question for parameter
+     * Prepare Question for client id
      *
-     * @param string $paramName
      * @return Question
      */
-    private function prepareHiddenQuestion(string $paramName): Question
+    private function askForClientId(): Question
     {
-        $question = $this->prepareQuestion($paramName);
+        $question = $this->prepareQuestion(self::CLIENT_ID_NAME);
+        $question->setValidator(function ($value) {
+            $this->imsCommandValidationService->emptyValueValidator($value);
+            $this->imsCommandValidationService->clientIdValidator($value);
+
+            return $value;
+        });
+
+        return $question;
+    }
+
+    /**
+     * Prepare Hidden Question for client secret
+     *
+     * @return Question
+     */
+    private function askForClientSecret(): Question
+    {
+        $question = $this->prepareQuestion(self::CLIENT_SECRET_NAME);
         $question->setHidden(true);
         $question->setHiddenFallback(false);
+        $question->setValidator(function ($value) {
+            $this->imsCommandValidationService->emptyValueValidator($value);
+            $this->imsCommandValidationService->clientSecretValidator($value);
+
+            return $value;
+        });
 
         return $question;
     }
