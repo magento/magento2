@@ -11,6 +11,8 @@
     <test name="AdminAdobeImsDisabledInfoCommandTest">
         <annotations>
             <features value="Cli"/>
+            <stories value="Test AdminAdobeIms Info command when module is disabled"/>
+            <title value="AdminAdobeIms Info Command for disabled module"/>
             <description value="Runs bin/magento admin:adobe-ims info command"/>
             <severity value="MINOR"/>
             <group value="admin_ims"/>
