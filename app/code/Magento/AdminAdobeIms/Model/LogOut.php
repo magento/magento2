@@ -11,6 +11,7 @@ use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\Client\CurlFactory;
@@ -20,7 +21,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Represent functionality for log out users from the Adobe account
  */
-class LogOut
+class LogOut implements LogOutInterface
 {
     /**
      * Successful result code.
@@ -140,7 +141,7 @@ class LogOut
         $result = false;
         try {
             $profile = $this->imsConnection->getProfile($accessToken);
-            if ($profile['email']) {
+            if (!empty($profile['email'])) {
                 $result = true;
             }
         } catch (AdobeImsTokenAuthorizationException $exception) {
