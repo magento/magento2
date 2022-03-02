@@ -24,6 +24,11 @@ class Rule implements LoaderInterface
     public const ACL_RULE_CACHE_KEY = 'authorization_rule_cached_data';
 
     /**
+     * Allow everything resource id
+     */
+    private const ALLOW_EVERYTHING = 'Magento_Backend::all';
+
+    /**
      * @var ResourceConnection
      */
     private ResourceConnection $_resource;
@@ -92,8 +97,7 @@ class Rule implements LoaderInterface
      */
     private function applyPermissionsAccordingToRules(\Magento\Framework\Acl $acl): array
     {
-        $foundResources = [];
-        $foundRoles = [];
+        $foundResources = $foundDeniedRoles = [];
         foreach ($this->getRulesArray() as $rule) {
             $role = $rule['role_id'];
             $resource = $rule['resource_id'];
@@ -101,18 +105,18 @@ class Rule implements LoaderInterface
 
             if ($acl->has($resource)) {
                 $foundResources[$resource] = $resource;
-                $foundRoles[$role] = $role;
                 if ($rule['permission'] == 'allow') {
                     if ($resource === $this->_rootResource->getId()) {
                         $acl->allow($role, null, $privileges);
                     }
                     $acl->allow($role, $resource, $privileges);
                 } elseif ($rule['permission'] == 'deny') {
+                    $foundDeniedRoles[$role] = $role;
                     $acl->deny($role, $resource, $privileges);
                 }
             }
         }
-        return [$foundResources, $foundRoles];
+        return [$foundResources, $foundDeniedRoles];
     }
 
     /**
@@ -122,15 +126,20 @@ class Rule implements LoaderInterface
      *
      * @param \Magento\Framework\Acl $acl
      * @param array $resources
-     * @param array $roles
+     * @param array $deniedRoles
      * @return void
      */
-    private function applyDenyPermissionsForMissingRules(\Magento\Framework\Acl $acl, array $resources, array $roles)
+    private function applyDenyPermissionsForMissingRules(\Magento\Framework\Acl $acl, array $resources, array $deniedRoles)
     {
-        foreach ($acl->getResources() as $resource) {
-            if (!isset($resources[$resource])) {
-                foreach ($roles as $role) {
-                    $acl->deny($role, $resource, null);
+        if (count($resources) && count($deniedRoles)
+            //ignore denying missing permission if all are allowed
+            && !(count($resources) == 1 && isset($resources[static::ALLOW_EVERYTHING]))
+        ) {
+            foreach ($acl->getResources() as $resource) {
+                if (!isset($resources[$resource])) {
+                    foreach ($deniedRoles as $role) {
+                        $acl->deny($role, $resource, null);
+                    }
                 }
             }
         }
