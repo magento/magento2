@@ -124,19 +124,19 @@ class RuleTest extends TestCase
             );
 
         $aclMock
-            ->method('getResources')
-            ->willReturn([
-                'Vendor_MyModule::menu'
-            ]);
-
-        $aclMock
             ->method('deny')
             ->withConsecutive(
-                ['3', 1, null],
-                ['1', 'Vendor_MyModule::menu', null],
-                ['2', 'Vendor_MyModule::menu', null],
-                ['3', 'Vendor_MyModule::menu', null]
+                ['3', 1, null]
             );
+
+        $aclMock
+            ->method('getResources')
+            ->willReturn([
+                'Magento_Backend::all',
+                'Magento_Backend::admin',
+                'Vendor_MyModule::menu',
+                'Vendor_MyModule::index'
+            ]);
 
         $this->model->populateAcl($aclMock);
     }
