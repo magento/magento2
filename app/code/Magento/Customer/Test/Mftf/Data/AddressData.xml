@@ -87,8 +87,8 @@
         <data key="lastname">Doe</data>
         <data key="company">Magento</data>
         <array key="street">
-            <item>7700 West Parmer Lane</item>
-            <item>Apt</item>
+            <item>7700 West</item>
+            <item>Parmer Lane Apt</item>
         </array>
         <data key="city">Austin</data>
         <data key="state">Texas</data>

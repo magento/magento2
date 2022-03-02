@@ -6,38 +6,41 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontUpdateCustomerShippingAddressFromBlockFailedTest">
         <annotations>
-            <features value="Customer"/>
-            <stories value="Update Customer Address"/>
-            <title value="Update customer shipping address via the Storefront fails if validation is not passed"/>
-            <description value="Update customer shipping address via the Storefront fails if validation is not passed"/>
-            <severity value="MINOR"/>
+            <features value="Customer address"/>
+            <stories value="JS validation error doesn't work for the 2nd line of the street attribute"/>
+            <title value="JS validation error does not work for the 2nd line of the street attribute"/>
+            <description value="Storefront user should be able to see error for 2nd line of the street attribute if length more than maximum text length property value."/>
+            <severity value="AVERAGE"/>
             <testCaseId value="MC-43268"/>
+            <useCaseId value="ACP2E-197"/>
             <group value="customer"/>
-            <group value="update"/>
         </annotations>
         <before>
-            <createData entity="US_Address_TX_Default_Billing_With_Long_Line_Apartment" stepKey="createCustomer"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties">
+                <argument name="minimumTextLength" value="1"/>
+                <argument name="maximumTextLength" value="255"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-
+        <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties">
+            <argument name="minimumTextLength" value="1"/>
+            <argument name="maximumTextLength" value="10"/>
+        </actionGroup>
         <!--Log in to Storefront as Customer 1 -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
-            <argument name="Customer" value="$createCustomer$"/>
+            <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="OpenCustomerAddNewAddress"/>
-        <waitForElementVisible selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="waitForChangeShippingAddressLinkVisible"/>
-        <click selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="ClickEditDefaultShippingAddress"/>
-        <fillField userInput="{{US_Address_TX_Default_Billing_With_Long_Line_Apartment.street}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="fillStreetTwoLines"/>
-        <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="saveCustomerAddress"/>
-        <waitForElementVisible stepKey="waitForErrorAppears" selector="{{StorefrontMessagesSection.error}}"/>
-        <see selector="{{StorefrontMessagesSection.error}}" userInput='Please enter less or equal than 10 symbols.' stepKey="seeErrorMessages"/>
-        <fillField userInput="{{US_Address_TX_Default_Billing.street}}" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="fillStreetLine"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessageVisible"/>
-        <see userInput="You saved the address." selector="{{StorefrontMessagesSection.success}}" stepKey="verifyAddressAdded"/>
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="AddNewAddress">
+            <argument name="Address" value="US_Address_TX_Default_Billing_With_Long_Line_Apartment"/>
+        </actionGroup>
+        <see userInput='"Street Address" length must be equal or less than 10 characters.' selector='{{StorefrontMessagesSection.error}}' stepKey='verifyAddressAdded'/>
     </test>
 </tests>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Same as "EditCustomerAddressesFromAdminActionGroup" but taking country and state from input "customerAddress" -->
+    <actionGroup name="AdminEditCustomerAddressAttributePropertiesActionGroup">
+        <annotations>
+            <description>Adds the provided properties value to a customer address attribute edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="minimumTextLength" type="string" defaultValue="1"/>
+            <argument name="maximumTextLength" type="string" defaultValue="255"/>
+        </arguments>
+        <!--Update customer attribute properties-->
+        <amOnPage url="{{CustomerAttributePrefixPage.url(CustomerStreetAddressPrefixAttribute.attribute_code)}}" stepKey="goToPrefix"/>
+        <waitForPageLoad stepKey="waitForPrefixPageOpened"/>
+        <fillField selector="{{AdminReturnAttributePropertiesSection.minTextLength}}" userInput="{{minimumTextLength}}" stepKey="minimumTextLength"/>
+        <fillField selector="{{AdminReturnAttributePropertiesSection.maxTextLength}}" userInput="{{maximumTextLength}}" stepKey="maximumTextLength"/>
+        <click selector="{{CustomerAddressPrefixSection.save}}" stepKey="ClickToSave"/>
+        <waitForPageLoad stepKey="waitForValueSaved"/>
+    </actionGroup>
+</actionGroups>

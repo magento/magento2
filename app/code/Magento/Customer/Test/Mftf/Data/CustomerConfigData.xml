@@ -61,4 +61,7 @@
         <data key="label">Global</data>
         <data key="value">0</data>
     </entity>
+    <entity name="CustomerStreetAddressPrefixAttribute">
+        <data key="attribute_code">28</data>
+    </entity>
 </entities>
