@@ -102,8 +102,7 @@ $numColumns = count($block->getColumns());
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
-                    <label for="<?= $block->escapeHtml($block->getHtmlId())
-                    ?><?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                    <label for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
                         class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
 
                     <div class="admin__data-grid-pager">
@@ -304,7 +303,7 @@ script;
 script;
         endif;
 
-        if (strpos($block->getRowClickCallback(), 'order.') !== false):
+        if ($block->getRowClickCallback() && strpos($block->getRowClickCallback(), 'order.') !== false):
             $scriptString .= <<<script
 
     deps.push('Magento_Sales/order/create/form')

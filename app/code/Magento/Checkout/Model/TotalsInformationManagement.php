@@ -5,14 +5,14 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Checkout\Api\Data\TotalsInformationInterface;
+
 /**
  * Class for management of totals information.
  */
 class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInformationManagementInterface
 {
     /**
-     * Cart total repository.
-     *
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
      */
     protected $cartTotalRepository;
@@ -42,7 +42,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
      */
     public function calculate(
         $cartId,
-        \Magento\Checkout\Api\Data\TotalsInformationInterface $addressInformation
+        TotalsInformationInterface $addressInformation
     ) {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->cartRepository->get($cartId);
@@ -53,9 +53,19 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
         } else {
             $quote->setShippingAddress($addressInformation->getAddress());
             if ($addressInformation->getShippingCarrierCode() && $addressInformation->getShippingMethodCode()) {
-                $quote->getShippingAddress()->setCollectShippingRates(true)->setShippingMethod(
-                    $addressInformation->getShippingCarrierCode().'_'.$addressInformation->getShippingMethodCode()
+                $shippingMethod = implode(
+                    '_',
+                    [$addressInformation->getShippingCarrierCode(), $addressInformation->getShippingMethodCode()]
                 );
+                $quoteShippingAddress = $quote->getShippingAddress();
+                if ($quoteShippingAddress->getShippingMethod() &&
+                    $quoteShippingAddress->getShippingMethod() !== $shippingMethod
+                ) {
+                    $quoteShippingAddress->setShippingAmount(0);
+                    $quoteShippingAddress->setBaseShippingAmount(0);
+                }
+                $quoteShippingAddress->setCollectShippingRates(true)
+                    ->setShippingMethod($shippingMethod);
             }
         }
         $quote->collectTotals();

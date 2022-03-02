@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher;
 
-use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface;
-
 /**
  * Test access to publisher configuration declared in deprecated queue.xml configs using Publisher\ConfigInterface.
  *
@@ -33,7 +31,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName());
+        $this->assertEquals('db', $connection->getName());
         $this->assertEquals('magento', $connection->getExchange());
         $this->assertFalse($connection->isDisabled());
     }
@@ -47,7 +45,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName());
+        $this->assertEquals('db', $connection->getName());
         $this->assertEquals('customExchange', $connection->getExchange());
         $this->assertFalse($connection->isDisabled());
     }
@@ -61,7 +59,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName());
+        $this->assertEquals('db', $connection->getName());
         $this->assertEquals('magento', $connection->getExchange());
         $this->assertFalse($connection->isDisabled());
     }

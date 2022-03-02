@@ -16,6 +16,7 @@
             <description value="Login as customer sees special prices on category"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -91,12 +92,13 @@
         </actionGroup>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <closeTab stepKey="closeLoginAsCustomerTab"/>
 
         <!-- Open order in admin -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
-            <argument name="orderId" value="{$grabOrderId}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
         <!-- Assert order subtotal -->
