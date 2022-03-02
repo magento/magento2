@@ -13,4 +13,8 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\User\Controller\Adminhtml\Auth\Forgotpassword">
+        <plugin name="admin_forgot_password_plugin" type="Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin" sortOrder="1"/>
+    </type>
 </config>

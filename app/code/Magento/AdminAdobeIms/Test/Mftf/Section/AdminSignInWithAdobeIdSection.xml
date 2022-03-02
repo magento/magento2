@@ -9,11 +9,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminSignInWithAdobeIdSection">
-        <element name="orText"
-                 type="text"
-                 selector=".adobe-id-login-wrapper .login-option-or-line"/>
         <element name="signInButton"
                  type="text"
-                 selector=".adobe-id-login-wrapper .login-option-or-line"/>
+                 selector=".adobe-id-login-wrapper a"/>
     </section>
 </sections>

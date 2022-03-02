@@ -13,9 +13,6 @@
             <description>Check for Sign in with Adobe ID button not being shown.</description>
         </annotations>
 
-        <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.orText}}"
-                    stepKey="assertAdminSignInWithAdobeIdOrElement"/>
-
         <dontSeeElement selector="{{AdminSignInWithAdobeIdSection.signInButton}}"
                     stepKey="assertAdminSignInWithAdobeIdButtonElement"/>
     </actionGroup>

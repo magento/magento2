@@ -16,6 +16,12 @@
                     <argument name="link_view_model" xsi:type="object">Magento\AdminAdobeIms\ViewModel\LinkViewModel</argument>
                 </arguments>
             </block>
+
+            <referenceBlock name="admin.login" template="Magento_AdminAdobeIms::admin/login.phtml">
+                <arguments>
+                    <argument name="admin_form_visibility_view_model" xsi:type="object">Magento\AdminAdobeIms\ViewModel\AdminFormVisibilityViewModel</argument>
+                </arguments>
+            </referenceBlock>
         </referenceContainer>
     </body>
 </page>
