@@ -23,14 +23,14 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
     private const HISTORY_TYPE_TRACKING_NUM = 8;
 
     /**
-     * Template
+     * History Template
      *
      * @var string
      */
     protected $_template = 'Magento_Sales::order/view/tab/history.phtml';
 
     /**
-     * Core registry
+     * Core registry variable
      *
      * @var \Magento\Framework\Registry
      */
@@ -89,7 +89,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
                 $orderComment->getStatusLabel(),
                 $orderComment->getIsCustomerNotified(),
                 $this->getOrderAdminDate($orderComment->getCreatedAt()),
-                $orderComment->getComment(),
+                $orderComment->getComment() ?? '',
                 self::HISTORY_TYPE_ORDER
             );
         }
@@ -357,7 +357,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param mixed $b
      * @return int
      */
-    public static function sortHistoryByTimestamp($a, $b)
+    public function sortHistoryByTimestamp($a, $b)
     {
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
@@ -371,6 +371,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param array $a
      * @param array $b
      * @return int
+     * @SuppressWarnings("unused")
      */
     private function sortHistory(array $a, array $b): int
     {
