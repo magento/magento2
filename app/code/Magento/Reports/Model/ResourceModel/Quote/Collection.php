@@ -200,9 +200,22 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
         foreach ($this->getItems() as $item) {
             foreach ($customersData as $customerItemData) {
                 if ($item['customer_id'] == $customerItemData['entity_id']) {
-                    $item->setData(array_merge($item->getData(), $customerItemData));
+                    $item['customer_name'] = $customerItemData['customer_name'];
+                    $item['email'] = $customerItemData['email'];
+                    $item->setData($item->getData());
                 }
             }
         }
+    }
+
+    /**
+     * Append customer data after collection load
+     *
+     * @return Collection|void
+     */
+    protected function _afterLoad()
+    {
+        parent::_afterLoad();
+        $this->resolveCustomerNames();
     }
 }
