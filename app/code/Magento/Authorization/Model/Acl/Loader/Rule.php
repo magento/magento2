@@ -129,8 +129,11 @@ class Rule implements LoaderInterface
      * @param array $deniedRoles
      * @return void
      */
-    private function applyDenyPermissionsForMissingRules(\Magento\Framework\Acl $acl, array $resources, array $deniedRoles)
-    {
+    private function applyDenyPermissionsForMissingRules(
+        \Magento\Framework\Acl $acl,
+        array $resources,
+        array $deniedRoles
+    ) {
         if (count($resources) && count($deniedRoles)
             //ignore denying missing permission if all are allowed
             && !(count($resources) == 1 && isset($resources[static::ALLOW_EVERYTHING]))
