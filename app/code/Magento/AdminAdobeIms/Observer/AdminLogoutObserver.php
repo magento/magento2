@@ -8,11 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Observer;
 
-use Magento\AdobeIms\Model\LogOut;
+use Magento\AdminAdobeIms\Model\LogOut;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 class AdminLogoutObserver implements ObserverInterface
 {
+    /**
+     * @var LogOut
+     */
     private LogOut $logOut;
 
     /**
@@ -23,13 +27,12 @@ class AdminLogoutObserver implements ObserverInterface
     ) {
         $this->logOut = $logOut;
     }
+
     /**
-     *
-     *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $this->logOut->execute();
         return $this;
