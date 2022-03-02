@@ -69,6 +69,57 @@ class ImsConfig extends Config
     }
 
     /**
+     * Enable Admin Adobe IMS Module and set Client ID and Client Secret and Organization ID
+     *
+     * @param string $clientId
+     * @param string $clientSecret
+     * @param string $organizationId
+     * @return void
+     */
+    public function enableModule(
+        string $clientId,
+        string $clientSecret,
+        string $organizationId
+    ): void {
+        $this->updateConfig(
+            self::XML_PATH_ENABLED,
+            '1'
+        );
+
+        $this->updateSecureConfig(
+            self::XML_PATH_ORGANIZATION_ID,
+            $organizationId
+        );
+
+        $this->updateSecureConfig(
+            self::XML_PATH_API_KEY,
+            $clientId
+        );
+
+        $this->updateSecureConfig(
+            self::XML_PATH_PRIVATE_KEY,
+            $clientSecret
+        );
+    }
+
+    /**
+     * Disable Admin Adobe IMS Module and unset Client ID and Client Secret from config
+     *
+     * @return void
+     */
+    public function disableModule(): void
+    {
+        $this->updateConfig(
+            self::XML_PATH_ENABLED,
+            '0'
+        );
+
+        $this->deleteConfig(self::XML_PATH_ORGANIZATION_ID);
+        $this->deleteConfig(self::XML_PATH_API_KEY);
+        $this->deleteConfig(self::XML_PATH_PRIVATE_KEY);
+    }
+
+    /**
      * Update config
      *
      * @param string $path

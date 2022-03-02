@@ -9,7 +9,10 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="adminAdobeImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsCommand</item>
+                <item name="adminAdobeEnableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand</item>
+                <item name="adminAdobeDisableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsDisableCommand</item>
+                <item name="adminAdobeInfoImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsInfoCommand</item>
+                <item name="adminAdobeStatusImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsStatusCommand</item>
             </argument>
         </arguments>
     </type>

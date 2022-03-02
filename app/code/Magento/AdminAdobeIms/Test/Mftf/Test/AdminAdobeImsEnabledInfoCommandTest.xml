@@ -23,7 +23,7 @@
             <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminImsAuthModule" />
         </after>
 
-        <magentoCLI command="admin:adobe-ims info" stepKey="infoAdminAdobeIms"/>
+        <magentoCLI command="admin:adobe-ims:info" stepKey="infoAdminAdobeIms"/>
 
         <assertRegExp stepKey="assertCommandInfoModuleEnabled">
             <expectedResult type="string">/Client ID: [\w.-]+\nOrganization ID: ([\w.-]+)|([\w.-]@+[\w.-])\nClient Secret (configured)|(not configured)\n/</expectedResult>
