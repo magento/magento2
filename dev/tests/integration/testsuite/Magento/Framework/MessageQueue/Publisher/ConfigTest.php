@@ -70,7 +70,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         /** @var \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface $connection */
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp', $connection->getName(), 'Incorrect default connection name');
+        $this->assertEquals('db', $connection->getName(), 'Incorrect default connection name');
         $this->assertEquals('magento', $connection->getExchange(), 'Incorrect default exchange name');
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }
