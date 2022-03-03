@@ -46,7 +46,7 @@ class AfterImportDataObserver implements ObserverInterface
     /**
      * Url Key Attribute
      */
-    const URL_KEY_ATTRIBUTE_CODE = 'url_key';
+    public const URL_KEY_ATTRIBUTE_CODE = 'url_key';
 
     /**
      * @var StoreViewService
@@ -210,9 +210,10 @@ class AfterImportDataObserver implements ObserverInterface
         $this->storeManager = $storeManager;
         $this->urlRewriteFactory = $urlRewriteFactory;
         $this->urlFinder = $urlFinder;
-        if (!isset($mergeDataProviderFactory)) {
-            $mergeDataProviderFactory = ObjectManager::getInstance()->get(MergeDataProviderFactory::class);
-        }
+
+        $mergeDataProviderFactory = $mergeDataProviderFactory ?: ObjectManager::getInstance()->get(
+            MergeDataProviderFactory::class
+        );
         $this->mergeDataProviderPrototype = $mergeDataProviderFactory->create();
         $this->categoryCollectionFactory = $categoryCollectionFactory ?:
             ObjectManager::getInstance()->get(CategoryCollectionFactory::class);
