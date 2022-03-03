@@ -24,12 +24,16 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+            <amOnPage url="{{CustomerAttributePrefixPage.url(CustomerAddressStreetAttribute.attribute_code)}}" stepKey="goToStreet"/>
+            <waitForPageLoad stepKey="waitForPrefixPageOpened"/>
             <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressPropertiesRollBack">
                 <argument name="minimumTextLength" value="1"/>
                 <argument name="maximumTextLength" value="255"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
+        <amOnPage url="{{CustomerAttributePrefixPage.url(CustomerAddressStreetAttribute.attribute_code)}}" stepKey="goToStreet"/>
+        <waitForPageLoad stepKey="waitForPrefixPageOpened"/>
         <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties">
             <argument name="minimumTextLength" value="1"/>
             <argument name="maximumTextLength" value="10"/>

@@ -18,8 +18,6 @@
             <argument name="maximumTextLength" type="string" defaultValue="255"/>
         </arguments>
         <!--Update customer attribute properties-->
-        <amOnPage url="{{CustomerAttributePrefixPage.url(CustomerAddressStreetAttribute.attribute_code)}}" stepKey="goToStreet"/>
-        <waitForPageLoad stepKey="waitForPrefixPageOpened"/>
         <fillField selector="{{AdminReturnAttributePropertiesSection.minTextLength}}" userInput="{{minimumTextLength}}" stepKey="minimumTextLength"/>
         <fillField selector="{{AdminReturnAttributePropertiesSection.maxTextLength}}" userInput="{{maximumTextLength}}" stepKey="maximumTextLength"/>
         <click selector="{{CustomerAddressPrefixSection.save}}" stepKey="ClickToSave"/>
