@@ -6,21 +6,28 @@
 
 namespace Magento\CatalogRule\Setup\Patch\Schema;
 
-use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
+/**
+ * Class CleanUpProductPriceReplicaTable
+ *
+ */
 class CleanUpProductPriceReplicaTable implements SchemaPatchInterface
 {
-    /** @var ModuleDataSetupInterface */
-    private ModuleDataSetupInterface $moduleDataSetup;
+    /**
+     * @var SchemaSetupInterface
+     */
+    private SchemaSetupInterface $schemaSetup;
 
     /**
-     * @param ModuleDataSetupInterface $moduleDataSetup
+     * CleanUpProductPriceReplicaTable constructor.
+     * @param SchemaSetupInterface $schemaSetup
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
+        SchemaSetupInterface $schemaSetup
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
+        $this->schemaSetup = $schemaSetup;
     }
 
     /**
@@ -28,8 +35,8 @@ class CleanUpProductPriceReplicaTable implements SchemaPatchInterface
      */
     public function apply(): void
     {
-        $connection = $this->moduleDataSetup->getConnection();
-        $connection->startSetup();
+        $connection = $this->schemaSetup->startSetup();
+        $connection = $this->schemaSetup->getConnection();
 
         // There was a bug which caused the catalogrule_product_price_replica
         // table to become unnecessarily large. The bug causing the growth has
