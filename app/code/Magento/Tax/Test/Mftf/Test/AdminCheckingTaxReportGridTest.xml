@@ -205,6 +205,7 @@
         <see selector="{{AdminTaxReportsSection.taxRuleAmount(TaxRateTexas.code)}}" userInput="$amountOfTaxOnFirstProduct" stepKey="assertSubtotalFirstField"/>
         <see selector="{{AdminTaxReportsSection.taxRuleAmount(SecondTaxRateTexas.code)}}" userInput="$amountOfTaxOnSecondProduct" stepKey="assertSubtotalSecondField"/>
         <!-- Return sum of all amounts on report except subtotal -->
+        <!-- Cannot simply add totals generated in this test above because tests that run before this test will appear in the generated report -->
         <executeJS function="
         return (
             function() {
