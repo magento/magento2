@@ -17,6 +17,18 @@
             <argument name="minimumTextLength" type="string" defaultValue="1"/>
             <argument name="maximumTextLength" type="string" defaultValue="255"/>
         </arguments>
+        <!--Go To Customer Address page-->
+        <click selector="{{AdminCustomerAddressPropertySection.stores}}" stepKey="GoToStores"/>
+        <waitForPageLoad stepKey="WaitForStoresLoaded"/>
+        <click selector="{{AdminCustomerAddressPropertySection.customerAddress}}" stepKey="GoToCustomerAddress"/>
+        <waitForPageLoad stepKey="WaitForCustomerAddressIsOpened"/>
+        <seeInCurrentUrl url="customer_address_attribute" stepKey="verifyPageIsOpened"/>
+        <waitForElementVisible selector="{{AdminCustomerAddressPropertySection.defaultLabel}}" stepKey="waitForDefaultLabelToVisible"/>
+        <fillField selector="{{AdminCustomerAddressPropertySection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName"/>
+        <click selector="{{AdminCustomerAddressPropertySection.search}}" stepKey="clickToSearchButton"/>
+        <waitForPageLoad stepKey="waitForResult"/>
+        <click selector="{{AdminCustomerAddressPropertySection.firstRowInGrid}}" stepKey="clickToSelectAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributePageLoaded"/>
         <!--Update customer attribute properties-->
         <fillField selector="{{AdminCustomerAddressPropertySection.minTextLength}}" userInput="{{minimumTextLength}}" stepKey="minimumTextLength"/>
         <fillField selector="{{AdminCustomerAddressPropertySection.maxTextLength}}" userInput="{{maximumTextLength}}" stepKey="maximumTextLength"/>

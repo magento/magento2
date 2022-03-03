@@ -21,14 +21,6 @@
         <before>
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!--Go To Customer Address page-->
-            <actionGroup ref="GoToCustomerAddress" stepKey="GoToCustomerAddress1"/>
-            <waitForElementVisible selector="{{AdminCustomerAddressPropertySection.defaultLabel}}" stepKey="waitForDefaultLabelToVisible"/>
-            <fillField selector="{{AdminCustomerAddressPropertySection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName"/>
-            <click selector="{{AdminCustomerAddressPropertySection.search}}" stepKey="clickToSearchButton"/>
-            <waitForPageLoad stepKey="waitForResult"/>
-            <click selector="{{AdminCustomerAddressPropertySection.firstRowInGrid}}" stepKey="clickToSelectAttribute"/>
-            <waitForPageLoad stepKey="waitForAttributePageLoaded"/>
             <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties">
                 <argument name="minimumTextLength" value="1"/>
                 <argument name="maximumTextLength" value="10"/>
@@ -36,7 +28,10 @@
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
-            <!--Go To Customer Address page-->
+            <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressPropertiesRollBack">
+                <argument name="minimumTextLength" value="1"/>
+                <argument name="maximumTextLength" value="255"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Log in to Storefront as Customer 1 -->
