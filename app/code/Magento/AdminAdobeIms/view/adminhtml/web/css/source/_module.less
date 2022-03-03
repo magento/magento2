@@ -4,11 +4,6 @@
  */
 
 & when (@media-common = true) {
-    body.adobe-ims-body {
-        background: rgba(0,0,0,0.4);
-        color: rgba(0,0,0,0.4);
-    }
-
     .adobe-ims-root {
         display: flex;
         flex-direction: column;
@@ -24,13 +19,13 @@
         flex: 1 0 auto;
         justify-content: space-evenly;
 
-        .spectrum-Modal {
-            background: #FFFFFF;
+        .adobe-ims-sign-in-modal {
+            background: @color-white;
             height: 581px;
             width: 470px;
         }
 
-        .spectrum-Dialog-content {
+        .adobe-ims-sign-in-dialog {
             display: flex;
             flex-direction: column;
 
@@ -46,7 +41,7 @@
         }
 
         .adobe-ims-note {
-            color: #FFFFFF;
+            color: @color-white;
         }
 
         .adobe-ims-error-message-wrapper {
@@ -56,8 +51,8 @@
 
     .adobe-ims-footer {
         align-items: center;
-        background: #000000;
-        color: #909090;
+        background: @color-black;
+        color: var(--spectrum-global-color-gray-600);
         display: flex;
         flex-shrink: 0;
         height: 39px;

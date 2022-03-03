@@ -12,12 +12,12 @@
 $viewModel = $block->getLinkViewModel();
 ?>
 <?php if ($viewModel->isActive()): ?>
-<div class="spectrum-Modal is-open spectrum-Typography">
+<div class="adobe-ims-sign-in-modal spectrum-Modal is-open spectrum-Typography">
     <div class="spectrum-Dialog spectrum-Dialog--medium spectrum-Dialog--noDivider" role="dialog" tabindex="-1" aria-modal="true">
         <div class="spectrum-Dialog-grid">
             <h1 class="spectrum-Dialog-heading spectrum-Heading spectrum-Heading--sizeXL"><?= $escaper->escapeHtml(__('Sign In')) ?></h1>
 
-            <section class="spectrum-Dialog-content">
+            <section class="adobe-ims-sign-in-dialog spectrum-Dialog-content">
                 <?= $block->getChildHtml('messages') ?>
 
                 <p class="spectrum-Body spectrum-Body--sizeM adobe-ims-organization-note">
