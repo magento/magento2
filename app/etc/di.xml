@@ -1682,7 +1682,6 @@
     <type name="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="asyncServiceReader" xsi:type="object" sortOrder="0">Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader\Consumer</item>
                 <item name="xmlReader" xsi:type="object" sortOrder="10">Magento\Framework\MessageQueue\Consumer\Config\Xml\Reader</item>
                 <item name="envReader" xsi:type="object" sortOrder="20">Magento\Framework\MessageQueue\Consumer\Config\Env\Reader</item>
             </argument>
@@ -1728,7 +1727,6 @@
     <type name="Magento\Framework\MessageQueue\Topology\Config\CompositeReader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="asyncServiceReader" xsi:type="object" sortOrder="0">Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader\Topology</item>
                 <item name="remoteServiceReader" xsi:type="object" sortOrder="10">Magento\Framework\MessageQueue\Topology\Config\RemoteService\Reader</item>
                 <item name="xmlReader" xsi:type="object" sortOrder="20">Magento\Framework\MessageQueue\Topology\Config\Xml\Reader</item>
             </argument>

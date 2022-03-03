@@ -60,8 +60,8 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
                     'topic'       => $topicName,
                     'disabled'    => false,
                     'connections' => [
-                        $this->getConnection() => [
-                            'name'     => $this->getConnection(),
+                        $this->defaultValueProvider->getConnection() => [
+                            'name'     => $this->defaultValueProvider->getConnection(),
                             'exchange' => 'magento',
                             'disabled' => false,
                         ],
@@ -70,17 +70,5 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Get connection
-     *
-     * @return string
-     */
-    private function getConnection()
-    {
-        $connection = $this->defaultValueProvider->getConnection();
-        // if db connection, return amqp instead.
-        return $connection === 'db' ? WebApiAsyncConfig::DEFAULT_CONSUMER_CONNECTION : $connection;
     }
 }
