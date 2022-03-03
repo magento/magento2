@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerAddressPropertySection">
+        <element name="stores" type="button" selector="#menu-magento-backend-stores"/>
+        <element name="customerAddress" type="button" selector="//span[text()='Customer Address']"/>
+        <element name="newAttribute" type="button" selector="#add"/>
+        <element name="label" type="input" selector="#attribute_label"/>
+        <element name="code" type="input" selector="#attribute_code"/>
+        <element name="inputType" type="select" selector="#frontend_input"/>
+        <element name="inputFilter" type="select" selector="#input_filter"/>
+        <element name="lineCount" type="input" selector="#multiline_count"/>
+        <element name="sortOrder" type="input" selector="#sort_order"/>
+        <element name="selectFormToUse" type="multiselect" selector="select#used_in_forms"/>
+        <element name="formToUse" type="multiselect" selector="//select[@id='used_in_forms']/option[text()='{{args}}']" parameterized="true"/>
+        <element name="showInSF" type="select" selector="#is_visible"/>
+        <element name="showInSFValue" type="select" selector="//select[@id='is_visible']/option[text()='{{arg1}}']" parameterized="true"/>
+        <element name="valuesRequired" type="select" selector="#is_required"/>
+        <element name="value" type="select" selector="//select[@id='is_required']/option[text()='{{arg2}}']" parameterized="true"/>
+        <element name="save" type="button" selector="#save"/>
+        <element name="multilineCount" type="input" selector="#multiline_count"/>
+        <element name="attributeOption" type="button" selector="#customer_attribute_tabs_options"/>
+        <element name="attribute" type="text" selector="//td[contains(text(), '{{arg3}}')]" parameterized="true"/>
+        <element name="delete" type="button" selector="#delete"/>
+        <element name="confirm" type="button" selector=".action-primary.action-accept"/>
+        <element name="defaultLabel" type="input" selector="#customerAddressAttributeGrid_filter_frontend_label"/>
+        <element name="search" type="button" selector="//div[@class='admin__filter-actions']//span[text()='Search']"/>
+        <element name="reset" type="button" selector="//span[text()='Reset Filter']"/>
+        <element name="createAccount" type="button" selector="input.action.primary"/>
+        <element name="customerAttribute" type="input" selector="//input[contains(@name,'custom_attributes')]"/>
+        <element name="defaultValueDate" type="input" selector="#default_value_date"/>
+        <element name="minimumValueDate" type="input" selector="#date_range_min"/>
+        <element name="maximumValueDate" type="input" selector="#date_range_max"/>
+        <element name="usedForSegment" type="select" selector="#is_used_for_customer_segment"/>
+        <element name="defaultValue" type="textarea" selector="#default_value_textarea"/>
+        <element name="inputValidation" type="select" selector="#input_validation"/>
+        <element name="firstRowInGrid" type="text" selector="//tbody/tr[1]"/>
+        <element name="successMessage" type="text" selector="#messages"/>
+        <element name="emptyRow" type="text" selector="td.empty-text"/>
+        <element name="usedInGrid" type="select" selector="#is_used_in_grid"/>
+        <element name="maxFileSize" type="input" selector="#max_file_size"/>
+        <element name="fileExtensions" type="input" selector="#file_extensions"/>
+        <element name="maxImageWidth" type="input" selector="#max_image_width"/>
+        <element name="maxImageHeight" type="input" selector="#max_image_heght"/>
+        <element name="minTextLength" type="input" selector="#min_text_length"/>
+        <element name="maxTextLength" type="input" selector="#max_text_length"/>
+    </section>
+</sections>

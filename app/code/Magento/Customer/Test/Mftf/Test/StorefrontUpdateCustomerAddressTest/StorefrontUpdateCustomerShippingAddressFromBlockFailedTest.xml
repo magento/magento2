@@ -22,15 +22,17 @@
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Go To Customer Address page-->
-            <!-- Go to Stores > Customer Address -->
-            <amOnPage url="{{CustomerAddressAttributesPage.url}}" stepKey="navigateToCustomerAddressAttributesPage"/>
-            <waitForPageLoad stepKey="waitForCustomerAddressAttributePageLoad"/>
-            <!-- Open 'prefix' attributes by its code -->
-            <actionGroup ref="FilterCustomerAttributesByAttributeCodeActionGroup" stepKey="findPrefixAttribute">
-                <argument name="attributeCode" value="street"/>
+            <actionGroup ref="GoToCustomerAddress" stepKey="GoToCustomerAddress1"/>
+            <waitForElementVisible selector="{{AdminCustomerAddressPropertySection.defaultLabel}}" stepKey="waitForDefaultLabelToVisible"/>
+            <fillField selector="{{AdminCustomerAddressPropertySection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName"/>
+            <click selector="{{AdminCustomerAddressPropertySection.search}}" stepKey="clickToSearchButton"/>
+            <waitForPageLoad stepKey="waitForResult"/>
+            <click selector="{{AdminCustomerAddressPropertySection.firstRowInGrid}}" stepKey="clickToSelectAttribute"/>
+            <waitForPageLoad stepKey="waitForAttributePageLoaded"/>
+            <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties">
+                <argument name="minimumTextLength" value="1"/>
+                <argument name="maximumTextLength" value="10"/>
             </actionGroup>
-            <click selector="{{AdminCustomerAddressAttributeSection.firstAttribute}}" stepKey="clickOnPrefixAttribute"/>
-            <waitForPageLoad stepKey="waitForPrefixAttributePageLoad"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>

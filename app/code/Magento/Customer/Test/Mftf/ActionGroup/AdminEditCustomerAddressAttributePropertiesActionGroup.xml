@@ -18,9 +18,9 @@
             <argument name="maximumTextLength" type="string" defaultValue="255"/>
         </arguments>
         <!--Update customer attribute properties-->
-        <fillField selector="{{AdminReturnAttributePropertiesSection.minTextLength}}" userInput="{{minimumTextLength}}" stepKey="minimumTextLength"/>
-        <fillField selector="{{AdminReturnAttributePropertiesSection.maxTextLength}}" userInput="{{maximumTextLength}}" stepKey="maximumTextLength"/>
-        <click selector="{{CustomerAddressPrefixSection.save}}" stepKey="ClickToSave"/>
+        <fillField selector="{{AdminCustomerAddressPropertySection.minTextLength}}" userInput="{{minimumTextLength}}" stepKey="minimumTextLength"/>
+        <fillField selector="{{AdminCustomerAddressPropertySection.maxTextLength}}" userInput="{{maximumTextLength}}" stepKey="maximumTextLength"/>
+        <click selector="{{AdminCustomerAddressPropertySection.save}}" stepKey="ClickToSave"/>
         <waitForPageLoad stepKey="waitForValueSaved"/>
     </actionGroup>
 </actionGroups>
