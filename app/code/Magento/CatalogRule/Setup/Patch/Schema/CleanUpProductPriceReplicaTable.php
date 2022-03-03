@@ -9,10 +9,6 @@ namespace Magento\CatalogRule\Setup\Patch\Schema;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\Patch\SchemaPatchInterface;
 
-/**
- * Class CleanUpProductPriceReplicaTable
- *
- */
 class CleanUpProductPriceReplicaTable implements SchemaPatchInterface
 {
     /**
