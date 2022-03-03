@@ -84,7 +84,7 @@
         </assertStringContainsString>
 
         <!--Check product name in Shopping Cart page-->
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickViewAndEdit"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="clickViewAndEdit"/>
         <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productName}}" stepKey="grabProductNameCart"/>
         <assertStringContainsString stepKey="assertProductNameCart">

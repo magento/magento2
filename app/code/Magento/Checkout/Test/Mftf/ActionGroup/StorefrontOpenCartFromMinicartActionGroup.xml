@@ -19,5 +19,7 @@
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickShowMinicart"/>
         <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="clickCart"/>
         <waitForPageLoad stepKey="waitForCart"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="waitForOrderTotal"/>
+        <waitForPageLoad stepKey="waitForOrderTotalCalculation"/>
     </actionGroup>
 </actionGroups>

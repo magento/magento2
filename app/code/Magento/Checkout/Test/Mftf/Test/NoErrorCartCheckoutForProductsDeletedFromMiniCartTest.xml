@@ -42,7 +42,7 @@
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
         <!-- open the minicart -->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickShowMinicart1"/>
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="editProductFromMiniCart"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="editProductFromMiniCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickShowMinicart2"/>
         <click selector="{{StorefrontMinicartSection.deleteMiniCartItem}}" stepKey="deleteMiniCartItem"/>
         <waitForElementVisible selector="{{StoreFrontRemoveItemModalSection.message}}" stepKey="waitFortheConfirmationModal"/>
