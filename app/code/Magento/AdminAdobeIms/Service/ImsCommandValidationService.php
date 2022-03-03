@@ -12,8 +12,19 @@ use Magento\Framework\Exception\LocalizedException;
 
 class ImsCommandValidationService
 {
+    /**
+     * @var string
+     */
     private string $organizationIdRegex;
+
+    /**
+     * @var string
+     */
     private string $clientIdRegex;
+
+    /**
+     * @var string
+     */
     private string $clientSecretRegex;
 
     /**
@@ -34,6 +45,7 @@ class ImsCommandValidationService
     /**
      * Validate that value is not empty
      *
+     * @param string $value
      * @throws LocalizedException
      */
     public function emptyValueValidator(string $value): void
@@ -48,6 +60,7 @@ class ImsCommandValidationService
     /**
      * Validate Organization ID
      *
+     * @param string $value
      * @throws LocalizedException
      */
     public function organizationIdValidator(string $value): void
@@ -63,6 +76,7 @@ class ImsCommandValidationService
     /**
      * Validate Client ID
      *
+     * @param string $value
      * @throws LocalizedException
      */
     public function clientIdValidator(string $value): void
@@ -77,6 +91,7 @@ class ImsCommandValidationService
     /**
      * Validate Client Secret
      *
+     * @param string $value
      * @throws LocalizedException
      */
     public function clientSecretValidator(string $value): void

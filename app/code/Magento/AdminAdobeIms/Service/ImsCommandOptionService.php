@@ -49,7 +49,7 @@ class ImsCommandOptionService
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param $helper
+     * @param mixed $helper
      * @param string $optionArgument
      * @return string
      * @throws LocalizedException
@@ -77,7 +77,7 @@ class ImsCommandOptionService
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param $helper
+     * @param mixed $helper
      * @param string $optionArgument
      * @return string
      * @throws LocalizedException
