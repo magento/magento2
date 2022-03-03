@@ -89,8 +89,8 @@ class UpdateItemQty implements HttpPostActionInterface
             $e = new InputException(__('A non-numeric value found')) ;
             return  $this->jsonResponse($e->getMessage());
         }
+        $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
         try {
-            $itemQty = $this->quantityProcessor->prepareQuantity($itemQty*1);
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->updateQuoteItem($itemId, $itemQty);
             return $this->jsonResponse();
