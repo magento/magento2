@@ -11,6 +11,7 @@ use Magento\Sales\Model\AdminOrder\Create;
 
 /**
  * Plugin to update customer firstname, middlename and lastname after create order
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class GuestNameUpdate
 {
@@ -30,11 +31,12 @@ class GuestNameUpdate
     }
 
     /**
-     * update guest name after create order
+     * Update guest name after create order
      *
      * @param Create $subject
      * @param Order $order
      * @return Order
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterCreateOrder(Create $subject, Order $order): Order
     {
