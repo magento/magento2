@@ -23,8 +23,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Go To Customer Address page-->
             <actionGroup ref="GoToCustomerAddress" stepKey="GoToCustomerAddress"/>
-            <click selector="{{CustomerAccountSection.reset}}" stepKey="resetFiltersOnGrid"/>
-            <waitForElementVisible selector="{{CustomerAccountSection.defaultLabel}}" stepKey="waitForDefaultLabelToVisible"/>
             <fillField selector="{{CustomerAccountSection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName"/>
             <click selector="{{CustomerAccountSection.search}}" stepKey="clickToSearchButton"/>
             <waitForPageLoad stepKey="waitForResult"/>
@@ -39,8 +37,6 @@
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
             <!--Go To Customer Address page-->
             <actionGroup ref="GoToCustomerAddress" stepKey="GoToCustomerAddress1"/>
-            <click selector="{{CustomerAccountSection.reset}}" stepKey="resetFiltersOnGrid1"/>
-            <waitForElementVisible selector="{{CustomerAccountSection.defaultLabel}}" stepKey="waitForDefaultLabelToVisible1"/>
             <fillField selector="{{CustomerAccountSection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName1"/>
             <click selector="{{CustomerAccountSection.search}}" stepKey="clickToSearchButton1"/>
             <waitForPageLoad stepKey="waitForResult1"/>
