@@ -70,9 +70,9 @@ class AdminAdobeImsInfoCommand extends Command
             if ($this->imsConfig->enabled()) {
                 $clientId = $this->imsConfig->getApiKey();
                 if ($this->imsConnection->testAuth($clientId)) {
+                    $clientSecret = $this->imsConfig->getPrivateKey() ? 'configured' : 'not configured';
                     $output->writeln(self::CLIENT_ID_NAME . ': ' . $clientId);
                     $output->writeln(self::ORGANIZATION_ID_NAME . ': ' . $this->imsConfig->getOrganizationId());
-                    $clientSecret = $this->imsConfig->getPrivateKey() ? 'configured' : 'not configured';
                     $output->writeln(self::CLIENT_SECRET_NAME . ' ' . $clientSecret);
                 }
             } else {
@@ -85,7 +85,6 @@ class AdminAdobeImsInfoCommand extends Command
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
-            // we must have an exit code higher than zero to indicate something was wrong
             return Cli::RETURN_FAILURE;
         }
     }
