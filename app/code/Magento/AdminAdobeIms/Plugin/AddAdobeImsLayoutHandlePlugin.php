@@ -11,6 +11,9 @@ namespace Magento\AdminAdobeIms\Plugin;
 use Magento\Framework\View\Result\Layout;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 
+/**
+ * Plugin to add Adobe ims layout handle when module is active
+ */
 class AddAdobeImsLayoutHandlePlugin
 {
     /** @var ImsConfig */
@@ -26,6 +29,8 @@ class AddAdobeImsLayoutHandlePlugin
     }
 
     /**
+     * Add our admin hand only when on the login page and module is active
+     *
      * @param Layout $subject
      * @param Layout $result
      * @return Layout
