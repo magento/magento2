@@ -22,30 +22,19 @@
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Go To Customer Address page-->
-            <actionGroup ref="GoToCustomerAddress" stepKey="GoToCustomerAddress"/>
-            <fillField selector="{{CustomerAccountSection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName"/>
-            <click selector="{{CustomerAccountSection.search}}" stepKey="clickToSearchButton"/>
-            <waitForPageLoad stepKey="waitForResult"/>
-            <click selector="{{AdminCustomerAddressAttributeSection.firstAttribute}}" stepKey="clickToSelectAttribute"/>
-            <waitForPageLoad stepKey="waitForAttributePageLoaded"/>
-            <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties">
-                <argument name="minimumTextLength" value="1"/>
-                <argument name="maximumTextLength" value="10"/>
+            <!-- Go to Stores > Customer Address -->
+            <amOnPage url="{{CustomerAddressAttributesPage.url}}" stepKey="navigateToCustomerAddressAttributesPage"/>
+            <waitForPageLoad stepKey="waitForCustomerAddressAttributePageLoad"/>
+            <!-- Open 'prefix' attributes by its code -->
+            <actionGroup ref="FilterCustomerAttributesByAttributeCodeActionGroup" stepKey="findPrefixAttribute">
+                <argument name="attributeCode" value="street"/>
             </actionGroup>
+            <click selector="{{AdminCustomerAddressAttributeSection.firstAttribute}}" stepKey="clickOnPrefixAttribute"/>
+            <waitForPageLoad stepKey="waitForPrefixAttributePageLoad"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
             <!--Go To Customer Address page-->
-            <actionGroup ref="GoToCustomerAddress" stepKey="GoToCustomerAddress1"/>
-            <fillField selector="{{CustomerAccountSection.defaultLabel}}" userInput="Street Address" stepKey="TypeAttributeName1"/>
-            <click selector="{{CustomerAccountSection.search}}" stepKey="clickToSearchButton1"/>
-            <waitForPageLoad stepKey="waitForResult1"/>
-            <click selector="{{AdminCustomerAddressAttributeSection.firstAttribute}}" stepKey="clickToSelectAttribute1"/>
-            <waitForPageLoad stepKey="waitForAttributePageLoaded"/>
-            <actionGroup ref="AdminEditCustomerAddressAttributePropertiesActionGroup" stepKey="editCustomerAddressProperties1">
-                <argument name="minimumTextLength" value="1"/>
-                <argument name="maximumTextLength" value="255"/>
-            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Log in to Storefront as Customer 1 -->
