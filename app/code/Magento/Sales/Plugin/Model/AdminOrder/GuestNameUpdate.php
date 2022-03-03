@@ -20,14 +20,14 @@ class GuestNameUpdate
      *
      * @var \Magento\Backend\Model\Session\Quote
      */
-    protected $_session;
+    private $session;
 
     /**
      * @param \Magento\Backend\Model\Session\Quote $quoteSession
      */
     public function __construct(\Magento\Backend\Model\Session\Quote $quoteSession)
     {
-        $this->_session = $quoteSession;
+        $this->session = $quoteSession;
     }
 
     /**
@@ -40,8 +40,8 @@ class GuestNameUpdate
      */
     public function afterCreateOrder(Create $subject, Order $order): Order
     {
-        if ($this->_session->getOrder()->getId()) {
-            $oldOrder = $this->_session->getOrder();
+        if ($this->session->getOrder()->getId()) {
+            $oldOrder = $this->session->getOrder();
             if ($order->getCustomerIsGuest()) {
                 $order->setCustomerFirstname($oldOrder->getCustomerFirstname());
                 $order->setCustomerLastname($oldOrder->getCustomerLastname());
