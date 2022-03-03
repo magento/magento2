@@ -7,15 +7,17 @@ namespace Magento\Checkout\Controller\Sidebar;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 
-class UpdateItemQty extends Action
+class UpdateItemQty implements HttpPostActionInterface
 {
     /**
      * @var Sidebar
@@ -38,38 +40,57 @@ class UpdateItemQty extends Action
     private $quantityProcessor;
 
     /**
-     * @param Context $context
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
      * @param Sidebar $sidebar
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @param RequestQuantityProcessor|null $quantityProcessor
      * @codeCoverageIgnore
      */
     public function __construct(
-        Context $context,
         Sidebar $sidebar,
         LoggerInterface $logger,
         Data $jsonHelper,
+        RequestInterface  $request,
+        ResponseInterface $response,
         ?RequestQuantityProcessor $quantityProcessor = null
     ) {
         $this->sidebar = $sidebar;
         $this->logger = $logger;
         $this->jsonHelper = $jsonHelper;
-        parent::__construct($context);
+        $this->request = $request;
+        $this->response = $response;
         $this->quantityProcessor = $quantityProcessor
             ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
     }
 
     /**
+     * Action for Quantity update
+     *
      * @return $this
      */
     public function execute()
     {
-        $itemId = (int)$this->getRequest()->getParam('item_id');
-        $itemQty = $this->getRequest()->getParam('item_qty') * 1;
-        $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
+        $itemId = (int)$this->request->getParam('item_id');
+        $itemQty = $this->request->getParam('item_qty');
 
+        if (!is_numeric($itemQty) || ($itemQty <=0)) {
+            $e = new InputException(__('A non-numeric value found')) ;
+            return  $this->jsonResponse($e->getMessage());
+        }
         try {
+            $itemQty = $this->quantityProcessor->prepareQuantity($itemQty*1);
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->updateQuoteItem($itemId, $itemQty);
             return $this->jsonResponse();
@@ -89,7 +110,7 @@ class UpdateItemQty extends Action
      */
     protected function jsonResponse($error = '')
     {
-        return $this->getResponse()->representJson(
+        return $this->response->representJson(
             $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
         );
     }
