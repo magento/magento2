@@ -10,9 +10,10 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\Collecti
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogGraphQl\Model\ResourceModel\Product\Collection as GraphQLProductsCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\JoinMinimalPosition;
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
@@ -61,15 +62,24 @@ class CategoryFilter implements CustomFilterInterface
     private $categoryResourceModel;
 
     /**
+     * @var JoinMinimalPosition
+     */
+    private $joinMinimalPosition;
+
+    /**
      * @param CategoryFactory $categoryFactory
      * @param CategoryResourceModel $categoryResourceModel
+     * @param JoinMinimalPosition|null $joinMinimalPosition
      */
     public function __construct(
         CategoryFactory $categoryFactory,
-        CategoryResourceModel $categoryResourceModel
+        CategoryResourceModel $categoryResourceModel,
+        ?JoinMinimalPosition $joinMinimalPosition = null
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResourceModel = $categoryResourceModel;
+        $this->joinMinimalPosition = $joinMinimalPosition
+            ?? ObjectManager::getInstance()->get(JoinMinimalPosition::class);
     }
 
     /**
@@ -92,8 +102,8 @@ class CategoryFilter implements CustomFilterInterface
                 $category = $this->getCategory((int) reset($ids));
                 /** This filter adds ability to sort by position*/
                 $collection->addCategoryFilter($category);
-            } elseif ($conditionType === self::CONDITION_TYPE_IN && $collection instanceof GraphQLProductsCollection) {
-                $collection->joinMinimalPosition($ids);
+            } elseif ($conditionType === self::CONDITION_TYPE_IN) {
+                $this->joinMinimalPosition->execute($collection, $ids);
             }
             /** Prevent filtering duplication as the filter should be already applied to the search result */
             if (!$collection->getFlag('search_resut_applied')) {

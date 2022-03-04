@@ -9,8 +9,9 @@ namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Products\SearchCriteri
 
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\JoinMinimalPosition;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter;
-use Magento\CatalogGraphQl\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\Filter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -36,6 +37,11 @@ class CategoryFilterTest extends TestCase
     private $categoryResourceModel;
 
     /**
+     * @var JoinMinimalPosition
+     */
+    private $joinMinimalPosition;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -43,9 +49,11 @@ class CategoryFilterTest extends TestCase
         parent::setUp();
         $this->categoryFactory = $this->createMock(CategoryFactory::class);
         $this->categoryResourceModel = $this->createMock(Category::class);
+        $this->joinMinimalPosition = $this->createMock(JoinMinimalPosition::class);
         $this->model = new CategoryFilter(
             $this->categoryFactory,
-            $this->categoryResourceModel
+            $this->categoryResourceModel,
+            $this->joinMinimalPosition
         );
     }
 
@@ -150,6 +158,9 @@ class CategoryFilterTest extends TestCase
         $category3->expects($this->once())
             ->method('getIsAnchor')
             ->willReturn(false);
+        $this->joinMinimalPosition->expects($this->once())
+            ->method('execute')
+            ->with($collection, [1, 3]);
         $this->model->apply($filter, $collection);
     }
 

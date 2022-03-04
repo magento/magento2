@@ -14,9 +14,7 @@
         "magento/module-catalog-search": "*",
         "magento/framework": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-advanced-search": "*",
-        "magento/module-catalog-url-rewrite": "*",
-        "magento/module-customer": "*"
+        "magento/module-advanced-search": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*",
