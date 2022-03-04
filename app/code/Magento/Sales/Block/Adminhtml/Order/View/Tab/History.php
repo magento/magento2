@@ -87,7 +87,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             $history[] = $this->prepareHistoryItemWithId(
                 $orderComment->getId(),
                 $orderComment->getStatusLabel(),
-                $orderComment->getIsCustomerNotified(),
+                $orderComment->getIsCustomerNotified() ?? false,
                 $this->getOrderAdminDate($orderComment->getCreatedAt()),
                 $orderComment->getComment() ?? '',
                 self::HISTORY_TYPE_ORDER
@@ -356,8 +356,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param mixed $a
      * @param mixed $b
      * @return int
+     * phpcs:disable
      */
-    public function sortHistoryByTimestamp($a, $b)
+    public static function sortHistoryByTimestamp($a, $b)
     {
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
@@ -372,6 +373,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param array $b
      * @return int
      * @SuppressWarnings("unused")
+     * phpcs:enable
      */
     private function sortHistory(array $a, array $b): int
     {
