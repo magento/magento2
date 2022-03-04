@@ -248,7 +248,7 @@ class UpdateItemQtyTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteWithInputException(): void
+    public function testExecuteWithNonNumericItemQty(): void
     {
         $this->requestMock
             ->method('getParam')

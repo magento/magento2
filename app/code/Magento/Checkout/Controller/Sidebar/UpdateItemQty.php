@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Controller\Sidebar;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
@@ -12,7 +14,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
@@ -83,13 +84,13 @@ class UpdateItemQty implements HttpPostActionInterface
     public function execute()
     {
         $itemId = (int)$this->request->getParam('item_id');
-        $itemQty = $this->request->getParam('item_qty');
+        $itemQty = (int)$this->request->getParam('item_qty');
 
-        if (!is_numeric($itemQty) || ($itemQty <=0)) {
-            $e = new InputException(__('A non-numeric value found')) ;
-            return  $this->jsonResponse($e->getMessage());
+        if ($itemQty <= 0) {
+            return  $this->jsonResponse(__('A non-numeric value found'));
         }
         $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
+
         try {
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->updateQuoteItem($itemId, $itemQty);
