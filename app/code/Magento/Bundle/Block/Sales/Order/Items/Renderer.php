@@ -7,8 +7,6 @@ namespace Magento\Bundle\Block\Sales\Order\Items;
 
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory;
-use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
  * Order item render block
@@ -22,10 +20,6 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      */
     private $serializer;
 
-    /**
-     * @var CollectionFactory
-     */
-    private $itemCollectionFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -33,20 +27,16 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param \Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory $itemCollectionFactory
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         array $data = [],
-        Json $serializer = null,
-        CollectionFactory $itemCollectionFactory = null
+        Json $serializer = null
     ) {
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(Json::class);
-        $this->itemCollectionFactory = $itemCollectionFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(CollectionFactory::class);
 
         parent::__construct($context, $string, $productOptionFactory, $data);
     }
@@ -231,35 +221,5 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
         $block = $this->getLayout()->getBlock('item_price');
         $block->setItem($item);
         return $block->toHtml();
-    }
-
-    /**
-     * Get Bundle Order Item Collection.
-     *
-     * @param int $orderId
-     * @param int $parentId
-     *
-     * @return array|null
-     */
-    public function getOrderItems(int $orderId, int $parentId): ?array
-    {
-        $collection = $this->itemCollectionFactory->create();
-        $collection->setOrderFilter($orderId);
-        $collection->addFieldToFilter(
-            [OrderItemInterface::ITEM_ID, OrderItemInterface::PARENT_ITEM_ID],
-            [
-            ['eq' => $parentId],
-            ['eq' => $parentId]
-            ]
-        );
-
-        $items = [];
-
-        foreach ($collection ?? [] as $item) {
-            $items[] = $item;
-        }
-        $collection->clear();
-
-        return $items;
     }
 }

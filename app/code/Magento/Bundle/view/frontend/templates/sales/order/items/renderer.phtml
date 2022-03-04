@@ -5,9 +5,10 @@
  */
 // phpcs:disable Magento2.Templates.ThisInTemplate
 /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */
+/** @var $viewModel \Magento\Bundle\ViewModel\Sales\Order\Items\Renderer */
 $parentItem = $block->getItem();
-$items = $block->getOrderItems((int)$parentItem->getOrderId(), (int)$parentItem->getId());
-
+$viewModel = $block->getViewModel();
+$items = $viewModel->getOrderItems((int)$parentItem->getOrderId(), (int)$parentItem->getId());
 $index = 0;
 $prevOptionId = '';
 ?>
