@@ -144,7 +144,6 @@
         }" stepKey="deleteCustomOptions"/>
         <dontSeeElement selector="{{AdminProductCustomizableOptionsSection.customOptionButtonDelete}}" stepKey="assertNoCustomOptions"/>
     </actionGroup>
-    
     <!-- Assumes we are on product edit page -->
     <actionGroup name="AdminAssertProductHasNoCustomOptions">
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="expandContentTab"/>
