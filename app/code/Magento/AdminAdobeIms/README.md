@@ -9,6 +9,25 @@ For information about module installation in Magento 2, see [Enable or disable m
 Enables the AdminAdobeIMS Module. \
 Required values are `Organization ID`, `Client ID` and `Client Secret`
 
+### Argument Validation
+On enabling the AdminAdobeIMS Module, the input arguments will be validated. \
+The pattern for the validation are configured in the di.xml
+
+```xml
+<type name="Magento\AdminAdobeIms\Service\ImsCommandValidationService">
+    <arguments>
+        <argument name="organizationIdRegex" xsi:type="string"><![CDATA[/^([A-Z0-9]{24})(@AdobeOrg)?$/i]]></argument>
+        <argument name="clientIdRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+        <argument name="clientSecretRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+    </arguments>
+</type>
+```
+
+We check if the arguments are not empty, as they are all required. 
+
+For the Organization ID, Client ID and Client Secret, we check if they contain only alphanumeric characters. \
+Additionally for the Organization ID, we check if it matches 24 characters and optional has the suffix `@AdobeOrg`. But we only store the ID and ignore the suffix.
+
 ##bin/magento admin:adobe-ims:disable
 Disables the AdminAdobeIMS Module.
 When disabling, the `Organization ID`, `Client ID` and `Client Secret` values will be deleted from the config.
