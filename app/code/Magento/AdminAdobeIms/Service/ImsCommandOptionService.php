@@ -16,6 +16,11 @@ use Symfony\Component\Console\Question\Question;
 class ImsCommandOptionService
 {
     /**
+     * Prompt for CLI command options
+     */
+    private const OPTION_QUESTION = 'Please enter your %s:';
+
+    /**
      * Human-readable name for Organization ID input option
      */
     private const ORGANIZATION_ID_NAME = 'Organization ID';
@@ -66,7 +71,7 @@ class ImsCommandOptionService
             $question = $this->askForOrganizationId();
             $organizationId = $helper->ask($input, $output, $question);
         } else {
-            $this->organizationIdValidation($organizationId);
+            $organizationId = $this->organizationIdValidation($organizationId);
         }
 
         return $organizationId;
@@ -94,7 +99,7 @@ class ImsCommandOptionService
             $question = $this->askForClientId();
             $clientId = $helper->ask($input, $output, $question);
         } else {
-            $this->clientIdValidation($clientId);
+            $clientId = $this->clientIdValidation($clientId);
         }
 
         return $clientId;
@@ -122,7 +127,7 @@ class ImsCommandOptionService
             $question = $this->askForClientSecret();
             $clientSecret = $helper->ask($input, $output, $question);
         } else {
-            $this->clientSecretValidation($clientSecret);
+            $clientSecret = $this->clientSecretValidation($clientSecret);
         }
 
         return $clientSecret;
@@ -136,7 +141,10 @@ class ImsCommandOptionService
      */
     private function prepareQuestion(string $paramName): Question
     {
-        return new Question('Please enter your ' . $paramName . ':', '');
+        return new Question(
+            sprintf(self::OPTION_QUESTION, $paramName),
+            ''
+        );
     }
 
     /**
@@ -149,8 +157,7 @@ class ImsCommandOptionService
         $question = $this->prepareQuestion(self::ORGANIZATION_ID_NAME);
         $question->setValidator(
             function ($value) {
-                $this->organizationIdValidation($value);
-                return $value;
+                return $this->organizationIdValidation($value);
             }
         );
 
@@ -167,8 +174,7 @@ class ImsCommandOptionService
         $question = $this->prepareQuestion(self::CLIENT_ID_NAME);
         $question->setValidator(
             function ($value) {
-                $this->clientIdValidation($value);
-                return $value;
+                return $this->clientIdValidation($value);
             }
         );
 
@@ -187,8 +193,7 @@ class ImsCommandOptionService
         $question->setHiddenFallback(false);
         $question->setValidator(
             function ($value) {
-                $this->clientSecretValidation($value);
-                return $value;
+                return $this->clientSecretValidation($value);
             }
         );
 
@@ -199,35 +204,35 @@ class ImsCommandOptionService
      * Validation for organizationId
      *
      * @param string $organizationId
+     * @return string
      * @throws LocalizedException
      */
-    private function organizationIdValidation(string $organizationId): void
+    private function organizationIdValidation(string $organizationId): string
     {
-        $this->imsCommandValidationService->emptyValueValidator($organizationId);
-        $this->imsCommandValidationService->organizationIdValidator($organizationId);
+        return $this->imsCommandValidationService->organizationIdValidator($organizationId);
     }
 
     /**
      * Validation for clientId
      *
      * @param string $clientId
+     * @return string
      * @throws LocalizedException
      */
-    private function clientIdValidation(string $clientId): void
+    private function clientIdValidation(string $clientId): string
     {
-        $this->imsCommandValidationService->emptyValueValidator($clientId);
-        $this->imsCommandValidationService->clientIdValidator($clientId);
+        return $this->imsCommandValidationService->clientIdValidator($clientId);
     }
 
     /**
      * Validation for clientSecret
      *
      * @param string $clientSecret
+     * @return string
      * @throws LocalizedException
      */
-    private function clientSecretValidation(string $clientSecret): void
+    private function clientSecretValidation(string $clientSecret): string
     {
-        $this->imsCommandValidationService->emptyValueValidator($clientSecret);
-        $this->imsCommandValidationService->clientSecretValidator($clientSecret);
+        return $this->imsCommandValidationService->clientSecretValidator($clientSecret);
     }
 }

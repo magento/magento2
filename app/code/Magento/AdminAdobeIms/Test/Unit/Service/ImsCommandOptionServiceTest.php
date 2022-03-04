@@ -21,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ImsCommandOptionServiceTest extends TestCase
 {
     private const VALID_ORGANIZATION_ID = '12121212ABCD1211AA11ABCD';
+    private const VALID_ORGANIZATION_ID_ALTERNATE = '12121212ABCD1211AA11ABCD@AdobeOrg';
     private const VALID_CLIENT_ID = 'AdobeCommerceIMS';
     private const VALID_CLIENT_SECRET = 'valid_client-secret';
 
@@ -72,21 +73,26 @@ class ImsCommandOptionServiceTest extends TestCase
 
     /**
      * @dataProvider validInput
-     * @param $argument
-     * @param $value
+     * @param string $argument
+     * @param string $value
+     * @param string $validatorMethod
      * @return void
      * @throws LocalizedException
      */
-    public function testValidInputWillBeReturned($argument, $value): void
+    public function testValidInputWillBeReturned(string $argument, string $value, string $validatorMethod): void
     {
+        $helperMock = $this->getMockBuilder(QuestionHelper::class)
+            ->getMock();
+
         $this->inputMock
             ->method('getOption')
             ->with($argument)
             ->willReturn($value);
 
-        $helperMock = $this->getMockBuilder(QuestionHelper::class)
-            ->getMock();
-
+        $this->imsCommandValidationServiceMock
+            ->method($validatorMethod)
+            ->with($value)
+            ->willReturn($value);
 
         $input = $this->executeGetOption($argument, $helperMock);
 
@@ -98,17 +104,26 @@ class ImsCommandOptionServiceTest extends TestCase
 
     /**
      * @dataProvider validInput
-     * @param $argument
-     * @param $value
+     * @param string $argument
+     * @param string $value
+     * @param string $validatorMethod
      * @return void
      * @throws LocalizedException
      */
-    public function testOrganizationIdPromptReturnsOrgId($argument, $value): void
-    {
+    public function testOrganizationIdPromptReturnsOrgId(
+        string $argument,
+        string $value,
+        string $validatorMethod
+    ): void {
         $this->inputMock
             ->method('getOption')
             ->with($argument)
             ->willReturn('');
+
+        $this->imsCommandValidationServiceMock
+            ->method($validatorMethod)
+            ->with($value)
+            ->willReturn($value);
 
         $helperMock = $this->getMockBuilder(QuestionHelper::class)
             ->getMock();
@@ -126,13 +141,17 @@ class ImsCommandOptionServiceTest extends TestCase
 
     /**
      * @dataProvider validInput
-     * @param $argument
-     * @param $value
+     * @param string $argument
+     * @param string $value
+     * @param string $validatorMethod
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function testEmptyOrganizationIdThrowsException($argument, $value): void
-    {
+    public function testEmptyOrganizationIdThrowsException(
+        string $argument,
+        string $value,
+        string $validatorMethod
+    ): void {
         $this->inputMock
             ->method('getOption')
             ->with($argument)
@@ -157,14 +176,14 @@ class ImsCommandOptionServiceTest extends TestCase
      * @dataProvider invalidInput
      * @param $argument
      * @param $value
-     * @param $validator
+     * @param $validatorMethod
      * @param $exceptionMessage
      * @return void
      */
     public function testInvalidOrganizationIdThrowsException(
         $argument,
         $value,
-        $validator,
+        $validatorMethod,
         $exceptionMessage
     ): void
     {
@@ -180,7 +199,7 @@ class ImsCommandOptionServiceTest extends TestCase
             ->getMock();
 
         $this->imsCommandValidationServiceMock
-            ->method($validator)
+            ->method($validatorMethod)
             ->with($value)
             ->willThrowException($expectedException);
 
@@ -230,6 +249,11 @@ class ImsCommandOptionServiceTest extends TestCase
     }
 
     /**
+     * Data provider for valid CLI Input
+     * - option name
+     * - option value
+     * - validator method
+     *
      * @return string[][]
      */
     public function validInput(): array
@@ -237,20 +261,34 @@ class ImsCommandOptionServiceTest extends TestCase
         return [
             [
                 'organization-id',
-                self::VALID_ORGANIZATION_ID
+                self::VALID_ORGANIZATION_ID,
+                'organizationIdValidator'
+            ],
+            [
+                'organization-id',
+                self::VALID_ORGANIZATION_ID_ALTERNATE,
+                'organizationIdValidator'
             ],
             [
                 'client-id',
-                self::VALID_CLIENT_ID
+                self::VALID_CLIENT_ID,
+                'clientIdValidator'
             ],
             [
                 'client-secret',
                 self::VALID_CLIENT_SECRET,
+                'clientSecretValidator'
             ]
         ];
     }
 
     /**
+     * Data provider for valid CLI Input
+     * - option name
+     * - option value
+     * - validator method
+     * - exception message
+     *
      * @return string[][]
      */
     public function invalidInput(): array
