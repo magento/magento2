@@ -13,15 +13,18 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  * @var $escaper Escaper
  * @var SecureHtmlRenderer $secureRenderer
  */
-$scriptString = <<<script
-require(['loadIcons'], function (loadIcons) {
-    loadIcons(
-        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-css-icons.svg'))}"
-    );
-    loadIcons(
-        "{$escaper->escapeUrl($block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-icons.svg'))}"
-    );
-});
-script;
-
-echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_AdminAdobeIms/js/admin_adobe_ims_load_icons": {
+                "spectrumCssIcons": "<?= $escaper->escapeUrl(
+                    $block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-css-icons.svg')
+                ) ?>",
+                "spectrumIcons": "<?= $escaper->escapeUrl(
+                    $block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-icons.svg')
+                ) ?>"
+            }
+        }
+    }
+</script>
