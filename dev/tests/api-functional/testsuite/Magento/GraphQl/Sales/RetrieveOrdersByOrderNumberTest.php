@@ -406,7 +406,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/customer_orders.php
      * @return void
      * @throws AuthenticationException
      */
