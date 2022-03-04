@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableOptionsImportSameBaseImageTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute"/>
+            <title value="Check thumbnail images and active image for Configurable Product with swatch attribute"/>
+            <description value="Login as admin, create attribute with three options, configurable product with three
+                associated simple products. Add few images for products, check the fotorama thumbnail images
+                (visible and active) for each selected option for the configurable product"/>
+            <severity value="MAJOR"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyBaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Configurable.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Configurable.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple2_Configurable.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Configurable.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple1_Configurable.baseImage}}</argument>
+            </helper>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="Set Size" />
+            </actionGroup>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
+            </helper>
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!--Create text swatch attribute with 3 options:  Small, Medium and Large-->
+        <actionGroup ref="AddTextSwatchToConfigurableProductActionGroup" stepKey="addSizeAttribute">
+            <argument name="attributeName" value="Set Size"/>
+            <argument name="attributeCode" value="set_size"/>
+            <argument name="4" value="4"/>
+            <argument name="24" value="24"/>
+            <argument name="30" value="30"/>
+        </actionGroup>
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
+        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('set_size')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+
+        <actionGroup ref="AdminImportProductsWithCustomImagesDirectoryActionGroup" stepKey="adminImportProduct">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_configurable_product_same_images.csv"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+
+        <!-- Open the configurable product page on storefront -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+        <!-- Select first option -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectFirstOptionValue">
+            <argument name="optionName" value="4"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(ImportProductSimple3_Configurable.baseImage)}}" stepKey="seeFirstImageInRibbon"/>
+        <!-- Select second option -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectSecondOptionValue">
+            <argument name="optionName" value="24"/>
+        </actionGroup>
+        <!-- Select third option -->
+        <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectThirdOptionValue">
+            <argument name="optionName" value="30"/>
+        </actionGroup>
+
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+            <argument name="sku" value="import-product-configurable"/>
+        </actionGroup>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct2">
+            <argument name="sku" value="import-product-simple1-configurable"/>
+        </actionGroup>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct3">
+            <argument name="sku" value="import-product-simple2-configurable"/>
+        </actionGroup>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct4">
+            <argument name="sku" value="import-product-simple3-configurable"/>
+        </actionGroup>
+    </test>
+</tests>
