@@ -11,8 +11,8 @@
     <test name="StorefrontConfigurableOptionsImportSameBaseImageTest">
         <annotations>
             <features value="Swatches"/>
-            <stories value="Configurable product with swatch attribute"/>
-            <title value="Check thumbnail images and active image for Configurable Product with swatch attribute"/>
+            <stories value="Configurable product import same base image"/>
+            <title value="Check thumbnail images for Configurable Product with same base image from Import option"/>
             <description value="Login as admin, create attribute with three options, configurable product with three
                 associated simple products. Add few images for products, check the fotorama thumbnail images
                 (visible and active) for each selected option for the configurable product"/>
