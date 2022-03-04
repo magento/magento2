@@ -13,9 +13,6 @@ use Magento\Framework\OsInfo;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Amqp;
 
-/**
- * Publisher Consumer Controller
- */
 class PublisherConsumerController
 {
     /**
@@ -88,7 +85,6 @@ class PublisherConsumerController
         $this->amqpHelper = $amqpHelper;
         $this->clearQueueProcessor = $clearQueueProcessor
             ?: Bootstrap::getObjectManager()->get(ClearQueueProcessor::class);
-
     }
 
     /**
