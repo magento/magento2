@@ -19,8 +19,7 @@ class Renderer extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      * @var Json
      */
     private $serializer;
-
-
+    
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
