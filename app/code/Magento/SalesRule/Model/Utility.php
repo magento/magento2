@@ -189,8 +189,6 @@ class Utility
         $rowTotalInclTax = $item->getRowTotalInclTax();
         $baseRowTotalInclTax = $item->getBaseRowTotalInclTax();
 
-        //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
-        //that can not be used as array index
         $percentKey = (string)$item->getDiscountPercent();
         $rowTotal = $item->getRowTotal();
         if ($percentKey && $rowTotal > 0) {
