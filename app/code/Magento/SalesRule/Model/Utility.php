@@ -189,9 +189,7 @@ class Utility
         $rowTotalInclTax = $item->getRowTotalInclTax();
         $baseRowTotalInclTax = $item->getBaseRowTotalInclTax();
 
-        //TODO Seems \Magento\Quote\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
-        //that can not be used as array index
-        $percentKey = $item->getDiscountPercent();
+        $percentKey = (string)$item->getDiscountPercent();
         $rowTotal = $item->getRowTotal();
         if ($percentKey && $rowTotal > 0) {
             $delta = isset($this->_roundingDeltas[$percentKey]) ? $this->_roundingDeltas[$percentKey] : 0;
@@ -209,7 +207,7 @@ class Utility
          * When we have 100% discount check if totals will not be negative
          */
 
-        if ($percentKey == 100) {
+        if ($item->getDiscountPercent() == 100) {
             $discountDelta = $rowTotalInclTax - $discountAmount;
             $baseDiscountDelta = $baseRowTotalInclTax - $baseDiscountAmount;
 
