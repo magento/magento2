@@ -11,7 +11,7 @@
             <block class="Magento\Framework\View\Element\Template" name="top.search" as="topSearch" template="Magento_Search::form.mini.phtml">
                 <arguments>
                     <argument name="configProvider" xsi:type="object">Magento\Search\ViewModel\ConfigProvider</argument>
-                    <argument name="searchQueryParams" xsi:type="object">Magento\Search\ViewModel\SearchQueryParams</argument>
+                    <argument name="searchAdditionalFormData" xsi:type="object">Magento\Search\ViewModel\SearchAdditionalFormData</argument>
                 </arguments>
             </block>
         </referenceContainer>
