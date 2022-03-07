@@ -83,8 +83,7 @@
         "tubalmartin/cssmin": "4.1.1",
         "web-token/jwt-framework": "^v2.2.7",
         "webonyx/graphql-php": "~14.11.3",
-        "wikimedia/less.php": "^3.0.0",
-        "magento/module-admin-adobe-ims": "*"
+        "wikimedia/less.php": "^3.0.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.5.0",
@@ -99,9 +98,7 @@
         "phpunit/phpunit": "~9.5.0",
         "sebastian/phpcpd": "^6.0.3",
         "squizlabs/php_codesniffer": "~3.6.0",
-        "symfony/finder": "^5.2",
-        "magento/module-adobe-ims": "dev-develop",
-        "magento/module-adobe-ims-api": "dev-develop"
+        "symfony/finder": "^5.2"
     },
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"
@@ -389,12 +386,5 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true,
-    "repositories": {
-        "ext": {
-            "type": "path",
-            "url": "./ext/*/*/*"
-        }
-    },
-    "minimum-stability": "dev"
+    "prefer-stable": true
 }
