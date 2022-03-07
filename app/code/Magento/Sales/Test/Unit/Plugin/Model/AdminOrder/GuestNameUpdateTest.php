@@ -113,8 +113,6 @@ class GuestNameUpdateTest extends TestCase
             ->willReturn(2);
         $guestOrder->method('getCustomerIsGuest')
             ->willReturn(true);
-        $guestOrder->method('getCustomerIsGuest')
-            ->willReturnSelf();
 
         $updatedOrder = $this->guestNameUpdate->afterCreateOrder($subject, $guestOrder);
 
