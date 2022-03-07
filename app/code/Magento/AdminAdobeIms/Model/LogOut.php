@@ -132,21 +132,23 @@ class LogOut implements LogOutInterface
     }
 
     /**
+     * Checks whether user profile could be got by the access token
+     * If the token is invalidated, profile information won't be returned
+     *
      * @param string $accessToken
      * @return bool
      * @throws AuthorizationException
      */
     private function checkUserProfile(string $accessToken): bool
     {
-        $result = false;
         try {
             $profile = $this->imsConnection->getProfile($accessToken);
             if (!empty($profile['email'])) {
-                $result = true;
+                return true;
             }
         } catch (AdobeImsTokenAuthorizationException $exception) {
             //case if profile does not exist anymore after token invalidation
         }
-        return $result;
+        return false;
     }
 }
