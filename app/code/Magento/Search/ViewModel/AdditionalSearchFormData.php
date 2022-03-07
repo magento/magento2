@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 /**
  * View model for search additional form params
  */
-class SearchAdditionalFormData implements ArgumentInterface
+class AdditionalSearchFormData implements ArgumentInterface
 {
     /**
      * Return search query params

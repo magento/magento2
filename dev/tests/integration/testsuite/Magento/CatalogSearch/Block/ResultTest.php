@@ -73,7 +73,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         /** @var Result $searchResultBlock */
         $searchResultBlock = $this->layout->createBlock(Result::class);
         /** @var Template $searchBlock */
-        $searchQueryParams = $this->getMockBuilder(\Magento\Search\ViewModel\SearchAdditionalFormData::class)
+        $searchQueryParams = $this->getMockBuilder(\Magento\Search\ViewModel\AdditionalSearchFormData::class)
             ->disableOriginalConstructor()
             ->setMethods(['getFormData'])
             ->getMock();
@@ -83,7 +83,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $searchBlock = $this->layout->createBlock(Template::class);
         $searchBlock->setData([
             'configProvider' => $this->configProvider,
-            'searchAdditionalFormData' => $searchQueryParams,
+            'additionalSearchFormData' => $searchQueryParams,
         ]);
         $searchBlock->setTemplate('Magento_Search::form.mini.phtml');
         /** @var RequestInterface $request */
