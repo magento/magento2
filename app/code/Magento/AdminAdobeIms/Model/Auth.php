@@ -10,10 +10,13 @@ namespace Magento\AdminAdobeIms\Model;
 
 use Magento\Backend\Model\Auth as BackendAuth;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
 
 class Auth extends BackendAuth
 {
+    private const ERROR_MESSAGE = 'The account sign-in was incorrect or your account is disabled temporarily. '
+        . 'Please wait and try again later.';
     /**
      * Perform login process without password
      *
@@ -26,10 +29,7 @@ class Auth extends BackendAuth
     {
         if (empty($username)) {
             self::throwException(
-                __(
-                    'The account sign-in was incorrect or your account is disabled temporarily. '
-                    . 'Please wait and try again later.'
-                )
+                __(self::ERROR_MESSAGE)
             );
         }
 
@@ -48,10 +48,7 @@ class Auth extends BackendAuth
 
             if (!$this->getAuthStorage()->getUser()) {
                 self::throwException(
-                    __(
-                        'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
-                    )
+                    __(self::ERROR_MESSAGE)
                 );
             }
         } catch (PluginAuthenticationException $e) {
@@ -60,15 +57,14 @@ class Auth extends BackendAuth
                 ['user_name' => $username, 'exception' => $e]
             );
             throw $e;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->_eventManager->dispatch(
                 'backend_auth_user_login_failed',
                 ['user_name' => $username, 'exception' => $e]
             );
             self::throwException(
                 __(
-                    $e->getMessage()? : 'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
+                    $e->getMessage()? : self::ERROR_MESSAGE
                 )
             );
         }

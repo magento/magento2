@@ -15,12 +15,14 @@ class Handler extends Base
 {
     /**
      * Logging level
+     *
      * @var int
      */
     protected $loggerType = Logger::ERROR;
 
     /**
-     * File name
+     * Path for log file
+     *
      * @var string
      */
     protected $fileName = '/var/log/admin_adobe_ims.log';

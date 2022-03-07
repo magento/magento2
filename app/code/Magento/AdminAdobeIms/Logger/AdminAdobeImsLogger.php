@@ -10,6 +10,7 @@ namespace Magento\AdminAdobeIms\Logger;
 
 use DateTimeZone;
 use Monolog\Logger;
+use Stringable;
 
 class AdminAdobeImsLogger extends Logger
 {
@@ -39,7 +40,7 @@ class AdminAdobeImsLogger extends Logger
     /**
      * Log error message and check if logging is enabled
      *
-     * @param $message
+     * @param string|Stringable $message
      * @param array $context
      * @return void
      */
