@@ -240,6 +240,14 @@ define([
 
                 return;
             }
+
+            // if script already loaded by other library
+            if (window.YT) {
+                videoRegister.register('youtube', true);
+                $(window).trigger('youtubeapiready');
+
+                return;
+            }
             videoRegister.register('youtube');
 
             element = document.createElement('script');
