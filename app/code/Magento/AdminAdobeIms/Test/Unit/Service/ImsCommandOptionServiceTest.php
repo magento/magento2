@@ -145,7 +145,7 @@ class ImsCommandOptionServiceTest extends TestCase
      * @param string $value
      * @param string $validatorMethod
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testEmptyOrganizationIdThrowsException(
         string $argument,
@@ -185,8 +185,7 @@ class ImsCommandOptionServiceTest extends TestCase
         $value,
         $validatorMethod,
         $exceptionMessage
-    ): void
-    {
+    ): void {
         $this->inputMock
             ->method('getOption')
             ->with($argument)

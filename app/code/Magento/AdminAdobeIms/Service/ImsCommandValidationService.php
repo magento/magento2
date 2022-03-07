@@ -72,8 +72,7 @@ class ImsCommandValidationService
         $value = $this->emptyValueValidator($value);
 
         /** @todo: use this for ImsOrganizationService::validateAndExtractOrganizationId() */
-        if (
-            preg_match($this->organizationIdRegex, $value, $match)
+        if (preg_match($this->organizationIdRegex, $value, $match)
             && isset($match[1])
         ) {
             return $match[1];
