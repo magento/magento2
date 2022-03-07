@@ -135,6 +135,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
 
     /**
      * Add AdminAdobeIMS Error Message
+     *
      * @param string $headline
      * @param string $message
      * @return void
