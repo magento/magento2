@@ -11,6 +11,7 @@ namespace Magento\AdminAdobeIms\Controller\Adminhtml\OAuth;
 use Exception;
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
+use Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger;
 use Magento\AdminAdobeIms\Service\AdminLoginProcessService;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\ImsOrganizationService;
@@ -20,7 +21,6 @@ use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Psr\Log\LoggerInterface;
 
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
@@ -47,9 +47,9 @@ class ImsCallback extends Auth implements HttpGetActionInterface
     private AdminLoginProcessService $adminLoginProcessService;
 
     /**
-     * @var LoggerInterface
+     * @var AdminAdobeImsLogger
      */
-    private LoggerInterface $logger;
+    private AdminAdobeImsLogger $logger;
 
     /**
      * @param Context $context
@@ -57,7 +57,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
      * @param ImsConfig $imsConfig
      * @param ImsOrganizationService $organizationService
      * @param AdminLoginProcessService $adminLoginProcessService
-     * @param LoggerInterface $logger
+     * @param AdminAdobeImsLogger $logger
      */
     public function __construct(
         Context $context,
@@ -65,7 +65,7 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         ImsConfig $imsConfig,
         ImsOrganizationService $organizationService,
         AdminLoginProcessService $adminLoginProcessService,
-        LoggerInterface $logger
+        AdminAdobeImsLogger $logger
     ) {
         parent::__construct($context);
         $this->imsConnection = $imsConnection;
@@ -110,14 +110,14 @@ class ImsCallback extends Auth implements HttpGetActionInterface
             $this->logger->error($e->getMessage());
 
             $this->imsErrorMessage(
-                'Unable to sign in with the Adobe ID',
+                'You don\'t have access to this Commerce instance',
                 AdobeImsTokenAuthorizationException::ERROR_MESSAGE
             );
         } catch (AdobeImsOrganizationAuthorizationException $e) {
             $this->logger->error($e->getMessage());
 
             $this->imsErrorMessage(
-                'You don\'t have access to this Commerce instance',
+                'Unable to sign in with the Adobe ID',
                 AdobeImsOrganizationAuthorizationException::ERROR_MESSAGE
             );
         } catch (Exception $e) {
