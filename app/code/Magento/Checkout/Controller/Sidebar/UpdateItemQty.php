@@ -9,16 +9,16 @@ namespace Magento\Checkout\Controller\Sidebar;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 
-class UpdateItemQty implements HttpPostActionInterface
+class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
      * @var Sidebar
@@ -41,37 +41,24 @@ class UpdateItemQty implements HttpPostActionInterface
     private $quantityProcessor;
 
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
-
-    /**
+     * @param Context $context
      * @param Sidebar $sidebar
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
      * @param RequestQuantityProcessor|null $quantityProcessor
      * @codeCoverageIgnore
      */
     public function __construct(
+        Context $context,
         Sidebar $sidebar,
         LoggerInterface $logger,
         Data $jsonHelper,
-        RequestInterface  $request,
-        ResponseInterface $response,
         ?RequestQuantityProcessor $quantityProcessor = null
     ) {
         $this->sidebar = $sidebar;
         $this->logger = $logger;
         $this->jsonHelper = $jsonHelper;
-        $this->request = $request;
-        $this->response = $response;
+        parent::__construct($context);
         $this->quantityProcessor = $quantityProcessor
             ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
     }
@@ -83,8 +70,8 @@ class UpdateItemQty implements HttpPostActionInterface
      */
     public function execute()
     {
-        $itemId = (int)$this->request->getParam('item_id');
-        $itemQty = (int)$this->request->getParam('item_qty');
+        $itemId = (int)$this->getRequest()->getParam('item_id');
+        $itemQty = (int)$this->getRequest()->getParam('item_qty');
 
         if ($itemQty <= 0) {
             return  $this->jsonResponse(__('A non-numeric value found'));
@@ -111,7 +98,7 @@ class UpdateItemQty implements HttpPostActionInterface
      */
     protected function jsonResponse($error = '')
     {
-        return $this->response->representJson(
+        return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($this->sidebar->getResponseData($error))
         );
     }
