@@ -74,3 +74,20 @@ The layout file `view/adminhtml/layout/adobe_ims_login.xml` adds:
 
 We have included the minified css and the used svgs from Spectrum CSS with our module, but you can also use npm to install the latest versions.
 To rebuild the minified css run the command `./node_modules/.bin/postcss -o dist/index.min.css index.css` after npm install from inside the web directory.
+
+# Error Handling
+For the AdminAdobeIms Module we have two specific error messages and one general error message which are shown on the Admin Login page when an error occured.
+
+###AdobeImsTokenAuthorizationException
+Will be thrown when there was an error during the authorization. \
+e. g. a call to AdobeIMS fails or there was no matching admin found in the magento database.
+
+###AdobeImsOrganizationAuthorizationException
+Will be thrown when the admin user who wants to log in does not have the configured organization ID assigned to his AdobeIMS Profile.
+
+### Error logging
+Whenever an exception is thrown during the Adobe IMS Login, we will log the specific exception message but show a general error message on the admin login form.
+
+Errors are logged into the `/var/log/admin_adobe_ims.log` file. \
+Logging can be enabled or disabled in the `di.xml` on changing the arguments for the
+`Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger` definition.
