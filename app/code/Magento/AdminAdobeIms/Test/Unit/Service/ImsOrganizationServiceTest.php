@@ -46,7 +46,7 @@ class ImsOrganizationServiceTest extends TestCase
 
     public function testCheckOrganizationAllocationWithEmptyProfileRolesThrowsException()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(AdobeImsOrganizationAuthorizationException::class);
         $this->expectExceptionMessage('No roles assigned for profile');
         $this->imsOrganizationService->checkOrganizationAllocation([]);
     }
@@ -74,9 +74,7 @@ class ImsOrganizationServiceTest extends TestCase
             ->willReturn(self::INVALID_ORGANIZATION_ID);
 
         $this->expectException(AdobeImsOrganizationAuthorizationException::class);
-        $this->expectExceptionMessage('The Adobe ID you\'re using does not belong to the organization ' .
-            'that controlling this Commerce instance. ' .
-            'Contact your administrator so he can add your Adobe ID to the organization.');
+        $this->expectExceptionMessage('Profile is not assigned to defined organization.');
 
         $this->imsOrganizationService->checkOrganizationAllocation([
             'roles' => [
