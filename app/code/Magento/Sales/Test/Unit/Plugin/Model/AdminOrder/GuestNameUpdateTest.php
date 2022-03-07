@@ -8,28 +8,10 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Plugin\Model\AdminOrder;
 
 use Magento\Backend\Model\Session\Quote as SessionQuote;
-use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Customer\Model\Customer\Mapper;
-use Magento\Customer\Model\Metadata\Form;
-use Magento\Customer\Model\Metadata\FormFactory;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\Quote\Item;
-use Magento\Quote\Model\Quote\Item\Updater;
-use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\AdminOrder\Create as Create;
-use Magento\Sales\Plugin\Model\AdminOrderrrrr\GuestNameUpdate;
+use Magento\Sales\Plugin\Model\AdminOrder\GuestNameUpdate;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,44 +28,9 @@ class GuestNameUpdateTest extends TestCase
     private $guestNameUpdate;
 
     /**
-     * @var CartRepositoryInterface|MockObject
-     */
-    private $quoteRepository;
-
-    /**
-     * @var QuoteFactory|MockObject
-     */
-    private $quoteFactory;
-
-    /**
      * @var SessionQuote|MockObject
      */
     private $sessionQuote;
-
-    /**
-     * @var CustomerInterfaceFactory|MockObject
-     */
-    private $customerFactory;
-
-    /**
-     * @var Updater|MockObject
-     */
-    private $itemUpdater;
-
-    /**
-     * @var Mapper|MockObject
-     */
-    private $customerMapper;
-
-    /**
-     * @var GroupRepositoryInterface|MockObject
-     */
-    private $groupRepository;
-
-    /**
-     * @var DataObjectHelper|MockObject
-     */
-    private $dataObjectHelper;
 
     /**
      * @var Order|MockObject
