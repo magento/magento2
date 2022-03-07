@@ -15,8 +15,12 @@ use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenti
 
 class Auth extends BackendAuth
 {
-    private const ERROR_MESSAGE = 'The account sign-in was incorrect or your account is disabled temporarily. '
+    /**
+     * @var string
+     */
+    private string $errorMessage = 'The account sign-in was incorrect or your account is disabled temporarily. '
         . 'Please wait and try again later.';
+
     /**
      * Perform login process without password
      *
@@ -29,7 +33,7 @@ class Auth extends BackendAuth
     {
         if (empty($username)) {
             self::throwException(
-                __(self::ERROR_MESSAGE)
+                __($this->errorMessage)
             );
         }
 
@@ -48,7 +52,7 @@ class Auth extends BackendAuth
 
             if (!$this->getAuthStorage()->getUser()) {
                 self::throwException(
-                    __(self::ERROR_MESSAGE)
+                    __($this->errorMessage)
                 );
             }
         } catch (PluginAuthenticationException $e) {
@@ -64,7 +68,7 @@ class Auth extends BackendAuth
             );
             self::throwException(
                 __(
-                    $e->getMessage()? : self::ERROR_MESSAGE
+                    $e->getMessage()? : $this->errorMessage
                 )
             );
         }

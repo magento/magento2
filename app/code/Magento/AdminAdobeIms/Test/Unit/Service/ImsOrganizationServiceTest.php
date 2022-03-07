@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Test\Unit\Model;
+namespace Magento\AdminAdobeIms\Test\Unit\Service;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Service\ImsConfig;
