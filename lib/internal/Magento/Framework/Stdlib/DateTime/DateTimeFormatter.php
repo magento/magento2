@@ -69,7 +69,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
         } elseif (is_numeric($format)) {
             $dateFormat = $format;
             $timeFormat = \IntlDateFormatter::FULL;
-        } elseif (is_string($format) || null == $format) {
+        } elseif (is_string($format) || null === $format) {
             $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;
         } else {
