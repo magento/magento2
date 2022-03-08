@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdobeImsNotesData">
+        <data key="note_left">Sign in to access the Adobe Commerce for your organization.</data>
+        <data key="note_right">This Commerce instance is managed by an organization. Contact your organization administrator to request access.</data>
+    </entity>
+</entities>
