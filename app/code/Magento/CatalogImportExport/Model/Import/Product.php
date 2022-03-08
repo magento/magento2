@@ -1541,6 +1541,8 @@ class Product extends AbstractEntity
                         $labels[$column] = array_slice($labels[$column], 0, count($images[$column]));
                     }
                 }
+            } elseif (!empty($rowData[$column . '_label'])) {
+                $labels[$column] = $this->parseMultipleValues($rowData[$column . '_label']);
             }
         }
 
