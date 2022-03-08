@@ -200,8 +200,8 @@ class Collection extends \Magento\Quote\Model\ResourceModel\Quote\Collection
         foreach ($this->getItems() as $item) {
             foreach ($customersData as $customerItemData) {
                 if ($item['customer_id'] == $customerItemData['entity_id']) {
-                    $item['customer_name'] = $customerItemData['customer_name'];
-                    $item['email'] = $customerItemData['email'];
+                    $item->setData('customer_name', $customerItemData['customer_name']);
+                    $item->setData('email', $customerItemData['email']);
                     $item->setData($item->getData());
                 }
             }
