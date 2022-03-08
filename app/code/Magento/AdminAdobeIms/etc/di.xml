@@ -39,11 +39,11 @@
                 type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
     </type>
 
-    <type name="Magento\AdminAdobeIms\Logger\Handler">
+    <virtualType name="Magento\AdminAdobeIms\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
         <arguments>
-            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="fileName" xsi:type="string">/var/log/admin_adobe_ims.log</argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger">
         <arguments>
             <argument name="enabled" xsi:type="string">1</argument>
