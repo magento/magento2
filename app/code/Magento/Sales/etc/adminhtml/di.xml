@@ -51,7 +51,4 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <plugin name="orderGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
     </type>
-    <type name="Magento\Sales\Model\AdminOrder\Create">
-        <plugin name="guestNameUpdate" type="Magento\Sales\Plugin\Model\AdminOrder\GuestNameUpdate"/>
-    </type>
 </config>

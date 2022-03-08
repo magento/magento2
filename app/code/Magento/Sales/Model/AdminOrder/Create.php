@@ -2008,6 +2008,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
+            $this->updateGuestName($oldOrder, $order);
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
@@ -2017,6 +2018,25 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
 
+        return $order;
+    }
+
+    /**
+     * Update guest name after create order
+     *
+     * @param Order $oldOrder
+     * @param Order $order
+     * @return Order
+     */
+    private function updateGuestName(Order $oldOrder, Order $order): Order
+    {
+        if ($order->getCustomerIsGuest()) {
+            $order->setCustomerFirstname($oldOrder->getCustomerFirstname());
+            $order->setCustomerLastname($oldOrder->getCustomerLastname());
+            if ($oldOrder->getMiddlename() === null) {
+                $order->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
+            }
+        }
         return $order;
     }
 
