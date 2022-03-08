@@ -44,7 +44,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateTest extends TestCase
 {
-    const CUSTOMER_ID = 1;
+    private const CUSTOMER_ID = 1;
 
     /**
      * @var Create
@@ -489,6 +489,9 @@ class CreateTest extends TestCase
         $this->adminOrderCreate->initFromOrder($this->orderMock);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreateOrder()
     {
         $method = $this->getMockBuilder(MethodInterface::class)
