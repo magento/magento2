@@ -54,7 +54,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $config = $this->model->getConfig();
         $designTheme = $this->design->getConfigurationDesignTheme('adminhtml');
-        $publicPathPattern = 'http://localhost/static/%s/adminhtml/{$designTheme}/en_US/%s';
+        $publicPathPattern = "http://localhost/static/%s/adminhtml/{$designTheme}/en_US/%s";
         $tinyMceConfig = $config->getData('tinymce');
         $contentCss = $tinyMceConfig['content_css'];
         if (is_array($contentCss)) {
