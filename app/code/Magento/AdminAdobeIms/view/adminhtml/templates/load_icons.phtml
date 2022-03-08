@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Messages;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var $block Messages
+ * @var $escaper Escaper
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_AdminAdobeIms/js/admin_adobe_ims_load_icons": {
+                "spectrumCssIcons": "<?= $escaper->escapeUrl(
+                    $block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-css-icons.svg')
+                ) ?>",
+                "spectrumIcons": "<?= $escaper->escapeUrl(
+                    $block->getViewFileUrl('Magento_AdminAdobeIms::images/spectrum-icons.svg')
+                ) ?>"
+            }
+        }
+    }
+</script>

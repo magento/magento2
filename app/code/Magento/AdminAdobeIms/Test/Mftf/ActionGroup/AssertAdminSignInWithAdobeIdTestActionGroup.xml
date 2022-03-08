@@ -15,5 +15,23 @@
 
         <seeElement selector="{{AdminSignInWithAdobeIdSection.signInButton}}"
                     stepKey="assertAdminSignInWithAdobeIdButtonElement"/>
+
+        <seeElement selector="{{AdminSignInWithAdobeIdSection.organizationNoteLeft}}"
+                    stepKey="assertAdminSignInWithAdobeIdOrganizationNoteLeft"/>
+        <grabTextFrom selector="{{AdminSignInWithAdobeIdSection.organizationNoteLeft}}"
+                      stepKey="adminSignInWithAdobeIdOrganizationNoteLeft"/>
+        <assertStringContainsString stepKey="assertNoteLeftContents">
+            <expectedResult type="string">{{AdobeImsNotesData.note_left}}</expectedResult>
+            <actualResult type="string">{$adminSignInWithAdobeIdOrganizationNoteLeft}</actualResult>
+        </assertStringContainsString>
+
+        <seeElement selector="{{AdminSignInWithAdobeIdSection.organizationNoteRight}}"
+                    stepKey="assertAdminSignInWithAdobeIdOrganizationNoteRight"/>
+        <grabTextFrom selector="{{AdminSignInWithAdobeIdSection.organizationNoteRight}}"
+                      stepKey="adminSignInWithAdobeIdOrganizationNoteRight"/>
+        <assertStringContainsString stepKey="assertNoteRightContents">
+            <expectedResult type="string">{{AdobeImsNotesData.note_right}}</expectedResult>
+            <actualResult type="string">{$adminSignInWithAdobeIdOrganizationNoteRight}</actualResult>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

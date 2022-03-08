@@ -1,12 +1,21 @@
-<div class="admin-adobe-ims-message-wrapper">
-    <div class="admin-adobe-ims-message-header">
-        <span>
-            <?php echo $block->getData('headline'); ?>
-        </span>
-    </div>
-    <div class="admin-adobe-ims-message-message">
-        <p>
-            <?php echo $block->getData('message'); ?>
-        </p>
-    </div>
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+
+/**
+ * @var $block Template
+ * @var $escaper Escaper
+ */
+?>
+<div class="spectrum-InLineAlert spectrum-InLineAlert--error">
+    <svg class="spectrum-Icon spectrum-Icon--sizeM spectrum-InLineAlert-icon" focusable="false" aria-hidden="true">
+        <use xlink:href="#spectrum-icon-18-Alert" />
+    </svg>
+    <div class="spectrum-InLineAlert-header"><?= $escaper->escapeHtml($block->getData('headline')) ?></div>
+    <div class="spectrum-InLineAlert-content"><?= $escaper->escapeHtml($block->getData('message')) ?></div>
 </div>
