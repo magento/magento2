@@ -13,6 +13,9 @@ use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\MessageQueue\QueueRepository;
 
+/**
+ * The processor to clear message queue
+ */
 class ClearQueueProcessor
 {
     /**
