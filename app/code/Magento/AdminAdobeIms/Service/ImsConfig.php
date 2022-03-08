@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
+use Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsCallback;
 use Magento\AdobeIms\Model\Config;
+use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -22,6 +24,8 @@ class ImsConfig extends Config
     public const XML_PATH_API_KEY = 'adobe_ims/integration/api_key';
     public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
+    public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
+    private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
 
     /**
      * @var ScopeConfigInterface
@@ -39,21 +43,29 @@ class ImsConfig extends Config
     private EncryptorInterface $encryptor;
 
     /**
+     * @var BackendUrlInterface
+     */
+    private BackendUrlInterface $backendUrl;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      * @param WriterInterface $writer
      * @param EncryptorInterface $encryptor
+     * @param BackendUrlInterface $backendUrl
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
         WriterInterface $writer,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        BackendUrlInterface $backendUrl
     ) {
         parent::__construct($scopeConfig, $url);
         $this->writer = $writer;
         $this->encryptor = $encryptor;
         $this->scopeConfig = $scopeConfig;
+        $this->backendUrl = $backendUrl;
     }
 
     /**
@@ -69,8 +81,20 @@ class ImsConfig extends Config
     }
 
     /**
-     * Update config
+     * Get Profile URL
      *
+     * @return string
+     */
+    public function getProfileUrl(): string
+    {
+        return str_replace(
+            ['#{client_id}'],
+            [$this->getApiKey()],
+            $this->scopeConfig->getValue(self::XML_PATH_PROFILE_URL)
+        );
+    }
+
+    /**
      * @param string $path
      * @param string $value
      * @return void
@@ -141,7 +165,9 @@ class ImsConfig extends Config
      */
     private function getAdminAdobeImsCallBackUrl(): string
     {
-        return $this->scopeConfig->getValue('web/secure/base_url');
+        return $this->backendUrl->getUrl(
+            self::OAUTH_CALLBACK_URL . ImsCallback::ACTION_NAME
+        );
     }
 
     /**

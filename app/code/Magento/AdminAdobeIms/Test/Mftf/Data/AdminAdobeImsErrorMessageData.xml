@@ -8,8 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="ClientCredentialsData">
-        <data key="org_id">{{_CREDS.magento/admin_adobe_ims/org_id}}</data>
+    <entity name="AdminAdobeImsErrorMessageData">
         <data key="client_id">{{_CREDS.magento/admin_adobe_ims/client_id}}</data>
         <data key="client_key">{{_CREDS.magento/admin_adobe_ims/client_key}}</data>
     </entity>

@@ -17,4 +17,15 @@
     <type name="Magento\User\Controller\Adminhtml\Auth\Forgotpassword">
         <plugin name="admin_forgot_password_plugin" type="Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin" sortOrder="1"/>
     </type>
+
+    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
+        <plugin name="captcha_check_user_login_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
+    </type>
+
+    <type name="Magento\Captcha\Observer\ResetAttemptForBackendObserver">
+        <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
+    </type>
+
 </config>
