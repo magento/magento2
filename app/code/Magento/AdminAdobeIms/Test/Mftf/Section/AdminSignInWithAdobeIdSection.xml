@@ -11,6 +11,14 @@
     <section name="AdminSignInWithAdobeIdSection">
         <element name="signInButton"
                  type="text"
-                 selector=".adobe-id-login-wrapper a"/>
+                 selector=".admin-ims-login-wrapper .adobe-ims-button button"/>
+
+        <element name="organizationNoteLeft"
+                 type="text"
+                 selector=".admin-ims-login-wrapper .adobe-ims-note"/>
+
+        <element name="organizationNoteRight"
+                 type="text"
+                 selector=".admin-ims-login-wrapper .adobe-ims-organization-note"/>
     </section>
 </sections>

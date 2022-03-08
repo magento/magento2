@@ -8,7 +8,9 @@
         "php": "~7.4.0||~8.1.0",
         "magento/framework": "*",
         "magento/module-adobe-ims": "*",
-        "magento/module-config": "*"
+        "magento/module-config": "*",
+        "magento/module-user": "*",
+        "magento/module-backend": "*"
     },
     "suggest": {
         "magento/module-theme": "*"
