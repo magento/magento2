@@ -128,7 +128,7 @@ class Handler
         MethodsMap $methodsMapProcessor,
         ?ParamsOverrider $paramsOverrider = null,
         ?BackpressureContextFactory $backpressureContextFactory = null,
-        ?BackpressureEnforcerInterface $backpressureEnforcer = null
+        ?BackpressureEnforcerInterface $backpressureEnforcer = null,
         ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->_request = $request;
