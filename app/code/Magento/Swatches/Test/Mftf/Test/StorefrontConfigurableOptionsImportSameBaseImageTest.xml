@@ -40,43 +40,63 @@
             </helper>
         </before>
         <after>
-            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
-                <argument name="productAttributeLabel" value="Set Size" />
-            </actionGroup>
             <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="import-product-configurable"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct2">
+                <argument name="sku" value="import-product-simple1-configurable"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct3">
+                <argument name="sku" value="import-product-simple2-configurable"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct4">
+                <argument name="sku" value="import-product-simple3-configurable"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="Set Size" />
+            </actionGroup>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
-            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
-        <!--Create text swatch attribute with 3 options:  Small, Medium and Large-->
-        <actionGroup ref="AddTextSwatchToConfigurableProductActionGroup" stepKey="addSizeAttribute">
-            <argument name="attributeName" value="Set Size"/>
-            <argument name="attributeCode" value="set_size"/>
-            <argument name="4" value="4"/>
-            <argument name="24" value="24"/>
-            <argument name="30" value="30"/>
+        <!--Create text swatch attribute with 3 options:  4, 24 and 30-->
+        <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSizeAttribute">
+            <argument name="attributeName" value="{{SwatchProductSizeAttribute.frontend_label}}"/>
+            <argument name="attributeCode" value="{{SwatchProductSizeAttribute.attribute_code}}"/>
+            <argument name="option1" value="4"/>
+            <argument name="option2" value="24"/>
+            <argument name="option3" value="30"/>
         </actionGroup>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
-        <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
-        <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
-        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('set_size')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
-        <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+
+        <!-- Go to created attribute (attribute page) -->
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="navigateToSkuProductAttribute">
+            <argument name="ProductAttribute" value="{{SwatchProductSizeAttribute.frontend_label}}"/>
+        </actionGroup>
+        <!-- Set 'yes' value for option "Update Product Preview Image" -->
+        <actionGroup ref="AdminUpdateProductPreviewImageActionGroup" stepKey="setUpdateProductPreviewImage" after="navigateToSkuProductAttribute"/>
+        <!-- Save Product Attribute -->
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute" after="setUpdateProductPreviewImage"/>
+
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+
+        <!-- From grid, click on attribute set Default -->
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+
+        <!-- Add Product Attribute to Default attribute by dragging and dropping this to the 'Project Details' folder. Then Save. -->
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{SwatchProductSizeAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
 
         <actionGroup ref="AdminImportProductsWithCustomImagesDirectoryActionGroup" stepKey="adminImportProduct">
             <argument name="behavior" value="Add/Update"/>
             <argument name="importFile" value="import_configurable_product_same_images.csv"/>
             <argument name="imagesFileDirectory" value="{{ImportProduct_Configurable.name}}"/>
         </actionGroup>
-
-        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
-            <argument name="tags" value="config full_page"/>
-        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForSaveImportProduct"/>
 
         <!-- Open the configurable product page on storefront -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
@@ -94,19 +114,6 @@
         <!-- Select third option -->
         <actionGroup ref="StorefrontSelectSwatchOptionOnProductPageActionGroup" stepKey="selectThirdOptionValue">
             <argument name="optionName" value="30"/>
-        </actionGroup>
-
-        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
-            <argument name="sku" value="import-product-configurable"/>
-        </actionGroup>
-        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct2">
-            <argument name="sku" value="import-product-simple1-configurable"/>
-        </actionGroup>
-        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct3">
-            <argument name="sku" value="import-product-simple2-configurable"/>
-        </actionGroup>
-        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct4">
-            <argument name="sku" value="import-product-simple3-configurable"/>
         </actionGroup>
     </test>
 </tests>
