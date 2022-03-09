@@ -30,6 +30,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
@@ -1016,7 +1017,7 @@ class Installer
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw  new Exception("Unsupported operation type $type is requested");
         }
-        $resource = new \Magento\Framework\Module\ModuleResource($this->context);
+        $resource = $this->getModuleResource();
         $verType = $type . '-version';
         $installType = $type . '-install';
         $upgradeType = $type . '-upgrade';
@@ -1118,6 +1119,16 @@ class Installer
             }
             $this->logProgress();
         }
+    }
+
+    /**
+     * Get a module Resource object
+     *
+     * @return ModuleResource
+     */
+    public function getModuleResource(): ModuleResource
+    {
+        return new ModuleResource($this->context);
     }
 
     /**
@@ -1650,7 +1661,7 @@ class Installer
     /**
      * Generates list of ModuleContext
      *
-     * @param \Magento\Framework\Module\ModuleResource $resource
+     * @param ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
      * @throws Exception
