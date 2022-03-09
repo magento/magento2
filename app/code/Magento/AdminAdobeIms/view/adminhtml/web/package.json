@@ -21,6 +21,7 @@
     "@spectrum-css/divider": "^1.0.16",
     "@spectrum-css/icon": "^3.0.14",
     "@spectrum-css/inlinealert": "^4.0.3",
+    "@spectrum-css/link": "^3.1.17",
     "@spectrum-css/modal": "^3.0.13",
     "@spectrum-css/page": "^5.0.2",
     "@spectrum-css/quickaction": "^3.0.16",
