@@ -13,9 +13,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateProductUrlKey
- *
- * @package Magento\Catalog\Setup\Patch
+ * Class UpdateProductUrlKey for updating description and validation class
  */
 class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
 {
@@ -43,7 +41,7 @@ class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -58,10 +56,11 @@ class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
                 'frontend_class' => 'validate-identifier-clean'
             ]
         );
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -72,7 +71,7 @@ class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -80,7 +79,7 @@ class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
