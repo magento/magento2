@@ -48,4 +48,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <plugin name="orderGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
+    </type>
 </config>
