@@ -28,4 +28,14 @@
             <argument name="clientSecretRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
         </arguments>
     </type>
+
+    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
+        <plugin name="captcha_check_user_login_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
+    </type>
+
+    <type name="Magento\Captcha\Observer\ResetAttemptForBackendObserver">
+        <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
+                type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
+    </type>
 </config>

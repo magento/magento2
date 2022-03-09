@@ -8,10 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
 
+use Magento\AdminAdobeIms\Exception\AdobeImsTokenAuthorizationException;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\AdobeIms\Model\GetToken;
+use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 
 class ImsConnection
 {
@@ -26,17 +31,31 @@ class ImsConnection
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
+    /**
+     * @var Json
+     */
+    private Json $json;
+    /**
+     * @var GetToken
+     */
+    private GetToken $token;
 
     /**
      * @param CurlFactory $curlFactory
      * @param ImsConfig $imsConfig
+     * @param Json $json
+     * @param GetToken $token
      */
     public function __construct(
         CurlFactory $curlFactory,
-        ImsConfig $imsConfig
+        ImsConfig $imsConfig,
+        Json $json,
+        GetToken $token
     ) {
         $this->curlFactory = $curlFactory;
         $this->imsConfig = $imsConfig;
+        $this->json = $json;
+        $this->token = $token;
     }
 
     /**
@@ -78,7 +97,7 @@ class ImsConnection
 
         $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
         $curl->addHeader('cache-control', 'no-cache');
-        $curl->post($authUrl, []);
+        $curl->get($authUrl);
 
         $this->validateResponse($curl);
 
@@ -109,7 +128,49 @@ class ImsConnection
         }
 
         if ($curl->getStatus() !== self::HTTP_REDIRECT_CODE) {
-            throw new InvalidArgumentException(__('Could not connect to Adobe IMS Service.'));
+            throw new InvalidArgumentException(
+                __('Could not get a valid response from Adobe IMS Service.')
+            );
         }
+    }
+
+    /**
+     * @param string $code
+     * @return TokenResponseInterface
+     * @throws AdobeImsTokenAuthorizationException
+     */
+    public function getTokenResponse(string $code): TokenResponseInterface
+    {
+        try {
+            return $this->token->execute($code);
+        } catch (AuthorizationException $exception) {
+            throw new AdobeImsTokenAuthorizationException(
+                __($exception->getMessage())
+            );
+        }
+    }
+
+    /**
+     * @param string $code
+     * @return array|bool|float|int|mixed|string|null
+     * @throws AuthorizationException
+     */
+    public function getProfile(string $code)
+    {
+        $curl = $this->curlFactory->create();
+
+        $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $curl->addHeader('cache-control', 'no-cache');
+        $curl->addHeader('Authorization', 'Bearer ' . $code);
+
+        $curl->get($this->imsConfig->getProfileUrl());
+
+        if ($curl->getBody() === '') {
+            throw new AdobeImsTokenAuthorizationException(
+                __('Profile body is empty')
+            );
+        }
+
+        return $this->json->unserialize($curl->getBody());
     }
 }
