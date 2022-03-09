@@ -13,11 +13,11 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateProductUrlKeyDescription
+ * Class UpdateProductUrlKey
  *
  * @package Magento\Catalog\Setup\Patch
  */
-class UpdateProductUrlKeyDescription implements DataPatchInterface, PatchVersionInterface
+class UpdateProductUrlKey implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -67,6 +67,7 @@ class UpdateProductUrlKeyDescription implements DataPatchInterface, PatchVersion
     {
         return [
             UpdateProductAttributes::class,
+            \Magento\CatalogUrlRewrite\Setup\Patch\Data\CreateUrlAttributes::class
         ];
     }
 
