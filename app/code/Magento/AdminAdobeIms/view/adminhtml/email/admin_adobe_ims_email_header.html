@@ -6,7 +6,7 @@
 -->
 <!--@subject {{trans "Header"}} @-->
 <!--@vars {
-"var logo_url":"Email Logo Image URL",
+"var logo_url":"Magento_AdminAdobeIms::images/adobe-commerce-dark.png",
 "var logo_alt":"Email Logo Alt Text",
 "var logo_height":"Email Logo Image Height",
 "var logo_width":"Email Logo Image Width",
@@ -22,10 +22,11 @@
     <style type="text/css">
         {{var template_styles|raw}}
 
-        {{css file="css/email.css"}}
+        {{css file="Magento_AdminAdobeIms::dist/index.min.css"}}
+        {{css file="Magento_AdminAdobeIms::css/adobe.css"}}
     </style>
 </head>
-<body>
+<body class="spectrum spectrum--medium spectrum--light">
 {{inlinecss file="css/email-inline.css"}}
 
 <!-- Begin wrapper table -->
