@@ -143,14 +143,14 @@ define([
                 success: function (response) {
                     var msg;
 
-                    if ($.type(response) === 'object' && !$.isEmptyObject(response)) {
+                    if (typeof response === 'object' && !$.isEmptyObject(response)) {
                         if (response['error_messages']) {
                             this._ajaxComplete();
                             msg = response['error_messages'];
 
                             /* eslint-disable max-depth */
                             if (msg) {
-                                if ($.type(msg) === 'array') {
+                                if (Array.isArray(msg)) {
                                     msg = msg.join('\n');
                                 }
                             }
@@ -216,7 +216,7 @@ define([
         _updateOrderSubmit: function (shouldDisable, fn) {
             this._toggleButton(this.options.orderReviewSubmitSelector, shouldDisable);
 
-            if ($.type(fn) === 'function') {
+            if (typeof fn === 'function') {
                 fn.call(this);
             }
         },
@@ -285,7 +285,9 @@ define([
             isChecked = $(this.options.billingAsShippingSelector).is(':checked');
             formData = null;
             callBackResponseHandler = null;
-            shippingMethod = $(this.options.shippingSelector).val().trim();
+            let val = $(this.options.shippingSelector).val();
+
+            shippingMethod = val.trim();
             this._shippingTobilling();
 
             if (url && resultId && shippingMethod) {
@@ -358,7 +360,9 @@ define([
          * Actions on change Shipping Address data
          */
         _onShippingChange: function () {
-            if (this.triggerPropertyChange && $(this.options.shippingSelector).val().trim()) {
+            let val = $(this.options.shippingSelector).val();
+
+            if (this.triggerPropertyChange && val.trim()) {
                 this.element.find(this.options.shippingSelector).hide().end()
                     .find(this.options.shippingSelector + '_update').show();
             }

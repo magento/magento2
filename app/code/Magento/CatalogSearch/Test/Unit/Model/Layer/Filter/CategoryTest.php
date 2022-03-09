@@ -26,6 +26,9 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryTest extends TestCase
 {
+    /**
+     * @var DataBuilder|MockObject
+     */
     private $itemDataBuilder;
 
     /**
@@ -53,27 +56,33 @@ class CategoryTest extends TestCase
      */
     private $target;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
-    /** @var  ItemFactory|MockObject */
+    /**
+     * @var ItemFactory|MockObject
+     */
     private $filterItemFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $dataProviderFactory = $this->getMockBuilder(
-            CategoryFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+        $dataProviderFactory = $this->getMockBuilder(CategoryFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])->getMock();
 
         $this->dataProvider = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\DataProvider\Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setCategoryId', 'getCategory'])
+            ->onlyMethods(['setCategoryId', 'getCategory'])
             ->getMock();
 
         $dataProviderFactory->expects($this->once())
@@ -82,23 +91,21 @@ class CategoryTest extends TestCase
 
         $this->category = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getChildrenCategories', 'getIsActive'])
+            ->onlyMethods(['getId', 'getChildrenCategories', 'getIsActive'])
             ->getMock();
 
         $this->dataProvider->expects($this->any())
-            ->method('getCategory', 'isValid')
+            ->method('getCategory')
             ->willReturn($this->category);
 
         $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getState', 'getProductCollection'])
+            ->onlyMethods(['getState', 'getProductCollection'])
             ->getMock();
 
-        $this->fulltextCollection = $this->getMockBuilder(
-            Collection::class
-        )
+        $this->fulltextCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryFilter', 'getFacetedData', 'getSize'])
+            ->onlyMethods(['addCategoryFilter', 'getFacetedData', 'getSize'])
             ->getMock();
 
         $this->layer->expects($this->any())
@@ -107,21 +114,17 @@ class CategoryTest extends TestCase
 
         $this->itemDataBuilder = $this->getMockBuilder(DataBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addItemData', 'build'])
+            ->onlyMethods(['addItemData', 'build'])
             ->getMock();
 
-        $this->filterItemFactory = $this->getMockBuilder(
-            ItemFactory::class
-        )
+        $this->filterItemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $filterItem = $this->getMockBuilder(
-            Item::class
-        )
+        $filterItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
+            ->addMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $filterItem->expects($this->any())
             ->method($this->anything())->willReturnSelf();
@@ -131,7 +134,7 @@ class CategoryTest extends TestCase
 
         $escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtml'])
+            ->onlyMethods(['escapeHtml'])
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
@@ -145,7 +148,7 @@ class CategoryTest extends TestCase
                 'layer' => $this->layer,
                 'itemDataBuilder' => $this->itemDataBuilder,
                 'filterItemFactory' => $this->filterItemFactory,
-                'escaper' => $escaper,
+                'escaper' => $escaper
             ]
         );
     }
@@ -154,9 +157,11 @@ class CategoryTest extends TestCase
      * @param $requestValue
      * @param $idValue
      * @param $isIdUsed
+     *
+     * @return void
      * @dataProvider applyWithEmptyRequestDataProvider
      */
-    public function testApplyWithEmptyRequest($requestValue, $idValue)
+    public function testApplyWithEmptyRequest($requestValue, $idValue): void
     {
         $requestField = 'test_request_var';
         $idField = 'id';
@@ -167,10 +172,9 @@ class CategoryTest extends TestCase
             ->method('getChildrenCategories')
             ->willReturn([]);
 
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with($requestField)
-            ->willReturnCallback(
+        $this->request->method('getParam')
+            ->withConsecutive([$requestField])
+            ->willReturnOnConsecutiveCalls(
                 function ($field) use ($requestField, $idField, $requestValue, $idValue) {
                     switch ($field) {
                         case $requestField:
@@ -188,25 +192,28 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function applyWithEmptyRequestDataProvider()
+    public function applyWithEmptyRequestDataProvider(): array
     {
         return [
             [
                 'requestValue' => null,
-                'id' => 0,
+                'id' => 0
             ],
             [
                 'requestValue' => 0,
-                'id' => false,
+                'id' => false
             ],
             [
                 'requestValue' => 0,
-                'id' => null,
+                'id' => null
             ]
         ];
     }
 
-    public function testApply()
+    /**
+     * @return void
+     */
+    public function testApply(): void
     {
         $categoryId = 123;
         $requestVar = 'test_request_var';
@@ -241,9 +248,10 @@ class CategoryTest extends TestCase
     }
 
     /**
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetItems()
+    public function testGetItems(): void
     {
         $this->category->expects($this->any())
             ->method('getIsActive')
@@ -251,7 +259,7 @@ class CategoryTest extends TestCase
 
         $category1 = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getName', 'getIsActive'])
+            ->onlyMethods(['getId', 'getName', 'getIsActive'])
             ->getMock();
         $category1->expects($this->atLeastOnce())
             ->method('getId')
@@ -265,7 +273,7 @@ class CategoryTest extends TestCase
 
         $category2 = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getName', 'getIsActive'])
+            ->onlyMethods(['getId', 'getName', 'getIsActive'])
             ->getMock();
         $category2->expects($this->atLeastOnce())
             ->method('getId')
@@ -279,7 +287,7 @@ class CategoryTest extends TestCase
 
         $category3 = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getName', 'getIsActive'])
+            ->onlyMethods(['getId', 'getName', 'getIsActive'])
             ->getMock();
         $category3->expects($this->atLeastOnce())
             ->method('getId')
@@ -293,7 +301,7 @@ class CategoryTest extends TestCase
         $categories = [
             $category1,
             $category2,
-            $category3,
+            $category3
         ];
         $this->category->expects($this->once())
             ->method('getChildrenCategories')
@@ -318,31 +326,19 @@ class CategoryTest extends TestCase
             [
                 'label' => 'Category 1',
                 'value' => 120,
-                'count' => 10,
+                'count' => 10
             ],
             [
                 'label' => 'Category 2',
                 'value' => 5641,
-                'count' => 45,
-            ],
+                'count' => 45
+            ]
         ];
 
-        $this->itemDataBuilder->expects($this->at(0))
+        $this->itemDataBuilder
             ->method('addItemData')
-            ->with(
-                'Category 1',
-                120,
-                10
-            )
-            ->willReturnSelf();
-        $this->itemDataBuilder->expects($this->at(1))
-            ->method('addItemData')
-            ->with(
-                'Category 2',
-                5641,
-                45
-            )
-            ->willReturnSelf();
+            ->withConsecutive(['Category 1', 120, 10], ['Category 2', 5641, 45])
+            ->willReturnOnConsecutiveCalls($this->itemDataBuilder, $this->itemDataBuilder);
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
             ->willReturn($builtData);

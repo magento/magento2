@@ -9,8 +9,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteMultipleTaxRatesActionGroup">
         <annotations>
-            <description>Navigates to the 'Tax Zones and Rates' page and deletes all specified rows one by one. Defaults
-                to delete all rows except the defaults of 'US-CA-*-Rate 1' and 'US-NY-*-Rate 1'.</description>
+            <description>Deletes all specified rows one by one on the 'Tax Zones and Rates' page. Defaults to delete all
+                rows except the defaults of 'US-CA-*-Rate 1' and 'US-NY-*-Rate 1'.</description>
         </annotations>
         <arguments>
             <argument name="rowsToDelete" defaultValue="{{AdminTaxRateGridSection.allNonDefaultTaxRates}}" type="string"/>

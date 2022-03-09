@@ -13,6 +13,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * Test querying Bundle products
@@ -413,5 +415,74 @@ QUERY;
             'GraphQL response contains errors: Cannot query field "qty" on type "ProductInterface".'
         );
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
+     */
+    public function testBundleProductWithDisabledProductOption()
+    {
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $storeIdDefault = $storeManager->getDefaultStoreView()->getId();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $simpleProduct = $productRepository->get('simple', false, $storeIdDefault, true);
+        $simpleProduct->setStatus(ProductStatus::STATUS_DISABLED);
+        $simpleProduct->setStoreIds([$storeIdDefault]);
+        $productRepository->save($simpleProduct);
+
+        $productSku = 'bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           sku
+           type_id
+           id
+           name
+           ... on PhysicalProductInterface {
+             weight
+           }
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku
+              options {
+                id
+                quantity
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEmpty($response['products']['items']);
     }
 }
