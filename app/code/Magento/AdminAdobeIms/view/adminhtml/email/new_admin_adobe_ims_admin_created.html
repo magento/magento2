@@ -1,0 +1,38 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "%user_name, you now have access to Adobe Commerce" user_name=$user.firstname}} @-->
+<!--@vars {
+"var store.frontend_name":"Store Name",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
+} @-->
+
+{{template config_path="adobe_ims/email/header_template"}}
+
+<p class="greeting">{{trans "%user_name, you now have access to Adobe Commerce" user_name=$user.firstname}}</p>
+<p>{{trans "Your administrator at %store_name has given you access to Adobe Commerce" store_name=$store.frontend_name}}</p>
+<p>
+    {{trans
+    '<a href="%customer_url">Get started</a>'
+    customer_url=$this.getUrl($store,'customer/account/',[_nosid:1])
+    |raw}}
+</p>
+<p>{{trans "Here are a few links to help you get up and running:"}}</p>
+<p>
+    {{trans
+    '<a href="%customer_url">Documentation</a>'
+    customer_url=$this.getUrl($store,'customer/account/',[_nosid:1])
+    |raw}}
+</p>
+<p>
+    {{trans
+    '<a href="%customer_url">Release notes</a>'
+    customer_url=$this.getUrl($store,'customer/account/',[_nosid:1])
+    |raw}}
+</p>
+<p>{{trans "If you have any questions about access to Adobe Commerce, contact your administrator or your Adobe account team for more information."}}</p>
+
+{{template config_path="adobe_ims/email/footer_template"}}

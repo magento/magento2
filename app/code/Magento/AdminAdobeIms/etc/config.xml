@@ -15,6 +15,10 @@
                 <token_url>https://ims-na1-stg1.adobelogin.com/ims/token</token_url>
                 <profile_url><![CDATA[https://ims-na1-stg1.adobelogin.com/ims/profile/v1?client_id=#{client_id}]]></profile_url>
             </integration>
+            <email>
+                <header_template>admin_adobe_ims_email_header_template</header_template>
+                <footer_template>admin_adobe_ims_email_footer_template</footer_template>
+            </email>
         </adobe_ims>
     </default>
 </config>
