@@ -1833,12 +1833,20 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            return $this;
-        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
+        if ($this->getQuote()->getCustomerIsGuest()) {
+            $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
+            $customer->setFirstname($customerBillingAddressDataObject->getFirstname())
+                ->setLastname($customerBillingAddressDataObject->getLastname())
+                ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
+                ->setStoreId($store->getId())
+                ->setWebsiteId($store->getWebsiteId());
+            $customer = $this->_validateCustomerData($customer);
+            $this->getQuote()->setCustomer($customer);
+            return $this;
+        }
 
         if ($customer->getId() && !$this->_customerIsInStore($store)) {
             /** Create a new customer record if it is not available in the specified store */
@@ -2008,7 +2016,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            $this->updateGuestName($oldOrder, $order);
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
@@ -2018,25 +2025,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
 
-        return $order;
-    }
-
-    /**
-     * Update guest name after create order
-     *
-     * @param Order $oldOrder
-     * @param Order $order
-     * @return Order
-     */
-    private function updateGuestName(Order $oldOrder, Order $order): Order
-    {
-        if ($order->getCustomerIsGuest()) {
-            $order->setCustomerFirstname($oldOrder->getCustomerFirstname());
-            $order->setCustomerLastname($oldOrder->getCustomerLastname());
-            if ($oldOrder->getMiddlename() === null) {
-                $order->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
-            }
-        }
         return $order;
     }
 

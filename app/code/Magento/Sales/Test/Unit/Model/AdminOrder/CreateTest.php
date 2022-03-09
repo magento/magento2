@@ -20,14 +20,9 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Payment;
-use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Quote\Model\Quote\Item\Updater;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Sales\Model\AdminOrder\Create;
@@ -44,7 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateTest extends TestCase
 {
-    private const CUSTOMER_ID = 1;
+    const CUSTOMER_ID = 1;
 
     /**
      * @var Create
@@ -55,11 +50,6 @@ class CreateTest extends TestCase
      * @var CartRepositoryInterface|MockObject
      */
     private $quoteRepository;
-
-    /**
-     * @var CartManagementInterface|MockObject
-     */
-    private $quoteManagement;
 
     /**
      * @var QuoteFactory|MockObject
@@ -114,10 +104,6 @@ class CreateTest extends TestCase
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->quoteFactory = $this->createPartialMock(QuoteFactory::class, ['create']);
         $this->customerFactory = $this->createPartialMock(CustomerInterfaceFactory::class, ['create']);
-        $this->quoteManagement = $this->getMockBuilder(CartManagementInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['submit'])
-            ->getMockForAbstractClass();
 
         $this->itemUpdater = $this->createMock(Updater::class);
 
@@ -131,7 +117,6 @@ class CreateTest extends TestCase
             ->setMethods(
                 [
                     'getQuote',
-                    'getOrder',
                     'getStoreId',
                     'getCustomerId',
                     'setData',
@@ -149,8 +134,6 @@ class CreateTest extends TestCase
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
-        $storeMock->method('getId')
-            ->willReturn(1);
         $this->sessionQuote->method('getStore')
             ->willReturn($storeMock);
 
@@ -178,15 +161,6 @@ class CreateTest extends TestCase
                     'getShippingAddress',
                     'getBillingAddress',
                     'getCouponCode',
-                    'getCustomerFirstname',
-                    'getCustomerLastname',
-                    'getCustomerMiddlename',
-                    'getIncrementId',
-                    'getOriginalIncrementId',
-                    'getEditIncrement',
-                    'setRelationChildId',
-                    'setRelationChildRealId',
-                    'save',
                 ]
             )
             ->getMock();
@@ -204,7 +178,6 @@ class CreateTest extends TestCase
                 'dataObjectHelper' => $this->dataObjectHelper,
                 'quoteRepository' => $this->quoteRepository,
                 'quoteFactory' => $this->quoteFactory,
-                'quoteManagement' => $this->quoteManagement,
             ]
         );
     }
@@ -487,145 +460,5 @@ class CreateTest extends TestCase
             ->method('setCustomerGroupId');
 
         $this->adminOrderCreate->initFromOrder($this->orderMock);
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testCreateOrder()
-    {
-        $method = $this->getMockBuilder(MethodInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'isAvailable',
-                    'validate',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $method->method('isAvailable')
-            ->willReturn(true);
-        $method->method('validate')
-            ->willReturn(true);
-        $payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getMethod',
-                    'getMethodInstance',
-                ]
-            )
-            ->getMock();
-        $payment->method('getMethod')
-            ->willReturn('checkmo');
-        $payment->method('getMethodInstance')
-            ->willReturn($method);
-
-        $type = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getOrderOptions',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $type->method('getOrderOptions')
-            ->willReturn(false);
-
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getTypeInstance',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $product->method('getTypeInstance')
-            ->willReturn($type);
-
-        $item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getHasError',
-                    'getProduct',
-                    'getOptionByCode',
-                ]
-            )
-            ->getMockForAbstractClass();
-        $item->method('getHasError')
-            ->willReturn(false);
-        $item->method('getProduct')
-            ->willReturn($product);
-        $item->method('getOptionByCode')
-            ->willReturn(false);
-        $items = [
-            $item
-        ];
-
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getCustomerIsGuest',
-                    'getAllItems',
-                    'isVirtual',
-                    'getPayment',
-                    'getItemById',
-                ]
-            )
-            ->getMock();
-        $quote->method('getCustomerIsGuest')
-            ->willReturn(true);
-        $quote->method('getAllItems')
-            ->willReturn($items);
-        $quote->method('isVirtual')
-            ->willReturn(true);
-        $quote->method('getPayment')
-            ->willReturn($payment);
-        $quote->method('getItemById')
-            ->willReturn($item);
-
-        $this->sessionQuote
-            ->method('getQuote')
-            ->willReturn($quote);
-        $this->orderMock->method('getId')
-            ->willReturn(1);
-        $this->orderMock->method('getCustomerFirstname')
-            ->willReturn('firstname');
-        $this->orderMock->method('getCustomerLastname')
-            ->willReturn('lastname');
-        $this->orderMock->method('getCustomerMiddlename')
-            ->willReturn('middlename');
-        $this->orderMock->method('getIncrementId')
-            ->willReturn('100000001');
-        $this->orderMock->method('getEditIncrement')
-            ->willReturn(0);
-        $this->sessionQuote
-            ->method('getOrder')
-            ->willReturn($this->orderMock);
-
-        $guestOrder = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getId',
-                    'getIncrementId',
-                    'getCustomerIsGuest',
-                    'save',
-                ]
-            )
-            ->getMock();
-        $guestOrder->method('getId')
-            ->willReturn(2);
-        $guestOrder->method('getIncrementId')
-            ->willReturn('100000001-1');
-        $guestOrder->method('getCustomerIsGuest')
-            ->willReturn(true);
-        $this->quoteManagement->method('submit')
-            ->willReturn($guestOrder);
-
-        $object = $this->adminOrderCreate->createOrder();
-        self::assertEquals($this->orderMock->getCustomerFirstname(), $object->getCustomerFirstname());
     }
 }
