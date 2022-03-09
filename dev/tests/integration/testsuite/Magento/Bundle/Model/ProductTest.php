@@ -12,12 +12,18 @@ namespace Magento\Bundle\Model;
 
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type as BundleType;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -248,6 +254,134 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         }
 
         return $variations;
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/bundle_product_with_dynamic_price.php
+     * @dataProvider shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider
+     * @param bool $isOption1Required
+     * @param bool $isOption2Required
+     * @param array $outOfStockConfig
+     * @param array $inStockConfig
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
+        bool $isOption1Required,
+        bool $isOption2Required,
+        array $outOfStockConfig,
+        array $inStockConfig
+    ): void {
+        $sku = 'bundle_product_with_dynamic_price';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, true, null, true);
+        $extension = $product->getExtensionAttributes();
+        $options = $extension->getBundleProductOptions();
+        $options[0]->setRequired($isOption1Required);
+        $options[1]->setRequired($isOption2Required);
+        $extension->setBundleProductOptions($options);
+        $stockItem = $extension->getStockItem();
+        $stockItem->setUseConfigManageStock(1);
+        $product->setExtensionAttributes($extension);
+        $productRepository->save($product);
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+        foreach ($outOfStockConfig as $childSku => $stockData) {
+            $this->updateStockItem($childSku, $stockData);
+        }
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertFalse($stockItem->getIsInStock());
+        foreach ($inStockConfig as $childSku => $stockData) {
+            $this->updateStockItem($childSku, $stockData);
+        }
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+    }
+
+    /**
+     * @return array
+     */
+    public function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    {
+        return [
+            'all options are required' => [
+                true,
+                true,
+                'out-of-stock' => [
+                    'simple1' => [
+                        'is_in_stock' => false
+                    ],
+                ],
+                'in-stock' => [
+                    'simple1' => [
+                        'is_in_stock' => true
+                    ]
+                ]
+            ],
+            'all options are optional' => [
+                false,
+                false,
+                'out-of-stock' => [
+                    'simple1' => [
+                        'is_in_stock' => false
+                    ],
+                    'simple2' => [
+                        'is_in_stock' => false
+                    ],
+                ],
+                'in-stock' => [
+                    'simple1' => [
+                        'is_in_stock' => true
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param string $sku
+     * @param array $data
+     * @throws NoSuchEntityException
+     */
+    private function updateStockItem(string $sku, array $data): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku, true, null, true);
+        $extendedAttributes = $product->getExtensionAttributes();
+        $stockItem = $extendedAttributes->getStockItem();
+        $stockItem->setIsInStock($data['is_in_stock']);
+        $extendedAttributes->setStockItem($stockItem);
+        $product->setExtensionAttributes($extendedAttributes);
+        $productRepository->save($product);
+    }
+
+    /**
+     * @param int $productId
+     * @return StockItemInterface|null
+     */
+    private function getStockItem(int $productId): ?StockItemInterface
+    {
+        $criteriaFactory = $this->objectManager->create(StockItemCriteriaInterfaceFactory::class);
+        $stockItemRepository = $this->objectManager->create(StockItemRepositoryInterface::class);
+        $stockConfiguration = $this->objectManager->create(StockConfigurationInterface::class);
+        $criteria = $criteriaFactory->create();
+        $criteria->setScopeFilter($stockConfiguration->getDefaultScopeId());
+        $criteria->setProductsFilter($productId);
+        $stockItemCollection = $stockItemRepository->getList($criteria);
+        $stockItems = $stockItemCollection->getItems();
+        return reset($stockItems);
     }
 
     /**

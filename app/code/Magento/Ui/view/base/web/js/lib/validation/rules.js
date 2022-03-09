@@ -458,7 +458,7 @@ define([
                     return false;
                 }
 
-                pass = $.trim(value);
+                pass = value.trim();
 
                 if (!pass.length) {
                     return true;
@@ -476,7 +476,7 @@ define([
                     return false;
                 }
 
-                pass = $.trim(value);
+                pass = value.trim();
 
                 if (pass.length === 0) {
                     return true;
@@ -500,7 +500,7 @@ define([
                     counter = 0,
                     passwordMinLength = $(elm).data('password-min-length'),
                     passwordMinCharacterSets = $(elm).data('password-min-character-sets'),
-                    pass = $.trim(v),
+                    pass = v.trim(),
                     result = pass.length >= passwordMinLength;
 
                 if (result === false) {
@@ -1101,6 +1101,22 @@ define([
                 return moment.utc(value, params.dateFormat).isSameOrBefore(moment.utc());
             },
             $.mage.__('The Date of Birth should not be greater than today.')
+        ],
+        'validate-no-utf8mb4-characters': [
+            function (value) {
+                var validator = this,
+                    message = $.mage.__('Please remove invalid characters: {0}.'),
+                    matches = value.match(/(?:[\uD800-\uDBFF][\uDC00-\uDFFF])/g),
+                    result = matches === null;
+
+                if (!result) {
+                    validator.charErrorMessage = message.replace('{0}', matches.join());
+                }
+
+                return result;
+            }, function () {
+                return this.charErrorMessage;
+            }
         ]
     }, function (data) {
         return {

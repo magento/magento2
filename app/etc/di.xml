@@ -698,6 +698,9 @@
                 <item name="0" xsi:type="string">Magento\Framework\Data\OptionSourceInterface</item>
                 <item name="1" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface</item>
             </argument>
+            <argument name="deniedClassList" xsi:type="array">
+                <item name="0" xsi:type="string">Magento\Framework\Model\ResourceModel\AbstractResource</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View">
@@ -1741,7 +1744,7 @@
         <arguments>
             <argument name="connectionToExchangeMap" xsi:type="array">
                 <item name="amqp" xsi:type="string">magento</item>
-                <item name="db" xsi:type="string">magento-db</item>
+                <item name="db" xsi:type="string">magento</item>
             </argument>
         </arguments>
     </type>
@@ -1749,7 +1752,7 @@
         <arguments>
             <argument name="publisherNameToConnectionMap" xsi:type="array">
                 <item name="amqp-magento" xsi:type="string">amqp</item>
-                <item name="db-magento-db" xsi:type="string">db</item>
+                <item name="db-magento" xsi:type="string">db</item>
             </argument>
         </arguments>
     </type>
@@ -1763,6 +1766,11 @@
     <!-- \Magento\Framework\MessageQueue\Bulk\PublisherPool is @api -->
     <virtualType name="Magento\Framework\MessageQueue\Bulk\PublisherPool" type="Magento\Framework\MessageQueue\PublisherPool" />
     <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionMaxSizeConfig">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT</argument>
         </arguments>
@@ -1925,6 +1933,43 @@
                 <item name="3" xsi:type="string">graphql</item>
                 <item name="4" xsi:type="string">standard</item>
             </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface" type="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator"/>
+    <type name="Magento\Framework\Webapi\Validator\CompositeServiceInputValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="entityArrayValidator" xsi:type="object">Magento\Framework\Webapi\Validator\EntityArrayValidator</item>
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\Webapi\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Validator\EntityArrayValidator">
+        <arguments>
+            <argument name="complexArrayItemLimit" xsi:type="number">20</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Validator\SearchCriteriaValidator">
+        <arguments>
+            <argument name="maximumPageSize" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface" type="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator"/>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
+        <arguments>
+            <argument name="maxPageSize" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\ServiceInputProcessor">
+        <arguments>
+            <argument name="defaultPageSize" xsi:type="number">20</argument>
         </arguments>
     </type>
 </config>

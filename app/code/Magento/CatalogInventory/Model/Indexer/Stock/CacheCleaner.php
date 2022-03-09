@@ -173,7 +173,7 @@ class CacheCleaner
      */
     private function getCategoryIdsByProductIds(array $productIds): array
     {
-        $categoryProductTable = $this->getConnection()->getTableName('catalog_category_product');
+        $categoryProductTable = $this->resource->getTableName('catalog_category_product');
         $select = $this->getConnection()->select()
             ->from(['catalog_category_product' => $categoryProductTable], ['category_id'])
             ->where('product_id IN (?)', $productIds);

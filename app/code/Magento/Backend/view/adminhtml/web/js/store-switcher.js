@@ -69,7 +69,7 @@ define([
 
                 } else {
                     $('#preview_selected_store').val(scopeId);
-                    $('#preview_form').submit();
+                    $('#preview_form').trigger('submit');
 
                     $('.store-switcher .dropdown-menu li a').each(function () {
                         var $this = $(this);
@@ -79,7 +79,7 @@ define([
                         }
                     });
 
-                    $('#store-change-button').click();
+                    $('#store-change-button').trigger('click');
                 }
             }
 
