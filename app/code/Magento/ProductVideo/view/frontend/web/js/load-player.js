@@ -9,7 +9,8 @@
  */
 define([
     'jquery',
-    'jquery-ui-modules/widget'
+    'jquery-ui-modules/widget',
+    'vimeoWrapper'
 ], function ($) {
     'use strict';
 
@@ -307,7 +308,8 @@ define([
         _create: function () {
             var timestamp,
                 additionalParams = '',
-                src;
+                src,
+                id;
 
             this._initialize();
             timestamp = new Date().getTime();
@@ -325,10 +327,11 @@ define([
                 this._code +
                 timestamp +
                 additionalParams;
+            id = 'vimeo' + this._code + timestamp;
             this.element.append(
                 $('<iframe></iframe>')
                     .attr('frameborder', 0)
-                    .attr('id', 'vimeo' + this._code + timestamp)
+                    .attr('id', id)
                     .attr('width', this._width)
                     .attr('height', this._height)
                     .attr('src', src)
@@ -338,10 +341,11 @@ define([
                     .attr('referrerPolicy', 'origin')
                     .attr('allow', 'autoplay')
             );
-            this._player = window.$f(this.element.children(':first')[0]);
 
-            // Froogaloop throws error without a registered ready event
-            this._player.addEvent('ready', function (id) {
+            /* eslint-disable no-undef */
+            this._player = new Vimeo.Player(this.element.children(':first')[0]);
+
+            this._player.ready().then(function () {
                 $('#' + id).closest('.fotorama__stage__frame').addClass('fotorama__product-video--loaded');
             });
         },
@@ -350,7 +354,7 @@ define([
          * Play command for Vimeo
          */
         play: function () {
-            this._player.api('play');
+            this._player.play();
             this._playing = true;
         },
 
@@ -358,7 +362,7 @@ define([
          * Pause command for Vimeo
          */
         pause: function () {
-            this._player.api('pause');
+            this._player.pause();
             this._playing = false;
         },
 
@@ -366,7 +370,7 @@ define([
          * Stop command for Vimeo
          */
         stop: function () {
-            this._player.api('unload');
+            this._player.unload();
             this._playing = false;
         },
 
