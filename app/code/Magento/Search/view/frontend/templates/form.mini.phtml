@@ -10,6 +10,8 @@
 /** @var $escaper \Magento\Framework\Escaper */
 /** @var $configProvider \Magento\Search\ViewModel\ConfigProvider */
 $configProvider = $block->getData('configProvider');
+/** @var $versionManager \Magento\Search\ViewModel\AdditionalSearchFormData */
+$additionalSearchFormData = $block->getData('additionalSearchFormData');
 /** @var $helper \Magento\Search\Helper\Data */
 $helper = $configProvider->getSearchHelperData();
 $allowedSuggestion = $configProvider->isSuggestionsAllowed();
@@ -20,6 +22,12 @@ $quickSearchUrl = $allowedSuggestion ? $escaper->escapeUrl($helper->getSuggestUr
     <div class="block block-content">
         <form class="form minisearch" id="search_mini_form"
               action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get">
+            <?php  if (!empty($queryParams = $additionalSearchFormData->getFormData())): ?>
+                <?php foreach ($queryParams as $param): ?>
+                    <input type="hidden" name="<?= $escaper->escapeHtmlAttr($param['name']) ?>"
+                           value="<?= $escaper->escapeHtmlAttr($param['value']) ?>"/>
+                <?php endforeach; ?>
+            <?php endif; ?>
             <div class="field search">
                 <label class="label" for="search" data-role="minisearch-label">
                     <span><?= $escaper->escapeHtml(__('Search')) ?></span>
