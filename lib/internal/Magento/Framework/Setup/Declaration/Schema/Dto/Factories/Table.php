@@ -23,12 +23,12 @@ class Table implements FactoryInterface
     /**
      * Default charset for SQL
      */
-    const DEFAULT_CHARSET = 'utf8';
+    const DEFAULT_CHARSET = 'utf8mb4';
 
     /**
      * Default collation
      */
-    const DEFAULT_COLLATION = 'utf8_general_ci';
+    const DEFAULT_COLLATION = 'utf8mb4_general_ci';
 
     /**
      * @var ObjectManagerInterface
