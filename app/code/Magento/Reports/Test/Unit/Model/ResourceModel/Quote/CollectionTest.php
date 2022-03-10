@@ -131,20 +131,20 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-        $this->selectMock->expects($this->atLeastOnce())
+        $this->selectMock->expects($this->once())
             ->method('from')
             ->with(['customer' => $customerTableName], ['entity_id', 'email'])
             ->willReturnSelf();
-        $this->selectMock->expects($this->atLeastOnce())
+        $this->selectMock->expects($this->once())
             ->method('columns')
             ->with(['customer_name' => $customerName])
             ->willReturnSelf();
-        $this->selectMock->expects($this->atLeastOnce())
+        $this->selectMock->expects($this->once())
             ->method('where')
             ->with('customer.entity_id IN (?)')
             ->willReturnSelf();
 
-        $this->connectionMock->expects($this->atLeastOnce())
+        $this->connectionMock->expects($this->once())
             ->method('getConcatSql')
             ->with(['firstname', 'lastname'], ' ')
             ->willReturn($customerName);
@@ -152,7 +152,7 @@ class CollectionTest extends TestCase
         $this->customerResourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-        $this->customerResourceMock->expects($this->atLeastOnce())
+        $this->customerResourceMock->expects($this->once())
             ->method('getTable')
             ->with('customer_entity')
             ->willReturn($customerTableName);
@@ -160,12 +160,12 @@ class CollectionTest extends TestCase
         $this->connectionMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
-        $this->connectionMock->expects($this->atLeastOnce())
+        $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->selectMock)
             ->willReturn($customersData);
 
-        $this->fetchStrategyMock->expects($this->atLeastOnce())
+        $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
             ->withAnyParameters()
             ->willReturn($customerId);

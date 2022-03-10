@@ -87,6 +87,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_massactionIdFilter;
 
     /**
+     * Massaction block name
+     *
      * @var string
      */
     protected $_massactionBlockName = \Magento\Backend\Block\Widget\Grid\Massaction\Extended::class;
@@ -120,6 +122,8 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_headersVisibility = true;
 
     /**
+     * Filter visibility
+     *
      * @var boolean
      */
     protected $_filterVisibility = true;
@@ -144,11 +148,15 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected $_isCollapsed;
 
     /**
+     * Count subtotals
+     *
      * @var boolean
      */
     protected $_countSubTotals = false;
 
     /**
+     * SubTotals
+     *
      * @var \Magento\Framework\DataObject[]
      */
     protected $_subtotals = [];
@@ -956,7 +964,6 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
 
         while ($break !== true) {
             $collection = clone $originalCollection;
-            $collection->clear();
             $collection->setPageSize($this->_exportPageSize);
             $collection->setCurPage($page);
             $collection->load();
@@ -968,6 +975,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                 $break = true;
             }
             $page++;
+
             foreach ($collection as $item) {
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
