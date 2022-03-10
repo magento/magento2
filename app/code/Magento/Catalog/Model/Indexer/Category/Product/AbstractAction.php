@@ -30,23 +30,23 @@ abstract class AbstractAction
     /**
      * Chunk size
      */
-    const RANGE_CATEGORY_STEP = 500;
+    public const RANGE_CATEGORY_STEP = 500;
 
     /**
      * Chunk size for product
      */
-    const RANGE_PRODUCT_STEP = 1000000;
+    public const RANGE_PRODUCT_STEP = 1000000;
 
     /**
      * Catalog category index table name
      */
-    const MAIN_INDEX_TABLE = 'catalog_category_product_index';
+    public const MAIN_INDEX_TABLE = 'catalog_category_product_index';
 
     /**
      * Suffix for table to show it is temporary
      * @deprecated see getIndexTable
      */
-    const TEMPORARY_TABLE_SUFFIX = '_tmp';
+    public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
     /**
      * Cached non anchor categories select by store id
