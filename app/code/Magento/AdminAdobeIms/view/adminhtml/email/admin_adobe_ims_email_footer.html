@@ -5,21 +5,47 @@
  */
 -->
 <!--@subject {{trans "Footer"}} @-->
-<!--@vars {
-"var store.frontend_name":"Store Name"
-} @-->
+<!--@vars {} @-->
 
-                    <!-- End Content -->
+                        </table>
+                        <!-- END pod1 -->
+
+                        <!-- END email content -->
                     </td>
                 </tr>
                 <tr>
-                    <td class="footer">
-                        <p class="closing">{{trans "Thank you, %store_name" store_name=$store.frontend_name}}!</p>
+                    <td bgcolor="#F5F5F5" style="background-color:#F5F5F5;">
+
+                        <!-- logo, links & legal-->
+                        <table class="email-width" align="center" width="500" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:500px;">
+                            <tr>
+                                <td style="color:#EB1000; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12px; line-height:18px; padding-top:40px;"><img alt="Adobe" src="https://landing.adobe.com/dam/global/images/adobe-logo.classic.160x222.png" width="30" height="auto" border="0" hspace="0" vspace="0" style="color:#EB1000; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12px; line-height:18px; display:block; vertical-align:top;"/></td>
+                            </tr>
+                            <tr>
+                                <td class="legal" style="color:#959595; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:16px; line-height:32px; padding-top:60px;">
+                                    <a href="https://www.adobe.com/go/account" target="_blank" style="color:#959595; text-decoration:underline;">
+                                        {{trans "User Guides"}}
+                                    </a><br/>
+                                    <a href="https://www.adobe.com/go/support" target="_blank" style="color:#959595; text-decoration:underline;">
+                                        {{trans "Customer Support"}}
+                                    </a><br/>
+                                    <a href="https://www.adobe.com/go/forums" target="_blank" style="color:#959595; text-decoration:underline;">
+                                        {{trans "Forums"}}
+                                    </a></td>
+                            </tr>
+                            <tr>
+                                <td class="legal" style="color:#959595; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:11px; line-height:18px; padding-top:50px; padding-bottom:50px;">
+                                    © Adobe {{var current_year}}. All rights reserved
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- END logo, links & legal-->
+
                     </td>
                 </tr>
             </table>
         </td>
     </tr>
 </table>
-<!-- End wrapper table -->
 </body>
+</html>

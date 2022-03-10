@@ -9,6 +9,7 @@ use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Api\Data\UserInterface;
@@ -42,21 +43,29 @@ class SendAdminCreatedMailPlugin
     private StoreManagerInterface $storeManager;
 
     /**
+     * @var Repository
+     */
+    private Repository $assetRepo;
+
+    /**
      * @param TransportBuilder $transportBuilder
      * @param ConfigInterface $config
      * @param ImsConfig $imsConfig
      * @param StoreManagerInterface $storeManager
+     * @param Repository $assetRepo
      */
     public function __construct(
         TransportBuilder $transportBuilder,
         ConfigInterface $config,
         ImsConfig $imsConfig,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Repository $assetRepo
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->config = $config;
         $this->imsConfig = $imsConfig;
         $this->storeManager = $storeManager;
+        $this->assetRepo = $assetRepo;
     }
 
     /**
@@ -73,12 +82,19 @@ class SendAdminCreatedMailPlugin
             return;
         }
 
+        $logo = $this->assetRepo->getUrlWithParams(
+            'Magento_AdminAdobeIms::images/adobe-commerce-light.png',
+            []
+        );
+
         $this->sendNotificationEmail(
             [
                 'user' => $user,
                 'store' => $this->storeManager->getStore(
                     Store::DEFAULT_STORE_ID
-                )
+                ),
+                'logo_url' => $logo,
+                'current_year' => date('Y'),
             ],
             $user->getEmail(),
             $user->getFirstName() . ' ' . $user->getLastName()

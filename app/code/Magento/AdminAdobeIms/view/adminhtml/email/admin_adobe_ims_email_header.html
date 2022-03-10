@@ -6,55 +6,108 @@
 -->
 <!--@subject {{trans "Header"}} @-->
 <!--@vars {
-"var logo_url":"Magento_AdminAdobeIms::images/adobe-commerce-dark.png",
 "var logo_alt":"Email Logo Alt Text",
 "var logo_height":"Email Logo Image Height",
 "var logo_width":"Email Logo Image Width",
 "var template_styles|raw":"Template CSS"
 } @-->
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="https://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <style type="text/css">
-        {{var template_styles|raw}}
+    <link rel="icon" href="https://www.adobe.com/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://www.adobe.com/favicon.ico" type="image/x-icon">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="email=no">
 
-        {{css file="Magento_AdminAdobeIms::dist/index.min.css"}}
-        {{css file="Magento_AdminAdobeIms::css/adobe.css"}}
+    <!--[if mso]>
+    <style type="text/css">
+        body, table, td {
+            font-family:Helvetica Neue, Helvetica, Verdana, Arial, sans-serif !important;
+        }
+    </style>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+
+    <style type="text/css">
+        @import url("https://use.typekit.net/onr8tbr.css");
+        @media (prefers-color-scheme: dark)
+            .ReadMsgBody { width:100%;}
+            .ExternalClass {width:100%;}
+            table {border-collapse:collapse; margin:0 auto;}
+            a, a:visited {color:#1473E6; text-decoration:none;}
+            .legal a {text-decoration:underline;}
+            /* iOS BLUE LINKS */
+            a[x-apple-data-detectors] {color:inherit !important; text-decoration:none !important; font-size:inherit !important; font-family:inherit !important; font-weight:inherit !important; line-height:inherit !important;}
+
+            .mobile {border-spacing:0;display:none!important;height:0;max-height:0;mso-hide:all;overflow:hidden;visibility:hidden;width:0;}
+
+            @media only screen and (max-width:480px) {
+                u ~ div {
+                    min-width:100vw;
+                }
+                div > u ~ div {
+                    min-width: 100%;
+                }
+                .web {
+                    display:none !important;
+                }
+
+                .mobile {
+                    display:block !important;
+                    width:auto !important;
+                    overflow:visible !important;
+                    height:auto !important;
+                    max-height:inherit !important;
+                    font-size:18px !important;
+                    line-height:26px !important;
+                    visibility:visible !important;
+                }
+
+                .email-width {
+                    width:84% !important;
+                }
+
+                .full-width {
+                    width:100% !important;
+                }
+
+                .mobile-image {
+                    height:auto !important;
+                    width:100% !important;
+                }
+
+                .social {
+                    float:left !important;
+                    padding-top:66px !important;
+                    text-align:left !important;
+                }
+            }
     </style>
 </head>
-<body class="spectrum spectrum--medium spectrum--light">
-{{inlinecss file="css/email-inline.css"}}
 
-<!-- Begin wrapper table -->
-<table class="wrapper" width="100%">
+<body bgcolor="#E4E4E4" style="background-color:#E4E4E4; margin:0; padding:0;-webkit-font-smoothing:antialiased;width:100% !important;-webkit-text-size-adjust:none;" topmargin="0"><div style="font-size:1px; color:#E4E4E4; display:none; overflow:hidden; visibility:hidden;">PREVIEW TEXT HERE &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+
+<table width="100%" bgcolor="#E4E4E4" style="background-color:#E4E4E4;" border="0" cellpadding="0" cellspacing="0" role="presentation">
     <tr>
-        <td class="wrapper-inner" align="center">
-            <table class="main" align="center">
+        <td style="padding-top: 40px;">
+            <table class="full-width" align="center" width="600" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:600px;">
                 <tr>
-                    <td class="header">
-                        <a class="logo" href="{{store url=""}}">
-                            <img
-                                {{if logo_width}}
-                                    width="{{var logo_width}}"
-                                {{else}}
-                                    width="180"
-                                {{/if}}
+                    <td bgcolor="#ffffff" style="border-top:4px solid #EB1000; background-color:#ffffff; padding-bottom:60px;">
 
-                                {{if logo_height}}
-                                    height="{{var logo_height}}"
-                                {{/if}}
+                        <!-- pod1 -->
+                        <table class="email-width" align="center" width="500" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:500px;">
+                            <tr>
+                                <td style="color:#EB1000; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12px; line-height:18px; padding-top:50px;"><img alt="Adobe" src="{{var logo_url}}" border="0" hspace="0" vspace="0" style="color:#EB1000; font-family:adobe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12px; line-height:18px; display:block; vertical-align:top;"/></td>
+                            </tr>
 
-                                src="{{var logo_url}}"
-                                alt="{{var logo_alt}}"
-                                border="0"
-                            />
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="main-content">
-                    <!-- Begin Content -->
