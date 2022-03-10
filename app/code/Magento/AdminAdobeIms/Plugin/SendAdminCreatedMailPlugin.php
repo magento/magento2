@@ -5,6 +5,7 @@ namespace Magento\AdminAdobeIms\Plugin;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\App\ConfigInterface;
+use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -48,24 +49,32 @@ class SendAdminCreatedMailPlugin
     private Repository $assetRepo;
 
     /**
+     * @var BackendUrlInterface
+     */
+    private BackendUrlInterface $backendUrl;
+
+    /**
      * @param TransportBuilder $transportBuilder
      * @param ConfigInterface $config
      * @param ImsConfig $imsConfig
      * @param StoreManagerInterface $storeManager
      * @param Repository $assetRepo
+     * @param BackendUrlInterface $backendUrl
      */
     public function __construct(
         TransportBuilder $transportBuilder,
         ConfigInterface $config,
         ImsConfig $imsConfig,
         StoreManagerInterface $storeManager,
-        Repository $assetRepo
+        Repository $assetRepo,
+        BackendUrlInterface $backendUrl
     ) {
         $this->transportBuilder = $transportBuilder;
         $this->config = $config;
         $this->imsConfig = $imsConfig;
         $this->storeManager = $storeManager;
         $this->assetRepo = $assetRepo;
+        $this->backendUrl = $backendUrl;
     }
 
     /**
@@ -87,12 +96,15 @@ class SendAdminCreatedMailPlugin
             []
         );
 
+        $backendUrl = $this->backendUrl->getUrl('admin');
+
         $this->sendNotificationEmail(
             [
                 'user' => $user,
                 'store' => $this->storeManager->getStore(
                     Store::DEFAULT_STORE_ID
                 ),
+                'cta_link' => $backendUrl,
                 'logo_url' => $logo,
                 'current_year' => date('Y'),
             ],
