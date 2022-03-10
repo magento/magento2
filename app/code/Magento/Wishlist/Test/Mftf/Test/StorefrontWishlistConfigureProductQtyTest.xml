@@ -60,7 +60,6 @@
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
 
-        <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
         <!-- Verify that product info main section contains the updated quantity. -->
         <seeInField userInput="1000" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="seeUpdatedQuantity"/>
     </test>
