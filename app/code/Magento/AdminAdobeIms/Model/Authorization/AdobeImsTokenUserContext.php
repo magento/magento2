@@ -89,10 +89,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
      */
     public function getUserId()
     {
-        if (!$this->userId) {
-            $this->processRequest();
-        }
-
+        $this->processRequest();
         return $this->userId;
     }
 
@@ -111,9 +108,10 @@ class AdobeImsTokenUserContext implements UserContextInterface
      */
     protected function processRequest()
     {
-        if (!$this->imsConfig->enabled()) {
+        if (!$this->imsConfig->enabled() || $this->isRequestProcessed) {
             return;
         }
+
         if (!$bearerToken = $this->getRequestedToken()) {
             return;
         }
