@@ -235,13 +235,16 @@ class Transport implements TransportInterface
             'name' => 'localhost',
             'host' => $host,
             'port' => $port,
-            'connection_class' => $auth,
             'connection_config' => [
                 'username' => $username,
                 'password' => $password,
             ]
         ];
 
+        if ($auth && $auth !== 'none') {
+            $options['connection_class'] = $auth;
+        }
+        
         if ($ssl && $ssl !== 'none') {
             $options['connection_config']['ssl'] = $ssl;
         }
