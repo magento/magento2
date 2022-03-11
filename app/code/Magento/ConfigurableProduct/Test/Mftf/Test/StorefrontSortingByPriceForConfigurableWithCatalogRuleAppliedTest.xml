@@ -153,7 +153,9 @@
             <argument name="discountAmount" value="{{CatalogRuleByPercentWith96Amount.discount_amount}}"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexIndices">
+            <argument name="indices" value="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule"/>
+        </actionGroup>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="fullCache">
             <argument name="tags" value="full_page"/>
         </actionGroup>

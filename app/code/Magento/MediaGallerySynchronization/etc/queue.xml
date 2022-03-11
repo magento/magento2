@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
-    <broker topic="media.gallery.synchronization" exchange="magento-db" type="db">
-        <queue name="media.gallery.synchronization" consumer="media.gallery.synchronization" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\MediaGallerySynchronization\Model\Consume::execute" />
+    <broker topic="media.gallery.synchronization" exchange="magento">
+        <queue name="media.gallery.synchronization" consumer="media.gallery.synchronization" handler="Magento\MediaGallerySynchronization\Model\Consume::execute" />
     </broker>
 </config>
