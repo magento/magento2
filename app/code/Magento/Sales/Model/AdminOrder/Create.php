@@ -1685,6 +1685,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $accountData['email'] = $customer->getEmail();
         }
         $form = $this->_createCustomerForm($customer);
+        $form->setInvisibleIgnored(CustomerForm::DONT_IGNORE_INVISIBLE);
 
         // emulate request
         $request = $form->prepareRequest($accountData);
