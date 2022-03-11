@@ -9,32 +9,33 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Logger;
 
 use DateTimeZone;
+use Magento\AdminAdobeIms\Service\ImsConfig;
 use Monolog\Logger;
 use Stringable;
 
 class AdminAdobeImsLogger extends Logger
 {
     /**
-     * @var string
+     * @var ImsConfig
      */
-    private string $enabled;
+    private ImsConfig $imsConfig;
 
     /**
      * @param string $name
-     * @param string $enabled
+     * @param ImsConfig $imsConfig
      * @param array $handlers
      * @param array $processors
      * @param DateTimeZone|null $timezone
      */
     public function __construct(
         string $name,
-        string $enabled,
+        ImsConfig $imsConfig,
         array $handlers = [],
         array $processors = [],
         ?DateTimeZone $timezone = null
     ) {
         parent::__construct($name, $handlers, $processors, $timezone);
-        $this->enabled = $enabled;
+        $this->imsConfig = $imsConfig;
     }
 
     /**
@@ -46,8 +47,18 @@ class AdminAdobeImsLogger extends Logger
      */
     public function error($message, array $context = []): void
     {
-        if ($this->enabled) {
+        if ($this->loggingEnabled()) {
             parent::error($message, $context);
         }
+    }
+
+    /**
+     * Check if AdminAdobeIMS Error logging is enabled
+     *
+     * @return bool
+     */
+    public function loggingEnabled(): bool
+    {
+        return $this->imsConfig->loggingEnabled();
     }
 }
