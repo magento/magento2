@@ -22,7 +22,7 @@
             <actionGroup ref="AdminDisableAdobeImsActionGroup" stepKey="disableAdminAdobeImsModule" />
         </before>
 
-        <magentoCLI command="admin:adobe-ims info" stepKey="infoAdminAdobeIms"/>
+        <magentoCLI command="admin:adobe-ims:info" stepKey="infoAdminAdobeIms"/>
 
         <assertStringContainsString stepKey="assertCommandInfoModuleDisabled">
             <expectedResult type="string">Module is disabled</expectedResult>

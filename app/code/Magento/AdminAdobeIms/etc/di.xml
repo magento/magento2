@@ -9,13 +9,24 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="adminAdobeImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsCommand</item>
+                <item name="adminAdobeEnableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand</item>
+                <item name="adminAdobeDisableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsDisableCommand</item>
+                <item name="adminAdobeInfoImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsInfoCommand</item>
+                <item name="adminAdobeStatusImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsStatusCommand</item>
             </argument>
         </arguments>
     </type>
 
     <type name="Magento\User\Controller\Adminhtml\Auth\Forgotpassword">
         <plugin name="admin_forgot_password_plugin" type="Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\AdminAdobeIms\Service\ImsCommandValidationService">
+        <arguments>
+            <argument name="organizationIdRegex" xsi:type="string"><![CDATA[/^([A-Z0-9]{24})(@AdobeOrg)?$/i]]></argument>
+            <argument name="clientIdRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+            <argument name="clientSecretRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
+        </arguments>
     </type>
 
     <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
@@ -27,5 +38,4 @@
         <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
                 type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
     </type>
-
 </config>

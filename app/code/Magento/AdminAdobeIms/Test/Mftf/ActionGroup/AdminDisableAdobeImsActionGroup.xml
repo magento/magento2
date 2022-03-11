@@ -13,7 +13,7 @@
             <description>Runs bin/magento command to disable Admin Adobe Ims module</description>
         </annotations>
 
-        <magentoCLI command="admin:adobe-ims disable" stepKey="disableAdminAdobeImsModule"/>
+        <magentoCLI command="admin:adobe-ims:disable" stepKey="disableAdminAdobeImsModule"/>
         <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
     </actionGroup>
 </actionGroups>
