@@ -33,6 +33,7 @@ class AdminLogoutObserver implements ObserverInterface
      *
      * @param Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute(Observer $observer)
     {
