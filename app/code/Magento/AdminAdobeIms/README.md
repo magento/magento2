@@ -88,6 +88,7 @@ Will be thrown when the admin user who wants to log in does not have the configu
 ### Error logging
 Whenever an exception is thrown during the Adobe IMS Login, we will log the specific exception message but show a general error message on the admin login form.
 
-Errors are logged into the `/var/log/admin_adobe_ims.log` file. \
-Logging can be enabled or disabled in the `di.xml` on changing the arguments for the
-`Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger` definition.
+Errors are logged into the `/var/log/admin_adobe_ims.log` file. 
+
+Logging can be enabled or disabled in the config on changing the value for `adobe_ims\integration\logging_enabled` or in the Magento Admin Configuration under `Advanced > Developer > Debug`. \
+There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
