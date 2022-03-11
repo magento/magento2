@@ -133,7 +133,7 @@ class LogOut implements LogOutInterface
 
     /**
      * Checks whether user profile could be got by the access token
-     * If the token is invalidated, profile information won't be returned
+     *  - If the token is invalidated, profile information won't be returned
      *
      * @param string $accessToken
      * @return bool
@@ -147,7 +147,7 @@ class LogOut implements LogOutInterface
                 return true;
             }
         } catch (AdobeImsTokenAuthorizationException $exception) {
-            //case if profile does not exist anymore after token invalidation
+            return false;
         }
         return false;
     }

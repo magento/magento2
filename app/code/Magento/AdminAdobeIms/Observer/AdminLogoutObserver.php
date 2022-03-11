@@ -29,6 +29,8 @@ class AdminLogoutObserver implements ObserverInterface
     }
 
     /**
+     * Perform logout action
+     *
      * @param Observer $observer
      * @return $this
      */

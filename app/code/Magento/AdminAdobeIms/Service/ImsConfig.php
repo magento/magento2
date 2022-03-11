@@ -133,7 +133,6 @@ class ImsConfig extends Config
     }
 
     /**
-     * Update config
      * Get Profile URL
      *
      * @return string
@@ -148,6 +147,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update config using config writer
+     *
      * @param string $path
      * @param string $value
      * @return void
