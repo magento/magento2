@@ -1829,20 +1829,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     public function _prepareCustomer()
     {
+        if ($this->getQuote()->getCustomerIsGuest()) {
+            return $this;
+        }
         /** @var $store \Magento\Store\Model\Store */
         $store = $this->getSession()->getStore();
         $customer = $this->getQuote()->getCustomer();
-        if ($this->getQuote()->getCustomerIsGuest()) {
-            $customerBillingAddressDataObject = $this->getBillingAddress()->exportCustomerAddress();
-            $customer->setFirstname($customerBillingAddressDataObject->getFirstname())
-                ->setLastname($customerBillingAddressDataObject->getLastname())
-                ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
-                ->setStoreId($store->getId())
-                ->setWebsiteId($store->getWebsiteId());
-            $customer = $this->_validateCustomerData($customer);
-            $this->getQuote()->setCustomer($customer);
-            return $this;
-        }
 
         if ($customer->getId() && !$this->_customerIsInStore($store)) {
             /** Create a new customer record if it is not available in the specified store */
@@ -2012,6 +2004,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
+            if ($order->getCustomerIsGuest()) {
+                $quote->setCustomerFirstname($oldOrder->getCustomerFirstname());
+                $quote->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
+                $quote->setCustomerLastname($oldOrder->getCustomerLastname());
+                $quote->save();
+                $order->setCustomerFirstname($oldOrder->getCustomerFirstname());
+                $order->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
+                $order->setCustomerLastname($oldOrder->getCustomerLastname());
+            }
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
