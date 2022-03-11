@@ -57,4 +57,7 @@
         <plugin name="disable_admin_login_auth"
                 type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
     </type>
+
+    <preference for="Magento\AdobeImsApi\Api\UserProfileRepositoryInterface" type="Magento\AdminAdobeIms\Model\UserProfileRepository"/>
+
 </config>
