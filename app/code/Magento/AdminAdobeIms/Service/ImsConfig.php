@@ -82,7 +82,6 @@ class ImsConfig extends Config
     }
 
     /**
-     * Update config
      * Check if module error-logging is enabled
      *
      * @return bool
@@ -160,6 +159,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update config using config writer
+     *
      * @param string $path
      * @param string $value
      * @return void
