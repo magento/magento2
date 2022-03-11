@@ -32,6 +32,7 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
  * @since 100.0.2
@@ -75,7 +76,7 @@ class Item extends AbstractModel implements ItemInterface
     protected $_optionsByCode = [];
 
     /**
-     * Not Represent options
+     * Initialization of Not Represent options
      *
      * @var string[]
      */
@@ -227,8 +228,8 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Register option code
      *
-     * @param   Option $option
-     * @return  $this
+     * @param Option $option
+     * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addOptionCode($option)
@@ -245,6 +246,7 @@ class Item extends AbstractModel implements ItemInterface
 
     /**
      * Checks that item model has data changes.
+     *
      * Call save item options if model isn't need to save in DB
      *
      * @return boolean
@@ -410,7 +412,7 @@ class Item extends AbstractModel implements ItemInterface
      * Return false for disabled or unvisible products
      *
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param bool $delete  delete the item after successful add to cart
+     * @param bool $delete delete the item after successful add to cart
      * @return bool
      * @throws \Magento\Catalog\Model\Product\Exception
      */
@@ -477,8 +479,8 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Returns formatted buy request - object, holding request received from
-     * product view page with keys and options for configured product
+     * Returns formatted buy request - object, holding request received from product view page with keys
+     * and options for configured product
      *
      * @return \Magento\Framework\DataObject
      */
@@ -526,8 +528,8 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Set buy request - object, holding request received from
-     * product view page with keys and options for configured product
+     * Set buy request - object, holding request received from product view page with keys and options
+     * for configured product
      *
      * @param \Magento\Framework\DataObject $buyRequest
      * @return $this
@@ -556,10 +558,10 @@ class Item extends AbstractModel implements ItemInterface
 
         $selfOptions = $this->getBuyRequest()->getData();
 
-        if (empty($buyRequest) && !empty($selfOptions)) {
+        if (false === $buyRequest && !empty($selfOptions)) {
             return false;
         }
-        if (empty($selfOptions) && !empty($buyRequest)) {
+        if (empty($selfOptions) && false !== $buyRequest) {
             if (!$product->isComposite()) {
                 return true;
             } else {
@@ -663,8 +665,8 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Add option to item
      *
-     * @param   Option|\Magento\Framework\DataObject|array $option
-     * @return  $this
+     * @param Option|\Magento\Framework\DataObject|array $option
+     * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addOption($option)
@@ -754,6 +756,7 @@ class Item extends AbstractModel implements ItemInterface
 
     /**
      * Returns special download params (if needed) for custom option with type = 'file'.
+     *
      * Needed to implement \Magento\Catalog\Model\Product\Configuration\Item\Interface.
      *
      * We have to customize only controller url, so return it.
@@ -796,7 +799,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Cleans up cache for single product when wishlist item updated (for product qty).
      *
-     * @param $productId
+     * @param int $productId
      * @return void
      */
     private function cleanProductCache($productId): void
