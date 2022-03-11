@@ -16,11 +16,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Api\Data\UserInterface;
 use Magento\User\Model\Notificator;
 
-/**
- * @copyright  Copyright (c) 2021 TechDivision GmbH (https://www.techdivision.com)
- * @author     TechDivision Team Allstars <allstars@techdivision.com>
- * @link       https://www.techdivision.com/
- */
 class SendAdminCreatedMailPlugin
 {
     /**
