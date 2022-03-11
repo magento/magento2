@@ -10,7 +10,7 @@ namespace Magento\Wishlist\Plugin\Model\ResourceModel;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\PageCache\Model\Cache\Type;
+use Magento\PageCache\Model\Cache\Type  as PageCache;
 use Magento\Wishlist\Model\ResourceModel\Item;
 
 /**
@@ -19,24 +19,24 @@ use Magento\Wishlist\Model\ResourceModel\Item;
 class WishlistItem
 {
     /**
-     * @var Type
+     * @var PageCache
      */
-    private $cache;
+    private $pageCache;
 
     /**
-     * @param Type $cache
+     * @param PageCache $pageCache
      */
-    public function __construct(Type $cache)
+    public function __construct(PageCache $pageCache)
     {
-        $this->cache = $cache;
+        $this->pageCache = $pageCache;
     }
 
     /**
      * Cleans up cache for wishlist item product qty update
      *
      * @param Item $subject
-     * @param AbstractModel $object
      * @param Item $result
+     * @param AbstractModel $object
      *
      * @return Item
      * @throws LocalizedException
@@ -47,7 +47,7 @@ class WishlistItem
             $product = $object->getProduct();
 
             if (!empty($product)) {
-                $this->cache->clean(
+                $this->pageCache->clean(
                     \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                     [Product::CACHE_TAG . '_' . $product->getId()]
                 );
