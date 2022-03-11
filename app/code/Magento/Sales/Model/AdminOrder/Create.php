@@ -1984,9 +1984,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $orderData = [];
         if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $quote->setCustomerFirstname($oldOrder->getCustomerFirstname());
-            $quote->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
-            $quote->setCustomerLastname($oldOrder->getCustomerLastname());
+            if ($oldOrder->getCustomerIsGuest()) {
+                $quote->setCustomerFirstname($oldOrder->getCustomerFirstname());
+                $quote->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
+                $quote->setCustomerLastname($oldOrder->getCustomerLastname());
+            }
             $originalId = $oldOrder->getOriginalIncrementId();
             if (!$originalId) {
                 $originalId = $oldOrder->getIncrementId();
@@ -2007,11 +2009,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            if ($order->getCustomerIsGuest()) {
-                $order->setCustomerFirstname($oldOrder->getCustomerFirstname());
-                $order->setCustomerMiddlename($oldOrder->getCustomerMiddlename());
-                $order->setCustomerLastname($oldOrder->getCustomerLastname());
-            }
             $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
