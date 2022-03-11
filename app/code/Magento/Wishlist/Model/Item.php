@@ -7,9 +7,12 @@
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\PageCache\Model\Cache\Type  as PageCache;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
@@ -128,6 +131,11 @@ class Item extends AbstractModel implements ItemInterface
     private $serializer;
 
     /**
+     * @var PageCache
+     */
+    private $pageCache;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -141,6 +149,7 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param PageCache|null $pageCache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -156,7 +165,8 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?PageCache $pageCache = null
     ) {
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
@@ -164,10 +174,11 @@ class Item extends AbstractModel implements ItemInterface
         $this->_catalogUrl = $catalogUrl;
         $this->_wishlistOptFactory = $wishlistOptFactory;
         $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
+        $this->pageCache = $pageCache ?: ObjectManager::getInstance()->get(PageCache::class);
     }
 
     /**
@@ -299,6 +310,7 @@ class Item extends AbstractModel implements ItemInterface
     public function afterSave()
     {
         $this->saveItemOptions();
+        $this->cleanProductCache($this->getProductId());
         return parent::afterSave();
     }
 
@@ -779,5 +791,21 @@ class Item extends AbstractModel implements ItemInterface
 
         $this->setOptions($options->getOptionsByItem($this));
         return $this;
+    }
+
+    /**
+     * Cleans up cache for single product when wishlist item updated (for product qty).
+     *
+     * @param $productId
+     * @return void
+     */
+    private function cleanProductCache($productId): void
+    {
+        if (!empty($productId)) {
+            $this->pageCache->clean(
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                [Product::CACHE_TAG . '_' . $productId]
+            );
+        }
     }
 }

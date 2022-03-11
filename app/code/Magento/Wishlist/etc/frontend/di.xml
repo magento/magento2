@@ -56,7 +56,4 @@
     <type name="Magento\Catalog\Helper\Product\View">
         <plugin name="pre_render_product_options_from_wishlist" type="Magento\Wishlist\Plugin\Helper\Product\View" />
     </type>
-    <type name="Magento\Wishlist\Model\ResourceModel\Item">
-        <plugin name="invalidate_pagecache_after_update_wishlist" type="Magento\Wishlist\Plugin\Model\ResourceModel\WishlistItem"/>
-    </type>
 </config>
