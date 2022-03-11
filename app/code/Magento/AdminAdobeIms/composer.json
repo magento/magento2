@@ -12,7 +12,7 @@
         "magento/module-config": "*",
         "magento/module-backend": "*",
         "magento/module-user": "*",
-        "magento/module-captcha": "*"
+        "magento/module-captcha": "*",
         "magento/module-config": "*",
         "magento/module-user": "*",
         "magento/module-backend": "*"

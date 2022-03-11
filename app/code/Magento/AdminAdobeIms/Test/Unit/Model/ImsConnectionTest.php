@@ -68,7 +68,7 @@ class ImsConnectionTest extends TestCase
             ->willReturn($curlMock);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Could not connect to Adobe IMS Service.');
+        $this->expectExceptionMessage('Could not get a valid response from Adobe IMS Service.');
         $this->imsConnection->auth();
     }
 
