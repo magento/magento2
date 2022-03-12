@@ -479,9 +479,7 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Returns formatted buy request
-     *
-     * object, holding request received from product view page with keys and options for configured product
+     * Returns formatted buy request - object, holding request received from product view page with keys and options
      *
      * @return \Magento\Framework\DataObject
      */
@@ -529,9 +527,7 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Set buy request
-     *
-     * object, holding request received from product view page with keys and options for configured product
+     * Set buy request - object, holding request received from product view page with keys and options
      *
      * @param \Magento\Framework\DataObject $buyRequest
      * @return $this
