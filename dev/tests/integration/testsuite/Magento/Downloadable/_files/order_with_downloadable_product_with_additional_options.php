@@ -50,6 +50,12 @@ $order->setCustomerEmail(
     '100000001'
 )->setCustomerIsGuest(
     true
+)->setCustomerFirstname(
+    'guestfname'
+)->setCustomerLastname(
+    'guestlname'
+)->setCustomerMiddlename(
+    'guestmname'
 )->setStoreId(
     1
 )->setEmailSent(
