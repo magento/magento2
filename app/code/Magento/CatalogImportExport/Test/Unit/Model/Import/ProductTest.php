@@ -1704,19 +1704,6 @@ class ProductTest extends AbstractImportTestCase
                         '_media_image' => ['label1', 'label2']
                     ]
                 ]
-            ],
-            [
-                [
-                    'image' => '',
-                    '_media_image' => '',
-                    '_media_image_label' => 'label1,label2'
-                ],
-                [
-                    [],
-                    [
-                        '_media_image' => ['label1', 'label2']
-                    ]
-                ]
             ]
         ];
     }
