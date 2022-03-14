@@ -138,3 +138,40 @@ This can be found in the `\Magento\AdminAdobeIms\Plugin\DisableForcedPasswordCha
 
 When the AdminAdobeIMS Module is disabled, the user can not be log in when using an empty password.
 Instead, the forgot password function must be used to reset the password.
+
+
+# WEB API authentication using IMS ACCESS_TOKEN
+
+When Admin Adobe IMS is enabled, Adobe Commerce admin users will stop having credentials (username and password).
+These admin user credentials are needed for getting token that can be used to make requests to admin web APIs.
+It means that will be not possible to create token because admin doesn't have credentials. In these case we have to use IMS access token.
+
+`\Magento\AdminAdobeIms\Model\Authorization\AdobeImsTokenUserContext` new implementation for `\Magento\Authorization\Model\UserContextInterface` was created.
+In the implementation IMS access token is read and verified to get adobe user id. If adobe_user_id already exists in adobe_user_profile table, then we can get admin_user_id.
+If adobe_user_id does not exist in adobe_user_profile table, then we have to make request to IMS service to get Adobe user profile, that contain email.
+Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into adobe_user_profile table.
+If admin user with the email is not found, authentication will fail.
+
+IMS access token verification.
+To verify token a public key is required. For more info https://wiki.corp.adobe.com/display/ims/IMS+public+key+retrieval 
+In Admin Adobe Ims module was defined path where certificate has to be downloaded from.
+By default, in config.xml, these value for production.
+For testing reasons, developers can override this value, for example in env.php file like this:
+```
+'system' => [
+        'default' => [
+            'adobe_ims' => [
+                'integration' => [
+                    'certificate_path' => 'https://static.adobelogin.com/keys/nonprod/',
+                ]
+            ]
+        ]
+    ]
+```
+Certificate value is cached for 24h.
+
+This authentication mechanism enabled for REST and SOAP web API areas.
+
+Examples, how developers can test functionality:
+curl -X GET "{domain}/rest/V1/customers/2" -H "Authorization: Bearer AddAdobeImsAccessToken"
+curl -X GET "{domain}/rest/V1/products/24-MB01" -H "Authorization: Bearer AddAdobeImsAccessToken" 
