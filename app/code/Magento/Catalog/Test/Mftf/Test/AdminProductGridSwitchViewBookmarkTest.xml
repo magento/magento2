@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductGridSwitchViewBookmarkTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Switch views in product grid"/>
+            <title value="Verify that newly created view on product grid and switching between default view is correct"/>
+            <description value="Verify that newly created view on product grid and switching between default view is correct"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-258"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <waitForElementVisible selector="{{AdminGridColumnsControls.columns}}" stepKey="waitForAdminGridColumnControlsColumn"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickAdminGridColumnControlsColumn"/>
+        <waitForElementVisible selector="{{AdminDataGridHeaderSection.columnCheckbox('Special Price')}}" stepKey="verifyAdminGridColumnControlsForSelectedColumnVisible"/>
+        <click selector="{{AdminDataGridHeaderSection.columnCheckbox('Special Price')}}" stepKey="clickForAdminGridControlForSelectedColumn"/>
+        <waitForElementVisible selector="{{AdminGridHeaders.headerByName('Special Price')}}" stepKey="waitForAdminGridColumnHeaderForSelectedColumn"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="closeAdminGridColumnControls"/>
+        <waitForElementNotVisible selector="{{AdminGridColumnsControls.columnName('Special Price')}}" stepKey="verifyAdminGridColumnControlsForSelectedColumnNotVisible"/>
+
+        <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
+        <waitForElementVisible selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="waitForSaveViewButton"/>
+        <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="saveView"/>
+        <waitForElementVisible selector="{{AdminGridDefaultViewControls.viewName}}" stepKey="waitForViewNameInput"/>
+        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{NewGridView.name}}" stepKey="inputViewName"/>
+        <pressKey selector="{{AdminGridDefaultViewControls.viewName}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
+        <waitForElementNotVisible selector="{{AdminGridDefaultViewControls.viewName}}" stepKey="waitForViewNameInputGone"/>
+
+        <waitForPageLoad stepKey="waitForGridLoad" time="10"/>
+
+        <grabTextFrom selector="{{AdminGridHeaders.headerByName('Special Price')}}" stepKey="grabCustomViewHeaderColumn"/>
+        <assertEquals message="ExpectedSpecialPriceHeader" stepKey="assertExpectedSpecialPriceHeader">
+            <actualResult type="variable">$grabCustomViewHeaderColumn</actualResult>
+            <expectedResult type="string">Special Price</expectedResult>
+        </assertEquals>
+
+        <click selector="{{AdminGridDefaultViewControls.viewByName('Default View')}}" stepKey="clickOnViewButton"/>
+        <waitForPageLoad stepKey="waitForGridReset"/>
+
+        <waitForElementNotVisible selector="{{AdminGridHeaders.headerByName('Special Price')}}" stepKey="verifyAdminGridHeaderForSelectedViewNotVisible"/>
+
+        <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarksForDeletion"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName(NewGridView.name)}}{{AdminEnhancedMediaGalleryActionsSection.editViewButtonPartial}}" stepKey="clickEditButton"/>
+        <seeElement selector="{{AdminEnhancedMediaGalleryActionsSection.deleteViewButton}}" stepKey="seeDeleteButton"/>
+        <click selector="{{AdminEnhancedMediaGalleryActionsSection.deleteViewButton}}" stepKey="clickDeleteButton"/>
+        <waitForPageLoad stepKey="waitForDeletion" time="10"/>
+    </test>
+</tests>
