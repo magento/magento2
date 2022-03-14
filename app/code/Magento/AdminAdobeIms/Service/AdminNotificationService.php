@@ -1,23 +1,47 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
-namespace Magento\AdminAdobeIms\Plugin;
+declare(strict_types=1);
 
-use Magento\AdminAdobeIms\Service\ImsConfig;
+namespace Magento\AdminAdobeIms\Service;
+
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Email\Model\BackendTemplate;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\TransportBuilder;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\Repository as AssetRepo;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Api\Data\UserInterface;
-use Magento\User\Model\Notificator;
 
-class SendAdminCreatedMailPlugin
+class AdminNotificationService
 {
+    /**
+     * @var ImsConfig
+     */
+    private ImsConfig $imsConfig;
+
+    /**
+     * @var AssetRepo
+     */
+    private AssetRepo $assetRepo;
+
+    /**
+     * @var BackendUrlInterface
+     */
+    private BackendUrlInterface $backendUrl;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
+
     /**
      * @var TransportBuilder
      */
@@ -29,58 +53,30 @@ class SendAdminCreatedMailPlugin
     private ConfigInterface $config;
 
     /**
-     * @var ImsConfig
-     */
-    private ImsConfig $imsConfig;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private StoreManagerInterface $storeManager;
-
-    /**
-     * @var Repository
-     */
-    private Repository $assetRepo;
-
-    /**
-     * @var BackendUrlInterface
-     */
-    private BackendUrlInterface $backendUrl;
-
-    /**
+     * @param ImsConfig $imsConfig
+     * @param AssetRepo $assetRepo
+     * @param BackendUrlInterface $backendUrl
+     * @param StoreManagerInterface $storeManager
      * @param TransportBuilder $transportBuilder
      * @param ConfigInterface $config
-     * @param ImsConfig $imsConfig
-     * @param StoreManagerInterface $storeManager
-     * @param Repository $assetRepo
-     * @param BackendUrlInterface $backendUrl
      */
     public function __construct(
-        TransportBuilder $transportBuilder,
-        ConfigInterface $config,
         ImsConfig $imsConfig,
+        AssetRepo $assetRepo,
+        BackendUrlInterface $backendUrl,
         StoreManagerInterface $storeManager,
-        Repository $assetRepo,
-        BackendUrlInterface $backendUrl
+        TransportBuilder $transportBuilder,
+        ConfigInterface $config
     ) {
-        $this->transportBuilder = $transportBuilder;
-        $this->config = $config;
         $this->imsConfig = $imsConfig;
-        $this->storeManager = $storeManager;
         $this->assetRepo = $assetRepo;
         $this->backendUrl = $backendUrl;
+        $this->storeManager = $storeManager;
+        $this->transportBuilder = $transportBuilder;
+        $this->config = $config;
     }
 
-    /**
-     * @param Notificator $subject
-     * @param null $result
-     * @param UserInterface $user
-     * @return void
-     * @throws MailException
-     * @throws NoSuchEntityException
-     */
-    public function afterSendCreated(Notificator $subject, $result, UserInterface $user): void
+    public function sendWelcomeMailToAdminUser(UserInterface $user)
     {
         if (!$this->imsConfig->enabled()) {
             return;
@@ -114,9 +110,10 @@ class SendAdminCreatedMailPlugin
      * @param array $templateVars
      * @param string $toEmail
      * @param string $toName
-     * @throws MailException
-     *
      * @return void
+     * @throws LocalizedException
+     *
+     * @throws MailException
      */
     private function sendNotificationEmail(
         array $templateVars,
@@ -131,8 +128,9 @@ class SendAdminCreatedMailPlugin
                 'store' => Store::DEFAULT_STORE_ID
             ])
             ->setTemplateVars($templateVars)
-            ->setFrom(
-                $this->config->getValue('admin/emails/forgot_email_identity')
+            ->setFromByScope(
+                $this->config->getValue('admin/emails/forgot_email_identity'),
+                Store::DEFAULT_STORE_ID
             )
             ->addTo($toEmail, $toName)
             ->getTransport();

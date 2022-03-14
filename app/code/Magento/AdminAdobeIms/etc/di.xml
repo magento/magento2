@@ -38,13 +38,4 @@
         <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
                 type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
     </type>
-
-    <type name="Magento\Setup\Model\AdminAccount">
-        <plugin name="admin_user_create_cli"
-                type="Magento\AdminAdobeIms\Plugin\AdminUserCreateCliPlugin"/>
-    </type>
-    <type name="Magento\Setup\Model\Installer">
-        <plugin name="admin_user_installer"
-                type="Magento\AdminAdobeIms\Plugin\AdminUserInstallerPlugin"/>
-    </type>
 </config>
