@@ -21,7 +21,9 @@
             <group value="sales"/>
         </annotations>
         <before>
-           <!--Create entities-->
+            <!--Deploy static content with French(Canada) locale-->
+            <magentoCLI command="setup:static-content:deploy fr_CA" stepKey="deployStaticContentWithFrenchLocale"/>
+            <!--Create entities-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!--Login to Admin page-->
@@ -65,7 +67,7 @@
             <actualResult type="variable">grabPurchaseDateInDefaultLocale</actualResult>
         </assertStringContainsString>
 
-        <!--Set Admin "Interface Locale" to "Français (France) / français (France)"-->
+        <!--Set Admin "Interface Locale" to "Français (Canada) / français (Canada)"-->
         <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
             <argument name="InterfaceLocaleByValue" value="fr_CA"/>
         </actionGroup>
