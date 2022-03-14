@@ -25,6 +25,8 @@ class ImsConfig extends Config
     public const XML_PATH_PRIVATE_KEY = 'adobe_ims/integration/private_key';
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
+    public const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
+
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
 
     /**
@@ -207,6 +209,18 @@ class ImsConfig extends Config
             ['#{client_id}', '#{redirect_uri}', '#{locale}'],
             [$clientId, $this->getAdminAdobeImsCallBackUrl(), $this->getLocale()],
             $this->scopeConfig->getValue(self::XML_PATH_AUTH_URL_PATTERN)
+        );
+    }
+
+    /**
+     * Get email template for new created admin users
+     *
+     * @return string
+     */
+    public function getEmailTemplateForNewAdminUsers()
+    {
+        return (string) $this->scopeConfig->getValue(
+            self::XML_PATH_ENABLED
         );
     }
 

@@ -86,7 +86,7 @@ class AdminNotificationService
      * @throws MailException
      * @throws NoSuchEntityException
      */
-    public function sendWelcomeMailToAdminUser(UserInterface $user)
+    public function sendWelcomeMailToAdminUser(UserInterface $user): void
     {
         if (!$this->imsConfig->enabled()) {
             return;
@@ -130,8 +130,10 @@ class AdminNotificationService
         string $toEmail,
         string $toName
     ): void {
+        $emailTemplate = $this->getEmailTemplate();
+
         $transport = $this->transportBuilder
-            ->setTemplateIdentifier('admin_emails_new_user_created_template')
+            ->setTemplateIdentifier($emailTemplate)
             ->setTemplateModel(BackendTemplate::class)
             ->setTemplateOptions([
                 'area' => FrontNameResolver::AREA_CODE,
@@ -145,5 +147,15 @@ class AdminNotificationService
             ->addTo($toEmail, $toName)
             ->getTransport();
         $transport->sendMessage();
+    }
+
+    /**
+     * Get Email Template
+     *
+     * @return string
+     */
+    private function getEmailTemplate(): string
+    {
+        return $this->imsConfig->getEmailTemplateForNewAdminUsers();
     }
 }
