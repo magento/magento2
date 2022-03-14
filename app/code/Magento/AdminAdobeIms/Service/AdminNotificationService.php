@@ -14,6 +14,7 @@ use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
 use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\View\Asset\Repository as AssetRepo;
 use Magento\Store\Model\Store;
@@ -76,6 +77,15 @@ class AdminNotificationService
         $this->config = $config;
     }
 
+    /**
+     * Send a welcome mail to created admin user
+     *
+     * @param UserInterface $user
+     * @return void
+     * @throws LocalizedException
+     * @throws MailException
+     * @throws NoSuchEntityException
+     */
     public function sendWelcomeMailToAdminUser(UserInterface $user)
     {
         if (!$this->imsConfig->enabled()) {
