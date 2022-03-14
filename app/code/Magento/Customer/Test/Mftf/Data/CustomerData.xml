@@ -25,7 +25,7 @@
         <data key="password">pwdTest123!</data>
         <data key="prefix">Mr</data>
         <data key="suffix">Sr</data>
-        <data key="gender">1</data>
+        <data key="gender">0</data>
         <data key="store_id">0</data>
         <data key="taxvat">taxValue</data>
         <data key="website_id">0</data>
@@ -308,7 +308,7 @@
         <data key="lastname">Mill</data>
         <data key="fullname">David Mill</data>
         <data key="password">pwdTest123!</data>
-        <data key="gender">1</data>
+        <data key="gender">0</data>
         <data key="store_id">0</data>
         <data key="website_id">0</data>
         <requiredEntity type="address">updateCustomerUKAddress</requiredEntity>
