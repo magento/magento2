@@ -119,6 +119,7 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
             <argument name="sku" value="$$createConfigChildProduct2.sku$$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!--Verify product is not visible in category store front page -->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openCategoryStoreFrontPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>

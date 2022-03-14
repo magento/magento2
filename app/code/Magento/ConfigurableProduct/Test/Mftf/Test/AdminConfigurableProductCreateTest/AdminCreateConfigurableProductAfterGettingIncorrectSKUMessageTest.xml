@@ -71,7 +71,7 @@
         <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="$grabTextFromContent"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <comment userInput="BIC workaround" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clickClearFiltersInitial"/>
     </test>
 </tests>

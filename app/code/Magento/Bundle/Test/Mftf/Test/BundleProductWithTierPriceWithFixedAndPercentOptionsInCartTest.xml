@@ -36,8 +36,8 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
-            <waitForPageLoad stepKey="waitForClearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <comment userInput="BIC workaround" stepKey="waitForClearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

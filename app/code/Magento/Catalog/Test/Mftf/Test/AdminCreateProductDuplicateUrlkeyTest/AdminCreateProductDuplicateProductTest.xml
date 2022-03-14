@@ -28,6 +28,7 @@
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$$createSimpleProduct$$"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <deleteData createDataKey="createCategory" stepKey="deletePreReqCatalog"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

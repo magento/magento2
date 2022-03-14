@@ -97,6 +97,9 @@
             <!-- Logout customer from storefront and delete -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="signOutCustomer"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateEnabled">
+                <argument name="tags" value="translate config full_page layout block_html translate"/>
+            </actionGroup>
         </after>
 
         <!-- Preconditions: Add product to cart on storefront -->
@@ -116,7 +119,7 @@
 
         <!-- 2. Refresh magento cache -->
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateEnabled">
-            <argument name="tags" value="translate full_page"/>
+            <argument name="tags" value="translate config full_page block_html"/>
         </actionGroup>
 
         <!-- 3. Go to storefront and click on cart button on the top -->
@@ -497,7 +500,7 @@
         <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
         <!-- 8. Clear magento cache -->
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateDisabled">
-            <argument name="tags" value="translate full_page"/>
+            <argument name="tags" value="translate config full_page block_html"/>
         </actionGroup>
 
         <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>

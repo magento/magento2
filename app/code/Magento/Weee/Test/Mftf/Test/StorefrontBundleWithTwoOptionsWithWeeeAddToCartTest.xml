@@ -46,12 +46,16 @@
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <magentoCLI command="config:set tax/weee/include_in_subtotal 0" stepKey="disableIncludeInSubtotal"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createFullTaxRate" stepKey="deleteFullTaxRate"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         </after>
 
         <comment userInput="BIC workaround" stepKey="loginAsAdmin"/>

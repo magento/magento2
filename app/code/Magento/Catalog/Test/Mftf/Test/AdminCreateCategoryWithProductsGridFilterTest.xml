@@ -28,7 +28,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct2">
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
-            <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>

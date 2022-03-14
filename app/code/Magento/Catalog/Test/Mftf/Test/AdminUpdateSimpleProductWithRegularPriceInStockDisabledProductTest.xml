@@ -24,12 +24,14 @@
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductDisabled.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

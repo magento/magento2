@@ -28,6 +28,9 @@
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

@@ -33,6 +33,7 @@
             <argument name="product" value="$$createFixedBundleProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($$createFixedBundleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnBundleProductPage"/>
         <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoops">

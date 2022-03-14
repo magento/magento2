@@ -74,11 +74,13 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
         <checkOption selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
+        <waitForPageLoad stepKey="waitForBankTransferLoad"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.editActiveAddressButton}}" stepKey="waitForEditButtonToBeVisible"/>
+        <comment userInput="BIC workaround" stepKey="waitForEditButtonToBeVisible"/>
+        <waitForPageLoad stepKey="waitForAddressUnchecked"/>
         <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="clickEditButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
 
         <!-- Fill Billing Address -->
         <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>

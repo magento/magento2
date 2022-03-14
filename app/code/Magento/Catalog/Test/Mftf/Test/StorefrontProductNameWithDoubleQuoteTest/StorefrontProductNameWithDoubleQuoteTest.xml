@@ -82,5 +82,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

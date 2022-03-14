@@ -34,6 +34,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!--Verify product on product page -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoops">

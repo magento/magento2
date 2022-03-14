@@ -46,6 +46,7 @@
                 <argument name="website" value="{{customWebsite.name}}"/>
                 <argument name="storeView" value="{{customStoreEN.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
@@ -54,6 +55,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>

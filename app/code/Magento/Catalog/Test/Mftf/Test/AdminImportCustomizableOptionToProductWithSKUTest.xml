@@ -44,7 +44,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondProduct">
                 <argument name="sku" value="$$createFirstProduct.sku$$-1"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Change second product sku to first product sku-->

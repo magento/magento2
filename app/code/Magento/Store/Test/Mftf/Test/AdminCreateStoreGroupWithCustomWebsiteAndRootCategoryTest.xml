@@ -36,6 +36,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <!--Delete root category-->
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -47,6 +48,7 @@
             <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="$$rootCategory.name$$"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Search created store group(from above step) in grid and verify AssertStoreGroupInGrid-->
         <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeCreatedStoreGroupInGrid">

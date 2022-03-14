@@ -94,6 +94,7 @@
         <!-- Go to the created product page and add it to the cart -->
         <amOnPage url="$$virtualProduct1.custom_attributes[url_key]$$.html" stepKey="goToVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForVirtualProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addVirtualProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>
         <see stepKey="seeSuccess" selector="{{StorefrontMessagesSection.success}}" userInput="You added"/>
@@ -120,9 +121,9 @@
             <argument name="Address" value="US_Address_CA"/>
             <argument name="classPrefix" value="[aria-hidden=false]"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.updateAddress}}"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="saveAddress"/>
 
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <comment userInput="BIC workaround" stepKey="waitForAddressSaved"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxCA.state}}"/>

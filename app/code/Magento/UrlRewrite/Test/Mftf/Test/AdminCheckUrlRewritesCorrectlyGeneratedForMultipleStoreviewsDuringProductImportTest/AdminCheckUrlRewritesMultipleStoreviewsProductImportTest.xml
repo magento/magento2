@@ -30,6 +30,7 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -40,11 +41,12 @@
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreFilters"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Change category name and URL key for EN Store View-->

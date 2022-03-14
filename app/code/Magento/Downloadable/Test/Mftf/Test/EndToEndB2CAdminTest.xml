@@ -55,5 +55,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteDownloadableProduct" after="cleanUpDownloadableProduct">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

@@ -18,7 +18,7 @@
 
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToStoresIndex"/>
         <waitForPageLoad stepKey="waitStoreIndexPageLoad"/>
-        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
         <fillField selector="{{AdminStoresGridSection.storeFilterTextField}}" userInput="{{customStore.name}}" stepKey="fillStoreViewFilterField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearch"/>
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewInGrid"/>

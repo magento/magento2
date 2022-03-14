@@ -24,7 +24,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
         </after>
 
         <!-- Create product -->

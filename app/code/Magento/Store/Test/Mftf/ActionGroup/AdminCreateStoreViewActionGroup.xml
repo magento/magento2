@@ -30,6 +30,7 @@
         <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Warning message" stepKey="seeWarningAboutTakingALongTimeToComplete"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmModal"/>
+        <waitForPageLoad stepKey="waitForSuccess"/>
         <waitForText selector="{{AdminMessagesSection.success}}" userInput="You saved the store view." stepKey="seeSavedMessage"/>
     </actionGroup>
 </actionGroups>

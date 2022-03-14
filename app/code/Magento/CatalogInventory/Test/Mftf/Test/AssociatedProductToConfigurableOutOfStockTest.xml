@@ -102,6 +102,7 @@
 
         <!-- Order product with single quantity -->
         <selectOption userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="configProductFillOption" />
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>

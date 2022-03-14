@@ -15,16 +15,16 @@
         <arguments>
             <argument name="customer" type="entity"/>
         </arguments>
-        
+
         <waitForPageLoad stepKey="waitForCheckoutShippingSectionToLoad"/>
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.password}}" stepKey="waitForElementVisible"/>
         <fillField selector="{{CheckoutShippingSection.password}}" userInput="{{customer.password}}" stepKey="fillPasswordField"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear2"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.loginButton}}" stepKey="waitForLoginButtonVisible"/>
         <doubleClick selector="{{CheckoutShippingSection.loginButton}}" stepKey="clickLoginBtn"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear3"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear3"/>
         <waitForPageLoad stepKey="waitToBeLoggedIn"/>
         <waitForElementNotVisible selector="{{CheckoutShippingSection.email}}" stepKey="waitForEmailInvisible" time ="60"/>
     </actionGroup>

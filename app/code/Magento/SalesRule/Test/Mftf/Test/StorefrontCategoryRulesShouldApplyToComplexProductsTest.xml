@@ -72,6 +72,9 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct2" stepKey="deleteConfigProductAttribute2"/>
             <!--Delete Cart Price Rule -->
             <deleteData  createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1: Create a cart price rule applying to CAT1 with discount -->

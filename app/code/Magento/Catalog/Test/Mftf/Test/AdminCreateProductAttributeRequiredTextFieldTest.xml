@@ -37,6 +37,9 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -52,7 +55,7 @@
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
         <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus">
              <argument name="stockStatus" value="In Stock"/>
-        </actionGroup> 
+        </actionGroup>
 
         <!-- Create Product Attribute -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>

@@ -30,6 +30,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
                 <field key="price">560</field>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Admin logout -->
