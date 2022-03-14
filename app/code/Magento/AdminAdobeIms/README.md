@@ -74,3 +74,14 @@ The layout file `view/adminhtml/layout/adobe_ims_login.xml` adds:
 
 We have included the minified css and the used svgs from Spectrum CSS with our module, but you can also use npm to install the latest versions.
 To rebuild the minified css run the command `./node_modules/.bin/postcss -o dist/index.min.css index.css` after npm install from inside the web directory.
+
+# Admin Created Email
+
+We created an Observer for the `admin_user_save_after` event. \
+There we check if the customer object is newly created or not. \
+When a new admin user got created in Magento, he will then receive an email with further information on how to login.
+
+We use the `admin_emails_new_user_created_template` Template for the content, and also created a new header and footer template for the Admin Adobe IMS module templates.
+They are called `admin_adobe_ims_email_header_template` and `admin_adobe_ims_email_footer_template`.
+
+The notification mail will be sent inside our `AdminNotificationService` where we can add and modify the template variables.
