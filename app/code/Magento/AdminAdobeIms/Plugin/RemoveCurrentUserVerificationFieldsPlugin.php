@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Plugin;
 
@@ -29,14 +35,14 @@ class RemoveCurrentUserVerificationFieldsPlugin
      */
     public function aroundAddElement(Form $subject, callable $proceed, AbstractElement $element, $after = false)
     {
-        $elementId = $element->getId();
-        if (
-            $elementId !== 'current_user_verification_fieldset'
-            || $elementId !== VerificationForm::IDENTITY_VERIFICATION_PASSWORD_FIELD
-        ) {
+        if ($this->imsConfig->enabled() !== true) {
             return $proceed($element, $after);
         }
-        if ($this->imsConfig->enabled() !== true) {
+
+        if (
+            $element->getId() !== 'current_user_verification_fieldset'
+            && $element->getId() !== VerificationForm::IDENTITY_VERIFICATION_PASSWORD_FIELD
+        ) {
             return $proceed($element, $after);
         }
     }

@@ -53,4 +53,9 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\User\Model\User">
+        <plugin name="aroundVerifyIdentity"
+                type="Magento\AdminAdobeIms\Plugin\DisableVerifyIdentityPlugin"/>
+    </type>
 </config>
