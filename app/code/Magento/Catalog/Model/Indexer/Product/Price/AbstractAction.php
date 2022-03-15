@@ -61,7 +61,6 @@ abstract class AbstractAction
     protected $_storeManager;
 
     /**
-     * Currency factory
      *
      * @var CurrencyFactory
      */
@@ -83,7 +82,6 @@ abstract class AbstractAction
     protected $_catalogProductType;
 
     /**
-     * Indexer price factory
      *
      * @var Factory
      */

@@ -136,7 +136,8 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         return $this->isBundle[$entityId];
     }
 
-    /**
+    /** Get Bundle Ids
+     *
      * @param array $entityIds
      * @return \Traversable
      */

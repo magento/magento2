@@ -1,7 +1,5 @@
 <?php
 /**
- * Grouped Products Price Indexer Resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

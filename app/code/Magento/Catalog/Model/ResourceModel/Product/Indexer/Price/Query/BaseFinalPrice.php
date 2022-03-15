@@ -136,7 +136,6 @@ class BaseFinalPrice
             $taxClassId = new \Zend_Db_Expr(0);
         }
 
-
         $this->joinAttributeProcessor->process($select, 'status', Status::STATUS_ENABLED);
 
         $price = $this->joinAttributeProcessor->process($select, 'price');
@@ -169,10 +168,10 @@ class BaseFinalPrice
             ['cg' => $this->getTable('customer_group')],
             array_key_exists(CustomerGroupDimensionProvider::DIMENSION_NAME, $dimensions)
                 ? sprintf(
-                '%s = %s',
-                $this->dimensionToFieldMapper[CustomerGroupDimensionProvider::DIMENSION_NAME],
-                $dimensions[CustomerGroupDimensionProvider::DIMENSION_NAME]->getValue()
-            ) : '',
+                    '%s = %s',
+                    $this->dimensionToFieldMapper[CustomerGroupDimensionProvider::DIMENSION_NAME],
+                    $dimensions[CustomerGroupDimensionProvider::DIMENSION_NAME]->getValue()
+                ) : '',
             []
         )->joinLeft(
         // customer group website limitations
@@ -235,8 +234,6 @@ class BaseFinalPrice
             $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
-
-
         /**
          * throw event for backward compatibility
          */
@@ -250,8 +247,6 @@ class BaseFinalPrice
             ]
         );
 
-       //  static $p; if (!$p) { echo $select; $p =1; }
-       // var_dump(__METHOD__, $connection->query($connection->select()->from((clone $select)->having('customer_group_id = 0'), "COUNT(*)"))->fetchColumn());
         return $select;
     }
 

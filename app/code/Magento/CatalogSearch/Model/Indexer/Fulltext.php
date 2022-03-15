@@ -33,7 +33,7 @@ class Fulltext implements
     /**
      * Indexer ID in configuration
      */
-    const INDEXER_ID = 'catalogsearch_fulltext';
+    public const INDEXER_ID = 'catalogsearch_fulltext';
 
     /**
      * Default batch size
