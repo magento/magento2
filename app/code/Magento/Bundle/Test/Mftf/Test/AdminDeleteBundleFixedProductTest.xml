@@ -35,7 +35,9 @@
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($$createFixedBundleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnBundleProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeWhoops">
+            <argument name="value" value="Whoops, our bad..."/>
+        </actionGroup>
         <!-- Search for the product by sku -->
         <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
             <argument name="query" value="$$createFixedBundleProduct.sku$$"/>
