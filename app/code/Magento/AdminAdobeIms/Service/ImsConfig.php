@@ -134,7 +134,6 @@ class ImsConfig extends Config
     }
 
     /**
-     * Update config
      * Get Profile URL
      *
      * @return string
@@ -149,6 +148,8 @@ class ImsConfig extends Config
     }
 
     /**
+     * Update config using config writer
+     *
      * @param string $path
      * @param string $value
      * @return void
@@ -217,10 +218,10 @@ class ImsConfig extends Config
      *
      * @return string
      */
-    public function getEmailTemplateForNewAdminUsers()
+    public function getEmailTemplateForNewAdminUsers(): string
     {
         return (string) $this->scopeConfig->getValue(
-            self::XML_PATH_ENABLED
+            self::XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE
         );
     }
 

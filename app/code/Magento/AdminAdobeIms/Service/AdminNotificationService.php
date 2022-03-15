@@ -8,15 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Service;
 
-use Magento\Backend\App\Area\FrontNameResolver;
-use Magento\Backend\App\ConfigInterface;
+use Magento\AdminAdobeIms\Model\ImsEmailNotification;
 use Magento\Backend\Model\UrlInterface as BackendUrlInterface;
-use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Mail\Template\TransportBuilder;
-use Magento\Framework\View\Asset\Repository as AssetRepo;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Api\Data\UserInterface;
@@ -29,11 +25,6 @@ class AdminNotificationService
     private ImsConfig $imsConfig;
 
     /**
-     * @var AssetRepo
-     */
-    private AssetRepo $assetRepo;
-
-    /**
      * @var BackendUrlInterface
      */
     private BackendUrlInterface $backendUrl;
@@ -44,37 +35,26 @@ class AdminNotificationService
     private StoreManagerInterface $storeManager;
 
     /**
-     * @var TransportBuilder
+     * @var ImsEmailNotification
      */
-    private TransportBuilder $transportBuilder;
-
-    /**
-     * @var ConfigInterface
-     */
-    private ConfigInterface $config;
+    private ImsEmailNotification $emailNotification;
 
     /**
      * @param ImsConfig $imsConfig
-     * @param AssetRepo $assetRepo
      * @param BackendUrlInterface $backendUrl
      * @param StoreManagerInterface $storeManager
-     * @param TransportBuilder $transportBuilder
-     * @param ConfigInterface $config
+     * @param ImsEmailNotification $emailNotification
      */
     public function __construct(
         ImsConfig $imsConfig,
-        AssetRepo $assetRepo,
         BackendUrlInterface $backendUrl,
         StoreManagerInterface $storeManager,
-        TransportBuilder $transportBuilder,
-        ConfigInterface $config
+        ImsEmailNotification $emailNotification
     ) {
         $this->imsConfig = $imsConfig;
-        $this->assetRepo = $assetRepo;
         $this->backendUrl = $backendUrl;
         $this->storeManager = $storeManager;
-        $this->transportBuilder = $transportBuilder;
-        $this->config = $config;
+        $this->emailNotification = $emailNotification;
     }
 
     /**
@@ -92,70 +72,21 @@ class AdminNotificationService
             return;
         }
 
-        $logo = $this->assetRepo->getUrlWithParams(
-            'Magento_AdminAdobeIms::images/adobe-commerce-light.png',
-            []
-        );
-
         $backendUrl = $this->backendUrl->getUrl('admin');
 
-        $this->sendNotificationEmail(
+        $emailTemplate = $this->imsConfig->getEmailTemplateForNewAdminUsers();
+
+        $this->emailNotification->sendNotificationEmail(
+            $emailTemplate,
             [
                 'user' => $user,
                 'store' => $this->storeManager->getStore(
                     Store::DEFAULT_STORE_ID
                 ),
-                'cta_link' => $backendUrl,
-                'logo_url' => $logo,
-                'current_year' => date('Y'),
+                'cta_link' => $backendUrl
             ],
             $user->getEmail(),
             $user->getFirstName() . ' ' . $user->getLastName()
         );
-    }
-
-    /**
-     * Send welcome e-mail to created user.
-     *
-     * @param array $templateVars
-     * @param string $toEmail
-     * @param string $toName
-     * @return void
-     * @throws LocalizedException
-     *
-     * @throws MailException
-     */
-    private function sendNotificationEmail(
-        array $templateVars,
-        string $toEmail,
-        string $toName
-    ): void {
-        $emailTemplate = $this->getEmailTemplate();
-
-        $transport = $this->transportBuilder
-            ->setTemplateIdentifier($emailTemplate)
-            ->setTemplateModel(BackendTemplate::class)
-            ->setTemplateOptions([
-                'area' => FrontNameResolver::AREA_CODE,
-                'store' => Store::DEFAULT_STORE_ID
-            ])
-            ->setTemplateVars($templateVars)
-            ->setFromByScope(
-                $this->config->getValue('admin/emails/forgot_email_identity'),
-                Store::DEFAULT_STORE_ID
-            )
-            ->addTo($toEmail, $toName)
-            ->getTransport();
-        $transport->sendMessage();
-    }
-
-    /**
-     * Get Email Template
-     *
-     * @return string
-     */
-    private function getEmailTemplate(): string
-    {
-        return $this->imsConfig->getEmailTemplateForNewAdminUsers();
     }
 }
