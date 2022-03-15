@@ -8,18 +8,23 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product;
 
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Eav\Model\Config;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
 
 /**
  * Build search criteria
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+
 class SearchCriteriaBuilder
 {
     /**
@@ -52,12 +57,18 @@ class SearchCriteriaBuilder
     private $sortOrderBuilder;
 
     /**
+     * @var Config
+     */
+    private Config $eavConfig;
+
+    /**
      * @param Builder $builder
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param Visibility $visibility
      * @param SortOrderBuilder $sortOrderBuilder
+     * @param Config $eavConfig
      */
     public function __construct(
         Builder $builder,
@@ -65,14 +76,16 @@ class SearchCriteriaBuilder
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder,
         Visibility $visibility,
-        SortOrderBuilder $sortOrderBuilder
+        SortOrderBuilder $sortOrderBuilder = null,
+        Config $eavConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->builder = $builder;
         $this->visibility = $visibility;
-        $this->sortOrderBuilder = $sortOrderBuilder;
+        $this->sortOrderBuilder = $sortOrderBuilder ?? ObjectManager::getInstance()->get(SortOrderBuilder::class);
+        $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -87,9 +100,13 @@ class SearchCriteriaBuilder
         $searchCriteria = $this->builder->build('products', $args);
         $isSearch = !empty($args['search']);
         $this->updateRangeFilters($searchCriteria);
-
         if ($includeAggregation) {
-            $this->preparePriceAggregation($searchCriteria);
+            $attributeData = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
+            $priceOptions = $attributeData->getData();
+
+            if ($priceOptions['is_filterable'] != 0) {
+                $this->preparePriceAggregation($searchCriteria);
+            }
             $requestName = 'graphql_product_search_with_aggregation';
         } else {
             $requestName = 'graphql_product_search';
@@ -178,7 +195,7 @@ class SearchCriteriaBuilder
     private function addFilter(
         SearchCriteriaInterface $searchCriteria,
         string $field,
-        $value,
+                                $value,
         ?string $condition = null
     ): void {
         $filter = $this->filterBuilder
