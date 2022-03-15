@@ -120,3 +120,12 @@ Errors are logged into the `/var/log/admin_adobe_ims.log` file.
 
 Logging can be enabled or disabled in the config on changing the value for `adobe_ims\integration\logging_enabled` or in the Magento Admin Configuration under `Advanced > Developer > Debug`. \
 There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
+
+# Password usage in Admin UI
+1. Remove current user password verification from form,
+2. Remove admin user set of passwords,
+3. Check that it is still updating the admin user information,
+4. Remove password refresh options from config,
+5. Validate that crons etc dont happen,
+6. Validate that when disabled the fields work again,
+7. Update Wiki

@@ -29,4 +29,13 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Data\Form\AbstractForm">
+        <plugin name="afterAddFieldset"
+                type="Magento\AdminAdobeIms\Plugin\RemoveCurrentUserVerificationFieldsetPlugin"/>
+    </type>
+    <type name="Magento\Framework\Data\Form\Element\Fieldset">
+        <plugin name="afterAddField"
+                type="Magento\AdminAdobeIms\Plugin\RemoveCurrentUserVerificationFieldPlugin"/>
+    </type>
 </config>
