@@ -60,14 +60,14 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      *
      * @var string
      */
-    const CODE = 'ups';
+    public const CODE = 'ups';
 
     /**
      * Delivery Confirmation level based on origin/destination
      */
-    const DELIVERY_CONFIRMATION_SHIPMENT = 1;
+    public const DELIVERY_CONFIRMATION_SHIPMENT = 1;
 
-    const DELIVERY_CONFIRMATION_PACKAGE = 2;
+    public const DELIVERY_CONFIRMATION_PACKAGE = 2;
 
     /**
      * Code of the carrier
@@ -91,22 +91,16 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_result;
 
     /**
-     * Base currency rate
-     *
      * @var float
      */
     protected $_baseCurrencyRate;
 
     /**
-     * Xml access request
-     *
      * @var string
      */
     protected $_xmlAccessRequest;
 
     /**
-     * Default cgi gateway url
-     *
      * @var string
      */
     protected $_defaultCgiGatewayUrl = 'https://www.ups.com/using/services/rave/qcostcgi.cgi';
@@ -154,7 +148,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $configHelper;
 
     /**
-     * @inheritdoc
+     * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
         'UserId',
@@ -917,7 +911,7 @@ XMLRequest;
             $success = (int)$arr[0];
             if ($success === 1) {
                 $arr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment");
-                $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
+                $allowedMethods = explode(",", $this->getConfigData('allowed_methods') ?? '');
 
                 // Negotiated rates
                 $negotiatedArr = $xml->getXpath("//RatingServiceSelectionResponse/RatedShipment/NegotiatedRates");
@@ -1356,11 +1350,8 @@ XMLAuth;
                 }
             }
         }
-        if (empty($statuses)) {
-            $statuses = __('Empty response');
-        }
 
-        return $statuses;
+        return $statuses ?: __('Empty response');
     }
 
     /**

@@ -7,11 +7,16 @@
         "AFL-3.0"
     ],
     "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "laminas/laminas-dependency-plugin": true,
+            "magento/*": true
+        },
         "preferred-install": "dist",
         "sort-packages": true
     },
     "require": {
-        "php": "~7.4.0||~8.0.0||~8.1.0",
+        "php": "~7.4.0||~8.1.0",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
@@ -83,7 +88,7 @@
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.5.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-        "friendsofphp/php-cs-fixer": "~3.3.0",
+        "friendsofphp/php-cs-fixer": "~3.4.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "^3.7",
