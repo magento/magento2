@@ -123,14 +123,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_storeIdToCode = [];
 
     /**
-     * Website ID-to-code.
+     * Array of Website ID-to-code.
      *
      * @var array
      */
     protected $_websiteIdToCode = [];
 
     /**
-     * Attribute types
+     * Attributes type
      *
      * @var array
      */
@@ -289,7 +289,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @var array
      */
-    protected $imageLabelAttributes = [
+    private $imageLabelAttributes = [
         'base_image_label',
         'small_image_label',
         'thumbnail_image_label',
@@ -358,7 +358,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $metadataPool;
 
     /**
-     * Product entity link field
+     * Link field of Product entity
      *
      * @var string
      */
@@ -1386,8 +1386,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Add image column if image label exists for all scope
      *
-     * @param $dataRow
-     * @param $rawData
+     * @param array $dataRow
+     * @param array $rawData
+     * @return void
      */
     private function updateGalleryImageData(&$dataRow, $rawData)
     {
