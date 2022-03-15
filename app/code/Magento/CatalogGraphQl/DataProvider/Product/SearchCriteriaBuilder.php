@@ -195,7 +195,7 @@ class SearchCriteriaBuilder
     private function addFilter(
         SearchCriteriaInterface $searchCriteria,
         string $field,
-                                $value,
+        $value,
         ?string $condition = null
     ): void {
         $filter = $this->filterBuilder
