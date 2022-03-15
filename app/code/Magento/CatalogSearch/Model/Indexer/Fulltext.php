@@ -113,6 +113,7 @@ class Fulltext implements
      * @param int|null $batchSize
      * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FullFactory $fullActionFactory,
