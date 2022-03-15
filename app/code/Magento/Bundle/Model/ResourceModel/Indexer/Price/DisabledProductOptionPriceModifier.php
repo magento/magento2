@@ -51,7 +51,6 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
      */
     private MetadataPool $metadataPool;
 
-
     /**
      * @param ResourceConnection $resourceConnection
      * @param Config $config
