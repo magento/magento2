@@ -11,7 +11,6 @@ namespace Magento\AdminAdobeIms\Plugin;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Backend\Block\System\Account\Edit\Form as VerificationForm;
 
 class RemoveCurrentUserVerificationFieldsPlugin
 {
@@ -39,10 +38,7 @@ class RemoveCurrentUserVerificationFieldsPlugin
             return $proceed($element, $after);
         }
 
-        if (
-            $element->getId() !== 'current_user_verification_fieldset'
-            && $element->getId() !== VerificationForm::IDENTITY_VERIFICATION_PASSWORD_FIELD
-        ) {
+        if ($element->getId() !== 'current_user_verification_fieldset') {
             return $proceed($element, $after);
         }
     }

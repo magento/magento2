@@ -34,4 +34,8 @@
         <plugin name="aroundAddElement"
                 type="Magento\AdminAdobeIms\Plugin\RemoveCurrentUserVerificationFieldsPlugin"/>
     </type>
+    <type name="Magento\Framework\Data\Form\Element\Fieldset">
+        <plugin name="afterAddField"
+                type="Magento\AdminAdobeIms\Plugin\RemovePasswordFieldsPlugin"/>
+    </type>
 </config>
