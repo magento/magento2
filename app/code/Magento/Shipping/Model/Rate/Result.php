@@ -163,6 +163,8 @@ class Result
                 'title' => $rate->getMethodTitle(),
                 'price' => $rate->getPrice(),
                 'price_formatted' => $currencyFilter->filter($rate->getPrice()),
+                'cost' => $rate->getCost(),
+                'cost_formatted' => $currencyFilter->filter($rate->getCost()),
             ];
         }
         return $rates;
