@@ -28,6 +28,7 @@ class ImsConfig extends Config
     public const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
 
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
+    public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
 
     /**
      * @var ScopeConfigInterface
@@ -245,6 +246,21 @@ class ImsConfig extends Config
     private function getLocale(): string
     {
         return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
+    }
+
+    /**
+     * Get BackendLogout URL
+     *
+     * @param string $accessToken
+     * @return string
+     */
+    public function getBackendLogoutUrl(string $accessToken) : string
+    {
+        return str_replace(
+            ['#{access_token}', '#{client_secret}', '#{client_id}'],
+            [$accessToken, $this->getPrivateKey(), $this->getApiKey()],
+            $this->scopeConfig->getValue(self::XML_PATH_LOGOUT_URL)
+        );
     }
 
     /**
