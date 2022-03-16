@@ -149,7 +149,7 @@ define([
                 delete paramData[this.options.page];
             }
 
-            if (currentPage > 1 && (paramName === this.options.limit || paramName === this.options.mode)) {
+            if (currentPage > 1 && paramName === this.options.limit) {
                 newPage = Math.floor(this.getCurrentLimit() * (currentPage - 1) / paramValue) + 1;
 
                 if (newPage > 1) {
