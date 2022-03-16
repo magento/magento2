@@ -74,3 +74,20 @@ The layout file `view/adminhtml/layout/adobe_ims_login.xml` adds:
 
 We have included the minified css and the used svgs from Spectrum CSS with our module, but you can also use npm to install the latest versions.
 To rebuild the minified css run the command `./node_modules/.bin/postcss -o dist/index.min.css index.css` after npm install from inside the web directory.
+
+# Admin Backend Login
+
+Login with the help Adobe IMS Service is implemented. The redirect to Adobe IMS Service is performed-
+The redirect from Adobe IMS is done to \Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsCallback controller.
+
+The access code comes from Adobe, the token response is got on the basis of the access code,
+client id (api key) and client secret (private key). 
+The token response access taken is used for getting user profile information. 
+If this is successful, the admin user will be logged in and the access and refresh tokens are saved in the `adobe_user_profile` table.
+
+# Admin Backend Logout
+
+The logout from Adobe IMS Service is performed when Magento Admin User is logged out.
+It's triggered by the event `controller_action_predispatch_adminhtml_auth_logout`
+
+Token is invalidated with a call, if it's successful, the access and refresh token are deleted in the `adobe_user_profile` table.
