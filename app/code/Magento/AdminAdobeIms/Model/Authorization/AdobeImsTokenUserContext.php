@@ -268,9 +268,9 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * Cache Id is based on prefix that is equal to module name
      * and certificate file name that is in token header
      *
-     * @param $certificateFileName
+     * @param string $certificateFileName
      */
-    private function setCertificateCacheId($certificateFileName)
+    private function setCertificateCacheId(string $certificateFileName)
     {
         $this->cacheId = $this->cacheIdPrefix . $certificateFileName;
     }

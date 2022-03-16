@@ -48,10 +48,10 @@ class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepositor
     /**
      * Get user profile by adobe user ID
      *
-     * @param $adobeUserId
+     * @param string $adobeUserId
      * @return UserProfileInterface
      */
-    public function getByAdobeUserId($adobeUserId): UserProfileInterface
+    public function getByAdobeUserId(string $adobeUserId): UserProfileInterface
     {
         $entity = $this->entityFactory->create();
         $this->resource->load($entity, $adobeUserId, self::ADOBE_USER_ID);

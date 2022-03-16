@@ -306,10 +306,10 @@ class ImsConfig extends Config
     /**
      * IMS certificate (public key) location retrieval
      *
-     * @param $fileName
+     * @param string $fileName
      * @return string
      */
-    public function getCertificateUrl($fileName): string
+    public function getCertificateUrl(string $fileName): string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_CERTIFICATE_PATH) . $fileName;
     }
