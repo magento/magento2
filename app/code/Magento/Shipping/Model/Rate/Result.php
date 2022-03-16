@@ -224,6 +224,7 @@ class Result
         if ($packageCount > 1) {
             foreach ($this->_rates as $rate) {
                 $rate->setPrice($rate->getPrice() * $packageCount);
+                $rate->setCost($rate->getCost() * $packageCount);
             }
         }
 
