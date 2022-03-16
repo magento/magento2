@@ -122,10 +122,16 @@ Logging can be enabled or disabled in the config on changing the value for `adob
 There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
 
 # Password usage in Admin UI
+Done:
 1. Remove current user password verification from forms (edit user/add new user),
-2. Remove admin user set of passwords,
+2. Remove admin user set of passwords, [edit user]
 3. Check that it is still updating the admin user information,
-4. Remove password refresh options from config,
-5. Validate that crons etc dont happen,
-6. Validate that when disabled the fields work again,
-7. Update Wiki
+
+Open:
+1. Disable the password rules when creating a new user
+2. Remove admin user set of passwords, [create new user]
+3. Remove password refresh options from config,
+   1. Validate that crons etc dont happen
+4. Validate that when disabled the fields work again,
+5. Update Wiki
+6. Functional tests

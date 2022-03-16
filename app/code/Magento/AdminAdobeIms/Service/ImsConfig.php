@@ -27,6 +27,7 @@ class ImsConfig extends Config
     public const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     public const XML_PATH_PROFILE_URL = 'adobe_ims/integration/profile_url';
     public const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
+    public const XML_PATH_VERIFY_URL = 'adobe_ims/integration/verify_url';
 
     private const OAUTH_CALLBACK_URL = 'adobe_ims_auth/oauth/';
     public const XML_PATH_LOGOUT_URL = 'adobe_ims/integration/logout_url';
@@ -158,6 +159,21 @@ class ImsConfig extends Config
             ['#{client_id}'],
             [$this->getApiKey()],
             $this->scopeConfig->getValue(self::XML_PATH_PROFILE_URL)
+        );
+    }
+
+    /**
+     * Get Token verification url
+     *
+     * @param string $code
+     * @return string
+     */
+    public function getVerifyUrl(string $code): string
+    {
+        return str_replace(
+            ['#{token}', '#{client_id}'],
+            [$code, $this->getApiKey()],
+            $this->scopeConfig->getValue(self::XML_PATH_VERIFY_URL)
         );
     }
 

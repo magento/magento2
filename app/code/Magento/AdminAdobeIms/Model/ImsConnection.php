@@ -135,6 +135,35 @@ class ImsConnection
     }
 
     /**
+     * Verify if access_token is valid
+     *
+     * @throws AuthorizationException
+     */
+    public function verifyToken(string $code): bool
+    {
+        $curl = $this->curlFactory->create();
+
+        $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $curl->addHeader('cache-control', 'no-cache');
+        $curl->addHeader('Authorization', 'Bearer ' . $code);
+
+        $curl->post(
+            $this->imsConfig->getVerifyUrl($code),
+            []
+        );
+
+        if ($curl->getBody() === '') {
+            throw new AuthorizationException(
+                __('Could not verify the access_token')
+            );
+        }
+
+        $body = $this->json->unserialize($curl->getBody());
+
+        return isset($body['valid']) && $body['valid'] === true;
+    }
+
+    /**
      * @param string $code
      * @return TokenResponseInterface
      * @throws AdobeImsTokenAuthorizationException

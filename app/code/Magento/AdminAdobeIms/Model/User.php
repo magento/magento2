@@ -50,7 +50,7 @@ class User extends AdminUser
     }
 
     /**
-     * Authenticate user name and save loaded record
+     * Authenticate username and save loaded record
      *
      * @param string $username
      * @return bool
@@ -67,7 +67,7 @@ class User extends AdminUser
                 ['username' => $username, 'user' => $this]
             );
             $this->loadByUsername($username);
-            $sensitive = $config ? $username == $this->getUserName() : true;
+            $sensitive = !$config || $username === $this->getUserName();
             if ($sensitive && $this->getId()) {
                 $result = $this->verifyIdentityWithoutPassword();
             }
@@ -87,7 +87,7 @@ class User extends AdminUser
      * Check if the current user account is active.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
     public function verifyIdentityWithoutPassword(): bool
     {
