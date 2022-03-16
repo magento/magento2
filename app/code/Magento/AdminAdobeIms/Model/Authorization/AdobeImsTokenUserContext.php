@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
 use Magento\AdminAdobeIms\Model\ImsConnection;
@@ -295,6 +297,8 @@ class AdobeImsTokenUserContext implements UserContextInterface
     }
 
     /**
+     * Update user profile with the data from token
+     *
      * @param UserProfileInterface $userProfileInterface
      * @param array $profile
      * @return UserProfileInterface
