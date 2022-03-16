@@ -27,6 +27,7 @@ class DisableVerifyIdentityPlugin
      */
     public function aroundVerifyIdentity(User $subject, callable $proceed, $password): bool
     {
+        //TODO: see if we can actually validate the user against IMS APIs
         if ($this->imsConfig->enabled() !== true) {
             return $proceed($password);
         }
