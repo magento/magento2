@@ -7,12 +7,9 @@
 namespace Magento\Wishlist\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\PageCache\Model\Cache\Type  as PageCache;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory;
@@ -32,7 +29,6 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  * @method string getDescription()
  * @method \Magento\Wishlist\Model\Item setDescription(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
  * @since 100.0.2
@@ -76,7 +72,7 @@ class Item extends AbstractModel implements ItemInterface
     protected $_optionsByCode = [];
 
     /**
-     * Initialization of Not Represent options
+     * Not Represent options
      *
      * @var string[]
      */
@@ -132,11 +128,6 @@ class Item extends AbstractModel implements ItemInterface
     private $serializer;
 
     /**
-     * @var PageCache
-     */
-    private $pageCache;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -150,7 +141,6 @@ class Item extends AbstractModel implements ItemInterface
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param PageCache|null $pageCache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -166,8 +156,7 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ?PageCache $pageCache = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
@@ -175,11 +164,10 @@ class Item extends AbstractModel implements ItemInterface
         $this->_catalogUrl = $catalogUrl;
         $this->_wishlistOptFactory = $wishlistOptFactory;
         $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->productRepository = $productRepository;
-        $this->pageCache = $pageCache ?: ObjectManager::getInstance()->get(PageCache::class);
     }
 
     /**
@@ -228,8 +216,8 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Register option code
      *
-     * @param Option $option
-     * @return $this
+     * @param   Option $option
+     * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _addOptionCode($option)
@@ -246,7 +234,6 @@ class Item extends AbstractModel implements ItemInterface
 
     /**
      * Checks that item model has data changes.
-     *
      * Call save item options if model isn't need to save in DB
      *
      * @return boolean
@@ -312,7 +299,6 @@ class Item extends AbstractModel implements ItemInterface
     public function afterSave()
     {
         $this->saveItemOptions();
-        $this->cleanProductCache($this->getProductId());
         return parent::afterSave();
     }
 
@@ -412,7 +398,7 @@ class Item extends AbstractModel implements ItemInterface
      * Return false for disabled or unvisible products
      *
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param bool $delete delete the item after successful add to cart
+     * @param bool $delete  delete the item after successful add to cart
      * @return bool
      * @throws \Magento\Catalog\Model\Product\Exception
      */
@@ -479,7 +465,8 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Returns formatted buy request - object, holding request received from product view page with keys and options
+     * Returns formatted buy request - object, holding request received from
+     * product view page with keys and options for configured product
      *
      * @return \Magento\Framework\DataObject
      */
@@ -527,7 +514,8 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     * Set buy request - object, holding request received from product view page with keys and options
+     * Set buy request - object, holding request received from
+     * product view page with keys and options for configured product
      *
      * @param \Magento\Framework\DataObject $buyRequest
      * @return $this
@@ -556,10 +544,10 @@ class Item extends AbstractModel implements ItemInterface
 
         $selfOptions = $this->getBuyRequest()->getData();
 
-        if (false === $buyRequest && !empty($selfOptions)) {
+        if (empty($buyRequest) && !empty($selfOptions)) {
             return false;
         }
-        if (empty($selfOptions) && false !== $buyRequest) {
+        if (empty($selfOptions) && !empty($buyRequest)) {
             if (!$product->isComposite()) {
                 return true;
             } else {
@@ -663,8 +651,8 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Add option to item
      *
-     * @param Option|\Magento\Framework\DataObject|array $option
-     * @return $this
+     * @param   Option|\Magento\Framework\DataObject|array $option
+     * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addOption($option)
@@ -754,7 +742,6 @@ class Item extends AbstractModel implements ItemInterface
 
     /**
      * Returns special download params (if needed) for custom option with type = 'file'.
-     *
      * Needed to implement \Magento\Catalog\Model\Product\Configuration\Item\Interface.
      *
      * We have to customize only controller url, so return it.
@@ -792,21 +779,5 @@ class Item extends AbstractModel implements ItemInterface
 
         $this->setOptions($options->getOptionsByItem($this));
         return $this;
-    }
-
-    /**
-     * Cleans up cache for single product when wishlist item updated (for product qty).
-     *
-     * @param int $productId
-     * @return void
-     */
-    private function cleanProductCache($productId): void
-    {
-        if (!empty($productId)) {
-            $this->pageCache->clean(
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                [Product::CACHE_TAG . '_' . $productId]
-            );
-        }
     }
 }
