@@ -29,6 +29,11 @@ class ImsConnectionTest extends TestCase
     private const AUTH_URL_ERROR = 'https://adobe-login-url.com/authorize?error=invalid_scope';
 
     /**
+     * @var CurlFactory
+     */
+    private $curlFactory;
+
+    /**
      * @var ImsConnection
      */
     private $imsConnection;
