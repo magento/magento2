@@ -28,27 +28,57 @@ use Magento\Framework\Webapi\Request;
  */
 class AdobeImsTokenUserContext implements UserContextInterface
 {
+    const AUTHORIZATION_METHOD_HEADER_BEARER   = 'bearer';
+    const HEADER_ATTRIBUTE_X5U   = 'x5u';
+
     private $cacheIdPrefix = 'AdminAdobeIms_';
     private $cacheId = '';
 
     /**
      * @var int
      */
-    protected $userId;
+    private $userId;
 
     /**
      * @var bool
      */
-    protected $isRequestProcessed;
+    private $isRequestProcessed;
 
-    protected Request $request;
-    protected ImsConnection $imsConnection;
-    protected ImsConfig $imsConfig;
+    /**
+     * @var Request
+     */
+    private Request $request;
+    /**
+     * @var ImsConnection
+     */
+    private ImsConnection $imsConnection;
+    /**
+     * @var ImsConfig
+     */
+    private ImsConfig $imsConfig;
+    /**
+     * @var JwkFactory
+     */
     private JwkFactory $jwkFactory;
+    /**
+     * @var JwtManagerInterface
+     */
     private JwtManagerInterface $jwtManager;
+    /**
+     * @var UserProfileRepositoryInterface
+     */
     private UserProfileRepositoryInterface $userProfileRepository;
+    /**
+     * @var UserProfileInterfaceFactory
+     */
     private UserProfileInterfaceFactory $userProfileFactory;
+    /**
+     * @var User
+     */
     private User $adminUser;
+    /**
+     * @var CacheInterface
+     */
     private CacheInterface $cache;
 
     /**
@@ -106,7 +136,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
      *
      * @return void
      */
-    protected function processRequest()
+    private function processRequest()
     {
         if (!$this->imsConfig->enabled() || $this->isRequestProcessed) {
             return;
@@ -159,7 +189,12 @@ class AdobeImsTokenUserContext implements UserContextInterface
         $this->isRequestProcessed = true;
     }
 
-    protected function getRequestedToken()
+    /**
+     * Getting requested token
+     *
+     * @return false|string
+     */
+    private function getRequestedToken()
     {
         $authorizationHeaderValue = $this->request->getHeader('Authorization');
         if (!$authorizationHeaderValue) {
@@ -174,7 +209,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
         }
 
         $tokenType = strtolower($headerPieces[0]);
-        if ($tokenType !== 'bearer') {
+        if ($tokenType !== self::AUTHORIZATION_METHOD_HEADER_BEARER) {
             $this->isRequestProcessed = true;
             return false;
         }
@@ -182,16 +217,22 @@ class AdobeImsTokenUserContext implements UserContextInterface
         return $headerPieces[1];
     }
 
-    protected function getJWK($bearerToken)
+    /**
+     * JSON Web Key (JWK) to verify JSON Web Signature (JWS)
+     *
+     * @param $bearerToken
+     * @return false|\Magento\Framework\Jwt\Jwk
+     */
+    private function getJWK($bearerToken)
     {
         list($header) = explode(".", "$bearerToken");
         $decodedAdobeImsHeader = json_decode(base64_decode($header), true);
 
-        if (!isset($decodedAdobeImsHeader['x5u'])) {
+        if (!isset($decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U])) {
             return false;
         }
 
-        $certificateFileName = $decodedAdobeImsHeader['x5u'];
+        $certificateFileName = $decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U];
         $this->setCertificateCacheId($certificateFileName);
 
         if (!$certificateValue = $this->loadCertificateFromCache()) {
@@ -208,15 +249,15 @@ class AdobeImsTokenUserContext implements UserContextInterface
     /**
      * @return string
      */
-    public function loadCertificateFromCache()
+    private function loadCertificateFromCache()
     {
         return $this->cache->load($this->cacheId);
     }
 
     /**
-     * @param $certificateValue
+     * @param string $certificateValue
      */
-    public function saveCertificateInCache($certificateValue)
+    private function saveCertificateInCache($certificateValue)
     {
         $this->cache->save($certificateValue, $this->cacheId, [], 86400);
     }
@@ -227,7 +268,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
      *
      * @param $certificateFileName
      */
-    protected function setCertificateCacheId($certificateFileName)
+    private function setCertificateCacheId($certificateFileName)
     {
         $this->cacheId = $this->cacheIdPrefix . $certificateFileName;
     }
@@ -238,7 +279,7 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * @param int $adminUserId
      * @return UserProfileInterface
      */
-    protected function getUserProfileInterface(int $adminUserId): UserProfileInterface
+    private function getUserProfileInterface(int $adminUserId): UserProfileInterface
     {
         try {
             return $this->userProfileRepository->getByUserId($adminUserId);
@@ -258,13 +299,12 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * @param array $profile
      * @return UserProfileInterface
      */
-    protected function updateUserProfile(
+    private function updateUserProfile(
         UserProfileInterface $userProfileInterface,
         array $profile
     ): UserProfileInterface {
         $userProfileInterface->setName($profile['name'] ?? '');
         $userProfileInterface->setEmail($profile['email'] ?? '');
-        $userProfileInterface->setImage('');
         $userProfileInterface->setAdobeUserId($profile['adobe_user_id']);
 
         return $userProfileInterface;

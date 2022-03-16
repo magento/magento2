@@ -21,9 +21,20 @@ class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepositor
 {
     private const ADOBE_USER_ID = 'adobe_user_id';
 
+    /**
+     * @var UserProfile
+     */
     private UserProfile $resource;
+    /**
+     * @var UserProfileInterfaceFactory
+     */
     private UserProfileInterfaceFactory $entityFactory;
 
+    /**
+     * @param UserProfile $resource
+     * @param UserProfileInterfaceFactory $entityFactory
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         UserProfile                 $resource,
         UserProfileInterfaceFactory $entityFactory,
@@ -34,6 +45,12 @@ class UserProfileRepository extends \Magento\AdobeIms\Model\UserProfileRepositor
         $this->entityFactory = $entityFactory;
     }
 
+    /**
+     * Get user profile by adobe user ID
+     *
+     * @param $adobeUserId
+     * @return UserProfileInterface
+     */
     public function getByAdobeUserId($adobeUserId): UserProfileInterface
     {
         $entity = $this->entityFactory->create();
