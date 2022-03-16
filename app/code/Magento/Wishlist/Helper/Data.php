@@ -322,7 +322,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'wishlist/index/configure',
             [
                 'id' => $item->getWishlistItemId(),
-                'product_id' => $item->getProductId()
+                'product_id' => $item->getProductId(),
+                'qty' => (int)$item->getQty()
             ]
         );
     }
