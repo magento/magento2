@@ -102,14 +102,13 @@ define([
          * Handles changes of the page size.
          */
         onPageSizeChange: function () {
-            if(!this.containers.length) {
-                return;
-            }
-            if(this.perPageSize !== undefined) {
-                this.pageSize = this.perPageSize;
-                this.reload();
-            } else {
-                this.perPageSize = this.pageSize;
+            if (!!this.getRecordCount()) {
+                if (this.perPageSize !== undefined) {
+                    this.pageSize = this.perPageSize;
+                    this.reload();
+                } else {
+                    this.perPageSize = this.pageSize;
+                }
             }
         },
     });
