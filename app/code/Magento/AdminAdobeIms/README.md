@@ -168,7 +168,7 @@ For testing reasons, developers can override this value, for example in env.php 
         ]
     ]
 ```
-Certificate value is cached for 24h.
+Certificate value is cached.
 
 This authentication mechanism enabled for REST and SOAP web API areas.
 

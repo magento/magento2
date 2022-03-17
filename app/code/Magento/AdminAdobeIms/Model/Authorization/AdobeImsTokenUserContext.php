@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model\Authorization;
 
+use Magento\AdminAdobeIms\Api\TokenReaderInterface;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Model\User;
 use Magento\AdminAdobeIms\Service\ImsConfig;
@@ -15,14 +16,8 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Exception\AuthenticationException;
-use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Jwt\JwkFactory;
-use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
-use Magento\Framework\Jwt\JwtManagerInterface;
-use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Framework\Webapi\Request;
 
 /**
@@ -30,11 +25,7 @@ use Magento\Framework\Webapi\Request;
  */
 class AdobeImsTokenUserContext implements UserContextInterface
 {
-    const AUTHORIZATION_METHOD_HEADER_BEARER   = 'bearer';
-    const HEADER_ATTRIBUTE_X5U   = 'x5u';
-
-    private $cacheIdPrefix = 'AdminAdobeIms_';
-    private $cacheId = '';
+    const AUTHORIZATION_METHOD_HEADER_BEARER = 'bearer';
 
     /**
      * @var int
@@ -51,6 +42,10 @@ class AdobeImsTokenUserContext implements UserContextInterface
      */
     private Request $request;
     /**
+     * @var TokenReaderInterface
+     */
+    private TokenReaderInterface $tokenReader;
+    /**
      * @var ImsConnection
      */
     private ImsConnection $imsConnection;
@@ -58,14 +53,6 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * @var ImsConfig
      */
     private ImsConfig $imsConfig;
-    /**
-     * @var JwkFactory
-     */
-    private JwkFactory $jwkFactory;
-    /**
-     * @var JwtManagerInterface
-     */
-    private JwtManagerInterface $jwtManager;
     /**
      * @var UserProfileRepositoryInterface
      */
@@ -78,42 +65,32 @@ class AdobeImsTokenUserContext implements UserContextInterface
      * @var User
      */
     private User $adminUser;
-    /**
-     * @var CacheInterface
-     */
-    private CacheInterface $cache;
 
     /**
      * @param Request $request
+     * @param TokenReaderInterface $tokenReader
      * @param ImsConnection $imsConnection
      * @param ImsConfig $imsConfig
-     * @param JwkFactory $jwkFactory
-     * @param JwtManagerInterface $jwtManager
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
      * @param User $adminUser
-     * @param CacheInterface $cache
      */
     public function __construct(
         Request $request,
+        TokenReaderInterface $tokenReader,
         ImsConnection $imsConnection,
         ImsConfig $imsConfig,
-        JwkFactory $jwkFactory,
-        JwtManagerInterface $jwtManager,
         UserProfileRepositoryInterface $userProfileRepository,
         UserProfileInterfaceFactory $userProfileFactory,
-        User $adminUser,
-        CacheInterface $cache
+        User $adminUser
     ) {
         $this->request = $request;
+        $this->tokenReader = $tokenReader;
         $this->imsConnection = $imsConnection;
         $this->imsConfig = $imsConfig;
-        $this->jwkFactory = $jwkFactory;
-        $this->jwtManager = $jwtManager;
         $this->userProfileRepository = $userProfileRepository;
         $this->userProfileFactory = $userProfileFactory;
         $this->adminUser = $adminUser;
-        $this->cache = $cache;
     }
 
     /**
@@ -149,21 +126,10 @@ class AdobeImsTokenUserContext implements UserContextInterface
         }
 
         try {
-            if (!$jwk = $this->getJWK($bearerToken)) {
-                return;
-            }
-
-            $jwt = $this->jwtManager->read($bearerToken, ['RS256' => new JwsSignatureJwks($jwk)]);
-
-            /** @var ClaimsPayloadInterface $payload */
-            $payload = $jwt->getPayload();
-            $claims = $payload->getClaims();
-            if (empty($claims['user_id']) || empty($claims['user_id']->getValue())) {
-                throw new InvalidArgumentException(__('user_id not provided by the received JWT'));
-            }
-
-            $adobeUserId = $claims['user_id']->getValue();
+            $tokenData = $this->tokenReader->read($bearerToken);
+            $adobeUserId = $tokenData['adobe_user_id'] ?? '';
             $userProfile = $this->userProfileRepository->getByAdobeUserId($adobeUserId);
+
             if ($userProfile->getId()) {
                 $adminUserId = (int) $userProfile->getData('admin_user_id');
             } else {
@@ -217,62 +183,6 @@ class AdobeImsTokenUserContext implements UserContextInterface
         }
 
         return $headerPieces[1];
-    }
-
-    /**
-     * JSON Web Key (JWK) to verify JSON Web Signature (JWS)
-     *
-     * @param $bearerToken
-     * @return false|\Magento\Framework\Jwt\Jwk
-     */
-    private function getJWK($bearerToken)
-    {
-        list($header) = explode(".", "$bearerToken");
-        $decodedAdobeImsHeader = json_decode(base64_decode($header), true);
-
-        if (!isset($decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U])) {
-            return false;
-        }
-
-        $certificateFileName = $decodedAdobeImsHeader[self::HEADER_ATTRIBUTE_X5U];
-        $this->setCertificateCacheId($certificateFileName);
-
-        if (!$certificateValue = $this->loadCertificateFromCache()) {
-            $certificateUrl = $this->imsConfig->getCertificateUrl($certificateFileName);
-            if (!$certificateValue = file_get_contents($certificateUrl)) {
-                return false;
-            }
-            $this->saveCertificateInCache($certificateValue);
-        }
-
-        return $this->jwkFactory->createVerifyRs256($certificateValue);
-    }
-
-    /**
-     * @return string
-     */
-    private function loadCertificateFromCache()
-    {
-        return $this->cache->load($this->cacheId);
-    }
-
-    /**
-     * @param string $certificateValue
-     */
-    private function saveCertificateInCache($certificateValue)
-    {
-        $this->cache->save($certificateValue, $this->cacheId, [], 86400);
-    }
-
-    /**
-     * Cache Id is based on prefix that is equal to module name
-     * and certificate file name that is in token header
-     *
-     * @param string $certificateFileName
-     */
-    private function setCertificateCacheId(string $certificateFileName)
-    {
-        $this->cacheId = $this->cacheIdPrefix . $certificateFileName;
     }
 
     /**
