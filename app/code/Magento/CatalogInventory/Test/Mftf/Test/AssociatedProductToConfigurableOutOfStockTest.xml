@@ -113,7 +113,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderSuccessPage1"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <!-- Reset admin order filter -->

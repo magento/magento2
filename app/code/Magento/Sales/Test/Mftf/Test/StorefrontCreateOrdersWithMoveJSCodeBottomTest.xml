@@ -99,6 +99,6 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview2"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="customerPlaceOrder" />
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="singOutCustomer" />
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="singOutCustomer" />
     </test>
 </tests>
