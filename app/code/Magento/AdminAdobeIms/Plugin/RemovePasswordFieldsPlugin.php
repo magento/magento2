@@ -35,6 +35,7 @@ class RemovePasswordFieldsPlugin
      * @param bool $after
      * @param bool $isAdvanced
      * @return AbstractElement
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function afterAddField(
         Fieldset $subject,

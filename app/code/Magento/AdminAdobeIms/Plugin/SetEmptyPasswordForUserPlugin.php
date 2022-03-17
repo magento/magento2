@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Plugin;
 
+use Exception;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\Framework\Data\Form;
-use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\User\Model\User;
 
-class RemoveCurrentUserVerificationFieldsPlugin
+class SetEmptyPasswordForUserPlugin
 {
     /**
      * @var ImsConfig
@@ -29,20 +29,21 @@ class RemoveCurrentUserVerificationFieldsPlugin
     }
 
     /**
-     * @param Form $subject
-     * @param callable $proceed
-     * @param AbstractElement $element
-     * @param bool $after
+     * This plugin is required, because \Magento\User\Model\User::_getEncodedPassword
+     * will throw an error, when password is null
+     *
+     * @param User $subject
+     * @param $result
+     * @return string
+     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function aroundAddElement(Form $subject, callable $proceed, AbstractElement $element, $after = false)
+    public function afterGetPassword(User $subject, $result): string
     {
         if ($this->imsConfig->enabled() !== true) {
-            return $proceed($element, $after);
+            return $result;
         }
 
-        if ($element->getId() !== 'current_user_verification_fieldset') {
-            return $proceed($element, $after);
-        }
+        return $result ?? '';
     }
 }
