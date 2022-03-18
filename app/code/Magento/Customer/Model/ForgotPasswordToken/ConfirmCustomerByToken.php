@@ -42,6 +42,7 @@ class ConfirmCustomerByToken
      * @param string $resetPasswordToken
      * @return void
      * @throws LocalizedException
+     * @deprecated rp tokens cannot be looked up directly from db
      */
     public function execute(string $resetPasswordToken): void
     {
@@ -64,5 +65,23 @@ class ConfirmCustomerByToken
         $customer->setConfirmation(null);
 
         $this->customerRepository->save($customer);
+    }
+
+    /**
+     * Check if customer confirmation needs to be reset
+     *
+     * @param int $customerId
+     * @return void
+     */
+    public function resetCustomerConfirmation(int $customerId): void
+    {
+        $customer = $this->customerRepository->getById($customerId);
+
+        if ($customer && $customer->getConfirmation()) {
+            // skip unnecessary address and customer validation
+            $customer->setData('ignore_validation_flag', true);
+            $customer->setConfirmation(null);
+            $this->customerRepository->save($customer);
+        }
     }
 }

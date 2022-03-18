@@ -12,12 +12,12 @@
         <annotations>
             <features value="Wishlist"/>
             <stories value="Configurable product child image should be Shown on wishlist"/>
-            <group value="wishlist"/>
             <title value="AWS S3 when user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
             <description value="When user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-38708"/>
             <group value="remote_storage_aws_s3"/>
+            <group value="wishlist"/>
         </annotations>
         <before>
             <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>

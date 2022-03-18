@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Test\Integration\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
@@ -21,6 +22,15 @@ use PHPUnit\Framework\TestCase;
 
 class GenerateRenditionsTest extends TestCase
 {
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
+    private const TEST_DIR = 'testDir';
+
+    /**
+     * @var array
+     */
+    private $origConfigValue;
+
     /**
      * @var GenerateRenditionsInterface
      */
@@ -41,13 +51,42 @@ class GenerateRenditionsTest extends TestCase
      */
     private $driver;
 
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
     protected function setup(): void
     {
-        $this->generateRenditions = Bootstrap::getObjectManager()->get(GenerateRenditionsInterface::class);
-        $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->generateRenditions = $this->objectManager->get(GenerateRenditionsInterface::class);
+        $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
-        $this->renditionSizeConfig = Bootstrap::getObjectManager()->get(Config::class);
+        $this->mediaDirectory->create(self::TEST_DIR);
+        $this->driver = $this->objectManager->get(DriverInterface::class);
+        $this->renditionSizeConfig = $this->objectManager->get(Config::class);
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->origConfigValue = $config->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            array_merge($this->origConfigValue, [self::TEST_DIR]),
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            $this->origConfigValue
+        );
+        if ($this->mediaDirectory->isExist(self::TEST_DIR)) {
+            $this->mediaDirectory->delete(self::TEST_DIR);
+        }
     }
 
     public static function tearDownAfterClass(): void
@@ -75,7 +114,7 @@ class GenerateRenditionsTest extends TestCase
     public function testExecute(string $path, string $renditionPath): void
     {
         $this->copyImage($path);
-        $this->generateRenditions->execute([$path]);
+        $this->generateRenditions->execute([self::TEST_DIR . '/' . $path]);
         $expectedRenditionPath = $this->mediaDirectory->getAbsolutePath($renditionPath);
         list($imageWidth, $imageHeight) = getimagesize($expectedRenditionPath);
         $this->assertFileExists($expectedRenditionPath);
@@ -98,7 +137,7 @@ class GenerateRenditionsTest extends TestCase
     private function copyImage(string $path): void
     {
         $imagePath = realpath(__DIR__ . '/../../_files' . $path);
-        $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
+        $modifiableFilePath = $this->mediaDirectory->getAbsolutePath(self::TEST_DIR . $path );
         $this->driver->copy(
             $imagePath,
             $modifiableFilePath
@@ -113,11 +152,11 @@ class GenerateRenditionsTest extends TestCase
         return [
             'rendition_image_not_generated' => [
                 'paths' => '/magento_medium_image.jpg',
-                'renditionPath' => ".renditions/magento_medium_image.jpg"
+                'renditionPath' => ".renditions/" . self::TEST_DIR . "/magento_medium_image.jpg"
             ],
             'rendition_image_generated' => [
                 'paths' => '/magento_large_image.jpg',
-                'renditionPath' => ".renditions/magento_large_image.jpg"
+                'renditionPath' => ".renditions/" . self::TEST_DIR . "/magento_large_image.jpg"
             ]
         ];
     }

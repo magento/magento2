@@ -44,7 +44,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateConsumer($consumer)
     {
@@ -58,7 +58,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createRequestToken($consumer)
     {
@@ -99,7 +99,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAccessToken($consumer)
     {
@@ -118,7 +118,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAccessTokenRequest($accessToken, $consumer)
     {
@@ -144,7 +144,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateAccessToken($accessToken)
     {
@@ -168,7 +168,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validateOauthToken($oauthToken)
     {
@@ -176,7 +176,7 @@ class Provider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConsumerByKey($consumerKey)
     {

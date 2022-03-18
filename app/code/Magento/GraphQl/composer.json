@@ -2,19 +2,20 @@
     "name": "magento/module-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/module-eav": "*",
-        "magento/framework": "*",
-        "magento/module-webapi": "*"
-    },
-    "suggest": {
-        "magento/module-graph-ql-cache": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.3-p2",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/module-eav": "102.1.*",
+        "magento/framework": "103.0.*",
+        "magento/module-webapi": "100.4.*"
+    },
+    "suggest": {
+        "magento/module-graph-ql-cache": "100.4.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -24,3 +25,4 @@
         }
     }
 }
+

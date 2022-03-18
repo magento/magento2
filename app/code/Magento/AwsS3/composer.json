@@ -1,20 +1,21 @@
 {
     "name": "magento/module-aws-s3",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-remote-storage": "*",
-        "league/flysystem": "^2.0",
-        "league/flysystem-aws-s3-v3": "^2.0"
-    },
     "type": "magento2-module",
     "license": [
         "proprietary"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.1-p1",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-remote-storage": "100.4.*",
+        "league/flysystem": "^2.0",
+        "league/flysystem-aws-s3-v3": "^2.0"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -24,3 +25,4 @@
         }
     }
 }
+

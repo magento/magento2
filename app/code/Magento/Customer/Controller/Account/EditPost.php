@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
 
@@ -226,7 +227,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
 
             try {
                 // whether a customer enabled change email option
-                $this->processChangeEmailRequest($currentCustomerDataObject);
+                $isEmailChanged = $this->processChangeEmailRequest($currentCustomerDataObject);
 
                 // whether a customer enabled change password option
                 $isPasswordChanged = $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
@@ -242,8 +243,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
                 $this->messageManager->addSuccessMessage(__('You saved the account information.'));
-                // logout from current session if password changed.
-                if ($isPasswordChanged) {
+                // logout from current session if password or email changed.
+                if ($isPasswordChanged || $isEmailChanged) {
                     $this->session->logout();
                     $this->session->start();
                     return $resultRedirect->setPath('customer/account/login');
@@ -364,7 +365,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * Process change email request
      *
      * @param CustomerInterface $currentCustomerDataObject
-     * @return void
+     * @return bool
      * @throws InvalidEmailOrPasswordException
      * @throws UserLockedException
      */
@@ -377,13 +378,15 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $currentCustomerDataObject->getId(),
                     $this->getRequest()->getPost('current_password')
                 );
-                $this->sessionCleaner->clearFor($currentCustomerDataObject->getId());
+                $this->sessionCleaner->clearFor((int) $currentCustomerDataObject->getId());
+                return true;
             } catch (InvalidEmailOrPasswordException $e) {
                 throw new InvalidEmailOrPasswordException(
                     __("The password doesn't match this account. Verify the password and try again.")
                 );
             }
         }
+        return false;
     }
 
     /**

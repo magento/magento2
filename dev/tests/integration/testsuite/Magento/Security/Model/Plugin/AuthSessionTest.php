@@ -93,7 +93,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $sessionId = $this->authSession->getSessionId();
+        $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $prolongsDiff = log($this->securityConfig->getAdminSessionLifetime()) - 2; // X from comment above
         $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
         $this->adminSessionsManager->getCurrentSession()
@@ -102,10 +102,10 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
                 $dateInPast
             )
             ->save();
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         $oldUpdatedAt = $this->adminSessionInfo->getUpdatedAt();
         $this->authSession->prolong();
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         $updatedAt = $this->adminSessionInfo->getUpdatedAt();
 
         $this->assertSame(strtotime($oldUpdatedAt), strtotime($updatedAt));
@@ -125,7 +125,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $sessionId = $this->authSession->getSessionId();
+        $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $prolongsDiff = 4 * log($this->securityConfig->getAdminSessionLifetime()) + 2; // X from comment above
         $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
         $this->adminSessionsManager->getCurrentSession()
@@ -134,10 +134,10 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
                 $dateInPast
             )
             ->save();
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         $oldUpdatedAt = $this->adminSessionInfo->getUpdatedAt();
         $this->authSession->prolong();
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         $updatedAt = $this->adminSessionInfo->getUpdatedAt();
 
         $this->assertGreaterThan(strtotime($oldUpdatedAt), strtotime($updatedAt));
@@ -169,7 +169,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
             ->save();
 
         // need to trigger a prolong
-        $sessionId = $this->authSession->getSessionId();
+        $adminSessionInfoId = $this->authSession->getAdminSessionInfoId();
         $prolongsDiff = 4 * log($this->securityConfig->getAdminSessionLifetime()) + 2;
         $dateInPast = $this->dateTime->formatDate($this->authSession->getUpdatedAt() - $prolongsDiff);
         $this->adminSessionsManager->getCurrentSession()
@@ -178,7 +178,7 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
                 $dateInPast
             )
             ->save();
-        $this->adminSessionInfo->load($sessionId, 'session_id');
+        $this->adminSessionInfo->load($adminSessionInfoId, 'id');
         $this->authSession->prolong();
         static::assertFalse($this->auth->isLoggedIn());
         $user->reload();

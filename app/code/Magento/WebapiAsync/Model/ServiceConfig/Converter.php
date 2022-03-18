@@ -8,40 +8,49 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model\ServiceConfig;
 
+use DOMDocument;
+use DOMElement;
+use Magento\Framework\Config\ConverterInterface;
+use Magento\Webapi\Model\Rest\Config;
+
 /**
- * Converter of webapi_async.xml content into array format.
+ * Converter of webapi_async.xml content into array format
  */
-class Converter implements \Magento\Framework\Config\ConverterInterface
+class Converter implements ConverterInterface
 {
     /**#@+
      * Array keys for config internal representation.
      */
-    const KEY_SERVICES = 'services';
-    const KEY_METHOD = 'method';
-    const KEY_METHODS = 'methods';
-    const KEY_SYNCHRONOUS_INVOCATION_ONLY = 'synchronousInvocationOnly';
-    const KEY_ROUTES = 'routes';
+    public const KEY_SERVICES = 'services';
+    public const KEY_METHOD = 'method';
+    public const KEY_METHODS = 'methods';
+    public const KEY_SYNCHRONOUS_INVOCATION_ONLY = 'synchronousInvocationOnly';
+    public const KEY_ROUTES = 'routes';
+    public const KEY_INPUT_ARRAY_SIZE_LIMIT = 'input-array-size-limit';
     /**#@-*/
 
+    /**
+     * @var array
+     */
     private $allowedRouteMethods = [
-        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
-        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
-        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
-        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
-        \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PATCH
+        Config::HTTP_METHOD_GET,
+        Config::HTTP_METHOD_POST,
+        Config::HTTP_METHOD_PUT,
+        Config::HTTP_METHOD_DELETE,
+        Config::HTTP_METHOD_PATCH
     ];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function convert($source)
     {
         $result = [self::KEY_SERVICES => []];
-        /** @var \DOMNodeList $services */
         $services = $source->getElementsByTagName('service');
-        /** @var \DOMElement $service */
+        /** @var DOMElement $service */
         foreach ($services as $service) {
             if (!$this->canConvertXmlNode($service)) {
                 continue;
@@ -61,16 +70,16 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Merge service data related to synchronous-only method invocations.
      *
-     * @param \DOMElement $service
+     * @param DOMElement $service
      * @param array $result
      * @param string $serviceClass
      * @param string $serviceMethod
      */
     private function mergeSynchronousInvocationMethodsData(
-        \DOMElement $service,
+        DOMElement $service,
         array &$result,
-        $serviceClass,
-        $serviceMethod
+        string $serviceClass,
+        string $serviceMethod
     ) {
         $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod] = array_merge(
             $result[self::KEY_SERVICES][$serviceClass][self::KEY_METHODS][$serviceMethod],
@@ -81,10 +90,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param \DOMElement $node
+     * Checks if xml node can be converted
+     *
+     * @param DOMElement $node
      * @return bool
      */
-    private function canConvertXmlNode(\DOMElement $node)
+    private function canConvertXmlNode(DOMElement $node): bool
     {
         if ($node->nodeType !== XML_ELEMENT_NODE) {
             return false;
@@ -120,10 +131,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param \DOMElement $service
+     * Returns service class
+     *
+     * @param DOMElement $service
      * @return null|string
      */
-    private function getServiceClass(\DOMElement $service)
+    private function getServiceClass(DOMElement $service): ?string
     {
         $serviceClass = $service->attributes->getNamedItem('class')->nodeValue;
 
@@ -131,10 +144,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param \DOMElement $service
+     * Returns service method
+     *
+     * @param DOMElement $service
      * @return null|string
      */
-    private function getServiceMethod(\DOMElement $service)
+    private function getServiceMethod(DOMElement $service): ?string
     {
         $serviceMethod = $service->attributes->getNamedItem('method')->nodeValue;
 
@@ -142,10 +157,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param \DOMElement $serviceNode
+     * Checks if synchronous method invocation only
+     *
+     * @param DOMElement $serviceNode
      * @return bool
      */
-    private function isSynchronousMethodInvocationOnly(\DOMElement $serviceNode)
+    private function isSynchronousMethodInvocationOnly(DOMElement $serviceNode): bool
     {
         $synchronousInvocationOnlyNodes = $serviceNode->getElementsByTagName('synchronousInvocationOnly');
 
@@ -153,10 +170,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * @param \DOMElement $synchronousInvocationOnlyNode
+     * Checks if synchronous invocation only true
+     *
+     * @param DOMElement|null $synchronousInvocationOnlyNode
      * @return bool|mixed
      */
-    private function isSynchronousInvocationOnlyTrue(\DOMElement $synchronousInvocationOnlyNode = null)
+    private function isSynchronousInvocationOnlyTrue(DOMElement $synchronousInvocationOnlyNode = null)
     {
         if ($synchronousInvocationOnlyNode === null) {
             return false;
@@ -171,53 +190,62 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * Convert and merge "route" nodes, which represent route customizations
-     * @param \DOMDocument $source
+     *
+     * @param DOMDocument $source
      * @return array
      */
-    private function convertRouteCustomizations($source)
+    private function convertRouteCustomizations(DOMDocument $source): array
     {
         $customRoutes = [];
         $routes = $source->getElementsByTagName('route');
-        /** @var \DOMElement  $route */
+        /** @var DOMElement  $route */
         foreach ($routes as $route) {
             $routeUrl = $this->getRouteUrl($route);
             $routeMethod = $this->getRouteMethod($route);
             $routeAlias = $this->getRouteAlias($route);
+            $inputArraySizeLimit =$this->getInputArraySizeLimit($route);
             if ($routeUrl && $routeMethod && $routeAlias) {
                 if (!isset($customRoutes[$routeAlias])) {
                     $customRoutes[$routeAlias] = [];
                 }
                 $customRoutes[$routeAlias][$routeMethod] = $routeUrl;
+                $customRoutes[$routeAlias][self::KEY_INPUT_ARRAY_SIZE_LIMIT] = $inputArraySizeLimit;
             }
         }
         return $customRoutes;
     }
 
     /**
-     * @param \DOMElement $route
+     * Returns route url
+     *
+     * @param DOMElement $route
      * @return null|string
      */
-    private function getRouteUrl($route)
+    private function getRouteUrl(DOMElement $route): ?string
     {
         $url = $route->attributes->getNamedItem('url')->nodeValue;
         return mb_strlen((string) $url) === 0 ? null : $url;
     }
 
     /**
-     * @param \DOMElement $route
+     * Returns route alias
+     *
+     * @param DOMElement $route
      * @return null|string
      */
-    private function getRouteAlias($route)
+    private function getRouteAlias(DOMElement $route): ?string
     {
         $alias = $route->attributes->getNamedItem('alias')->nodeValue;
         return mb_strlen((string) $alias) === 0 ? null : ltrim($alias, '/');
     }
 
     /**
-     * @param \DOMElement $route
+     * Returns route method
+     *
+     * @param DOMElement $route
      * @return null|string
      */
-    private function getRouteMethod($route)
+    private function getRouteMethod(DOMElement $route): ?string
     {
         $method = $route->attributes->getNamedItem('method')->nodeValue;
         $method =  mb_strlen((string) $method) === 0 ? null : $method;
@@ -225,11 +253,35 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
+     * Validates method of route
+     *
      * @param string $method
      * @return bool
      */
     private function validateRouteMethod($method)
     {
         return in_array($method, $this->allowedRouteMethods);
+    }
+
+    /**
+     * Returns array size limit of input data
+     *
+     * @param \DOMElement $routeDOMElement
+     * @return int|null
+     */
+    private function getInputArraySizeLimit(\DOMElement $routeDOMElement): ?int
+    {
+        /** @var \DOMElement $dataDOMElement */
+        foreach ($routeDOMElement->getElementsByTagName('data') as $dataDOMElement) {
+            if ($dataDOMElement->nodeType === XML_ELEMENT_NODE) {
+                $inputArraySizeLimitDOMNode = $dataDOMElement->attributes
+                    ->getNamedItem(self::KEY_INPUT_ARRAY_SIZE_LIMIT);
+                return ($inputArraySizeLimitDOMNode instanceof \DOMNode)
+                    ? (int)$inputArraySizeLimitDOMNode->nodeValue
+                    : null;
+            }
+        }
+
+        return null;
     }
 }

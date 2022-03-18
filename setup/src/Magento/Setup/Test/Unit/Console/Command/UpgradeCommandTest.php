@@ -120,6 +120,10 @@ class UpgradeCommandTest extends TestCase
      */
     public function executeDataProvider()
     {
+        $mediaGalleryNotice = "Media files stored outside of 'Media Gallery Allowed' folders will not be available "
+            . "to the media gallery.\n"
+            . "Please refer to Developer Guide for more details.\n";
+
         return [
             [
                 'options' => [
@@ -128,7 +132,7 @@ class UpgradeCommandTest extends TestCase
                 ],
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
                 'expectedString' => 'Please re-run Magento compile command. Use the command "setup:di:compile"'
-                    . PHP_EOL,
+                    . PHP_EOL . $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,
@@ -145,7 +149,7 @@ class UpgradeCommandTest extends TestCase
                     '--keep-generated' => true,
                 ],
                 'deployMode' => \Magento\Framework\App\State::MODE_PRODUCTION,
-                'expectedString' => '',
+                'expectedString' => $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => true,
                     'convert-old-scripts' => false,
@@ -158,7 +162,7 @@ class UpgradeCommandTest extends TestCase
             [
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => \Magento\Framework\App\State::MODE_DEVELOPER,
-                'expectedString' => '',
+                'expectedString' => $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,
@@ -171,7 +175,7 @@ class UpgradeCommandTest extends TestCase
             [
                 'options' => ['--magento-init-params' => '', '--convert-old-scripts' => false],
                 'deployMode' => \Magento\Framework\App\State::MODE_DEFAULT,
-                'expectedString' => '',
+                'expectedString' => $mediaGalleryNotice,
                 'expectedOptions' => [
                     'keep-generated' => false,
                     'convert-old-scripts' => false,

@@ -1679,7 +1679,7 @@ class AccountManagementTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('"resetPasswordLinkToken" is required. Enter and try again.');
 
-        $this->accountManagement->validateResetPasswordLinkToken(22, null);
+        $this->accountManagement->validateResetPasswordLinkToken(22, '');
     }
 
     /**
