@@ -63,6 +63,34 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
     }
 
     /**
+     * Verify customer token as admin with store
+     *
+     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
+     * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
+     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/customer_with_second_store.php.php
+     * @throws Exception
+     */
+    public function testGenerateCustomerValidTokenAsAdminWithStore()
+    {
+        $customerEmail = '2ndstorecustomer@example.com';
+
+        $mutation = $this->getQuery($customerEmail);
+
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getAdminHeaderAuthenticationWithStore(
+                'TestAdmin1',
+                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                'fixture_second_store'
+            )
+        );
+        $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
+        $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
+    }
+
+    /**
      * Verify with Admin email ID and Magento_LoginAsCustomer::login is disabled
      *
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
@@ -215,6 +243,30 @@ MUTATION;
         try {
             $adminAccessToken = $this->adminTokenService->createAdminAccessToken($userName, $password);
             return ['Authorization' => 'Bearer ' . $adminAccessToken];
+        } catch (\Exception $e) {
+            throw new AuthenticationException(
+                __(
+                    'The account sign-in was incorrect or your account is disabled temporarily. '
+                    . 'Please wait and try again later.'
+                )
+            );
+        }
+    }
+
+    /**
+     * To get admin access token with store
+     *
+     * @param string $userName
+     * @param string $password
+     * @param string $storeCode
+     * @return string[]
+     * @throws AuthenticationException
+     */
+    private function getAdminHeaderAuthenticationWithStore(string $userName, string $password, string $storeCode)
+    {
+        try {
+            $adminAccessToken = $this->adminTokenService->createAdminAccessToken($userName, $password);
+            return ['Authorization' => 'Bearer ' . $adminAccessToken, 'store' => $storeCode];
         } catch (\Exception $e) {
             throw new AuthenticationException(
                 __(
