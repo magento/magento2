@@ -134,4 +134,3 @@ Open:
 2. Validate that when disabled the fields work again,
 3. Update Wiki
 4. Functional tests
-5. Test user with no password, but module disable with POST Request and API call

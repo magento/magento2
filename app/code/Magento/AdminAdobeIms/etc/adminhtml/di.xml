@@ -58,4 +58,10 @@
         <plugin name="remove_user_validation_rules"
                 type="Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin"/>
     </type>
+    <type name="Magento\User\Model\Backend\Config\ObserverConfig">
+        <plugin name="disable_password_reset"
+                type="Magento\AdminAdobeIms\Plugin\DisablePasswordResetPlugin"/>
+        <plugin name="disable_forced_password_change"
+                type="Magento\AdminAdobeIms\Plugin\DisableForcedPasswordChangePlugin"/>
+    </type>
 </config>
