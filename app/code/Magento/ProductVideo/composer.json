@@ -16,7 +16,8 @@
     },
     "suggest": {
         "magento/module-customer": "*",
-        "magento/module-config": "*"
+        "magento/module-config": "*",
+        "magento/module-theme": "*"
     },
     "type": "magento2-module",
     "license": [
