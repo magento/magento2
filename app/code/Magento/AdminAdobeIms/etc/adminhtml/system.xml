@@ -23,5 +23,15 @@
                 </field>
             </group>
         </section>
+        <section id="admin">
+            <group id="security">
+                <field id="password_lifetime">
+                    <frontend_model>Magento\AdminAdobeIms\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
+                </field>
+                <field id="password_is_forced">
+                    <frontend_model>Magento\AdminAdobeIms\Block\Adminhtml\System\Config\Form\Field\Disabled</frontend_model>
+                </field>
+            </group>
+        </section>
     </system>
 </config>
