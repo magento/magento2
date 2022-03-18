@@ -11,7 +11,6 @@ namespace Magento\AdminAdobeIms\Test\Unit\Service;
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\AdminAdobeIms\Service\ImsOrganizationService;
-use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
