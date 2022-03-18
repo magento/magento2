@@ -1,11 +1,17 @@
 <?php
 /**
- * Public media files entry point
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/**
+ * Public media files entry point
+ */
+// phpcs:disable Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
+// phpcs:disable Magento2.Functions.DiscouragedFunction.Discouraged
+// phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+// phpcs:disable Magento2.Security.LanguageConstruct.ExitUsage
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Cache\Frontend\Factory;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
@@ -24,6 +30,13 @@ $isAllowed = function ($resource, array $allowedResources) {
         }
     }
     return false;
+};
+
+$createBootstrap = function (array $params = []) {
+    // phpcs:ignore Magento2.Security.Superglobal.SuperglobalUsageWarning
+    $params = array_merge($_SERVER, $params);
+
+    return Bootstrap::create(BP, $params);
 };
 
 $request = new \Magento\MediaStorage\Model\File\Storage\Request(
@@ -56,6 +69,10 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
                     require_once 'errors/404.php';
                     exit;
                 }
+
+                // Need to run for object manager instantiation.
+                $createBootstrap();
+
                 $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
                     new \Magento\Framework\HTTP\PhpEnvironment\Response(),
                     new \Magento\Framework\File\Mime()
@@ -68,12 +85,12 @@ if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
 }
 
 // Materialize file in application
-$params = $_SERVER;
+$params = [];
 if (empty($mediaDirectory)) {
     $params[ObjectManagerFactory::INIT_PARAM_DEPLOYMENT_CONFIG] = [];
     $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
 }
-$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+$bootstrap = $createBootstrap($params);
 /** @var \Magento\MediaStorage\App\Media $app */
 $app = $bootstrap->createApplication(
     \Magento\MediaStorage\App\Media::class,
