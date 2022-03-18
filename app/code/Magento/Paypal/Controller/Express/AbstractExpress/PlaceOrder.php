@@ -11,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
- * Class PlaceOrder
+ * Finalizes the PayPal order and executes payment
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
@@ -99,6 +100,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
 
             // prepare session to success or cancellation page
             $this->_getCheckoutSession()->clearHelperData();
+            $this->_getSession()->unsQuoteId();
 
             // "last successful quote"
             $quoteId = $this->_getQuote()->getId();

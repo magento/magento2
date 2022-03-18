@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
@@ -90,7 +91,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      * @param array $ignores
      * @param array $data
      * @param RequestSafetyInterface|null $requestSafety
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -182,6 +182,24 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             $this->session->setVisitorData($this->getData());
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave()
+    {
+        $this->unsetData("session_id");
+        return parent::beforeSave();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterSave()
+    {
+        $this->setSessionId($this->session->getSessionId());
+        return parent::afterSave();
     }
 
     /**

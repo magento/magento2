@@ -140,7 +140,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
-    public function testLegacyTemplateFromDbLoadsInLegacyMode()
+    public function testLegacyTemplateFromDbLoadsInStrictMode()
     {
         $objectManager = Bootstrap::getObjectManager();
 
@@ -150,7 +150,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '1',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -170,7 +169,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 
     /**
@@ -206,6 +205,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 }

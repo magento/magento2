@@ -2,17 +2,18 @@
     "name": "magento/module-theme-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
-    },
-    "suggest": {
-        "magento/module-store-graph-ql": "*"
-    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.3.4",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*"
+    },
+    "suggest": {
+        "magento/module-store-graph-ql": "100.3.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -22,3 +23,4 @@
         }
     }
 }
+

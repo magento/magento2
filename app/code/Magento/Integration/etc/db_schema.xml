@@ -16,7 +16,7 @@
                 comment="Updated At"/>
         <column xsi:type="varchar" name="name" nullable="false" length="255" comment="Name of consumer"/>
         <column xsi:type="varchar" name="key" nullable="false" length="32" comment="Key code"/>
-        <column xsi:type="varchar" name="secret" nullable="false" length="32" comment="Secret code"/>
+        <column xsi:type="varchar" name="secret" nullable="false" length="128" comment="Secret code"/>
         <column xsi:type="text" name="callback_url" nullable="true" comment="Callback URL"/>
         <column xsi:type="text" name="rejected_callback_url" nullable="false" comment="Rejected callback URL"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -46,7 +46,7 @@
                 comment="Customer user ID"/>
         <column xsi:type="varchar" name="type" nullable="false" length="16" comment="Token Type"/>
         <column xsi:type="varchar" name="token" nullable="false" length="32" comment="Token"/>
-        <column xsi:type="varchar" name="secret" nullable="false" length="32" comment="Token Secret"/>
+        <column xsi:type="varchar" name="secret" nullable="false" length="128" comment="Token Secret"/>
         <column xsi:type="varchar" name="verifier" nullable="true" length="32" comment="Token Verifier"/>
         <column xsi:type="text" name="callback_url" nullable="false" comment="Token Callback URL"/>
         <column xsi:type="smallint" name="revoked" padding="5" unsigned="true" nullable="false" identity="false"

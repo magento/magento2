@@ -6,16 +6,17 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\PageCache\FormKey;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
  * @magentoDataFixture Magento/Customer/_files/customer.php
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
@@ -124,7 +125,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $location);
         $beforeAuthUrl = $this->_customerSession->getData('before_auth_url');
         $this->assertNotEmpty($beforeAuthUrl);
-        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $beforeAuthUrl);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $beforeAuthUrl);
 
         $this->_customerSession->authenticate('/customer/account');
         $location = (string)$this->response->getHeader('Location');

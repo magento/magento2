@@ -111,7 +111,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->setMethods(['getFrontendName', 'getId'])
+            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -221,11 +221,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->with($templateSubject)
             ->willReturn($expectedResult);
 
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(false)], [$this->equalTo(true)])
-            ->willReturnOnConsecutiveCalls(true, false);
-
         $variables = ['key' => 'value'];
         $filterTemplate->expects($this->once())
             ->method('setVariables')
@@ -262,8 +257,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                     'setStoreId',
                     'filter',
                     'getStoreId',
-                    'getInlineCssFiles',
-                    'setStrictMode',
+                    'getInlineCssFiles'
                 ]
             )
             ->disableOriginalConstructor()
@@ -288,11 +282,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
-
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
-            ->willReturnOnConsecutiveCalls(false, true);
 
         // The following block of code tests to ensure that the store id of the subscriber will be used, if the
         // 'subscriber' variable is set.

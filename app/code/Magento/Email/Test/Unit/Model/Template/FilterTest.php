@@ -113,7 +113,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     private $pubDirectoryRead;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filter\VariableResolver\StrategyResolver
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filter\VariableResolver\StrictResolver
      */
     private $variableResolver;
 
@@ -190,7 +190,7 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->variableResolver =
-            $this->getMockBuilder(\Magento\Framework\Filter\VariableResolver\StrategyResolver::class)
+            $this->getMockBuilder(\Magento\Framework\Filter\VariableResolver\StrictResolver::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 

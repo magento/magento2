@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
@@ -26,7 +25,6 @@ use Magento\Framework\Filesystem\Driver\File as Driver;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Tests Metadata/Form/Image class
@@ -100,6 +98,9 @@ class ImageTest extends AbstractFormTestCase
      */
     private $driverMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -202,14 +203,6 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn('File Input Field Label');
 
         $this->fileProcessorMock->expects($this->once())
-            ->method('getStat')
-            ->with($value['tmp_name'])
-            ->willReturn([
-                'extension' => 'txt',
-                'basename' => 'tmp_file.txt',
-            ]);
-
-        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['tmp_name'])
             ->willReturn(true);
@@ -239,19 +232,11 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn('File Input Field Label');
 
         $this->fileProcessorMock->expects($this->once())
-            ->method('getStat')
-            ->with($value['tmp_name'])
-            ->willReturn([
-                'extension' => 'gif',
-                'basename' => 'logo.gif',
-            ]);
-
-        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
-        $this->ioFileSystemMock->expects($this->any())
+        $this->ioFileSystemMock->expects($this->once())
             ->method('getPathInfo')
             ->with($value['name'])
             ->willReturn([
@@ -300,19 +285,11 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn([$validationRuleMock]);
 
         $this->fileProcessorMock->expects($this->once())
-            ->method('getStat')
-            ->with($value['tmp_name'])
-            ->willReturn([
-                'extension' => 'gif',
-                'basename' => 'logo.gif',
-            ]);
-
-        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
-        $this->ioFileSystemMock->expects($this->any())
+        $this->ioFileSystemMock->expects($this->once())
             ->method('getPathInfo')
             ->with($value['name'])
             ->willReturn([
@@ -360,19 +337,11 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn([$validationRuleMock]);
 
         $this->fileProcessorMock->expects($this->once())
-            ->method('getStat')
-            ->with($value['tmp_name'])
-            ->willReturn([
-                'extension' => 'gif',
-                'basename' => 'logo.gif',
-            ]);
-
-        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
-        $this->ioFileSystemMock->expects($this->any())
+        $this->ioFileSystemMock->expects($this->once())
             ->method('getPathInfo')
             ->with($value['name'])
             ->willReturn([
@@ -420,19 +389,11 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn([$validationRuleMock]);
 
         $this->fileProcessorMock->expects($this->once())
-            ->method('getStat')
-            ->with($value['tmp_name'])
-            ->willReturn([
-                'extension' => 'gif',
-                'basename' => 'logo.gif',
-            ]);
-
-        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
-        $this->ioFileSystemMock->expects($this->any())
+        $this->ioFileSystemMock->expects($this->once())
             ->method('getPathInfo')
             ->with($value['name'])
             ->willReturn([

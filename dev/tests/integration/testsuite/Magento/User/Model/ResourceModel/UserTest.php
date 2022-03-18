@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\ResourceModel\User as UserResourceModel;
 use Magento\User\Model\User;
 use Magento\User\Model\UserFactory;
+use Magento\Framework\Math\Random;
 
 /**
  * @magentoAppArea adminhtml
@@ -36,6 +37,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
     private $userFactory;
 
     /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -43,6 +49,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->model = Bootstrap::getObjectManager()->get(UserResourceModel::class);
         $this->userRoleCollectionFactory = Bootstrap::getObjectManager()->get(UserRoleCollectionFactory::class);
         $this->userFactory = Bootstrap::getObjectManager()->get(UserFactory::class);
+        $this->random = Bootstrap::getObjectManager()->get(Random::class);
     }
 
     /**
@@ -112,5 +119,39 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $rules = $this->model->getValidationRulesBeforeSave();
         $this->assertInstanceOf('Zend_Validate_Interface', $rules);
+    }
+
+    /**
+     * Test save rp token
+     *
+     * @throws \Exception
+     * @magentoDbIsolation enabled
+     */
+    public function testSave(): void
+    {
+        $token = 'randomstring';
+        $username = $this->random->getRandomString(6);
+        $email = $username . "@example.com";
+        $password = uniqid().$this->random->getRandomString(10);
+        $userModel = Bootstrap::getObjectManager()->get(User::class);
+
+        $userModel->setData(
+            [
+                'email' => $email,
+                'rp_token' => $token,
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'password' => $password,
+                'username' => $username
+            ]
+        )->save();
+
+        $userResourceModel = $this->model;
+
+        $this->assertEquals($token, $userModel->getRpToken());
+        $this->assertNotEquals(
+            $userModel->getRpToken(),
+            $userResourceModel->load($userModel, 'rp_token')
+        );
     }
 }

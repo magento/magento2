@@ -53,6 +53,7 @@
         <element name="InsertFile" type="text" selector="#insert_files"/>
         <element name="CreateFolder" type="button" selector="#new_folder" />
         <element name="DeleteSelectedBtn" type="text" selector="#delete_files"/>
+        <element name="DeleteFolder" type="button" selector="#delete_folder"/>
         <element name="CancelBtn" type="button" selector="#cancel" />
         <element name="FolderName" type="button" selector="input[data-role='promptField']" />
         <element name="AcceptFolderName" type="button" selector=".action-primary.action-accept" />
@@ -62,6 +63,8 @@
         <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]" />
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept" />
         <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
+        <element name="mediaGalleryFolderTreeIconCollapsed" type="button" parameterized="true" selector="//a[text()='{{folderName}}']/parent::li[contains(@class,'jstree-closed')]/ins"/>
+        <element name="mediaGalleryFolderTreeIconExpanded" type="button" parameterized="true" selector="//a[text()='{{folderName}}']/parent::li[contains(@class,'jstree-open')]/ins"/>
     </section>
     <section name="VariableSection">
         <element name="InsertWidget" type="button" selector="#insert_variable"/>

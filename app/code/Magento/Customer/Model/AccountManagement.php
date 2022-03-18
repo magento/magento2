@@ -711,8 +711,8 @@ class AccountManagement implements AccountManagementInterface
     public function resetPassword($email, $resetToken, $newPassword)
     {
         if (!$email) {
-            $customer = $this->getByToken->execute($resetToken);
-            $email = $customer->getEmail();
+            $params = ['fieldName' => 'email'];
+            throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         } else {
             $customer = $this->customerRepository->get($email);
         }
@@ -1183,9 +1183,9 @@ class AccountManagement implements AccountManagementInterface
      * @throws NoSuchEntityException If customer doesn't exist
      * @SuppressWarnings(PHPMD.LongVariable)
      */
-    private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
+    private function validateResetPasswordToken(int $customerId, string $resetPasswordLinkToken): bool
     {
-        if ($customerId !== null && $customerId <= 0) {
+        if (!$customerId) {
             throw new InputException(
                 __(
                     'Invalid value of "%value" provided for the %fieldName field.',
@@ -1193,14 +1193,7 @@ class AccountManagement implements AccountManagementInterface
                 )
             );
         }
-
-        if ($customerId === null) {
-            //Looking for the customer.
-            $customerId = $this->getByToken
-                ->execute($resetPasswordLinkToken)
-                ->getId();
-        }
-        if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
+        if (!$resetPasswordLinkToken) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
             throw new InputException(__('"%fieldName" is required. Enter and try again.', $params));
         }

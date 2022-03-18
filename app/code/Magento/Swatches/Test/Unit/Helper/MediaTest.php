@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Swatches\Test\Unit\Helper;
 
 /**
@@ -136,6 +138,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(false);
         $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
+        $this->mediaDirectoryMock->method('getAbsolutePath')->willReturn('attribute/swatch/e/a/file');
         $result = $this->mediaHelperObject->moveImageFromTmp('file.tmp');
         $this->assertNotNull($result);
     }

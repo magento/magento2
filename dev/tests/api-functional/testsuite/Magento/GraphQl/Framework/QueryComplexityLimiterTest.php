@@ -28,6 +28,16 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
     products {
       items {
         name
+        nameAlias: name
+        ...configurableFields
+        ... on BundleProduct {
+          items {
+            options {
+              uid
+              label
+            }
+          }
+        }
         categories {
           id
           position
@@ -323,6 +333,12 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
                                         percentage_value
                                         website_id
                                       }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
                                       new_to_date
                                       new_from_date
                                       tier_price
@@ -390,9 +406,19 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
     }
   }
 }
+
+fragment configurableFields on ConfigurableProduct {
+  variants {
+    attributes {
+      uid
+      code
+      label
+    }
+  }
+}
 QUERY;
 
-        self::expectExceptionMessageMatches('/Max query complexity should be 300 but got 302/');
+        self::expectExceptionMessageMatches('/Max query complexity should be 300 but got 317/');
         //Use POST request because request uri is too large for some servers
         $this->graphQlMutation($query);
     }

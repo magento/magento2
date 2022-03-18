@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
+
 namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -27,6 +29,8 @@ use Magento\Framework\Validation\ValidationException;
  */
 class Uploader
 {
+    private const MAX_LENGTH = 90;
+
     /**
      * Uploaded file handle (copy of $_FILES[] element)
      *
@@ -412,20 +416,18 @@ class Uploader
      */
     public static function getCorrectFileName($fileName)
     {
-        $fileName = preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', $fileName);
+        $fileName = trim(preg_replace('/[^a-z0-9_\\-\\.]+/i', '_', ltrim($fileName, '.')));
         $fileInfo = pathinfo($fileName);
-        $fileInfo['extension'] = $fileInfo['extension'] ?? '';
-
         // account for excessively long filenames that cannot be stored completely in database
-        if (strlen($fileInfo['basename']) > 90) {
-            throw new \InvalidArgumentException('Filename is too long; must be 90 characters or less');
+        if (strlen($fileInfo['basename']) > self::MAX_LENGTH) {
+            throw new \InvalidArgumentException(
+                'Filename is too long; must be '.self::MAX_LENGTH.' characters or less'
+            );
         }
-
-        if (preg_match('/^_+$/', $fileInfo['filename'])) {
-            $fileName = 'file.' . $fileInfo['extension'];
-        }
-
-        return $fileName;
+        $newFileName = $fileInfo['filename'] === '_' ? 'file' : $fileInfo['filename'];
+        $newFileName .= !empty($fileInfo['extension']) ? '.' . $fileInfo['extension']
+            : ($fileInfo['filename'] === '_' ? '.' : '');
+        return $newFileName;
     }
 
     /**
@@ -557,6 +559,9 @@ class Uploader
      */
     public function checkAllowedExtension($extension)
     {
+        if (preg_match('/[^a-z0-9]/i', $extension)) {
+            return false;
+        }
         if (!is_array($this->_allowedExtensions) || empty($this->_allowedExtensions)) {
             return true;
         }
@@ -664,7 +669,7 @@ class Uploader
 
         if (!$isValid) {
             throw new \InvalidArgumentException(
-                __('Invalid parameter given. A valid $fileId[tmp_name] is expected.')
+                'Invalid parameter given. A valid $fileId[tmp_name] is expected.'
             );
         }
     }

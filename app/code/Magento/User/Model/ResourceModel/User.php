@@ -17,6 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
+use Magento\Framework\Encryption\EncryptorInterface;
 
 /**
  * ACL user resource
@@ -50,6 +51,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $observerConfig;
 
     /**
+     * @var EncryptorInterface|null
+     */
+    private $encryptor;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -58,6 +64,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $connectionName
      * @param CacheInterface $aclDataCache
      * @param ObserverConfig|null $observerConfig
+     * @param EncryptorInterface|null $encryptor
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -65,13 +72,16 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null,
         CacheInterface $aclDataCache = null,
-        ObserverConfig $observerConfig = null
+        ObserverConfig $observerConfig = null,
+        EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
         $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(CacheInterface::class);
         $this->observerConfig = $observerConfig ?: ObjectManager::getInstance()->get(ObserverConfig::class);
+        $this->encryptor = $encryptor ??
+            ObjectManager::getInstance()->get(EncryptorInterface::class);
     }
 
     /**
@@ -180,6 +190,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($user->hasRoleId()) {
             $user->setReloadAclFlag(1);
         }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->encrypt($rpToken));
+        }
 
         return parent::_beforeSave($user);
     }
@@ -196,6 +210,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($user->hasRoleId()) {
             $this->_clearUserRoles($user);
             $this->_createUserRole($user->getRoleId(), $user);
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->decrypt($rpToken));
         }
         return $this;
     }
@@ -254,6 +272,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         if (is_string($user->getExtra())) {
             $user->setExtra($this->getSerializer()->unserialize($user->getExtra()));
+        }
+        if ($user->getData('rp_token')) {
+            $rpToken = $user->getData('rp_token');
+            $user->setRpToken($this->encryptor->decrypt($rpToken));
         }
         return parent::_afterLoad($user);
     }

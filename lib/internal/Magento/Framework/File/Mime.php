@@ -88,6 +88,7 @@ class Mime
     private $genericMimeTypes = [
         'application/x-empty',
         'inode/x-empty',
+        'application/octet-stream'
     ];
 
     /**

@@ -146,6 +146,7 @@
     </actionGroup>
     <!-- Assumes we are on product edit page -->
     <actionGroup name="AdminAssertProductHasNoCustomOptions">
+        <reloadPage stepKey="refreshPage"/>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="expandContentTab"/>
         <waitForPageLoad time="10" stepKey="waitCustomizableOptionsTabOpened"/>
         <dontSeeElement selector="{{AdminProductCustomizableOptionsSection.customOption}}" stepKey="assertNoCustomOptions"/>

@@ -5,17 +5,32 @@
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Encryption\Encryptor;
+
+/**
+ * Consumer ResourceModel Class
+ */
 class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+
+    /**
+     * @var Encryptor
+     */
+    private $encryptor;
+
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param string $connectionName
+     * @param Encryptor $encryptor
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        $connectionName = null
+        $connectionName = null,
+        Encryptor $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(Encryptor::class);
     }
 
     /**
@@ -60,5 +75,41 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->where('entity_id = ?', $consumerId);
 
         return $connection->fetchOne($select);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getSecret()) {
+            $object->setSecret($this->encryptor->encrypt($object->getSecret()));
+        }
+
+        return parent::_beforeSave($object);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getSecret()) {
+            $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+        }
+
+        return parent::_afterLoad($object);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getSecret()) {
+            $object->setSecret($this->encryptor->decrypt($object->getSecret()));
+        }
+
+        return parent::_afterSave($object);
     }
 }

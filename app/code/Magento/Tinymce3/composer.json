@@ -1,24 +1,24 @@
 {
     "name": "magento/module-tinymce-3",
     "description": "N/A",
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-ui": "*",
-        "magento/module-variable": "*",
-        "magento/module-widget": "*",
-        "magento/module-cms": "*"
-
-    },
-    "suggest": {
-        "magento/module-cms": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.3.7",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*",
+        "magento/module-backend": "101.0.*",
+        "magento/module-ui": "101.1.*",
+        "magento/module-variable": "100.3.*",
+        "magento/module-widget": "101.1.*",
+        "magento/module-cms": "103.0.*"
+    },
+    "suggest": {
+        "magento/module-cms": "103.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -28,3 +28,4 @@
         }
     }
 }
+

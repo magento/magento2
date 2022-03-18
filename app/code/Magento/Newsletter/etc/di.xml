@@ -25,4 +25,11 @@
         <plugin name="update_newsletter_subscription_on_customer_update"
                 type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="newsletterCompatibilityCheck" xsi:type="object">Magento\Newsletter\Console\Command\TemplateCheckCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

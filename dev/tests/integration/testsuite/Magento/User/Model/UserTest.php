@@ -16,6 +16,7 @@ use Magento\User\Model\User as UserModel;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserTest extends \PHPUnit\Framework\TestCase
 {
@@ -476,11 +477,12 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testChangeResetPasswordLinkToken()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $userId = $this->_model->getId();
         $this->_model->changeResetPasswordLinkToken('test');
         $date = $this->_model->getRpTokenCreatedAt();
         $this->assertNotNull($date);
         $this->_model->save();
-        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->load($userId);
         $this->assertEquals('test', $this->_model->getRpToken());
         $this->assertEquals(strtotime($date), strtotime($this->_model->getRpTokenCreatedAt()));
     }

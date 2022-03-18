@@ -11,7 +11,7 @@ use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenCollection;
 
 /**
- * oAuth token model
+ * OAuth token model
  *
  * @method string getName() Consumer name (joined from consumer table)
  * @method int getConsumerId()
@@ -318,6 +318,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     {
         $tokenData = $this->getResource()->selectTokenByConsumerIdAndUserType($consumerId, $userType);
         $this->setData($tokenData ? $tokenData : []);
+        $this->getResource()->afterLoad($this);
         return $this;
     }
 

@@ -518,16 +518,12 @@ class TemplateTest extends TestCase
 
         class_exists(Template::class, true);
         $filterTemplate = $this->getMockBuilder(\Magento\Framework\Filter\Template::class)
-            ->setMethods(['setVariables', 'setStoreId', 'filter', 'setStrictMode'])
+            ->setMethods(['setVariables', 'setStoreId', 'filter'])
             ->disableOriginalConstructor()
             ->getMock();
         $model->expects($this->once())
             ->method('getTemplateFilter')
             ->willReturn($filterTemplate);
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
-            ->willReturnOnConsecutiveCalls(false, true);
 
         $model->expects($this->once())
             ->method('applyDesignConfig');

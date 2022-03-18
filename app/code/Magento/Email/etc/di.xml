@@ -90,4 +90,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="emailTemplateCheck" xsi:type="object">Magento\Email\Console\Command\DatabaseTemplateCompatibilityCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

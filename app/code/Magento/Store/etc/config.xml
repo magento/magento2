@@ -124,6 +124,7 @@
                     <pl>pl</pl>
                     <py>py</py>
                     <asp>asp</asp>
+                    <aspx>aspx</aspx>
                     <sh>sh</sh>
                     <cgi>cgi</cgi>
                     <htm>htm</htm>
@@ -132,6 +133,7 @@
                     <shtml>shtml</shtml>
                     <phpt>phpt</phpt>
                     <pht>pht</pht>
+                    <phar>phar</phar>
                     <svg>svg</svg>
                     <xml>xml</xml>
                     <xhtml>xhtml</xhtml>

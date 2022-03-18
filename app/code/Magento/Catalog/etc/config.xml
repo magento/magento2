@@ -64,6 +64,9 @@
                     <tmp_images_folder>tmp</tmp_images_folder>
                     <catalog_product_images>media/catalog/product/cache/</catalog_product_images>
                     <catalog_images_folder>catalog</catalog_images_folder>
+                    <media_gallery_image_folders>
+                        <category_image_folder>catalog/category</category_image_folder>
+                    </media_gallery_image_folders>
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>
             </media_storage_configuration>

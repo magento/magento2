@@ -1,21 +1,23 @@
 {
     "name": "magento/theme-frontend-blank",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
-    },
     "type": "magento2-theme",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.3.7",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "102.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
         ]
     }
 }
+

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
@@ -261,6 +262,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model->setAttribute($this->attribute);
 
         $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $mediaDirectoryMock->method('getAbsolutePath')->willReturn('pub/media/temp/test123.jpg');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -318,15 +320,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnCallback(
-                
-                    function ($class, $params = []) use ($imageUploaderMock) {
-                        if ($class == "\Magento\Catalog\CategoryImageUpload") {
-                            return $imageUploaderMock;
-                        }
-
-                        return $this->objectManager->get($class, $params);
+                function ($class, $params = []) use ($imageUploaderMock) {
+                    if ($class == "\Magento\Catalog\CategoryImageUpload") {
+                        return $imageUploaderMock;
                     }
-                
+                    return $this->objectManager->get($class, $params);
+                }
             );
 
         $model = $this->objectManager->getObject(

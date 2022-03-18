@@ -123,7 +123,8 @@ class TokenTest extends \PHPUnit\Framework\TestCase
                     'selectTokenByConsumerIdAndUserType',
                     'selectTokenByAdminId',
                     'selectTokenByCustomerId',
-                    'load'
+                    'load',
+                    'afterLoad'
                 ]
             )
             ->disableOriginalConstructor()
