@@ -84,11 +84,8 @@
             <expectedResult type="string">Buy {{tierPriceOnDefault.qty_0}} for ${{tierPriceOnDefault.price_0}} each and save 100%</expectedResult>
             <actualResult type="variable">firstTierPriceText</actualResult>
         </assertEquals>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', tierPriceOnDefault.qty_1)}}" stepKey="secondTierPriceText"/>
-        <assertEquals stepKey="assertTierPriceTextOnProductPage2">
-            <expectedResult type="string">Buy {{tierPriceOnDefault.qty_1}} for ${{tierPriceOnDefault.price_1}} each and save 100%</expectedResult>
-            <actualResult type="variable">secondTierPriceText</actualResult>
-        </assertEquals>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', tierPriceOnDefault.qty_1)}}" stepKey="secondTierPriceText"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertTierPriceTextOnProductPage2"/>
 
         <!--  Verify customer see product out of stock status on product page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>

@@ -217,7 +217,6 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 unset($priceList[$priceKey]);
                 continue;
             }
-            $minPrice = $price['price'];
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
                 continue;
@@ -240,6 +239,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             } else {
                 $qtyCache[$price['price_qty']] = $priceKey;
             }
+            $minPrice = $price['price'];
         }
         return array_values($priceList);
     }
